@@ -13,6 +13,7 @@
 - semantic validator для curated Sources packs
 - phase-aware recommendation layer для boundary-actions и Sources summary
 - automatic phase detection helper
+- synthetic phase detection self-test
 
 ## Ожидаемое поведение на fresh scaffold
 Проходят structural / versioning / defect / alignment проверки.
@@ -29,6 +30,7 @@ Evidence / quality / DoD до смыслового наполнения арте
 - `VALIDATE_FACTORY_TEMPLATE_OPS.sh` подтверждает semantic profile для `sources-pack-core-20`, `sources-pack-release-20` и `sources-pack-bugfix-20`.
 - `EXPORT_FACTORY_TEMPLATE_SOURCES.sh` и `GENERATE_BOUNDARY_ACTIONS.sh` публикуют phase-aware рекомендацию для `controlled-fixes`, `release` и `bugfix-drift`.
 - `DETECT_FACTORY_TEMPLATE_PHASE.sh` корректно различает `release` и `bugfix-drift` на rule-based changed path signals.
+- `PHASE_DETECTION_TEST.sh` автоматически проверяет synthetic `controlled-fixes`, `release` и `bugfix-drift` сценарии.
 - `release` определяется только при сочетании release-path signals и checked intent markers в `RELEASE_CHECKLIST.md`.
 - `bugfix-drift` определяется только при сочетании bug/validator path signals и bug-report intent markers в `reports/bugs/*.md`.
 - Golden examples и fresh scaffold синхронизированы с финальным versioning layer.

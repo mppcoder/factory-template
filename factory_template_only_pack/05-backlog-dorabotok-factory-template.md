@@ -27,6 +27,7 @@
 - добавлен automatic state detection по changed paths вместо ручного `current_phase`
 - для `release` добавлены document intent signals через `RELEASE_CHECKLIST.md`, чтобы не ловить ложные release-switch
 - для `bugfix-drift` добавлены document intent signals через `reports/bugs/*.md`
+- добавлен synthetic self-test `PHASE_DETECTION_TEST.sh` для automatic phase detection
 - дальше можно расширять фазовые policy manifests и делать более глубокий intent detection поверх git/release state
 
 ---

@@ -23,6 +23,7 @@
 - boundary-actions generation
 - phase-aware Sources recommendation
 - automatic phase detection
+- automatic phase detection self-test
 
 ## Known Residual Limits
 

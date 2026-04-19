@@ -93,6 +93,7 @@ Phase recommendation теперь тоже декларативна:
 
 ```bash
 bash DETECT_FACTORY_TEMPLATE_PHASE.sh
+bash PHASE_DETECTION_TEST.sh
 ```
 
 Эта рекомендация автоматически попадает в `_sources-export/factory-template/SUMMARY.md` и `_boundary-actions/factory-template-boundary-actions.md`.
