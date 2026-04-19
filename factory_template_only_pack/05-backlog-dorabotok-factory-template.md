@@ -26,6 +26,7 @@
 - добавлена phase-aware recommendation matrix для `controlled-fixes / release / bugfix-drift`
 - добавлен automatic state detection по changed paths вместо ручного `current_phase`
 - для `release` добавлены document intent signals через `RELEASE_CHECKLIST.md`, чтобы не ловить ложные release-switch
+- для `bugfix-drift` добавлены document intent signals через `reports/bugs/*.md`
 - дальше можно расширять фазовые policy manifests и делать более глубокий intent detection поверх git/release state
 
 ---

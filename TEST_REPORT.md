@@ -30,6 +30,7 @@ Evidence / quality / DoD до смыслового наполнения арте
 - `EXPORT_FACTORY_TEMPLATE_SOURCES.sh` и `GENERATE_BOUNDARY_ACTIONS.sh` публикуют phase-aware рекомендацию для `controlled-fixes`, `release` и `bugfix-drift`.
 - `DETECT_FACTORY_TEMPLATE_PHASE.sh` корректно различает `release` и `bugfix-drift` на rule-based changed path signals.
 - `release` определяется только при сочетании release-path signals и checked intent markers в `RELEASE_CHECKLIST.md`.
+- `bugfix-drift` определяется только при сочетании bug/validator path signals и bug-report intent markers в `reports/bugs/*.md`.
 - Golden examples и fresh scaffold синхронизированы с финальным versioning layer.
 - curated `sources-pack-core-20`, `sources-pack-release-20`, `sources-pack-bugfix-20` собираются из декларативного policy manifest.
 - boundary-actions guide генерируется из markdown template и проверяется вместе с ops-policy слоем.
@@ -51,3 +52,4 @@ Evidence / quality / DoD до смыслового наполнения арте
 - semantic/relevance оценка curated packs пока остается rule-based, а не phase-aware recommendation engine.
 - phase detection пока rule-based по changed paths и может не уловить более сложный operator intent без явных файловых сигналов.
 - документальные intent signals сейчас реализованы только для `release`, а не для всех фаз.
+- document intent signals сейчас реализованы для `release` и `bugfix-drift`, но ещё не покрывают возможные более тонкие подфазы внутри controlled fixes.

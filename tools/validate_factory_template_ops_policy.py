@@ -222,6 +222,7 @@ def main() -> int:
                 exact_paths = phase_cfg.get("exact_paths", [])
                 prefixes = phase_cfg.get("path_prefixes", [])
                 document_signals = phase_cfg.get("document_signals", {})
+                document_signal_prefixes = phase_cfg.get("document_signal_prefixes", {})
                 if not isinstance(min_matches, int) or min_matches < 1:
                     fail(f"boundary_actions.phase_detection.{phase_name}.min_matches должен быть целым >= 1", errors)
                 if not isinstance(require_document_intent, bool):
@@ -257,6 +258,22 @@ def main() -> int:
                         for pattern in patterns:
                             if not isinstance(pattern, str) or not pattern.strip():
                                 fail(f"boundary_actions.phase_detection.{phase_name}.document_signals.{rel_path} содержит пустой pattern", errors)
+                if not isinstance(document_signal_prefixes, dict):
+                    fail(f"boundary_actions.phase_detection.{phase_name}.document_signal_prefixes должен быть mapping", errors)
+                else:
+                    for rel_prefix, patterns in document_signal_prefixes.items():
+                        if not isinstance(rel_prefix, str) or not rel_prefix.strip():
+                            fail(f"boundary_actions.phase_detection.{phase_name}.document_signal_prefixes содержит пустой префикс", errors)
+                            continue
+                        if not isinstance(patterns, list) or not patterns:
+                            fail(f"boundary_actions.phase_detection.{phase_name}.document_signal_prefixes.{rel_prefix} должен быть непустым списком", errors)
+                            continue
+                        prefix_path = ROOT / rel_prefix
+                        if not prefix_path.exists():
+                            fail(f"boundary_actions.phase_detection.{phase_name}.document_signal_prefixes ссылается на отсутствующий путь {rel_prefix}", errors)
+                        for pattern in patterns:
+                            if not isinstance(pattern, str) or not pattern.strip():
+                                fail(f"boundary_actions.phase_detection.{phase_name}.document_signal_prefixes.{rel_prefix} содержит пустой pattern", errors)
 
     template_text = TEMPLATE_PATH.read_text(encoding="utf-8")
     for placeholder in [

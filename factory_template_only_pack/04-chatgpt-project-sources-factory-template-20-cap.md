@@ -137,3 +137,8 @@ bash DETECT_FACTORY_TEMPLATE_PHASE.sh
 
 - detector дополнительно ждёт checked intent markers в `RELEASE_CHECKLIST.md`;
 - это снижает риск ложного переключения в release phase из-за обычной правки release docs.
+
+Для `bugfix-drift` действует похожее правило:
+
+- detector ждёт bug/validator changed paths;
+- и дополнительно смотрит intent markers внутри `reports/bugs/*.md`.

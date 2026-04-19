@@ -113,6 +113,8 @@ boundary_actions:
           - '\[x\]\s+go/no-go review in progress'
     bugfix-drift:
       min_matches: 2
+      require_document_intent: true
+      min_document_signal_matches: 2
       exact_paths:
         - template-repo/launcher.sh
         - VALIDATE_FACTORY_FEEDBACK.sh
@@ -124,4 +126,10 @@ boundary_actions:
       path_prefixes:
         - template-repo/scripts/validate-
         - reports/bugs/
+      document_signal_prefixes:
+        reports/bugs/:
+          - '## Нужен ли feedback в фабрику\s+Да'
+          - '## Временный обход'
+          - '## Статус\s+зафиксировано'
+          - '## Граница ответственности'
   uploads_dir: /projects/_incoming

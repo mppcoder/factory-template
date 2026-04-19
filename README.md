@@ -84,6 +84,11 @@ Phase recommendation теперь тоже декларативна:
 - detector смотрит на changed paths;
 - и отдельно проверяет checked intent signals в `RELEASE_CHECKLIST.md`.
 
+Для `bugfix-drift` тоже нужен не только file drift:
+
+- detector смотрит на bug/validator changed paths;
+- и отдельно проверяет intent signals внутри `reports/bugs/*.md`.
+
 Проверить текущую рекомендацию можно так:
 
 ```bash

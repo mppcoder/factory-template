@@ -63,25 +63,52 @@ def matches_rule(path: str, exact_paths: list[str], prefixes: list[str]) -> bool
     return any(path.startswith(prefix) for prefix in prefixes)
 
 
-def document_signal_matches(root: Path, signals: dict, document_overrides: dict[str, str] | None = None) -> list[str]:
+def document_signal_matches(
+    root: Path,
+    signals: dict,
+    signal_prefixes: dict | None = None,
+    document_overrides: dict[str, str] | None = None,
+) -> list[str]:
     matches: list[str] = []
     if not isinstance(signals, dict):
-        return matches
+        signals = {}
     for rel_path, patterns in signals.items():
         if not isinstance(rel_path, str) or not isinstance(patterns, list):
             continue
+        text_sources: list[tuple[str, str]] = []
         if document_overrides and rel_path in document_overrides:
-            text = document_overrides[rel_path]
+            text_sources.append((rel_path, document_overrides[rel_path]))
         else:
             doc_path = root / rel_path
-            if not doc_path.exists():
+            if doc_path.exists():
+                text_sources.append((rel_path, doc_path.read_text(encoding="utf-8", errors="ignore")))
+        for source_name, text in text_sources:
+            for pattern in patterns:
+                if not isinstance(pattern, str) or not pattern.strip():
+                    continue
+                if re.search(pattern, text, flags=re.MULTILINE):
+                    matches.append(f"{source_name}: {pattern}")
+    if isinstance(signal_prefixes, dict):
+        for prefix, patterns in signal_prefixes.items():
+            if not isinstance(prefix, str) or not isinstance(patterns, list):
                 continue
-            text = doc_path.read_text(encoding="utf-8", errors="ignore")
-        for pattern in patterns:
-            if not isinstance(pattern, str) or not pattern.strip():
-                continue
-            if re.search(pattern, text, flags=re.MULTILINE):
-                matches.append(f"{rel_path}: {pattern}")
+            matched_docs: list[tuple[str, str]] = []
+            if document_overrides:
+                for rel_path, text in document_overrides.items():
+                    if rel_path.startswith(prefix):
+                        matched_docs.append((rel_path, text))
+            else:
+                prefix_path = root / prefix
+                if prefix_path.exists():
+                    for doc_path in sorted(prefix_path.rglob("*.md")):
+                        rel_path = doc_path.relative_to(root).as_posix()
+                        matched_docs.append((rel_path, doc_path.read_text(encoding="utf-8", errors="ignore")))
+            for source_name, text in matched_docs:
+                for pattern in patterns:
+                    if not isinstance(pattern, str) or not pattern.strip():
+                        continue
+                    if re.search(pattern, text, flags=re.MULTILINE):
+                        matches.append(f"{source_name}: {pattern}")
     return matches
 
 
@@ -110,6 +137,7 @@ def detect_phase(
             require_document_intent = bool(cfg.get("require_document_intent", False))
             min_document_signal_matches = cfg.get("min_document_signal_matches", 1)
             doc_signals = cfg.get("document_signals", {})
+            doc_signal_prefixes = cfg.get("document_signal_prefixes", {})
             if not isinstance(exact_paths, list):
                 exact_paths = []
             if not isinstance(prefixes, list):
@@ -122,7 +150,7 @@ def detect_phase(
                 path for path in changed_paths
                 if matches_rule(path, exact_paths, prefixes)
             ]
-            signal_matches = document_signal_matches(ROOT, doc_signals, document_overrides)
+            signal_matches = document_signal_matches(ROOT, doc_signals, doc_signal_prefixes, document_overrides)
             matches_by_phase[phase_name] = matched + signal_matches
             path_threshold_ok = len(matched) >= min_matches
             doc_threshold_ok = len(signal_matches) >= min_document_signal_matches

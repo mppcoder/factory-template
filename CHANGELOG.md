@@ -13,6 +13,7 @@
 - phase-aware recommendation matrix для `controlled-fixes`, `release` и `bugfix-drift` внутри `factory-template-ops-policy.yaml`
 - automatic phase detection helper `DETECT_FACTORY_TEMPLATE_PHASE.sh` / `tools/factory_template_phase_detection.py`
 - composite release-intent detection через checked markers в `RELEASE_CHECKLIST.md`
+- bugfix-intent detection через document signals в `reports/bugs/*.md`
 
 ### Изменено
 - launcher теперь предлагает новый профиль и новый класс изменения
@@ -25,6 +26,7 @@
 - `SUMMARY.md` и boundary-actions guide теперь публикуют текущую phase recommendation и матрицу выбора pack'ов
 - phase recommendation теперь вычисляется из `git` changed paths и policy rules, а не переключается вручную через `current_phase`
 - `release` phase теперь требует не только release-path changes, но и document intent signals из checklist
+- `bugfix-drift` phase теперь требует не только bug/validator path changes, но и document intent signals из bug reports
 
 ### Исправлено
 - `tools/ingest_factory_feedback.py` больше не падает на runtime `NameError` при запуске validator перед ingest
