@@ -28,6 +28,7 @@
 - финальное dogfooding на реальных greenfield и brownfield проектах
 - окончательная polish-фаза для runner layer и operational reports
 - отдельный release-facing validator/report для curated pack quality beyond structural checks
+- investigation и устранение runtime-нестабильности git sync, пока покрытой только documented workaround
 
 ## Граница core
 Core включает фабрику, шаблон, versioning/documentation layer, `.chatgpt`, scenario-pack, examples и feedback loop.
