@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import subprocess
+import re
 from pathlib import Path
 
 import yaml
@@ -62,7 +63,33 @@ def matches_rule(path: str, exact_paths: list[str], prefixes: list[str]) -> bool
     return any(path.startswith(prefix) for prefix in prefixes)
 
 
-def detect_phase(policy: dict, changed_paths: list[str] | None = None) -> dict[str, object]:
+def document_signal_matches(root: Path, signals: dict, document_overrides: dict[str, str] | None = None) -> list[str]:
+    matches: list[str] = []
+    if not isinstance(signals, dict):
+        return matches
+    for rel_path, patterns in signals.items():
+        if not isinstance(rel_path, str) or not isinstance(patterns, list):
+            continue
+        if document_overrides and rel_path in document_overrides:
+            text = document_overrides[rel_path]
+        else:
+            doc_path = root / rel_path
+            if not doc_path.exists():
+                continue
+            text = doc_path.read_text(encoding="utf-8", errors="ignore")
+        for pattern in patterns:
+            if not isinstance(pattern, str) or not pattern.strip():
+                continue
+            if re.search(pattern, text, flags=re.MULTILINE):
+                matches.append(f"{rel_path}: {pattern}")
+    return matches
+
+
+def detect_phase(
+    policy: dict,
+    changed_paths: list[str] | None = None,
+    document_overrides: dict[str, str] | None = None,
+) -> dict[str, object]:
     boundary = policy.get("boundary_actions", {}) if isinstance(policy, dict) else {}
     phase_recommendations = boundary.get("phase_recommendations", {})
     phase_detection = boundary.get("phase_detection", {})
@@ -80,22 +107,31 @@ def detect_phase(policy: dict, changed_paths: list[str] | None = None) -> dict[s
             exact_paths = cfg.get("exact_paths", [])
             prefixes = cfg.get("path_prefixes", [])
             min_matches = cfg.get("min_matches", 1)
+            require_document_intent = bool(cfg.get("require_document_intent", False))
+            min_document_signal_matches = cfg.get("min_document_signal_matches", 1)
+            doc_signals = cfg.get("document_signals", {})
             if not isinstance(exact_paths, list):
                 exact_paths = []
             if not isinstance(prefixes, list):
                 prefixes = []
             if not isinstance(min_matches, int) or min_matches < 1:
                 min_matches = 1
+            if not isinstance(min_document_signal_matches, int) or min_document_signal_matches < 1:
+                min_document_signal_matches = 1
             matched = [
                 path for path in changed_paths
                 if matches_rule(path, exact_paths, prefixes)
             ]
-            matches_by_phase[phase_name] = matched
-            if len(matched) >= min_matches:
+            signal_matches = document_signal_matches(ROOT, doc_signals, document_overrides)
+            matches_by_phase[phase_name] = matched + signal_matches
+            path_threshold_ok = len(matched) >= min_matches
+            doc_threshold_ok = len(signal_matches) >= min_document_signal_matches
+            if path_threshold_ok and (not require_document_intent or doc_threshold_ok):
                 detected_phase = phase_name
-                reasons.append(
-                    f"{phase_name}: matched {len(matched)} path(s) with threshold {min_matches}"
-                )
+                reason = f"{phase_name}: matched {len(matched)} path(s) with threshold {min_matches}"
+                if require_document_intent:
+                    reason += f"; document intent {len(signal_matches)} with threshold {min_document_signal_matches}"
+                reasons.append(reason)
                 break
 
     if not reasons:

@@ -217,10 +217,17 @@ def main() -> int:
                     fail(f"boundary_actions.phase_detection.{phase_name} должен быть mapping", errors)
                     continue
                 min_matches = phase_cfg.get("min_matches")
+                require_document_intent = phase_cfg.get("require_document_intent", False)
+                min_document_signal_matches = phase_cfg.get("min_document_signal_matches", 1)
                 exact_paths = phase_cfg.get("exact_paths", [])
                 prefixes = phase_cfg.get("path_prefixes", [])
+                document_signals = phase_cfg.get("document_signals", {})
                 if not isinstance(min_matches, int) or min_matches < 1:
                     fail(f"boundary_actions.phase_detection.{phase_name}.min_matches должен быть целым >= 1", errors)
+                if not isinstance(require_document_intent, bool):
+                    fail(f"boundary_actions.phase_detection.{phase_name}.require_document_intent должен быть bool", errors)
+                if not isinstance(min_document_signal_matches, int) or min_document_signal_matches < 1:
+                    fail(f"boundary_actions.phase_detection.{phase_name}.min_document_signal_matches должен быть целым >= 1", errors)
                 if not isinstance(exact_paths, list):
                     fail(f"boundary_actions.phase_detection.{phase_name}.exact_paths должен быть списком", errors)
                 if not isinstance(prefixes, list):
@@ -235,6 +242,21 @@ def main() -> int:
                     for prefix in prefixes:
                         if not isinstance(prefix, str) or not prefix.strip():
                             fail(f"boundary_actions.phase_detection.{phase_name}.path_prefixes содержит пустой префикс", errors)
+                if not isinstance(document_signals, dict):
+                    fail(f"boundary_actions.phase_detection.{phase_name}.document_signals должен быть mapping", errors)
+                else:
+                    for rel_path, patterns in document_signals.items():
+                        if not isinstance(rel_path, str) or not rel_path.strip():
+                            fail(f"boundary_actions.phase_detection.{phase_name}.document_signals содержит пустой путь", errors)
+                            continue
+                        if not isinstance(patterns, list) or not patterns:
+                            fail(f"boundary_actions.phase_detection.{phase_name}.document_signals.{rel_path} должен быть непустым списком", errors)
+                            continue
+                        if not (ROOT / rel_path).exists():
+                            fail(f"boundary_actions.phase_detection.{phase_name}.document_signals ссылается на отсутствующий файл {rel_path}", errors)
+                        for pattern in patterns:
+                            if not isinstance(pattern, str) or not pattern.strip():
+                                fail(f"boundary_actions.phase_detection.{phase_name}.document_signals.{rel_path} содержит пустой pattern", errors)
 
     template_text = TEMPLATE_PATH.read_text(encoding="utf-8")
     for placeholder in [

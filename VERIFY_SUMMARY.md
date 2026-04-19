@@ -28,6 +28,7 @@
 
 - `MATRIX_TEST.sh` остаётся representative runner, а не exhaustive coverage всех возможных комбинаций
 - phase detection валидируется rule-based по changed paths, а не через более глубокий semantic анализ repo intent
+- `release` phase now requires both changed-path signals and checked intent markers in `RELEASE_CHECKLIST.md`
 - release/no-release решение остаётся отдельным операторским решением
 - git-операции в этом окружении нужно выполнять последовательно; параллельный `commit/push/fetch/remote change` может давать ложные результаты
 

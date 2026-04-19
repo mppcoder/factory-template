@@ -79,6 +79,11 @@ Phase recommendation теперь тоже декларативна:
 
 Автоопределение фазы теперь считается из `git status` и правил в `factory-template-ops-policy.yaml`.
 
+Для `release` одной правки release-файлов недостаточно:
+
+- detector смотрит на changed paths;
+- и отдельно проверяет checked intent signals в `RELEASE_CHECKLIST.md`.
+
 Проверить текущую рекомендацию можно так:
 
 ```bash

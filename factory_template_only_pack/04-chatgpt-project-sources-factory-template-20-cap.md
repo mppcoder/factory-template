@@ -132,3 +132,8 @@ Codex должен готовить для пользователя инстру
 ```bash
 bash DETECT_FACTORY_TEMPLATE_PHASE.sh
 ```
+
+Для `release` этого недостаточно только по changed files:
+
+- detector дополнительно ждёт checked intent markers в `RELEASE_CHECKLIST.md`;
+- это снижает риск ложного переключения в release phase из-за обычной правки release docs.

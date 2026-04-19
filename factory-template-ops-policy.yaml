@@ -91,6 +91,8 @@ boundary_actions:
   phase_detection:
     release:
       min_matches: 3
+      require_document_intent: true
+      min_document_signal_matches: 2
       exact_paths:
         - RELEASE_CHECKLIST.md
         - VERIFY_SUMMARY.md
@@ -100,6 +102,15 @@ boundary_actions:
         - meta-template-project/RELEASE_NOTES.md
       path_prefixes:
         - /projects/_release/
+      document_signals:
+        RELEASE_CHECKLIST.md:
+          - '\[x\]\s+Проверить `CHANGELOG\.md`'
+          - '\[x\]\s+`bash VALIDATE_FACTORY_TEMPLATE_OPS\.sh`'
+          - '\[x\]\s+`bash PRE_RELEASE_AUDIT\.sh`'
+          - '\[x\]\s+release bundle можно собирать'
+          - '\[x\]\s+release pass started'
+          - '\[x\]\s+release note drafted'
+          - '\[x\]\s+go/no-go review in progress'
     bugfix-drift:
       min_matches: 2
       exact_paths:

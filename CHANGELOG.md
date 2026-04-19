@@ -12,6 +12,7 @@
 - semantic checks для `sources-pack-core-20`, `sources-pack-release-20` и `sources-pack-bugfix-20` внутри `tools/validate_factory_template_ops_policy.py`
 - phase-aware recommendation matrix для `controlled-fixes`, `release` и `bugfix-drift` внутри `factory-template-ops-policy.yaml`
 - automatic phase detection helper `DETECT_FACTORY_TEMPLATE_PHASE.sh` / `tools/factory_template_phase_detection.py`
+- composite release-intent detection через checked markers в `RELEASE_CHECKLIST.md`
 
 ### Изменено
 - launcher теперь предлагает новый профиль и новый класс изменения
@@ -23,6 +24,7 @@
 - `sources-pack-release-20` теперь ориентирован на release-facing docs, а `sources-pack-bugfix-20` включает feedback/handoff validators
 - `SUMMARY.md` и boundary-actions guide теперь публикуют текущую phase recommendation и матрицу выбора pack'ов
 - phase recommendation теперь вычисляется из `git` changed paths и policy rules, а не переключается вручную через `current_phase`
+- `release` phase теперь требует не только release-path changes, но и document intent signals из checklist
 
 ### Исправлено
 - `tools/ingest_factory_feedback.py` больше не падает на runtime `NameError` при запуске validator перед ingest

@@ -6,6 +6,12 @@
 - Current release line: `2.4.0`
 - Current working section in changelog: `Unreleased`
 
+## Intent Signals
+
+- [ ] release pass started
+- [ ] release note drafted
+- [ ] go/no-go review in progress
+
 ## Before Release Decision
 
 - [ ] Проверить `CHANGELOG.md`
