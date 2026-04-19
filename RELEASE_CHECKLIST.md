@@ -13,6 +13,7 @@
 - [ ] Проверить `TEST_REPORT.md`
 - [ ] Проверить `VERIFY_SUMMARY.md`
 - [ ] Проверить `RELEASE_NOTE_TEMPLATE.md`
+- [ ] При необходимости свериться с `COMMIT_MESSAGE_GUIDE.md`
 - [ ] Проверить `meta-template-project/RELEASE_NOTES.md`
 - [ ] Убедиться, что release note отражает изменения в template/runtime/policy layer
 

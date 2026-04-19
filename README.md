@@ -39,6 +39,7 @@ bash GENERATE_BOUNDARY_ACTIONS.sh
 - `RELEASE_CHECKLIST.md`
 - `VERIFY_SUMMARY.md`
 - `RELEASE_NOTE_TEMPLATE.md`
+- `COMMIT_MESSAGE_GUIDE.md`
 
 ## Что входит в релиз
 - `template-repo/` — шаблон нового рабочего проекта.
