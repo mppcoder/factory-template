@@ -17,6 +17,14 @@
 
 Краткая сводка по этим режимам вынесена в root-level `ENTRY_MODES.md`.
 
+## Sources Principle For Generated Projects
+
+Во всех режимах generated project использует один и тот же базовый Sources pack:
+
+- общий `scenario-pack`
+
+Entry mode влияет не на состав загружаемых файлов, а на то, с какого сценария начинать и какой preset/policy применять первым.
+
 ## Правило фиксации дефектов
 Любой обнаруженный defect должен быть зафиксирован как bug report до исправления или одновременно с ним. Silent fixes запрещены.
 

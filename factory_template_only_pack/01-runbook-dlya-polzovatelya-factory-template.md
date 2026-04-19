@@ -25,6 +25,12 @@
 - имеющийся проект без репо → `brownfield` + типовой профиль `brownfield-dogfood-codex-assisted`
 - имеющийся проект с репо → `brownfield` + типовые профили `legacy-modernization`, `integration-project`, `audit-only`
 
+Важно:
+
+- для generated projects Sources pack остается единым
+- не нужно поддерживать разные загружаемые пакеты файлов под каждый entry mode
+- различие задается через entry path, preset и сценарный маршрут
+
 ---
 
 ## 1. Целевой контур
