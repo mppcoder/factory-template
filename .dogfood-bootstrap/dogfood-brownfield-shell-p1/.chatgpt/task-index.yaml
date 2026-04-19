@@ -1,0 +1,35 @@
+change:
+  id: chg-20260419-001
+  title: 'Dogfood Brownfield Shell P1: brownfield-stabilization'
+  class: brownfield-stabilization
+  execution_mode: codex-led
+  type: brownfield
+  status: draft
+  priority: medium
+  summary: ''
+  outputs: []
+tasks:
+- id: T-001
+  title: Исследование и фиксация контекста
+  type: analysis
+  risk_level: low
+  executor: analyst
+  depends_on: []
+  outputs:
+  - .chatgpt/reality-check.md
+  acceptance:
+  - Результат зафиксирован в артефактах проекта
+  - Проверены факты, а не только предположения
+- id: T-002
+  title: Формализация решения
+  type: docs
+  risk_level: low
+  executor: editor
+  depends_on:
+  - T-001
+  outputs:
+  - .chatgpt/user-spec.md
+  - .chatgpt/tech-spec.md
+  acceptance:
+  - Изменения перенесены в repo
+  - Текст готов к handoff в Codex или ручному исполнению

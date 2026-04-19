@@ -1,0 +1,14 @@
+scenario_pack:
+  name: scenario-pack
+  entrypoint: 00-master-router.md
+project_preset: brownfield-dogfood-codex-assisted
+active:
+- 00-master-router.md
+- brownfield/00-brownfield-entry.md
+- brownfield/01-system-inventory.md
+- brownfield/02-repo-audit.md
+- brownfield/03-as-is-architecture-map.md
+- brownfield/04-gap-register.md
+- brownfield/10-evidence-pack-completion.md
+- brownfield/11-codex-assisted-stabilization.md
+status: нужно_загрузить_в_sources

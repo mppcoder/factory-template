@@ -1,0 +1,32 @@
+change:
+  id: chg-20260413-002
+  class: small-fix
+  execution_mode: manual
+  type: correction
+  status: planned
+  priority: low
+  title: Исправление опечатки в подписи кнопки
+  description: Локальная правка UI-текста без изменения логики.
+  summary: Локально исправить опечатку в подписи кнопки без изменения логики и интеграций.
+tasks:
+- id: T-001
+  title: Найти и исправить строку подписи
+  type: edit
+  risk_level: low
+  executor: manual
+  depends_on: []
+  outputs:
+  - Исправленный шаблон формы
+  acceptance:
+  - В шаблоне больше нет строки 'Сохранть'
+- id: T-002
+  title: Проверить форму вручную
+  type: verification
+  risk_level: low
+  executor: manual
+  depends_on:
+  - T-001
+  outputs:
+  - Подтверждение правильной подписи
+  acceptance:
+  - На экране отображается 'Сохранить'

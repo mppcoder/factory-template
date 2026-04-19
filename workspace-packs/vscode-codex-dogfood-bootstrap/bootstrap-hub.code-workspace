@@ -1,0 +1,22 @@
+{
+  "folders": [
+    { "path": "/projects/_incoming", "name": "00-incoming" },
+    { "path": "/projects/factory-template", "name": "01-factory-template" },
+    { "path": "/projects/dogfood-brownfield-shell", "name": "02-brownfield-shell" },
+    { "path": "/projects/brownfield-evidence", "name": "03-brownfield-evidence" },
+    { "path": "/projects/reconstructed-brownfield-repo", "name": "04-reconstructed-repo" },
+    { "path": "/projects/product-greenfield-package", "name": "05-greenfield-package" }
+  ],
+  "settings": {
+    "files.autoSave": "afterDelay",
+    "terminal.integrated.defaultProfile.linux": "bash",
+    "terminal.integrated.cwd": "/projects",
+    "git.autoRepositoryDetection": true,
+    "search.exclude": {
+      "**/.git": true,
+      "**/node_modules": true,
+      "**/.venv": true,
+      "**/__pycache__": true
+    }
+  }
+}

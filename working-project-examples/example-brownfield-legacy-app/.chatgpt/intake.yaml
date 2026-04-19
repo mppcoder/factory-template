@@ -1,0 +1,4 @@
+project:
+  name: "example-brownfield-legacy-app"
+  slug: "example-brownfield-legacy-app"
+  mode: "brownfield"

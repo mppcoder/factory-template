@@ -1,0 +1,108 @@
+# Backlog доработок — только для factory-template
+
+## Цель
+
+Ниже — список улучшений именно для самого шаблона фабрики, без боевых контуров.
+
+---
+
+## 1. Стабилизировать source packs
+
+Нужно сделать штатные curated exports:
+
+- `sources-pack-core-20/`
+- `sources-pack-release-20/`
+- `sources-pack-bugfix-20/`
+
+Чтобы пользователь не собирал состав Sources вручную.
+
+Статус:
+
+- базовые curated packs для самого `factory-template` уже автоматизированы через `EXPORT_FACTORY_TEMPLATE_SOURCES.sh`
+- состав pack'ов вынесен в декларативный `factory-template-ops-policy.yaml`
+- дальше можно расширять фазовые policy manifests и добавить validator для pack composition
+
+---
+
+## 2. Усилить codex task pack
+
+Нужно добавить более явные артефакты:
+
+- `codex-context.md`
+- `codex-input.md`
+- `codex-task-pack.md`
+- `boundary-actions.md`
+
+Цель: сделать handoff в Codex всегда одинаковым и воспроизводимым.
+
+---
+
+## 3. Добавить boundary-action generator
+
+Фабрика должна уметь генерировать инструкции пользователю на внешние действия:
+
+- создать GitHub repo;
+- подключить репозиторий;
+- создать ChatGPT Project;
+- загрузить curated Sources;
+- загрузить новый архив в `_incoming`.
+
+Статус:
+
+- базовый generator уже автоматизирован через `GENERATE_BOUNDARY_ACTIONS.sh`
+- текст generator вынесен в шаблон `factory_template_only_pack/templates/factory-template-boundary-actions.template.md`
+- дальше можно сделать phase-aware инструкции и привязку к конкретному release/pack
+
+---
+
+## 4. Выравнять docs ↔ scripts ↔ validators
+
+Нужен регулярный контроль на рассогласования между:
+
+- runbook;
+- launcher;
+- scripts;
+- validators;
+- examples;
+- `.chatgpt/`.
+
+---
+
+## 5. Выделить release layer
+
+Нужно явнее оформить release-контур шаблона:
+
+- release checklist;
+- release verify pack;
+- release note template;
+- bundle manifest.
+
+Статус:
+
+- добавлены operator-facing `RELEASE_CHECKLIST.md` и `VERIFY_SUMMARY.md`
+- добавлен базовый `RELEASE_NOTE_TEMPLATE.md`
+- дальше можно собрать phase-specific release verify pack
+
+---
+
+## 6. Встроить routing rules для профилей Codex
+
+Минимум:
+
+- `default-dev`
+- `fast-routine`
+- `heavy-analysis`
+- `release-verify`
+
+Пока достаточно как правил в `AGENTS.md` + примера `.codex/config.toml`.
+
+---
+
+## 7. Отдельный feedback ingestion layer
+
+Нужно стандартизовать, как feedback из dogfood/боевых проектов возвращается обратно в шаблон:
+
+- bug report into template;
+- feature extraction into template;
+- scenario correction into template;
+- validator correction into template.

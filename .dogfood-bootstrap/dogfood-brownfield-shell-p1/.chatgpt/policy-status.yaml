@@ -1,0 +1,24 @@
+policy_preset: brownfield-stabilization
+change_class: brownfield-stabilization
+execution_mode: codex-led
+handoff_policy: required
+minimum_evidence_required_all:
+- '[PROJECT]'
+minimum_evidence_required_any:
+- '[DOC]'
+- '[REAL]'
+- '[FIX]'
+active_default_scenarios:
+- 00-master-router.md
+- brownfield/00-brownfield-entry.md
+- brownfield/01-system-inventory.md
+- brownfield/03-as-is-architecture-map.md
+- brownfield/08-brownfield-risk-review.md
+- brownfield/10-evidence-pack-completion.md
+- brownfield/11-codex-assisted-stabilization.md
+- 15-handoff-to-codex.md
+notes:
+- До завершения evidence pack handoff должен оставаться optional.
+- После фиксации safe zones и rollback плана можно переходить в codex-led.
+applied: true
+validated: true

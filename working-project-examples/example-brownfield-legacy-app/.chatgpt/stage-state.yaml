@@ -1,0 +1,20 @@
+project:
+  name: "{{PROJECT_NAME}}"
+  slug: "{{PROJECT_SLUG}}"
+  mode: "brownfield"
+
+stage:
+  current: "intake"
+  previous: ""
+  next: "discovery"
+
+gates:
+  intake_complete: true
+  reuse_check_complete: false
+  reality_check_complete: false
+  conflict_detection_complete: false
+  spec_validated: false
+  tech_spec_validated: false
+  task_validation_complete: false
+  verification_complete: false
+  done_complete: false

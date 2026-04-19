@@ -1,0 +1,27 @@
+model = "gpt-5.4"
+model_reasoning_effort = "medium"
+approval_policy = "on-request"
+profile = "default-dev"
+
+[shell_environment_policy]
+include_only = ["PATH", "HOME", "USER", "SHELL", "LANG", "LC_ALL", "TERM"]
+
+[profiles.default-dev]
+model = "gpt-5.4"
+model_reasoning_effort = "medium"
+approval_policy = "on-request"
+
+[profiles.fast-routine]
+model = "gpt-5.4-mini"
+model_reasoning_effort = "low"
+approval_policy = "on-request"
+
+[profiles.heavy-analysis]
+model = "gpt-5.4"
+model_reasoning_effort = "high"
+approval_policy = "on-request"
+
+[profiles.release-verify]
+model = "gpt-5.4"
+model_reasoning_effort = "high"
+approval_policy = "on-request"

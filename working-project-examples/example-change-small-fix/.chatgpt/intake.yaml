@@ -1,0 +1,23 @@
+project:
+  name: "Пример small-fix"
+  slug: "example-change-small-fix"
+  mode: "brownfield"
+  type: "software"
+  owner: "Команда сопровождения"
+  repo_url: "https://example.invalid/small-fix"
+  runtime_url: ""
+  notes: "Нужно исправить некорректное имя кнопки в форме уведомления."
+
+current_request:
+  summary: "Исправить подпись кнопки 'Сохранть' на 'Сохранить'."
+  requested_outcome: "Пользователь видит корректную подпись без изменения логики формы."
+  constraints:
+    - "Не менять поведение формы"
+    - "Не затрагивать backend"
+  known_risks:
+    - "Возможна вторая копия текста в другом шаблоне"
+
+status:
+  phase: "intake"
+  codex_handoff_allowed: false
+  reverse_engineering_required: false

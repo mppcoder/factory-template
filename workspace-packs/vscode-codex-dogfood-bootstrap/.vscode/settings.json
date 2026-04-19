@@ -1,0 +1,6 @@
+{
+  "files.autoSave": "afterDelay",
+  "terminal.integrated.defaultProfile.linux": "bash",
+  "terminal.integrated.cwd": "/projects",
+  "git.autoRepositoryDetection": true
+}

@@ -1,0 +1,7 @@
+project:
+  name: "example-brownfield-project"
+  slug: "example-brownfield-project"
+  mode: "brownfield"
+status:
+  phase: "intake"
+  codex_handoff_allowed: false

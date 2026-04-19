@@ -1,0 +1,27 @@
+# Журнал изменений шаблона
+
+## [Unreleased] - 2026-04-19
+### Добавлено
+- профиль `brownfield-dogfood-codex-assisted` для dogfood-сценария brownfield without repo
+- класс изменения `brownfield-stabilization` с поддержкой `hybrid` и `codex-led`
+- шаблонные `.codex` конфиги и подагенты для автоматического переключения режимов внутри одной живой сессии
+- workspace pack `vscode-codex-dogfood-bootstrap` для старта из одного окна VS Code с дальнейшим переходом на отдельные окна по проектам
+
+### Изменено
+- launcher теперь предлагает новый профиль и новый класс изменения
+- policy preset и scenario-pack расширены под evidence-first → stabilization → reconstructed repo → clean package flow
+
+
+## [2.4.0] - 2026-04-16
+### Изменено
+- launcher и generated versioning layer переведены на финальную версию фабрики `2.4.0`
+- generated project origin и changelog больше не несут `rc2` как текущую фабричную версию
+
+## [2.4.0-rc2] - 2026-04-15
+### Добавлено
+- единый release-alignment/versioning layer для generated projects
+- автоматическая генерация `VERSION.md`, `CHANGELOG.md`, `CURRENT_FUNCTIONAL_STATE.md`
+- валидатор versioning layer
+
+### Изменено
+- `project-origin.md` и launcher синхронизированы с актуальной версией фабрики

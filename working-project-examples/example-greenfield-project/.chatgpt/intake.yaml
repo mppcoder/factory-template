@@ -1,0 +1,7 @@
+project:
+  name: "example-greenfield-project"
+  slug: "example-greenfield-project"
+  mode: "greenfield"
+status:
+  phase: "intake"
+  codex_handoff_allowed: false

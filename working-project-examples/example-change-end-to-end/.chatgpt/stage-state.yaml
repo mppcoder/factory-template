@@ -1,0 +1,24 @@
+stage:
+  current: done
+  previous: verification
+  next: none
+gates:
+  intake_complete: true
+  classification_complete: true
+  reuse_check_complete: true
+  reality_check_complete: true
+  conflict_detection_complete: true
+  spec_ready: true
+  spec_validated: true
+  tech_spec_ready: true
+  tech_spec_validated: true
+  decomposition_complete: true
+  task_validation_complete: true
+  codex_handoff_allowed: true
+  execution_complete: true
+  verification_complete: true
+  done_complete: true
+project:
+  name: Пример end-to-end feature
+  slug: example-change-end-to-end
+  mode: brownfield

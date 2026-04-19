@@ -1,0 +1,8 @@
+# Здесь хранится активный набор сценариев для текущего проекта.
+scenario_pack:
+  name: "scenario-pack"
+  entrypoint: "00-master-router.md"
+project_preset: ""
+active:
+  - "00-master-router.md"
+status: "нужно_загрузить_в_sources"

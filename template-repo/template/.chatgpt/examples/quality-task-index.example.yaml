@@ -1,0 +1,41 @@
+# Пример качественно заполненного task-index.yaml
+change:
+  id: "chg-20260413-101"
+  title: "Усиление таймаутов и логирования интеграции"
+  class: feature
+  execution_mode: hybrid
+  type: brownfield
+  status: ready-for-handoff
+  priority: high
+  summary: "Добавить явные таймауты, расширить логирование ошибок и подготовить изменение retry-логики."
+  outputs:
+    - ".chatgpt/reality-check.md"
+    - ".chatgpt/tech-spec.md"
+    - "work/active/chg-20260413-101/tasks/T-001.md"
+
+tasks:
+  - id: T-001
+    title: "Подтвердить фактическую схему ошибок и таймаутов"
+    type: analysis
+    risk_level: medium
+    executor: analyst
+    depends_on: []
+    outputs:
+      - ".chatgpt/reality-check.md"
+      - ".chatgpt/evidence-register.md"
+    acceptance:
+      - "Подтверждено, какие таймауты реально используются сейчас"
+      - "Собраны минимум два доказательства в evidence-register"
+
+  - id: T-002
+    title: "Подготовить техническую спецификацию изменения"
+    type: docs
+    risk_level: medium
+    executor: architect
+    depends_on: [T-001]
+    outputs:
+      - ".chatgpt/tech-spec.md"
+      - ".chatgpt/tech-spec-validation.md"
+    acceptance:
+      - "В tech-spec описаны таймауты, логирование и retry-ограничения"
+      - "Спецификация пригодна для handoff в Codex"

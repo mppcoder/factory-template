@@ -1,0 +1,20 @@
+# Манифест зон синхронизации фабрики.
+# sync_zones безопасны для controlled apply.
+# advisory_only_zones можно сравнивать и экспортировать, но применять только вручную.
+# exclude_zones исключаются из автоматической обратной синхронизации.
+sync_zones:
+  - bootstrap
+  - template-repo/scenario-pack
+  - template-repo/template/.chatgpt/examples
+  - template-repo/template/meta-feedback
+advisory_only_zones:
+  - template-repo/template/.chatgpt
+  - template-repo/template/brownfield
+  - template-repo/template/greenfield
+  - template-repo/template/docs
+exclude_zones:
+  - template-repo/template/work
+  - registry
+  - working-project-examples
+  - domain-packs
+  - workspace-packs

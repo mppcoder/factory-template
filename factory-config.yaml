@@ -1,0 +1,7 @@
+# Общие настройки фабрики.
+# Подсказка: меняйте значения под свою организацию, если хотите сместить акценты по умолчанию.
+default_project_preset: "product-dev"
+default_mode: "greenfield"
+enforce_stage_gates: true
+require_evidence_tags: true
+allow_domain_packs: true

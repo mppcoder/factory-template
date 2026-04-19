@@ -1,0 +1,175 @@
+# Ранбук для пользователя — только factory-template
+
+## 0. Цель
+
+Этот ранбук описывает работу **только с проектом шаблона фабрики проектов**.
+
+Цель проекта:
+
+- развивать сам шаблон;
+- исправлять баги фабрики;
+- улучшать launcher / validators / scenario-pack / source-pack / codex handoff;
+- собирать новые релизные версии фабрики.
+
+---
+
+## 1. Целевой контур
+
+На VPS используется один основной каталог:
+
+```text
+/projects/factory-template/
+```
+
+Рядом можно держать:
+
+```text
+/projects/_incoming/
+/projects/_release/
+/projects/_artifacts/
+```
+
+Но source of truth для проекта — только `factory-template`.
+
+---
+
+## 2. Что делаете вы
+
+Вы делаете только внешние действия:
+
+1. создаете и поддерживаете GitHub-репозиторий шаблона;
+2. создаете ChatGPT Project шаблона;
+3. загружаете curated sources в Project;
+4. загружаете архивы/входящие материалы в `_incoming`;
+5. подтверждаете risky-внешние действия;
+6. принимаете release/no-release решение.
+
+---
+
+## 3. Что делает Codex
+
+Codex делает внутреннюю работу по шаблону:
+
+1. распаковка/инициализация;
+2. self-tests;
+3. анализ багов фабрики;
+4. реализация улучшений;
+5. обновление scenario-pack / source-pack / codex-task-pack;
+6. smoke / audit / matrix / examples;
+7. подготовка release bundle;
+8. формирование для вас инструкций на внешние действия.
+
+---
+
+## 4. Порядок запуска
+
+## Шаг 1. Подготовить внешние сущности
+
+Создайте:
+
+- GitHub repo `factory-template`
+- ChatGPT Project `Factory Template`
+
+## Шаг 2. Подготовить VPS
+
+```bash
+mkdir -p /projects/_incoming /projects/_release /projects/_artifacts
+```
+
+Загрузите в `/projects/_incoming` архив фабрики и дополнительные входящие артефакты.
+
+## Шаг 3. Открыть VS Code по SSH
+
+Откройте в VS Code именно папку:
+
+```text
+/projects/factory-template
+```
+
+Если репо еще не распаковано — сначала откройте `/projects/_incoming`, дайте Codex распаковать, затем переключитесь на `/projects/factory-template`.
+
+## Шаг 4. Стартовый промпт для Codex
+
+```text
+Работаем только по проекту шаблона фабрики проектов.
+Твоя зона ответственности — сам repo factory-template.
+Не выходи за внешние границы: GitHub, ChatGPT Project Sources, ручные загрузки, секреты, внешние UI.
+Во всех таких местах готовь для меня точные пошаговые инструкции.
+Сначала:
+1. проверь структуру repo,
+2. прогони self-tests,
+3. зафиксируй текущее состояние,
+4. найди несогласованности между runbook, scripts, examples, validators и scenario-pack,
+5. подготовь план controlled fixes.
+```
+
+---
+
+## 5. Основной цикл работы
+
+Рабочий цикл всегда один:
+
+```text
+внешний сигнал → ChatGPT Project → решение/спецификация → Codex-исполнение → verify → release/no-release
+```
+
+### Типовые внешние сигналы
+
+- найден баг фабрики;
+- надо улучшить launcher;
+- надо обновить validators;
+- надо собрать новый source-pack;
+- надо изменить архитектуру фабрики;
+- надо подготовить новый релиз;
+- надо сравнить поведение шаблона с боевыми dogfood проектами.
+
+---
+
+## 6. Что сначала отдавать в ChatGPT Project
+
+Сначала в ChatGPT Project:
+
+- спорные архитектурные решения;
+- изменение философии фабрики;
+- новые сценарные ветки;
+- release strategy;
+- сравнение нескольких вариантов устройства шаблона;
+- анализ, что надо вынести из dogfood обратно в фабрику.
+
+## 7. Что сразу отдавать в Codex
+
+Сразу в Codex:
+
+- правка markdown и yaml/json/toml/sh;
+- обновление launcher/validators;
+- приведение структуры в порядок;
+- синхронизация `template-repo/scenario-pack/`, `template-repo/scripts/`, `working-project-examples/` и generated project artifacts;
+- self-tests и локальные проверки;
+- сбор release bundle;
+- подготовка curated sources pack;
+- генерация boundary-инструкций на GitHub / ChatGPT Project / uploads.
+
+---
+
+## 8. Жесткие правила
+
+1. Не открывать один Codex-сеанс на весь `/projects`.
+2. Не смешивать входящие архивы и сам repo.
+3. Не публиковать релиз без локального verify-пакета.
+4. Не менять одновременно сценарную логику и validators без повторного полного прогона self-tests.
+5. Любое изменение фабрики, влияющее на downstream-проекты, должно иметь release note.
+6. После `SMOKE_TEST.sh` / `EXAMPLES_TEST.sh` / `MATRIX_TEST.sh` перед `PRE_RELEASE_AUDIT.sh` запускать `bash CLEAN_VERIFY_ARTIFACTS.sh`.
+7. Перед `git`/GitHub-фиксацией сверяться с `VERIFY_SUMMARY.md` и `RELEASE_CHECKLIST.md`.
+8. Для любого release/no-release решения использовать `RELEASE_NOTE_TEMPLATE.md` как базовый шаблон релизной заметки.
+
+---
+
+## 9. Критерий успеха
+
+Схема считается внедренной, если:
+
+1. Codex самостоятельно ведет внутреннюю работу по `factory-template`;
+2. вы не сопровождаете вручную каждую команду терминала;
+3. ChatGPT Project используется как сценарный и исследовательский слой;
+4. все внешние действия сведены к коротким инструкциям;
+5. новый релиз фабрики собирается воспроизводимо.

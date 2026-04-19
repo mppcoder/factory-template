@@ -1,0 +1,13 @@
+version: 2.4.0
+template_name: template-repo
+language: ru
+supports_modes:
+- greenfield
+- brownfield
+supports_project_presets:
+- product-dev
+- legacy-modernization
+- integration-project
+- audit-only
+- brownfield-dogfood-codex-assisted
+factory_version: 2.4.0

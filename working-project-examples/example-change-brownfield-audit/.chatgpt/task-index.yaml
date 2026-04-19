@@ -1,0 +1,30 @@
+change:
+  id: "chg-20260413-003" # Идентификатор изменения. Формат: chg-ГГГГММДД-NNN
+  title: "Аудит архитектурных расхождений в существующей системе" # Короткий заголовок изменения
+  class: "brownfield-audit" # Класс изменения
+  execution_mode: "manual" # Режим выполнения: manual, hybrid или codex-led
+  summary: "Собрать фактическую архитектурную карту, найти расхождения и оформить рекомендации" # Краткое описание сути изменения
+
+tasks:
+  - id: "T-001"
+    type: "audit"
+    title: "Собрать инвентаризацию модулей и процессов"
+    executor: "manual"
+    risk_level: "medium"
+    depends_on: []
+    outputs:
+      - "brownfield/system-inventory.md"
+    acceptance:
+      - "Перечислены ключевые модули, процессы и окружения"
+  - id: "T-002"
+    type: "analysis"
+    title: "Сопоставить repo и документацию"
+    executor: "manual"
+    risk_level: "medium"
+    depends_on:
+      - "T-001"
+    outputs:
+      - "brownfield/repo-audit.md"
+      - "brownfield/gap-register.md"
+    acceptance:
+      - "Описаны расхождения между фактическим состоянием и документами"

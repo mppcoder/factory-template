@@ -1,0 +1,27 @@
+project_preset: brownfield-dogfood-codex-assisted
+project_title: Dogfood brownfield через Codex
+recommended_mode: brownfield
+recommended_change_class: brownfield-stabilization
+recommended_execution_mode: hybrid
+active_default_scenarios:
+- 00-master-router.md
+- brownfield/00-brownfield-entry.md
+- brownfield/01-system-inventory.md
+- brownfield/02-repo-audit.md
+- brownfield/03-as-is-architecture-map.md
+- brownfield/04-gap-register.md
+- brownfield/10-evidence-pack-completion.md
+- brownfield/11-codex-assisted-stabilization.md
+required_artifacts:
+- brownfield/system-inventory.md
+- brownfield/repo-audit.md
+- brownfield/reverse-engineering-summary.md
+- .chatgpt/evidence-register.md
+- .chatgpt/codex-input.md
+notes:
+- Стартуйте как hybrid до завершения evidence pack и reality-check.
+- Переключение в codex-led допускается после audit-only цикла и фиксации safe zones.
+- Подходит для dogfood-развертывания factory-template + brownfield shell + evidence
+  workspace в одном VS Code bootstrap окне.
+applied: true
+validated: true

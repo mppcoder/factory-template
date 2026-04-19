@@ -1,0 +1,14 @@
+defect_detected: false
+bug_report_required: false
+bug_report_created: false
+
+defect_layer: "project-only"
+
+factory_feedback_required: false
+factory_feedback_created: false
+
+chatgpt_bug_handoff_required: false
+chatgpt_bug_handoff_created: false
+
+codex_bug_capture_required: true
+silent_fix_forbidden: true

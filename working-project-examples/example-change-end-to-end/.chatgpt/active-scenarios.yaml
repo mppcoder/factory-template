@@ -1,0 +1,13 @@
+scenario_pack:
+  name: "factory-v2.2.8"
+  entrypoint: "00-master-router.md"
+active_scenarios:
+  - "00-master-router.md"
+  - "02-decision-policy.md"
+  - "brownfield/00-brownfield-entry.md"
+  - "brownfield/01-system-inventory.md"
+  - "brownfield/02-repo-audit.md"
+  - "10-task-decomposition.md"
+  - "15-handoff-to-codex.md"
+  - "16-done-closeout.md"
+notes: "Демонстрационный набор сценариев для полного brownfield change lifecycle"

@@ -1,0 +1,22 @@
+# Здесь хранятся этапы и gate-флаги.
+project:
+  name: "{{PROJECT_NAME}}"
+  slug: "{{PROJECT_SLUG}}"
+  mode: "{{PROJECT_MODE}}"
+stage:
+  current: "intake"
+  previous: ""
+  next: "classification"
+gates:
+  intake_complete: false
+  classification_complete: false
+  reuse_check_complete: false
+  reality_check_complete: false
+  conflict_detection_complete: false
+  spec_validated: false
+  tech_spec_validated: false
+  task_validation_complete: false
+  codex_handoff_allowed: false
+  execution_complete: false
+  verification_complete: false
+  done_complete: false

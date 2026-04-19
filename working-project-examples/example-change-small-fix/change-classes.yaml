@@ -1,0 +1,33 @@
+# Справочник классов изменений.
+# Подсказка: меняйте только после согласования с командой, потому что от этого зависят gate'ы и правила handoff.
+change_classes:
+  small-fix:
+    title: "Небольшое исправление"
+    allowed_execution_modes: [manual, hybrid]
+    required_gates: [intake_complete, classification_complete, reuse_check_complete, reality_check_complete]
+    required_artifacts: [.chatgpt/reuse-check.md, .chatgpt/reality-check.md, .chatgpt/evidence-register.md]
+    recommended_task_types: [analysis, docs, fix]
+  feature:
+    title: "Новая функция"
+    allowed_execution_modes: [hybrid, codex-led]
+    required_gates: [intake_complete, classification_complete, reuse_check_complete, reality_check_complete, conflict_detection_complete, spec_validated, tech_spec_validated, task_validation_complete]
+    required_artifacts: [.chatgpt/user-spec.md, .chatgpt/tech-spec.md, .chatgpt/task-index.yaml, .chatgpt/codex-input.md]
+    recommended_task_types: [analysis, design, implementation, docs, verify]
+  refactor:
+    title: "Рефакторинг"
+    allowed_execution_modes: [manual, hybrid, codex-led]
+    required_gates: [intake_complete, classification_complete, reuse_check_complete, reality_check_complete, conflict_detection_complete, tech_spec_validated, task_validation_complete]
+    required_artifacts: [.chatgpt/reality-check.md, .chatgpt/conflict-report.md, .chatgpt/task-index.yaml]
+    recommended_task_types: [analysis, refactor, docs, verify]
+  migration:
+    title: "Миграция или перенос"
+    allowed_execution_modes: [hybrid, codex-led]
+    required_gates: [intake_complete, classification_complete, reuse_check_complete, reality_check_complete, conflict_detection_complete, spec_validated, tech_spec_validated, task_validation_complete]
+    required_artifacts: [.chatgpt/reality-check.md, .chatgpt/conflict-report.md, .chatgpt/tech-spec.md, .chatgpt/task-index.yaml]
+    recommended_task_types: [analysis, migration, docs, verify]
+  brownfield-audit:
+    title: "Аудит существующей системы"
+    allowed_execution_modes: [manual, hybrid]
+    required_gates: [intake_complete, classification_complete, reuse_check_complete, reality_check_complete]
+    required_artifacts: [.chatgpt/reality-check.md, .chatgpt/evidence-register.md, brownfield/system-inventory.md, brownfield/repo-audit.md]
+    recommended_task_types: [analysis, audit, docs]

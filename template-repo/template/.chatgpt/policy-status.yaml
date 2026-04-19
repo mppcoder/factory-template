@@ -1,0 +1,12 @@
+# Состояние примененной policy preset.
+# Подсказка: этот файл описывает требования текущей политики для выбранного change class.
+policy_preset: "" # Идентификатор policy preset, обычно совпадает с change class
+change_class: "" # Класс изменения
+execution_mode: "" # Режим выполнения: manual, hybrid или codex-led
+handoff_policy: "forbidden" # Политика handoff: forbidden, optional, required
+minimum_evidence_required_all: [] # Evidence-теги, которые должны присутствовать все
+minimum_evidence_required_any: [] # Evidence-теги, из которых нужен хотя бы один
+active_default_scenarios: [] # Сценарии, которые политика активирует по умолчанию
+notes: [] # Дополнительные пояснения к политике
+applied: false # Была ли политика применена
+validated: false # Прошла ли политика проверку валидатором

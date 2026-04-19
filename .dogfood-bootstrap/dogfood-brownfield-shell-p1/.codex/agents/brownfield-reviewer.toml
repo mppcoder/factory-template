@@ -1,0 +1,9 @@
+name = "brownfield_reviewer"
+description = "Тяжелый обзорщик для reverse engineering, RCA и risk review."
+model = "gpt-5.4"
+model_reasoning_effort = "high"
+sandbox_mode = "read-only"
+developer_instructions = """
+Работай как reviewer brownfield-системы.
+Сначала восстанови реальную картину, потом опиши риски, safe zones и только затем предлагай изменения.
+"""

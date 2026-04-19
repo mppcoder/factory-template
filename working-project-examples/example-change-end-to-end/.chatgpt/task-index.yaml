@@ -1,0 +1,65 @@
+change:
+  id: "chg-20260413-001" # Идентификатор change
+  title: "Retry для временных ошибок HTTP-интеграции"
+  class: "feature" # Класс изменения
+  execution_mode: "hybrid" # Режим выполнения: manual / codex-led / hybrid
+  priority: "high"
+  status: "done"
+  summary: "Добавить ограниченный retry для временных ошибок внешнего API"
+
+tasks:
+  - id: "T-001"
+    type: "analysis"
+    title: "Уточнить whitelist временных ошибок"
+    executor: "manual"
+    risk_level: "medium"
+    depends_on: []
+    outputs:
+      - "docs/integrations.md"
+      - ".chatgpt/reality-check.md"
+    acceptance:
+      - "Есть список кодов и условий, которые считаются временными ошибками"
+      - "Список согласован с reality check"
+
+  - id: "T-002"
+    type: "implementation"
+    title: "Подключить retry к HTTP-каналу"
+    executor: "codex"
+    risk_level: "high"
+    depends_on:
+      - "T-001"
+    outputs:
+      - "src/"
+      - "tests/"
+    acceptance:
+      - "При временной ошибке уведомление возвращается в очередь"
+      - "Число повторов ограничено"
+      - "Идемпотентный ключ сохраняется"
+
+  - id: "T-003"
+    type: "verification"
+    title: "Проверить журналирование и тесты"
+    executor: "manual"
+    risk_level: "medium"
+    depends_on:
+      - "T-002"
+    outputs:
+      - ".chatgpt/verification-report.md"
+    acceptance:
+      - "Тесты покрывают retry-путь"
+      - "Журнал попыток корректно отражает все попытки"
+
+  - id: "T-004"
+    type: "documentation"
+    title: "Обновить знания проекта и закрыть цикл"
+    executor: "manual"
+    risk_level: "low"
+    depends_on:
+      - "T-003"
+    outputs:
+      - "project-knowledge/known-issues.md"
+      - "project-knowledge/fixes-registry.md"
+      - ".chatgpt/done-report.md"
+    acceptance:
+      - "Документация обновлена"
+      - "Done report заполнен"

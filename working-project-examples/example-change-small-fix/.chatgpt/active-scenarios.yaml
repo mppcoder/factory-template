@@ -1,0 +1,11 @@
+scenario_pack:
+  name: standard-project-discovery-pack
+  version: 1
+  entrypoint: 00-master-router.md
+project_preset: product-dev
+active:
+  - 00-master-router.md
+  - 02-decision-policy.md
+  - 12-bug-analysis.md
+  - 14-docs-normalization.md
+status: completed

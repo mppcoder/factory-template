@@ -1,0 +1,19 @@
+policy_preset: small-fix
+change_class: small-fix
+execution_mode: manual
+handoff_policy: forbidden
+minimum_evidence_required_all:
+- '[PROJECT]'
+- '[DOC]'
+minimum_evidence_required_any:
+- '[FIX]'
+- '[REAL]'
+active_default_scenarios:
+- 00-master-router.md
+- 02-decision-policy.md
+- 12-bug-analysis.md
+- 14-docs-normalization.md
+notes:
+- Для small-fix в ручном режиме handoff не требуется.
+applied: true
+validated: true

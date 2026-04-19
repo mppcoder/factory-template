@@ -1,0 +1,24 @@
+project:
+  name: "Пример brownfield-audit"
+  slug: "example-change-brownfield-audit"
+  mode: "brownfield"
+  type: "software"
+  owner: "Команда платформы"
+  repo_url: "https://example.invalid/brownfield-audit"
+  runtime_url: "https://staging.example.invalid"
+  notes: "Нужно восстановить реальное устройство проекта перед модернизацией."
+
+current_request:
+  summary: "Провести аудит существующей системы заказов перед этапом модернизации."
+  requested_outcome: "Получить фактическую карту системы, ограничения и gap-register."
+  constraints:
+    - "Ничего не менять в production"
+    - "Сначала зафиксировать факты"
+  known_risks:
+    - "Документация может не совпадать с кодом"
+    - "Есть ручные правки без описания"
+
+status:
+  phase: "intake"
+  codex_handoff_allowed: false
+  reverse_engineering_required: true

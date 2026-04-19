@@ -1,0 +1,5 @@
+project_preset: "legacy-modernization"
+recommended_mode: "brownfield"
+recommended_change_class: "brownfield-audit"
+recommended_execution_mode: "manual"
+notes: "Пример синхронизирован с единым versioning layer"

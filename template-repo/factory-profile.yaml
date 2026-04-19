@@ -1,0 +1,7 @@
+# Профиль шаблона.
+# Подсказка: если хотите сделать внутреннюю вариацию фабрики, начните с этого файла.
+language: "ru"
+project_presets_enabled: true
+change_classes_enabled: true
+policy_presets_enabled: true
+default_project_preset: "product-dev"

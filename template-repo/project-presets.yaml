@@ -1,0 +1,100 @@
+project_presets:
+  product-dev:
+    title: Развитие продукта
+    default_mode: greenfield
+    recommended_change_class: feature
+    recommended_execution_mode: codex-led
+    default_scenarios:
+    - 00-master-router.md
+    - 04-discovery-new-project.md
+    - 05-clarify-scope.md
+    - 06-user-spec-generation.md
+    required_artifacts:
+    - .chatgpt/intake.yaml
+    - .chatgpt/user-spec.md
+    - .chatgpt/tech-spec.md
+    - .chatgpt/task-index.yaml
+    notes:
+    - Подходит для продуктовой разработки, где ожидается реализация и последующая
+      верификация.
+  legacy-modernization:
+    title: Модернизация старой системы
+    default_mode: brownfield
+    recommended_change_class: refactor
+    recommended_execution_mode: hybrid
+    default_scenarios:
+    - 00-master-router.md
+    - brownfield/00-brownfield-entry.md
+    - brownfield/01-system-inventory.md
+    - brownfield/02-repo-audit.md
+    - 13-refactor-analysis.md
+    required_artifacts:
+    - brownfield/system-inventory.md
+    - brownfield/repo-audit.md
+    - brownfield/as-is-architecture.md
+    - .chatgpt/conflict-report.md
+    notes:
+    - Начинайте с фиксации реальности и ограничений.
+  integration-project:
+    title: Интеграционный проект
+    default_mode: brownfield
+    recommended_change_class: migration
+    recommended_execution_mode: hybrid
+    default_scenarios:
+    - 00-master-router.md
+    - 02-decision-policy.md
+    - brownfield/01-system-inventory.md
+    - 08-tech-spec-generation.md
+    - 10-task-decomposition.md
+    required_artifacts:
+    - docs/integrations.md
+    - .chatgpt/reality-check.md
+    - .chatgpt/tech-spec.md
+    - .chatgpt/task-index.yaml
+    notes:
+    - Для интеграций обязательно фиксируйте зависимости, версии и внешние ограничения.
+  audit-only:
+    title: Аудит без обязательной реализации
+    default_mode: brownfield
+    recommended_change_class: brownfield-audit
+    recommended_execution_mode: manual
+    default_scenarios:
+    - 00-master-router.md
+    - brownfield/00-brownfield-entry.md
+    - brownfield/01-system-inventory.md
+    - brownfield/02-repo-audit.md
+    - brownfield/04-gap-register.md
+    required_artifacts:
+    - brownfield/system-inventory.md
+    - brownfield/repo-audit.md
+    - brownfield/gap-register.md
+    - .chatgpt/evidence-register.md
+    notes:
+    - Используйте, когда задача — описать и оценить систему без обязательного handoff
+      в Codex.
+  brownfield-dogfood-codex-assisted:
+    title: Dogfood brownfield через Codex
+    default_mode: brownfield
+    recommended_change_class: brownfield-stabilization
+    recommended_execution_mode: hybrid
+    default_scenarios:
+    - 00-master-router.md
+    - brownfield/00-brownfield-entry.md
+    - brownfield/01-system-inventory.md
+    - brownfield/02-repo-audit.md
+    - brownfield/03-as-is-architecture-map.md
+    - brownfield/04-gap-register.md
+    - brownfield/10-evidence-pack-completion.md
+    - brownfield/11-codex-assisted-stabilization.md
+    required_artifacts:
+    - brownfield/system-inventory.md
+    - brownfield/repo-audit.md
+    - brownfield/reverse-engineering-summary.md
+    - .chatgpt/evidence-register.md
+    - .chatgpt/codex-input.md
+    notes:
+    - Стартуйте как hybrid до завершения evidence pack и reality-check.
+    - Переключение в codex-led допускается после audit-only цикла и фиксации safe
+      zones.
+    - Подходит для dogfood-развертывания factory-template + brownfield shell + evidence
+      workspace в одном VS Code bootstrap окне.

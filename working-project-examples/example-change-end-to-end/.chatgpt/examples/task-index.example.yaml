@@ -1,0 +1,75 @@
+# Пример хорошо заполненного реестра изменения и задач
+change:
+  id: "chg-20260413-001"
+  title: "Добавить примеры заполнения ключевых артефактов"
+  class: feature
+  execution_mode: hybrid
+  type: "brownfield"
+  status: ready-for-handoff
+  priority: high
+  summary: "Усилить шаблон фабрики примерами и русскими подсказками по заполнению"
+  outputs:
+    - "bootstrap/12-примеры-хорошего-заполнения.md"
+    - "template-repo/template/.chatgpt/examples/user-spec.example.md"
+    - "template-repo/template/.chatgpt/examples/tech-spec.example.md"
+    - "template-repo/template/.chatgpt/examples/reality-check.example.md"
+    - "template-repo/template/.chatgpt/examples/evidence-register.example.md"
+    - "template-repo/template/.chatgpt/examples/task-index.example.yaml"
+
+tasks:
+  - id: T-001
+    title: "Проверить текущие шаблоны и выявить, где не хватает пояснений"
+    type: analysis
+    risk_level: low
+    executor: analyst
+    depends_on: []
+    outputs:
+      - ".chatgpt/reality-check.md"
+      - ".chatgpt/evidence-register.md"
+    acceptance:
+      - "Зафиксированы шаблоны, которые нужно усилить"
+      - "Определены файлы, где есть слишком бедные или неясные подсказки"
+
+  - id: T-002
+    title: "Обновить пустые шаблоны русскими подсказками"
+    type: docs
+    risk_level: medium
+    executor: editor
+    depends_on: [T-001]
+    outputs:
+      - "template-repo/template/.chatgpt/user-spec.md"
+      - "template-repo/template/.chatgpt/tech-spec.md"
+      - "template-repo/template/.chatgpt/reality-check.md"
+      - "template-repo/template/.chatgpt/evidence-register.md"
+      - "template-repo/template/.chatgpt/task-index.yaml"
+    acceptance:
+      - "Во всех ключевых шаблонах есть русские подсказки по заполнению"
+      - "Английские ключи сопровождаются русскими комментариями"
+
+  - id: T-003
+    title: "Добавить примерные файлы хорошего заполнения"
+    type: docs
+    risk_level: medium
+    executor: editor
+    depends_on: [T-002]
+    outputs:
+      - "template-repo/template/.chatgpt/examples/user-spec.example.md"
+      - "template-repo/template/.chatgpt/examples/tech-spec.example.md"
+      - "template-repo/template/.chatgpt/examples/reality-check.example.md"
+      - "template-repo/template/.chatgpt/examples/evidence-register.example.md"
+      - "template-repo/template/.chatgpt/examples/task-index.example.yaml"
+    acceptance:
+      - "Примеры показывают хорошую глубину заполнения"
+      - "Примеры универсальны и не привязаны только к одному домену"
+
+  - id: T-004
+    title: "Проверить, что пакет собирается и не содержит временных артефактов"
+    type: verify
+    risk_level: low
+    executor: reviewer
+    depends_on: [T-003]
+    outputs:
+      - ".chatgpt/verification-report.md"
+    acceptance:
+      - "Архив создаётся без ошибок"
+      - "В пакете нет тестовых каталогов и временных файлов"

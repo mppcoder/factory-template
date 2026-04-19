@@ -1,0 +1,15 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Открыть корень /projects",
+      "type": "shell",
+      "command": "pwd && ls -la /projects"
+    },
+    {
+      "label": "Проверить входящий архив",
+      "type": "shell",
+      "command": "ls -lh /projects/_incoming"
+    }
+  ]
+}

@@ -1,0 +1,58 @@
+# Реестр изменения и задач.
+# Подсказка: английские ключи используются для скриптов, поэтому их названия не переводятся.
+# Русские комментарии ниже объясняют, что именно и в каком формате нужно заполнять.
+
+change:
+  # id — уникальный идентификатор изменения, например chg-20260413-001
+  id: ""
+  # title — короткое понятное название изменения
+  title: ""
+  # class — класс изменения: small-fix / feature / refactor / migration / brownfield-audit
+  class: small-fix
+  # execution_mode — режим выполнения: manual / hybrid / codex-led
+  execution_mode: manual
+  # type — тип стартового контекста: greenfield / brownfield
+  type: "{{PROJECT_MODE}}"
+  # status — draft / in-progress / ready-for-handoff / done
+  status: draft
+  # priority — low / medium / high / critical
+  priority: medium
+  # summary — кратко, что именно меняется и какой результат нужен
+  summary: ""
+  # outputs — список ожидаемых артефактов: документы, файлы, отчёты, изменения структуры
+  outputs: []
+
+# Подсказка: каждая задача должна быть достаточно маленькой, чтобы её можно было отдать в работу отдельно.
+# Если задача слишком большая, разбейте её на несколько T-xxx.
+tasks:
+  - id: T-001
+    # title — краткое название задачи
+    title: "Исследование и фиксация контекста"
+    # type — тип задачи: analysis / docs / code / test / migration / verify
+    type: analysis
+    # risk_level — низкий, средний, высокий риск: low / medium / high
+    risk_level: low
+    # executor — кто лучше подходит на выполнение: analyst / editor / developer / architect / reviewer
+    executor: analyst
+    # depends_on — от каких задач зависит эта задача
+    depends_on: []
+    # outputs — какие артефакты должны появиться по итогам задачи
+    outputs:
+      - ".chatgpt/reality-check.md"
+    # acceptance — как понять, что задача выполнена качественно
+    acceptance:
+      - "Результат зафиксирован в артефактах проекта"
+      - "Проверены факты, а не только предположения"
+
+  - id: T-002
+    title: "Формализация решения"
+    type: docs
+    risk_level: low
+    executor: editor
+    depends_on: [T-001]
+    outputs:
+      - ".chatgpt/user-spec.md"
+      - ".chatgpt/tech-spec.md"
+    acceptance:
+      - "Изменения перенесены в repo"
+      - "Текст готов к handoff в Codex или ручному исполнению"

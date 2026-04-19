@@ -1,0 +1,125 @@
+policy_presets:
+  small-fix:
+    default_scenarios:
+    - 00-master-router.md
+    - 02-decision-policy.md
+    - 12-bug-analysis.md
+    - 14-docs-normalization.md
+    minimum_evidence:
+      required_all:
+      - '[PROJECT]'
+      - '[DOC]'
+      required_any:
+      - '[FIX]'
+      - '[REAL]'
+    codex_handoff:
+      manual: forbidden
+      hybrid: optional
+      codex-led: forbidden
+    notes:
+    - Используйте для небольших исправлений без масштабной перестройки системы.
+  feature:
+    default_scenarios:
+    - 00-master-router.md
+    - 05-clarify-scope.md
+    - 06-user-spec-generation.md
+    - 08-tech-spec-generation.md
+    - 10-task-decomposition.md
+    - 15-handoff-to-codex.md
+    minimum_evidence:
+      required_all:
+      - '[PROJECT]'
+      - '[DOC]'
+      required_any:
+      - '[REAL]'
+      - '[FIX]'
+    codex_handoff:
+      manual: forbidden
+      hybrid: required
+      codex-led: required
+    notes:
+    - Для новой функции обязательны spec, decomposition и verify.
+  refactor:
+    default_scenarios:
+    - 00-master-router.md
+    - 02-decision-policy.md
+    - 13-refactor-analysis.md
+    - 10-task-decomposition.md
+    - 15-handoff-to-codex.md
+    minimum_evidence:
+      required_all:
+      - '[PROJECT]'
+      required_any:
+      - '[DOC]'
+      - '[REAL]'
+      - '[FIX]'
+    codex_handoff:
+      manual: optional
+      hybrid: required
+      codex-led: required
+    notes:
+    - Рефакторинг нельзя делать без conflict detection.
+  migration:
+    default_scenarios:
+    - 00-master-router.md
+    - 02-decision-policy.md
+    - 08-tech-spec-generation.md
+    - 10-task-decomposition.md
+    - 15-handoff-to-codex.md
+    minimum_evidence:
+      required_all:
+      - '[PROJECT]'
+      - '[DOC]'
+      required_any:
+      - '[REAL]'
+      - '[ASSUMPTION]'
+    codex_handoff:
+      manual: forbidden
+      hybrid: required
+      codex-led: required
+    notes:
+    - Для миграций обязательно фиксируйте риски совместимости.
+  brownfield-audit:
+    default_scenarios:
+    - 00-master-router.md
+    - brownfield/00-brownfield-entry.md
+    - brownfield/01-system-inventory.md
+    - brownfield/02-repo-audit.md
+    - brownfield/04-gap-register.md
+    minimum_evidence:
+      required_all:
+      - '[PROJECT]'
+      required_any:
+      - '[DOC]'
+      - '[REAL]'
+      - '[FIX]'
+    codex_handoff:
+      manual: forbidden
+      hybrid: optional
+      codex-led: forbidden
+    notes:
+    - Аудит может завершаться без handoff в Codex, если цель — инвентаризация и нормализация.
+  brownfield-stabilization:
+    default_scenarios:
+    - 00-master-router.md
+    - brownfield/00-brownfield-entry.md
+    - brownfield/01-system-inventory.md
+    - brownfield/03-as-is-architecture-map.md
+    - brownfield/08-brownfield-risk-review.md
+    - brownfield/10-evidence-pack-completion.md
+    - brownfield/11-codex-assisted-stabilization.md
+    - 15-handoff-to-codex.md
+    minimum_evidence:
+      required_all:
+      - '[PROJECT]'
+      required_any:
+      - '[DOC]'
+      - '[REAL]'
+      - '[FIX]'
+    codex_handoff:
+      manual: forbidden
+      hybrid: optional
+      codex-led: required
+    notes:
+    - До завершения evidence pack handoff должен оставаться optional.
+    - После фиксации safe zones и rollback плана можно переходить в codex-led.

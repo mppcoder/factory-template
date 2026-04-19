@@ -1,0 +1,17 @@
+project_preset: product-dev
+project_title: Развитие продукта
+recommended_mode: brownfield
+recommended_change_class: small-fix
+recommended_execution_mode: manual
+active_default_scenarios:
+- 00-master-router.md
+- 02-decision-policy.md
+- 12-bug-analysis.md
+required_artifacts:
+- .chatgpt/reality-check.md
+- .chatgpt/evidence-register.md
+- .chatgpt/task-index.yaml
+notes:
+- Золотой пример для локального исправления без обязательного handoff в Codex.
+applied: true
+validated: true

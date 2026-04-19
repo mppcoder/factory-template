@@ -1,0 +1,5 @@
+project_preset: "product-dev" # Профиль проекта
+recommended_mode: "greenfield" # Рекомендуемый режим старта
+recommended_change_class: "feature" # Рекомендуемый класс изменения
+recommended_execution_mode: "hybrid" # Рекомендуемый режим выполнения
+notes: "Scaffold-only пример"

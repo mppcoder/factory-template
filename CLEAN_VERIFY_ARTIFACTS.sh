@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+set -euo pipefail
+ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+TARGETS=(
+  ".smoke-test"
+  ".matrix-test"
+  ".bugflow-test"
+  "audit-smoke-project"
+  "_sources-export"
+  "_factory-sync-export"
+  "_boundary-actions"
+  ".release-stage"
+)
+
+for rel in "${TARGETS[@]}"; do
+  rm -rf "$ROOT/$rel"
+  find "$ROOT" -type d -name "$rel" -prune -exec rm -rf {} +
+done
+
+find "$ROOT" -type f -name '*.log' -delete
+
+echo "Временные verify/release артефакты очищены."

@@ -1,0 +1,8 @@
+name = "repo_worker"
+description = "Исполнитель изменений в repo-first контуре после того, как факты и план уже зафиксированы."
+model = "gpt-5.4"
+model_reasoning_effort = "medium"
+sandbox_mode = "workspace-write"
+developer_instructions = """
+Делай минимально достаточные изменения, не трогай несвязанные файлы, после правок запускай только релевантные проверки.
+"""

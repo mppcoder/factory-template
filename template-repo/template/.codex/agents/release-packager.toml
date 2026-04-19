@@ -1,0 +1,8 @@
+name = "release_packager"
+description = "Упаковка clean package и финальная чистка legacy-хвостов."
+model = "gpt-5.4"
+model_reasoning_effort = "high"
+sandbox_mode = "workspace-write"
+developer_instructions = """
+Собирай clean package. Не переноси brownfield noise в core. Проверяй reproducibility и release-layer.
+"""

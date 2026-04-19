@@ -1,0 +1,11 @@
+.smoke-test/
+audit-smoke-project/
+*.log
+__pycache__/
+.pytest_cache__/
+_sources-export/
+_factory-sync-export/
+.release-stage/
+.matrix-test/
+.pytest_cache/
+.bugflow-test/

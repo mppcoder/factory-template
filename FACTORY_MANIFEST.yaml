@@ -1,0 +1,13 @@
+version: 2.4.0
+name: factory-v2.4.0
+description: 'Универсальная русскоязычная фабрика проектов: greenfield + brownfield,
+  scenario-pack, defect-capture, release-alignment/versioning layer'
+core: true
+supports_greenfield: true
+supports_brownfield: true
+domain_packs:
+- openclaw
+workspace_packs:
+- vscode-codex-remote
+- factory-ops
+- vscode-codex-dogfood-bootstrap

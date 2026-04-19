@@ -1,0 +1,5 @@
+project_preset: "legacy-modernization" # Профиль проекта
+recommended_mode: "brownfield" # Рекомендуемый режим старта
+recommended_change_class: "brownfield-audit" # Рекомендуемый класс изменения
+recommended_execution_mode: "manual" # Рекомендуемый режим выполнения
+notes: "Scaffold-only пример"

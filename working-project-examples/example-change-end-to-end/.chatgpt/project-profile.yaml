@@ -1,0 +1,20 @@
+project_preset: integration-project
+project_title: Интеграционный проект
+recommended_mode: brownfield
+recommended_change_class: feature
+recommended_execution_mode: hybrid
+active_default_scenarios:
+- 00-master-router.md
+- 02-decision-policy.md
+- 08-tech-spec-generation.md
+- 10-task-decomposition.md
+- 15-handoff-to-codex.md
+required_artifacts:
+- docs/integrations.md
+- .chatgpt/reality-check.md
+- .chatgpt/tech-spec.md
+- .chatgpt/task-index.yaml
+notes:
+- Главный золотой пример feature-change с handoff в Codex и полным циклом verify/done.
+applied: true
+validated: true

@@ -1,0 +1,21 @@
+policy_preset: brownfield-audit
+change_class: brownfield-audit
+execution_mode: manual
+handoff_policy: forbidden
+minimum_evidence_required_all:
+- '[PROJECT]'
+minimum_evidence_required_any:
+- '[DOC]'
+- '[REAL]'
+- '[FIX]'
+active_default_scenarios:
+- 00-master-router.md
+- brownfield/00-brownfield-entry.md
+- brownfield/01-system-inventory.md
+- brownfield/02-repo-audit.md
+- brownfield/04-gap-register.md
+notes:
+- Для brownfield-audit handoff в Codex не требуется, если цель ограничена инвентаризацией
+  и формализацией знаний.
+applied: true
+validated: true

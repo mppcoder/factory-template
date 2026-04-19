@@ -1,0 +1,5 @@
+name: "scenario-pack"
+language: "ru"
+entrypoint: "00-master-router.md"
+contains_brownfield_bundle: true
+contains_decision_policy: true

@@ -1,0 +1,21 @@
+project_preset: audit-only
+project_title: Аудит без обязательной реализации
+recommended_mode: brownfield
+recommended_change_class: brownfield-audit
+recommended_execution_mode: manual
+active_default_scenarios:
+- 00-master-router.md
+- brownfield/00-brownfield-entry.md
+- brownfield/01-system-inventory.md
+- brownfield/02-repo-audit.md
+- brownfield/04-gap-register.md
+required_artifacts:
+- brownfield/system-inventory.md
+- brownfield/repo-audit.md
+- brownfield/gap-register.md
+- .chatgpt/evidence-register.md
+notes:
+- Золотой пример для аудита существующей системы без обязательной реализации и без
+  handoff в Codex.
+applied: true
+validated: true

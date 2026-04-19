@@ -1,0 +1,21 @@
+policy_preset: feature
+change_class: feature
+execution_mode: hybrid
+handoff_policy: required
+minimum_evidence_required_all:
+- '[PROJECT]'
+- '[DOC]'
+minimum_evidence_required_any:
+- '[REAL]'
+- '[FIX]'
+active_default_scenarios:
+- 00-master-router.md
+- 05-clarify-scope.md
+- 06-user-spec-generation.md
+- 08-tech-spec-generation.md
+- 10-task-decomposition.md
+- 15-handoff-to-codex.md
+notes:
+- Для feature-change handoff обязателен после закрытия ключевых gate.
+applied: true
+validated: true

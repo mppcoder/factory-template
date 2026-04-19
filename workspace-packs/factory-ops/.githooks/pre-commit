@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+set -euo pipefail
+changed="$(git diff --cached --name-only || true)"
+if echo "$changed" | grep -Eq '^(bootstrap/|template-repo/|registry/|meta-template-project/templates/)'; then
+  echo
+  echo 'ВНИМАНИЕ: вы меняете шаблонные зоны фабрики.'
+  echo 'Проверьте:'
+  echo '1. нужно ли обновить registry/factory-versions.md'
+  echo '2. нужно ли зафиксировать релиз в registry/release-history.md'
+  echo '3. нужно ли обновить TEST_REPORT.md'
+  echo '4. нужен ли feedback или синхронизация в активные проекты'
+  echo
+fi

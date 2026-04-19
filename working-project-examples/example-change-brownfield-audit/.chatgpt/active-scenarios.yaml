@@ -1,0 +1,12 @@
+scenario_pack:
+  name: standard-project-discovery-pack
+  version: 1
+  entrypoint: 00-master-router.md
+project_preset: audit-only
+active:
+  - 00-master-router.md
+  - brownfield/00-brownfield-entry.md
+  - brownfield/01-system-inventory.md
+  - brownfield/02-repo-audit.md
+  - brownfield/04-gap-register.md
+status: completed

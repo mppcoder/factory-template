@@ -1,0 +1,19 @@
+# Заполните карточку запроса.
+# Подсказка: если термин в ключе на английском, рядом даны русские пояснения.
+project:
+  # name — название проекта
+  name: "Dogfood Brownfield Shell P1"
+  # slug — короткое машинное имя проекта
+  slug: "dogfood-brownfield-shell-p1"
+  # mode — режим старта: greenfield или brownfield
+  mode: "brownfield"
+request:
+  # summary — кратко: что нужно получить
+  summary: ""
+  # desired_outcome — желаемый результат простыми словами
+  desired_outcome: ""
+  # constraints — ограничения: сроки, технологии, запреты
+  constraints: []
+status:
+  # phase — текущая фаза intake
+  phase: "intake"

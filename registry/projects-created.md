@@ -1,0 +1,108 @@
+# Проекты, созданные из фабрики
+
+<!--
+Подсказка: сюда заносятся production-проекты, созданные из фабрики.
+Для test-прогонов используйте статус `test` или режим `FACTORY_REGISTRY_MODE=skip`.
+
+Формат записи:
+- дата: 2026-04-14
+  проект: Название проекта
+  slug: slug-project
+  версия_фабрики: 2.3.6
+  режим: greenfield|brownfield
+  статус_записи: production|test
+  project_preset: product-dev|legacy-modernization|integration-project|audit-only
+  change_class: small-fix|feature|refactor|migration|brownfield-audit
+  execution_mode: manual|hybrid|codex-led
+  примечание: свободный комментарий
+-->
+- дата: 2026-04-14
+  проект: Проект дефектов
+  slug: proj-defect
+  версия_фабрики: 2.3.7
+  режим: greenfield
+  статус_записи: production
+  project_preset: product-dev
+  change_class: feature
+  execution_mode: hybrid
+  примечание: создан через launcher
+- дата: 2026-04-14
+  проект: Проект дефектов
+  slug: proj-defect
+  версия_фабрики: 2.3.7
+  режим: greenfield
+  статус_записи: production
+  project_preset: product-dev
+  change_class: feature
+  execution_mode: hybrid
+  примечание: создан через launcher
+- дата: 2026-04-14
+  проект: Проект дефектов
+  slug: proj-defect
+  версия_фабрики: 2.3.7
+  режим: greenfield
+  статус_записи: production
+  project_preset: product-dev
+  change_class: feature
+  execution_mode: hybrid
+  примечание: создан через launcher
+- дата: 2026-04-14
+  проект: Проект дефектов
+  slug: proj-defect
+  версия_фабрики: 2.3.7
+  режим: greenfield
+  статус_записи: production
+  project_preset: product-dev
+  change_class: feature
+  execution_mode: hybrid
+  примечание: создан через launcher
+- дата: 2026-04-15
+  проект: Тестовый проект
+  slug: test-align
+  версия_фабрики: 2.3.7
+  режим: greenfield
+  статус_записи: production
+  project_preset: product-dev
+  change_class: small-fix
+  execution_mode: manual
+  примечание: создан через launcher
+- дата: 2026-04-15
+  проект: Тестовый проект
+  slug: test-align
+  версия_фабрики: 2.3.7
+  режим: greenfield
+  статус_записи: production
+  project_preset: product-dev
+  change_class: small-fix
+  execution_mode: manual
+  примечание: создан через launcher
+- дата: 2026-04-15
+  проект: GF Demo
+  slug: gf-demo
+  версия_фабрики: 2.4.0-versioning-layer
+  режим: greenfield
+  статус_записи: production
+  project_preset: product-dev
+  change_class: feature
+  execution_mode: hybrid
+  примечание: создан через launcher
+- дата: 2026-04-15
+  проект: BF Demo
+  slug: bf-demo
+  версия_фабрики: 2.4.0-versioning-layer
+  режим: brownfield
+  статус_записи: production
+  project_preset: legacy-modernization
+  change_class: brownfield-audit
+  execution_mode: manual
+  примечание: создан через launcher
+- дата: 2026-04-17
+  проект: Dogfood Brownfield Shell
+  slug: dogfood-brownfield-shell
+  версия_фабрики: 2.4.0
+  режим: brownfield
+  статус_записи: production
+  project_preset: audit-only
+  change_class: brownfield-audit
+  execution_mode: manual
+  примечание: создан через launcher
