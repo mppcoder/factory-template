@@ -9,6 +9,7 @@
 - декларативный `factory-template-ops-policy.yaml` для curated Sources packs и boundary-actions settings
 - validator `VALIDATE_FACTORY_TEMPLATE_OPS.sh` / `tools/validate_factory_template_ops_policy.py`
 - validator `template-repo/scripts/validate-codex-task-pack.sh` для generated Codex handoff pack
+- semantic checks для `sources-pack-core-20`, `sources-pack-release-20` и `sources-pack-bugfix-20` внутри `tools/validate_factory_template_ops_policy.py`
 
 ### Изменено
 - launcher теперь предлагает новый профиль и новый класс изменения
@@ -17,6 +18,7 @@
 - `PRE_RELEASE_AUDIT.sh`, `SMOKE_TEST.sh` и `MATRIX_TEST.sh` теперь учитывают ops-policy validator
 - feedback ingest теперь явно фиксирует режим `validated` / `allow-incomplete` в `incoming-learnings/INDEX.md`
 - `create-codex-task-pack.sh` теперь корректно подхватывает `active_scenarios` и `scenario_pack.entrypoint` из `active-scenarios.yaml`
+- `sources-pack-release-20` теперь ориентирован на release-facing docs, а `sources-pack-bugfix-20` включает feedback/handoff validators
 
 ### Исправлено
 - `tools/ingest_factory_feedback.py` больше не падает на runtime `NameError` при запуске validator перед ingest

@@ -35,7 +35,9 @@ sources_packs:
       - VERSION_SYNC_CHECK.sh
       - CLEAN_VERIFY_ARTIFACTS.sh
       - TEST_REPORT.md
-      - CONTROLLED_FIXES_AUDIT_2026-04-19.md
+      - RELEASE_CHECKLIST.md
+      - VERIFY_SUMMARY.md
+      - RELEASE_NOTE_TEMPLATE.md
       - meta-template-project/RELEASE_NOTES.md
       - template-repo/CHANGELOG.md
       - template-repo/README.md
@@ -43,8 +45,6 @@ sources_packs:
       - factory_template_only_pack/01-runbook-dlya-polzovatelya-factory-template.md
       - factory_template_only_pack/02-runbook-dlya-codex-factory-template.md
       - factory_template_only_pack/04-chatgpt-project-sources-factory-template-20-cap.md
-      - factory_template_only_pack/05-backlog-dorabotok-factory-template.md
-      - factory_template_only_pack/07-AGENTS-factory-template.md
   sources-pack-bugfix-20:
     purpose: bugfix-oriented Sources pack for launcher and validator drift work
     files:
@@ -61,12 +61,12 @@ sources_packs:
       - template-repo/scripts/validate-versioning-layer.sh
       - template-repo/scripts/validate-defect-capture.sh
       - template-repo/scripts/validate-alignment.sh
+      - template-repo/scripts/validate-codex-task-pack.sh
       - template-repo/scripts/export-sources-pack.sh
       - template-repo/scripts/create-codex-task-pack.sh
+      - VALIDATE_FACTORY_FEEDBACK.sh
       - factory_template_only_pack/02-runbook-dlya-codex-factory-template.md
-      - factory_template_only_pack/04-chatgpt-project-sources-factory-template-20-cap.md
       - factory_template_only_pack/05-backlog-dorabotok-factory-template.md
-      - CONTROLLED_FIXES_AUDIT_2026-04-19.md
       - TEST_REPORT.md
 
 boundary_actions:

@@ -16,6 +16,92 @@ def fail(msg: str, errors: list[str]) -> None:
     errors.append(msg)
 
 
+def require_paths(name: str, files: set[str], required: list[str], errors: list[str]) -> None:
+    for rel in required:
+        if rel not in files:
+            fail(f"{name}: отсутствует обязательный semantic-файл {rel}", errors)
+
+
+def require_prefix_count(name: str, items: list[str], prefix: str, min_count: int, errors: list[str]) -> None:
+    count = sum(1 for rel in items if rel.startswith(prefix))
+    if count < min_count:
+        fail(f"{name}: ожидается минимум {min_count} файлов с префиксом {prefix}, сейчас {count}", errors)
+
+
+def validate_pack_semantics(name: str, files: list[str], errors: list[str]) -> None:
+    file_set = set(files)
+    if name == "sources-pack-core-20":
+        require_paths(
+            name,
+            file_set,
+            [
+                "template-repo/scenario-pack/00-master-router.md",
+                "template-repo/scenario-pack/01-global-rules.md",
+                "template-repo/scenario-pack/15-handoff-to-codex.md",
+                "factory_template_only_pack/01-runbook-dlya-polzovatelya-factory-template.md",
+                "factory_template_only_pack/02-runbook-dlya-codex-factory-template.md",
+                "README.md",
+                "CHANGELOG.md",
+                "CURRENT_FUNCTIONAL_STATE.md",
+                "template-repo/project-presets.yaml",
+                "template-repo/policy-presets.yaml",
+                "template-repo/change-classes.yaml",
+                "TEST_REPORT.md",
+            ],
+            errors,
+        )
+        require_prefix_count(name, files, "template-repo/scenario-pack/", 6, errors)
+        require_prefix_count(name, files, "factory_template_only_pack/", 4, errors)
+
+    elif name == "sources-pack-release-20":
+        require_paths(
+            name,
+            file_set,
+            [
+                "FACTORY_MANIFEST.yaml",
+                "RELEASE_BUILD.sh",
+                "PRE_RELEASE_AUDIT.sh",
+                "VERSION_SYNC_CHECK.sh",
+                "CLEAN_VERIFY_ARTIFACTS.sh",
+                "RELEASE_CHECKLIST.md",
+                "VERIFY_SUMMARY.md",
+                "RELEASE_NOTE_TEMPLATE.md",
+                "meta-template-project/RELEASE_NOTES.md",
+                "template-repo/TEMPLATE_MANIFEST.yaml",
+            ],
+            errors,
+        )
+        if "factory_template_only_pack/05-backlog-dorabotok-factory-template.md" in file_set:
+            fail(f"{name}: backlog-файл не должен занимать место в release-oriented pack", errors)
+        if "CONTROLLED_FIXES_AUDIT_2026-04-19.md" in file_set:
+            fail(f"{name}: audit snapshot не должен заменять release-facing docs", errors)
+
+    elif name == "sources-pack-bugfix-20":
+        require_paths(
+            name,
+            file_set,
+            [
+                "template-repo/launcher.sh",
+                "template-repo/scripts/validate-project-preset.sh",
+                "template-repo/scripts/validate-policy-preset.sh",
+                "template-repo/scripts/validate-quality.sh",
+                "template-repo/scripts/validate-handoff.sh",
+                "template-repo/scripts/validate-codex-task-pack.sh",
+                "template-repo/scripts/validate-defect-capture.sh",
+                "template-repo/scripts/create-codex-task-pack.sh",
+                "VALIDATE_FACTORY_FEEDBACK.sh",
+                "TEST_REPORT.md",
+            ],
+            errors,
+        )
+        validator_count = sum(
+            1 for rel in files
+            if rel.startswith("template-repo/scripts/validate-")
+        )
+        if validator_count < 9:
+            fail(f"{name}: ожидается минимум 9 validator scripts, сейчас {validator_count}", errors)
+
+
 def validate_pack(name: str, pack: dict, errors: list[str]) -> None:
     files = pack.get("files")
     purpose = pack.get("purpose")
@@ -37,6 +123,7 @@ def validate_pack(name: str, pack: dict, errors: list[str]) -> None:
         seen.add(rel)
         if not (ROOT / rel).exists():
             fail(f"{name}: отсутствует файл {rel}", errors)
+    validate_pack_semantics(name, files, errors)
 
 
 def main() -> int:

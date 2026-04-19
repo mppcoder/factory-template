@@ -20,7 +20,10 @@
 
 - базовые curated packs для самого `factory-template` уже автоматизированы через `EXPORT_FACTORY_TEMPLATE_SOURCES.sh`
 - состав pack'ов вынесен в декларативный `factory-template-ops-policy.yaml`
-- дальше можно расширять фазовые policy manifests и добавить validator для pack composition
+- добавлен validator не только на pack composition, но и на semantic profile `core / release / bugfix`
+- `sources-pack-release-20` теперь несет release-facing docs вместо временных audit/backlog файлов
+- `sources-pack-bugfix-20` теперь включает handoff/feedback validators
+- дальше можно расширять фазовые policy manifests и делать phase-aware recommendation engine
 
 ---
 

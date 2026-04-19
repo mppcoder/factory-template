@@ -65,6 +65,12 @@ python3 template-repo/scripts/validate-codex-task-pack.sh <working-project>
 
 `validate-codex-task-pack.sh` проверяет, что `codex-context.md`, `codex-task-pack.md`, `boundary-actions.md` и `done-checklist.md` не только созданы, но и согласованы с `active-scenarios.yaml`.
 
+`VALIDATE_FACTORY_TEMPLATE_OPS.sh` теперь проверяет не только структуру `sources-pack-*`, но и их semantic profile:
+
+- `sources-pack-core-20` обязан содержать сценарное ядро, runbook layer и policy presets;
+- `sources-pack-release-20` обязан содержать release-facing docs и release scripts;
+- `sources-pack-bugfix-20` обязан содержать launcher, validator layer и feedback/handoff validators.
+
 Состав curated packs и параметры boundary-инструкций задаются декларативно в:
 
 - `factory-template-ops-policy.yaml`

@@ -104,3 +104,14 @@ Codex должен готовить для пользователя инстру
 - что удалить из Sources;
 - что заменить на новую фазу;
 - какие файлы реально существуют в repo и являются source of truth.
+
+## 5. Curated Packs
+
+Помимо постоянного core-набора, repo сейчас поддерживает ещё два phase-oriented pack:
+
+- `sources-pack-release-20`
+  Включает release-facing слой: `RELEASE_CHECKLIST.md`, `VERIFY_SUMMARY.md`, `RELEASE_NOTE_TEMPLATE.md`, release scripts и manifests.
+- `sources-pack-bugfix-20`
+  Включает launcher/validator слой и handoff/feedback validators, включая `validate-codex-task-pack.sh` и `VALIDATE_FACTORY_FEEDBACK.sh`.
+
+Эти pack'и проверяются не только по правилу `20 files`, но и по semantic profile внутри `VALIDATE_FACTORY_TEMPLATE_OPS.sh`.
