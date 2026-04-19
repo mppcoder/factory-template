@@ -153,9 +153,10 @@ def main() -> int:
     else:
         repo_name = boundary.get("repo_name")
         project_name = boundary.get("project_name")
-        current_phase = boundary.get("current_phase")
+        default_phase = boundary.get("default_phase")
         recommended = boundary.get("recommended_sources_pack")
         phase_recommendations = boundary.get("phase_recommendations")
+        phase_detection = boundary.get("phase_detection")
         available = boundary.get("available_sources_packs")
         uploads_dir = boundary.get("uploads_dir")
 
@@ -165,8 +166,8 @@ def main() -> int:
             fail("boundary_actions.project_name должен быть непустой строкой", errors)
         if not isinstance(uploads_dir, str) or not uploads_dir.strip():
             fail("boundary_actions.uploads_dir должен быть непустой строкой", errors)
-        if not isinstance(current_phase, str) or not current_phase.strip():
-            fail("boundary_actions.current_phase должен быть непустой строкой", errors)
+        if not isinstance(default_phase, str) or not default_phase.strip():
+            fail("boundary_actions.default_phase должен быть непустой строкой", errors)
         if not isinstance(available, list) or not available:
             fail("boundary_actions.available_sources_packs должен быть непустым списком", errors)
         else:
@@ -188,8 +189,8 @@ def main() -> int:
         if not isinstance(phase_recommendations, dict) or not phase_recommendations:
             fail("boundary_actions.phase_recommendations должен быть непустым mapping", errors)
         else:
-            if isinstance(current_phase, str) and current_phase not in phase_recommendations:
-                fail("boundary_actions.current_phase должен существовать в phase_recommendations", errors)
+            if isinstance(default_phase, str) and default_phase not in phase_recommendations:
+                fail("boundary_actions.default_phase должен существовать в phase_recommendations", errors)
             for phase_name, phase_cfg in phase_recommendations.items():
                 if not isinstance(phase_cfg, dict):
                     fail(f"boundary_actions.phase_recommendations.{phase_name} должен быть mapping", errors)
@@ -202,18 +203,45 @@ def main() -> int:
                     fail(f"boundary_actions.phase_recommendations.{phase_name}.recommended_sources_pack должен входить в available_sources_packs", errors)
                 if not isinstance(rationale, str) or not rationale.strip():
                     fail(f"boundary_actions.phase_recommendations.{phase_name}.rationale должен быть непустой строкой", errors)
-            if isinstance(current_phase, str) and isinstance(phase_recommendations, dict):
-                active_cfg = phase_recommendations.get(current_phase)
+            if isinstance(default_phase, str) and isinstance(phase_recommendations, dict):
+                active_cfg = phase_recommendations.get(default_phase)
                 if isinstance(active_cfg, dict):
                     active_pack = active_cfg.get("recommended_sources_pack")
                     if isinstance(recommended, str) and isinstance(active_pack, str) and recommended != active_pack:
-                        fail("boundary_actions.recommended_sources_pack должен совпадать с рекомендацией текущей фазы", errors)
+                        fail("boundary_actions.recommended_sources_pack должен совпадать с рекомендацией default_phase", errors)
+        if not isinstance(phase_detection, dict) or not phase_detection:
+            fail("boundary_actions.phase_detection должен быть непустым mapping", errors)
+        else:
+            for phase_name, phase_cfg in phase_detection.items():
+                if not isinstance(phase_cfg, dict):
+                    fail(f"boundary_actions.phase_detection.{phase_name} должен быть mapping", errors)
+                    continue
+                min_matches = phase_cfg.get("min_matches")
+                exact_paths = phase_cfg.get("exact_paths", [])
+                prefixes = phase_cfg.get("path_prefixes", [])
+                if not isinstance(min_matches, int) or min_matches < 1:
+                    fail(f"boundary_actions.phase_detection.{phase_name}.min_matches должен быть целым >= 1", errors)
+                if not isinstance(exact_paths, list):
+                    fail(f"boundary_actions.phase_detection.{phase_name}.exact_paths должен быть списком", errors)
+                if not isinstance(prefixes, list):
+                    fail(f"boundary_actions.phase_detection.{phase_name}.path_prefixes должен быть списком", errors)
+                if isinstance(exact_paths, list) and isinstance(prefixes, list) and not exact_paths and not prefixes:
+                    fail(f"boundary_actions.phase_detection.{phase_name} должен содержать exact_paths или path_prefixes", errors)
+                if isinstance(exact_paths, list):
+                    for rel in exact_paths:
+                        if not isinstance(rel, str) or not rel.strip():
+                            fail(f"boundary_actions.phase_detection.{phase_name}.exact_paths содержит пустой путь", errors)
+                if isinstance(prefixes, list):
+                    for prefix in prefixes:
+                        if not isinstance(prefix, str) or not prefix.strip():
+                            fail(f"boundary_actions.phase_detection.{phase_name}.path_prefixes содержит пустой префикс", errors)
 
     template_text = TEMPLATE_PATH.read_text(encoding="utf-8")
     for placeholder in [
         "{{repo_name}}",
         "{{project_name}}",
         "{{current_phase}}",
+        "{{phase_detection_reason}}",
         "{{root_path}}",
         "{{sources_export_dir}}",
         "{{recommended_sources_pack}}",

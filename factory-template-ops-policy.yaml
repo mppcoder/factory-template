@@ -72,7 +72,7 @@ sources_packs:
 boundary_actions:
   repo_name: factory-template
   project_name: Factory Template
-  current_phase: controlled-fixes
+  default_phase: controlled-fixes
   recommended_sources_pack: sources-pack-core-20.tar.gz
   available_sources_packs:
     - sources-pack-core-20.tar.gz
@@ -88,4 +88,29 @@ boundary_actions:
     bugfix-drift:
       recommended_sources_pack: sources-pack-bugfix-20.tar.gz
       rationale: launcher, validator layer и handoff/feedback checks для локализации drift и runtime-багов
+  phase_detection:
+    release:
+      min_matches: 3
+      exact_paths:
+        - RELEASE_CHECKLIST.md
+        - VERIFY_SUMMARY.md
+        - RELEASE_NOTE_TEMPLATE.md
+        - RELEASE_BUILD.sh
+        - FACTORY_MANIFEST.yaml
+        - meta-template-project/RELEASE_NOTES.md
+      path_prefixes:
+        - /projects/_release/
+    bugfix-drift:
+      min_matches: 2
+      exact_paths:
+        - template-repo/launcher.sh
+        - VALIDATE_FACTORY_FEEDBACK.sh
+        - tools/validate_factory_feedback.py
+        - tools/ingest_factory_feedback.py
+        - tools/triage_incoming_learnings.py
+        - template-repo/scripts/create-codex-task-pack.sh
+        - template-repo/scripts/validate-codex-task-pack.sh
+      path_prefixes:
+        - template-repo/scripts/validate-
+        - reports/bugs/
   uploads_dir: /projects/_incoming

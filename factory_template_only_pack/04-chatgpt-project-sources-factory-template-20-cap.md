@@ -126,3 +126,9 @@ Codex должен готовить для пользователя инстру
 
 - `_sources-export/factory-template/SUMMARY.md`
 - `_boundary-actions/factory-template-boundary-actions.md`
+
+Текущую автоопределённую фазу можно посмотреть через:
+
+```bash
+bash DETECT_FACTORY_TEMPLATE_PHASE.sh
+```

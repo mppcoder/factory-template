@@ -71,7 +71,8 @@
 
 1. В терминале запустите `bash EXPORT_FACTORY_TEMPLATE_SOURCES.sh`.
 2. Откройте каталог `{{sources_export_dir}}`.
-3. Для текущей фазы `{{current_phase}}` используйте phase-aware рекомендацию ниже:
+3. Для автоматически определенной фазы `{{current_phase}}` используйте phase-aware рекомендацию ниже.
+   Причина: `{{phase_detection_reason}}`
 {{phase_recommendations_bullets}}
 4. Выберите один из архивов:
 {{available_sources_packs_bullets}}

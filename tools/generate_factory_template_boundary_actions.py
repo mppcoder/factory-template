@@ -4,7 +4,7 @@ from __future__ import annotations
 from pathlib import Path
 import yaml
 
-
+from factory_template_phase_detection import detect_phase, load_policy
 ROOT = Path(__file__).resolve().parents[1]
 OUT_DIR = ROOT / "_boundary-actions"
 POLICY_PATH = ROOT / "factory-template-ops-policy.yaml"
@@ -20,11 +20,14 @@ def render(template: str, mapping: dict[str, str]) -> str:
 def main() -> int:
     OUT_DIR.mkdir(parents=True, exist_ok=True)
     doc = OUT_DIR / "factory-template-boundary-actions.md"
-    policy = yaml.safe_load(POLICY_PATH.read_text(encoding="utf-8")) or {}
+    policy = load_policy()
     cfg = policy.get("boundary_actions", {})
     packs = cfg.get("available_sources_packs", [])
     available_bullets = "\n".join(f"   - `{name}`" for name in packs)
-    current_phase = cfg.get("current_phase", "controlled-fixes")
+    detected = detect_phase(policy)
+    current_phase = str(detected.get("phase", cfg.get("default_phase", "controlled-fixes")))
+    current_pack = str(detected.get("recommended_sources_pack", cfg.get("recommended_sources_pack", "sources-pack-core-20.tar.gz")))
+    detection_reason = "; ".join(detected.get("reasons", [])) if isinstance(detected.get("reasons"), list) else "phase detection reason unavailable"
     phase_cfg = cfg.get("phase_recommendations", {})
     phase_lines: list[str] = []
     for phase_name, phase_data in phase_cfg.items():
@@ -44,9 +47,10 @@ def main() -> int:
             "repo_name": cfg.get("repo_name", "factory-template"),
             "project_name": cfg.get("project_name", "Factory Template"),
             "current_phase": current_phase,
+            "phase_detection_reason": detection_reason,
             "root_path": str(ROOT),
             "sources_export_dir": str(ROOT / "_sources-export" / "factory-template"),
-            "recommended_sources_pack": cfg.get("recommended_sources_pack", "sources-pack-core-20.tar.gz"),
+            "recommended_sources_pack": current_pack,
             "available_sources_packs_bullets": available_bullets,
             "phase_recommendations_bullets": phase_bullets,
             "uploads_dir": cfg.get("uploads_dir", "/projects/_incoming"),

@@ -7,7 +7,7 @@ import tarfile
 from pathlib import Path
 import yaml
 
-
+from factory_template_phase_detection import detect_phase
 ROOT = Path(__file__).resolve().parents[1]
 OUT_ROOT = ROOT / "_sources-export" / "factory-template"
 POLICY_PATH = ROOT / "factory-template-ops-policy.yaml"
@@ -69,12 +69,15 @@ def main() -> int:
         copy_pack(name, pack_data)
     summary = OUT_ROOT / "SUMMARY.md"
     boundary = policy.get("boundary_actions", {})
-    current_phase = boundary.get("current_phase", "controlled-fixes")
-    current_pack = boundary.get("recommended_sources_pack", "sources-pack-core-20.tar.gz")
+    detected = detect_phase(policy)
+    current_phase = str(detected.get("phase", boundary.get("default_phase", "controlled-fixes")))
+    current_pack = str(detected.get("recommended_sources_pack", boundary.get("recommended_sources_pack", "sources-pack-core-20.tar.gz")))
+    detection_reason = "; ".join(detected.get("reasons", [])) if isinstance(detected.get("reasons"), list) else "phase detection reason unavailable"
     lines = [
         "# Factory Template Sources Packs",
         "",
         f"Текущая phase recommendation: `{current_phase}` -> `{current_pack}`.",
+        f"Причина: {detection_reason}",
         "",
         "Собраны curated packs:",
         "",

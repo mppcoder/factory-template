@@ -77,6 +77,14 @@ Phase recommendation теперь тоже декларативна:
 - `release` -> `sources-pack-release-20.tar.gz`
 - `bugfix-drift` -> `sources-pack-bugfix-20.tar.gz`
 
+Автоопределение фазы теперь считается из `git status` и правил в `factory-template-ops-policy.yaml`.
+
+Проверить текущую рекомендацию можно так:
+
+```bash
+bash DETECT_FACTORY_TEMPLATE_PHASE.sh
+```
+
 Эта рекомендация автоматически попадает в `_sources-export/factory-template/SUMMARY.md` и `_boundary-actions/factory-template-boundary-actions.md`.
 
 Состав curated packs и параметры boundary-инструкций задаются декларативно в:

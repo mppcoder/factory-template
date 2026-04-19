@@ -22,11 +22,12 @@
 - curated Sources packs policy
 - boundary-actions generation
 - phase-aware Sources recommendation
+- automatic phase detection
 
 ## Known Residual Limits
 
 - `MATRIX_TEST.sh` остаётся representative runner, а не exhaustive coverage всех возможных комбинаций
-- curated Sources packs и phase recommendations валидируются rule-based, а не через automatic state detection
+- phase detection валидируется rule-based по changed paths, а не через более глубокий semantic анализ repo intent
 - release/no-release решение остаётся отдельным операторским решением
 - git-операции в этом окружении нужно выполнять последовательно; параллельный `commit/push/fetch/remote change` может давать ложные результаты
 
