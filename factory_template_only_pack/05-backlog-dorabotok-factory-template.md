@@ -39,7 +39,9 @@
 
 - `create-codex-task-pack.sh` уже собирает `codex-context.md`, `codex-task-pack.md`, `done-checklist.md`
 - добавлена автоматическая генерация `.chatgpt/boundary-actions.md`
-- дальше можно усилить semantic validation качества handoff contents
+- добавлен validator `template-repo/scripts/validate-codex-task-pack.sh` для semantic-проверки handoff contents
+- исправлена синхронизация route line с `active-scenarios.yaml`
+- дальше можно усиливать качество самого `classification.md` / `codex-input.md`, а не только generated pack
 
 ---
 

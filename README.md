@@ -56,6 +56,15 @@ bash TRIAGE_INCOMING_LEARNINGS.sh --dry-run
 
 `INGEST_FACTORY_FEEDBACK.sh` сначала прогоняет `VALIDATE_FACTORY_FEEDBACK.sh` и останавливает ingest на пустом или шаблонном `meta-feedback`, если не передан `--allow-incomplete`.
 
+Для handoff в Codex:
+
+```bash
+python3 template-repo/scripts/create-codex-task-pack.sh <working-project>
+python3 template-repo/scripts/validate-codex-task-pack.sh <working-project>
+```
+
+`validate-codex-task-pack.sh` проверяет, что `codex-context.md`, `codex-task-pack.md`, `boundary-actions.md` и `done-checklist.md` не только созданы, но и согласованы с `active-scenarios.yaml`.
+
 Состав curated packs и параметры boundary-инструкций задаются декларативно в:
 
 - `factory-template-ops-policy.yaml`

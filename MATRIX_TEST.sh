@@ -66,6 +66,7 @@ PYCODE
 assert_pass 'factory-bugflow' detect-factory-issues.py python3 "$ROOT/workspace-packs/factory-ops/detect-factory-issues.py" "$P"
 assert_pass 'factory-bugflow' check-template-drift.py python3 "$ROOT/workspace-packs/factory-ops/check-template-drift.py" "$ROOT" "$P"
 assert_pass 'factory-bugflow' create-codex-task-pack.sh "$ROOT/template-repo/scripts/create-codex-task-pack.sh" "$P"
+assert_pass 'factory-bugflow' validate-codex-task-pack.sh "$ROOT/template-repo/scripts/validate-codex-task-pack.sh" "$P"
 assert_pass 'factory-bugflow' boundary-actions.md test -f "$P/.chatgpt/boundary-actions.md"
 assert_pass 'factory-bugflow' validate-defect-capture.sh "$ROOT/template-repo/scripts/validate-defect-capture.sh" "$P"
 assert_pass 'factory-bugflow' validate-alignment.sh "$ROOT/template-repo/scripts/validate-alignment.sh" "$P"

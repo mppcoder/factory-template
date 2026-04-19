@@ -81,8 +81,10 @@ def main() -> int:
 """
 
     handoff_policy = policy.get('handoff_policy', 'forbidden')
-    active_scenarios = active.get('active', []) if isinstance(active.get('active'), list) else []
-    scenario_status = active.get('status', 'неизвестно')
+    raw_active_scenarios = active.get('active_scenarios', active.get('active', []))
+    active_scenarios = raw_active_scenarios if isinstance(raw_active_scenarios, list) else []
+    scenario_pack = active.get('scenario_pack', {}) if isinstance(active.get('scenario_pack'), dict) else {}
+    entrypoint = scenario_pack.get('entrypoint', '00-master-router.md')
     if handoff_policy == 'required':
         handoff_line = 'Handoff в Codex обязателен: завершите handoff только после проверки codex-input.md, evidence-register.md и gate codex_handoff_allowed.'
     elif handoff_policy == 'optional':
@@ -90,10 +92,10 @@ def main() -> int:
     else:
         handoff_line = 'Handoff в Codex сейчас не является обязательным для выбранного профиля.'
 
-    if scenario_status == 'нужно_загрузить_в_sources':
-        sources_line = f'Загрузите единый scenario-pack в ChatGPT Project Sources через ./scripts/export-sources-pack.sh . и начните с {active.get("scenario_pack", {}).get("entrypoint", "00-master-router.md")}.'
+    if active.get('status') == 'нужно_загрузить_в_sources':
+        sources_line = f'Загрузите единый scenario-pack в ChatGPT Project Sources через ./scripts/export-sources-pack.sh . и начните с {entrypoint}.'
     else:
-        sources_line = 'Sources уже должны быть загружены; если есть сомнения, повторно экспортируйте единый scenario-pack через ./scripts/export-sources-pack.sh .'
+        sources_line = f'Sources уже должны быть загружены; если есть сомнения, повторно экспортируйте единый scenario-pack через ./scripts/export-sources-pack.sh . Базовая точка входа: {entrypoint}.'
 
     route_line = 'Активные стартовые сценарии: ' + (', '.join(active_scenarios) if active_scenarios else 'еще не определены.')
     boundary_actions = f"""# Boundary Actions
@@ -103,7 +105,7 @@ def main() -> int:
 - Создать или открыть ChatGPT Project для этого рабочего проекта.
 - {sources_line}
 - {route_line}
-- Проверить, что Codex получает актуальные `codex-input.md`, `codex-task-pack.md` и `boundary-actions.md`.
+- Проверить, что Codex получает актуальные `codex-input.md`, `codex-context.md`, `codex-task-pack.md` и `boundary-actions.md`.
 
 ## Для handoff
 
