@@ -1,6 +1,7 @@
 # Текущее функциональное состояние фабрики
 
 ## Что уже реализовано
+- 3 canonical entry modes: новый проект с нуля, brownfield без репо, brownfield с репо
 - генерация greenfield и brownfield проектов
 - scenario-pack, `.chatgpt` и launcher
 - project presets, policy presets и change classes
@@ -11,6 +12,7 @@
 
 ## Что работает стабильно
 - создание fresh scaffold через launcher
+- явное покрытие 3 целевых вариантов входа через presets и scenario-pack
 - defect-aware handoff и Codex task pack
 - базовые structural validators
 - release hygiene, pre-release audit и version sync checks
