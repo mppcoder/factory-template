@@ -181,6 +181,8 @@ mkdir -p /projects/_incoming /projects/_release /projects/_artifacts
 6. После `SMOKE_TEST.sh` / `EXAMPLES_TEST.sh` / `MATRIX_TEST.sh` перед `PRE_RELEASE_AUDIT.sh` запускать `bash CLEAN_VERIFY_ARTIFACTS.sh`.
 7. Перед `git`/GitHub-фиксацией сверяться с `VERIFY_SUMMARY.md` и `RELEASE_CHECKLIST.md`.
 8. Для любого release/no-release решения использовать `RELEASE_NOTE_TEMPLATE.md` как базовый шаблон релизной заметки.
+9. Git-зависимые шаги (`commit`, `push`, `fetch`, смена `origin`) выполнять последовательно, не параллелить.
+10. Если `git push origin main` ведет себя нестабильно, использовать прямой SSH push на `git@github.com:mppcoder/factory-template.git`.
 
 ---
 

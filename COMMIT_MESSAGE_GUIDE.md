@@ -98,3 +98,14 @@ feat: add release checklist and verify summary
 - если главное — добавить новый workflow, используйте `feat`
 - если главное — подготовить publish/release, используйте `release`
 - если главное — синхронизировать документацию, используйте `docs`
+
+## Git Execution Note
+
+Для этого repo git-шаги нужно выполнять последовательно:
+
+1. `git add`
+2. `git commit`
+3. `git push`
+4. `git fetch` или `git status`
+
+Не запускайте зависимые git-команды параллельно, иначе можно получить ложные результаты вроде `Everything up-to-date` или push в неверный transport.

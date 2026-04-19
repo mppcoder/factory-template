@@ -67,6 +67,11 @@ bash GENERATE_BOUNDARY_ACTIONS.sh
 
 - `ENTRY_MODES.md`
 
+Примечание по git sync в этом окружении:
+
+- `git commit`, `git push`, `git fetch` и смену `origin` выполняйте последовательно
+- если обычный `git push origin main` ведет себя нестабильно, используйте прямой SSH push на `git@github.com:mppcoder/factory-template.git`
+
 ## Что входит в релиз
 - `template-repo/` — шаблон нового рабочего проекта.
 - `meta-template-project/` — контур развития самой фабрики.

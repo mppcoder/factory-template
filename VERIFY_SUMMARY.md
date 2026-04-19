@@ -27,6 +27,7 @@
 - `MATRIX_TEST.sh` остаётся representative runner, а не exhaustive coverage всех возможных комбинаций
 - curated Sources packs валидируются структурно, а не по semantic relevance
 - release/no-release решение остаётся отдельным операторским решением
+- git-операции в этом окружении нужно выполнять последовательно; параллельный `commit/push/fetch/remote change` может давать ложные результаты
 
 ## Operator Use
 
@@ -36,3 +37,9 @@
 - подключением `origin`
 - публикацией в GitHub
 - ручной загрузкой Sources в ChatGPT Project
+
+## Git Sync Note
+
+- `git commit`, `git push`, `git fetch`, `git remote set-url` выполнять только последовательно
+- если `git push origin main` ведет себя нестабильно, используйте прямой SSH push:
+  `git push git@github.com:mppcoder/factory-template.git main`
