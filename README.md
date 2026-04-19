@@ -49,7 +49,12 @@ bash PRE_RELEASE_AUDIT.sh
 ```bash
 bash EXPORT_FACTORY_TEMPLATE_SOURCES.sh
 bash GENERATE_BOUNDARY_ACTIONS.sh
+bash VALIDATE_FACTORY_FEEDBACK.sh <working-project>
+bash INGEST_FACTORY_FEEDBACK.sh <working-project> --dry-run
+bash TRIAGE_INCOMING_LEARNINGS.sh --dry-run
 ```
+
+`INGEST_FACTORY_FEEDBACK.sh` сначала прогоняет `VALIDATE_FACTORY_FEEDBACK.sh` и останавливает ingest на пустом или шаблонном `meta-feedback`, если не передан `--allow-incomplete`.
 
 Состав curated packs и параметры boundary-инструкций задаются декларативно в:
 

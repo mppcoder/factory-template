@@ -35,6 +35,12 @@
 
 Цель: сделать handoff в Codex всегда одинаковым и воспроизводимым.
 
+Статус:
+
+- `create-codex-task-pack.sh` уже собирает `codex-context.md`, `codex-task-pack.md`, `done-checklist.md`
+- добавлена автоматическая генерация `.chatgpt/boundary-actions.md`
+- дальше можно усилить semantic validation качества handoff contents
+
 ---
 
 ## 3. Добавить boundary-action generator
@@ -106,3 +112,11 @@
 - feature extraction into template;
 - scenario correction into template;
 - validator correction into template.
+
+Статус:
+
+- добавлен базовый ingestion script `INGEST_FACTORY_FEEDBACK.sh`
+- feedback из working project можно перенести в `meta-template-project/incoming-learnings/`
+- добавлен dry-run triage script `TRIAGE_INCOMING_LEARNINGS.sh`
+- добавлен validator `VALIDATE_FACTORY_FEEDBACK.sh` для качества `meta-feedback`
+- дальше можно усиливать semantic validation и автоматическую запись в backlog / accepted / rejected

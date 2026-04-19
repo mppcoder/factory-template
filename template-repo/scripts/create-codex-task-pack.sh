@@ -16,9 +16,13 @@ def main() -> int:
     task = yaml.safe_load((chat / 'task-index.yaml').read_text(encoding='utf-8')) if (chat / 'task-index.yaml').exists() else {}
     stage = yaml.safe_load((chat / 'stage-state.yaml').read_text(encoding='utf-8')) if (chat / 'stage-state.yaml').exists() else {}
     bugflow = yaml.safe_load((chat / 'bugflow-status.yaml').read_text(encoding='utf-8')) if (chat / 'bugflow-status.yaml').exists() else {}
+    policy = yaml.safe_load((chat / 'policy-status.yaml').read_text(encoding='utf-8')) if (chat / 'policy-status.yaml').exists() else {}
+    active = yaml.safe_load((chat / 'active-scenarios.yaml').read_text(encoding='utf-8')) if (chat / 'active-scenarios.yaml').exists() else {}
     task = task or {}
     stage = stage or {}
     bugflow = bugflow or {}
+    policy = policy or {}
+    active = active or {}
     change = task.get('change', {})
     classification = read_text(chat / 'classification.md').strip() or 'Классификация еще не заполнена.'
     codex_input = read_text(chat / 'codex-input.md').strip() or 'codex-input.md еще не заполнен.'
@@ -76,8 +80,46 @@ def main() -> int:
 - [ ] Если был найден defect, создать или обновить bug report
 """
 
+    handoff_policy = policy.get('handoff_policy', 'forbidden')
+    active_scenarios = active.get('active', []) if isinstance(active.get('active'), list) else []
+    scenario_status = active.get('status', 'неизвестно')
+    if handoff_policy == 'required':
+        handoff_line = 'Handoff в Codex обязателен: завершите handoff только после проверки codex-input.md, evidence-register.md и gate codex_handoff_allowed.'
+    elif handoff_policy == 'optional':
+        handoff_line = 'Handoff в Codex опционален: сначала проверьте, действительно ли проект дошел до момента передачи в Codex.'
+    else:
+        handoff_line = 'Handoff в Codex сейчас не является обязательным для выбранного профиля.'
+
+    if scenario_status == 'нужно_загрузить_в_sources':
+        sources_line = f'Загрузите единый scenario-pack в ChatGPT Project Sources через ./scripts/export-sources-pack.sh . и начните с {active.get("scenario_pack", {}).get("entrypoint", "00-master-router.md")}.'
+    else:
+        sources_line = 'Sources уже должны быть загружены; если есть сомнения, повторно экспортируйте единый scenario-pack через ./scripts/export-sources-pack.sh .'
+
+    route_line = 'Активные стартовые сценарии: ' + (', '.join(active_scenarios) if active_scenarios else 'еще не определены.')
+    boundary_actions = f"""# Boundary Actions
+
+## Для пользователя
+
+- Создать или открыть ChatGPT Project для этого рабочего проекта.
+- {sources_line}
+- {route_line}
+- Проверить, что Codex получает актуальные `codex-input.md`, `codex-task-pack.md` и `boundary-actions.md`.
+
+## Для handoff
+
+- {handoff_line}
+- Если выбран `hybrid` или `codex-led`, передать Codex актуальный `codex-task-pack.md`.
+- После возврата из Codex обновить verification-report.md, done-report.md и CURRENT_FUNCTIONAL_STATE.md.
+
+## Для внешних границ
+
+- GitHub / внешние UI / секреты не выполнять автоматически из Codex.
+- Все внешние действия фиксировать отдельной пошаговой инструкцией для пользователя.
+"""
+
     (chat / 'codex-context.md').write_text(context, encoding='utf-8')
     (chat / 'codex-task-pack.md').write_text(pack, encoding='utf-8')
+    (chat / 'boundary-actions.md').write_text(boundary_actions, encoding='utf-8')
     (chat / 'done-checklist.md').write_text(checklist, encoding='utf-8')
     print('Codex task pack собран.')
     return 0

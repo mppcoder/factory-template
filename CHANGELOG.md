@@ -14,6 +14,12 @@
 - policy preset и scenario-pack расширены под evidence-first → stabilization → reconstructed repo → clean package flow
 - curated Sources packs и boundary-actions generator теперь собираются из policy/template слоя, а не из хардкода
 - `PRE_RELEASE_AUDIT.sh`, `SMOKE_TEST.sh` и `MATRIX_TEST.sh` теперь учитывают ops-policy validator
+- feedback ingest теперь явно фиксирует режим `validated` / `allow-incomplete` в `incoming-learnings/INDEX.md`
+
+### Исправлено
+- `tools/ingest_factory_feedback.py` больше не падает на runtime `NameError` при запуске validator перед ingest
+- `MATRIX_TEST.sh` теперь проверяет feedback validator и dry-run ingest path на generated project
+- очищены шумовые backlog/incoming-learning записи, появившиеся из placeholder feedback
 
 
 ## [2.4.0] - 2026-04-16

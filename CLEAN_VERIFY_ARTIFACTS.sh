@@ -19,5 +19,7 @@ for rel in "${TARGETS[@]}"; do
 done
 
 find "$ROOT" -type f -name '*.log' -delete
+find "$ROOT" -type d -name '__pycache__' -prune -exec rm -rf {} +
+find "$ROOT" -type d -name '.pytest_cache' -prune -exec rm -rf {} +
 
 echo "Временные verify/release артефакты очищены."

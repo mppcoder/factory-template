@@ -17,6 +17,7 @@
 - базовые structural validators
 - release hygiene, pre-release audit и version sync checks
 - автоматическая проверка `factory-template-ops-policy.yaml` и boundary-actions template
+- feedback loop с проверкой качества `meta-feedback` до ingest и matrix-покрытием dry-run ingest path
 
 ## Что работает частично
 - matrix runner как единый источник истины

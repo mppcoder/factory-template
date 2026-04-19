@@ -66,8 +66,40 @@ PYCODE
 assert_pass 'factory-bugflow' detect-factory-issues.py python3 "$ROOT/workspace-packs/factory-ops/detect-factory-issues.py" "$P"
 assert_pass 'factory-bugflow' check-template-drift.py python3 "$ROOT/workspace-packs/factory-ops/check-template-drift.py" "$ROOT" "$P"
 assert_pass 'factory-bugflow' create-codex-task-pack.sh "$ROOT/template-repo/scripts/create-codex-task-pack.sh" "$P"
+assert_pass 'factory-bugflow' boundary-actions.md test -f "$P/.chatgpt/boundary-actions.md"
 assert_pass 'factory-bugflow' validate-defect-capture.sh "$ROOT/template-repo/scripts/validate-defect-capture.sh" "$P"
 assert_pass 'factory-bugflow' validate-alignment.sh "$ROOT/template-repo/scripts/validate-alignment.sh" "$P"
+assert_fail 'factory-bugflow' validate-factory-feedback.sh bash "$ROOT/VALIDATE_FACTORY_FEEDBACK.sh" "$P"
+python3 - <<PYCODE >/dev/null
+from pathlib import Path
+root = Path(r"$P") / "meta-feedback"
+task = (root / "factory-task.md").read_text(encoding="utf-8")
+for old, new in {
+    "<!-- Почему фабрику нужно доработать -->": "Codex task pack должен фиксированно включать boundary-actions.md в handoff-артефакты.",
+    "<!-- Из какого проекта или цикла пришел feedback -->": "Матрица проверки factory-bugflow в factory-template.",
+    "<!-- Опишите требуемое изменение -->": "Нужно валидировать и воспроизводимо собирать feedback loop через self-tests.",
+    "<!-- Перечислите основные файлы -->": "template-repo/scripts/create-codex-task-pack.sh, MATRIX_TEST.sh, tools/ingest_factory_feedback.py",
+    "<!-- Как понять, что доработка завершена -->": "VALIDATE_FACTORY_FEEDBACK.sh проходит, ingest не падает, matrix green.",
+    "<!-- Да / нет / определить позже -->": "Нет",
+}.items():
+    task = task.replace(old, new)
+(root / "factory-task.md").write_text(task, encoding="utf-8")
+bug = (root / "factory-bug-report.md").read_text(encoding="utf-8")
+for old, new in {
+    "<!-- Укажите проект, пример, сценарий или шаг -->": "Factory matrix bugflow scenario.",
+    "<!-- Укажите рабочий проект -->": "factory-bugflow",
+    "<!-- Укажите сценарий, validator, launcher или другой шаг -->": "Feedback ingestion and meta-feedback validation.",
+    "<!-- Опишите ожидаемое поведение фабрики -->": "Ingest script должен корректно валидировать feedback и не падать на runtime error.",
+    "<!-- Опишите фактическое поведение -->": "Сырой feedback должен блокироваться validator до ingest.",
+    "<!-- Если обход найден, кратко опишите его -->": "Временно запускать validator отдельно и не делать ingest с --allow-incomplete без ручной оценки.",
+    "<!-- Кратко сформулируйте желаемое исправление -->": "Сделать ingest устойчивым и покрыть feedback loop тестом.",
+    "<!-- Перечислите предполагаемые файлы -->": "tools/ingest_factory_feedback.py, tools/validate_factory_feedback.py, MATRIX_TEST.sh",
+}.items():
+    bug = bug.replace(old, new)
+(root / "factory-bug-report.md").write_text(bug, encoding="utf-8")
+PYCODE
+assert_pass 'factory-bugflow' validate-factory-feedback.sh bash "$ROOT/VALIDATE_FACTORY_FEEDBACK.sh" "$P"
+assert_pass 'factory-bugflow' ingest-factory-feedback.sh bash "$ROOT/INGEST_FACTORY_FEEDBACK.sh" "$P" --dry-run
 assert_pass 'factory-bugflow' export-template-patch.sh "$ROOT/workspace-packs/factory-ops/export-template-patch.sh" "$ROOT" "$P" --dry-run
 assert_pass 'factory-bugflow' 'apply-template-patch.sh --check' "$ROOT/workspace-packs/factory-ops/apply-template-patch.sh" "$P/_factory-sync-export" --check
 assert_pass 'factory-bugflow' 'apply-template-patch.sh --apply-safe-zones' "$ROOT/workspace-packs/factory-ops/apply-template-patch.sh" "$P/_factory-sync-export" --apply-safe-zones
