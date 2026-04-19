@@ -20,6 +20,7 @@
 - feedback loop с проверкой качества `meta-feedback` до ingest и matrix-покрытием dry-run ingest path
 - codex handoff pack с автоматической проверкой `codex-context.md`, `codex-task-pack.md`, `boundary-actions.md` и `done-checklist.md`
 - curated Sources packs с semantic validation по профилям `core / release / bugfix`, а не только по cap=20 и существованию файлов
+- phase-aware recommendation layer для выбора `sources-pack-*` в `controlled-fixes / release / bugfix-drift`
 
 ## Что работает частично
 - matrix runner как единый источник истины

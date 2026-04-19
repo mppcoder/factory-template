@@ -71,11 +71,13 @@
 
 1. В терминале запустите `bash EXPORT_FACTORY_TEMPLATE_SOURCES.sh`.
 2. Откройте каталог `{{sources_export_dir}}`.
-3. Выберите один из архивов:
+3. Для текущей фазы `{{current_phase}}` используйте phase-aware рекомендацию ниже:
+{{phase_recommendations_bullets}}
+4. Выберите один из архивов:
 {{available_sources_packs_bullets}}
-4. По умолчанию используйте `{{recommended_sources_pack}}`, если нет отдельной phase-specific причины взять другой pack.
-5. Загрузите содержимое выбранного pack в Project Sources.
-6. Если Sources уже заняты, заменяйте только целевой набор, а не смешивайте phase-specific packs.
+5. По умолчанию используйте `{{recommended_sources_pack}}`, если нет отдельной phase-specific причины взять другой pack.
+6. Загрузите содержимое выбранного pack в Project Sources.
+7. Если Sources уже заняты, заменяйте только целевой набор, а не смешивайте phase-specific packs.
 
 Что прислать обратно:
 

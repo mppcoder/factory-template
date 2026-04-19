@@ -72,9 +72,20 @@ sources_packs:
 boundary_actions:
   repo_name: factory-template
   project_name: Factory Template
+  current_phase: controlled-fixes
   recommended_sources_pack: sources-pack-core-20.tar.gz
   available_sources_packs:
     - sources-pack-core-20.tar.gz
     - sources-pack-release-20.tar.gz
     - sources-pack-bugfix-20.tar.gz
+  phase_recommendations:
+    controlled-fixes:
+      recommended_sources_pack: sources-pack-core-20.tar.gz
+      rationale: основной steady-state набор для повседневной работы по шаблону, runbook layer и policy alignment
+    release:
+      recommended_sources_pack: sources-pack-release-20.tar.gz
+      rationale: release-facing docs, manifests и verify scripts для финальной проверки и packaging
+    bugfix-drift:
+      recommended_sources_pack: sources-pack-bugfix-20.tar.gz
+      rationale: launcher, validator layer и handoff/feedback checks для локализации drift и runtime-багов
   uploads_dir: /projects/_incoming

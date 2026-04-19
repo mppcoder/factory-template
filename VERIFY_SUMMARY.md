@@ -21,11 +21,12 @@
 - defect-capture / alignment / handoff checks
 - curated Sources packs policy
 - boundary-actions generation
+- phase-aware Sources recommendation
 
 ## Known Residual Limits
 
 - `MATRIX_TEST.sh` остаётся representative runner, а не exhaustive coverage всех возможных комбинаций
-- curated Sources packs валидируются структурно, а не по semantic relevance
+- curated Sources packs и phase recommendations валидируются rule-based, а не через automatic state detection
 - release/no-release решение остаётся отдельным операторским решением
 - git-операции в этом окружении нужно выполнять последовательно; параллельный `commit/push/fetch/remote change` может давать ложные результаты
 

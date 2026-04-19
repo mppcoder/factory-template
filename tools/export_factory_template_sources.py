@@ -68,8 +68,13 @@ def main() -> int:
     for name, pack_data in packs.items():
         copy_pack(name, pack_data)
     summary = OUT_ROOT / "SUMMARY.md"
+    boundary = policy.get("boundary_actions", {})
+    current_phase = boundary.get("current_phase", "controlled-fixes")
+    current_pack = boundary.get("recommended_sources_pack", "sources-pack-core-20.tar.gz")
     lines = [
         "# Factory Template Sources Packs",
+        "",
+        f"Текущая phase recommendation: `{current_phase}` -> `{current_pack}`.",
         "",
         "Собраны curated packs:",
         "",
@@ -79,6 +84,20 @@ def main() -> int:
         purpose = pack_data.get("purpose", "").strip()
         suffix = f" — {purpose}" if purpose else ""
         lines.append(f"- `{name}`: {len(files)} файлов{suffix}")
+    lines.extend(
+        [
+            "",
+            "Phase-aware рекомендации:",
+            "",
+        ]
+    )
+    for phase_name, phase_cfg in boundary.get("phase_recommendations", {}).items():
+        if not isinstance(phase_cfg, dict):
+            continue
+        pack_name = phase_cfg.get("recommended_sources_pack", "не указано")
+        rationale = phase_cfg.get("rationale", "без пояснения")
+        marker = " (current)" if phase_name == current_phase else ""
+        lines.append(f"- `{phase_name}`{marker}: `{pack_name}` — {rationale}")
     lines.extend(
         [
             "",

@@ -115,3 +115,14 @@ Codex должен готовить для пользователя инстру
   Включает launcher/validator слой и handoff/feedback validators, включая `validate-codex-task-pack.sh` и `VALIDATE_FACTORY_FEEDBACK.sh`.
 
 Эти pack'и проверяются не только по правилу `20 files`, но и по semantic profile внутри `VALIDATE_FACTORY_TEMPLATE_OPS.sh`.
+
+Текущая рекомендация по фазам:
+
+- `controlled-fixes` -> `sources-pack-core-20.tar.gz`
+- `release` -> `sources-pack-release-20.tar.gz`
+- `bugfix-drift` -> `sources-pack-bugfix-20.tar.gz`
+
+Эта матрица хранится в `factory-template-ops-policy.yaml` и автоматически попадает в:
+
+- `_sources-export/factory-template/SUMMARY.md`
+- `_boundary-actions/factory-template-boundary-actions.md`

@@ -71,6 +71,14 @@ python3 template-repo/scripts/validate-codex-task-pack.sh <working-project>
 - `sources-pack-release-20` обязан содержать release-facing docs и release scripts;
 - `sources-pack-bugfix-20` обязан содержать launcher, validator layer и feedback/handoff validators.
 
+Phase recommendation теперь тоже декларативна:
+
+- `controlled-fixes` -> `sources-pack-core-20.tar.gz`
+- `release` -> `sources-pack-release-20.tar.gz`
+- `bugfix-drift` -> `sources-pack-bugfix-20.tar.gz`
+
+Эта рекомендация автоматически попадает в `_sources-export/factory-template/SUMMARY.md` и `_boundary-actions/factory-template-boundary-actions.md`.
+
 Состав curated packs и параметры boundary-инструкций задаются декларативно в:
 
 - `factory-template-ops-policy.yaml`

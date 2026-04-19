@@ -10,6 +10,7 @@
 - validator `VALIDATE_FACTORY_TEMPLATE_OPS.sh` / `tools/validate_factory_template_ops_policy.py`
 - validator `template-repo/scripts/validate-codex-task-pack.sh` для generated Codex handoff pack
 - semantic checks для `sources-pack-core-20`, `sources-pack-release-20` и `sources-pack-bugfix-20` внутри `tools/validate_factory_template_ops_policy.py`
+- phase-aware recommendation matrix для `controlled-fixes`, `release` и `bugfix-drift` внутри `factory-template-ops-policy.yaml`
 
 ### Изменено
 - launcher теперь предлагает новый профиль и новый класс изменения
@@ -19,6 +20,7 @@
 - feedback ingest теперь явно фиксирует режим `validated` / `allow-incomplete` в `incoming-learnings/INDEX.md`
 - `create-codex-task-pack.sh` теперь корректно подхватывает `active_scenarios` и `scenario_pack.entrypoint` из `active-scenarios.yaml`
 - `sources-pack-release-20` теперь ориентирован на release-facing docs, а `sources-pack-bugfix-20` включает feedback/handoff validators
+- `SUMMARY.md` и boundary-actions guide теперь публикуют текущую phase recommendation и матрицу выбора pack'ов
 
 ### Исправлено
 - `tools/ingest_factory_feedback.py` больше не падает на runtime `NameError` при запуске validator перед ingest

@@ -23,7 +23,8 @@
 - добавлен validator не только на pack composition, но и на semantic profile `core / release / bugfix`
 - `sources-pack-release-20` теперь несет release-facing docs вместо временных audit/backlog файлов
 - `sources-pack-bugfix-20` теперь включает handoff/feedback validators
-- дальше можно расширять фазовые policy manifests и делать phase-aware recommendation engine
+- добавлена phase-aware recommendation matrix для `controlled-fixes / release / bugfix-drift`
+- дальше можно расширять фазовые policy manifests и делать automatic state detection вместо ручного phase switch
 
 ---
 
