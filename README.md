@@ -65,11 +65,16 @@ python3 template-repo/scripts/validate-codex-task-pack.sh <working-project>
 
 `validate-codex-task-pack.sh` проверяет, что `codex-context.md`, `codex-task-pack.md`, `boundary-actions.md` и `done-checklist.md` не только созданы, но и согласованы с `active-scenarios.yaml`.
 
-`VALIDATE_FACTORY_TEMPLATE_OPS.sh` теперь проверяет не только структуру `sources-pack-*`, но и их semantic profile:
+`VALIDATE_FACTORY_TEMPLATE_OPS.sh` теперь проверяет не только структуру `sources-pack-*`, но и их semantic profile, а также direct Sources profile:
 
 - `sources-pack-core-20` обязан содержать сценарное ядро, runbook layer и policy presets;
+- `core-hot-15` обязан содержать ровно 15 hot-файлов для ежедневной прямой загрузки;
 - `sources-pack-release-20` обязан содержать release-facing docs и release scripts;
 - `sources-pack-bugfix-20` обязан содержать launcher, validator layer и feedback/handoff validators.
+
+Состав archive pack и direct profile теперь берётся из единого declarative manifest:
+
+- `packaging/sources/sources-profiles.yaml`
 
 Phase recommendation теперь тоже декларативна:
 
@@ -96,7 +101,7 @@ bash DETECT_FACTORY_TEMPLATE_PHASE.sh
 bash PHASE_DETECTION_TEST.sh
 ```
 
-Эта рекомендация автоматически попадает в `_sources-export/factory-template/SUMMARY.md` и `_boundary-actions/factory-template-boundary-actions.md`.
+Эта рекомендация автоматически попадает в `_sources-export/factory-template/SUMMARY.md` и `_boundary-actions/factory-template-boundary-actions.md`, но для постоянной ежедневной работы рекомендуется direct hot-set `core-hot-15/`, а canonical archive `sources-pack-core-20.tar.gz` остаётся полным steady-work snapshot.
 
 Состав curated packs и параметры boundary-инструкций задаются декларативно в:
 
@@ -109,6 +114,7 @@ bash PHASE_DETECTION_TEST.sh
 - `VERIFY_SUMMARY.md`
 - `RELEASE_NOTE_TEMPLATE.md`
 - `COMMIT_MESSAGE_GUIDE.md`
+- `docs/releases/sources-pack-usage.md`
 
 Короткая карта поддерживаемых режимов:
 

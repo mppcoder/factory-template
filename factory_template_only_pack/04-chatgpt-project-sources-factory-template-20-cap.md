@@ -1,16 +1,21 @@
-# Sources для ChatGPT Project шаблона фабрики — cap 20 файлов
+# Sources для ChatGPT Project шаблона фабрики — hybrid hot/cold strategy
 
 ## Принцип
 
-Для проекта шаблона фабрики используется **операционный hard cap = 20 файлов**.
+Для `factory-template` теперь штатно поддерживается **hybrid-схема**:
 
-Даже если интерфейс где-то допускает больше, для шаблона лучше держать компактный curated source-pack из реально существующих файлов repo.
+- **direct hot-set** для ежедневной работы в ChatGPT Project;
+- **canonical archive pack** как полный steady-work snapshot.
+
+Даже если интерфейс где-то допускает больше, для шаблона лучше держать небольшой direct hot-set и отдельно хранить архивный bundle как reference.
 
 ---
 
 ## 1. Что держать в постоянных Sources
 
-### Ядро сценариев (6 файлов)
+Постоянным набором теперь считается не archive pack, а direct profile `core-hot-15`.
+
+### Direct hot-set `core-hot-15` (15 файлов)
 
 1. `template-repo/scenario-pack/00-master-router.md`
 2. `template-repo/scenario-pack/01-global-rules.md`
@@ -25,87 +30,47 @@
 8. `factory_template_only_pack/02-runbook-dlya-codex-factory-template.md`
 9. `factory_template_only_pack/03-mode-routing-factory-template.md`
 10. `factory_template_only_pack/07-AGENTS-factory-template.md`
-
-### Текущее состояние фабрики (5 файлов)
-
-11. `README.md`
+11. `CURRENT_FUNCTIONAL_STATE.md`
 12. `VERSION.md`
-13. `CHANGELOG.md`
-14. `CURRENT_FUNCTIONAL_STATE.md`
-15. `meta-template-project/RELEASE_NOTES.md`
-
-### Политики и automation (3 файла)
-
-16. `template-repo/project-presets.yaml`
-17. `template-repo/policy-presets.yaml`
-18. `template-repo/change-classes.yaml`
-
-### Активный рабочий набор (2 файла)
-
-19. `CONTROLLED_FIXES_AUDIT_2026-04-19.md`
-20. `TEST_REPORT.md`
+13. `template-repo/change-classes.yaml`
+14. `template-repo/policy-presets.yaml`
+15. `template-repo/project-presets.yaml`
 
 ---
 
-## 2. Что не держать как постоянные Sources
+## 2. Canonical archive pack
 
-Не держать постоянно:
+Canonical archive pack остаётся:
 
-- большие тестовые логи;
-- временные отчеты из `.smoke-test/` и `.matrix-test/`;
-- `_sources-export/` и `_factory-sync-export/`;
-- артефакты из `_incoming`;
-- файлы, которых нет в repo;
-- generated project `.chatgpt/*` из случайных тестовых прогонов.
+- `sources-pack-core-20.tar.gz`
 
-Это должно жить в repo, а в Project Sources нужно держать только load-bearing docs и policy layer.
+Он содержит весь steady-work content set и остается основным reference bundle.
 
----
+### Cold / reference слой внутри archive pack
 
-## 3. Правило ротации
+Эти файлы intentionally остаются cold/reference, а не частью постоянного direct hot-set:
 
-Постоянными стараются оставаться слои:
-
-- ядро сценариев;
-- operator docs;
-- текущее состояние фабрики;
-- policy layer.
-
-Меняется только активный рабочий набор.
-
-### В фазе controlled fixes
-
-активный набор:
-
-- `CONTROLLED_FIXES_AUDIT_2026-04-19.md`
+- `README.md`
+- `CHANGELOG.md`
 - `TEST_REPORT.md`
-
-### В фазе release
-
-активный набор можно заменить на:
-
-- `FACTORY_MANIFEST.yaml`
-- `RELEASE_BUILD.sh`
-
-### В фазе deep drift analysis
-
-активный набор можно заменить на:
-
-- конкретный diff/audit report
-- один целевой validator или launcher script
+- `CONTROLLED_FIXES_AUDIT_2026-04-19.md`
+- `meta-template-project/RELEASE_NOTES.md`
+- `manifest.json` как служебный файл archive pack
 
 ---
 
-## 4. Роль Codex
+## 3. Как пользоваться схемой hot + cold
 
-Codex должен готовить для пользователя инструкцию:
+Рекомендуемая схема:
 
-- какие 20 файлов держать в Sources сейчас;
-- что удалить из Sources;
-- что заменить на новую фазу;
-- какие файлы реально существуют в repo и являются source of truth.
+- в Sources проекта загружать напрямую файлы из `core-hot-15/`;
+- `sources-pack-core-20.tar.gz` хранить как canonical archive snapshot;
+- cold/reference-файлы использовать при release audit, регрессии и post-mortem;
+- phase-specific pack'и не использовать как второй постоянный набор для ежедневной работы.
 
-## 5. Curated Packs
+---
+
+## 4. Archive overrides
 
 Помимо постоянного core-набора, repo сейчас поддерживает ещё два phase-oriented pack:
 
@@ -114,7 +79,7 @@ Codex должен готовить для пользователя инстру
 - `sources-pack-bugfix-20`
   Включает launcher/validator слой и handoff/feedback validators, включая `validate-codex-task-pack.sh` и `VALIDATE_FACTORY_FEEDBACK.sh`.
 
-Эти pack'и проверяются не только по правилу `20 files`, но и по semantic profile внутри `VALIDATE_FACTORY_TEMPLATE_OPS.sh`.
+Эти pack'и остаются archive override-профилями и проверяются не только по правилу `20 files`, но и по semantic profile внутри `VALIDATE_FACTORY_TEMPLATE_OPS.sh`.
 
 Текущая рекомендация по фазам:
 
@@ -142,3 +107,13 @@ bash DETECT_FACTORY_TEMPLATE_PHASE.sh
 
 - detector ждёт bug/validator changed paths;
 - и дополнительно смотрит intent markers внутри `reports/bugs/*.md`.
+
+---
+
+## 5. Источник правды
+
+Состав и archive pack, и direct hot-set берётся из декларативного manifest:
+
+- `packaging/sources/sources-profiles.yaml`
+
+Пользователь не должен вручную выбирать файлы для постоянной загрузки.

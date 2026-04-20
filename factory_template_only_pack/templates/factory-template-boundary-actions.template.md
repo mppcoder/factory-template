@@ -60,7 +60,7 @@
 
 ## Upload Curated Sources
 
-Цель: загрузить curated Sources pack без ручного выбора файлов.
+Цель: использовать штатную hybrid-схему `direct hot-set + canonical archive` без ручной догадки по составу.
 
 Где делать:
 
@@ -71,19 +71,21 @@
 
 1. В терминале запустите `bash EXPORT_FACTORY_TEMPLATE_SOURCES.sh`.
 2. Откройте каталог `{{sources_export_dir}}`.
-3. Для автоматически определенной фазы `{{current_phase}}` используйте phase-aware рекомендацию ниже.
+3. Для ежедневной постоянной работы используйте direct profile `{{canonical_direct_profile}}`.
+4. Загрузите в ChatGPT Project напрямую файлы из каталога `{{direct_sources_dir}}`, сохраняя структуру путей.
+5. Canonical archive pack `{{canonical_archive_pack}}` держите как полный steady-work snapshot и резервный reference bundle.
+6. Для автоматически определенной фазы `{{current_phase}}` используйте phase-aware archive recommendation ниже, если нужен operator override.
    Причина: `{{phase_detection_reason}}`
 {{phase_recommendations_bullets}}
-4. Выберите один из архивов:
+7. Archive override выбирайте только при отдельной фазовой причине:
 {{available_sources_packs_bullets}}
-5. По умолчанию используйте `{{recommended_sources_pack}}`, если нет отдельной phase-specific причины взять другой pack.
-6. Загрузите содержимое выбранного pack в Project Sources.
-7. Если Sources уже заняты, заменяйте только целевой набор, а не смешивайте phase-specific packs.
+8. По умолчанию archive override не нужен: для steady-state работы достаточно `{{canonical_direct_profile}}`, а canonical archive остаётся reference snapshot. Если всё же нужен один archive pack по умолчанию, используйте `{{recommended_sources_pack}}`.
+9. Если Sources уже заняты, держите один постоянный direct hot-set, а phase-specific archive pack не смешивайте с ним как второй постоянный набор.
 
 Что прислать обратно:
 
-- какой pack загружен
-- какие файлы были заменены в Project Sources
+- что загружено как постоянный direct hot-set
+- нужен ли phase-specific archive override
 
 ## Upload New Incoming Archive
 

@@ -1,15 +1,17 @@
 #!/usr/bin/env python3
 from __future__ import annotations
 
-import sys
 from pathlib import Path
 
 import yaml
+import json
 
+from sources_profiles import get_profiles, profiles_path_from_policy
 
 ROOT = Path(__file__).resolve().parents[1]
 POLICY_PATH = ROOT / "factory-template-ops-policy.yaml"
 TEMPLATE_PATH = ROOT / "factory_template_only_pack" / "templates" / "factory-template-boundary-actions.template.md"
+EXPORT_ROOT = ROOT / "_sources-export" / "factory-template"
 
 
 def fail(msg: str, errors: list[str]) -> None:
@@ -102,16 +104,23 @@ def validate_pack_semantics(name: str, files: list[str], errors: list[str]) -> N
             fail(f"{name}: ожидается минимум 9 validator scripts, сейчас {validator_count}", errors)
 
 
-def validate_pack(name: str, pack: dict, errors: list[str]) -> None:
-    files = pack.get("files")
-    purpose = pack.get("purpose")
+def validate_profile(name: str, profile: dict, errors: list[str]) -> None:
+    export_name = profile.get("export_name")
+    kind = profile.get("kind")
+    files = profile.get("files")
+    purpose = profile.get("purpose")
+    if not isinstance(export_name, str) or not export_name.strip():
+        fail(f"{name}: export_name должен быть непустой строкой", errors)
+    if kind not in {"archive_pack", "direct_sources"}:
+        fail(f"{name}: kind должен быть archive_pack или direct_sources", errors)
     if not isinstance(purpose, str) or not purpose.strip():
         fail(f"{name}: purpose должен быть непустой строкой", errors)
     if not isinstance(files, list):
         fail(f"{name}: files должен быть списком", errors)
         return
-    if len(files) != 20:
-        fail(f"{name}: ожидается ровно 20 файлов, сейчас {len(files)}", errors)
+    expected_count = 20 if kind == "archive_pack" else 15
+    if len(files) != expected_count:
+        fail(f"{name}: ожидается ровно {expected_count} файлов, сейчас {len(files)}", errors)
     seen: set[str] = set()
     for rel in files:
         if not isinstance(rel, str) or not rel.strip():
@@ -123,7 +132,109 @@ def validate_pack(name: str, pack: dict, errors: list[str]) -> None:
         seen.add(rel)
         if not (ROOT / rel).exists():
             fail(f"{name}: отсутствует файл {rel}", errors)
-    validate_pack_semantics(name, files, errors)
+    if isinstance(export_name, str) and export_name.startswith("sources-pack-"):
+        validate_pack_semantics(export_name, files, errors)
+
+
+def validate_profiles_manifest(policy: dict, errors: list[str]) -> tuple[dict[str, dict], Path]:
+    profiles_path = profiles_path_from_policy(policy)
+    if not profiles_path.exists():
+        fail(f"sources_profiles_manifest отсутствует: {profiles_path.relative_to(ROOT)}", errors)
+        return {}, profiles_path
+    data = yaml.safe_load(profiles_path.read_text(encoding="utf-8")) or {}
+    version = data.get("profiles_manifest_version")
+    if version != 1:
+        fail("profiles_manifest_version должен быть равен 1", errors)
+    profiles = get_profiles(policy)
+    if not profiles:
+        fail("profiles manifest должен содержать непустой mapping profiles", errors)
+        return {}, profiles_path
+    for profile_name, profile in profiles.items():
+        if not isinstance(profile, dict):
+            fail(f"{profile_name}: описание profile должно быть mapping", errors)
+            continue
+        validate_profile(profile_name, profile, errors)
+
+    required_hot = [
+        "template-repo/scenario-pack/00-master-router.md",
+        "template-repo/scenario-pack/01-global-rules.md",
+        "template-repo/scenario-pack/02-decision-policy.md",
+        "template-repo/scenario-pack/03-stage-gates.md",
+        "template-repo/scenario-pack/15-handoff-to-codex.md",
+        "template-repo/scenario-pack/16-done-closeout.md",
+        "factory_template_only_pack/01-runbook-dlya-polzovatelya-factory-template.md",
+        "factory_template_only_pack/02-runbook-dlya-codex-factory-template.md",
+        "factory_template_only_pack/03-mode-routing-factory-template.md",
+        "factory_template_only_pack/07-AGENTS-factory-template.md",
+        "CURRENT_FUNCTIONAL_STATE.md",
+        "VERSION.md",
+        "template-repo/change-classes.yaml",
+        "template-repo/policy-presets.yaml",
+        "template-repo/project-presets.yaml",
+    ]
+    required_cold = [
+        "README.md",
+        "CHANGELOG.md",
+        "TEST_REPORT.md",
+        "CONTROLLED_FIXES_AUDIT_2026-04-19.md",
+        "meta-template-project/RELEASE_NOTES.md",
+    ]
+    core_archive = profiles.get("core_archive", {})
+    core_hot = profiles.get("core_hot_direct", {})
+    archive_files = core_archive.get("files", []) if isinstance(core_archive, dict) else []
+    hot_files = core_hot.get("files", []) if isinstance(core_hot, dict) else []
+    if core_archive.get("export_name") != "sources-pack-core-20":
+        fail("core_archive.export_name должен быть sources-pack-core-20", errors)
+    if core_hot.get("export_name") != "core-hot-15":
+        fail("core_hot_direct.export_name должен быть core-hot-15", errors)
+    if archive_files and set(required_hot).difference(set(archive_files)):
+        fail("core_archive должен включать весь hot-set как подмножество archive set", errors)
+    if hot_files and list(hot_files) != required_hot:
+        fail("core_hot_direct должен содержать ровно заданный список hot-файлов в фиксированном порядке", errors)
+    cold_files = core_archive.get("cold_reference_files", []) if isinstance(core_archive, dict) else []
+    if cold_files and list(cold_files) != required_cold:
+        fail("core_archive.cold_reference_files должен совпадать с зафиксированным cold-set", errors)
+    if hot_files and archive_files and not set(hot_files).issubset(set(archive_files)):
+        fail("core_hot_direct должен быть подмножеством core_archive", errors)
+    if any(rel in set(required_cold) for rel in hot_files):
+        fail("core_hot_direct не должен содержать cold/reference/release-support файлы", errors)
+    return profiles, profiles_path
+
+
+def validate_exported_artifacts(profiles: dict[str, dict], errors: list[str]) -> None:
+    if not EXPORT_ROOT.exists():
+        return
+    for profile_name, profile in profiles.items():
+        export_name = str(profile.get("export_name", "")).strip()
+        if not export_name:
+            continue
+        export_dir = EXPORT_ROOT / export_name
+        manifest_path = export_dir / "manifest.json"
+        readme_path = export_dir / "README.md"
+        if not export_dir.exists():
+            fail(f"exported profile отсутствует: _sources-export/factory-template/{export_name}", errors)
+            continue
+        if not manifest_path.exists():
+            fail(f"{export_name}: отсутствует generated manifest.json", errors)
+            continue
+        if not readme_path.exists():
+            fail(f"{export_name}: отсутствует generated README.md", errors)
+            continue
+        manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+        manifest_files = manifest.get("files", [])
+        if manifest.get("profile_name") != profile_name:
+            fail(f"{export_name}: manifest.profile_name расходится с declarative profile", errors)
+        if manifest.get("file_count") != len(manifest_files):
+            fail(f"{export_name}: manifest.file_count расходится со списком files", errors)
+        if manifest_files != profile.get("files", []):
+            fail(f"{export_name}: manifest.files расходится с declarative profile", errors)
+        if manifest.get("file_count") != len(profile.get("files", [])):
+            fail(f"{export_name}: manifest.file_count расходится с declarative profile", errors)
+        readme = readme_path.read_text(encoding="utf-8")
+        if profile.get("kind") == "archive_pack" and "canonical archive pack" not in readme:
+            fail(f"{export_name}: README должен явно помечать canonical archive pack", errors)
+        if profile.get("kind") == "direct_sources" and "direct Sources profile" not in readme:
+            fail(f"{export_name}: README должен явно помечать direct Sources profile", errors)
 
 
 def main() -> int:
@@ -136,17 +247,13 @@ def main() -> int:
         return 1
 
     policy = yaml.safe_load(POLICY_PATH.read_text(encoding="utf-8")) or {}
-    packs = policy.get("sources_packs")
     boundary = policy.get("boundary_actions")
-
-    if not isinstance(packs, dict) or not packs:
-        fail("sources_packs должен быть непустым mapping", errors)
-    else:
-        for name, pack in packs.items():
-            if not isinstance(pack, dict):
-                fail(f"{name}: описание pack должно быть mapping", errors)
-                continue
-            validate_pack(name, pack, errors)
+    profiles, profiles_path = validate_profiles_manifest(policy, errors)
+    archive_profiles = {
+        name: profile for name, profile in profiles.items()
+        if isinstance(profile, dict) and profile.get("kind") == "archive_pack"
+    }
+    validate_exported_artifacts(profiles, errors)
 
     if not isinstance(boundary, dict):
         fail("boundary_actions должен быть mapping", errors)
@@ -173,14 +280,17 @@ def main() -> int:
         else:
             if len(set(available)) != len(available):
                 fail("boundary_actions.available_sources_packs содержит дубли", errors)
-            pack_names = set(packs.keys()) if isinstance(packs, dict) else set()
-            expected_archives = {f"{name}.tar.gz" for name in pack_names}
+            expected_archives = {
+                f"{profile.get('export_name')}.tar.gz"
+                for profile in archive_profiles.values()
+                if isinstance(profile.get("export_name"), str)
+            }
             for item in available:
                 if not isinstance(item, str) or not item.endswith(".tar.gz"):
                     fail(f"boundary_actions.available_sources_packs: некорректное имя архива {item}", errors)
                     continue
                 if item not in expected_archives:
-                    fail(f"boundary_actions.available_sources_packs: архив {item} не соответствует описанным sources_packs", errors)
+                    fail(f"boundary_actions.available_sources_packs: архив {item} не соответствует archive profiles из declarative manifest", errors)
         if not isinstance(recommended, str) or not recommended.strip():
             fail("boundary_actions.recommended_sources_pack должен быть непустой строкой", errors)
         else:
@@ -283,6 +393,9 @@ def main() -> int:
         "{{phase_detection_reason}}",
         "{{root_path}}",
         "{{sources_export_dir}}",
+        "{{canonical_archive_pack}}",
+        "{{canonical_direct_profile}}",
+        "{{direct_sources_dir}}",
         "{{recommended_sources_pack}}",
         "{{available_sources_packs_bullets}}",
         "{{phase_recommendations_bullets}}",

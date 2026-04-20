@@ -1,0 +1,109 @@
+profiles_manifest_version: 1
+
+profiles:
+  core_archive:
+    export_name: sources-pack-core-20
+    kind: archive_pack
+    purpose: canonical archive pack for steady factory-template work
+    direct_profile: core_hot_direct
+    cold_reference_files:
+      - README.md
+      - CHANGELOG.md
+      - TEST_REPORT.md
+      - CONTROLLED_FIXES_AUDIT_2026-04-19.md
+      - meta-template-project/RELEASE_NOTES.md
+    files:
+      - template-repo/scenario-pack/00-master-router.md
+      - template-repo/scenario-pack/01-global-rules.md
+      - template-repo/scenario-pack/02-decision-policy.md
+      - template-repo/scenario-pack/03-stage-gates.md
+      - template-repo/scenario-pack/15-handoff-to-codex.md
+      - template-repo/scenario-pack/16-done-closeout.md
+      - factory_template_only_pack/01-runbook-dlya-polzovatelya-factory-template.md
+      - factory_template_only_pack/02-runbook-dlya-codex-factory-template.md
+      - factory_template_only_pack/03-mode-routing-factory-template.md
+      - factory_template_only_pack/07-AGENTS-factory-template.md
+      - README.md
+      - VERSION.md
+      - CHANGELOG.md
+      - CURRENT_FUNCTIONAL_STATE.md
+      - meta-template-project/RELEASE_NOTES.md
+      - template-repo/project-presets.yaml
+      - template-repo/policy-presets.yaml
+      - template-repo/change-classes.yaml
+      - CONTROLLED_FIXES_AUDIT_2026-04-19.md
+      - TEST_REPORT.md
+
+  core_hot_direct:
+    export_name: core-hot-15
+    kind: direct_sources
+    purpose: direct upload profile for daily ChatGPT Project work
+    archive_profile: core_archive
+    files:
+      - template-repo/scenario-pack/00-master-router.md
+      - template-repo/scenario-pack/01-global-rules.md
+      - template-repo/scenario-pack/02-decision-policy.md
+      - template-repo/scenario-pack/03-stage-gates.md
+      - template-repo/scenario-pack/15-handoff-to-codex.md
+      - template-repo/scenario-pack/16-done-closeout.md
+      - factory_template_only_pack/01-runbook-dlya-polzovatelya-factory-template.md
+      - factory_template_only_pack/02-runbook-dlya-codex-factory-template.md
+      - factory_template_only_pack/03-mode-routing-factory-template.md
+      - factory_template_only_pack/07-AGENTS-factory-template.md
+      - CURRENT_FUNCTIONAL_STATE.md
+      - VERSION.md
+      - template-repo/change-classes.yaml
+      - template-repo/policy-presets.yaml
+      - template-repo/project-presets.yaml
+
+  release_archive:
+    export_name: sources-pack-release-20
+    kind: archive_pack
+    purpose: release-oriented Sources pack for final verification and packaging
+    files:
+      - README.md
+      - VERSION.md
+      - CHANGELOG.md
+      - CURRENT_FUNCTIONAL_STATE.md
+      - FACTORY_MANIFEST.yaml
+      - RELEASE_BUILD.sh
+      - PRE_RELEASE_AUDIT.sh
+      - VERSION_SYNC_CHECK.sh
+      - CLEAN_VERIFY_ARTIFACTS.sh
+      - TEST_REPORT.md
+      - RELEASE_CHECKLIST.md
+      - VERIFY_SUMMARY.md
+      - RELEASE_NOTE_TEMPLATE.md
+      - meta-template-project/RELEASE_NOTES.md
+      - template-repo/CHANGELOG.md
+      - template-repo/README.md
+      - template-repo/TEMPLATE_MANIFEST.yaml
+      - factory_template_only_pack/01-runbook-dlya-polzovatelya-factory-template.md
+      - factory_template_only_pack/02-runbook-dlya-codex-factory-template.md
+      - factory_template_only_pack/04-chatgpt-project-sources-factory-template-20-cap.md
+
+  bugfix_archive:
+    export_name: sources-pack-bugfix-20
+    kind: archive_pack
+    purpose: bugfix-oriented Sources pack for launcher and validator drift work
+    files:
+      - template-repo/launcher.sh
+      - template-repo/scripts/validate-project-preset.sh
+      - template-repo/scripts/validate-policy-preset.sh
+      - template-repo/scripts/validate-change-profile.sh
+      - template-repo/scripts/validate-task-graph.sh
+      - template-repo/scripts/validate-stage.sh
+      - template-repo/scripts/validate-evidence.sh
+      - template-repo/scripts/validate-quality.sh
+      - template-repo/scripts/validate-handoff.sh
+      - template-repo/scripts/check-dod.sh
+      - template-repo/scripts/validate-versioning-layer.sh
+      - template-repo/scripts/validate-defect-capture.sh
+      - template-repo/scripts/validate-alignment.sh
+      - template-repo/scripts/validate-codex-task-pack.sh
+      - template-repo/scripts/export-sources-pack.sh
+      - template-repo/scripts/create-codex-task-pack.sh
+      - VALIDATE_FACTORY_FEEDBACK.sh
+      - factory_template_only_pack/02-runbook-dlya-codex-factory-template.md
+      - factory_template_only_pack/05-backlog-dorabotok-factory-template.md
+      - TEST_REPORT.md
