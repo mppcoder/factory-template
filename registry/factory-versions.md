@@ -1,5 +1,6 @@
 # Версии фабрики
 
+- 2.4.2 — patch-релиз: declarative direct Sources profile, hybrid hot/cold strategy и updated ChatGPT Project guidance
 - 2.4.1 — patch-релиз: ops-policy layer, phase detection, curated packs и release-facing синхронизация
 - 2.4.0 — финальный релиз: smoke-fix, финальный version alignment и подтвержденные release-gates
 - 2.4.0-rc2 — release-alignment patch: version sync, safer build, stricter pre-release audit

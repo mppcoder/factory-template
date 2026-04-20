@@ -1,5 +1,10 @@
 # Журнал изменений
 
+## 2.4.2
+- добавлен declarative direct Sources profile `core-hot-15` для ежедневной работы в ChatGPT Project
+- canonical archive `sources-pack-core-20` закреплён как steady-work snapshot, а не как единственный daily upload
+- boundary guidance и release docs выровнены под hybrid-модель `direct hot-set + canonical archive`
+
 ## 2.4.1
 - в отдельный patch-релиз вынесены ops-policy, phase detection и release-facing improvements из бывшего `Unreleased`
 - release metadata, bundle name и GitHub tag синхронизированы под `factory-v2.4.1`

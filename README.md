@@ -1,4 +1,4 @@
-# Русское ядро фабрики проектов v2.4.1
+# Русское ядро фабрики проектов v2.4.2
 
 Это стабилизационный релиз фабрики проектов для связки:
 
@@ -31,7 +31,7 @@
 ## Подготовка после распаковки
 
 ```bash
-cd factory-v2.4.1
+cd factory-v2.4.2
 bash POST_UNZIP_SETUP.sh
 bash MATRIX_TEST.sh
 bash CLEAN_VERIFY_ARTIFACTS.sh
@@ -137,13 +137,13 @@ bash PHASE_DETECTION_TEST.sh
 - временные каталоги smoke/matrix прогонов;
 - логи и служебные следы локальной сборки.
 
-## Что нового в релизе 2.4.1
-- бывший `Unreleased` оформлен как отдельный patch-релиз;
-- ops-policy, curated Sources packs и boundary-actions layer включены в официальный релизный контур;
-- release metadata и build output синхронизированы под имя `factory-v2.4.1`;
-- release-facing docs приведены к финальному go/no-go состоянию.
+## Что нового в релизе 2.4.2
+- добавлен declarative direct Sources profile `core-hot-15` для ежедневной работы в ChatGPT Project;
+- canonical archive `sources-pack-core-20` зафиксирован как steady-work snapshot;
+- export, validation и boundary guidance теперь поддерживают hybrid-схему `direct hot-set + canonical archive`;
+- release metadata и build output синхронизированы под имя `factory-v2.4.2`.
 
-## Базовый функционал ветки 2.4.1
+## Базовый функционал ветки 2.4.2
 - введен обязательный defect-capture layer;
 - добавлены process-файлы по обработке дефектов и DoD для bugfix/feature/change;
 - добавлены шаблоны bug report, factory feedback и ChatGPT handoff для дефектов;

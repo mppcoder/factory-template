@@ -107,10 +107,10 @@ origin = f"""# Происхождение проекта
 {os.environ['PROJECT_MODE']}
 
 ## Создан из фабрики
-factory-v2.4.1
+factory-v2.4.2
 
 ## Версия фабрики
-2.4.1
+2.4.2
 
 ## Дата создания
 {datetime.date.today().isoformat()}
@@ -209,7 +209,7 @@ version_md = f'''# Версия проекта
 {today}
 
 ## Версия фабрики-источника
-2.4.1
+2.4.2
 
 ## Тип проекта
 {os.environ['PROJECT_MODE']}
@@ -220,7 +220,7 @@ changelog_md = f'''# Журнал изменений проекта
 
 ## [0.1.0] - {today}
 ### Добавлено
-- первичная генерация проекта из фабрики 2.4.1
+- первичная генерация проекта из фабрики 2.4.2
 
 ### Изменено
 - 
@@ -262,7 +262,7 @@ if [ "$REGISTRY_MODE" != "skip" ] && [ -f "$REGISTRY_FILE" ] && [ -w "$REGISTRY_
     echo "- дата: $(date +%F)"
     echo "  проект: $PROJECT_NAME"
     echo "  slug: $PROJECT_SLUG"
-    echo "  версия_фабрики: 2.4.1"
+    echo "  версия_фабрики: 2.4.2"
     echo "  режим: $PROJECT_MODE"
     echo "  статус_записи: $REGISTRY_MODE"
     echo "  project_preset: $PROJECT_PRESET"

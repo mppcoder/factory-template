@@ -2,21 +2,21 @@
 
 ## Release
 
-- Версия: 2.4.1
+- Версия: 2.4.2
 - Дата: 2026-04-20
 - Статус: published
 
 ## Что вошло
 
-- бывший `Unreleased` оформлен как официальный patch-релиз `2.4.1`
-- в релиз вошли ops-policy, phase detection и curated Sources packs
-- release-facing docs и bundle metadata синхронизированы под `factory-v2.4.1`
+- direct Sources profile `core-hot-15` добавлен как официальный daily profile для ChatGPT Project
+- в релиз вошла hybrid-модель `direct hot-set + canonical archive`
+- release-facing docs и bundle metadata синхронизированы под `factory-v2.4.2`
 
 ## Что изменилось в template/runtime/policy layer
 
-- launcher и generated versioning layer переведены на `2.4.1`
-- policy-driven сценарии и release/boundary docs выровнены под текущий patch-релиз
-- release checklist, release notes и registry history больше не расходятся с реальным состоянием repo
+- launcher и generated versioning layer переведены на `2.4.2`
+- export/validation layer выровнены под declarative Sources profiles
+- release checklist, release notes и boundary guidance отражают hybrid-схему Sources
 
 ## Что проверено
 
@@ -30,7 +30,7 @@
 
 - для steady-state работы использовать `sources-pack-core-20.tar.gz`
 - для release-facing прохода использовать `sources-pack-release-20.tar.gz`
-- generated projects теперь получают фабричную версию `2.4.1`
+- generated projects теперь получают фабричную версию `2.4.2`
 
 ## Риски и ограничения
 
@@ -39,8 +39,8 @@
 
 ## Внешние шаги для пользователя
 
-- GitHub repo и tag синхронизировать с новым релизом `v2.4.1`
-- прикрепить к GitHub Release архив `factory-v2.4.1.zip`
+- GitHub repo и tag синхронизировать с новым релизом `v2.4.2`
+- прикрепить к GitHub Release архив `factory-v2.4.2.zip`
 - загрузить нужный curated Sources pack в ChatGPT Project
 
 ## Go / No-Go

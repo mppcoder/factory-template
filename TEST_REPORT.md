@@ -1,4 +1,4 @@
-# TEST REPORT v2.4.1
+# TEST REPORT v2.4.2
 
 ## Что проверено
 - pre-release audit
@@ -37,7 +37,7 @@ Evidence / quality / DoD до смыслового наполнения арте
 - curated `sources-pack-core-20`, `sources-pack-release-20`, `sources-pack-bugfix-20` собираются из декларативного policy manifest.
 - boundary-actions guide генерируется из markdown template и проверяется вместе с ops-policy слоем.
 
-## Что вошло в релиз 2.4.1
+## Что вошло в релиз 2.4.2
 - синхронизированы root/template/meta-template/example версии и release labels;
 - `RELEASE_BUILD.sh` перестал использовать вручную вшитый legacy-id релиза;
 - prerelease-аудит усилен проверками version drift и запрещенных legacy-ссылок.
@@ -47,6 +47,8 @@ Evidence / quality / DoD до смыслового наполнения арте
 - bugfix-oriented pack теперь включает handoff/feedback validators, которые реально нужны для drift-исправлений.
 - policy layer теперь хранит `default_phase`, phase-specific recommendation matrix и detection rules для Sources upload.
 - policy layer теперь хранит `default_phase`, phase detection rules и recommendation matrix для Sources upload.
+- direct Sources profile `core-hot-15` добавлен как ежедневный hot-set для ChatGPT Project.
+- archive/direct Sources generation теперь строятся из единого declarative manifest.
 
 ## Известные ограничения
 - `MATRIX_TEST.sh` остаётся representative prerelease runner, а не exhaustive full-matrix coverage для всех 22 допустимых комбинаций;

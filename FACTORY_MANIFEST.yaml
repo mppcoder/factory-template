@@ -1,5 +1,5 @@
-version: 2.4.1
-name: factory-v2.4.1
+version: 2.4.2
+name: factory-v2.4.2
 description: 'Универсальная русскоязычная фабрика проектов: greenfield + brownfield,
   scenario-pack, defect-capture, release-alignment/versioning layer'
 core: true

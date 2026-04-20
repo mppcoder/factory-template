@@ -1,5 +1,16 @@
 # Журнал изменений фабрики
 
+## [2.4.2] - 2026-04-20
+### Добавлено
+- declarative manifest `packaging/sources/sources-profiles.yaml` для archive/direct Sources profiles
+- direct Sources profile `core-hot-15` для ежедневной работы в ChatGPT Project
+- usage doc `docs/releases/sources-pack-usage.md` для hybrid-схемы `direct hot-set + canonical archive`
+
+### Изменено
+- export Sources теперь строит и canonical archive packs, и direct hot-set из одного источника правды
+- boundary-actions и summary теперь рекомендуют `core-hot-15` как постоянный direct Sources set
+- `sources-pack-core-20` явно закреплён как canonical archive snapshot, а не как единственный ежедневный способ загрузки
+
 ## [2.4.1] - 2026-04-20
 ### Добавлено
 - профиль `brownfield-dogfood-codex-assisted` для dogfood-сценария brownfield without repo

@@ -3,8 +3,8 @@
 ## Scope
 
 - Repo: `factory-template`
-- Current release line: `2.4.1`
-- Current working section in changelog: `2.4.1`
+- Current release line: `2.4.2`
+- Current working section in changelog: `2.4.2`
 
 ## Intent Signals
 

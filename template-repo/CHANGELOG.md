@@ -1,5 +1,10 @@
 # Журнал изменений шаблона
 
+## [2.4.2] - 2026-04-20
+### Изменено
+- template layer синхронизирован с hybrid-моделью Sources: direct hot-set для daily use и canonical archive pack для steady snapshot
+- generated guidance теперь исходит из единого declarative Sources manifest
+
 ## [2.4.1] - 2026-04-20
 ### Добавлено
 - профиль `brownfield-dogfood-codex-assisted` для dogfood-сценария brownfield without repo
