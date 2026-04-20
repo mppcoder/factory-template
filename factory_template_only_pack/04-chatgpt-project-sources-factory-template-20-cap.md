@@ -5,7 +5,8 @@
 Для `factory-template` теперь штатно поддерживается **hybrid-схема**:
 
 - **direct hot-set** для ежедневной работы в ChatGPT Project;
-- **canonical archive pack** как полный steady-work snapshot.
+- **cold/reference remainder archive** без дублей hot-set;
+- **canonical archive pack** как полный steady-work snapshot и reference bundle.
 
 Даже если интерфейс где-то допускает больше, для шаблона лучше держать небольшой direct hot-set и отдельно хранить архивный bundle как reference.
 
@@ -38,7 +39,25 @@
 
 ---
 
-## 2. Canonical archive pack
+## 2. Cold / reference remainder archive
+
+Для чистой hybrid-схемы без дублей используется отдельный archive remainder:
+
+- `core-cold-5.tar.gz`
+
+Он содержит только оставшийся cold/reference слой:
+
+- `README.md`
+- `CHANGELOG.md`
+- `TEST_REPORT.md`
+- `CONTROLLED_FIXES_AUDIT_2026-04-19.md`
+- `meta-template-project/RELEASE_NOTES.md`
+
+Этот архив загружается рядом с direct hot-set и не повторяет его состав.
+
+---
+
+## 3. Canonical archive pack
 
 Canonical archive pack остаётся:
 
@@ -46,31 +65,27 @@ Canonical archive pack остаётся:
 
 Он содержит весь steady-work content set и остается основным reference bundle.
 
-### Cold / reference слой внутри archive pack
+Canonical archive нужен не для постоянной загрузки в Sources, а как:
 
-Эти файлы intentionally остаются cold/reference, а не частью постоянного direct hot-set:
-
-- `README.md`
-- `CHANGELOG.md`
-- `TEST_REPORT.md`
-- `CONTROLLED_FIXES_AUDIT_2026-04-19.md`
-- `meta-template-project/RELEASE_NOTES.md`
-- `manifest.json` как служебный файл archive pack
+- полный контрольный снимок steady-work состава;
+- reference bundle для сверки и регрессии;
+- исходный канонический набор, из которого выводятся hot-set и cold remainder.
 
 ---
 
-## 3. Как пользоваться схемой hot + cold
+## 4. Как пользоваться схемой hot + cold
 
 Рекомендуемая схема:
 
 - в Sources проекта загружать напрямую файлы из `core-hot-15/`;
-- `sources-pack-core-20.tar.gz` хранить как canonical archive snapshot;
+- `core-cold-5.tar.gz` загружать как отдельный cold/reference archive remainder без дублей;
+- `sources-pack-core-20.tar.gz` хранить как canonical archive snapshot и reference bundle;
 - cold/reference-файлы использовать при release audit, регрессии и post-mortem;
 - phase-specific pack'и не использовать как второй постоянный набор для ежедневной работы.
 
 ---
 
-## 4. Archive overrides
+## 5. Archive overrides
 
 Помимо постоянного core-набора, repo сейчас поддерживает ещё два phase-oriented pack:
 
@@ -110,10 +125,12 @@ bash DETECT_FACTORY_TEMPLATE_PHASE.sh
 
 ---
 
-## 5. Источник правды
+## 6. Источник правды
 
 Состав и archive pack, и direct hot-set берётся из декларативного manifest:
 
 - `packaging/sources/sources-profiles.yaml`
+
+Из него же теперь строится и cold/reference remainder archive.
 
 Пользователь не должен вручную выбирать файлы для постоянной загрузки.

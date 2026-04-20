@@ -5,7 +5,8 @@
 `factory-template` использует hybrid-модель:
 
 - direct hot-set для ежедневной работы в ChatGPT Project;
-- canonical archive pack как полный steady-work snapshot;
+- cold/reference remainder archive без дублей hot-set;
+- canonical archive pack как полный steady-work snapshot и reference bundle;
 - phase-specific archive packs только как operator override.
 
 ## Canonical Daily Profile
@@ -32,6 +33,22 @@
 14. `template-repo/policy-presets.yaml`
 15. `template-repo/project-presets.yaml`
 
+## Cold / Reference Remainder Archive
+
+Для hybrid-загрузки без дублей используйте отдельный archive remainder:
+
+- `core-cold-5.tar.gz`
+
+Он содержит только cold/reference слой:
+
+- `README.md`
+- `CHANGELOG.md`
+- `TEST_REPORT.md`
+- `CONTROLLED_FIXES_AUDIT_2026-04-19.md`
+- `meta-template-project/RELEASE_NOTES.md`
+
+Этот архив загружается рядом с `core-hot-15/` и не дублирует hot-set.
+
 ## Canonical Archive
 
 Canonical archive pack остаётся:
@@ -42,25 +59,16 @@ Canonical archive pack остаётся:
 
 - полный steady-work snapshot;
 - резервный reference bundle;
-- cold/reference набор для release audit, regression и post-mortem.
-
-## Cold / Reference Layer
-
-Cold/reference-файлы внутри canonical archive:
-
-- `README.md`
-- `CHANGELOG.md`
-- `TEST_REPORT.md`
-- `CONTROLLED_FIXES_AUDIT_2026-04-19.md`
-- `meta-template-project/RELEASE_NOTES.md`
+- полный контрольный снимок состава, из которого выводятся и hot-set, и cold remainder;
 - `manifest.json` как служебный файл archive pack
 
 ## Recommended Workflow
 
 1. Запустить `bash EXPORT_FACTORY_TEMPLATE_SOURCES.sh`.
 2. Для ежедневной работы загрузить напрямую файлы из `_sources-export/factory-template/core-hot-15/`.
-3. Archive `sources-pack-core-20.tar.gz` сохранить как canonical snapshot.
-4. При release/bugfix-фазе при необходимости использовать phase-specific archive override, но не держать его как второй постоянный набор Sources.
+3. Загрузить `_sources-export/factory-template/core-cold-5.tar.gz` как cold/reference archive remainder.
+4. Archive `sources-pack-core-20.tar.gz` сохранить как canonical snapshot и reference bundle.
+5. При release/bugfix-фазе при необходимости использовать phase-specific archive override, но не держать его как второй постоянный набор Sources.
 
 ## Single Source Of Truth
 

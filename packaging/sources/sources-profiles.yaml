@@ -39,6 +39,7 @@ profiles:
     kind: direct_sources
     purpose: direct upload profile for daily ChatGPT Project work
     archive_profile: core_archive
+    cold_archive_profile: core_cold_archive
     files:
       - template-repo/scenario-pack/00-master-router.md
       - template-repo/scenario-pack/01-global-rules.md
@@ -55,6 +56,19 @@ profiles:
       - template-repo/change-classes.yaml
       - template-repo/policy-presets.yaml
       - template-repo/project-presets.yaml
+
+  core_cold_archive:
+    export_name: core-cold-5
+    kind: archive_pack
+    purpose: cold/reference remainder archive for hybrid ChatGPT Project Sources work
+    canonical_archive_profile: core_archive
+    direct_profile: core_hot_direct
+    files:
+      - README.md
+      - CHANGELOG.md
+      - TEST_REPORT.md
+      - CONTROLLED_FIXES_AUDIT_2026-04-19.md
+      - meta-template-project/RELEASE_NOTES.md
 
   release_archive:
     export_name: sources-pack-release-20

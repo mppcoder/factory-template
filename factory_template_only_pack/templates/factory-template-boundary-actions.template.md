@@ -60,7 +60,7 @@
 
 ## Upload Curated Sources
 
-Цель: использовать штатную hybrid-схему `direct hot-set + canonical archive` без ручной догадки по составу.
+Цель: использовать штатную hybrid-схему `direct hot-set + cold archive remainder + canonical archive` без ручной догадки по составу.
 
 Где делать:
 
@@ -73,14 +73,15 @@
 2. Откройте каталог `{{sources_export_dir}}`.
 3. Для ежедневной постоянной работы используйте direct profile `{{canonical_direct_profile}}`.
 4. Загрузите в ChatGPT Project напрямую файлы из каталога `{{direct_sources_dir}}`, сохраняя структуру путей.
-5. Canonical archive pack `{{canonical_archive_pack}}` держите как полный steady-work snapshot и резервный reference bundle.
-6. Для автоматически определенной фазы `{{current_phase}}` используйте phase-aware archive recommendation ниже, если нужен operator override.
+5. Загрузите `{{canonical_cold_archive_pack}}` как cold/reference archive remainder без дублей hot-set.
+6. Canonical archive pack `{{canonical_archive_pack}}` держите как полный steady-work snapshot и резервный reference bundle.
+7. Для автоматически определенной фазы `{{current_phase}}` используйте phase-aware archive recommendation ниже, если нужен operator override.
    Причина: `{{phase_detection_reason}}`
 {{phase_recommendations_bullets}}
-7. Archive override выбирайте только при отдельной фазовой причине:
-{{available_sources_packs_bullets}}
-8. По умолчанию archive override не нужен: для steady-state работы достаточно `{{canonical_direct_profile}}`, а canonical archive остаётся reference snapshot. Если всё же нужен один archive pack по умолчанию, используйте `{{recommended_sources_pack}}`.
-9. Если Sources уже заняты, держите один постоянный direct hot-set, а phase-specific archive pack не смешивайте с ним как второй постоянный набор.
+8. Phase-specific archive override выбирайте только при отдельной фазовой причине:
+{{phase_override_packs_bullets}}
+9. По умолчанию archive override не нужен: для steady-state работы достаточно `{{canonical_direct_profile}}` + `{{canonical_cold_archive_pack}}`, а canonical archive остаётся reference snapshot. Если всё же нужен один archive pack по умолчанию, используйте `{{recommended_sources_pack}}`.
+10. Если Sources уже заняты, держите один постоянный direct hot-set и один cold/reference remainder archive, а phase-specific archive pack не смешивайте с ними как второй постоянный набор.
 
 Что прислать обратно:
 

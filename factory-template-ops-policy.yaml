@@ -7,6 +7,7 @@ boundary_actions:
   recommended_sources_pack: sources-pack-core-20.tar.gz
   available_sources_packs:
     - sources-pack-core-20.tar.gz
+    - core-cold-5.tar.gz
     - sources-pack-release-20.tar.gz
     - sources-pack-bugfix-20.tar.gz
   phase_recommendations:

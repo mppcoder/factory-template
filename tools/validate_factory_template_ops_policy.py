@@ -119,6 +119,8 @@ def validate_profile(name: str, profile: dict, errors: list[str]) -> None:
         fail(f"{name}: files должен быть списком", errors)
         return
     expected_count = 20 if kind == "archive_pack" else 15
+    if name == "core_cold_archive":
+        expected_count = 5
     if len(files) != expected_count:
         fail(f"{name}: ожидается ровно {expected_count} файлов, сейчас {len(files)}", errors)
     seen: set[str] = set()
@@ -181,12 +183,16 @@ def validate_profiles_manifest(policy: dict, errors: list[str]) -> tuple[dict[st
     ]
     core_archive = profiles.get("core_archive", {})
     core_hot = profiles.get("core_hot_direct", {})
+    core_cold = profiles.get("core_cold_archive", {})
     archive_files = core_archive.get("files", []) if isinstance(core_archive, dict) else []
     hot_files = core_hot.get("files", []) if isinstance(core_hot, dict) else []
+    cold_archive_files = core_cold.get("files", []) if isinstance(core_cold, dict) else []
     if core_archive.get("export_name") != "sources-pack-core-20":
         fail("core_archive.export_name должен быть sources-pack-core-20", errors)
     if core_hot.get("export_name") != "core-hot-15":
         fail("core_hot_direct.export_name должен быть core-hot-15", errors)
+    if core_cold.get("export_name") != "core-cold-5":
+        fail("core_cold_archive.export_name должен быть core-cold-5", errors)
     if archive_files and set(required_hot).difference(set(archive_files)):
         fail("core_archive должен включать весь hot-set как подмножество archive set", errors)
     if hot_files and list(hot_files) != required_hot:
@@ -194,8 +200,17 @@ def validate_profiles_manifest(policy: dict, errors: list[str]) -> tuple[dict[st
     cold_files = core_archive.get("cold_reference_files", []) if isinstance(core_archive, dict) else []
     if cold_files and list(cold_files) != required_cold:
         fail("core_archive.cold_reference_files должен совпадать с зафиксированным cold-set", errors)
+    if cold_archive_files and list(cold_archive_files) != required_cold:
+        fail("core_cold_archive должен содержать ровно зафиксированный cold-set", errors)
     if hot_files and archive_files and not set(hot_files).issubset(set(archive_files)):
         fail("core_hot_direct должен быть подмножеством core_archive", errors)
+    if cold_archive_files and archive_files and not set(cold_archive_files).issubset(set(archive_files)):
+        fail("core_cold_archive должен быть подмножеством core_archive", errors)
+    if hot_files and cold_archive_files and set(hot_files).intersection(set(cold_archive_files)):
+        fail("core_hot_direct и core_cold_archive не должны пересекаться", errors)
+    if hot_files and cold_archive_files and archive_files:
+        if set(hot_files).union(set(cold_archive_files)) != set(archive_files):
+            fail("core_hot_direct + core_cold_archive должны в точности восстанавливать core_archive", errors)
     if any(rel in set(required_cold) for rel in hot_files):
         fail("core_hot_direct не должен содержать cold/reference/release-support файлы", errors)
     return profiles, profiles_path
@@ -231,8 +246,12 @@ def validate_exported_artifacts(profiles: dict[str, dict], errors: list[str]) ->
         if manifest.get("file_count") != len(profile.get("files", [])):
             fail(f"{export_name}: manifest.file_count расходится с declarative profile", errors)
         readme = readme_path.read_text(encoding="utf-8")
-        if profile.get("kind") == "archive_pack" and "canonical archive pack" not in readme:
-            fail(f"{export_name}: README должен явно помечать canonical archive pack", errors)
+        if profile.get("kind") == "archive_pack":
+            if export_name == "core-cold-5":
+                if "cold/reference remainder archive" not in readme:
+                    fail(f"{export_name}: README должен явно помечать cold/reference remainder archive", errors)
+            elif "canonical archive pack" not in readme:
+                fail(f"{export_name}: README должен явно помечать canonical archive pack", errors)
         if profile.get("kind") == "direct_sources" and "direct Sources profile" not in readme:
             fail(f"{export_name}: README должен явно помечать direct Sources profile", errors)
 
@@ -394,10 +413,11 @@ def main() -> int:
         "{{root_path}}",
         "{{sources_export_dir}}",
         "{{canonical_archive_pack}}",
+        "{{canonical_cold_archive_pack}}",
         "{{canonical_direct_profile}}",
         "{{direct_sources_dir}}",
         "{{recommended_sources_pack}}",
-        "{{available_sources_packs_bullets}}",
+        "{{phase_override_packs_bullets}}",
         "{{phase_recommendations_bullets}}",
         "{{uploads_dir}}",
     ]:

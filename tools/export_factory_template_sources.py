@@ -8,7 +8,7 @@ from pathlib import Path
 import yaml
 
 from factory_template_phase_detection import detect_phase
-from sources_profiles import get_profiles, find_profile_by_export_name
+from sources_profiles import get_profiles
 ROOT = Path(__file__).resolve().parents[1]
 OUT_ROOT = ROOT / "_sources-export" / "factory-template"
 POLICY_PATH = ROOT / "factory-template-ops-policy.yaml"
@@ -33,6 +33,28 @@ def render_readme(profile_name: str, export_name: str, profile: dict, profiles: 
         "",
     ]
     if kind == "archive_pack":
+        if profile_name == "core_cold_archive":
+            direct_profile_name = profile.get("direct_profile")
+            direct_profile = profiles.get(direct_profile_name, {}) if isinstance(direct_profile_name, str) else {}
+            direct_export = direct_profile.get("export_name", "не указан")
+            canonical_profile_name = profile.get("canonical_archive_profile")
+            canonical_profile = profiles.get(canonical_profile_name, {}) if isinstance(canonical_profile_name, str) else {}
+            canonical_export = canonical_profile.get("export_name", "не указан")
+            lines.extend(
+                [
+                    "## Role",
+                    "",
+                    "Это cold/reference remainder archive для hybrid-модели ChatGPT Project Sources.",
+                    "",
+                    "## Recommended Workflow",
+                    "",
+                    f"- Для ежедневной работы держите direct hot-set `{direct_export}`.",
+                    f"- Этот archive загружайте как remainder без дублей hot-set.",
+                    f"- Полный canonical snapshot `{canonical_export}` храните как reference bundle и резервный снимок состава.",
+                    "",
+                ]
+            )
+            return "\n".join(lines)
         direct_profile_name = profile.get("direct_profile")
         direct_profile = profiles.get(direct_profile_name, {}) if isinstance(direct_profile_name, str) else {}
         direct_export = direct_profile.get("export_name", "не указан")
@@ -59,6 +81,9 @@ def render_readme(profile_name: str, export_name: str, profile: dict, profiles: 
         archive_profile_name = profile.get("archive_profile")
         archive_profile = profiles.get(archive_profile_name, {}) if isinstance(archive_profile_name, str) else {}
         archive_export = archive_profile.get("export_name", "не указан")
+        cold_archive_profile_name = profile.get("cold_archive_profile")
+        cold_archive_profile = profiles.get(cold_archive_profile_name, {}) if isinstance(cold_archive_profile_name, str) else {}
+        cold_archive_export = cold_archive_profile.get("export_name", "не указан")
         lines.extend(
             [
                 "## Role",
@@ -68,7 +93,8 @@ def render_readme(profile_name: str, export_name: str, profile: dict, profiles: 
                 "## Recommended Workflow",
                 "",
                 "- Загружайте эти файлы напрямую в Sources проекта.",
-                f"- Canonical archive `{archive_export}` храните как полный steady-work snapshot.",
+                f"- Cold/archive remainder `{cold_archive_export}` загружайте как отдельный архив без дублей hot-set.",
+                f"- Canonical archive `{archive_export}` храните как полный steady-work snapshot и reference bundle.",
                 "- Hot-set не заменяет archive pack и не живет как ручная копия: он генерируется из декларативного manifest.",
                 "",
             ]
@@ -95,7 +121,7 @@ def export_profile(profile_name: str, profile: dict, profiles: dict[str, dict]) 
         "purpose": purpose,
         "files": rel_paths,
     }
-    for extra_key in ["direct_profile", "archive_profile", "cold_reference_files"]:
+    for extra_key in ["direct_profile", "archive_profile", "cold_archive_profile", "canonical_archive_profile", "cold_reference_files"]:
         if extra_key in profile:
             manifest[extra_key] = profile[extra_key]
     for rel in rel_paths:
@@ -137,17 +163,21 @@ def main() -> int:
     current_phase = str(detected.get("phase", boundary.get("default_phase", "controlled-fixes")))
     current_pack = str(detected.get("recommended_sources_pack", boundary.get("recommended_sources_pack", "sources-pack-core-20.tar.gz")))
     detection_reason = "; ".join(detected.get("reasons", [])) if isinstance(detected.get("reasons"), list) else "phase detection reason unavailable"
-    _, archive_profile = find_profile_by_export_name(profiles, current_pack.removesuffix(".tar.gz"))
-    direct_profile_name = archive_profile.get("direct_profile") if isinstance(archive_profile, dict) else None
+    core_archive = profiles.get("core_archive", {})
+    canonical_archive_export = str(core_archive.get("export_name", "sources-pack-core-20"))
+    direct_profile_name = core_archive.get("direct_profile") if isinstance(core_archive, dict) else None
     direct_profile = profiles.get(direct_profile_name, {}) if isinstance(direct_profile_name, str) else {}
     direct_export = str(direct_profile.get("export_name", "core-hot-15"))
+    cold_archive_name = direct_profile.get("cold_archive_profile") if isinstance(direct_profile, dict) else None
+    cold_archive = profiles.get(cold_archive_name, {}) if isinstance(cold_archive_name, str) else {}
+    cold_archive_export = str(cold_archive.get("export_name", "core-cold-5"))
     lines = [
         "# Factory Template Sources Packs",
         "",
         f"Текущая phase recommendation для archive pack: `{current_phase}` -> `{current_pack}`.",
         f"Причина: {detection_reason}",
         "",
-        f"Постоянная схема работы: direct hot-set `{direct_export}` + canonical archive `{current_pack}`.",
+        f"Постоянная схема работы: direct hot-set `{direct_export}` + archive remainder `{cold_archive_export}.tar.gz` без дублей + canonical archive `{canonical_archive_export}.tar.gz` как reference snapshot.",
         "",
         "Собраны declarative profiles:",
         "",
@@ -165,7 +195,8 @@ def main() -> int:
             "Рекомендуемая стратегия Sources:",
             "",
             f"- для ежедневной работы загружать напрямую файлы из `{direct_export}/`",
-            f"- `{current_pack}` держать как canonical archive snapshot",
+            f"- `{cold_archive_export}.tar.gz` загружать как cold/reference archive remainder без дублей hot-set",
+            f"- `{canonical_archive_export}.tar.gz` держать как canonical archive snapshot и полный reference bundle",
             "- phase-specific archive packs использовать только как operator override, а не как постоянный Sources set",
             "",
             "Phase-aware рекомендации:",
