@@ -3,6 +3,10 @@ from __future__ import annotations
 from pathlib import Path
 import sys, re, yaml
 root=Path(sys.argv[1] if len(sys.argv)>1 else '.'); chat=root/'.chatgpt'; errors=[]
+classes_file=root/'change-classes.yaml'
+if not classes_file.exists():
+    classes_file=Path(__file__).resolve().parents[1]/'change-classes.yaml'
+
 def non_placeholder(text):
     out=[]
     for raw in text.splitlines():
@@ -39,6 +43,12 @@ else:
     data=yaml.safe_load(ip.read_text(encoding='utf-8')) or {}; change=data.get('change',{}) if isinstance(data,dict) else {}; tasks=data.get('tasks',[]) if isinstance(data,dict) else []
     for field in ['id','title','summary']:
         if not str(change.get(field,'')).strip(): errors.append(f'task-index.yaml: change.{field} должен быть заполнен')
+    classes=(yaml.safe_load(classes_file.read_text(encoding='utf-8')) or {}).get('change_classes', {}) if classes_file.exists() else {}
+    change_class=change.get('class')
+    cfg=classes.get(change_class, {}) if isinstance(classes, dict) else {}
+    for rel in cfg.get('required_artifacts', []) if isinstance(cfg, dict) else []:
+        if not (root / rel).exists():
+            errors.append(f'task-index.yaml: для класса {change_class} отсутствует обязательный артефакт {rel}')
     if not isinstance(tasks,list) or not tasks: errors.append('task-index.yaml: должна быть хотя бы одна задача')
     else:
         for i,task in enumerate(tasks,1):

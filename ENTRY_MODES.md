@@ -50,7 +50,9 @@
 - Когда использовать:
   когда уже есть существующий репозиторий, который нужно привести к фабричному процессу и артефактному слою
 - Основной сценарный вход:
-  после `00-master-router.md` переходите к `template-repo/scenario-pack/brownfield/01-system-inventory.md`
+  после `00-master-router.md` сначала переходите к `template-repo/scenario-pack/brownfield/00-brownfield-entry.md`, затем к `template-repo/scenario-pack/brownfield/01-system-inventory.md`
+- Зачем нужен `brownfield/00-brownfield-entry.md`:
+  это короткий brownfield gate, который фиксирует правило evidence-first даже если репозиторий уже существует
 
 ## Quick Mapping
 

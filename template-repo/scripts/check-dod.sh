@@ -14,6 +14,9 @@ CLASS = ROOT / '.chatgpt' / 'classification.md'
 BUGFLOW = ROOT / '.chatgpt' / 'bugflow-status.yaml'
 BUGDIR = ROOT / 'reports' / 'bugs'
 FEEDBACK = ROOT / 'reports' / 'factory-feedback'
+CLASSES_FILE = ROOT / 'change-classes.yaml'
+if not CLASSES_FILE.exists():
+    CLASSES_FILE = Path(__file__).resolve().parents[1] / 'change-classes.yaml'
 
 missing = [str(p) for p in [VERIFY, DONE, STATE, CURRENT] if not p.exists()]
 if missing:
@@ -24,6 +27,13 @@ if missing:
 
 state = yaml.safe_load(STATE.read_text(encoding='utf-8')) or {}
 gates = state.get('gates', {})
+task_index = yaml.safe_load((ROOT / '.chatgpt' / 'task-index.yaml').read_text(encoding='utf-8')) if (ROOT / '.chatgpt' / 'task-index.yaml').exists() else {}
+task_index = task_index or {}
+change = task_index.get('change', {}) if isinstance(task_index, dict) else {}
+classes = yaml.safe_load(CLASSES_FILE.read_text(encoding='utf-8')) if CLASSES_FILE.exists() else {}
+classes = (classes or {}).get('change_classes', {}) if isinstance(classes, dict) else {}
+change_class = change.get('class')
+class_cfg = classes.get(change_class, {}) if isinstance(classes, dict) else {}
 if gates.get('done_complete') is not True:
     print('DOD НЕ ПРОЙДЕН')
     print('- done_complete != true')
@@ -32,6 +42,16 @@ if gates.get('verification_complete') is not True:
     print('DOD НЕ ПРОЙДЕН')
     print('- verification_complete != true')
     raise SystemExit(1)
+for gate in class_cfg.get('required_gates', []) if isinstance(class_cfg, dict) else []:
+    if gates.get(gate) is not True:
+        print('DOD НЕ ПРОЙДЕН')
+        print(f'- для класса {change_class} gate {gate} должен быть true')
+        raise SystemExit(1)
+for rel in class_cfg.get('required_artifacts', []) if isinstance(class_cfg, dict) else []:
+    if not (ROOT / rel).exists():
+        print('DOD НЕ ПРОЙДЕН')
+        print(f'- для класса {change_class} отсутствует обязательный артефакт {rel}')
+        raise SystemExit(1)
 
 
 def meaningful(path: Path, min_lines: int = 3) -> bool:

@@ -3,6 +3,8 @@ scenario_pack:
   name: "scenario-pack"
   entrypoint: "00-master-router.md"
 project_preset: ""
+policy_preset: ""
+policy_default_scenarios: []
 active:
   - "00-master-router.md"
 status: "нужно_загрузить_в_sources"

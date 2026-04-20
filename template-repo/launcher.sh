@@ -40,6 +40,7 @@ repl = {
     "{{PROJECT_NAME}}": os.environ['PROJECT_NAME'],
     "{{PROJECT_SLUG}}": os.environ['PROJECT_SLUG'],
     "{{PROJECT_MODE}}": os.environ['PROJECT_MODE'],
+    "{{CURRENT_DATE}}": __import__("datetime").date.today().isoformat(),
 }
 for p in Path(os.environ['DEST_DIR']).rglob("*"):
     if p.is_file():
@@ -194,6 +195,8 @@ silent_fix_forbidden: true  # Silent fix запрещен
 '''
 (chat / 'bugflow-status.yaml').write_text(bugflow, encoding='utf-8')
 
+today = datetime.date.today().isoformat()
+
 version_md = f'''# Версия проекта
 
 ## Текущая версия проекта
@@ -203,7 +206,7 @@ version_md = f'''# Версия проекта
 {os.environ['PROJECT_MODE']}-draft
 
 ## Дата последнего обновления
-2026-04-15
+{today}
 
 ## Версия фабрики-источника
 2.4.0
@@ -215,7 +218,7 @@ version_md = f'''# Версия проекта
 
 changelog_md = f'''# Журнал изменений проекта
 
-## [0.1.0] - 2026-04-15
+## [0.1.0] - {today}
 ### Добавлено
 - первичная генерация проекта из фабрики 2.4.0
 
@@ -280,7 +283,7 @@ echo "3. Загрузите _sources-export/scenario-pack/* в Sources"
 echo "4. Начните с 00-master-router.md и затем выберите entry path по типу проекта:"
 echo "   - greenfield: 04-discovery-new-project.md"
 echo "   - brownfield без repo: brownfield/00-brownfield-entry.md"
-echo "   - brownfield с repo: brownfield/01-system-inventory.md"
+echo "   - brownfield с repo: brownfield/00-brownfield-entry.md -> brownfield/01-system-inventory.md"
 echo "5. Обновляйте .chatgpt/ по мере прохождения сценариев"
 echo "6. Перед handoff запустите проверки:"
 echo "   ./scripts/validate-task-graph.sh"

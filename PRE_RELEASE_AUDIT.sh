@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+export PYTHONDONTWRITEBYTECODE=1
 FAILS=0
 check_absent(){ local pattern="$1"; if find "$ROOT" -path "$ROOT/.release-stage" -prune -o -name "$pattern" -print | grep -q .; then echo "ОШИБКА: найден запрещённый артефакт: $pattern"; FAILS=$((FAILS+1)); fi; }
 check_exists(){ local file="$1"; [ -e "$ROOT/$file" ] || { echo "ОШИБКА: отсутствует обязательный файл: $file"; FAILS=$((FAILS+1)); }; }
