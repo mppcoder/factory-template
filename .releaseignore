@@ -1,5 +1,6 @@
 .smoke-test/
 audit-smoke-project/
+.git/
 *.log
 __pycache__/
 .pytest_cache__/

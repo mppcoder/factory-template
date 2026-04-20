@@ -13,6 +13,6 @@ rsync -a --delete --exclude-from="$ROOT/.releaseignore" "$ROOT/" "$STAGE/"
 find "$STAGE" -name '*.sh' -exec chmod +x {} +
 find "$STAGE" -name '*.py' -exec chmod +x {} + || true
 ( cd "$STAGE" && bash VERSION_SYNC_CHECK.sh )
-( cd "$STAGE" && bash PRE_RELEASE_AUDIT.sh )
+( cd "$STAGE" && ALLOW_GIT_DIR=0 bash PRE_RELEASE_AUDIT.sh )
 ( cd "$ROOT/.release-stage" && zip -qr "$OUT_ZIP" "$REL_NAME" )
 echo "Собран чистый релиз: $OUT_ZIP"
