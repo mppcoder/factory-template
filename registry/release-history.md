@@ -1,5 +1,10 @@
 # Общая история изменений фабрики
 
+## 2.4.1
+- бывший `Unreleased` оформлен как отдельный patch-релиз
+- release-facing docs и checklist доведены до go/no-go состояния
+- bundle и GitHub release синхронизированы под `factory-v2.4.1`
+
 ## 2.4.0
 - финализирован `rc2-smokefix` после полного прогона smoke/examples/matrix на чистом архиве
 - `SMOKE_TEST.sh` переведен на детерминированное заполнение артефактов через `tools/fill_smoke_artifacts.py`

@@ -1,4 +1,4 @@
-# TEST REPORT v2.4.0
+# TEST REPORT v2.4.1
 
 ## Что проверено
 - pre-release audit
@@ -37,7 +37,7 @@ Evidence / quality / DoD до смыслового наполнения арте
 - curated `sources-pack-core-20`, `sources-pack-release-20`, `sources-pack-bugfix-20` собираются из декларативного policy manifest.
 - boundary-actions guide генерируется из markdown template и проверяется вместе с ops-policy слоем.
 
-## Что вошло в финальный релиз
+## Что вошло в релиз 2.4.1
 - синхронизированы root/template/meta-template/example версии и release labels;
 - `RELEASE_BUILD.sh` перестал использовать вручную вшитый legacy-id релиза;
 - prerelease-аудит усилен проверками version drift и запрещенных legacy-ссылок.

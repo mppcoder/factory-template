@@ -4,6 +4,7 @@ audit-smoke-project/
 __pycache__/
 .pytest_cache__/
 _sources-export/
+_boundary-actions/
 _factory-sync-export/
 .release-stage/
 .matrix-test/

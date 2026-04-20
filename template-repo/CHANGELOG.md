@@ -1,6 +1,6 @@
 # Журнал изменений шаблона
 
-## [Unreleased] - 2026-04-19
+## [2.4.1] - 2026-04-20
 ### Добавлено
 - профиль `brownfield-dogfood-codex-assisted` для dogfood-сценария brownfield without repo
 - класс изменения `brownfield-stabilization` с поддержкой `hybrid` и `codex-led`

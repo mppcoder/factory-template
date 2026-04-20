@@ -1,5 +1,10 @@
 # Журнал изменений
 
+## 2.4.1
+- в отдельный patch-релиз вынесены ops-policy, phase detection и release-facing improvements из бывшего `Unreleased`
+- release metadata, bundle name и GitHub tag синхронизированы под `factory-v2.4.1`
+- release checklist и release note приведены к финальному go-статусу
+
 ## 2.4.0
 - `rc2-smokefix` переведен в финальный релиз после полного прохождения smoke/examples/matrix
 - метаданные и build output синхронизированы под финальное имя `factory-v2.4.0`

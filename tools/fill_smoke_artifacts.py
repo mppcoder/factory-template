@@ -13,7 +13,7 @@ chat = root / '.chatgpt'
 
 ## Что подтверждено в проекте
 - В проекте уже созданы каталоги `.chatgpt`, `scripts`, `work` и `.factory-sources`.
-- Версия пакета: 2.4.0.
+- Версия пакета: 2.4.1.
 - В репозитории подтверждено наличие `project-presets.yaml`, `policy-presets.yaml` и `change-classes.yaml`.
 
 ## Что говорит официальная документация
@@ -127,7 +127,7 @@ chat = root / '.chatgpt'
 - Не менять core-структуру проекта.
 ''', encoding='utf-8')
 stage = yaml.safe_load((chat / 'stage-state.yaml').read_text(encoding='utf-8'))
-for key in ['reuse_check_complete','reality_check_complete','conflict_detection_complete','spec_ready','spec_validated','tech_spec_ready','tech_spec_validated','decomposition_complete','task_validation_complete','codex_handoff_allowed','execution_complete','verification_complete','done_complete']:
+for key in ['intake_complete','classification_complete','reuse_check_complete','reality_check_complete','conflict_detection_complete','spec_ready','spec_validated','tech_spec_ready','tech_spec_validated','decomposition_complete','task_validation_complete','codex_handoff_allowed','execution_complete','verification_complete','done_complete']:
     stage['gates'][key] = True
 stage['stage'] = {'current': 'done', 'previous': 'verification', 'next': 'none'}
 (chat / 'stage-state.yaml').write_text(yaml.safe_dump(stage, allow_unicode=True, sort_keys=False), encoding='utf-8')
