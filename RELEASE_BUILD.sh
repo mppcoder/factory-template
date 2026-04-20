@@ -8,6 +8,7 @@ REL_NAME="factory-v${VERSION}"
 STAGE="$ROOT/.release-stage/$REL_NAME"
 OUT_ZIP="${1:-$ROOT/../$REL_NAME.zip}"
 rm -rf "$STAGE"
+rm -f "$OUT_ZIP"
 mkdir -p "$STAGE"
 rsync -a --delete --exclude-from="$ROOT/.releaseignore" "$ROOT/" "$STAGE/"
 find "$STAGE" -name '*.sh' -exec chmod +x {} +
