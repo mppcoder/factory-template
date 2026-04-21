@@ -71,6 +71,7 @@ python3 template-repo/scripts/validate-codex-task-pack.sh <working-project>
 - `core-hot-15` обязан содержать ровно 15 hot-файлов для ежедневной прямой загрузки;
 - `core-hot-15` обязан экспортироваться в одну flat-папку без подпапок и без silent overwrite;
 - `core-hot-15` должен содержать рядом и готовый `core-cold-5.tar.gz`, чтобы daily upload набор лежал в одном месте;
+- `core-hot-15` должен содержать явные generated marker-файлы `UPLOAD_TO_SOURCES.txt` и `DO_NOT_UPLOAD.txt`;
 - `core-cold-5` обязан содержать ровно 5 cold/reference файлов без дублей hot-set;
 - `sources-pack-release-20` обязан содержать release-facing docs и release scripts;
 - `sources-pack-bugfix-20` обязан содержать launcher, validator layer и feedback/handoff validators.

@@ -273,9 +273,30 @@ def validate_exported_artifacts(profiles: dict[str, dict], errors: list[str]) ->
                 bundled_names = [item.get("export_filename") for item in bundled_artifacts if isinstance(item, dict)]
                 if len(bundled_names) != len(set(bundled_names)):
                     fail(f"{export_name}: manifest.bundled_artifacts содержит конфликтующие export_filename", errors)
+                upload_list_path = export_dir / "UPLOAD_TO_SOURCES.txt"
+                do_not_upload_path = export_dir / "DO_NOT_UPLOAD.txt"
+                if not upload_list_path.exists():
+                    fail(f"{export_name}: отсутствует UPLOAD_TO_SOURCES.txt", errors)
+                if not do_not_upload_path.exists():
+                    fail(f"{export_name}: отсутствует DO_NOT_UPLOAD.txt", errors)
+                upload_to_sources = manifest.get("upload_to_sources", [])
+                do_not_upload = manifest.get("do_not_upload", [])
+                if sorted(upload_to_sources) != sorted(export_names + bundled_names):
+                    fail(f"{export_name}: manifest.upload_to_sources должен совпадать с export filenames", errors)
+                expected_do_not_upload = ["manifest.json", "README.md", "UPLOAD_TO_SOURCES.txt", "DO_NOT_UPLOAD.txt"]
+                if do_not_upload != expected_do_not_upload:
+                    fail(f"{export_name}: manifest.do_not_upload должен совпадать с каноническим списком", errors)
+                if upload_list_path.exists():
+                    upload_lines = [line.strip() for line in upload_list_path.read_text(encoding='utf-8').splitlines() if line.strip()]
+                    if upload_lines != upload_to_sources:
+                        fail(f"{export_name}: UPLOAD_TO_SOURCES.txt расходится с manifest.upload_to_sources", errors)
+                if do_not_upload_path.exists():
+                    do_not_upload_lines = [line.strip() for line in do_not_upload_path.read_text(encoding='utf-8').splitlines() if line.strip()]
+                    if do_not_upload_lines != do_not_upload:
+                        fail(f"{export_name}: DO_NOT_UPLOAD.txt расходится с manifest.do_not_upload", errors)
                 top_level_names = sorted(
                     p.name for p in export_dir.iterdir()
-                    if p.is_file() and p.name not in {"manifest.json", "README.md"}
+                    if p.is_file() and p.name not in {"manifest.json", "README.md", "UPLOAD_TO_SOURCES.txt", "DO_NOT_UPLOAD.txt"}
                 )
                 if sorted(export_names + bundled_names) != top_level_names:
                     fail(f"{export_name}: manifest.exported_files не совпадает с фактически экспортированными flat filenames", errors)

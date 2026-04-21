@@ -1,12 +1,12 @@
 change:
-  id: "chg-20260421-009"
-  title: "Bundle cold archive into core-hot-15 folder"
+  id: "chg-20260421-010"
+  title: "Mark hot15 uploadable files explicitly"
   class: "small-fix"
   execution_mode: "single-pass"
   type: "brownfield"
   status: "done"
   priority: "medium"
-  summary: "Положить ready-to-upload `core-cold-5.tar.gz` в ту же папку `core-hot-15`, чтобы весь daily upload набор лежал в одном месте."
+  summary: "Добавить явные marker-файлы в `core-hot-15`, чтобы было видно, что нужно загружать в Sources, а что не нужно."
   outputs:
     - "tools/export_factory_template_sources.py"
     - "tools/validate_factory_template_ops_policy.py"
@@ -19,7 +19,7 @@ change:
 
 tasks:
   - id: "T-001"
-    title: "Добавить cold companion archive в папку core-hot-15"
+    title: "Сгенерировать явные upload markers для core-hot-15"
     type: "implementation"
     risk_level: "medium"
     executor: "developer"
@@ -28,8 +28,8 @@ tasks:
       - "tools/export_factory_template_sources.py"
       - "tools/validate_factory_template_ops_policy.py"
     acceptance:
-      - "core-hot-15 содержит рядом `core-cold-5.tar.gz`"
-      - "manifest фиксирует bundled artifact и валидатор это подтверждает"
+      - "core-hot-15 содержит `UPLOAD_TO_SOURCES.txt` и `DO_NOT_UPLOAD.txt`"
+      - "manifest фиксирует upload/do-not-upload lists и валидатор это подтверждает"
 
   - id: "T-002"
     title: "Синхронизировать operator instructions и closeout artifacts"
@@ -47,5 +47,5 @@ tasks:
       - "CURRENT_FUNCTIONAL_STATE.md"
       - "work/completed/chg-20260421-008.md"
     acceptance:
-      - "инструкции явно говорят, что cold archive лежит в той же папке hot15"
+      - "инструкции явно ссылаются на `UPLOAD_TO_SOURCES.txt` и `DO_NOT_UPLOAD.txt`"
       - "completion/source-update layer использует тот же wording"

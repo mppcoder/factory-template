@@ -132,6 +132,8 @@ def render_readme(profile_name: str, export_name: str, profile: dict, profiles: 
                     "- По умолчанию имя файла совпадает с базовым именем исходника.",
                     f"- При конфликте базовых имён используется deterministic naming strategy: `{naming_strategy}`.",
                     "- Silent overwrite запрещён: конфликт должен быть разрешён на этапе генерации export.",
+                    "- Используйте `UPLOAD_TO_SOURCES.txt` как канонический список того, что нужно загрузить в ChatGPT Project Sources.",
+                    "- Файлы из `DO_NOT_UPLOAD.txt` в Sources загружать не нужно.",
                     "",
                 ]
             )
@@ -225,10 +227,30 @@ def export_profile(profile_name: str, profile: dict, profiles: dict[str, dict]) 
                 )
         if bundled_artifacts:
             manifest["bundled_artifacts"] = bundled_artifacts
-            (pack_dir / "manifest.json").write_text(
-                json.dumps(manifest, ensure_ascii=False, indent=2) + "\n",
-                encoding="utf-8",
-            )
+        upload_to_sources = sorted(
+            [item["export_filename"] for item in exported_files] +
+            [item["export_filename"] for item in bundled_artifacts]
+        )
+        do_not_upload = [
+            "manifest.json",
+            "README.md",
+            "UPLOAD_TO_SOURCES.txt",
+            "DO_NOT_UPLOAD.txt",
+        ]
+        manifest["upload_to_sources"] = upload_to_sources
+        manifest["do_not_upload"] = do_not_upload
+        (pack_dir / "UPLOAD_TO_SOURCES.txt").write_text(
+            "\n".join(upload_to_sources) + "\n",
+            encoding="utf-8",
+        )
+        (pack_dir / "DO_NOT_UPLOAD.txt").write_text(
+            "\n".join(do_not_upload) + "\n",
+            encoding="utf-8",
+        )
+        (pack_dir / "manifest.json").write_text(
+            json.dumps(manifest, ensure_ascii=False, indent=2) + "\n",
+            encoding="utf-8",
+        )
 
 
 def main() -> int:

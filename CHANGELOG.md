@@ -17,6 +17,7 @@
 - root `.chatgpt` и template `.chatgpt` теперь несут release decision templates и closeout artifacts для sync/release automation
 - direct hot-set `core-hot-15` теперь экспортируется как одна flat-папка без подпапок, с deterministic naming strategy при конфликтах имён
 - `core-cold-5.tar.gz` теперь дублируется прямо в папке `core-hot-15/` как companion archive для ручной загрузки
+- `core-hot-15` теперь содержит generated marker-файлы `UPLOAD_TO_SOURCES.txt` и `DO_NOT_UPLOAD.txt`, чтобы было видно, что загружать в Sources, а что нет
 
 ### Исправлено
 - устранен reusable process gap, из-за которого ChatGPT мог остановиться на аналитике вместо готового handoff

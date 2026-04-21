@@ -35,6 +35,8 @@
 
 При загрузке в ChatGPT Project берите файлы прямо из одной папки `core-hot-15/`.
 Если когда-нибудь появится конфликт одинаковых базовых имён, export применит deterministic naming strategy вместо silent overwrite.
+Ориентируйтесь на generated файл `UPLOAD_TO_SOURCES.txt`: он перечисляет всё, что нужно загрузить в Sources.
+Файл `DO_NOT_UPLOAD.txt` перечисляет служебные файлы export-папки, которые загружать не нужно.
 
 ## Cold / Reference Remainder Archive
 
@@ -68,7 +70,7 @@ Canonical archive pack остаётся:
 ## Recommended Workflow
 
 1. Запустить `bash EXPORT_FACTORY_TEMPLATE_SOURCES.sh`.
-2. Для ежедневной работы загрузить напрямую файлы из одной flat-папки `_sources-export/factory-template/core-hot-15/` без подпапок.
+2. Для ежедневной работы открыть `_sources-export/factory-template/core-hot-15/` и загружать только файлы из `UPLOAD_TO_SOURCES.txt`.
 3. Взять `core-cold-5.tar.gz` из той же папки `_sources-export/factory-template/core-hot-15/` и загрузить его как cold/reference archive remainder.
 4. Archive `sources-pack-core-20.tar.gz` сохранить как canonical snapshot и reference bundle.
 5. При release/bugfix-фазе при необходимости использовать phase-specific archive override, но не держать его как второй постоянный набор Sources.
