@@ -1,9 +1,15 @@
 # Журнал изменений фабрики
 
 ## [Unreleased]
+### Добавлено
+- отдельный contour `VERIFIED_SYNC.sh` для auto commit/push после successful verify
+- отдельный contour `EXECUTE_RELEASE_DECISION.sh` для tag/release path только после явного release decision
+- validators для verified sync prereqs, release decision, release notes source и publish outcome
+
 ### Изменено
 - release-facing слой зафиксировал factory-template defect remediation из `a9b05c0` без смены release semantics
 - `CURRENT_FUNCTIONAL_STATE.md` и release notes теперь явно отражают обязательный inline Codex handoff при допустимом handoff и достаточной определенности задачи
+- root `.chatgpt` и template `.chatgpt` теперь несут release decision templates и closeout artifacts для sync/release automation
 
 ### Исправлено
 - устранен reusable process gap, из-за которого ChatGPT мог остановиться на аналитике вместо готового handoff

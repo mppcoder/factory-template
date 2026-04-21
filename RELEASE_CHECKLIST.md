@@ -19,6 +19,7 @@
 - [x] Проверить `TEST_REPORT.md`
 - [x] Проверить `VERIFY_SUMMARY.md`
 - [x] Проверить `RELEASE_NOTE_TEMPLATE.md`
+- [x] Проверить `.chatgpt/release-decision.yaml`
 - [x] При необходимости свериться с `COMMIT_MESSAGE_GUIDE.md`
 - [x] Проверить `meta-template-project/RELEASE_NOTES.md`
 - [x] Убедиться, что release note отражает изменения в template/runtime/policy layer
@@ -27,6 +28,9 @@
 
 - [x] `bash POST_UNZIP_SETUP.sh`
 - [x] `bash VALIDATE_FACTORY_TEMPLATE_OPS.sh`
+- [x] `bash VALIDATE_VERIFIED_SYNC_PREREQS.sh`
+- [x] `bash VALIDATE_RELEASE_DECISION.sh`
+- [x] `bash VALIDATE_RELEASE_NOTES_SOURCE.sh`
 - [x] `bash SMOKE_TEST.sh`
 - [x] `bash EXAMPLES_TEST.sh`
 - [x] `bash MATRIX_TEST.sh`
@@ -39,6 +43,7 @@
 - [x] `factory-template-ops-policy.yaml` валиден
 - [x] curated Sources packs собираются
 - [x] boundary-actions guide генерируется
+- [x] verified sync выполнен или детерминированно завершился как no-op
 - [x] временные verify artifacts очищены перед release build
 
 ## External Boundary Readiness

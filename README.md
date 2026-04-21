@@ -125,6 +125,15 @@ bash PHASE_DETECTION_TEST.sh
 
 - `git commit`, `git push`, `git fetch` и смену `origin` выполняйте последовательно
 - если обычный `git push origin main` ведет себя нестабильно, используйте прямой SSH push на `git@github.com:mppcoder/factory-template.git`
+- если нужен canonical verified path, используйте `bash VERIFIED_SYNC.sh`
+- если нужен release path после отдельного решения, используйте `bash EXECUTE_RELEASE_DECISION.sh`
+
+Для нового automation contour доступны validators:
+
+- `bash VALIDATE_VERIFIED_SYNC_PREREQS.sh`
+- `bash VALIDATE_RELEASE_DECISION.sh`
+- `bash VALIDATE_RELEASE_NOTES_SOURCE.sh`
+- `bash VALIDATE_RELEASE_REPORT.sh`
 
 ## Что входит в релиз
 - `template-repo/` — шаблон нового рабочего проекта.
@@ -157,6 +166,7 @@ bash PHASE_DETECTION_TEST.sh
 - quality-валидация остаётся эвристической, а не семантической;
 - advisory/back-sync слой по-прежнему рассчитан на контролируемое применение, а не на безусловный sync всех зон;
 - содержательное наполнение `user-spec`, `tech-spec`, `reality-check` требует сценарного слоя и участия пользователя.
+- auto GitHub Release publication выполняется только при явном `release-decision.yaml` и доступном `gh auth`.
 
 
 ## Стандарт versioning/documentation layer

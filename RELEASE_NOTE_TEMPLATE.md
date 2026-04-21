@@ -17,6 +17,7 @@
 - launcher и generated versioning layer переведены на `2.4.2`
 - export/validation layer выровнены под declarative Sources profiles
 - release checklist, release notes и boundary guidance отражают hybrid-схему Sources
+- verified sync и release publication остаются раздельными контурами
 
 ## Что проверено
 
@@ -31,6 +32,7 @@
 - для steady-state работы использовать `sources-pack-core-20.tar.gz`
 - для release-facing прохода использовать `sources-pack-release-20.tar.gz`
 - generated projects теперь получают фабричную версию `2.4.2`
+- verified sync после green verify может выполняться автоматически, но auto release требует отдельного `release-decision.yaml`
 
 ## Риски и ограничения
 
@@ -39,7 +41,8 @@
 
 ## Внешние шаги для пользователя
 
-- GitHub repo и tag синхронизировать с новым релизом `v2.4.2`
+- при `decision=release` проверить, доступна ли автоматическая публикация через `gh`
+- если runtime перешел в fallback, использовать release report и затем синхронизировать GitHub tag/release вручную
 - прикрепить к GitHub Release архив `factory-v2.4.2.zip`
 - загрузить нужный curated Sources pack в ChatGPT Project
 

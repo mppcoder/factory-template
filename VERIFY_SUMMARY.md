@@ -19,6 +19,8 @@
 - launcher and generated project scaffolding
 - structural validators
 - defect-capture / alignment / handoff checks
+- verified sync prereqs, denylist/no-op path и fallback push strategy
+- release decision validation и publish fallback reporting
 - curated Sources packs policy
 - boundary-actions generation
 - phase-aware Sources recommendation
@@ -33,6 +35,7 @@
 - `bugfix-drift` phase now requires both bug/validator path signals and bug-report intent markers in `reports/bugs/*.md`
 - release/no-release решение остаётся отдельным операторским решением
 - git-операции в этом окружении нужно выполнять последовательно; параллельный `commit/push/fetch/remote change` может давать ложные результаты
+- auto GitHub Release publication зависит от доступности `gh` и не должна считаться гарантированной без отдельной проверки auth/runtime
 
 ## Operator Use
 
@@ -45,6 +48,7 @@
 
 ## Git Sync Note
 
+- `VERIFIED_SYNC.sh` использовать как основной verified path для auto commit/push
 - `git commit`, `git push`, `git fetch`, `git remote set-url` выполнять только последовательно
 - если `git push origin main` ведет себя нестабильно, используйте прямой SSH push:
   `git push git@github.com:mppcoder/factory-template.git main`

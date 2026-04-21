@@ -1,0 +1,72 @@
+change:
+  id: "chg-20260421-002"
+  title: "Automate verified sync and separate release contour"
+  class: "feature"
+  execution_mode: "hybrid"
+  type: "brownfield"
+  status: "done"
+  priority: "high"
+  summary: "Добавить auto commit/push после successful verify и отдельный автоматический release executor после явного release decision."
+  outputs:
+    - "VERIFIED_SYNC.sh"
+    - "EXECUTE_RELEASE_DECISION.sh"
+    - ".chatgpt/release-decision.yaml"
+    - "template-repo/scripts/verified-sync.sh"
+    - "template-repo/scripts/execute-release-decision.sh"
+
+tasks:
+  - id: "T-001"
+    title: "Встроить verified sync automation"
+    type: "implementation"
+    risk_level: "high"
+    executor: "developer"
+    depends_on: []
+    outputs:
+      - "VERIFIED_SYNC.sh"
+      - "template-repo/scripts/verified-sync.sh"
+      - "template-repo/scripts/validate-verified-sync-prereqs.sh"
+    acceptance:
+      - "verify failure блокирует commit и push"
+      - "no diff приводит к deterministic no-op report"
+      - "push использует fallback strategy при сбое origin"
+
+  - id: "T-002"
+    title: "Добавить release decision и auto release executor"
+    type: "implementation"
+    risk_level: "high"
+    executor: "developer"
+    depends_on:
+      - "T-001"
+    outputs:
+      - ".chatgpt/release-decision.yaml"
+      - "EXECUTE_RELEASE_DECISION.sh"
+      - "template-repo/scripts/execute-release-decision.sh"
+      - "template-repo/scripts/validate-release-decision.sh"
+      - "template-repo/scripts/validate-release-notes-source.sh"
+      - "template-repo/scripts/validate-release-report.sh"
+    acceptance:
+      - "release decision остается отдельным явным контуром"
+      - "tag/release не выполняются при no-release"
+      - "publish fallback не является silent fail"
+
+  - id: "T-003"
+    title: "Синхронизировать docs, runbooks и closeout artifacts"
+    type: "documentation"
+    risk_level: "medium"
+    executor: "editor"
+    depends_on:
+      - "T-001"
+      - "T-002"
+    outputs:
+      - "factory_template_only_pack/01-runbook-dlya-polzovatelya-factory-template.md"
+      - "factory_template_only_pack/02-runbook-dlya-codex-factory-template.md"
+      - "factory_template_only_pack/03-mode-routing-factory-template.md"
+      - "factory_template_only_pack/07-AGENTS-factory-template.md"
+      - "CURRENT_FUNCTIONAL_STATE.md"
+      - ".chatgpt/verification-report.md"
+      - ".chatgpt/done-report.md"
+      - "work/completed/chg-20260421-002.md"
+    acceptance:
+      - "docs фиксируют separate verified sync и release contour"
+      - "release semantics не размыты"
+      - "closeout artifacts отражают verify results"

@@ -63,7 +63,7 @@
 - `meta-template-project/` — release notes и backlog самой фабрики
 - `workspace-packs/` — optional operational packs
 - `bootstrap/` — операторские пояснения и how-to
-- root-level `.chatgpt/` в этом repo не является обязательным слоем
+- root-level `.chatgpt/` в этом repo используется для factory-level change artifacts, release decision и closeout по самому `factory-template`
 
 ### Фаза B. Self-tests
 
@@ -113,6 +113,8 @@ bash PRE_RELEASE_AUDIT.sh
 - чинить scripts;
 - синхронизировать docs и automation;
 - собирать release artifacts;
+- выполнять `VERIFIED_SYNC.sh` после green verify;
+- выполнять `EXECUTE_RELEASE_DECISION.sh` только после явного `release-decision.yaml`;
 - готовить curated source-pack;
 - генерировать boundary-actions instructions для внешних шагов;
 - выравнивать policy manifests и template files для pack/export flows;
@@ -127,8 +129,23 @@ bash PRE_RELEASE_AUDIT.sh
 - менять основную фазовую модель фабрики;
 - удалять сценарные ветки без замены;
 - делать широкий destructive rewrite;
-- публиковать релиз автоматически;
+- публиковать релиз автоматически без отдельного release decision;
 - менять release semantics без release note.
+
+## 4.1. Separate sync and release contours
+
+Для `factory-template` теперь действуют два отдельных автоматических контура:
+
+1. `verified sync`
+   Выполняется только после successful verify и только если в repo есть допустимый diff.
+   Результат: auto commit + auto push + runtime sync report.
+
+2. `release executor`
+   Выполняется только после явного `release-decision.yaml`.
+   Для `decision=no-release` ограничивается report-only closeout.
+   Для `decision=release` выполняет tag/release path или пишет explicit fallback report.
+
+Нельзя смешивать эти контуры в один always-auto-release шаг.
 
 ---
 
@@ -143,6 +160,12 @@ bash PRE_RELEASE_AUDIT.sh
 - нужен глубокий сравнительный анализ.
 
 Если handoff в Codex уже разрешен и задача достаточно определена, не останавливайся на аналитике: выдай готовый inline handoff в том же ответе. Откладывать handoff можно только при незакрытых gate'ах, нехватке обязательных артефактов, реальной неоднозначности или архитектурной развилке.
+
+Для verified sync / release automation сначала делай reuse-check:
+
+- используй `VERIFIED_SYNC.sh` вместо ad-hoc `git add/commit/push`;
+- используй `EXECUTE_RELEASE_DECISION.sh` вместо ручного смешивания verify, tag и publish;
+- перед запуском прогоняй validators контура.
 
 ---
 

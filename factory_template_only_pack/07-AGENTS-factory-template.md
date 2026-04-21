@@ -67,7 +67,8 @@
 - final release pass;
 - complete self-test review;
 - diff review before publish;
-- release bundle verification.
+- release bundle verification;
+- explicit release decision execution.
 
 ## Правило переключения профиля
 
@@ -93,3 +94,22 @@
 - verify summary;
 - release notes;
 - явной фиксации, что изменилось в шаблоне.
+
+## Правило verified sync
+
+После green verify используйте `VERIFIED_SYNC.sh` как канонический путь commit/push.
+
+Требования:
+
+- без green verify commit/push запрещены;
+- при отсутствии diff sync должен завершаться как no-op;
+- git-команды выполнять только последовательно;
+- fallback push через прямой SSH допустим только как deterministic fallback, а не как silent branch.
+
+## Правило release decision
+
+Используйте отдельный `.chatgpt/release-decision.yaml`.
+
+- `decision=no-release` означает только verified sync без tag/release;
+- `decision=release` разрешает `EXECUTE_RELEASE_DECISION.sh`;
+- auto release без явного decision запрещен.

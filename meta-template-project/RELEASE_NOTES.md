@@ -5,6 +5,7 @@
 - reusable process gap закрыт: inline Codex handoff теперь обязателен при допустимом handoff и достаточной определенности задачи
 - reusable process gap закрыт: финальный блок `Инструкция пользователю` теперь обязателен при любом pending user/external step
 - downstream process behavior обновлен без изменения release semantics: автопубликация релиза не добавлена, release discipline сохранена
+- добавлен separate contour для auto commit/push после successful verify и отдельный release executor после явного release decision
 
 ## 2.4.2
 - добавлен declarative direct Sources profile `core-hot-15` для ежедневной работы в ChatGPT Project

@@ -1,9 +1,14 @@
 # Журнал изменений шаблона
 
 ## [Unreleased]
+### Добавлено
+- reusable scripts `verified-sync` и `execute-release-decision` для generated project automation
+- templates для `release-decision`, `sync-report` и `release-report`
+
 ### Изменено
 - template/runtime/policy layer теперь закрепляет обязательный inline Codex handoff, если handoff уже допустим и задача достаточно определена
 - template guidance теперь требует финальный блок `Инструкция пользователю` при любом pending user/external step
+- generated projects теперь могут отделять verified sync от release publication
 
 ### Исправлено
 - устранен reusable process gap между router, handoff rules, runbook, AGENTS и closeout layer

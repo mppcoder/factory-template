@@ -41,7 +41,8 @@
 - rename only;
 - export packs;
 - mechanical cleanup;
-- простых validator runs.
+- простых validator runs;
+- repeated no-op/recheck runs для `VALIDATE_*` и `VERIFIED_SYNC.sh`.
 
 Рекомендуемый профиль:
 
@@ -73,7 +74,8 @@
 - final audit;
 - diff review;
 - release bundle review;
-- complete self-test pass review.
+- complete self-test pass review;
+- `EXECUTE_RELEASE_DECISION.sh` и publish/fallback review.
 
 Рекомендуемый профиль:
 
@@ -106,6 +108,14 @@
 ### Правило 5
 
 Release verify не выполнять на `mini`.
+
+### Правило 6
+
+`VERIFIED_SYNC.sh` запускать из `default-dev` или `fast-routine` только после зеленого verify.
+
+### Правило 7
+
+`EXECUTE_RELEASE_DECISION.sh` запускать только в `release-verify`, когда есть явный `release-decision.yaml`.
 
 ---
 

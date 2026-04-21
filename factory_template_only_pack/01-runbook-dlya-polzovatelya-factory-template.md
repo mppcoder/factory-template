@@ -64,6 +64,8 @@
 5. подтверждаете risky-внешние действия;
 6. принимаете release/no-release решение.
 
+После successful verify verified sync теперь может выполняться автоматически: commit/push делаются без отдельного ручного GitHub UI шага, если verify green и в repo есть diff.
+
 ---
 
 ## 3. Что делает Codex
@@ -139,8 +141,14 @@ mkdir -p /projects/_incoming /projects/_release /projects/_artifacts
 Рабочий цикл всегда один:
 
 ```text
-внешний сигнал → ChatGPT Project → решение/спецификация → Codex-исполнение → verify → release/no-release
+внешний сигнал → ChatGPT Project → решение/спецификация → Codex-исполнение → verify → verified sync → release/no-release
 ```
+
+Где:
+
+- `verified sync` = auto commit + auto push только после green verify;
+- `release/no-release` = отдельное явное решение;
+- auto release path включается только после `release=yes`.
 
 ### Типовые внешние сигналы
 
@@ -192,6 +200,8 @@ mkdir -p /projects/_incoming /projects/_release /projects/_artifacts
 8. Для любого release/no-release решения использовать `RELEASE_NOTE_TEMPLATE.md` как базовый шаблон релизной заметки.
 9. Git-зависимые шаги (`commit`, `push`, `fetch`, смена `origin`) выполнять последовательно, не параллелить.
 10. Если `git push origin main` ведет себя нестабильно, использовать прямой SSH push на `git@github.com:mppcoder/factory-template.git`.
+11. Если verify failed, не запускать `VERIFIED_SYNC.sh` и `EXECUTE_RELEASE_DECISION.sh`.
+12. Если release decision = `no-release`, не создавать tag и не публиковать GitHub Release.
 
 ---
 

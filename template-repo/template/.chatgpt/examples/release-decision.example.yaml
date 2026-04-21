@@ -1,0 +1,6 @@
+decision: "release"
+version: "2.4.2"
+channel: "patch"
+notes_source: "RELEASE_NOTE_TEMPLATE.md"
+approved_by: "factory-operator"
+timestamp: "2026-04-21T12:00:00Z"

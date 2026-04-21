@@ -24,18 +24,21 @@
 - curated Sources packs с semantic validation по профилям `core / release / bugfix`, а не только по cap=20 и существованию файлов
 - phase-aware recommendation layer для выбора `sources-pack-*` в `controlled-fixes / release / bugfix-drift`
 - automatic phase detection из `git`-состояния для выбора рекомендованного `sources-pack-*`
+- separate verified sync contour: auto commit/push после successful verify с lock, denylist и fallback push strategy
+- separate release decision contour: auto tag/release path только после явного `release-decision.yaml`
 
 ## Что работает частично
 - matrix runner как единый источник истины
 - полный controlled back-sync как production flow
 - насыщенность scaffold-only examples
 - phase-aware состав curated packs пока задается статическим policy manifest без отдельного сценарного роутинга
+- auto GitHub Release publication зависит от доступности и авторизации `gh` CLI в конкретной среде
 
 ## Что еще не закрыто
 - финальное dogfooding на реальных greenfield и brownfield проектах
 - окончательная polish-фаза для runner layer и operational reports
 - отдельный release-facing validator/report для curated pack quality beyond structural checks
-- investigation и устранение runtime-нестабильности git sync, пока покрытой только documented workaround
+- дальнейшее production hardening runtime-нестабильности git sync beyond current fallback strategy
 
 ## Граница core
 Core включает фабрику, шаблон, versioning/documentation layer, `.chatgpt`, scenario-pack, examples и feedback loop.

@@ -11,3 +11,4 @@ _factory-sync-export/
 .matrix-test/
 .pytest_cache/
 .bugflow-test/
+.factory-runtime/

@@ -1,0 +1,6 @@
+decision: "no-release" # release | no-release
+version: "{{FACTORY_VERSION}}" # Версия, к которой относится решение
+channel: "patch" # patch | minor | major | hotfix | custom
+notes_source: "RELEASE_NOTE_TEMPLATE.md" # Относительный путь к исходнику release notes
+approved_by: "" # Кто принял release/no-release decision
+timestamp: "" # ISO timestamp решения

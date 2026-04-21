@@ -1,0 +1,6 @@
+decision: "no-release"
+version: "2.4.2"
+channel: "patch"
+notes_source: "RELEASE_NOTE_TEMPLATE.md"
+approved_by: "factory-template-operator"
+timestamp: "2026-04-21T11:30:00Z"

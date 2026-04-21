@@ -1,0 +1,11 @@
+timestamp: "2026-04-21T12:10:00Z"
+status: "pushed"
+change_id: "chg-20260421-002"
+branch: "main"
+remote: "git@github.com:example/repo.git"
+push_status: "success"
+commit_sha: "abcdef1234567890"
+commit_message: "feat: automate verified sync contour"
+staged_paths:
+  - "template-repo/scripts/verified-sync.sh"
+  - "factory_template_only_pack/02-runbook-dlya-codex-factory-template.md"
