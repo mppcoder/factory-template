@@ -7,6 +7,7 @@
 - reusable process gap закрыт: internal repo follow-up после remediation/push больше не должен ошибочно уходить в user-only closeout
 - reusable process hardening добавил source-update completion package для factory Sources, downstream repo sync и battle ChatGPT Project Sources
 - reusable process hardening добавил immediate completion-package rule: обязательная инструкция пользователю должна появляться в том же финальном ответе
+- reusable process hardening закрепил, что internal prepare/export commands для source-update completion package выполняет Codex внутри repo, а не пользователь
 - downstream process behavior обновлен без изменения release semantics: автопубликация релиза не добавлена, release discipline сохранена
 - добавлен separate contour для auto commit/push после successful verify и отдельный release executor после явного release decision
 

@@ -9,6 +9,7 @@
 - internal-followup precedence rule: user footer больше не должен вытеснять inline handoff, если remaining work еще остается внутренней Codex-eligible работой repo
 - completion/handoff layer теперь требует source-update completion package для factory Sources, downstream repo sync и battle ChatGPT Project Sources, когда change затрагивает downstream-consumed content
 - immediate completion-package rule: обязательная инструкция пользователю должна быть в том же финальном ответе, а не после напоминания пользователя
+- completion package больше не должен перекладывать на пользователя внутренние prepare/export команды; такие шаги выполняет Codex до финального ответа
 
 ### Изменено
 - release-facing слой зафиксировал factory-template defect remediation из `a9b05c0` без смены release semantics

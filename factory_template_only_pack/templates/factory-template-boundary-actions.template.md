@@ -50,14 +50,14 @@ Internal repo follow-up, включая release-followup, source-pack refresh, e
 
 ### Команды/скрипты для repo-level sync
 
-- `bash EXPORT_FACTORY_TEMPLATE_SOURCES.sh`
+- `bash EXPORT_FACTORY_TEMPLATE_SOURCES.sh` — выполняет Codex внутри repo до выдачи финального completion package
 - `{{repo_patch_export_script}}`
 - `{{repo_patch_apply_script}}`
 
 ### Пошаговая инструкция по окнам
 
-- VS Code Explorer — открыть каталог с export/patch артефактами
-- VS Code Terminal — запустить команды экспорта и sync
+- VS Code Explorer — открыть каталог с уже подготовленными export/patch артефактами
+- VS Code Terminal — только если нужен внешний repo-level sync в downstream repo; внутренние prepare-команды Codex выполняет сам
 - ChatGPT Project → Sources — удалить старые Sources и загрузить новые
 - GitHub/repo window — выполнить review commit/push, если это действительно внешний шаг
 
@@ -125,13 +125,12 @@ Internal repo follow-up, включая release-followup, source-pack refresh, e
 
 Где делать:
 
-- терминал: `{{root_path}}`
+- VS Code Explorer: `{{sources_export_dir}}`
 - затем ChatGPT Project UI
 
 Шаги:
 
-1. В терминале запустите `bash EXPORT_FACTORY_TEMPLATE_SOURCES.sh`.
-2. Откройте каталог `{{sources_export_dir}}`.
+1. Откройте каталог `{{sources_export_dir}}` с уже подготовленными артефактами.
 3. Для ежедневной постоянной работы используйте direct profile `{{canonical_direct_profile}}`.
 4. Загрузите в ChatGPT Project напрямую файлы из каталога `{{direct_sources_dir}}`, сохраняя структуру путей.
 5. Загрузите `{{canonical_cold_archive_pack}}` как cold/reference archive remainder без дублей hot-set.

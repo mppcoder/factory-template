@@ -75,6 +75,7 @@ def main() -> int:
     ensure_contains(boundary, "workspace-packs/factory-ops/export-template-patch.sh", errors, "boundary-actions.md")
     ensure_contains(boundary, "workspace-packs/factory-ops/apply-template-patch.sh", errors, "boundary-actions.md")
     ensure_contains(boundary, "bash EXPORT_FACTORY_TEMPLATE_SOURCES.sh", errors, "boundary-actions.md")
+    ensure_contains(boundary, "выполняет Codex внутри repo", errors, "boundary-actions.md")
     if "описание не задано" in boundary:
         errors.append("boundary-actions.md содержит незаполненные impact descriptions")
     for required_file in ["`codex-input.md`", "`codex-context.md`", "`codex-task-pack.md`", "`boundary-actions.md`"]:

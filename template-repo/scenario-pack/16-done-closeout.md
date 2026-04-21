@@ -36,6 +36,8 @@ Closeout без handoff допустим только при реальном о
 - downstream repo template sync;
 - downstream/battle ChatGPT Project Sources.
 
+Перед таким closeout Codex обязан сам выполнить внутренний repo prep: export refresh, boundary-actions generation, archive/manifest refresh и другую сборку артефактов, если она нужна для внешнего шага. Ответ, который вместо этого отправляет пользователя запускать внутренние repo-команды, считается неполным closeout.
+
 Если replacement в Sources может создать stale duplicates, в блоке `## Инструкция пользователю` обязателен отдельный подраздел `Удалить перед заменой` с точными именами файлов или архивов.
 
 Closeout не считается завершенным, если обязательный внешний completion package был выдан не сразу, а только после дополнительного напоминания пользователя. Такой ответ считается неполным closeout и требует remediation.

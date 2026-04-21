@@ -195,8 +195,9 @@ def main() -> int:
 - GitHub / внешние UI / секреты не выполнять автоматически из Codex.
 - Все внешние действия фиксировать отдельной пошаговой инструкцией для пользователя с финальным блоком `Инструкция пользователю`.
 - `Инструкция пользователю` не должна подменять внутренний handoff, если internal repo follow-up еще не завершен.
-- Для factory Sources refresh используйте `bash EXPORT_FACTORY_TEMPLATE_SOURCES.sh` и generated артефакты в `_sources-export/factory-template/`.
+- Для factory Sources refresh сначала сам выполните `bash EXPORT_FACTORY_TEMPLATE_SOURCES.sh`; этот шаг выполняет Codex внутри repo, после чего пользователю передаются уже готовые generated артефакты в `_sources-export/factory-template/`.
 - Для downstream repo sync сначала используйте `workspace-packs/factory-ops/export-template-patch.sh` и `workspace-packs/factory-ops/apply-template-patch.sh`.
+- Не перекладывайте на пользователя запуск внутренних repo-команд вроде `EXPORT_FACTORY_TEMPLATE_SOURCES.sh` или `GENERATE_BOUNDARY_ACTIONS.sh`, если эти шаги может выполнить Codex.
 - Если replacement может создать stale duplicates, добавляйте точный раздел `Удалить перед заменой`.
 """
 

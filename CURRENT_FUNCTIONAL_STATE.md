@@ -30,6 +30,7 @@
 - process layer явно различает internal repo follow-up, external boundary step и mixed follow-up, не позволяя user-only closeout вытеснить внутренний Codex handoff
 - completion/handoff layer умеет требовать source-update completion package с affected contours, delete-before-replace и repo-level sync steps для factory Sources и downstream consumers
 - completion/handoff layer теперь явно требует, чтобы обязательный completion package появлялся в том же финальном ответе, а не только после дополнительного запроса пользователя
+- completion/handoff layer теперь различает готовые внешние boundary steps и внутренние prepare/export commands: сборка export artifacts выполняется Codex внутри repo до пользовательского блока
 
 ## Что работает частично
 - matrix runner как единый источник истины

@@ -49,6 +49,8 @@ User-only closeout допустим только если remaining next step д
 
 Если change затрагивает downstream-consumed template content, source-pack, launcher, validators, runbooks, codex-task-pack, `.chatgpt` artifacts или другой слой, который потом обновляется через ChatGPT Project Sources или downstream template sync, `## Инструкция пользователю` должен быть не общим footer, а структурированным completion package.
 
+Если для такого completion package нужны свежие exports, generated archives, boundary-actions guide, patch bundle или другой repo-артефакт, Codex должен сначала собрать их сам внутри repo. Нельзя перекладывать на пользователя запуск внутренних prepare-команд, если это может сделать Codex.
+
 В таком случае нужно явно различить:
 - обновление Sources проекта шаблона в ChatGPT;
 - обновление шаблона в downstream/battle repo;

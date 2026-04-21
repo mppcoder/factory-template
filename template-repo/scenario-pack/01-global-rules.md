@@ -27,3 +27,5 @@
 Если change влияет на Sources или downstream template consumers, но completion output не различает affected contours, delete-before-replace semantics и boundary steps по окнам/папкам, это считается reusable process defect.
 
 Если обязательный `## Инструкция пользователю` или source-update completion package появляется только после дополнительного запроса пользователя, это считается reusable process defect completion/handoff layer.
+
+Если Codex перекладывает на пользователя внутренние repo-операции вроде export refresh, boundary-actions generation, manifest refresh или сборки patch/export artifacts, это считается reusable process defect boundary/completion layer.

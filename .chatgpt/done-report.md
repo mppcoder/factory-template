@@ -1,25 +1,24 @@
 # Итоговый отчёт по закрытию изменения
 
 ## Что было запрошено
-- Исправить ситуацию, где по итогам relevant change обязательный completion package не попал в основной финальный ответ.
+- Исправить ситуацию, где completion package отправлял пользователя выполнять внутренние repo prepare/export команды.
 
 ## Что реально сделано
-- Добавлено immediate same-response rule для completion package.
-- Deferred instruction after reminder теперь считается reusable process defect.
-- Обновлены DoD, runbook/AGENTS и checklist/validator.
-- Зафиксирован новый defect в `reports/bugs/bug-008-deferred-completion-package-after-reminder.md`.
+- Router, policy, handoff, done-closeout, runbook и AGENTS теперь фиксируют, что internal prepare/export steps выполняет Codex.
+- Boundary-actions template и codex-task-pack generation/validation выровнены под готовые артефакты вместо пользовательского запуска prepare-команд.
+- Зафиксирован новый defect в `reports/bugs/bug-009-internal-prepare-commands-leaking-into-user-instructions.md`.
 
 ## Какие артефакты обновлены
 - `.chatgpt/*` для текущего change
 - `template-repo/scenario-pack/*`
-- `template-repo/process/definition-of-done.bugfix-feature-change.md`
+- `factory_template_only_pack/templates/factory-template-boundary-actions.template.md`
 - `template-repo/scripts/create-codex-task-pack.sh`
 - `template-repo/scripts/validate-codex-task-pack.sh`
 - `CHANGELOG.md`, `template-repo/CHANGELOG.md`, `CURRENT_FUNCTIONAL_STATE.md`, `meta-template-project/RELEASE_NOTES.md`
 
 ## Что осталось вне объёма
 - Runtime auditing свободного prose ответа
-- Новый completion package format
+- Полная автоматизация внешних UI шагов
 
 ## Итог закрытия
-- Если completion package обязателен, он должен быть в том же финальном ответе; выдача только после напоминания пользователя теперь считается defect.
+- Если для внешнего шага нужны export artifacts, Codex обязан собрать их сам и передать пользователю уже готовые пути/архивы вместо внутренних prepare-команд.

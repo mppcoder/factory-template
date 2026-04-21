@@ -229,7 +229,9 @@ bash PRE_RELEASE_AUDIT.sh
 - `workspace-packs/factory-ops/export-template-patch.sh`
 - `workspace-packs/factory-ops/apply-template-patch.sh`
 
-Для Sources refresh по умолчанию используй:
+Для Sources refresh по умолчанию сам используй:
 - `bash EXPORT_FACTORY_TEMPLATE_SOURCES.sh`
 - generated каталоги и архивы в `_sources-export/factory-template/`
 - generated guide `_boundary-actions/factory-template-boundary-actions.md`
+
+Не перекладывай запуск этих внутренних prepare-команд на пользователя в `## Инструкция пользователю`. В финальном блоке давай уже готовые пути, архивы, delete-before-replace список и внешний click/upload flow.
