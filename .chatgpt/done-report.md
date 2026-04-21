@@ -1,27 +1,29 @@
 # Итоговый отчёт по закрытию изменения
 
 ## Что было запрошено
-- Добавить auto commit/push после successful verify.
-- Оставить release/no-release отдельным контуром.
-- Автоматизировать tag/release path только после явного release decision.
+- Добавить auto commit/push для lightweight post-verify follow-up изменений.
+- Не спрашивать отдельное подтверждение на commit/push для low-risk cleanup поверх уже green verify.
+- Не размывать separate release contour и verify-first модель.
 
 ## Что реально сделано
-- Добавлен reusable verified sync script с denylist, lock-файлом, no-op path и fallback push strategy.
-- Добавлен отдельный release executor с release decision artifact, tag push и GitHub Release fallback path.
-- Добавлены validators для sync prereqs, release decision, notes source и release report.
-- Обновлены template artifacts, runbooks, AGENTS, functional state и release-facing docs.
-- Отдельно зафиксирован reusable process gap в `reports/bugs/bug-004-verified-sync-and-release-automation-gap.md`.
+- Добавлен lightweight follow-up mode в reusable verified sync helper и validator.
+- Добавлен allowlist для low-risk `.gitignore` и docs/closeout post-verify cleanup.
+- Добавлена отдельная генерация commit message для lightweight follow-up path.
+- Обновлены runbook, mode-routing, AGENTS, changelog и functional state.
+- Отдельно зафиксирован reusable process gap в `reports/bugs/bug-005-lightweight-followup-sync-gap.md`.
 
 ## Какие артефакты обновлены
 - `.chatgpt/*` для текущего change
-- `template-repo/scripts/*` для reusable automation
-- root-level wrappers `VERIFIED_SYNC.sh` и `EXECUTE_RELEASE_DECISION.sh`
-- runbook / AGENTS / mode-routing / changelog / release notes / CURRENT_FUNCTIONAL_STATE
+- `template-repo/scripts/factory_automation_common.py`
+- `template-repo/scripts/verified-sync.sh`
+- `template-repo/scripts/validate-verified-sync-prereqs.sh`
+- `factory_template_only_pack/*`
+- `CHANGELOG.md`, `template-repo/CHANGELOG.md`, `CURRENT_FUNCTIONAL_STATE.md`
 
 ## Что осталось вне объёма
-- Полная CI/CD orchestration вокруг release executor
-- Интеграция с другим forge кроме GitHub
-- Автоматический version bump без отдельного release decision
+- Расширение lightweight allowlist за пределы low-risk docs/ignore cleanup
+- Любые изменения release executor или release decision semantics
+- Новый CI/CD orchestration layer
 
 ## Итог закрытия
-- Factory-template получил разделенный контур verified sync и release publication без перехода к always-auto-release.
+- Factory-template теперь auto-sync'ит и безопасные lightweight follow-up cleanup изменения без лишнего ручного подтверждения и без размытия separate release contour.

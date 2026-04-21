@@ -126,6 +126,7 @@ bash PHASE_DETECTION_TEST.sh
 - `git commit`, `git push`, `git fetch` и смену `origin` выполняйте последовательно
 - если обычный `git push origin main` ведет себя нестабильно, используйте прямой SSH push на `git@github.com:mppcoder/factory-template.git`
 - если нужен canonical verified path, используйте `bash VERIFIED_SYNC.sh`
+- если после уже пройденного green verify остался только low-risk follow-up вроде `.gitignore` или небольших docs/closeout правок, `bash VERIFIED_SYNC.sh` может сам перейти в lightweight follow-up mode и закоммитить их без отдельного ручного подтверждения
 - если нужен release path после отдельного решения, используйте `bash EXECUTE_RELEASE_DECISION.sh`
 
 Для нового automation contour доступны validators:

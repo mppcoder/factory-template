@@ -25,6 +25,7 @@
 - phase-aware recommendation layer для выбора `sources-pack-*` в `controlled-fixes / release / bugfix-drift`
 - automatic phase detection из `git`-состояния для выбора рекомендованного `sources-pack-*`
 - separate verified sync contour: auto commit/push после successful verify с lock, denylist и fallback push strategy
+- lightweight follow-up verified sync для low-risk post-verify `.gitignore` и docs/closeout cleanup без отдельного ручного подтверждения
 - separate release decision contour: auto tag/release path только после явного `release-decision.yaml`
 
 ## Что работает частично

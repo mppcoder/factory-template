@@ -18,6 +18,28 @@ VERIFY_REQUIRED_FILES = [
     ".chatgpt/verification-report.md",
 ]
 
+LIGHTWEIGHT_EXACT_PATHS = {
+    ".gitignore",
+    ".releaseignore",
+    "README.md",
+    "CHANGELOG.md",
+    "CURRENT_FUNCTIONAL_STATE.md",
+    "VERIFY_SUMMARY.md",
+    "RELEASE_CHECKLIST.md",
+    "RELEASE_NOTE_TEMPLATE.md",
+    "COMMIT_MESSAGE_GUIDE.md",
+    "template-repo/CHANGELOG.md",
+    "template-repo/CURRENT_FUNCTIONAL_STATE.md",
+    "meta-template-project/RELEASE_NOTES.md",
+}
+
+LIGHTWEIGHT_PREFIX_RULES = (
+    ("factory_template_only_pack/", (".md",)),
+    ("reports/bugs/", (".md",)),
+    ("work/completed/", (".md",)),
+    ("docs/", (".md",)),
+)
+
 DENY_PREFIXES = [
     ".factory-runtime/",
     ".release-stage/",
@@ -160,6 +182,105 @@ def validate_verify_prereqs(root: Path) -> tuple[dict, dict]:
     branch = current_branch(root)
     push_url = remote_url(root, "origin", "push")
     return task_index, {"branch": branch, "push_url": push_url}
+
+
+def has_green_verify_baseline(root: Path) -> bool:
+    stage = read_yaml(root / ".chatgpt" / "stage-state.yaml")
+    if not stage.get("gates", {}).get("verification_complete"):
+        return False
+    verification_report = read_text(root / ".chatgpt" / "verification-report.md")
+    return len([line for line in verification_report.splitlines() if line.strip()]) >= 4
+
+
+def is_lightweight_followup_path(rel: str) -> bool:
+    if rel in LIGHTWEIGHT_EXACT_PATHS:
+        return True
+    for prefix, suffixes in LIGHTWEIGHT_PREFIX_RULES:
+        if rel.startswith(prefix) and rel.endswith(suffixes):
+            return True
+    return False
+
+
+def build_lightweight_commit_message(paths: list[str]) -> str:
+    if not paths:
+        return "docs: sync lightweight follow-up"
+    if len(paths) == 1:
+        only = paths[0]
+        name = Path(only).name
+        if only == ".gitignore":
+            return "docs: ignore local artifacts bundles"
+        if only == ".releaseignore":
+            return "docs: update release ignore rules"
+        if name.endswith(".md"):
+            stem = name[:-3] if name.lower().endswith(".md") else name
+            normalized = stem.replace("-", " ").replace("_", " ").strip().lower()
+            return f"docs: update {normalized}"
+        return f"docs: update {name}"
+    if all(path.endswith(".md") for path in paths):
+        return "docs: update lightweight follow-up docs"
+    return "docs: sync lightweight follow-up"
+
+
+def validate_lightweight_followup(root: Path, paths: list[str]) -> dict:
+    ensure_git_repo(root)
+    if not paths:
+        raise AutomationError("Lightweight follow-up невозможен без diff")
+    disallowed = [path for path in paths if not is_lightweight_followup_path(path)]
+    if disallowed:
+        raise AutomationError(
+            "Lightweight follow-up допускается только для low-risk docs/ignore changes; "
+            f"обнаружены пути вне allowlist: {', '.join(disallowed)}"
+        )
+    if not has_green_verify_baseline(root):
+        raise AutomationError("Lightweight follow-up требует уже зафиксированный green verify baseline")
+    diff_check = run_git(root, ["diff", "--check", "--", *paths], check=False)
+    if diff_check.returncode != 0:
+        raise AutomationError(diff_check.stderr.strip() or diff_check.stdout.strip() or "git diff --check failed")
+    return {
+        "mode": "lightweight-followup",
+        "branch": current_branch(root),
+        "push_url": remote_url(root, "origin", "push"),
+        "commit_message": build_lightweight_commit_message(paths),
+        "change": {
+            "id": "lightweight-followup",
+            "title": "Lightweight verified sync follow-up",
+            "summary": "Low-risk post-verify docs/ignore cleanup synced through lightweight verified path.",
+            "class": "brownfield-audit",
+        },
+    }
+
+
+def resolve_sync_plan(root: Path, paths: list[str]) -> dict:
+    lightweight_indicators = all(is_lightweight_followup_path(path) for path in paths) if paths else False
+    full_cycle_indicators = any(
+        path in {
+            ".chatgpt/task-index.yaml",
+            ".chatgpt/verification-report.md",
+            ".chatgpt/done-report.md",
+            ".chatgpt/user-spec.md",
+            ".chatgpt/tech-spec.md",
+            ".chatgpt/codex-input.md",
+        }
+        for path in paths
+    )
+    if lightweight_indicators and not full_cycle_indicators:
+        return validate_lightweight_followup(root, paths)
+
+    stage = read_yaml(root / ".chatgpt" / "stage-state.yaml")
+    if stage.get("stage", {}).get("current") == "done" and not full_cycle_indicators:
+        raise AutomationError(
+            "Diff не похож ни на lightweight follow-up, ни на новый full verify cycle; "
+            "обновите `.chatgpt` verify artifacts перед VERIFIED_SYNC.sh"
+        )
+
+    task_index, git_meta = validate_verify_prereqs(root)
+    return {
+        "mode": "full",
+        "branch": git_meta["branch"],
+        "push_url": git_meta["push_url"],
+        "commit_message": build_commit_message(task_index.get("change", {})),
+        "change": task_index.get("change", {}),
+    }
 
 
 def validate_release_decision_data(root: Path) -> dict:

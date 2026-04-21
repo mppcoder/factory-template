@@ -139,6 +139,7 @@ bash PRE_RELEASE_AUDIT.sh
 1. `verified sync`
    Выполняется только после successful verify и только если в repo есть допустимый diff.
    Результат: auto commit + auto push + runtime sync report.
+   Для low-risk post-verify follow-up правок в `.gitignore` и канонических docs/closeout файлах допускается lightweight follow-up mode: Codex сам делает минимальный deterministic verify, а затем сразу запускает `VERIFIED_SYNC.sh` без отдельного запроса пользователю.
 
 2. `release executor`
    Выполняется только после явного `release-decision.yaml`.
@@ -166,6 +167,7 @@ bash PRE_RELEASE_AUDIT.sh
 - используй `VERIFIED_SYNC.sh` вместо ad-hoc `git add/commit/push`;
 - используй `EXECUTE_RELEASE_DECISION.sh` вместо ручного смешивания verify, tag и publish;
 - перед запуском прогоняй validators контура.
+- если после уже green verify остался только low-risk follow-up diff, не откладывай commit: используй lightweight follow-up mode и синхронизируй изменение сразу.
 
 ---
 

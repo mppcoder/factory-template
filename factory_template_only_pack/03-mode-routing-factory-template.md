@@ -43,6 +43,7 @@
 - mechanical cleanup;
 - простых validator runs;
 - repeated no-op/recheck runs для `VALIDATE_*` и `VERIFIED_SYNC.sh`.
+- post-verify lightweight follow-up changes вроде `.gitignore` и небольших docs/closeout cleanup.
 
 Рекомендуемый профиль:
 
@@ -112,6 +113,7 @@ Release verify не выполнять на `mini`.
 ### Правило 6
 
 `VERIFIED_SYNC.sh` запускать из `default-dev` или `fast-routine` только после зеленого verify.
+Для low-risk post-verify follow-up diff допускается lightweight follow-up mode в `fast-routine`: достаточно минимального deterministic verify без полного повторного regression pass.
 
 ### Правило 7
 

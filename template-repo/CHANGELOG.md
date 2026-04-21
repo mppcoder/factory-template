@@ -4,6 +4,7 @@
 ### Добавлено
 - reusable scripts `verified-sync` и `execute-release-decision` для generated project automation
 - templates для `release-decision`, `sync-report` и `release-report`
+- lightweight follow-up mode для low-risk post-verify docs/ignore cleanup
 
 ### Изменено
 - template/runtime/policy layer теперь закрепляет обязательный inline Codex handoff, если handoff уже допустим и задача достаточно определена

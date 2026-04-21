@@ -5,16 +5,15 @@ import sys
 
 from factory_automation_common import (
     AutomationError,
-    build_commit_message,
     changed_paths,
     file_lock,
     head_sha,
     now_utc,
     push_branch,
     repo_root,
+    resolve_sync_plan,
     run_git,
     sync_report_path,
-    validate_verify_prereqs,
     write_report,
 )
 
@@ -24,18 +23,14 @@ def main() -> int:
     report_path = sync_report_path(root)
     try:
         with file_lock(root, "verified-sync.lock"):
-            task_index, git_meta = validate_verify_prereqs(root)
-            branch = git_meta["branch"]
-            push_url = git_meta["push_url"]
             paths = changed_paths(root)
-            change = task_index.get("change", {})
             if not paths:
                 report = {
                     "timestamp": now_utc(),
                     "status": "no-op",
-                    "change_id": change.get("id"),
-                    "branch": branch,
-                    "remote": push_url,
+                    "change_id": None,
+                    "branch": None,
+                    "remote": None,
                     "push_status": "skipped-no-diff",
                     "commit_sha": head_sha(root),
                     "staged_paths": [],
@@ -43,6 +38,11 @@ def main() -> int:
                 write_report(report_path, report)
                 print("VERIFIED SYNC: no-op, diff отсутствует")
                 return 0
+
+            plan = resolve_sync_plan(root, paths)
+            branch = plan["branch"]
+            push_url = plan["push_url"]
+            change = plan["change"]
 
             run_git(root, ["add", "-A", "--", *paths])
             proc = run_git(root, ["diff", "--cached", "--name-only"], check=False)
@@ -52,6 +52,7 @@ def main() -> int:
                     "timestamp": now_utc(),
                     "status": "no-op",
                     "change_id": change.get("id"),
+                    "verify_mode": plan["mode"],
                     "branch": branch,
                     "remote": push_url,
                     "push_status": "skipped-denylist-only",
@@ -62,7 +63,7 @@ def main() -> int:
                 print("VERIFIED SYNC: no-op, после denylist не осталось допустимых изменений")
                 return 0
 
-            message = build_commit_message(change)
+            message = plan["commit_message"]
             run_git(root, ["commit", "-m", message])
             commit_sha = head_sha(root)
             pushed_via, push_status = push_branch(root, branch, push_url)
@@ -70,6 +71,7 @@ def main() -> int:
                 "timestamp": now_utc(),
                 "status": "pushed",
                 "change_id": change.get("id"),
+                "verify_mode": plan["mode"],
                 "branch": branch,
                 "remote": pushed_via,
                 "push_status": push_status,
@@ -79,6 +81,7 @@ def main() -> int:
             }
             write_report(report_path, report)
             print("VERIFIED SYNC ПРОЙДЕН")
+            print(f"- verify_mode: {plan['mode']}")
             print(f"- commit: {commit_sha}")
             print(f"- branch: {branch}")
             print(f"- remote: {pushed_via}")

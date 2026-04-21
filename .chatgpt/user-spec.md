@@ -1,17 +1,16 @@
 # Пользовательская спецификация
 
 ## Цель изменения
-- Добавить для `factory-template` автоматический контур verified sync после успешного verify.
-- Сохранить отдельный явный release/no-release decision.
-- Автоматизировать publication layer только после явного release decision.
+- Добавить для `factory-template` lightweight follow-up mode поверх существующего verified sync.
+- Разрешить auto commit/push для low-risk post-verify cleanup изменений без отдельного ручного подтверждения.
+- Сохранить verify-first модель и отдельный release decision contour без изменений.
 
 ## Что должно получиться
-- После успешного verify и при наличии diff выполняются auto commit и auto push.
-- Если verify failed, ни commit, ни push, ни release не выполняются.
-- Если release decision = `no-release`, ограничиться verified sync без tag и GitHub Release.
-- Если release decision = `release`, после verified sync автоматически выполнить tag/release path или записать явный fallback report.
+- После уже зафиксированного green verify low-risk `.gitignore` и docs/closeout follow-up правки тоже auto commit/push через `VERIFIED_SYNC.sh`.
+- Lightweight follow-up не должен захватывать code/scripts/policy changes вне allowlist.
+- Commit message для lightweight follow-up не должен повторно использовать title предыдущего большого change.
 
 ## Что не входит в объем
 - Автоматический релиз после любого verify без отдельного решения.
-- Параллельное выполнение git-команд.
+- Ослабление verify требований для non-lightweight изменений.
 - Хранение секретов в repo.

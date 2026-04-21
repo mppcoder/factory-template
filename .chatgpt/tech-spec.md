@@ -1,14 +1,15 @@
 # Техническая спецификация
 
 ## Архитектура
-- Verified sync и release executor разделяются на два независимых скрипта.
+- Verified sync и release executor остаются двумя независимыми скриптами.
 - Оба контура используют общий helper layer в `template-repo/scripts/factory_automation_common.py`.
 - Runtime lock-файлы и отчеты живут в `.factory-runtime/`, который исключен из git и release bundle.
 
 ## Verified Sync
-- Проверить `verification_complete` в `.chatgpt/stage-state.yaml`.
-- Проверить наличие и достаточность `.chatgpt/task-index.yaml` и `.chatgpt/verification-report.md`.
-- Собрать commit message из change metadata.
+- Для полного change path сохранить текущую проверку `verification_complete` и `.chatgpt/task-index.yaml` / `.chatgpt/verification-report.md`.
+- Для lightweight follow-up path разрешать только low-risk `.gitignore` и docs/closeout allowlist paths.
+- Lightweight follow-up требовать уже существующий green verify baseline и прогон `git diff --check`.
+- Для lightweight follow-up собирать отдельный commit message, а не наследовать старый task title.
 - Отфильтровать runtime и verify noise через denylist.
 - Выполнить `git add` -> `git commit` -> `git push` строго последовательно.
 - При нестабильном `origin push` использовать fallback на прямой SSH URL.

@@ -105,6 +105,7 @@
 - при отсутствии diff sync должен завершаться как no-op;
 - git-команды выполнять только последовательно;
 - fallback push через прямой SSH допустим только как deterministic fallback, а не как silent branch.
+- если основной green verify уже зафиксирован, а текущий diff состоит только из low-risk `.gitignore`/docs/closeout follow-up правок, Codex должен сам выполнить lightweight follow-up verify и сразу запустить `VERIFIED_SYNC.sh`, а не спрашивать отдельное разрешение на commit/push.
 
 ## Правило release decision
 

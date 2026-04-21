@@ -65,6 +65,7 @@
 6. принимаете release/no-release решение.
 
 После successful verify verified sync теперь может выполняться автоматически: commit/push делаются без отдельного ручного GitHub UI шага, если verify green и в repo есть diff.
+Если основной verify уже green, а потом остался только low-risk follow-up вроде `.gitignore` или небольшого closeout/docs cleanup, фабрика может использовать lightweight follow-up verify path и тоже выполнить auto commit/push без отдельного ручного подтверждения.
 
 ---
 
