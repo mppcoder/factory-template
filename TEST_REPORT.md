@@ -14,6 +14,7 @@
 - phase-aware recommendation layer для boundary-actions и Sources summary
 - automatic phase detection helper
 - synthetic phase detection self-test
+- Codex-managed Google Drive connector contour for hot Sources export
 
 ## Ожидаемое поведение на fresh scaffold
 Проходят structural / versioning / defect / alignment проверки.
@@ -31,6 +32,15 @@ Evidence / quality / DoD до смыслового наполнения арте
 - `EXPORT_FACTORY_TEMPLATE_SOURCES.sh` и `GENERATE_BOUNDARY_ACTIONS.sh` публикуют phase-aware рекомендацию для `controlled-fixes`, `release` и `bugfix-drift`.
 - `DETECT_FACTORY_TEMPLATE_PHASE.sh` корректно различает `release` и `bugfix-drift` на rule-based changed path signals.
 - `PHASE_DETECTION_TEST.sh` автоматически проверяет synthetic `controlled-fixes`, `release` и `bugfix-drift` сценарии.
+- `VERIFY_GDRIVE_SOURCES_SYNC.sh` проверяет compare-plan contour для hot flat export: local export + remote snapshot -> `create`, `update`, `delete`, `skipped` и pending-without-snapshot.
+- `VALIDATE_FACTORY_TEMPLATE_OPS.sh` теперь включает и verify для Google Drive connector compare contour, а не только policy/profile validator.
+- template layer теперь несёт `template-repo/template/.chatgpt/google-drive-sources.yaml` как canonical project config и `template-repo/template/.env.example` как optional override, чтобы generated battle project мог переопределить `GOOGLE_DRIVE_FOLDER_URL` отдельно от папки фабрики.
+- launcher smoke на временном scaffold подтверждает, что URL папки задаётся прямо при создании проекта и scaffold не должен оставлять placeholder.
+- `POST_UNZIP_SETUP.sh` остаётся безопасным для non-interactive verify path и не блокирует test runs prompt'ом.
+- generated-project validator `validate-google-drive-sources.sh` проходит только при реальном folder URL и ловит placeholder-конфиг как незавершённую настройку.
+- validator `validate-codex-task-pack.sh` теперь требует, чтобы handoff pack явно фиксировал приоритет правил repo.
+- validator `validate-codex-task-pack.sh` теперь также требует правило: handoff пользователю выдаётся только одним цельным copy-paste блоком, а не ссылкой на файл и не несколькими блоками.
+- `validate-handoff-response-format.sh` проверяет готовый markdown handoff-response и ловит file-based handoff, несколько handoff-заголовков и отсутствие fenced copy-paste блока.
 - `release` определяется только при сочетании release-path signals и checked intent markers в `RELEASE_CHECKLIST.md`.
 - `bugfix-drift` определяется только при сочетании bug/validator path signals и bug-report intent markers в `reports/bugs/*.md`.
 - Golden examples и fresh scaffold синхронизированы с финальным versioning layer.
@@ -49,6 +59,7 @@ Evidence / quality / DoD до смыслового наполнения арте
 - policy layer теперь хранит `default_phase`, phase detection rules и recommendation matrix для Sources upload.
 - direct Sources profile `core-hot-15` добавлен как ежедневный hot-set для ChatGPT Project.
 - archive/direct Sources generation теперь строятся из единого declarative manifest.
+- добавлен Codex-managed Google Drive connector contour для `core-hot-15/upload-to-sources/` с machine-readable/human-readable sync request reports.
 
 ## Известные ограничения
 - `MATRIX_TEST.sh` остаётся representative prerelease runner, а не exhaustive full-matrix coverage для всех 22 допустимых комбинаций;
@@ -57,3 +68,4 @@ Evidence / quality / DoD до смыслового наполнения арте
 - phase detection пока rule-based по changed paths и может не уловить более сложный operator intent без явных файловых сигналов.
 - документальные intent signals сейчас реализованы только для `release`, а не для всех фаз.
 - document intent signals сейчас реализованы для `release` и `bugfix-drift`, но ещё не покрывают возможные более тонкие подфазы внутри controlled fixes.
+- реальный end-to-end mutation step в живой Google Drive folder зависит от фактических write-capabilities активного Codex Google Drive connector и от корректного `GOOGLE_DRIVE_FOLDER_URL`.

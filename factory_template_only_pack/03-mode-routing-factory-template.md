@@ -40,6 +40,7 @@
 - docs only;
 - rename only;
 - export packs;
+- dry-run и повторные recheck'и Google Drive sync reports;
 - mechanical cleanup;
 - простых validator runs;
 - repeated no-op/recheck runs для `VALIDATE_*` и `VERIFIED_SYNC.sh`.
@@ -81,6 +82,7 @@
 - `EXECUTE_RELEASE_DECISION.sh` и publish/fallback review;
 - release-followup, source-pack refresh и closeout consistency pass как внутренней repo-работы.
 - final review операторских инструкций для factory Sources, downstream repo sync и battle ChatGPT Project Sources.
+- финальный review рисков Google Drive sync и границы между Drive folder sync и ChatGPT UI refresh.
 
 Рекомендуемый профиль:
 

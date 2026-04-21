@@ -91,6 +91,9 @@ Codex делает внутреннюю работу по шаблону:
 
 Пользовательские инструкции нужны только на внешних границах, а не вместо такого внутреннего follow-up.
 
+Отдельный случай: если фабрика сообщает, что hot Sources уже подготовлены для dedicated Google Drive folder, это означает только готовый Codex-managed connector contour и сформированные sync reports.
+Это не означает, что ChatGPT Project Sources автоматически обновились или переиндексировались внутри ChatGPT UI.
+
 Формат таких инструкций канонический и обязательный:
 
 `## Инструкция пользователю`
@@ -112,6 +115,11 @@ Codex делает внутреннюю работу по шаблону:
 
 Если для этих внешних шагов нужны exports, generated archives, boundary-actions guide или patch bundle, Codex должен подготовить их заранее сам внутри repo. Пользователь не должен запускать внутренние repo-команды только для того, чтобы собрать артефакт, который фабрика умеет собрать автоматически.
 
+То же правило действует и для Drive sync контура:
+- export hot-set и connector sync request/report для Google Drive folder делает Codex внутри repo;
+- если после этого все еще нужен внешний шаг в ChatGPT UI, он описывается отдельно;
+- dangerous-режим `delete stale` безопасен только для dedicated folder.
+
 ---
 
 ## 4. Порядок запуска
@@ -130,6 +138,8 @@ mkdir -p /projects/_incoming /projects/_release /projects/_artifacts
 ```
 
 Загрузите в `/projects/_incoming` архив фабрики и дополнительные входящие артефакты.
+
+После распаковки и первого `bash POST_UNZIP_SETUP.sh` factory-template теперь сам потребует реальный URL папки Google Drive для своего Sources contour и запишет его в `.chatgpt/google-drive-sources.yaml`.
 
 ## Шаг 3. Открыть VS Code по SSH
 

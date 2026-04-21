@@ -119,12 +119,36 @@ chat = root / '.chatgpt'
 ## Контекст
 - Это smoke-test ядра фабрики проектов.
 - Базовые проверки уже закрыты и подтверждены evidence-артефактами.
+- При исполнении этого handoff приоритет у правил repo: `AGENTS`, runbook, scenario-pack и policy files репозитория.
 
 ## Что должен сделать исполнитель
 - Считать smoke-test завершенным без дополнительных изменений.
 
 ## Ограничения
 - Не менять core-структуру проекта.
+- Общие рабочие инструкции применять только там, где они не противоречат repo rules и старшим системным ограничениям среды.
+''', encoding='utf-8')
+(chat / 'handoff-response.md').write_text('''## Handoff в Codex
+
+```text
+Repo: smoke-test project
+Цель: завершить smoke-test без дополнительных изменений кода.
+Приоритет: сначала правила repo, затем общие инструкции, если нет конфликта.
+Scope: не менять core-структуру проекта.
+Verify: использовать уже заполненные smoke artifacts и существующие validators.
+```
+
+## Инструкция пользователю
+1. Цель
+Подтвердить, что smoke-test уже закрыт.
+2. Где сделать
+В текущем проекте.
+3. Точные шаги
+Посмотреть verification-report и done-report.
+4. Ожидаемый результат
+Состояние проекта подтверждено как green smoke baseline.
+5. Что прислать обратно
+Ничего, если follow-up не нужен.
 ''', encoding='utf-8')
 stage = yaml.safe_load((chat / 'stage-state.yaml').read_text(encoding='utf-8'))
 for key in ['intake_complete','classification_complete','reuse_check_complete','reality_check_complete','conflict_detection_complete','spec_ready','spec_validated','tech_spec_ready','tech_spec_validated','decomposition_complete','task_validation_complete','codex_handoff_allowed','execution_complete','verification_complete','done_complete']:

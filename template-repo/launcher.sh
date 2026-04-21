@@ -31,6 +31,20 @@ CHANGE_CLASS="${CHANGE_CLASS:-$DEFAULT_CLASS}"
 read -rp "Режим выполнения (manual/hybrid/codex-led) [${DEFAULT_EXEC}]: " EXEC_MODE
 EXEC_MODE="${EXEC_MODE:-$DEFAULT_EXEC}"
 
+validate_drive_folder_url() {
+  local url="$1"
+  [[ "$url" == https://drive.google.com/drive/folders/* ]] && [[ "$url" != *"<replace-with-project-folder-id>"* ]]
+}
+
+while true; do
+  read -rp "URL папки Google Drive для Sources contour проекта: " GOOGLE_DRIVE_FOLDER_URL
+  GOOGLE_DRIVE_FOLDER_URL="${GOOGLE_DRIVE_FOLDER_URL//[$'\r\n']/}"
+  if validate_drive_folder_url "$GOOGLE_DRIVE_FOLDER_URL"; then
+    break
+  fi
+  echo "Нужен реальный URL вида https://drive.google.com/drive/folders/... без placeholder."
+done
+
 DEST_DIR="./${PROJECT_SLUG}"
 cp -R "$TEMPLATE_DIR" "$DEST_DIR"
 PROJECT_NAME="$PROJECT_NAME" PROJECT_SLUG="$PROJECT_SLUG" PROJECT_MODE="$PROJECT_MODE" DEST_DIR="$DEST_DIR" python3 - <<'PY'
@@ -84,6 +98,23 @@ PY
   ./scripts/apply-project-preset.sh "$PROJECT_PRESET" project-presets.yaml .chatgpt/project-profile.yaml .chatgpt/active-scenarios.yaml
   ./scripts/apply-policy-preset.sh .chatgpt/task-index.yaml policy-presets.yaml .chatgpt/policy-status.yaml
 )
+
+PROJECT_DRIVE_FOLDER_URL="$GOOGLE_DRIVE_FOLDER_URL" DEST_DIR="$DEST_DIR" python3 - <<'PY'
+import os, yaml
+from pathlib import Path
+
+root = Path(os.environ['DEST_DIR'])
+cfg_path = root / '.chatgpt/google-drive-sources.yaml'
+cfg = yaml.safe_load(cfg_path.read_text(encoding='utf-8')) or {}
+block = cfg.get('google_drive_sources', {})
+if not isinstance(block, dict):
+    block = {}
+folder_url = os.environ.get('PROJECT_DRIVE_FOLDER_URL', '').strip()
+if folder_url:
+    block['folder_url'] = folder_url
+cfg['google_drive_sources'] = block
+cfg_path.write_text(yaml.safe_dump(cfg, allow_unicode=True, sort_keys=False), encoding='utf-8')
+PY
 
 PROJECT_NAME="$PROJECT_NAME" PROJECT_SLUG="$PROJECT_SLUG" PROJECT_MODE="$PROJECT_MODE" PROJECT_PRESET="$PROJECT_PRESET" CHANGE_CLASS="$CHANGE_CLASS" EXEC_MODE="$EXEC_MODE" CHANGE_ID="$CHANGE_ID" DEST_DIR="$DEST_DIR" python3 - <<'PY'
 import os, yaml, datetime
@@ -276,6 +307,7 @@ echo
 echo "Проект создан: $DEST_DIR"
 echo "Change ID: $CHANGE_ID"
 echo "Профиль проекта: $PROJECT_PRESET"
+echo "Google Drive folder URL: $GOOGLE_DRIVE_FOLDER_URL"
 echo "Дальше:"
 echo "1. Создайте ChatGPT Project"
 echo "2. При необходимости экспортируйте единый Sources pack: ./scripts/export-sources-pack.sh ."

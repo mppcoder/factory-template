@@ -37,6 +37,12 @@ bash MATRIX_TEST.sh
 bash CLEAN_VERIFY_ARTIFACTS.sh
 ```
 
+При интерактивном первом запуске `POST_UNZIP_SETUP.sh` теперь дополнительно требует реальный URL папки Google Drive для Sources contour самого `factory-template` и обновляет root `.chatgpt/google-drive-sources.yaml`.
+В non-interactive test/CI прогонах этот prompt пропускается автоматически.
+
+Для generated projects launcher тоже требует реальный URL папки Google Drive и не даёт завершить scaffold с placeholder.
+`./scripts/validate-google-drive-sources.sh .` считает placeholder-конфиг неготовым к реальному Sources contour.
+
 Если после self-tests нужен `PRE_RELEASE_AUDIT.sh` или сборка релиза, сначала очистите временные артефакты:
 
 ```bash
@@ -48,6 +54,7 @@ bash PRE_RELEASE_AUDIT.sh
 
 ```bash
 bash EXPORT_FACTORY_TEMPLATE_SOURCES.sh
+bash EXPORT_AND_SYNC_FACTORY_TEMPLATE_SOURCES_TO_GDRIVE.sh
 bash GENERATE_BOUNDARY_ACTIONS.sh
 bash VALIDATE_FACTORY_FEEDBACK.sh <working-project>
 bash INGEST_FACTORY_FEEDBACK.sh <working-project> --dry-run
@@ -64,6 +71,9 @@ python3 template-repo/scripts/validate-codex-task-pack.sh <working-project>
 ```
 
 `validate-codex-task-pack.sh` проверяет, что `codex-context.md`, `codex-task-pack.md`, `boundary-actions.md` и `done-checklist.md` не только созданы, но и согласованы с `active-scenarios.yaml`.
+При формировании handoff в Codex явно фиксируйте, что приоритет у правил репозитория: `AGENTS`, runbook, scenario-pack и policy files repo.
+Пользователю handoff выдаётся только одним цельным блоком для copy-paste в Codex, а не ссылкой на файл и не несколькими разрозненными блоками.
+`template-repo/scripts/validate-handoff-response-format.sh` дополнительно валидирует уже готовый markdown-ответ handoff и ловит file-based / multi-block handoff как process defect.
 
 `VALIDATE_FACTORY_TEMPLATE_OPS.sh` теперь проверяет не только структуру `sources-pack-*`, но и их semantic profile, а также direct Sources profile:
 
@@ -74,6 +84,46 @@ python3 template-repo/scripts/validate-codex-task-pack.sh <working-project>
 - `core-cold-5` обязан содержать ровно 5 cold/reference файлов без дублей hot-set;
 - `sources-pack-release-20` обязан содержать release-facing docs и release scripts;
 - `sources-pack-bugfix-20` обязан содержать launcher, validator layer и feedback/handoff validators.
+
+Для hot Sources в dedicated Google Drive folder теперь есть отдельный Codex-managed contour:
+
+- `bash EXPORT_AND_SYNC_FACTORY_TEMPLATE_SOURCES_TO_GDRIVE.sh` сначала пересобирает export, затем валидирует flat-папку `core-hot-15/upload-to-sources/` и после этого собирает connector sync request/report для Codex;
+- repo-script больше не использует raw Google API credentials и не обещает shell-driven upload/update/delete;
+- compare layer живет в `tools/sync_factory_template_sources_to_gdrive_api.py` и работает по local export + optional remote snapshot;
+- sync request пишет machine-readable и human-readable отчеты в `_sources-export/factory-template/_sync-reports/`;
+- если remote snapshot уже получен через подключённый Google Drive connector, отчет различает `create/update/delete/skipped`;
+- Drive folder contour не означает автоматический refresh ChatGPT Project Sources и не обещает auto-reindex внутри ChatGPT UI.
+
+Минимальная локальная конфигурация берется из:
+
+- `.env.example`
+
+Ключевые переменные:
+
+- `GOOGLE_DRIVE_FOLDER_URL`
+- `GOOGLE_DRIVE_DELETE_STALE=0|1`
+- `GOOGLE_DRIVE_DRY_RUN=0|1`
+- `GOOGLE_DRIVE_SUPPORTS_ALL_DRIVES=0|1`
+
+Для самой фабрики canonical project-level config теперь лежит в:
+
+- `.chatgpt/google-drive-sources.yaml`
+
+Для самой фабрики в этом YAML и в `.env.example` уже указан текущий folder URL:
+
+- `https://drive.google.com/drive/folders/1kagCZTcHD0IA9TviJBCDj7K1NvKa2rfZ?usp=drive_link`
+
+Для generated battle project этот URL не должен быть жёстко общим. Шаблон теперь несёт:
+
+- `template-repo/template/.chatgpt/google-drive-sources.yaml` как canonical project config
+- `template-repo/template/.env.example` как optional env override
+
+Риски этого контура:
+
+- неверный `GOOGLE_DRIVE_FOLDER_URL` может увести Codex не в ту папку;
+- `GOOGLE_DRIVE_DELETE_STALE=1` безопасен только для dedicated managed folder;
+- Shared Drive может требовать `GOOGLE_DRIVE_SUPPORTS_ALL_DRIVES=1`;
+- текущий подключённый Google Drive connector является внешней boundary-capability, а не in-repo shell API client.
 
 Состав archive pack и direct profile теперь берётся из единого declarative manifest:
 

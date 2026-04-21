@@ -43,6 +43,7 @@ Internal repo follow-up, включая release-followup, source-pack refresh, e
 ### Готовые артефакты для скачивания
 
 - generated каталоги и архивы из `{{sources_export_dir}}`
+- generated sync reports из `{{sources_sync_reports_dir}}`
 - direct hot-set `{{canonical_direct_profile}}/upload-to-sources/` как одна flat-подпапка, вместе с `{{canonical_cold_archive_pack}}`
 - cold archive `{{canonical_cold_archive_pack}}`
 - canonical archive `{{canonical_archive_pack}}`
@@ -51,8 +52,15 @@ Internal repo follow-up, включая release-followup, source-pack refresh, e
 ### Команды/скрипты для repo-level sync
 
 - `bash EXPORT_FACTORY_TEMPLATE_SOURCES.sh` — выполняет Codex внутри repo до выдачи финального completion package
+- `bash EXPORT_AND_SYNC_FACTORY_TEMPLATE_SOURCES_TO_GDRIVE.sh` — выполняет Codex внутри repo для export + connector sync request/report в dedicated Google Drive folder contour
 - `{{repo_patch_export_script}}`
 - `{{repo_patch_apply_script}}`
+
+### Ограничение Drive sync
+
+- sync contour для Google Drive folder не означает auto-refresh или auto-reindex ChatGPT Project Sources
+- `delete stale` безопасен только для dedicated managed folder
+- Shared Drive может требовать special flags/доступ
 
 ### Пошаговая инструкция по окнам
 

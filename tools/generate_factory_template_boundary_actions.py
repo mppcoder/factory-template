@@ -63,6 +63,7 @@ def main() -> int:
             "phase_detection_reason": detection_reason,
             "root_path": str(ROOT),
             "sources_export_dir": str(ROOT / "_sources-export" / "factory-template"),
+            "sources_sync_reports_dir": str(ROOT / "_sources-export" / "factory-template" / "_sync-reports"),
             "canonical_archive_pack": f"{canonical_archive_export}.tar.gz",
             "canonical_cold_archive_pack": f"{cold_archive_export}.tar.gz",
             "canonical_direct_profile": direct_export,

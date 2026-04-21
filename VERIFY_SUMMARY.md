@@ -24,6 +24,7 @@
 - curated Sources packs policy
 - boundary-actions generation
 - phase-aware Sources recommendation
+- Codex-managed Google Drive connector contour for hot Sources export
 - automatic phase detection
 - automatic phase detection self-test
 
@@ -45,6 +46,7 @@
 - подключением `origin`
 - публикацией в GitHub
 - ручной загрузкой Sources в ChatGPT Project
+- repo-side подготовкой hot export и connector sync request/report для dedicated Google Drive folder
 
 ## Git Sync Note
 

@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import json
+import hashlib
 import shutil
 import tarfile
 from pathlib import Path
@@ -12,6 +13,25 @@ from sources_profiles import get_profiles
 ROOT = Path(__file__).resolve().parents[1]
 OUT_ROOT = ROOT / "_sources-export" / "factory-template"
 POLICY_PATH = ROOT / "factory-template-ops-policy.yaml"
+
+
+def compute_file_metadata(path: Path) -> dict[str, str | int]:
+    sha256 = hashlib.sha256()
+    md5 = hashlib.md5()
+    size = 0
+    with path.open("rb") as handle:
+        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
+            if not chunk:
+                break
+            sha256.update(chunk)
+            md5.update(chunk)
+            size += len(chunk)
+    return {
+        "sha256": sha256.hexdigest(),
+        "md5": md5.hexdigest(),
+        "size": size,
+        "mtime_epoch": int(path.stat().st_mtime),
+    }
 
 
 def load_policy() -> dict:
@@ -193,7 +213,14 @@ def export_profile(profile_name: str, profile: dict, profiles: dict[str, dict]) 
             dest = pack_dir / rel
             dest.parent.mkdir(parents=True, exist_ok=True)
         shutil.copy2(src, dest)
-        exported_files.append({"source": rel, "export_filename": export_filename})
+        metadata = compute_file_metadata(dest)
+        exported_files.append(
+            {
+                "source": rel,
+                "export_filename": export_filename,
+                **metadata,
+            }
+        )
 
     if exported_files:
         manifest["exported_files"] = exported_files
@@ -223,11 +250,13 @@ def export_profile(profile_name: str, profile: dict, profiles: dict[str, dict]) 
             if cold_tar_path.exists():
                 bundled_dest = upload_dir / cold_tar_name
                 shutil.copy2(cold_tar_path, bundled_dest)
+                metadata = compute_file_metadata(bundled_dest)
                 bundled_artifacts.append(
                     {
                         "type": "archive_remainder",
                         "source": str(cold_tar_path.relative_to(ROOT)),
                         "export_filename": cold_tar_name,
+                        **metadata,
                     }
                 )
         if bundled_artifacts:

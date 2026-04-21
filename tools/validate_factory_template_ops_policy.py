@@ -89,6 +89,7 @@ def validate_pack_semantics(name: str, files: list[str], errors: list[str]) -> N
                 "template-repo/scripts/validate-quality.sh",
                 "template-repo/scripts/validate-handoff.sh",
                 "template-repo/scripts/validate-codex-task-pack.sh",
+                "template-repo/scripts/validate-handoff-response-format.sh",
                 "template-repo/scripts/validate-defect-capture.sh",
                 "template-repo/scripts/create-codex-task-pack.sh",
                 "VALIDATE_FACTORY_FEEDBACK.sh",
@@ -100,8 +101,8 @@ def validate_pack_semantics(name: str, files: list[str], errors: list[str]) -> N
             1 for rel in files
             if rel.startswith("template-repo/scripts/validate-")
         )
-        if validator_count < 9:
-            fail(f"{name}: ожидается минимум 9 validator scripts, сейчас {validator_count}", errors)
+        if validator_count < 10:
+            fail(f"{name}: ожидается минимум 10 validator scripts, сейчас {validator_count}", errors)
 
 
 def validate_profile(name: str, profile: dict, errors: list[str]) -> None:
@@ -266,10 +267,24 @@ def validate_exported_artifacts(profiles: dict[str, dict], errors: list[str]) ->
                 export_names = [item.get("export_filename") for item in exported_files if isinstance(item, dict)]
                 if len(export_names) != len(set(export_names)):
                     fail(f"{export_name}: manifest.exported_files содержит конфликтующие export_filename", errors)
+                for item in exported_files:
+                    if not isinstance(item, dict):
+                        fail(f"{export_name}: manifest.exported_files должен содержать только mapping items", errors)
+                        continue
+                    for key in ["sha256", "md5", "size", "mtime_epoch"]:
+                        if key not in item:
+                            fail(f"{export_name}: export item `{item.get('export_filename', 'unknown')}` не содержит `{key}`", errors)
                 bundled_artifacts = manifest.get("bundled_artifacts", [])
                 bundled_names = [item.get("export_filename") for item in bundled_artifacts if isinstance(item, dict)]
                 if len(bundled_names) != len(set(bundled_names)):
                     fail(f"{export_name}: manifest.bundled_artifacts содержит конфликтующие export_filename", errors)
+                for item in bundled_artifacts:
+                    if not isinstance(item, dict):
+                        fail(f"{export_name}: manifest.bundled_artifacts должен содержать только mapping items", errors)
+                        continue
+                    for key in ["sha256", "md5", "size", "mtime_epoch"]:
+                        if key not in item:
+                            fail(f"{export_name}: bundled artifact `{item.get('export_filename', 'unknown')}` не содержит `{key}`", errors)
                 upload_subdir = str(manifest.get("upload_subdir", profile.get("upload_subdir", "upload-to-sources")))
                 upload_dir = export_dir / upload_subdir
                 if not upload_dir.exists() or not upload_dir.is_dir():

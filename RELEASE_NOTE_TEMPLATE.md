@@ -10,6 +10,7 @@
 
 - direct Sources profile `core-hot-15` добавлен как официальный daily profile для ChatGPT Project
 - в релиз вошла hybrid-модель `direct hot-set + canonical archive`
+- repo теперь умеет дополнительно готовить Codex-managed connector sync request для hot export в dedicated Google Drive folder
 - release-facing docs и bundle metadata синхронизированы под `factory-v2.4.2`
 
 ## Что изменилось в template/runtime/policy layer
@@ -45,6 +46,7 @@
 - если runtime перешел в fallback, использовать release report и затем синхронизировать GitHub tag/release вручную
 - прикрепить к GitHub Release архив `factory-v2.4.2.zip`
 - загрузить нужный curated Sources pack в ChatGPT Project
+- при использовании Google Drive staging помнить, что folder contour не заменяет отдельный refresh Sources в ChatGPT UI
 
 ## Go / No-Go
 

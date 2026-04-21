@@ -33,6 +33,16 @@
 - completion/handoff layer теперь различает готовые внешние boundary steps и внутренние prepare/export commands: сборка export artifacts выполняется Codex внутри repo до пользовательского блока
 - direct hot-set `core-hot-15` теперь экспортируется как одна flat-подпапка `upload-to-sources/` для упрощённой ручной загрузки в ChatGPT Project Sources
 - companion archive `core-cold-5.tar.gz` теперь кладётся в ту же подпапку `core-hot-15/upload-to-sources/`, чтобы весь daily upload набор лежал в одном месте
+- Codex-managed Google Drive connector contour для hot Sources export: repo готовит flat export, sync request/report и compare plan для connected Drive folder без credential/json API path внутри repo
+- если Codex уже получил remote snapshot через подключённый Google Drive connector, compare layer различает `create/update/delete/skipped` по имени файла и deterministic checksum strategy
+- completion/docs layer теперь отдельно фиксирует, что Drive folder contour не равен автоматическому refresh ChatGPT Project Sources
+- template layer теперь позволяет generated battle project задать свой `GOOGLE_DRIVE_FOLDER_URL` через project-local `.chatgpt/google-drive-sources.yaml` с optional env override
+- launcher generated project теперь автоматически требует реальный URL папки Google Drive для Sources contour и пишет его в `.chatgpt/google-drive-sources.yaml`
+- `POST_UNZIP_SETUP.sh` теперь при интерактивном развёртывании самого `factory-template` тоже требует реальный URL папки Google Drive и пишет его в root `.chatgpt/google-drive-sources.yaml`
+- generated projects теперь получают validator `validate-google-drive-sources.sh`, который не пропускает placeholder URL как готовую настройку Sources contour
+- handoff source files и validator `validate-codex-task-pack.sh` теперь явно требуют фиксировать приоритет repo rules при передаче задачи в Codex
+- handoff layer теперь явно запрещает выдачу handoff через файл или несколькими блоками: пользователю разрешён только один цельный copy-paste блок для Codex
+- generated project tooling теперь включает validator `validate-handoff-response-format.sh`, который проверяет сам markdown-ответ на single-block handoff и запрещает file-based handoff patterns
 
 ## Что работает частично
 - matrix runner как единый источник истины
@@ -40,6 +50,7 @@
 - насыщенность scaffold-only examples
 - phase-aware состав curated packs пока задается статическим policy manifest без отдельного сценарного роутинга
 - auto GitHub Release publication зависит от доступности и авторизации `gh` CLI в конкретной среде
+- текущий репозиторий не может сам из shell вызвать Codex Google Drive connector; это external boundary step
 
 ## Что еще не закрыто
 - финальное dogfooding на реальных greenfield и brownfield проектах

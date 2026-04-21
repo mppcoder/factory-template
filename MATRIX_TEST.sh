@@ -12,10 +12,11 @@ assert_pass 'factory-template' validate-factory-template-ops.sh bash "$ROOT/VALI
 make_project(){
   local workdir="$1" pname="$2" slug="$3" preset="$4" mode="$5" cls="$6" execm="$7" reg="${8:-skip}"
   rm -rf "$workdir"; mkdir -p "$workdir"
-  (cd "$workdir" && printf '%s\n%s\n%s\n%s\n%s\n%s\n' "$pname" "$slug" "$preset" "$mode" "$cls" "$execm" | FACTORY_REGISTRY_MODE="$reg" timeout 60s bash "$ROOT/launcher.sh" >/dev/null)
+  local drive_url="https://drive.google.com/drive/folders/${slug}-folder?usp=drive_link"
+  (cd "$workdir" && printf '%s\n%s\n%s\n%s\n%s\n%s\n%s\n' "$pname" "$slug" "$preset" "$mode" "$cls" "$execm" "$drive_url" | FACTORY_REGISTRY_MODE="$reg" timeout 60s bash "$ROOT/launcher.sh" >/dev/null)
 }
 SBASE="$ROOT/.matrix-test"; rm -rf "$SBASE"; mkdir -p "$SBASE"
-POSITIVE_COMMON=(validate-project-preset.sh validate-policy-preset.sh validate-change-profile.sh validate-task-graph.sh validate-stage.sh validate-versioning-layer.sh validate-defect-capture.sh validate-alignment.sh)
+POSITIVE_COMMON=(validate-project-preset.sh validate-policy-preset.sh validate-change-profile.sh validate-task-graph.sh validate-stage.sh validate-versioning-layer.sh validate-defect-capture.sh validate-alignment.sh validate-google-drive-sources.sh)
 
 make_project "$SBASE/green-small-fix" 'Матрица greenfield small-fix' 'green-small-fix' product-dev greenfield small-fix manual
 P="$SBASE/green-small-fix/green-small-fix"
@@ -48,6 +49,9 @@ done
 
 make_project "$SBASE/bugflow" 'Factory bugflow' 'factory-bugflow' product-dev brownfield feature hybrid
 P="$SBASE/bugflow/factory-bugflow"
+python3 "$ROOT/tools/fill_smoke_artifacts.py" "$P" >/dev/null 2>&1 || (
+  cd "$P" && python3 "$ROOT/tools/fill_smoke_artifacts.py" >/dev/null
+)
 cp "$P/meta-feedback/factory-bug-report.md" "$P/.chatgpt/factory-bug-report.md"
 python3 - <<PYCODE >/dev/null
 from pathlib import Path
@@ -67,6 +71,7 @@ assert_pass 'factory-bugflow' detect-factory-issues.py python3 "$ROOT/workspace-
 assert_pass 'factory-bugflow' check-template-drift.py python3 "$ROOT/workspace-packs/factory-ops/check-template-drift.py" "$ROOT" "$P"
 assert_pass 'factory-bugflow' create-codex-task-pack.sh "$ROOT/template-repo/scripts/create-codex-task-pack.sh" "$P"
 assert_pass 'factory-bugflow' validate-codex-task-pack.sh "$ROOT/template-repo/scripts/validate-codex-task-pack.sh" "$P"
+assert_pass 'factory-bugflow' validate-handoff-response-format.sh "$ROOT/template-repo/scripts/validate-handoff-response-format.sh" "$P/.chatgpt/handoff-response.md"
 assert_pass 'factory-bugflow' boundary-actions.md test -f "$P/.chatgpt/boundary-actions.md"
 assert_pass 'factory-bugflow' validate-defect-capture.sh "$ROOT/template-repo/scripts/validate-defect-capture.sh" "$P"
 assert_pass 'factory-bugflow' validate-alignment.sh "$ROOT/template-repo/scripts/validate-alignment.sh" "$P"

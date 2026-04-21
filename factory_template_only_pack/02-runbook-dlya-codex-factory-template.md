@@ -4,6 +4,8 @@
 
 Ты — основной исполнитель внутри repo `factory-template`.
 
+При формировании handoff, task-pack и execution plan явно считай правила repo приоритетными: сначала следуй `AGENTS`, runbook, scenario-pack, policy files и другим каноническим файлам этого репозитория. Общие рабочие инструкции применяй только там, где они не конфликтуют с repo rules и старшими системными ограничениями среды.
+
 Ты не заменяешь пользователя на внешних границах.
 
 ### Внешние границы
@@ -177,6 +179,8 @@ bash PRE_RELEASE_AUDIT.sh
 
 Если handoff в Codex уже разрешен и задача достаточно определена, не останавливайся на аналитике: выдай готовый inline handoff в том же ответе. Откладывать handoff можно только при незакрытых gate'ах, нехватке обязательных артефактов, реальной неоднозначности или архитектурной развилке.
 
+Пользователю handoff нужно выдавать только одним цельным блоком для copy-paste в Codex. Нельзя выдавать handoff в виде ссылки на файл, набора нескольких разрозненных блоков или инструкции собрать handoff самостоятельно из `codex-input.md`, `codex-context.md` и `codex-task-pack.md`.
+
 Если после remediation, verify, commit/push или release-followup еще остаются внутренние repo-задачи, это не внешний шаг пользователя, а нормальный internal follow-up handoff case. К таким задачам относятся:
 - release notes и release-facing docs внутри repo;
 - source-pack и curated sources refresh;
@@ -231,7 +235,16 @@ bash PRE_RELEASE_AUDIT.sh
 
 Для Sources refresh по умолчанию сам используй:
 - `bash EXPORT_FACTORY_TEMPLATE_SOURCES.sh`
+- `bash EXPORT_AND_SYNC_FACTORY_TEMPLATE_SOURCES_TO_GDRIVE.sh` для export + connector sync request/report в dedicated Google Drive folder contour
 - generated каталоги и архивы в `_sources-export/factory-template/`
+- generated sync reports в `_sources-export/factory-template/_sync-reports/`
 - generated guide `_boundary-actions/factory-template-boundary-actions.md`
 
 Не перекладывай запуск этих внутренних prepare-команд на пользователя в `## Инструкция пользователю`. В финальном блоке давай уже готовые пути, архивы, delete-before-replace список и внешний click/upload flow.
+
+Если используется Google Drive sync contour, обязательно проговори в completion package:
+- это готовит Codex-managed folder contour, а не shell-driven credential sync внутри repo;
+- это не обещает auto-refresh или auto-reindex ChatGPT Project Sources;
+- `delete stale` включать только для dedicated managed folder;
+- для Shared Drive может понадобиться `GOOGLE_DRIVE_SUPPORTS_ALL_DRIVES=1`.
+- folder URL для `factory-template` и folder URL для generated battle project могут и должны различаться; для боевого проекта canonical path теперь `project-local .chatgpt/google-drive-sources.yaml`, а `.env` остаётся override-слоем.

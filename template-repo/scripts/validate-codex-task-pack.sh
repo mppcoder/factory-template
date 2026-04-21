@@ -55,6 +55,7 @@ def main() -> int:
     ensure_contains(pack, "## Класс изменения", errors, "codex-task-pack.md")
     ensure_contains(pack, "## Режим выполнения", errors, "codex-task-pack.md")
     ensure_contains(pack, "## Handoff input", errors, "codex-task-pack.md")
+    ensure_contains(pack, "приоритет у правил repo", errors, "codex-task-pack.md")
     if "codex-input.md еще не заполнен." in pack:
         errors.append("codex-task-pack.md ссылается на пустой codex-input.md")
 
@@ -63,6 +64,9 @@ def main() -> int:
     ensure_contains(boundary, "## Impact Model", errors, "boundary-actions.md")
     ensure_contains(boundary, "## Completion Package For Source Update Changes", errors, "boundary-actions.md")
     ensure_contains(boundary, "## Для handoff", errors, "boundary-actions.md")
+    ensure_contains(boundary, "При исполнении handoff приоритет у правил repo", errors, "boundary-actions.md")
+    ensure_contains(boundary, "только один цельный блок для copy-paste в Codex", errors, "boundary-actions.md")
+    ensure_contains(boundary, "Нельзя заменять handoff ссылкой на файл", errors, "boundary-actions.md")
     ensure_contains(boundary, "## Для внешних границ", errors, "boundary-actions.md")
     ensure_contains(boundary, "Инструкция пользователю", errors, "boundary-actions.md")
     ensure_contains(boundary, "internal repo follow-up", errors, "boundary-actions.md")

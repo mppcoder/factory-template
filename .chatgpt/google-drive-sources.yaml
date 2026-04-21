@@ -1,0 +1,6 @@
+google_drive_sources:
+  folder_url: https://drive.google.com/drive/folders/factory-instance-folder?usp=drive_link
+  delete_stale: false
+  dry_run: true
+  supports_all_drives: false
+  report_dir: _sources-export/factory-template/_sync-reports

@@ -184,9 +184,13 @@ def main() -> int:
 ## Для handoff
 
 - {handoff_line}
+- При исполнении handoff приоритет у правил repo: `AGENTS`, runbook, scenario-pack, policy files и других канонических файлов этого репозитория.
+- Общие рабочие инструкции применять только там, где они не конфликтуют с repo rules и старшими системными ограничениями среды.
 - Если выбран `hybrid` или `codex-led`, передать Codex актуальный `codex-task-pack.md`.
 - После возврата из Codex обновить verification-report.md, done-report.md и CURRENT_FUNCTIONAL_STATE.md.
 - Если handoff уже разрешен и задача достаточно определена, его нужно выдать inline в том же ответе, а не ограничиваться аналитикой.
+- Формат handoff для пользователя: только один цельный блок для copy-paste в Codex.
+- Нельзя заменять handoff ссылкой на файл, несколькими разрозненными блоками или инструкцией собрать handoff из `codex-input.md`, `codex-context.md`, `codex-task-pack.md`.
 - Если remaining work еще остается внутренним repo follow-up, handoff не должен исчезать из-за будущего user footer.
 - Release-followup, source-pack refresh, export refresh, closeout-sync и release-facing consistency pass внутри repo считаются внутренней работой Codex.
 

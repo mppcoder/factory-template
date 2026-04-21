@@ -139,3 +139,17 @@ bash DETECT_FACTORY_TEMPLATE_PHASE.sh
 
 Пользователь не должен вручную выбирать файлы для постоянной загрузки.
 Пользователь не должен гадать по служебным файлам: загружать нужно только содержимое `upload-to-sources/`.
+
+## 7. Google Drive folder sync contour
+
+Repo теперь умеет готовить hot-set `core-hot-15/upload-to-sources/` для Codex-managed contour с dedicated Google Drive folder.
+
+Важно:
+
+- это готовит folder sync request/report для Codex connector contour;
+- это не обещает автоматический refresh Sources внутри ChatGPT Project;
+- если после Drive sync нужен внешний шаг в ChatGPT UI, он должен описываться отдельно в completion package;
+- `delete stale` безопасен только для dedicated managed folder без посторонних файлов.
+
+Для `factory-template` можно держать свой folder URL.
+Для каждого generated battle project URL папки должен переопределяться отдельно через project-local `.chatgpt/google-drive-sources.yaml`, а не наследоваться автоматически как общий factory folder.

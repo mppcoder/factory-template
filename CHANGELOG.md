@@ -10,6 +10,16 @@
 - completion/handoff layer теперь требует source-update completion package для factory Sources, downstream repo sync и battle ChatGPT Project Sources, когда change затрагивает downstream-consumed content
 - immediate completion-package rule: обязательная инструкция пользователю должна быть в том же финальном ответе, а не после напоминания пользователя
 - completion package больше не должен перекладывать на пользователя внутренние prepare/export команды; такие шаги выполняет Codex до финального ответа
+- Codex-managed Google Drive connector contour для `core-hot-15/upload-to-sources/`
+- wrapper `EXPORT_AND_SYNC_FACTORY_TEMPLATE_SOURCES_TO_GDRIVE.sh` для export + flat validation + connector sync request/report
+- `.env.example` для безопасной конфигурации folder URL и sync intent без секретов в repo
+- `template-repo/template/.chatgpt/google-drive-sources.yaml` как canonical project config и `template-repo/template/.env.example` как override layer для `GOOGLE_DRIVE_FOLDER_URL` в generated battle projects
+- launcher теперь автоматически требует реальный URL папки Google Drive для Sources contour при создании проекта и записывает его в generated `.chatgpt/google-drive-sources.yaml`
+- `POST_UNZIP_SETUP.sh` теперь автоматически требует реальный URL папки Google Drive для Sources contour самого `factory-template` при интерактивном развёртывании
+- добавлен validator `template-repo/scripts/validate-google-drive-sources.sh`, который не пропускает placeholder URL в generated project
+- handoff source files и validator `validate-codex-task-pack.sh` усилены явным правилом: при формировании handoff в Codex приоритет у правил repo
+- handoff format rule усилен: пользователю нельзя выдавать handoff ссылкой на файл или несколькими блоками, только одним цельным copy-paste блоком
+- добавлен validator `template-repo/scripts/validate-handoff-response-format.sh` для проверки готового handoff markdown-ответа на single-block и anti-file-based rules
 
 ### Изменено
 - release-facing слой зафиксировал factory-template defect remediation из `a9b05c0` без смены release semantics
@@ -18,6 +28,8 @@
 - direct hot-set `core-hot-15` теперь экспортируется как одна flat-папка без подпапок, с deterministic naming strategy при конфликтах имён
 - `core-cold-5.tar.gz` теперь дублируется прямо в папке `core-hot-15/` как companion archive для ручной загрузки
 - `core-hot-15` теперь физически разделяет uploadable и служебные файлы: всё для Sources лежит в `upload-to-sources/`
+- export manifest теперь публикует детерминированные checksum metadata для hot export и bundled artifacts, чтобы compare layer мог строить `create/update/delete/skipped` план без эвристики только по mtime
+- docs и completion layer теперь явно различают Codex connector contour для Drive folder и отдельный внешний шаг обновления ChatGPT Project Sources
 
 ### Исправлено
 - устранен reusable process gap, из-за которого ChatGPT мог остановиться на аналитике вместо готового handoff
