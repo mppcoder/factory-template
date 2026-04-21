@@ -13,15 +13,15 @@ Internal repo follow-up, включая release-followup, source-pack refresh, e
 - `impact.manual_archive_required` — {{impact_manual_archive_required}}
 - `impact.delete_before_replace` — {{impact_delete_before_replace}}
 
-## Completion package для source-update changes
+## Completion package для repo-first instruction changes
 
 Если completed change затрагивает downstream-consumed template content, финальный boundary output должен содержать:
 
 1. Что изменено
 2. Какие файлы обновлены в repo
-3. Нужно ли обновлять Sources factory-template ChatGPT Project
+3. Нужно ли обновлять repo-first инструкцию factory-template ChatGPT Project
 4. Нужно ли обновлять downstream template in battle repos
-5. Нужно ли обновлять Sources battle ChatGPT Projects
+5. Нужно ли обновлять repo-first инструкции battle ChatGPT Projects
 6. Готовые артефакты для скачивания
 7. Команды/скрипты для repo-level sync
 8. Удалить перед заменой
@@ -30,43 +30,37 @@ Internal repo follow-up, включая release-followup, source-pack refresh, e
 
 Контуры, которые нужно различать явно:
 
-- Обновление Sources проекта шаблона в ChatGPT
+- Обновление repo-first инструкции проекта шаблона в ChatGPT
 - Обновление шаблона в боевых repo
-- Обновление Sources боевых ChatGPT Projects
+- Обновление repo-first инструкции боевых ChatGPT Projects
 
 Если contour не затронут, это нужно написать явно.
 
 ### Удалить перед заменой
 
-Если replacement может создать stale duplicates, перечислите точные файлы и архивы, которые нужно удалить из Sources до загрузки новых.
+Если replacement может создать конфликтующий старый текст, перечислите точные инструкции или файлы, которые нужно удалить перед заменой.
 
 ### Готовые артефакты для скачивания
 
-- generated каталоги и архивы из `{{sources_export_dir}}`
-- generated sync reports из `{{sources_sync_reports_dir}}`
-- direct hot-set `{{canonical_direct_profile}}/upload-to-sources/` как одна flat-подпапка, вместе с `{{canonical_cold_archive_pack}}`
-- cold archive `{{canonical_cold_archive_pack}}`
-- canonical archive `{{canonical_archive_pack}}`
+- готовый текст repo-first инструкции для ChatGPT Project
 - downstream patch bundle через `{{repo_patch_export_script}}`
 
 ### Команды/скрипты для repo-level sync
 
-- `bash EXPORT_FACTORY_TEMPLATE_SOURCES.sh` — выполняет Codex внутри repo до выдачи финального completion package
-- `bash EXPORT_AND_SYNC_FACTORY_TEMPLATE_SOURCES_TO_GDRIVE.sh` — выполняет Codex внутри repo для export + connector sync request/report в dedicated Google Drive folder contour
 - `{{repo_patch_export_script}}`
 - `{{repo_patch_apply_script}}`
 
-### Ограничение Drive sync
+### Ограничение repo-first режима
 
-- sync contour для Google Drive folder не означает auto-refresh или auto-reindex ChatGPT Project Sources
-- `delete stale` безопасен только для dedicated managed folder
-- Shared Drive может требовать special flags/доступ
+- ChatGPT Project не должен хранить сценарии как source of truth
+- сначала всегда читается GitHub repo, потом `00-master-router.md`
+- старые инструкции про `Sources` и старый staging-workflow нужно удалять, если они конфликтуют с новым правилом
 
 ### Пошаговая инструкция по окнам
 
 - VS Code Explorer — открыть каталог с уже подготовленными export/patch артефактами
 - VS Code Terminal — только если нужен внешний repo-level sync в downstream repo; внутренние prepare-команды Codex выполняет сам
-- ChatGPT Project → Sources — удалить старые Sources и загрузить новые
+- ChatGPT Project UI — заменить старую инструкцию на новую repo-first версию
 - GitHub/repo window — выполнить review commit/push, если это действительно внешний шаг
 
 ### GitHub Repo
@@ -119,42 +113,33 @@ Internal repo follow-up, включая release-followup, source-pack refresh, e
 Шаги:
 
 1. Создайте Project с названием `{{project_name}}`.
-2. Не загружайте произвольные файлы вручную.
-3. Используйте curated Sources pack из этого repo.
+2. Не храните сценарии внутри Project как основной источник правды.
+3. Вставьте repo-first инструкцию из этого repo.
 
 Что прислать обратно:
 
 - подтверждение, что Project создан
-- сколько Sources-слотов доступно сейчас
+- подтверждение, что repo-first инструкция вставлена
 
-### Upload Curated Sources
+### Update Repo-First Instruction
 
-Цель: использовать штатную hybrid-схему `direct hot-set + cold archive remainder + canonical archive` без ручной догадки по составу.
+Цель: обновить инструкцию в ChatGPT Project так, чтобы сценарии читались прямо из GitHub repo.
 
 Где делать:
 
-- VS Code Explorer: `{{sources_export_dir}}`
-- затем ChatGPT Project UI
+- ChatGPT Project UI
 
 Шаги:
 
-1. Откройте каталог `{{sources_export_dir}}` с уже подготовленными артефактами.
-3. Для ежедневной постоянной работы используйте direct profile `{{canonical_direct_profile}}`.
-4. Откройте подпапку `{{direct_sources_dir}}/upload-to-sources/` и загрузите в ChatGPT Project все файлы из неё.
-5. `{{canonical_cold_archive_pack}}` уже лежит в той же подпапке `{{direct_sources_dir}}/upload-to-sources/` и загружается как cold/reference archive remainder без дублей hot-set.
-6. Canonical archive pack `{{canonical_archive_pack}}` держите как полный steady-work snapshot и резервный reference bundle.
-7. Для автоматически определенной фазы `{{current_phase}}` используйте phase-aware archive recommendation ниже, если нужен operator override.
-   Причина: `{{phase_detection_reason}}`
-{{phase_recommendations_bullets}}
-8. Phase-specific archive override выбирайте только при отдельной фазовой причине:
-{{phase_override_packs_bullets}}
-9. По умолчанию archive override не нужен: для steady-state работы достаточно `{{canonical_direct_profile}}` + `{{canonical_cold_archive_pack}}`, а canonical archive остаётся reference snapshot. Если всё же нужен один archive pack по умолчанию, используйте `{{recommended_sources_pack}}`.
-10. Если Sources уже заняты, держите один постоянный direct hot-set и один cold/reference remainder archive, а phase-specific archive pack не смешивайте с ними как второй постоянный набор.
+1. Откройте текущие инструкции проекта.
+2. Удалите старый текст про `Sources`, upload packs и staging-workflow, если он конфликтует с новым правилом.
+3. Вставьте новую repo-first инструкцию, подготовленную Codex.
+4. Проверьте, что в инструкции явно указан repo `{{repo_name}}` и путь `template-repo/scenario-pack/00-master-router.md`.
 
 Что прислать обратно:
 
-- что загружено как постоянный direct hot-set
-- нужен ли phase-specific archive override
+- подтверждение, что старая инструкция удалена
+- подтверждение, что новая repo-first инструкция сохранена
 
 ### Upload New Incoming Archive
 

@@ -13,7 +13,7 @@
 Считать внешними границами:
 
 - создание GitHub repo и действия в GitHub UI;
-- создание и наполнение ChatGPT Project Sources;
+- поддержка repo-first инструкции в ChatGPT Project;
 - ручные загрузки архивов;
 - ввод секретов;
 - любые действия во внешних UI.
@@ -29,12 +29,12 @@
 4. Ожидаемый результат
 5. Что прислать обратно
 
-Если внешний шаг связан с source update flows, не ограничивайся общим footer. Собирай расширенный completion package с секциями:
+Если внешний шаг связан с обновлением repo-first инструкций или downstream sync flows, не ограничивайся общим footer. Собирай расширенный completion package с секциями:
 - `Что изменено`
 - `Какие файлы обновлены в repo`
-- `Нужно ли обновлять Sources factory-template ChatGPT Project`
+- `Нужно ли обновлять repo-first инструкцию factory-template ChatGPT Project`
 - `Нужно ли обновлять downstream template in battle repos`
-- `Нужно ли обновлять Sources battle ChatGPT Projects`
+- `Нужно ли обновлять repo-first инструкции battle ChatGPT Projects`
 - `Готовые артефакты для скачивания`
 - `Команды/скрипты для repo-level sync`
 - `Удалить перед заменой`
@@ -53,7 +53,7 @@
 - launcher layer;
 - validators layer;
 - scenario-pack;
-- sources pack;
+- repo instruction layer;
 - codex handoff pack;
 - release assembly.
 
@@ -233,18 +233,14 @@ bash PRE_RELEASE_AUDIT.sh
 - `workspace-packs/factory-ops/export-template-patch.sh`
 - `workspace-packs/factory-ops/apply-template-patch.sh`
 
-Для Sources refresh по умолчанию сам используй:
-- `bash EXPORT_FACTORY_TEMPLATE_SOURCES.sh`
-- `bash EXPORT_AND_SYNC_FACTORY_TEMPLATE_SOURCES_TO_GDRIVE.sh` для export + connector sync request/report в dedicated Google Drive folder contour
-- generated каталоги и архивы в `_sources-export/factory-template/`
-- generated sync reports в `_sources-export/factory-template/_sync-reports/`
-- generated guide `_boundary-actions/factory-template-boundary-actions.md`
+Для repo-first guidance refresh по умолчанию сам используй:
+- GitHub repo `mppcoder/factory-template` как канонический источник сценариев;
+- generated guide `_boundary-actions/factory-template-boundary-actions.md`, если нужен structured completion package.
 
-Не перекладывай запуск этих внутренних prepare-команд на пользователя в `## Инструкция пользователю`. В финальном блоке давай уже готовые пути, архивы, delete-before-replace список и внешний click/upload flow.
+Не перекладывай подготовку repo-first текста на пользователя в `## Инструкция пользователю`. В финальном блоке давай уже готовый текст инструкции и внешний update flow.
 
-Если используется Google Drive sync contour, обязательно проговори в completion package:
-- это готовит Codex-managed folder contour, а не shell-driven credential sync внутри repo;
-- это не обещает auto-refresh или auto-reindex ChatGPT Project Sources;
-- `delete stale` включать только для dedicated managed folder;
-- для Shared Drive может понадобиться `GOOGLE_DRIVE_SUPPORTS_ALL_DRIVES=1`.
-- folder URL для `factory-template` и folder URL для generated battle project могут и должны различаться; для боевого проекта canonical path теперь `project-local .chatgpt/google-drive-sources.yaml`, а `.env` остаётся override-слоем.
+Для ChatGPT Project всегда проговаривай явно:
+- сценарии не хранятся внутри проекта как source of truth;
+- на каждый запрос сначала нужно открыть GitHub repo;
+- первое обязательное чтение: `template-repo/scenario-pack/00-master-router.md`;
+- любые repo-first инструкции нужно обновлять как отдельный внешний шаг только если текст реально изменился.

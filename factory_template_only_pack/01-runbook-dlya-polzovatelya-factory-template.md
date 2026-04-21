@@ -59,7 +59,7 @@
 
 1. создаете и поддерживаете GitHub-репозиторий шаблона;
 2. создаете ChatGPT Project шаблона;
-3. загружаете curated sources в Project;
+3. поддерживаете короткую repo-first инструкцию в ChatGPT Project;
 4. загружаете архивы/входящие материалы в `_incoming`;
 5. подтверждаете risky-внешние действия;
 6. принимаете release/no-release решение.
@@ -91,8 +91,8 @@ Codex делает внутреннюю работу по шаблону:
 
 Пользовательские инструкции нужны только на внешних границах, а не вместо такого внутреннего follow-up.
 
-Отдельный случай: если фабрика сообщает, что hot Sources уже подготовлены для dedicated Google Drive folder, это означает только готовый Codex-managed connector contour и сформированные sync reports.
-Это не означает, что ChatGPT Project Sources автоматически обновились или переиндексировались внутри ChatGPT UI.
+ChatGPT Project для `factory-template` не должен хранить сценарии как основной источник правды.
+Внутри проекта должна лежать только короткая инструкция: сначала открыть GitHub repo `mppcoder/factory-template`, затем `template-repo/scenario-pack/00-master-router.md`, затем идти по маршруту из него.
 
 Формат таких инструкций канонический и обязательный:
 
@@ -103,10 +103,10 @@ Codex делает внутреннюю работу по шаблону:
 4. Ожидаемый результат
 5. Что прислать обратно
 
-Если change затрагивает source-pack, runbook layer, scenario-pack, launcher, validators, codex-task-pack или другой downstream-consumed template content, инструкции должны быть расширены до completion package для трёх контуров:
-- обновление Sources проекта шаблона в ChatGPT;
+Если change затрагивает runbook layer, scenario-pack, launcher, validators, codex-task-pack или другой downstream-consumed template content, инструкции должны быть расширены до completion package для трёх контуров:
+- обновление repo-first инструкции проекта шаблона в ChatGPT;
 - обновление шаблона в downstream/battle repo;
-- обновление Sources downstream/battle ChatGPT Projects.
+- обновление repo-first инструкции downstream/battle ChatGPT Projects.
 
 Для manual replacement обязательно должны быть перечислены:
 - что удалить перед заменой;
@@ -115,10 +115,7 @@ Codex делает внутреннюю работу по шаблону:
 
 Если для этих внешних шагов нужны exports, generated archives, boundary-actions guide или patch bundle, Codex должен подготовить их заранее сам внутри repo. Пользователь не должен запускать внутренние repo-команды только для того, чтобы собрать артефакт, который фабрика умеет собрать автоматически.
 
-То же правило действует и для Drive sync контура:
-- export hot-set и connector sync request/report для Google Drive folder делает Codex внутри repo;
-- если после этого все еще нужен внешний шаг в ChatGPT UI, он описывается отдельно;
-- dangerous-режим `delete stale` безопасен только для dedicated folder.
+Нельзя считать ChatGPT Project источником сценариев. Источник правды всегда находится в repo.
 
 ---
 
@@ -139,7 +136,7 @@ mkdir -p /projects/_incoming /projects/_release /projects/_artifacts
 
 Загрузите в `/projects/_incoming` архив фабрики и дополнительные входящие артефакты.
 
-После распаковки и первого `bash POST_UNZIP_SETUP.sh` factory-template теперь сам потребует реальный URL папки Google Drive для своего Sources contour и запишет его в `.chatgpt/google-drive-sources.yaml`.
+После распаковки и первого `bash POST_UNZIP_SETUP.sh` дополнительных действий по внешнему staging-контуру больше не требуется.
 
 ## Шаг 3. Открыть VS Code по SSH
 
@@ -156,7 +153,7 @@ mkdir -p /projects/_incoming /projects/_release /projects/_artifacts
 ```text
 Работаем только по проекту шаблона фабрики проектов.
 Твоя зона ответственности — сам repo factory-template.
-Не выходи за внешние границы: GitHub, ChatGPT Project Sources, ручные загрузки, секреты, внешние UI.
+Не выходи за внешние границы: GitHub, ChatGPT Project UI, ручные загрузки, секреты, внешние UI.
 Во всех таких местах готовь для меня точные пошаговые инструкции.
 Сначала:
 1. проверь структуру repo,

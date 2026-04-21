@@ -12,11 +12,10 @@ assert_pass 'factory-template' validate-factory-template-ops.sh bash "$ROOT/VALI
 make_project(){
   local workdir="$1" pname="$2" slug="$3" preset="$4" mode="$5" cls="$6" execm="$7" reg="${8:-skip}"
   rm -rf "$workdir"; mkdir -p "$workdir"
-  local drive_url="https://drive.google.com/drive/folders/${slug}-folder?usp=drive_link"
-  (cd "$workdir" && printf '%s\n%s\n%s\n%s\n%s\n%s\n%s\n' "$pname" "$slug" "$preset" "$mode" "$cls" "$execm" "$drive_url" | FACTORY_REGISTRY_MODE="$reg" timeout 60s bash "$ROOT/launcher.sh" >/dev/null)
+  (cd "$workdir" && printf '%s\n%s\n%s\n%s\n%s\n%s\n' "$pname" "$slug" "$preset" "$mode" "$cls" "$execm" | FACTORY_REGISTRY_MODE="$reg" timeout 60s bash "$ROOT/launcher.sh" >/dev/null)
 }
 SBASE="$ROOT/.matrix-test"; rm -rf "$SBASE"; mkdir -p "$SBASE"
-POSITIVE_COMMON=(validate-project-preset.sh validate-policy-preset.sh validate-change-profile.sh validate-task-graph.sh validate-stage.sh validate-versioning-layer.sh validate-defect-capture.sh validate-alignment.sh validate-google-drive-sources.sh)
+POSITIVE_COMMON=(validate-project-preset.sh validate-policy-preset.sh validate-change-profile.sh validate-task-graph.sh validate-stage.sh validate-versioning-layer.sh validate-defect-capture.sh validate-alignment.sh)
 
 make_project "$SBASE/green-small-fix" 'Матрица greenfield small-fix' 'green-small-fix' product-dev greenfield small-fix manual
 P="$SBASE/green-small-fix/green-small-fix"

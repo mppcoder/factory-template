@@ -106,19 +106,17 @@
 
 Если есть и внутренние, и внешние шаги, сначала выдай inline handoff на внутреннюю часть, затем отдельный `## Инструкция пользователю` на внешнюю границу.
 
-Для source-update changes в completion package обязательно различай:
-- factory template Sources;
+Для changes, затрагивающих ChatGPT Project guidance, в completion package обязательно различай:
+- factory template ChatGPT Project instruction;
 - downstream repo template sync;
-- downstream ChatGPT Project Sources.
+- downstream ChatGPT Project instructions.
 
 Если replacement может создать дубль или stale Source, всегда добавляй точный раздел `Удалить перед заменой`.
 
 Если для внешней границы нужны exports, generated archives, manifest refresh или boundary-actions guide, сначала собери их сам внутри repo. Не проси пользователя запускать внутренние repo-команды ради подготовки этих артефактов.
 
-Это же правило относится к Google Drive folder sync:
-- `EXPORT_AND_SYNC_FACTORY_TEMPLATE_SOURCES_TO_GDRIVE.sh` — внутренний repo-side export/prepare/report step;
-- пользователю передаются уже готовые export paths и sync reports;
-- нельзя выдавать это как обещание автоматического обновления Sources внутри ChatGPT Project UI.
+ChatGPT Project не является каноническим хранилищем сценариев.
+Если меняется repo-first инструкция, пользователю передается точный обновленный текст для вставки в проект, а не указание пересказать сценарии вручную.
 
 ## Правило по release
 

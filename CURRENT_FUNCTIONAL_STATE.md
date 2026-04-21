@@ -8,7 +8,7 @@
 - defect-capture layer и feedback loop
 - drift detection, patch export и safe apply для разрешенных зон
 - golden examples и scaffold-only examples
-- curated Sources packs, boundary-actions generator и ops-policy layer
+- curated reference/export packs, boundary-actions generator и ops-policy layer
 
 ## Что работает стабильно
 - создание fresh scaffold через launcher
@@ -21,25 +21,18 @@
 - автоматическая проверка `factory-template-ops-policy.yaml` и boundary-actions template
 - feedback loop с проверкой качества `meta-feedback` до ingest и matrix-покрытием dry-run ingest path
 - codex handoff pack с автоматической проверкой `codex-context.md`, `codex-task-pack.md`, `boundary-actions.md` и `done-checklist.md`
-- curated Sources packs с semantic validation по профилям `core / release / bugfix`, а не только по cap=20 и существованию файлов
+- curated reference/export packs с semantic validation по профилям `core / release / bugfix`, а не только по cap=20 и существованию файлов
 - phase-aware recommendation layer для выбора `sources-pack-*` в `controlled-fixes / release / bugfix-drift`
 - automatic phase detection из `git`-состояния для выбора рекомендованного `sources-pack-*`
 - separate verified sync contour: auto commit/push после successful verify с lock, denylist и fallback push strategy
 - lightweight follow-up verified sync для low-risk post-verify `.gitignore` и docs/closeout cleanup без отдельного ручного подтверждения
 - separate release decision contour: auto tag/release path только после явного `release-decision.yaml`
 - process layer явно различает internal repo follow-up, external boundary step и mixed follow-up, не позволяя user-only closeout вытеснить внутренний Codex handoff
-- completion/handoff layer умеет требовать source-update completion package с affected contours, delete-before-replace и repo-level sync steps для factory Sources и downstream consumers
+- completion/handoff layer умеет требовать completion package с affected contours, delete-before-replace и repo-level sync steps для repo-first инструкций и downstream consumers
 - completion/handoff layer теперь явно требует, чтобы обязательный completion package появлялся в том же финальном ответе, а не только после дополнительного запроса пользователя
 - completion/handoff layer теперь различает готовые внешние boundary steps и внутренние prepare/export commands: сборка export artifacts выполняется Codex внутри repo до пользовательского блока
-- direct hot-set `core-hot-15` теперь экспортируется как одна flat-подпапка `upload-to-sources/` для упрощённой ручной загрузки в ChatGPT Project Sources
-- companion archive `core-cold-5.tar.gz` теперь кладётся в ту же подпапку `core-hot-15/upload-to-sources/`, чтобы весь daily upload набор лежал в одном месте
-- Codex-managed Google Drive connector contour для hot Sources export: repo готовит flat export, sync request/report и compare plan для connected Drive folder без credential/json API path внутри repo
-- если Codex уже получил remote snapshot через подключённый Google Drive connector, compare layer различает `create/update/delete/skipped` по имени файла и deterministic checksum strategy
-- completion/docs layer теперь отдельно фиксирует, что Drive folder contour не равен автоматическому refresh ChatGPT Project Sources
-- template layer теперь позволяет generated battle project задать свой `GOOGLE_DRIVE_FOLDER_URL` через project-local `.chatgpt/google-drive-sources.yaml` с optional env override
-- launcher generated project теперь автоматически требует реальный URL папки Google Drive для Sources contour и пишет его в `.chatgpt/google-drive-sources.yaml`
-- `POST_UNZIP_SETUP.sh` теперь при интерактивном развёртывании самого `factory-template` тоже требует реальный URL папки Google Drive и пишет его в root `.chatgpt/google-drive-sources.yaml`
-- generated projects теперь получают validator `validate-google-drive-sources.sh`, который не пропускает placeholder URL как готовую настройку Sources contour
+- repo-first instruction layer для ChatGPT Projects: сценарии читаются прямо из GitHub repo, а не из локально загруженных project artifacts
+- launcher и template docs больше не требуют отдельную project-local staging-конфигурацию
 - handoff source files и validator `validate-codex-task-pack.sh` теперь явно требуют фиксировать приоритет repo rules при передаче задачи в Codex
 - handoff layer теперь явно запрещает выдачу handoff через файл или несколькими блоками: пользователю разрешён только один цельный copy-paste блок для Codex
 - generated project tooling теперь включает validator `validate-handoff-response-format.sh`, который проверяет сам markdown-ответ на single-block handoff и запрещает file-based handoff patterns
@@ -50,7 +43,7 @@
 - насыщенность scaffold-only examples
 - phase-aware состав curated packs пока задается статическим policy manifest без отдельного сценарного роутинга
 - auto GitHub Release publication зависит от доступности и авторизации `gh` CLI в конкретной среде
-- текущий репозиторий не может сам из shell вызвать Codex Google Drive connector; это external boundary step
+- phase-aware export/reference packs остаются вспомогательным слоем, а не каноническим хранилищем сценариев
 
 ## Что еще не закрыто
 - финальное dogfooding на реальных greenfield и brownfield проектах

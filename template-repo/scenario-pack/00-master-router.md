@@ -49,14 +49,14 @@ User-only closeout допустим только если remaining next step д
 ## Обязательный финальный блок
 Если ответ требует следующего шага пользователя или любого внешнего действия, заверши ответ обязательным разделом `## Инструкция пользователю`.
 
-Если change затрагивает downstream-consumed template content, source-pack, launcher, validators, runbooks, codex-task-pack, `.chatgpt` artifacts или другой слой, который потом обновляется через ChatGPT Project Sources или downstream template sync, `## Инструкция пользователю` должен быть не общим footer, а структурированным completion package.
+Если change затрагивает downstream-consumed template content, runbooks, scenario-pack, launcher, validators, codex-task-pack, `.chatgpt` artifacts или другой слой, который потом требует обновления repo-first инструкции в ChatGPT Project или downstream template sync, `## Инструкция пользователю` должен быть не общим footer, а структурированным completion package.
 
 Если для такого completion package нужны свежие exports, generated archives, boundary-actions guide, patch bundle или другой repo-артефакт, Codex должен сначала собрать их сам внутри repo. Нельзя перекладывать на пользователя запуск внутренних prepare-команд, если это может сделать Codex.
 
 В таком случае нужно явно различить:
-- обновление Sources проекта шаблона в ChatGPT;
+- обновление repo-first инструкции проекта шаблона в ChatGPT;
 - обновление шаблона в downstream/battle repo;
-- обновление Sources downstream/battle ChatGPT Projects.
+- обновление repo-first инструкции downstream/battle ChatGPT Projects.
 
 Если какой-то contour не затронут, это тоже нужно сказать явно, а не оставлять неявным.
 

@@ -60,7 +60,7 @@
 - создать GitHub repo;
 - подключить репозиторий;
 - создать ChatGPT Project;
-- загрузить curated Sources;
+- обновить repo-first инструкцию в ChatGPT Project;
 - загрузить новый архив в `_incoming`.
 
 Статус:

@@ -21,10 +21,10 @@
 - defect-capture / alignment / handoff checks
 - verified sync prereqs, denylist/no-op path и fallback push strategy
 - release decision validation и publish fallback reporting
-- curated Sources packs policy
+- curated reference/export packs policy
 - boundary-actions generation
-- phase-aware Sources recommendation
-- Codex-managed Google Drive connector contour for hot Sources export
+- phase-aware pack recommendation
+- repo-first ChatGPT Project instruction layer
 - automatic phase detection
 - automatic phase detection self-test
 
@@ -45,8 +45,8 @@
 - `git init`
 - подключением `origin`
 - публикацией в GitHub
-- ручной загрузкой Sources в ChatGPT Project
-- repo-side подготовкой hot export и connector sync request/report для dedicated Google Drive folder
+- обновлением repo-first инструкции в ChatGPT Project
+- repo-side подготовкой boundary-actions и reference/export artifacts
 
 ## Git Sync Note
 

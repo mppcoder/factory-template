@@ -20,7 +20,7 @@ cat "$LOG"
 
 log '=== 1. Создание проекта ==='
 cd "$WORKDIR"
-printf 'Тестовый проект\n%s\nproduct-dev\nbrownfield\nfeature\nhybrid\nhttps://drive.google.com/drive/folders/smoke-test-project-folder?usp=drive_link\n' "$PROJECT_SLUG" | FACTORY_REGISTRY_MODE=skip bash "$ROOT/launcher.sh" >>"$LOG" 2>&1
+printf 'Тестовый проект\n%s\nproduct-dev\nbrownfield\nfeature\nhybrid\n' "$PROJECT_SLUG" | FACTORY_REGISTRY_MODE=skip bash "$ROOT/launcher.sh" >>"$LOG" 2>&1
 cat "$LOG"
 : > "$LOG"
 
@@ -31,7 +31,6 @@ run ./scripts/validate-policy-preset.sh .
 run ./scripts/validate-change-profile.sh .
 run ./scripts/validate-task-graph.sh .
 run ./scripts/validate-stage.sh .
-run ./scripts/validate-google-drive-sources.sh .
 run_expect_fail ./scripts/validate-evidence.sh . && log 'OK: свежий scaffold корректно не проходит evidence' || { log 'ОШИБКА: свежий scaffold не должен проходить evidence'; exit 1; }
 run_expect_fail ./scripts/validate-quality.sh . && log 'OK: свежий scaffold корректно не проходит quality' || { log 'ОШИБКА: свежий scaffold не должен проходить quality'; exit 1; }
 run_expect_fail ./scripts/check-dod.sh . && log 'OK: свежий scaffold корректно не проходит DoD' || { log 'ОШИБКА: свежий scaffold не должен проходить DoD'; exit 1; }
@@ -50,7 +49,6 @@ run ./scripts/validate-policy-preset.sh .
 run ./scripts/validate-task-graph.sh .
 run ./scripts/validate-change-profile.sh .
 run ./scripts/validate-stage.sh .
-run ./scripts/validate-google-drive-sources.sh .
 run ./scripts/validate-evidence.sh .
 run ./scripts/validate-quality.sh .
 run ./scripts/validate-handoff.sh .

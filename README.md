@@ -37,11 +37,8 @@ bash MATRIX_TEST.sh
 bash CLEAN_VERIFY_ARTIFACTS.sh
 ```
 
-При интерактивном первом запуске `POST_UNZIP_SETUP.sh` теперь дополнительно требует реальный URL папки Google Drive для Sources contour самого `factory-template` и обновляет root `.chatgpt/google-drive-sources.yaml`.
-В non-interactive test/CI прогонах этот prompt пропускается автоматически.
-
-Для generated projects launcher тоже требует реальный URL папки Google Drive и не даёт завершить scaffold с placeholder.
-`./scripts/validate-google-drive-sources.sh .` считает placeholder-конфиг неготовым к реальному Sources contour.
+`POST_UNZIP_SETUP.sh` теперь только обновляет execute-биты.
+Generated projects больше не зависят от внешнего staging-контура для сценариев.
 
 Если после self-tests нужен `PRE_RELEASE_AUDIT.sh` или сборка релиза, сначала очистите временные артефакты:
 
@@ -53,8 +50,6 @@ bash PRE_RELEASE_AUDIT.sh
 Для работы с внешними границами без ручной сборки файлов:
 
 ```bash
-bash EXPORT_FACTORY_TEMPLATE_SOURCES.sh
-bash EXPORT_AND_SYNC_FACTORY_TEMPLATE_SOURCES_TO_GDRIVE.sh
 bash GENERATE_BOUNDARY_ACTIONS.sh
 bash VALIDATE_FACTORY_FEEDBACK.sh <working-project>
 bash INGEST_FACTORY_FEEDBACK.sh <working-project> --dry-run
@@ -75,55 +70,33 @@ python3 template-repo/scripts/validate-codex-task-pack.sh <working-project>
 Пользователю handoff выдаётся только одним цельным блоком для copy-paste в Codex, а не ссылкой на файл и не несколькими разрозненными блоками.
 `template-repo/scripts/validate-handoff-response-format.sh` дополнительно валидирует уже готовый markdown-ответ handoff и ловит file-based / multi-block handoff как process defect.
 
-`VALIDATE_FACTORY_TEMPLATE_OPS.sh` теперь проверяет не только структуру `sources-pack-*`, но и их semantic profile, а также direct Sources profile:
+`VALIDATE_FACTORY_TEMPLATE_OPS.sh` теперь проверяет не только структуру `sources-pack-*`, но и semantic profile repo-артефактов, если они используются как reference/export layer:
 
 - `sources-pack-core-20` обязан содержать сценарное ядро, runbook layer и policy presets;
-- `core-hot-15` обязан содержать ровно 15 hot-файлов для ежедневной прямой загрузки;
-- `core-hot-15` должен содержать одну flat-подпапку `upload-to-sources/` для всего, что реально загружается в ChatGPT Sources;
-- `core-hot-15` должен содержать рядом и готовый `core-cold-5.tar.gz`, чтобы daily upload набор лежал в одном месте;
+- `core-hot-15` обязан содержать ровно 15 hot-файлов reference-профиля;
+- `core-hot-15` и companion archive остаются repo-side export-профилями, а не обязательным daily UI upload flow;
 - `core-cold-5` обязан содержать ровно 5 cold/reference файлов без дублей hot-set;
 - `sources-pack-release-20` обязан содержать release-facing docs и release scripts;
 - `sources-pack-bugfix-20` обязан содержать launcher, validator layer и feedback/handoff validators.
 
-Для hot Sources в dedicated Google Drive folder теперь есть отдельный Codex-managed contour:
+## Repo-First ChatGPT Project Rule
 
-- `bash EXPORT_AND_SYNC_FACTORY_TEMPLATE_SOURCES_TO_GDRIVE.sh` сначала пересобирает export, затем валидирует flat-папку `core-hot-15/upload-to-sources/` и после этого собирает connector sync request/report для Codex;
-- repo-script больше не использует raw Google API credentials и не обещает shell-driven upload/update/delete;
-- compare layer живет в `tools/sync_factory_template_sources_to_gdrive_api.py` и работает по local export + optional remote snapshot;
-- sync request пишет machine-readable и human-readable отчеты в `_sources-export/factory-template/_sync-reports/`;
-- если remote snapshot уже получен через подключённый Google Drive connector, отчет различает `create/update/delete/skipped`;
-- Drive folder contour не означает автоматический refresh ChatGPT Project Sources и не обещает auto-reindex внутри ChatGPT UI.
+Для проектов ChatGPT теперь каноничен repo-first режим:
 
-Минимальная локальная конфигурация берется из:
+- сценарии не хранятся внутри ChatGPT Project как основной источник правды;
+- на каждый запрос сначала открывается GitHub repo проекта;
+- первое обязательное действие: открыть `template-repo/scenario-pack/00-master-router.md`, прочитать его и действовать строго по маршруту;
+- если router ведёт в другие сценарии, читать уже их и только потом отвечать.
 
-- `.env.example`
+Для `factory-template` canonical repo:
 
-Ключевые переменные:
-
-- `GOOGLE_DRIVE_FOLDER_URL`
-- `GOOGLE_DRIVE_DELETE_STALE=0|1`
-- `GOOGLE_DRIVE_DRY_RUN=0|1`
-- `GOOGLE_DRIVE_SUPPORTS_ALL_DRIVES=0|1`
-
-Для самой фабрики canonical project-level config теперь лежит в:
-
-- `.chatgpt/google-drive-sources.yaml`
-
-Для самой фабрики в этом YAML и в `.env.example` уже указан текущий folder URL:
-
-- `https://drive.google.com/drive/folders/1kagCZTcHD0IA9TviJBCDj7K1NvKa2rfZ?usp=drive_link`
-
-Для generated battle project этот URL не должен быть жёстко общим. Шаблон теперь несёт:
-
-- `template-repo/template/.chatgpt/google-drive-sources.yaml` как canonical project config
-- `template-repo/template/.env.example` как optional env override
+- `mppcoder/factory-template`
 
 Риски этого контура:
 
-- неверный `GOOGLE_DRIVE_FOLDER_URL` может увести Codex не в ту папку;
-- `GOOGLE_DRIVE_DELETE_STALE=1` безопасен только для dedicated managed folder;
-- Shared Drive может требовать `GOOGLE_DRIVE_SUPPORTS_ALL_DRIVES=1`;
-- текущий подключённый Google Drive connector является внешней boundary-capability, а не in-repo shell API client.
+- если в ChatGPT Project останется старый текст про `Sources` или старый staging-workflow, агент может пойти по неверному workflow;
+- если repo-first инструкция не обновлена после смены repo/path, модель может читать не тот репозиторий;
+- нельзя заменять чтение `00-master-router.md` пересказом по памяти.
 
 Состав archive pack и direct profile теперь берётся из единого declarative manifest:
 
@@ -154,7 +127,7 @@ bash DETECT_FACTORY_TEMPLATE_PHASE.sh
 bash PHASE_DETECTION_TEST.sh
 ```
 
-Эта рекомендация автоматически попадает в `_sources-export/factory-template/SUMMARY.md` и `_boundary-actions/factory-template-boundary-actions.md`, но для постоянной ежедневной работы рекомендуется hybrid-схема: direct hot-set `core-hot-15/upload-to-sources/` как одна flat-подпапка, где уже лежит `core-cold-5.tar.gz`, а canonical archive `sources-pack-core-20.tar.gz` остаётся полным steady-work snapshot.
+Эта рекомендация автоматически попадает в `_sources-export/factory-template/SUMMARY.md` и `_boundary-actions/factory-template-boundary-actions.md`, но для ежедневной работы ChatGPT Project должен опираться на GitHub repo, а не на отдельный Drive/Sources sync-контур.
 
 Состав curated packs и параметры boundary-инструкций задаются декларативно в:
 

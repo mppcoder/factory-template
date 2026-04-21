@@ -7,14 +7,14 @@
 - fresh scaffold: brownfield + brownfield-audit + manual
 - golden examples
 - versioning / defect-capture / alignment layer
-- curated Sources packs and boundary-actions policy layer
+- curated reference/export packs and boundary-actions policy layer
 - feedback validator and ingest dry-run path
 - codex task pack validator
-- semantic validator для curated Sources packs
-- phase-aware recommendation layer для boundary-actions и Sources summary
+- semantic validator для curated reference/export packs
+- phase-aware recommendation layer для boundary-actions и pack summary
 - automatic phase detection helper
 - synthetic phase detection self-test
-- Codex-managed Google Drive connector contour for hot Sources export
+- repo-first ChatGPT Project instruction mode
 
 ## Ожидаемое поведение на fresh scaffold
 Проходят structural / versioning / defect / alignment проверки.
@@ -32,12 +32,8 @@ Evidence / quality / DoD до смыслового наполнения арте
 - `EXPORT_FACTORY_TEMPLATE_SOURCES.sh` и `GENERATE_BOUNDARY_ACTIONS.sh` публикуют phase-aware рекомендацию для `controlled-fixes`, `release` и `bugfix-drift`.
 - `DETECT_FACTORY_TEMPLATE_PHASE.sh` корректно различает `release` и `bugfix-drift` на rule-based changed path signals.
 - `PHASE_DETECTION_TEST.sh` автоматически проверяет synthetic `controlled-fixes`, `release` и `bugfix-drift` сценарии.
-- `VERIFY_GDRIVE_SOURCES_SYNC.sh` проверяет compare-plan contour для hot flat export: local export + remote snapshot -> `create`, `update`, `delete`, `skipped` и pending-without-snapshot.
-- `VALIDATE_FACTORY_TEMPLATE_OPS.sh` теперь включает и verify для Google Drive connector compare contour, а не только policy/profile validator.
-- template layer теперь несёт `template-repo/template/.chatgpt/google-drive-sources.yaml` как canonical project config и `template-repo/template/.env.example` как optional override, чтобы generated battle project мог переопределить `GOOGLE_DRIVE_FOLDER_URL` отдельно от папки фабрики.
-- launcher smoke на временном scaffold подтверждает, что URL папки задаётся прямо при создании проекта и scaffold не должен оставлять placeholder.
+- launcher smoke на временном scaffold подтверждает, что создание проекта больше не зависит от внешнего staging URL и сразу переводит проект в repo-first режим.
 - `POST_UNZIP_SETUP.sh` остаётся безопасным для non-interactive verify path и не блокирует test runs prompt'ом.
-- generated-project validator `validate-google-drive-sources.sh` проходит только при реальном folder URL и ловит placeholder-конфиг как незавершённую настройку.
 - validator `validate-codex-task-pack.sh` теперь требует, чтобы handoff pack явно фиксировал приоритет правил repo.
 - validator `validate-codex-task-pack.sh` теперь также требует правило: handoff пользователю выдаётся только одним цельным copy-paste блоком, а не ссылкой на файл и не несколькими блоками.
 - `validate-handoff-response-format.sh` проверяет готовый markdown handoff-response и ловит file-based handoff, несколько handoff-заголовков и отсутствие fenced copy-paste блока.
@@ -56,10 +52,9 @@ Evidence / quality / DoD до смыслового наполнения арте
 - release-oriented pack теперь несет release-facing docs (`RELEASE_CHECKLIST.md`, `VERIFY_SUMMARY.md`, `RELEASE_NOTE_TEMPLATE.md`) вместо временного audit snapshot.
 - bugfix-oriented pack теперь включает handoff/feedback validators, которые реально нужны для drift-исправлений.
 - policy layer теперь хранит `default_phase`, phase-specific recommendation matrix и detection rules для Sources upload.
-- policy layer теперь хранит `default_phase`, phase detection rules и recommendation matrix для Sources upload.
-- direct Sources profile `core-hot-15` добавлен как ежедневный hot-set для ChatGPT Project.
-- archive/direct Sources generation теперь строятся из единого declarative manifest.
-- добавлен Codex-managed Google Drive connector contour для `core-hot-15/upload-to-sources/` с machine-readable/human-readable sync request reports.
+- policy layer теперь хранит `default_phase`, phase detection rules и recommendation matrix для reference/export packs.
+- archive/reference pack generation теперь строятся из единого declarative manifest.
+- ChatGPT Project переведён на repo-first режим с обязательным чтением `00-master-router.md` из GitHub repo.
 
 ## Известные ограничения
 - `MATRIX_TEST.sh` остаётся representative prerelease runner, а не exhaustive full-matrix coverage для всех 22 допустимых комбинаций;
@@ -68,4 +63,4 @@ Evidence / quality / DoD до смыслового наполнения арте
 - phase detection пока rule-based по changed paths и может не уловить более сложный operator intent без явных файловых сигналов.
 - документальные intent signals сейчас реализованы только для `release`, а не для всех фаз.
 - document intent signals сейчас реализованы для `release` и `bugfix-drift`, но ещё не покрывают возможные более тонкие подфазы внутри controlled fixes.
-- реальный end-to-end mutation step в живой Google Drive folder зависит от фактических write-capabilities активного Codex Google Drive connector и от корректного `GOOGLE_DRIVE_FOLDER_URL`.
+- phase-aware export/reference packs остаются вспомогательным слоем и не заменяют чтение сценариев из GitHub repo.

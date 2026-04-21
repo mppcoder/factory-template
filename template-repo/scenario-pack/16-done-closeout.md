@@ -31,18 +31,12 @@ Closeout без handoff допустим только при реальном о
 - внутренний follow-up handoff;
 - внешний boundary step с блоком `## Инструкция пользователю`.
 
-Если внешний boundary step связан с source update flows, closeout считается полным только если `## Инструкция пользователю` явно покрывает все затронутые contour'ы:
-- factory-template ChatGPT Project Sources;
+Если внешний boundary step связан с repo-first instruction/update flows, closeout считается полным только если `## Инструкция пользователю` явно покрывает все затронутые contour'ы:
+- factory-template ChatGPT Project instruction;
 - downstream repo template sync;
-- downstream/battle ChatGPT Project Sources.
+- downstream/battle ChatGPT Project instructions.
 
-Перед таким closeout Codex обязан сам выполнить внутренний repo prep: export refresh, boundary-actions generation, archive/manifest refresh и другую сборку артефактов, если она нужна для внешнего шага. Ответ, который вместо этого отправляет пользователя запускать внутренние repo-команды, считается неполным closeout.
-
-Если во внутренний prep входит sync в папку Google Drive через API, closeout должен отдельно различать:
-
-- repo-side export и connector sync request/report уже подготовлены;
-- нужен ли после этого отдельный внешний шаг в ChatGPT Project UI;
-- что именно делает `delete stale`, если он был включён.
+Перед таким closeout Codex обязан сам выполнить внутренний repo prep: boundary-actions generation, текстовую нормализацию инструкции и другую сборку артефактов, если она нужна для внешнего шага. Ответ, который вместо этого отправляет пользователя запускать внутренние repo-команды, считается неполным closeout.
 
 Если replacement в Sources может создать stale duplicates, в блоке `## Инструкция пользователю` обязателен отдельный подраздел `Удалить перед заменой` с точными именами файлов или архивов.
 

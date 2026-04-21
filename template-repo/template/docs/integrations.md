@@ -2,23 +2,13 @@
 
 Перечислите внешние сервисы, API и обмены данными.
 
-## Google Drive Sources Folder
+## ChatGPT Project Repo Instruction
 
-Если проект использует отдельную папку Google Drive для staging/export Sources, launcher при создании проекта потребует реальный URL, а дальше он хранится через:
+Для проекта задайте repo-first правило:
 
-- `.chatgpt/google-drive-sources.yaml`
-- `.env`
-- переменная `GOOGLE_DRIVE_FOLDER_URL`
+1. ChatGPT Project хранит только короткую инструкцию.
+2. На каждый запрос сначала открывается GitHub repo проекта.
+3. Первое обязательное чтение: `template-repo/scenario-pack/00-master-router.md`.
+4. Ответ формируется только после прохождения маршрута из router-сценария.
 
-Шаблонный пример лежит в:
-
-- `.chatgpt/google-drive-sources.yaml`
-- `.env.example`
-
-Приоритет рекомендуется такой:
-
-1. `.chatgpt/google-drive-sources.yaml`
-2. `.env`
-3. явный CLI override `--folder-url`
-
-Для каждого развёрнутого боевого проекта URL папки должен задаваться отдельно. Не наследуйте бездумно folder URL от `factory-template`, если проекту нужна своя dedicated папка.
+Если где-то остаются legacy export-артефакты, считайте их вспомогательным reference-слоем, а не основным источником сценариев.

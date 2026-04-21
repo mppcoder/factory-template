@@ -7,4 +7,4 @@ policy_preset: ""
 policy_default_scenarios: []
 active:
   - "00-master-router.md"
-status: "нужно_загрузить_в_sources"
+status: "нужно_обновить_repo_first_инструкцию"

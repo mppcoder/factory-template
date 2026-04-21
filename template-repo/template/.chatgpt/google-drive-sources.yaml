@@ -1,7 +1,0 @@
-# Google Drive contour for a generated battle project.
-google_drive_sources:
-  folder_url: "https://drive.google.com/drive/folders/<replace-with-project-folder-id>"
-  delete_stale: false
-  dry_run: true
-  supports_all_drives: false
-  report_dir: "_sources-export/_sync-reports"

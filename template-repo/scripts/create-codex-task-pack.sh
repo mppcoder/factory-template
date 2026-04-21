@@ -87,13 +87,13 @@ def main() -> int:
 - [ ] impact.manual_archive_required
 - [ ] impact.delete_before_replace
 
-## Completion Package For Source Update Changes
+## Completion Package For Repo-First Instruction Changes
 
 - [ ] Что изменено
 - [ ] Какие файлы обновлены в repo
-- [ ] Нужно ли обновлять Sources factory-template ChatGPT Project
+- [ ] Нужно ли обновлять repo-first инструкцию factory-template ChatGPT Project
 - [ ] Нужно ли обновлять downstream template in battle repos
-- [ ] Нужно ли обновлять Sources battle ChatGPT Projects
+- [ ] Нужно ли обновлять repo-first инструкции battle ChatGPT Projects
 - [ ] Готовые артефакты для скачивания
 - [ ] Команды/скрипты для repo-level sync
 - [ ] Удалить перед заменой
@@ -114,19 +114,19 @@ def main() -> int:
     else:
         handoff_line = 'Handoff в Codex сейчас не является обязательным для выбранного профиля.'
 
-    if active.get('status') == 'нужно_загрузить_в_sources':
-        sources_line = f'Загрузите единый scenario-pack в ChatGPT Project Sources через ./scripts/export-sources-pack.sh . и начните с {entrypoint}.'
+    if active.get('status') == 'нужно_обновить_repo_first_инструкцию':
+        sources_line = f'Обновите repo-first инструкцию в ChatGPT Project и начните с {entrypoint}. Сценарии нужно читать прямо из GitHub repo.'
     else:
-        sources_line = f'Sources уже должны быть загружены; если есть сомнения, повторно экспортируйте единый scenario-pack через ./scripts/export-sources-pack.sh . Базовая точка входа: {entrypoint}.'
+        sources_line = f'В ChatGPT Project должен действовать repo-first режим: сначала GitHub repo, затем {entrypoint}. Сценарии не должны пересказываться из памяти.'
 
     route_line = 'Активные стартовые сценарии: ' + (', '.join(active_scenarios) if active_scenarios else 'еще не определены.')
     impact_model = policy.get('boundary_actions', {}).get('completion_impacts', {}) if isinstance(policy.get('boundary_actions', {}), dict) else {}
     impact_defaults = {
-        "factory_sources": "Обновление Sources проекта шаблона в ChatGPT",
+        "factory_sources": "Обновление repo-first инструкции проекта шаблона в ChatGPT",
         "downstream_template_sync": "Обновление шаблона в боевых repo",
-        "downstream_project_sources": "Обновление Sources боевых ChatGPT Projects",
+        "downstream_project_sources": "Обновление repo-first инструкции боевых ChatGPT Projects",
         "manual_archive_required": "Нужен готовый архив или каталог для ручной загрузки",
-        "delete_before_replace": "Перед заменой нужно удалить старые Sources",
+        "delete_before_replace": "Перед заменой нужно удалить старую repo-first инструкцию, если она конфликтует с новой",
     }
     impact_lines = []
     for key in [
@@ -159,15 +159,15 @@ def main() -> int:
 
 {impact_block}
 
-## Completion Package For Source Update Changes
+## Completion Package For Repo-First Instruction Changes
 
-Если change затрагивает source-pack, scenario-pack, launcher, validators, runbooks, codex-task-pack, `.chatgpt` artifacts или другой downstream-consumed template content, пользовательский boundary output должен включать:
+Если change затрагивает scenario-pack, launcher, validators, runbooks, codex-task-pack, `.chatgpt` artifacts или другой downstream-consumed template content, пользовательский boundary output должен включать:
 
 1. Что изменено
 2. Какие файлы обновлены в repo
-3. Нужно ли обновлять Sources factory-template ChatGPT Project
+3. Нужно ли обновлять repo-first инструкцию factory-template ChatGPT Project
 4. Нужно ли обновлять downstream template in battle repos
-5. Нужно ли обновлять Sources battle ChatGPT Projects
+5. Нужно ли обновлять repo-first инструкции battle ChatGPT Projects
 6. Готовые артефакты для скачивания
 7. Команды/скрипты для repo-level sync
 8. Удалить перед заменой
@@ -175,9 +175,9 @@ def main() -> int:
 10. Что прислать обратно после внешнего шага
 
 Обязательно различайте три контура:
-- Обновление Sources проекта шаблона в ChatGPT
+- Обновление repo-first инструкции проекта шаблона в ChatGPT
 - Обновление шаблона в боевых repo
-- Обновление Sources боевых ChatGPT Projects
+- Обновление repo-first инструкции боевых ChatGPT Projects
 
 Если contour не затронут, это нужно явно написать.
 

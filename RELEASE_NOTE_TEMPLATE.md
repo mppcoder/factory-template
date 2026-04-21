@@ -8,16 +8,15 @@
 
 ## Что вошло
 
-- direct Sources profile `core-hot-15` добавлен как официальный daily profile для ChatGPT Project
-- в релиз вошла hybrid-модель `direct hot-set + canonical archive`
-- repo теперь умеет дополнительно готовить Codex-managed connector sync request для hot export в dedicated Google Drive folder
+- repo-first instruction mode добавлен как канонический режим для ChatGPT Project
+- export/reference packs переведены в вспомогательный слой, а не основной daily workflow
 - release-facing docs и bundle metadata синхронизированы под `factory-v2.4.2`
 
 ## Что изменилось в template/runtime/policy layer
 
 - launcher и generated versioning layer переведены на `2.4.2`
-- export/validation layer выровнены под declarative Sources profiles
-- release checklist, release notes и boundary guidance отражают hybrid-схему Sources
+- export/validation layer выровнены под declarative pack profiles
+- release checklist, release notes и boundary guidance отражают repo-first workflow
 - verified sync и release publication остаются раздельными контурами
 
 ## Что проверено
@@ -30,7 +29,7 @@
 
 ## Что важно для downstream
 
-- для steady-state работы использовать `sources-pack-core-20.tar.gz`
+- для steady-state работы использовать GitHub repo как source of truth, а `sources-pack-core-20.tar.gz` держать как reference/export bundle
 - для release-facing прохода использовать `sources-pack-release-20.tar.gz`
 - generated projects теперь получают фабричную версию `2.4.2`
 - verified sync после green verify может выполняться автоматически, но auto release требует отдельного `release-decision.yaml`
@@ -45,8 +44,7 @@
 - при `decision=release` проверить, доступна ли автоматическая публикация через `gh`
 - если runtime перешел в fallback, использовать release report и затем синхронизировать GitHub tag/release вручную
 - прикрепить к GitHub Release архив `factory-v2.4.2.zip`
-- загрузить нужный curated Sources pack в ChatGPT Project
-- при использовании Google Drive staging помнить, что folder contour не заменяет отдельный refresh Sources в ChatGPT UI
+- обновить repo-first инструкцию в ChatGPT Project, если поменялись repo/path/обязательные правила чтения сценариев
 
 ## Go / No-Go
 
