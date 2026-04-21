@@ -1,5 +1,15 @@
 # Журнал изменений фабрики
 
+## [Unreleased]
+### Изменено
+- release-facing слой зафиксировал factory-template defect remediation из `a9b05c0` без смены release semantics
+- `CURRENT_FUNCTIONAL_STATE.md` и release notes теперь явно отражают обязательный inline Codex handoff при допустимом handoff и достаточной определенности задачи
+
+### Исправлено
+- устранен reusable process gap, из-за которого ChatGPT мог остановиться на аналитике вместо готового handoff
+- устранен reusable process gap, из-за которого ответ мог завершаться без финального блока `Инструкция пользователю` при pending user/external step
+- подтверждено, что автопубликация релиза не добавлялась и existing release discipline сохранена
+
 ## [2.4.2] - 2026-04-20
 ### Добавлено
 - declarative manifest `packaging/sources/sources-profiles.yaml` для archive/direct Sources profiles

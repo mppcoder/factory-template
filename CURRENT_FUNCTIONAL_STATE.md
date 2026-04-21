@@ -14,6 +14,8 @@
 - создание fresh scaffold через launcher
 - явное покрытие 3 целевых вариантов входа через presets и scenario-pack
 - defect-aware handoff и Codex task pack
+- router / policy / handoff layer больше не допускает purely-analytic ответ вместо готового Codex handoff, если handoff уже допустим и задача достаточно определена
+- финальный блок `Инструкция пользователю` теперь канонически обязателен для pending external/user steps
 - базовые structural validators
 - release hygiene, pre-release audit и version sync checks
 - автоматическая проверка `factory-template-ops-policy.yaml` и boundary-actions template

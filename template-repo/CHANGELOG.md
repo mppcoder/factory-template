@@ -1,5 +1,13 @@
 # Журнал изменений шаблона
 
+## [Unreleased]
+### Изменено
+- template/runtime/policy layer теперь закрепляет обязательный inline Codex handoff, если handoff уже допустим и задача достаточно определена
+- template guidance теперь требует финальный блок `Инструкция пользователю` при любом pending user/external step
+
+### Исправлено
+- устранен reusable process gap между router, handoff rules, runbook, AGENTS и closeout layer
+
 ## [2.4.2] - 2026-04-20
 ### Изменено
 - template layer синхронизирован с hybrid-моделью Sources: direct hot-set для daily use и canonical archive pack для steady snapshot
