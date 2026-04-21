@@ -5,3 +5,4 @@ __pycache__/
 _boundary-actions/
 _sources-export/
 .factory-runtime/
+_artifacts/
