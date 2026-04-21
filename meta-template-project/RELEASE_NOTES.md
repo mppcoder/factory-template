@@ -4,6 +4,7 @@
 - зафиксирован release-followup для factory-template defect remediation из `a9b05c0`
 - reusable process gap закрыт: inline Codex handoff теперь обязателен при допустимом handoff и достаточной определенности задачи
 - reusable process gap закрыт: финальный блок `Инструкция пользователю` теперь обязателен при любом pending user/external step
+- reusable process gap закрыт: internal repo follow-up после remediation/push больше не должен ошибочно уходить в user-only closeout
 - downstream process behavior обновлен без изменения release semantics: автопубликация релиза не добавлена, release discipline сохранена
 - добавлен separate contour для auto commit/push после successful verify и отдельный release executor после явного release decision
 
