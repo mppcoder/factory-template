@@ -1,30 +1,25 @@
 # Итоговый отчёт по закрытию изменения
 
 ## Что было запрошено
-- После relevant factory change требовать не общий footer, а source-update completion package.
-- Явно различать factory Sources, downstream repo sync и downstream ChatGPT Project Sources.
-- Добавить delete-before-replace, ready artifacts и window-by-window instructions.
+- Исправить ситуацию, где по итогам relevant change обязательный completion package не попал в основной финальный ответ.
 
 ## Что реально сделано
-- Обновлены router/global/decision/handoff/done rules.
-- Добавлен lightweight impact model в boundary policy.
-- Усилен codex-task-pack generator/validator и boundary-actions template.
-- Обновлены runbook, AGENTS, mode-routing, changelog, functional state и release notes.
-- Отдельно зафиксирован reusable process defect в `reports/bugs/bug-007-missing-source-update-completion-package.md`.
+- Добавлено immediate same-response rule для completion package.
+- Deferred instruction after reminder теперь считается reusable process defect.
+- Обновлены DoD, runbook/AGENTS и checklist/validator.
+- Зафиксирован новый defect в `reports/bugs/bug-008-deferred-completion-package-after-reminder.md`.
 
 ## Какие артефакты обновлены
 - `.chatgpt/*` для текущего change
 - `template-repo/scenario-pack/*`
+- `template-repo/process/definition-of-done.bugfix-feature-change.md`
 - `template-repo/scripts/create-codex-task-pack.sh`
 - `template-repo/scripts/validate-codex-task-pack.sh`
-- `factory-template-ops-policy.yaml`
-- `factory_template_only_pack/templates/factory-template-boundary-actions.template.md`
-- runbook / AGENTS / changelog / release notes / CURRENT_FUNCTIONAL_STATE
+- `CHANGELOG.md`, `template-repo/CHANGELOG.md`, `CURRENT_FUNCTIONAL_STATE.md`, `meta-template-project/RELEASE_NOTES.md`
 
 ## Что осталось вне объёма
-- Автоматическое обновление ChatGPT UI
-- Новый тяжёлый subsystem для impact tracking
-- Автоматический release publication
+- Runtime auditing свободного prose ответа
+- Новый completion package format
 
 ## Итог закрытия
-- Relevant source-update changes теперь требуют канонический completion package с affected contours, delete-before-replace, ready artifacts и repo-level sync steps.
+- Если completion package обязателен, он должен быть в том же финальном ответе; выдача только после напоминания пользователя теперь считается defect.

@@ -102,6 +102,7 @@ def main() -> int:
     ensure_contains(checklist, "impact.manual_archive_required", errors, "done-checklist.md")
     ensure_contains(checklist, "impact.delete_before_replace", errors, "done-checklist.md")
     ensure_contains(checklist, "## Completion Package For Source Update Changes", errors, "done-checklist.md")
+    ensure_contains(checklist, "Completion package выдан в том же финальном ответе", errors, "done-checklist.md")
     for item in [
         "verification-report.md",
         "done-report.md",

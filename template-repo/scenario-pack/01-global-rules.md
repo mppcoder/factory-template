@@ -25,3 +25,5 @@
 Смешение internal repo work и external boundary action без явного разделения на handoff и user footer считается reusable process defect.
 
 Если change влияет на Sources или downstream template consumers, но completion output не различает affected contours, delete-before-replace semantics и boundary steps по окнам/папкам, это считается reusable process defect.
+
+Если обязательный `## Инструкция пользователю` или source-update completion package появляется только после дополнительного запроса пользователя, это считается reusable process defect completion/handoff layer.

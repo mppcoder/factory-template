@@ -8,6 +8,7 @@
 - lightweight follow-up mode для `VERIFIED_SYNC.sh`, чтобы low-risk post-verify `.gitignore` и docs/closeout изменения тоже коммитились и пушились автоматически
 - internal-followup precedence rule: user footer больше не должен вытеснять inline handoff, если remaining work еще остается внутренней Codex-eligible работой repo
 - completion/handoff layer теперь требует source-update completion package для factory Sources, downstream repo sync и battle ChatGPT Project Sources, когда change затрагивает downstream-consumed content
+- immediate completion-package rule: обязательная инструкция пользователю должна быть в том же финальном ответе, а не после напоминания пользователя
 
 ### Изменено
 - release-facing слой зафиксировал factory-template defect remediation из `a9b05c0` без смены release semantics

@@ -56,6 +56,8 @@ User-only closeout допустим только если remaining next step д
 
 Если какой-то contour не затронут, это тоже нужно сказать явно, а не оставлять неявным.
 
+Этот completion package должен быть выдан в том же финальном ответе, где сообщается о завершении change. Нельзя считать задачу закрытой, если инструкция появилась только после дополнительного напоминания пользователя.
+
 ## Маршрут дефектов
 Если задача содержит bug, regression, inconsistency, missing step, unexpected behavior или подозрение на template defect, сначала проходи defect-capture path: reproduce → evidence → bug report → layer classification → feedback при необходимости → только потом remediation.
 

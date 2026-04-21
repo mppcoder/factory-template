@@ -1,16 +1,14 @@
 # Пользовательская спецификация
 
 ## Цель изменения
-- Сделать source-update completion package нормой completion/handoff layer.
-- Обязать Codex явно различать factory Sources, downstream repo sync и downstream ChatGPT Project Sources.
-- Требовать delete-before-replace, ready artifacts и window-by-window instructions для manual external steps.
+- Сделать обязательный completion package immediate same-response rule.
+- Запретить ситуацию, где инструкция пользователю появляется только после напоминания.
+- Не менять сами contours completion package, а только закрепить их обязательность в основном финальном ответе.
 
 ## Что должно получиться
-- После relevant change completion output явно показывает, какие external update contours затронуты.
-- Для manual replacement есть точный список `Удалить перед заменой`.
-- Для repo-level sync и Sources refresh указаны готовые артефакты и точные скрипты.
+- Если `## Инструкция пользователю` или source-update completion package обязателен, он идет сразу в финальном ответе.
+- Отложенная инструкция после follow-up вопроса считается process defect.
 
 ## Что не входит в объем
-- Автоматическое управление GitHub UI или ChatGPT UI.
-- Новый entry-mode matrix.
-- Автопубликация релиза.
+- Новый completion package format.
+- Изменение release semantics.
