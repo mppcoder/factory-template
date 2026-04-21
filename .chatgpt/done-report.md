@@ -1,29 +1,30 @@
 # Итоговый отчёт по закрытию изменения
 
 ## Что было запрошено
-- Добавить auto commit/push для lightweight post-verify follow-up изменений.
-- Не спрашивать отдельное подтверждение на commit/push для low-risk cleanup поверх уже green verify.
-- Не размывать separate release contour и verify-first модель.
+- Исправить reusable process bug, из-за которого remaining internal repo follow-up после remediation/push мог ошибочно уходить в user-only closeout.
+- Сохранить footer `Инструкция пользователю` только для реальных внешних границ.
+- Добавить generation/validation coverage, если это возможно в codex-task-pack layer.
 
 ## Что реально сделано
-- Добавлен lightweight follow-up mode в reusable verified sync helper и validator.
-- Добавлен allowlist для low-risk `.gitignore` и docs/closeout post-verify cleanup.
-- Добавлена отдельная генерация commit message для lightweight follow-up path.
-- Обновлены runbook, mode-routing, AGENTS, changelog и functional state.
-- Отдельно зафиксирован reusable process gap в `reports/bugs/bug-005-lightweight-followup-sync-gap.md`.
+- Добавлено единое правило различения internal repo follow-up, external boundary step и mixed follow-up.
+- Зафиксирован precedence rule: inline handoff обязателен раньше user footer, если внутренняя repo-работа еще не завершена.
+- Обновлены scenario-pack, process docs, runbook, AGENTS, mode-routing, policy manifests и change classes.
+- Усилены `create-codex-task-pack.sh` и `validate-codex-task-pack.sh`.
+- Отдельно зафиксирован reusable process defect в `reports/bugs/bug-006-internal-followup-misclassified-as-user-closeout.md`.
 
 ## Какие артефакты обновлены
 - `.chatgpt/*` для текущего change
-- `template-repo/scripts/factory_automation_common.py`
-- `template-repo/scripts/verified-sync.sh`
-- `template-repo/scripts/validate-verified-sync-prereqs.sh`
+- `template-repo/scenario-pack/*`
+- `template-repo/process/*`
+- `template-repo/scripts/create-codex-task-pack.sh`
+- `template-repo/scripts/validate-codex-task-pack.sh`
 - `factory_template_only_pack/*`
-- `CHANGELOG.md`, `template-repo/CHANGELOG.md`, `CURRENT_FUNCTIONAL_STATE.md`
+- `CHANGELOG.md`, `CURRENT_FUNCTIONAL_STATE.md`, `template-repo/CHANGELOG.md`
 
 ## Что осталось вне объёма
-- Расширение lightweight allowlist за пределы low-risk docs/ignore cleanup
-- Любые изменения release executor или release decision semantics
-- Новый CI/CD orchestration layer
+- Автоматический release path
+- Изменение version number
+- Широкий rewrite примеров и release bundle контуров
 
 ## Итог закрытия
-- Factory-template теперь auto-sync'ит и безопасные lightweight follow-up cleanup изменения без лишнего ручного подтверждения и без размытия separate release contour.
+- Factory-template больше не должен переводить внутренний release-followup в user-only closeout: сначала handoff на внутреннюю часть, footer только для настоящей внешней границы.

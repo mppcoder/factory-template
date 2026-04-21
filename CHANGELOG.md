@@ -6,6 +6,7 @@
 - отдельный contour `EXECUTE_RELEASE_DECISION.sh` для tag/release path только после явного release decision
 - validators для verified sync prereqs, release decision, release notes source и publish outcome
 - lightweight follow-up mode для `VERIFIED_SYNC.sh`, чтобы low-risk post-verify `.gitignore` и docs/closeout изменения тоже коммитились и пушились автоматически
+- internal-followup precedence rule: user footer больше не должен вытеснять inline handoff, если remaining work еще остается внутренней Codex-eligible работой repo
 
 ### Изменено
 - release-facing слой зафиксировал factory-template defect remediation из `a9b05c0` без смены release semantics

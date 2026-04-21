@@ -1,16 +1,16 @@
 # Пользовательская спецификация
 
 ## Цель изменения
-- Добавить для `factory-template` lightweight follow-up mode поверх существующего verified sync.
-- Разрешить auto commit/push для low-risk post-verify cleanup изменений без отдельного ручного подтверждения.
-- Сохранить verify-first модель и отдельный release decision contour без изменений.
+- Исправить reusable process gap в `factory-template`, из-за которого internal repo follow-up после remediation/push мог ошибочно уходить в user-only closeout.
+- Сохранить обязательный footer `Инструкция пользователю` для реальных внешних границ.
+- Не менять release semantics и не превращать closeout в automatic release.
 
 ## Что должно получиться
-- После уже зафиксированного green verify low-risk `.gitignore` и docs/closeout follow-up правки тоже auto commit/push через `VERIFIED_SYNC.sh`.
-- Lightweight follow-up не должен захватывать code/scripts/policy changes вне allowlist.
-- Commit message для lightweight follow-up не должен повторно использовать title предыдущего большого change.
+- Если remaining work еще выполняется внутри repo и остается Codex-eligible, ответ обязан выдавать inline handoff.
+- User-only closeout допустим только для реальных external boundary steps.
+- При mixed follow-up сначала идет inline handoff на внутреннюю часть, затем при необходимости отдельный footer для внешней границы.
 
 ## Что не входит в объем
-- Автоматический релиз после любого verify без отдельного решения.
-- Ослабление verify требований для non-lightweight изменений.
-- Хранение секретов в repo.
+- Автопубликация релиза.
+- Широкий rewrite всей фазовой модели.
+- Ослабление правила обязательного footer для внешних шагов.

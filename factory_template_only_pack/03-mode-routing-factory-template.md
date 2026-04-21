@@ -60,6 +60,7 @@
 - RCA сложного тестового сбоя;
 - сравнения нескольких сценарных веток;
 - reverse analysis downstream feedback into template.
+- классификации internal repo follow-up vs external boundary step при спорном closeout.
 
 Рекомендуемый профиль:
 
@@ -76,7 +77,8 @@
 - diff review;
 - release bundle review;
 - complete self-test pass review;
-- `EXECUTE_RELEASE_DECISION.sh` и publish/fallback review.
+- `EXECUTE_RELEASE_DECISION.sh` и publish/fallback review;
+- release-followup, source-pack refresh и closeout consistency pass как внутренней repo-работы.
 
 Рекомендуемый профиль:
 
@@ -138,6 +140,8 @@ Release verify не выполнять на `mini`.
 ```
 
 Если heavy-analysis уже закрыл обязательные gate'ы и задача стала достаточно определенной для handoff, следующий ответ должен содержать готовый inline handoff, а не еще один purely-analytic summary.
+
+Если heavy-analysis показал, что remaining work остается внутренним release-followup внутри repo, следующий ответ не должен уходить в user-only closeout.
 
 ---
 

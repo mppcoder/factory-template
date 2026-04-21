@@ -22,6 +22,28 @@
 - задача реально неоднозначна;
 - нужен выбор архитектурной развилки.
 
+## Internal vs External Follow-up Rule
+Если после remediation, verify, commit/push или closeout-stage остаются внутренние Codex-eligible задачи внутри repo, нельзя завершать ответ только инструкцией пользователю.
+
+К внутреннему follow-up по умолчанию относятся:
+- release note и release-facing changelog/update внутри repo;
+- source-pack, curated sources, export/manifests refresh;
+- closeout artifact sync;
+- verify-summary, done-summary и release-facing consistency pass;
+- release bundle preparation;
+- другой release-followup, который делается внутри repo без внешнего UI/manual шага.
+
+Если remaining work относится к такому internal follow-up, выдай inline Codex handoff в том же ответе.
+
+User-only closeout допустим только если remaining next step действительно внешний:
+- GitHub UI;
+- ChatGPT Project UI;
+- ручная загрузка архива;
+- ввод секрета;
+- другой manual step вне IDE/SSH.
+
+Если есть и внутренние, и внешние шаги, сначала выдай inline Codex handoff на внутреннюю часть, а затем отдельно заверши ответ блоком `## Инструкция пользователю` только для внешней границы.
+
 ## Обязательный финальный блок
 Если ответ требует следующего шага пользователя или любого внешнего действия, заверши ответ обязательным разделом `## Инструкция пользователю`.
 

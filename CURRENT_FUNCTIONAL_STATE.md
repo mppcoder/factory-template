@@ -27,6 +27,7 @@
 - separate verified sync contour: auto commit/push после successful verify с lock, denylist и fallback push strategy
 - lightweight follow-up verified sync для low-risk post-verify `.gitignore` и docs/closeout cleanup без отдельного ручного подтверждения
 - separate release decision contour: auto tag/release path только после явного `release-decision.yaml`
+- process layer явно различает internal repo follow-up, external boundary step и mixed follow-up, не позволяя user-only closeout вытеснить внутренний Codex handoff
 
 ## Что работает частично
 - matrix runner как единый источник истины

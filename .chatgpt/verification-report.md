@@ -1,20 +1,20 @@
 # Отчёт о проверке результата
 
 ## Что проверяли
-- `python3 -m py_compile template-repo/scripts/factory_automation_common.py template-repo/scripts/verified-sync.sh template-repo/scripts/validate-verified-sync-prereqs.sh`
-- `bash VALIDATE_VERIFIED_SYNC_PREREQS.sh` для текущего полного change path.
-- Временный repo-сценарий: low-risk `.gitignore` follow-up после уже green verify baseline.
-- Временный repo-сценарий: unsafe path вне lightweight allowlist должен блокировать lightweight follow-up.
-- `git diff --check` на актуальном дереве изменений.
+- semantic grep по `internal follow-up`, `external boundary`, `user-only closeout`, `inline handoff`, `release-followup`, `Инструкция пользователю`
+- согласованность router / decision policy / handoff / done-closeout / runbook / AGENTS / manifests
+- `python3 -m py_compile template-repo/scripts/create-codex-task-pack.sh template-repo/scripts/validate-codex-task-pack.sh`
+- `template-repo/scripts/create-codex-task-pack.sh`
+- `template-repo/scripts/validate-codex-task-pack.sh`
 
 ## Что подтверждено
-- `VERIFIED_SYNC.sh` теперь различает `full` и `lightweight-followup` modes.
-- Low-risk `.gitignore` и docs/closeout cleanup после уже green verify могут auto commit/push без отдельного ручного подтверждения.
-- Lightweight follow-up не пропускает пути вне allowlist и не использует повторно старый большой task title как commit message.
-- Separate release contour не затронут и не смешивается с lightweight follow-up sync.
+- Internal repo follow-up теперь явно отличается от external boundary step во всех канонических слоях.
+- User-only closeout запрещен, если remaining work еще остается внутренней Codex-eligible работой repo.
+- Для mixed follow-up правило одинаковое: сначала handoff, затем footer только для внешней границы.
+- Boundary-actions и validator теперь явно проверяют, что внутренний handoff не вытесняется footer'ом.
 
 ## Что не подтверждено или требует повторной проверки
-- Расширение lightweight allowlist на дополнительные типы low-risk файлов, если они понадобятся позже.
+- Семантическое качество будущих свободных формулировок модели все еще зависит от prompt compliance, хотя rule layer и validator теперь жёстче.
 
 ## Итоговый вывод
-- Verified sync закрывает и полный change path, и безопасный lightweight follow-up path без размытия verify-first модели и release semantics.
+- Reusable process gap закрыт без изменения release semantics: footer сохранен для реальных внешних границ, но больше не подменяет внутренний repo follow-up.

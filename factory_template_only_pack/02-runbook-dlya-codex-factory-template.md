@@ -119,6 +119,7 @@ bash PRE_RELEASE_AUDIT.sh
 - генерировать boundary-actions instructions для внешних шагов;
 - выравнивать policy manifests и template files для pack/export flows;
 - обновлять AGENTS / `.chatgpt/` / codex pack.
+- закрывать внутренний release-followup, closeout-sync и release-facing consistency work внутри repo без перевода этого хвоста в user-only closeout.
 
 ---
 
@@ -162,6 +163,18 @@ bash PRE_RELEASE_AUDIT.sh
 
 Если handoff в Codex уже разрешен и задача достаточно определена, не останавливайся на аналитике: выдай готовый inline handoff в том же ответе. Откладывать handoff можно только при незакрытых gate'ах, нехватке обязательных артефактов, реальной неоднозначности или архитектурной развилке.
 
+Если после remediation, verify, commit/push или release-followup еще остаются внутренние repo-задачи, это не внешний шаг пользователя, а нормальный internal follow-up handoff case. К таким задачам относятся:
+- release notes и release-facing docs внутри repo;
+- source-pack и curated sources refresh;
+- export/manifests refresh;
+- closeout artifact sync;
+- verify / done / release-facing consistency pass;
+- release bundle preparation.
+
+Если remaining step относится к этой группе, нельзя завершать ответ только блоком `Инструкция пользователю`.
+
+Если remaining steps смешанные, сначала выдай inline handoff на внутреннюю часть, а затем отдельно дай `## Инструкция пользователю` только для внешней границы.
+
 Для verified sync / release automation сначала делай reuse-check:
 
 - используй `VERIFIED_SYNC.sh` вместо ad-hoc `git add/commit/push`;
@@ -183,4 +196,6 @@ bash PRE_RELEASE_AUDIT.sh
 6. нужен ли release note;
 7. нужно ли обновление source-pack / scenario-pack / codex-task-pack.
 
-Если в завершении остается внешний шаг, следующий шаг пользователя, handoff в Codex, возврат в ChatGPT Project, ожидание verify/release decision или ожидание артефакта, финальный ответ обязан завершаться блоком `## Инструкция пользователю`.
+Если в завершении остается внешний шаг, следующий шаг пользователя, возврат в ChatGPT Project, ожидание verify/release decision или ожидание внешнего артефакта, финальный ответ обязан завершаться блоком `## Инструкция пользователю`.
+
+Этот footer не должен вытеснять внутренний handoff, если internal repo follow-up еще не завершен.

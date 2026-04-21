@@ -3,15 +3,14 @@
 ## Контекст
 - Repo: `factory-template`
 - Изменение уровня factory-template, а не project-only.
-- Нужно дожать verified sync так, чтобы low-risk post-verify follow-up cleanup тоже auto commit/push без отдельного ручного запроса.
+- Нужно исправить reusable process bug в closeout semantics: internal repo follow-up после remediation/push не должен классифицироваться как user-only closeout.
 
 ## Что должен сделать исполнитель
-- Добавить lightweight follow-up mode в `VERIFIED_SYNC.sh` и его validator.
-- Сохранить verify-first модель и отдельный release contour без изменений.
-- Обновить runbook, AGENTS, functional state, changelog и closeout artifacts.
+- Обновить router, global rules, decision policy, handoff rules и done-closeout.
+- Синхронизировать runbook, AGENTS, mode-routing, policy manifests и change classes.
+- Усилить codex-task-pack generation/validation и зафиксировать defect отдельным bug report.
 
 ## Ограничения
-- Git operations только последовательно.
-- Без silent partial success.
-- Без ослабления verify для non-lightweight diff.
-- Без хранения секретов в repo.
+- Не размывать release semantics.
+- Не убирать footer для реальных внешних границ.
+- Не перепридумывать всю фазовую модель.

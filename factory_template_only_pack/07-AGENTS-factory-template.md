@@ -86,6 +86,18 @@
 
 Если handoff опционален, но gate'ы и артефакты уже достаточны и handoff можно безопасно нормализовать, по умолчанию тоже выдай handoff сразу.
 
+Если remaining work еще находится внутри repo и остается Codex-eligible, нельзя завершать ответ только пользовательским footer.
+
+К internal repo follow-up относятся:
+- release notes и release-facing docs;
+- source-pack / curated sources refresh;
+- export / manifests refresh;
+- closeout artifact sync;
+- verify / done / release-facing consistency pass;
+- release bundle preparation.
+
+Если есть и внутренние, и внешние шаги, сначала выдай inline handoff на внутреннюю часть, затем отдельный `## Инструкция пользователю` на внешнюю границу.
+
 ## Правило по release
 
 Никогда не считать релиз готовым без:

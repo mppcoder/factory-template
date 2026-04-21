@@ -120,11 +120,14 @@ def main() -> int:
 - Если выбран `hybrid` или `codex-led`, передать Codex актуальный `codex-task-pack.md`.
 - После возврата из Codex обновить verification-report.md, done-report.md и CURRENT_FUNCTIONAL_STATE.md.
 - Если handoff уже разрешен и задача достаточно определена, его нужно выдать inline в том же ответе, а не ограничиваться аналитикой.
+- Если remaining work еще остается внутренним repo follow-up, handoff не должен исчезать из-за будущего user footer.
+- Release-followup, source-pack refresh, export refresh, closeout-sync и release-facing consistency pass внутри repo считаются внутренней работой Codex.
 
 ## Для внешних границ
 
 - GitHub / внешние UI / секреты не выполнять автоматически из Codex.
 - Все внешние действия фиксировать отдельной пошаговой инструкцией для пользователя с финальным блоком `Инструкция пользователю`.
+- `Инструкция пользователю` не должна подменять внутренний handoff, если internal repo follow-up еще не завершен.
 """
 
     (chat / 'codex-context.md').write_text(context, encoding='utf-8')

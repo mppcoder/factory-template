@@ -19,3 +19,7 @@
 Отсутствие inline Codex handoff в ответе, где handoff уже допустим и задача достаточно определена, считается reusable process defect.
 
 Отсутствие финального блока `Инструкция пользователю` в ответе, где есть pending external/user step, считается reusable process defect.
+
+Подмена internal repo follow-up user-only closeout'ом считается reusable process defect.
+
+Смешение internal repo work и external boundary action без явного разделения на handoff и user footer считается reusable process defect.

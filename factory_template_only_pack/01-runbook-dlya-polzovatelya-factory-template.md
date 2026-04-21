@@ -82,6 +82,15 @@ Codex делает внутреннюю работу по шаблону:
 7. подготовка release bundle;
 8. формирование для вас инструкций на внешние действия.
 
+К этой внутренней работе также относятся release-facing и closeout follow-up внутри repo:
+- release notes и changelog;
+- source-pack / curated sources refresh;
+- export / manifests refresh;
+- closeout artifacts;
+- verify / done / release-facing consistency pass.
+
+Пользовательские инструкции нужны только на внешних границах, а не вместо такого внутреннего follow-up.
+
 Формат таких инструкций канонический и обязательный:
 
 `## Инструкция пользователю`

@@ -9,6 +9,15 @@
 ## Обязательное правило inline handoff
 Если handoff уже допустим и задача достаточно определена, handoff нужно выдать в том же ответе. Нельзя останавливаться на аналитике, если change-class требует handoff или если optional handoff уже безопасно нормализуется.
 
+Post-remediation follow-up handoff тоже является нормальным и обязательным handoff case, если remaining work еще остается внутренней Codex-eligible работой repo.
+
+Допустимые типы такого handoff включают:
+- `release-followup`
+- `closeout-sync`
+- `release-facing-consistency`
+- `source-pack-refresh`
+- `export-refresh`
+
 Допустимые причины отложить handoff:
 - обязательные gate'ы еще не закрыты;
 - не хватает обязательных артефактов;
@@ -25,4 +34,6 @@
 - указание, нужен ли defect/factory feedback follow-up.
 
 ## После handoff
-Сразу после handoff, если дальше нужен шаг пользователя, handoff в Codex, возврат в ChatGPT Project, внешнее действие или ожидание артефакта, добавь финальный раздел `## Инструкция пользователю`.
+Если remaining work еще внутренний и Codex-eligible, handoff должен быть выдан раньше любого user footer.
+
+Сразу после handoff, если дальше нужен внешний шаг пользователя, возврат в ChatGPT Project, внешнее действие или ожидание внешнего артефакта, добавь финальный раздел `## Инструкция пользователю`.

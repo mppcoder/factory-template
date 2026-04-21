@@ -2,6 +2,9 @@
 
 ## Инструкция пользователю
 
+Используйте этот блок только для реальных внешних границ.
+Internal repo follow-up, включая release-followup, source-pack refresh, export refresh, closeout-sync и release-facing consistency pass внутри repo, остается работой Codex и не должен вытесняться этим footer.
+
 ### GitHub Repo
 
 Цель: создать внешний GitHub-репозиторий для текущего состояния `{{repo_name}}`.

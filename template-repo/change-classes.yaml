@@ -20,6 +20,7 @@ change_classes:
     notes:
     - Если выбранный режим допускает handoff и обязательные gate'ы с артефактами уже достаточны, handoff нужно выдать inline в том же ответе, а не заканчивать ответ только аналитикой.
     - Если остается pending external/user step, обязательна финальная секция `Инструкция пользователю`.
+    - Internal repo follow-up не должен маркироваться как внешний шаг; для mixed follow-up сначала нужен inline handoff, затем user footer только для внешней границы.
   feature:
     title: Новая функция
     allowed_execution_modes:
@@ -48,6 +49,7 @@ change_classes:
     notes:
     - Для `hybrid` и `codex-led` handoff не может оставаться только в аналитическом виде: при достаточности gate'ов и артефактов нужен inline handoff в том же ответе.
     - Если остается pending external/user step, обязательна финальная секция `Инструкция пользователю`.
+    - Internal repo follow-up не должен маркироваться как внешний шаг; для mixed follow-up сначала нужен inline handoff, затем user footer только для внешней границы.
   refactor:
     title: Рефакторинг
     allowed_execution_modes:
@@ -74,6 +76,7 @@ change_classes:
     notes:
     - Для режимов, где handoff допустим, при достаточности gate'ов и артефактов нужен inline handoff в том же ответе.
     - Если остается pending external/user step, обязательна финальная секция `Инструкция пользователю`.
+    - Internal repo follow-up не должен маркироваться как внешний шаг; для mixed follow-up сначала нужен inline handoff, затем user footer только для внешней границы.
   migration:
     title: Миграция или перенос
     allowed_execution_modes:
@@ -101,6 +104,7 @@ change_classes:
     notes:
     - Для всех допустимых режимов handoff должен выдаваться inline сразу после закрытия обязательных gate'ов и артефактов.
     - Если остается pending external/user step, обязательна финальная секция `Инструкция пользователю`.
+    - Internal repo follow-up не должен маркироваться как внешний шаг; для mixed follow-up сначала нужен inline handoff, затем user footer только для внешней границы.
   brownfield-audit:
     title: Аудит существующей системы
     allowed_execution_modes:
@@ -124,6 +128,7 @@ change_classes:
     - Если handoff не нужен по цели аудита, допустим closeout без Codex handoff.
     - Если handoff уже разрешен и задача достаточно определена, по умолчанию выдать inline handoff в том же ответе.
     - Если остается pending external/user step, обязательна финальная секция `Инструкция пользователю`.
+    - Если remaining work еще внутренний и Codex-eligible, user-only closeout запрещен даже для audit-like хвоста.
   brownfield-stabilization:
     title: Стабилизация brownfield-контура
     allowed_execution_modes:
@@ -154,3 +159,4 @@ change_classes:
       истории исходного repo.
     - После закрытия обязательных gate'ов и подготовки обязательных артефактов нельзя останавливаться на одной аналитике: нужен inline handoff в том же ответе.
     - Если остается pending external/user step, обязательна финальная секция `Инструкция пользователю`.
+    - Internal repo follow-up не должен маркироваться как внешний шаг; для mixed follow-up сначала нужен inline handoff, затем user footer только для внешней границы.

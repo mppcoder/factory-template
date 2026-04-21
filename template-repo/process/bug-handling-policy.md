@@ -20,3 +20,5 @@
 
 ## Правило remediation handoff
 Если после defect-capture обязательные gate'ы уже закрыты, артефакты достаточны и задача достаточно определена, remediation-ответ должен содержать готовый inline handoff в Codex в том же ответе.
+
+Если после remediation, verify или push остается внутренний release-followup / closeout-sync / release-facing consistency work внутри repo, это тоже считается handoff-worthy внутренним этапом. В таком случае нельзя завершать ответ user-only closeout'ом.

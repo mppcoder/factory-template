@@ -1,22 +1,14 @@
 # Техническая спецификация
 
-## Архитектура
-- Verified sync и release executor остаются двумя независимыми скриптами.
-- Оба контура используют общий helper layer в `template-repo/scripts/factory_automation_common.py`.
-- Runtime lock-файлы и отчеты живут в `.factory-runtime/`, который исключен из git и release bundle.
+## Архитектура правила
+- Router, decision policy, handoff rules и done-closeout должны одинаково различать `internal follow-up pending`, `external boundary pending`, `mixed follow-up` и `fully done`.
+- Internal repo follow-up имеет precedence над user footer: если внутренняя работа еще не закрыта, сначала обязателен inline handoff.
+- Footer `Инструкция пользователю` остается обязательным только для реальных external boundary steps.
 
-## Verified Sync
-- Для полного change path сохранить текущую проверку `verification_complete` и `.chatgpt/task-index.yaml` / `.chatgpt/verification-report.md`.
-- Для lightweight follow-up path разрешать только low-risk `.gitignore` и docs/closeout allowlist paths.
-- Lightweight follow-up требовать уже существующий green verify baseline и прогон `git diff --check`.
-- Для lightweight follow-up собирать отдельный commit message, а не наследовать старый task title.
-- Отфильтровать runtime и verify noise через denylist.
-- Выполнить `git add` -> `git commit` -> `git push` строго последовательно.
-- При нестабильном `origin push` использовать fallback на прямой SSH URL.
+## Internal Follow-up
+- К internal repo follow-up относятся release-followup, source-pack refresh, export/manifests refresh, closeout artifact sync, verify/done/release-facing consistency pass и release bundle preparation внутри repo.
+- Такие задачи блокируют user-only closeout и `done_complete`, пока не будут закрыты или явно выведены за scope.
 
-## Release Decision
-- Канонический artifact: `.chatgpt/release-decision.yaml`.
-- Валидировать `decision`, `version`, `channel`, `notes_source`, `approved_by`, `timestamp`.
-- Для `release` требовать успешный verified sync и clean repo.
-- Для `release` создавать и pushить tag, собирать notes artifact и публиковать GitHub Release через `gh` при возможности.
-- При невозможности publish записывать deterministic fallback report без silent fail.
+## Generation / Validation
+- `create-codex-task-pack.sh` должен явно писать, что internal repo follow-up остается работой Codex.
+- `validate-codex-task-pack.sh` должен проверять, что boundary-actions не подменяет внутренний handoff user footer'ом.
