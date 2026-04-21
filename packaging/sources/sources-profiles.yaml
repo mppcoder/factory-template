@@ -38,6 +38,8 @@ profiles:
     export_name: core-hot-15
     kind: direct_sources
     purpose: direct upload profile for daily ChatGPT Project work
+    export_layout: flat
+    naming_strategy: basename_unless_conflict_then_path_joined_with_double_underscore
     archive_profile: core_archive
     cold_archive_profile: core_cold_archive
     files:

@@ -245,6 +245,8 @@ def validate_exported_artifacts(profiles: dict[str, dict], errors: list[str]) ->
             fail(f"{export_name}: manifest.files расходится с declarative profile", errors)
         if manifest.get("file_count") != len(profile.get("files", [])):
             fail(f"{export_name}: manifest.file_count расходится с declarative profile", errors)
+        if manifest.get("export_layout") != profile.get("export_layout", "nested"):
+            fail(f"{export_name}: manifest.export_layout расходится с declarative profile", errors)
         readme = readme_path.read_text(encoding="utf-8")
         if profile.get("kind") == "archive_pack":
             if export_name == "core-cold-5":
@@ -252,8 +254,27 @@ def validate_exported_artifacts(profiles: dict[str, dict], errors: list[str]) ->
                     fail(f"{export_name}: README должен явно помечать cold/reference remainder archive", errors)
             elif "canonical archive pack" not in readme:
                 fail(f"{export_name}: README должен явно помечать canonical archive pack", errors)
-        if profile.get("kind") == "direct_sources" and "direct Sources profile" not in readme:
-            fail(f"{export_name}: README должен явно помечать direct Sources profile", errors)
+        if profile.get("kind") == "direct_sources":
+            if "direct Sources profile" not in readme:
+                fail(f"{export_name}: README должен явно помечать direct Sources profile", errors)
+            if profile.get("export_layout") == "flat":
+                if "flat-папки без подпапок" not in readme:
+                    fail(f"{export_name}: README должен явно описывать flat layout без подпапок", errors)
+                nested_files = [p for p in export_dir.rglob("*") if p.is_file() and p.parent != export_dir and p.name not in {"manifest.json", "README.md"}]
+                if nested_files:
+                    fail(f"{export_name}: direct_sources flat export не должен содержать вложенные файлы", errors)
+                exported_files = manifest.get("exported_files", [])
+                if len(exported_files) != len(manifest_files):
+                    fail(f"{export_name}: manifest.exported_files должен покрывать все source files", errors)
+                export_names = [item.get("export_filename") for item in exported_files if isinstance(item, dict)]
+                if len(export_names) != len(set(export_names)):
+                    fail(f"{export_name}: manifest.exported_files содержит конфликтующие export_filename", errors)
+                top_level_names = sorted(
+                    p.name for p in export_dir.iterdir()
+                    if p.is_file() and p.name not in {"manifest.json", "README.md"}
+                )
+                if sorted(export_names) != top_level_names:
+                    fail(f"{export_name}: manifest.exported_files не совпадает с фактически экспортированными flat filenames", errors)
 
 
 def main() -> int:

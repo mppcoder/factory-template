@@ -69,6 +69,7 @@ python3 template-repo/scripts/validate-codex-task-pack.sh <working-project>
 
 - `sources-pack-core-20` обязан содержать сценарное ядро, runbook layer и policy presets;
 - `core-hot-15` обязан содержать ровно 15 hot-файлов для ежедневной прямой загрузки;
+- `core-hot-15` обязан экспортироваться в одну flat-папку без подпапок и без silent overwrite;
 - `core-cold-5` обязан содержать ровно 5 cold/reference файлов без дублей hot-set;
 - `sources-pack-release-20` обязан содержать release-facing docs и release scripts;
 - `sources-pack-bugfix-20` обязан содержать launcher, validator layer и feedback/handoff validators.
@@ -102,7 +103,7 @@ bash DETECT_FACTORY_TEMPLATE_PHASE.sh
 bash PHASE_DETECTION_TEST.sh
 ```
 
-Эта рекомендация автоматически попадает в `_sources-export/factory-template/SUMMARY.md` и `_boundary-actions/factory-template-boundary-actions.md`, но для постоянной ежедневной работы рекомендуется hybrid-схема: direct hot-set `core-hot-15/` + cold/reference archive `core-cold-5.tar.gz`, а canonical archive `sources-pack-core-20.tar.gz` остаётся полным steady-work snapshot.
+Эта рекомендация автоматически попадает в `_sources-export/factory-template/SUMMARY.md` и `_boundary-actions/factory-template-boundary-actions.md`, но для постоянной ежедневной работы рекомендуется hybrid-схема: direct hot-set `core-hot-15/` в одной flat-папке + cold/reference archive `core-cold-5.tar.gz`, а canonical archive `sources-pack-core-20.tar.gz` остаётся полным steady-work snapshot.
 
 Состав curated packs и параметры boundary-инструкций задаются декларативно в:
 

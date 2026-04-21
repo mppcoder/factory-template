@@ -1,19 +1,22 @@
 # Отчёт о проверке результата
 
 ## Что проверяли
-- grep по `выполняет Codex внутри repo`, `Не перекладывайте на пользователя`, `Откройте каталог`
-- `python3 template-repo/scripts/create-codex-task-pack.sh .`
-- `python3 template-repo/scripts/validate-codex-task-pack.sh .`
+- `bash EXPORT_FACTORY_TEMPLATE_SOURCES.sh`
 - `bash GENERATE_BOUNDARY_ACTIONS.sh`
+- `bash VALIDATE_FACTORY_TEMPLATE_OPS.sh`
+- `find _sources-export/factory-template/core-hot-15 -mindepth 2 -type f`
+- проверка `_sources-export/factory-template/core-hot-15/manifest.json`
+- grep по `flat-папк`, `без подпапок`, `deterministic naming strategy`, `silent overwrite`
 - `git diff --check`
 
 ## Что подтверждено
-- Process layer теперь явно запрещает перекладывать internal prepare/export commands на пользователя.
-- Generated boundary guidance помечает `EXPORT_FACTORY_TEMPLATE_SOURCES.sh` как внутреннюю работу Codex.
-- Пользовательский flow теперь начинает с уже готовых артефактов, а не с запуска prepare-команд.
+- `core-hot-15` теперь экспортируется в одну flat-папку без подпапок.
+- Все 15 hot-файлов присутствуют в export и не теряются при flattening.
+- `manifest.json` фиксирует `export_layout=flat`, `naming_strategy` и mapping `source -> export_filename`.
+- Docs и boundary guidance теперь явно говорят про flat hot15 folder.
 
 ## Что не подтверждено или требует повторной проверки
-- Полностью автоматическая проверка каждого prose-ответа по-прежнему невозможна без runtime conversation audit, но канонический rule layer и generated guidance усилены.
+- В текущем hot-set конфликтов базовых имён нет; fallback naming strategy проверен логически и зафиксирован в export logic/manifest, но не потребовался на реальном составе.
 
 ## Итоговый вывод
-- Reusable gap закрыт: completion package больше не должен просить пользователя выполнять внутренние repo prepare/export шаги.
+- Hot15 Sources export нормализован: для ручной загрузки в ChatGPT Project используется одна flat-папка без подпапок и без silent overwrite.

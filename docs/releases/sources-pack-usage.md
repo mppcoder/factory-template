@@ -15,7 +15,7 @@
 
 - `core-hot-15/`
 
-Это direct Sources profile, который содержит 15 hot-файлов:
+Это direct Sources profile, который содержит 15 hot-файлов в одной flat-папке без подпапок:
 
 1. `template-repo/scenario-pack/00-master-router.md`
 2. `template-repo/scenario-pack/01-global-rules.md`
@@ -32,6 +32,9 @@
 13. `template-repo/change-classes.yaml`
 14. `template-repo/policy-presets.yaml`
 15. `template-repo/project-presets.yaml`
+
+При загрузке в ChatGPT Project берите файлы прямо из одной папки `core-hot-15/`.
+Если когда-нибудь появится конфликт одинаковых базовых имён, export применит deterministic naming strategy вместо silent overwrite.
 
 ## Cold / Reference Remainder Archive
 
@@ -65,7 +68,7 @@ Canonical archive pack остаётся:
 ## Recommended Workflow
 
 1. Запустить `bash EXPORT_FACTORY_TEMPLATE_SOURCES.sh`.
-2. Для ежедневной работы загрузить напрямую файлы из `_sources-export/factory-template/core-hot-15/`.
+2. Для ежедневной работы загрузить напрямую файлы из одной flat-папки `_sources-export/factory-template/core-hot-15/` без подпапок.
 3. Загрузить `_sources-export/factory-template/core-cold-5.tar.gz` как cold/reference archive remainder.
 4. Archive `sources-pack-core-20.tar.gz` сохранить как canonical snapshot и reference bundle.
 5. При release/bugfix-фазе при необходимости использовать phase-specific archive override, но не держать его как второй постоянный набор Sources.

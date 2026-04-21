@@ -18,16 +18,39 @@ def load_policy() -> dict:
     return yaml.safe_load(POLICY_PATH.read_text(encoding="utf-8")) or {}
 
 
+def build_flat_export_names(rel_paths: list[str]) -> dict[str, str]:
+    basename_counts: dict[str, int] = {}
+    for rel in rel_paths:
+        basename = Path(rel).name
+        basename_counts[basename] = basename_counts.get(basename, 0) + 1
+
+    result: dict[str, str] = {}
+    used_names: set[str] = set()
+    for rel in rel_paths:
+        basename = Path(rel).name
+        if basename_counts[basename] == 1:
+            candidate = basename
+        else:
+            candidate = rel.replace("/", "__")
+        if candidate in used_names:
+            raise ValueError(f"Duplicate export filename for flat layout: {candidate}")
+        used_names.add(candidate)
+        result[rel] = candidate
+    return result
+
+
 def render_readme(profile_name: str, export_name: str, profile: dict, profiles: dict[str, dict]) -> str:
     rel_paths = list(profile.get("files", []))
     kind = str(profile.get("kind", "")).strip()
     purpose = str(profile.get("purpose", "")).strip()
+    export_layout = str(profile.get("export_layout", "nested")).strip()
     lines = [
         f"# {export_name}",
         "",
         f"- Profile name: `{profile_name}`",
         f"- Source repo: `factory-template`",
         f"- Kind: `{kind}`",
+        f"- Export layout: `{export_layout}`",
         f"- Files: {len(rel_paths)} content files",
         f"- Purpose: {purpose or 'factory-template Sources export profile'}",
         "",
@@ -84,6 +107,7 @@ def render_readme(profile_name: str, export_name: str, profile: dict, profiles: 
         cold_archive_profile_name = profile.get("cold_archive_profile")
         cold_archive_profile = profiles.get(cold_archive_profile_name, {}) if isinstance(cold_archive_profile_name, str) else {}
         cold_archive_export = cold_archive_profile.get("export_name", "не указан")
+        naming_strategy = str(profile.get("naming_strategy", "")).strip()
         lines.extend(
             [
                 "## Role",
@@ -92,13 +116,25 @@ def render_readme(profile_name: str, export_name: str, profile: dict, profiles: 
                 "",
                 "## Recommended Workflow",
                 "",
-                "- Загружайте эти файлы напрямую в Sources проекта.",
+                "- Загружайте эти файлы напрямую в Sources проекта из одной flat-папки без подпапок.",
                 f"- Cold/archive remainder `{cold_archive_export}` загружайте как отдельный архив без дублей hot-set.",
                 f"- Canonical archive `{archive_export}` храните как полный steady-work snapshot и reference bundle.",
                 "- Hot-set не заменяет archive pack и не живет как ручная копия: он генерируется из декларативного manifest.",
                 "",
             ]
         )
+        if export_layout == "flat":
+            lines.extend(
+                [
+                    "## Flat Folder Rule",
+                    "",
+                    "- Все source-файлы для direct hot-set лежат в одной папке без вложенных директорий.",
+                    "- По умолчанию имя файла совпадает с базовым именем исходника.",
+                    f"- При конфликте базовых имён используется deterministic naming strategy: `{naming_strategy}`.",
+                    "- Silent overwrite запрещён: конфликт должен быть разрешён на этапе генерации export.",
+                    "",
+                ]
+            )
     return "\n".join(lines)
 
 
@@ -107,30 +143,52 @@ def export_profile(profile_name: str, profile: dict, profiles: dict[str, dict]) 
     rel_paths = list(profile.get("files", []))
     purpose = str(profile.get("purpose", "")).strip()
     kind = str(profile.get("kind", "")).strip()
+    export_layout = str(profile.get("export_layout", "nested")).strip()
+    naming_strategy = str(profile.get("naming_strategy", "")).strip()
     pack_dir = OUT_ROOT / export_name
     if pack_dir.exists():
         shutil.rmtree(pack_dir)
     pack_dir.mkdir(parents=True)
+
+    exported_files: list[dict[str, str]] = []
+    flat_names = build_flat_export_names(rel_paths) if kind == "direct_sources" and export_layout == "flat" else {}
 
     manifest = {
         "profile_name": profile_name,
         "export_name": export_name,
         "repo": "factory-template",
         "kind": kind,
+        "export_layout": export_layout,
         "file_count": len(rel_paths),
         "purpose": purpose,
         "files": rel_paths,
     }
-    for extra_key in ["direct_profile", "archive_profile", "cold_archive_profile", "canonical_archive_profile", "cold_reference_files"]:
+    for extra_key in [
+        "direct_profile",
+        "archive_profile",
+        "cold_archive_profile",
+        "canonical_archive_profile",
+        "cold_reference_files",
+        "naming_strategy",
+    ]:
         if extra_key in profile:
             manifest[extra_key] = profile[extra_key]
     for rel in rel_paths:
         src = ROOT / rel
         if not src.exists():
             raise FileNotFoundError(f"Missing source for profile {profile_name}: {rel}")
-        dest = pack_dir / rel
-        dest.parent.mkdir(parents=True, exist_ok=True)
+        if kind == "direct_sources" and export_layout == "flat":
+            export_filename = flat_names[rel]
+            dest = pack_dir / export_filename
+        else:
+            export_filename = rel
+            dest = pack_dir / rel
+            dest.parent.mkdir(parents=True, exist_ok=True)
         shutil.copy2(src, dest)
+        exported_files.append({"source": rel, "export_filename": export_filename})
+
+    if exported_files:
+        manifest["exported_files"] = exported_files
 
     (pack_dir / "manifest.json").write_text(
         json.dumps(manifest, ensure_ascii=False, indent=2) + "\n",
@@ -177,7 +235,7 @@ def main() -> int:
         f"Текущая phase recommendation для archive pack: `{current_phase}` -> `{current_pack}`.",
         f"Причина: {detection_reason}",
         "",
-        f"Постоянная схема работы: direct hot-set `{direct_export}` + archive remainder `{cold_archive_export}.tar.gz` без дублей + canonical archive `{canonical_archive_export}.tar.gz` как reference snapshot.",
+        f"Постоянная схема работы: direct hot-set `{direct_export}` в одной flat-папке + archive remainder `{cold_archive_export}.tar.gz` без дублей + canonical archive `{canonical_archive_export}.tar.gz` как reference snapshot.",
         "",
         "Собраны declarative profiles:",
         "",
@@ -194,7 +252,7 @@ def main() -> int:
             "",
             "Рекомендуемая стратегия Sources:",
             "",
-            f"- для ежедневной работы загружать напрямую файлы из `{direct_export}/`",
+            f"- для ежедневной работы загружать напрямую файлы из flat-папки `{direct_export}/` без подпапок",
             f"- `{cold_archive_export}.tar.gz` загружать как cold/reference archive remainder без дублей hot-set",
             f"- `{canonical_archive_export}.tar.gz` держать как canonical archive snapshot и полный reference bundle",
             "- phase-specific archive packs использовать только как operator override, а не как постоянный Sources set",
