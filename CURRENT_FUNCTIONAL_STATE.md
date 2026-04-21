@@ -31,9 +31,8 @@
 - completion/handoff layer умеет требовать source-update completion package с affected contours, delete-before-replace и repo-level sync steps для factory Sources и downstream consumers
 - completion/handoff layer теперь явно требует, чтобы обязательный completion package появлялся в том же финальном ответе, а не только после дополнительного запроса пользователя
 - completion/handoff layer теперь различает готовые внешние boundary steps и внутренние prepare/export commands: сборка export artifacts выполняется Codex внутри repo до пользовательского блока
-- direct hot-set `core-hot-15` теперь экспортируется в одну flat-папку без подпапок для упрощённой ручной загрузки в ChatGPT Project Sources
-- companion archive `core-cold-5.tar.gz` теперь кладётся в ту же папку `core-hot-15/`, чтобы весь daily upload набор лежал в одном месте
-- hot15 export теперь явно маркирует, что загружать и что не загружать, через `UPLOAD_TO_SOURCES.txt` и `DO_NOT_UPLOAD.txt`
+- direct hot-set `core-hot-15` теперь экспортируется как одна flat-подпапка `upload-to-sources/` для упрощённой ручной загрузки в ChatGPT Project Sources
+- companion archive `core-cold-5.tar.gz` теперь кладётся в ту же подпапку `core-hot-15/upload-to-sources/`, чтобы весь daily upload набор лежал в одном месте
 
 ## Что работает частично
 - matrix runner как единый источник истины

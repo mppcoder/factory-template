@@ -15,7 +15,7 @@
 
 - `core-hot-15/`
 
-Это direct Sources profile, который содержит 15 hot-файлов в одной flat-папке без подпапок:
+Это direct Sources profile, где всё, что нужно загружать в Sources, лежит в одной flat-подпапке `upload-to-sources/`:
 
 1. `template-repo/scenario-pack/00-master-router.md`
 2. `template-repo/scenario-pack/01-global-rules.md`
@@ -33,10 +33,8 @@
 14. `template-repo/policy-presets.yaml`
 15. `template-repo/project-presets.yaml`
 
-При загрузке в ChatGPT Project берите файлы прямо из одной папки `core-hot-15/`.
+При загрузке в ChatGPT Project открывайте только `core-hot-15/upload-to-sources/`.
 Если когда-нибудь появится конфликт одинаковых базовых имён, export применит deterministic naming strategy вместо silent overwrite.
-Ориентируйтесь на generated файл `UPLOAD_TO_SOURCES.txt`: он перечисляет всё, что нужно загрузить в Sources.
-Файл `DO_NOT_UPLOAD.txt` перечисляет служебные файлы export-папки, которые загружать не нужно.
 
 ## Cold / Reference Remainder Archive
 
@@ -52,7 +50,7 @@
 - `CONTROLLED_FIXES_AUDIT_2026-04-19.md`
 - `meta-template-project/RELEASE_NOTES.md`
 
-Этот архив также дублируется прямо внутри `core-hot-15/` как ready-to-upload companion file, чтобы весь daily набор лежал в одной папке.
+Этот архив также лежит внутри `core-hot-15/upload-to-sources/`, чтобы весь daily upload набор был собран в одном месте.
 
 ## Canonical Archive
 
@@ -70,8 +68,8 @@ Canonical archive pack остаётся:
 ## Recommended Workflow
 
 1. Запустить `bash EXPORT_FACTORY_TEMPLATE_SOURCES.sh`.
-2. Для ежедневной работы открыть `_sources-export/factory-template/core-hot-15/` и загружать только файлы из `UPLOAD_TO_SOURCES.txt`.
-3. Взять `core-cold-5.tar.gz` из той же папки `_sources-export/factory-template/core-hot-15/` и загрузить его как cold/reference archive remainder.
+2. Для ежедневной работы открыть `_sources-export/factory-template/core-hot-15/upload-to-sources/`.
+3. Загрузить в ChatGPT Project все файлы из этой подпапки.
 4. Archive `sources-pack-core-20.tar.gz` сохранить как canonical snapshot и reference bundle.
 5. При release/bugfix-фазе при необходимости использовать phase-specific archive override, но не держать его как второй постоянный набор Sources.
 

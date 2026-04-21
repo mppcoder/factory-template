@@ -258,11 +258,8 @@ def validate_exported_artifacts(profiles: dict[str, dict], errors: list[str]) ->
             if "direct Sources profile" not in readme:
                 fail(f"{export_name}: README должен явно помечать direct Sources profile", errors)
             if profile.get("export_layout") == "flat":
-                if "flat-папки без подпапок" not in readme:
-                    fail(f"{export_name}: README должен явно описывать flat layout без подпапок", errors)
-                nested_files = [p for p in export_dir.rglob("*") if p.is_file() and p.parent != export_dir and p.name not in {"manifest.json", "README.md"}]
-                if nested_files:
-                    fail(f"{export_name}: direct_sources flat export не должен содержать вложенные файлы", errors)
+                if "flat-подпапке" not in readme:
+                    fail(f"{export_name}: README должен явно описывать flat upload subdir", errors)
                 exported_files = manifest.get("exported_files", [])
                 if len(exported_files) != len(manifest_files):
                     fail(f"{export_name}: manifest.exported_files должен покрывать все source files", errors)
@@ -273,33 +270,22 @@ def validate_exported_artifacts(profiles: dict[str, dict], errors: list[str]) ->
                 bundled_names = [item.get("export_filename") for item in bundled_artifacts if isinstance(item, dict)]
                 if len(bundled_names) != len(set(bundled_names)):
                     fail(f"{export_name}: manifest.bundled_artifacts содержит конфликтующие export_filename", errors)
-                upload_list_path = export_dir / "UPLOAD_TO_SOURCES.txt"
-                do_not_upload_path = export_dir / "DO_NOT_UPLOAD.txt"
-                if not upload_list_path.exists():
-                    fail(f"{export_name}: отсутствует UPLOAD_TO_SOURCES.txt", errors)
-                if not do_not_upload_path.exists():
-                    fail(f"{export_name}: отсутствует DO_NOT_UPLOAD.txt", errors)
-                upload_to_sources = manifest.get("upload_to_sources", [])
-                do_not_upload = manifest.get("do_not_upload", [])
-                if sorted(upload_to_sources) != sorted(export_names + bundled_names):
-                    fail(f"{export_name}: manifest.upload_to_sources должен совпадать с export filenames", errors)
-                expected_do_not_upload = ["manifest.json", "README.md", "UPLOAD_TO_SOURCES.txt", "DO_NOT_UPLOAD.txt"]
-                if do_not_upload != expected_do_not_upload:
-                    fail(f"{export_name}: manifest.do_not_upload должен совпадать с каноническим списком", errors)
-                if upload_list_path.exists():
-                    upload_lines = [line.strip() for line in upload_list_path.read_text(encoding='utf-8').splitlines() if line.strip()]
-                    if upload_lines != upload_to_sources:
-                        fail(f"{export_name}: UPLOAD_TO_SOURCES.txt расходится с manifest.upload_to_sources", errors)
-                if do_not_upload_path.exists():
-                    do_not_upload_lines = [line.strip() for line in do_not_upload_path.read_text(encoding='utf-8').splitlines() if line.strip()]
-                    if do_not_upload_lines != do_not_upload:
-                        fail(f"{export_name}: DO_NOT_UPLOAD.txt расходится с manifest.do_not_upload", errors)
-                top_level_names = sorted(
-                    p.name for p in export_dir.iterdir()
-                    if p.is_file() and p.name not in {"manifest.json", "README.md", "UPLOAD_TO_SOURCES.txt", "DO_NOT_UPLOAD.txt"}
-                )
-                if sorted(export_names + bundled_names) != top_level_names:
-                    fail(f"{export_name}: manifest.exported_files не совпадает с фактически экспортированными flat filenames", errors)
+                upload_subdir = str(manifest.get("upload_subdir", profile.get("upload_subdir", "upload-to-sources")))
+                upload_dir = export_dir / upload_subdir
+                if not upload_dir.exists() or not upload_dir.is_dir():
+                    fail(f"{export_name}: отсутствует upload subdir `{upload_subdir}`", errors)
+                upload_subdir_files = manifest.get("upload_subdir_files", [])
+                if sorted(upload_subdir_files) != sorted(export_names + bundled_names):
+                    fail(f"{export_name}: manifest.upload_subdir_files должен совпадать с export filenames", errors)
+                nested_upload_files = [p for p in upload_dir.rglob("*") if p.is_file() and p.parent != upload_dir]
+                if nested_upload_files:
+                    fail(f"{export_name}: upload subdir должен оставаться flat без вложенных файлов", errors)
+                actual_upload_names = sorted(p.name for p in upload_dir.iterdir() if p.is_file())
+                if actual_upload_names != sorted(export_names + bundled_names):
+                    fail(f"{export_name}: upload subdir не совпадает с declared export filenames", errors)
+                root_files = sorted(p.name for p in export_dir.iterdir() if p.is_file())
+                if root_files != ["README.md", "manifest.json"]:
+                    fail(f"{export_name}: корень direct export должен содержать только README.md и manifest.json", errors)
 
 
 def main() -> int:

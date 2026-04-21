@@ -1,13 +1,14 @@
 change:
-  id: "chg-20260421-010"
-  title: "Mark hot15 uploadable files explicitly"
+  id: "chg-20260421-011"
+  title: "Move hot15 uploadables into one subfolder"
   class: "small-fix"
   execution_mode: "single-pass"
   type: "brownfield"
   status: "done"
   priority: "medium"
-  summary: "Добавить явные marker-файлы в `core-hot-15`, чтобы было видно, что нужно загружать в Sources, а что не нужно."
+  summary: "Переделать hot15 export так, чтобы всё, что нужно загружать в Sources, лежало в одной подпапке `upload-to-sources/`, а служебные файлы не мешались рядом."
   outputs:
+    - "packaging/sources/sources-profiles.yaml"
     - "tools/export_factory_template_sources.py"
     - "tools/validate_factory_template_ops_policy.py"
     - "docs/releases/sources-pack-usage.md"
@@ -19,17 +20,18 @@ change:
 
 tasks:
   - id: "T-001"
-    title: "Сгенерировать явные upload markers для core-hot-15"
+    title: "Вынести uploadable hot15 files в одну подпапку"
     type: "implementation"
     risk_level: "medium"
     executor: "developer"
     depends_on: []
     outputs:
+      - "packaging/sources/sources-profiles.yaml"
       - "tools/export_factory_template_sources.py"
       - "tools/validate_factory_template_ops_policy.py"
     acceptance:
-      - "core-hot-15 содержит `UPLOAD_TO_SOURCES.txt` и `DO_NOT_UPLOAD.txt`"
-      - "manifest фиксирует upload/do-not-upload lists и валидатор это подтверждает"
+      - "core-hot-15 содержит только служебные файлы в корне"
+      - "все uploadable файлы лежат в flat-подпапке `upload-to-sources/`"
 
   - id: "T-002"
     title: "Синхронизировать operator instructions и closeout artifacts"
@@ -47,5 +49,5 @@ tasks:
       - "CURRENT_FUNCTIONAL_STATE.md"
       - "work/completed/chg-20260421-008.md"
     acceptance:
-      - "инструкции явно ссылаются на `UPLOAD_TO_SOURCES.txt` и `DO_NOT_UPLOAD.txt`"
+      - "инструкции явно ссылаются на подпапку `upload-to-sources/`"
       - "completion/source-update layer использует тот же wording"

@@ -108,6 +108,7 @@ def render_readme(profile_name: str, export_name: str, profile: dict, profiles: 
         cold_archive_profile = profiles.get(cold_archive_profile_name, {}) if isinstance(cold_archive_profile_name, str) else {}
         cold_archive_export = cold_archive_profile.get("export_name", "не указан")
         naming_strategy = str(profile.get("naming_strategy", "")).strip()
+        upload_subdir = str(profile.get("upload_subdir", "upload-to-sources")).strip()
         lines.extend(
             [
                 "## Role",
@@ -116,7 +117,7 @@ def render_readme(profile_name: str, export_name: str, profile: dict, profiles: 
                 "",
                 "## Recommended Workflow",
                 "",
-                "- Загружайте эти файлы напрямую в Sources проекта из одной flat-папки без подпапок.",
+                f"- Откройте подпапку `{upload_subdir}/` и загружайте в Sources только файлы из неё.",
                 f"- Cold/archive remainder `{cold_archive_export}` загружайте как отдельный архив без дублей hot-set.",
                 f"- Canonical archive `{archive_export}` храните как полный steady-work snapshot и reference bundle.",
                 "- Hot-set не заменяет archive pack и не живет как ручная копия: он генерируется из декларативного manifest.",
@@ -126,14 +127,13 @@ def render_readme(profile_name: str, export_name: str, profile: dict, profiles: 
         if export_layout == "flat":
             lines.extend(
                 [
-                    "## Flat Folder Rule",
+                    "## Upload Folder Rule",
                     "",
-                    "- Все source-файлы для direct hot-set лежат в одной папке без вложенных директорий.",
+                    f"- Все uploadable source-файлы для direct hot-set лежат в одной flat-подпапке `{upload_subdir}/` без вложенных директорий.",
+                    "- Корневая папка export содержит только служебные файлы и README/manifest.",
                     "- По умолчанию имя файла совпадает с базовым именем исходника.",
                     f"- При конфликте базовых имён используется deterministic naming strategy: `{naming_strategy}`.",
                     "- Silent overwrite запрещён: конфликт должен быть разрешён на этапе генерации export.",
-                    "- Используйте `UPLOAD_TO_SOURCES.txt` как канонический список того, что нужно загрузить в ChatGPT Project Sources.",
-                    "- Файлы из `DO_NOT_UPLOAD.txt` в Sources загружать не нужно.",
                     "",
                 ]
             )
@@ -147,6 +147,7 @@ def export_profile(profile_name: str, profile: dict, profiles: dict[str, dict]) 
     kind = str(profile.get("kind", "")).strip()
     export_layout = str(profile.get("export_layout", "nested")).strip()
     naming_strategy = str(profile.get("naming_strategy", "")).strip()
+    upload_subdir = str(profile.get("upload_subdir", "upload-to-sources")).strip()
     pack_dir = OUT_ROOT / export_name
     if pack_dir.exists():
         shutil.rmtree(pack_dir)
@@ -155,6 +156,9 @@ def export_profile(profile_name: str, profile: dict, profiles: dict[str, dict]) 
     exported_files: list[dict[str, str]] = []
     bundled_artifacts: list[dict[str, str]] = []
     flat_names = build_flat_export_names(rel_paths) if kind == "direct_sources" and export_layout == "flat" else {}
+    upload_dir = pack_dir / upload_subdir if kind == "direct_sources" and export_layout == "flat" else pack_dir
+    if upload_dir != pack_dir:
+        upload_dir.mkdir(parents=True, exist_ok=True)
 
     manifest = {
         "profile_name": profile_name,
@@ -173,6 +177,7 @@ def export_profile(profile_name: str, profile: dict, profiles: dict[str, dict]) 
         "canonical_archive_profile",
         "cold_reference_files",
         "naming_strategy",
+        "upload_subdir",
     ]:
         if extra_key in profile:
             manifest[extra_key] = profile[extra_key]
@@ -182,7 +187,7 @@ def export_profile(profile_name: str, profile: dict, profiles: dict[str, dict]) 
             raise FileNotFoundError(f"Missing source for profile {profile_name}: {rel}")
         if kind == "direct_sources" and export_layout == "flat":
             export_filename = flat_names[rel]
-            dest = pack_dir / export_filename
+            dest = upload_dir / export_filename
         else:
             export_filename = rel
             dest = pack_dir / rel
@@ -216,7 +221,7 @@ def export_profile(profile_name: str, profile: dict, profiles: dict[str, dict]) 
             cold_tar_name = f"{cold_archive_export}.tar.gz"
             cold_tar_path = OUT_ROOT / cold_tar_name
             if cold_tar_path.exists():
-                bundled_dest = pack_dir / cold_tar_name
+                bundled_dest = upload_dir / cold_tar_name
                 shutil.copy2(cold_tar_path, bundled_dest)
                 bundled_artifacts.append(
                     {
@@ -227,25 +232,9 @@ def export_profile(profile_name: str, profile: dict, profiles: dict[str, dict]) 
                 )
         if bundled_artifacts:
             manifest["bundled_artifacts"] = bundled_artifacts
-        upload_to_sources = sorted(
+        manifest["upload_subdir_files"] = sorted(
             [item["export_filename"] for item in exported_files] +
             [item["export_filename"] for item in bundled_artifacts]
-        )
-        do_not_upload = [
-            "manifest.json",
-            "README.md",
-            "UPLOAD_TO_SOURCES.txt",
-            "DO_NOT_UPLOAD.txt",
-        ]
-        manifest["upload_to_sources"] = upload_to_sources
-        manifest["do_not_upload"] = do_not_upload
-        (pack_dir / "UPLOAD_TO_SOURCES.txt").write_text(
-            "\n".join(upload_to_sources) + "\n",
-            encoding="utf-8",
-        )
-        (pack_dir / "DO_NOT_UPLOAD.txt").write_text(
-            "\n".join(do_not_upload) + "\n",
-            encoding="utf-8",
         )
         (pack_dir / "manifest.json").write_text(
             json.dumps(manifest, ensure_ascii=False, indent=2) + "\n",
@@ -281,7 +270,7 @@ def main() -> int:
         f"Текущая phase recommendation для archive pack: `{current_phase}` -> `{current_pack}`.",
         f"Причина: {detection_reason}",
         "",
-        f"Постоянная схема работы: direct hot-set `{direct_export}` в одной flat-папке + archive remainder `{cold_archive_export}.tar.gz` без дублей + canonical archive `{canonical_archive_export}.tar.gz` как reference snapshot.",
+        f"Постоянная схема работы: direct hot-set `{direct_export}/upload-to-sources/` как одна flat-подпапка + archive remainder `{cold_archive_export}.tar.gz` без дублей + canonical archive `{canonical_archive_export}.tar.gz` как reference snapshot.",
         "",
         "Собраны declarative profiles:",
         "",
@@ -298,7 +287,7 @@ def main() -> int:
             "",
             "Рекомендуемая стратегия Sources:",
             "",
-            f"- для ежедневной работы загружать напрямую файлы из flat-папки `{direct_export}/` без подпапок",
+            f"- для ежедневной работы загружать напрямую файлы из flat-подпапки `{direct_export}/upload-to-sources/`",
             f"- `{cold_archive_export}.tar.gz` загружать как cold/reference archive remainder без дублей hot-set",
             f"- `{canonical_archive_export}.tar.gz` держать как canonical archive snapshot и полный reference bundle",
             "- phase-specific archive packs использовать только как operator override, а не как постоянный Sources set",

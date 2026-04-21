@@ -1,15 +1,16 @@
 # Итоговый отчёт по закрытию изменения
 
 ## Что было запрошено
-- Пометить в `core-hot-15`, какие файлы нужно выгружать в Sources проекта, а какие не нужно.
+- Переделать логику так, чтобы всё, что надо выгружать, лежало в одной подпапке, а служебные файлы не мешались рядом.
 
 ## Что реально сделано
-- Export logic теперь генерирует `UPLOAD_TO_SOURCES.txt` и `DO_NOT_UPLOAD.txt` прямо внутри `core-hot-15/`.
-- Manifest direct profile фиксирует `upload_to_sources` и `do_not_upload` отдельными списками.
-- Operator-facing docs и boundary template синхронизированы под marker-driven upload flow.
+- Export logic теперь кладёт все uploadable файлы в `core-hot-15/upload-to-sources/`.
+- Manifest direct profile фиксирует `upload_subdir` и `upload_subdir_files`.
+- Operator-facing docs и boundary template синхронизированы под subfolder-driven upload flow.
 
 ## Какие артефакты обновлены
 - `.chatgpt/*` для текущего change
+ - `packaging/sources/sources-profiles.yaml`
 - `tools/export_factory_template_sources.py`
 - `tools/validate_factory_template_ops_policy.py`
 - `docs/releases/sources-pack-usage.md`
@@ -22,4 +23,4 @@
 - Перестройка canonical archive layer
 
 ## Итог закрытия
-- Для ручной загрузки в `core-hot-15` теперь есть явная маркировка: что загружать в Sources и какие служебные файлы выгружать не нужно.
+- Для ручной загрузки в `core-hot-15` теперь достаточно открыть одну подпапку `upload-to-sources/` и загрузить всё её содержимое.
