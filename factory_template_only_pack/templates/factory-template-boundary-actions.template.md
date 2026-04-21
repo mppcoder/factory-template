@@ -43,7 +43,7 @@ Internal repo follow-up, включая release-followup, source-pack refresh, e
 ### Готовые артефакты для скачивания
 
 - generated каталоги и архивы из `{{sources_export_dir}}`
-- direct hot-set `{{canonical_direct_profile}}` в одной flat-папке без подпапок
+- direct hot-set `{{canonical_direct_profile}}` в одной flat-папке без подпапок, вместе с `{{canonical_cold_archive_pack}}`
 - cold archive `{{canonical_cold_archive_pack}}`
 - canonical archive `{{canonical_archive_pack}}`
 - downstream patch bundle через `{{repo_patch_export_script}}`
@@ -133,7 +133,7 @@ Internal repo follow-up, включая release-followup, source-pack refresh, e
 1. Откройте каталог `{{sources_export_dir}}` с уже подготовленными артефактами.
 3. Для ежедневной постоянной работы используйте direct profile `{{canonical_direct_profile}}`.
 4. Загрузите в ChatGPT Project напрямую файлы из flat-папки `{{direct_sources_dir}}`; подпапок внутри hot-set быть не должно.
-5. Загрузите `{{canonical_cold_archive_pack}}` как cold/reference archive remainder без дублей hot-set.
+5. Возьмите `{{canonical_cold_archive_pack}}` из той же папки `{{direct_sources_dir}}` и загрузите его как cold/reference archive remainder без дублей hot-set.
 6. Canonical archive pack `{{canonical_archive_pack}}` держите как полный steady-work snapshot и резервный reference bundle.
 7. Для автоматически определенной фазы `{{current_phase}}` используйте phase-aware archive recommendation ниже, если нужен operator override.
    Причина: `{{phase_detection_reason}}`

@@ -50,7 +50,7 @@
 - `CONTROLLED_FIXES_AUDIT_2026-04-19.md`
 - `meta-template-project/RELEASE_NOTES.md`
 
-Этот архив загружается рядом с `core-hot-15/` и не дублирует hot-set.
+Этот архив также дублируется прямо внутри `core-hot-15/` как ready-to-upload companion file, чтобы весь daily набор лежал в одной папке.
 
 ## Canonical Archive
 
@@ -69,7 +69,7 @@ Canonical archive pack остаётся:
 
 1. Запустить `bash EXPORT_FACTORY_TEMPLATE_SOURCES.sh`.
 2. Для ежедневной работы загрузить напрямую файлы из одной flat-папки `_sources-export/factory-template/core-hot-15/` без подпапок.
-3. Загрузить `_sources-export/factory-template/core-cold-5.tar.gz` как cold/reference archive remainder.
+3. Взять `core-cold-5.tar.gz` из той же папки `_sources-export/factory-template/core-hot-15/` и загрузить его как cold/reference archive remainder.
 4. Archive `sources-pack-core-20.tar.gz` сохранить как canonical snapshot и reference bundle.
 5. При release/bugfix-фазе при необходимости использовать phase-specific archive override, но не держать его как второй постоянный набор Sources.
 

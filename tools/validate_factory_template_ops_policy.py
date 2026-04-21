@@ -269,11 +269,15 @@ def validate_exported_artifacts(profiles: dict[str, dict], errors: list[str]) ->
                 export_names = [item.get("export_filename") for item in exported_files if isinstance(item, dict)]
                 if len(export_names) != len(set(export_names)):
                     fail(f"{export_name}: manifest.exported_files содержит конфликтующие export_filename", errors)
+                bundled_artifacts = manifest.get("bundled_artifacts", [])
+                bundled_names = [item.get("export_filename") for item in bundled_artifacts if isinstance(item, dict)]
+                if len(bundled_names) != len(set(bundled_names)):
+                    fail(f"{export_name}: manifest.bundled_artifacts содержит конфликтующие export_filename", errors)
                 top_level_names = sorted(
                     p.name for p in export_dir.iterdir()
                     if p.is_file() and p.name not in {"manifest.json", "README.md"}
                 )
-                if sorted(export_names) != top_level_names:
+                if sorted(export_names + bundled_names) != top_level_names:
                     fail(f"{export_name}: manifest.exported_files не совпадает с фактически экспортированными flat filenames", errors)
 
 

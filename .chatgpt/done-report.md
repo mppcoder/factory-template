@@ -1,16 +1,15 @@
 # Итоговый отчёт по закрытию изменения
 
 ## Что было запрошено
-- Нормализовать hot15 Sources export так, чтобы все source-файлы для ChatGPT Project складывались в одну flat-папку без подпапок.
+- Добавить архив `core-cold-5.tar.gz` в ту же папку `core-hot-15`.
 
 ## Что реально сделано
-- `core_hot_direct` переведен на канонический flat layout через declarative manifest и export logic.
-- Добавлена deterministic naming strategy `basename_unless_conflict_then_path_joined_with_double_underscore` без silent overwrite.
-- Operator-facing docs и boundary template синхронизированы под flat hot15 folder.
+- Export logic теперь дублирует ready-to-upload `core-cold-5.tar.gz` прямо в папку `core-hot-15/`.
+- Manifest direct profile фиксирует bundled artifact отдельно от hot source-files.
+- Operator-facing docs и boundary template синхронизированы под one-folder daily upload flow.
 
 ## Какие артефакты обновлены
 - `.chatgpt/*` для текущего change
-- `packaging/sources/sources-profiles.yaml`
 - `tools/export_factory_template_sources.py`
 - `tools/validate_factory_template_ops_policy.py`
 - `docs/releases/sources-pack-usage.md`
@@ -19,8 +18,8 @@
 - `README.md`, `CHANGELOG.md`, `CURRENT_FUNCTIONAL_STATE.md`
 
 ## Что осталось вне объёма
-- Перестройка cold/archive export
 - Изменение состава hot-set
+- Перестройка canonical archive layer
 
 ## Итог закрытия
-- Для ручной загрузки hot15 в ChatGPT Project теперь используется одна flat-папка без подпапок; docs и export layer больше не расходятся.
+- Для ручной загрузки весь daily набор теперь лежит в одной папке `core-hot-15/`: 15 hot-файлов плюс `core-cold-5.tar.gz`.

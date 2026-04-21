@@ -32,6 +32,7 @@
 - completion/handoff layer теперь явно требует, чтобы обязательный completion package появлялся в том же финальном ответе, а не только после дополнительного запроса пользователя
 - completion/handoff layer теперь различает готовые внешние boundary steps и внутренние prepare/export commands: сборка export artifacts выполняется Codex внутри repo до пользовательского блока
 - direct hot-set `core-hot-15` теперь экспортируется в одну flat-папку без подпапок для упрощённой ручной загрузки в ChatGPT Project Sources
+- companion archive `core-cold-5.tar.gz` теперь кладётся в ту же папку `core-hot-15/`, чтобы весь daily upload набор лежал в одном месте
 
 ## Что работает частично
 - matrix runner как единый источник истины

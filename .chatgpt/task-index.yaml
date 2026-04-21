@@ -1,14 +1,13 @@
 change:
-  id: "chg-20260421-008"
-  title: "Flatten core-hot-15 Sources export"
+  id: "chg-20260421-009"
+  title: "Bundle cold archive into core-hot-15 folder"
   class: "small-fix"
   execution_mode: "single-pass"
   type: "brownfield"
   status: "done"
   priority: "medium"
-  summary: "Нормализовать hot15 direct Sources export в одну flat-папку без подпапок, сохранив состав hot-set и добавив deterministic naming strategy на случай конфликтов имён."
+  summary: "Положить ready-to-upload `core-cold-5.tar.gz` в ту же папку `core-hot-15`, чтобы весь daily upload набор лежал в одном месте."
   outputs:
-    - "packaging/sources/sources-profiles.yaml"
     - "tools/export_factory_template_sources.py"
     - "tools/validate_factory_template_ops_policy.py"
     - "docs/releases/sources-pack-usage.md"
@@ -20,18 +19,17 @@ change:
 
 tasks:
   - id: "T-001"
-    title: "Перевести core-hot-15 direct export в flat layout"
+    title: "Добавить cold companion archive в папку core-hot-15"
     type: "implementation"
     risk_level: "medium"
     executor: "developer"
     depends_on: []
     outputs:
-      - "packaging/sources/sources-profiles.yaml"
       - "tools/export_factory_template_sources.py"
       - "tools/validate_factory_template_ops_policy.py"
     acceptance:
-      - "core-hot-15 экспортируется в одну flat-папку без подпапок"
-      - "silent overwrite исключен и manifest фиксирует export filenames"
+      - "core-hot-15 содержит рядом `core-cold-5.tar.gz`"
+      - "manifest фиксирует bundled artifact и валидатор это подтверждает"
 
   - id: "T-002"
     title: "Синхронизировать operator instructions и closeout artifacts"
@@ -49,5 +47,5 @@ tasks:
       - "CURRENT_FUNCTIONAL_STATE.md"
       - "work/completed/chg-20260421-008.md"
     acceptance:
-      - "инструкции явно говорят про одну flat-папку hot15"
-      - "completion/source-update layer использует тот же flat-folder wording"
+      - "инструкции явно говорят, что cold archive лежит в той же папке hot15"
+      - "completion/source-update layer использует тот же wording"

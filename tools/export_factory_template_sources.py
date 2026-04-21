@@ -151,6 +151,7 @@ def export_profile(profile_name: str, profile: dict, profiles: dict[str, dict]) 
     pack_dir.mkdir(parents=True)
 
     exported_files: list[dict[str, str]] = []
+    bundled_artifacts: list[dict[str, str]] = []
     flat_names = build_flat_export_names(rel_paths) if kind == "direct_sources" and export_layout == "flat" else {}
 
     manifest = {
@@ -205,6 +206,29 @@ def export_profile(profile_name: str, profile: dict, profiles: dict[str, dict]) 
             tar_path.unlink()
         with tarfile.open(tar_path, "w:gz") as tar:
             tar.add(pack_dir, arcname=export_name)
+    elif kind == "direct_sources":
+        cold_archive_profile_name = profile.get("cold_archive_profile")
+        cold_archive_profile = profiles.get(cold_archive_profile_name, {}) if isinstance(cold_archive_profile_name, str) else {}
+        cold_archive_export = str(cold_archive_profile.get("export_name", "")).strip()
+        if cold_archive_export:
+            cold_tar_name = f"{cold_archive_export}.tar.gz"
+            cold_tar_path = OUT_ROOT / cold_tar_name
+            if cold_tar_path.exists():
+                bundled_dest = pack_dir / cold_tar_name
+                shutil.copy2(cold_tar_path, bundled_dest)
+                bundled_artifacts.append(
+                    {
+                        "type": "archive_remainder",
+                        "source": str(cold_tar_path.relative_to(ROOT)),
+                        "export_filename": cold_tar_name,
+                    }
+                )
+        if bundled_artifacts:
+            manifest["bundled_artifacts"] = bundled_artifacts
+            (pack_dir / "manifest.json").write_text(
+                json.dumps(manifest, ensure_ascii=False, indent=2) + "\n",
+                encoding="utf-8",
+            )
 
 
 def main() -> int:
