@@ -23,6 +23,7 @@ def main() -> int:
     doc = OUT_DIR / "factory-template-boundary-actions.md"
     policy = load_policy()
     cfg = policy.get("boundary_actions", {})
+    impact_cfg = cfg.get("completion_impacts", {}) if isinstance(cfg, dict) else {}
     profiles = get_profiles(policy)
     detected = detect_phase(policy)
     current_phase = str(detected.get("phase", cfg.get("default_phase", "controlled-fixes")))
@@ -70,6 +71,13 @@ def main() -> int:
             "phase_override_packs_bullets": phase_override_bullets,
             "phase_recommendations_bullets": phase_bullets,
             "uploads_dir": cfg.get("uploads_dir", "/projects/_incoming"),
+            "impact_factory_sources": impact_cfg.get("factory_sources", "Обновление Sources проекта шаблона в ChatGPT"),
+            "impact_downstream_template_sync": impact_cfg.get("downstream_template_sync", "Обновление шаблона в боевых repo"),
+            "impact_downstream_project_sources": impact_cfg.get("downstream_project_sources", "Обновление Sources боевых ChatGPT Projects"),
+            "impact_manual_archive_required": impact_cfg.get("manual_archive_required", "Нужен готовый архив или каталог для ручной загрузки"),
+            "impact_delete_before_replace": impact_cfg.get("delete_before_replace", "Перед заменой нужно удалить старые Sources"),
+            "repo_patch_export_script": str(ROOT / "workspace-packs" / "factory-ops" / "export-template-patch.sh"),
+            "repo_patch_apply_script": str(ROOT / "workspace-packs" / "factory-ops" / "apply-template-patch.sh"),
         },
     )
     doc.write_text(text, encoding="utf-8")

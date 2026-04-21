@@ -60,12 +60,23 @@ def main() -> int:
 
     ensure_contains(boundary, "# Boundary Actions", errors, "boundary-actions.md")
     ensure_contains(boundary, "## Для пользователя", errors, "boundary-actions.md")
+    ensure_contains(boundary, "## Impact Model", errors, "boundary-actions.md")
+    ensure_contains(boundary, "## Completion Package For Source Update Changes", errors, "boundary-actions.md")
     ensure_contains(boundary, "## Для handoff", errors, "boundary-actions.md")
     ensure_contains(boundary, "## Для внешних границ", errors, "boundary-actions.md")
     ensure_contains(boundary, "Инструкция пользователю", errors, "boundary-actions.md")
     ensure_contains(boundary, "internal repo follow-up", errors, "boundary-actions.md")
     ensure_contains(boundary, "Release-followup, source-pack refresh, export refresh, closeout-sync и release-facing consistency pass внутри repo считаются внутренней работой Codex.", errors, "boundary-actions.md")
     ensure_contains(boundary, "`Инструкция пользователю` не должна подменять внутренний handoff", errors, "boundary-actions.md")
+    ensure_contains(boundary, "Обновление Sources проекта шаблона в ChatGPT", errors, "boundary-actions.md")
+    ensure_contains(boundary, "Обновление шаблона в боевых repo", errors, "boundary-actions.md")
+    ensure_contains(boundary, "Обновление Sources боевых ChatGPT Projects", errors, "boundary-actions.md")
+    ensure_contains(boundary, "Удалить перед заменой", errors, "boundary-actions.md")
+    ensure_contains(boundary, "workspace-packs/factory-ops/export-template-patch.sh", errors, "boundary-actions.md")
+    ensure_contains(boundary, "workspace-packs/factory-ops/apply-template-patch.sh", errors, "boundary-actions.md")
+    ensure_contains(boundary, "bash EXPORT_FACTORY_TEMPLATE_SOURCES.sh", errors, "boundary-actions.md")
+    if "описание не задано" in boundary:
+        errors.append("boundary-actions.md содержит незаполненные impact descriptions")
     for required_file in ["`codex-input.md`", "`codex-context.md`", "`codex-task-pack.md`", "`boundary-actions.md`"]:
         ensure_contains(boundary, required_file, errors, "boundary-actions.md")
 
@@ -84,6 +95,13 @@ def main() -> int:
             errors.append(f"boundary-actions.md не содержит entrypoint `{entrypoint}`")
 
     ensure_contains(checklist, "# Чек-лист завершения", errors, "done-checklist.md")
+    ensure_contains(checklist, "## Impact classification", errors, "done-checklist.md")
+    ensure_contains(checklist, "impact.factory_sources", errors, "done-checklist.md")
+    ensure_contains(checklist, "impact.downstream_template_sync", errors, "done-checklist.md")
+    ensure_contains(checklist, "impact.downstream_project_sources", errors, "done-checklist.md")
+    ensure_contains(checklist, "impact.manual_archive_required", errors, "done-checklist.md")
+    ensure_contains(checklist, "impact.delete_before_replace", errors, "done-checklist.md")
+    ensure_contains(checklist, "## Completion Package For Source Update Changes", errors, "done-checklist.md")
     for item in [
         "verification-report.md",
         "done-report.md",

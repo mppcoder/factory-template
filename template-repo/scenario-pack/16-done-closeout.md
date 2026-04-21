@@ -30,3 +30,10 @@ Closeout без handoff допустим только при реальном о
 Если есть и внутренние, и внешние шаги, финальный ответ должен явно разделять:
 - внутренний follow-up handoff;
 - внешний boundary step с блоком `## Инструкция пользователю`.
+
+Если внешний boundary step связан с source update flows, closeout считается полным только если `## Инструкция пользователю` явно покрывает все затронутые contour'ы:
+- factory-template ChatGPT Project Sources;
+- downstream repo template sync;
+- downstream/battle ChatGPT Project Sources.
+
+Если replacement в Sources может создать stale duplicates, в блоке `## Инструкция пользователю` обязателен отдельный подраздел `Удалить перед заменой` с точными именами файлов или архивов.

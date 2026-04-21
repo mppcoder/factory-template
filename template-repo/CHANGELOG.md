@@ -6,6 +6,7 @@
 - templates для `release-decision`, `sync-report` и `release-report`
 - lightweight follow-up mode для low-risk post-verify docs/ignore cleanup
 - internal-followup precedence rule для handoff/boundary layers generated project
+- source-update completion package и impact model для boundary/handoff layers generated project
 
 ### Изменено
 - template/runtime/policy layer теперь закрепляет обязательный inline Codex handoff, если handoff уже допустим и задача достаточно определена

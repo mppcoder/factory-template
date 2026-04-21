@@ -38,6 +38,27 @@
 - verify-summary / done-summary / release-facing consistency pass;
 - release bundle preparation.
 
+Если completed change затрагивает downstream-consumed content, после классификации internal/external/mixed follow-up дополнительно классифицируй impact по update contours:
+- `impact.factory_sources`
+- `impact.downstream_template_sync`
+- `impact.downstream_project_sources`
+- `impact.manual_archive_required`
+- `impact.delete_before_replace`
+
+Для каждого флага нужно явно определить:
+- `да`
+- `нет`
+- `не применяется`
+
+Если хотя бы один contour требует внешнего действия, финальный `## Инструкция пользователю` должен явно включать:
+- что изменено;
+- какие файлы обновлены в repo;
+- какие update contours затронуты;
+- какие артефакты/архивы уже готовы;
+- что удалить перед заменой;
+- пошаговую маршрутизацию по окнам и папкам;
+- что прислать обратно после внешнего шага.
+
 Если по итогам шага 4 нужен следующий шаг пользователя, внешний шаг, загрузка артефактов, действие в GitHub UI, действие в ChatGPT Project UI, risky confirmation, возврат после verify/release decision или ожидание следующего артефакта, сформулируй этот шаг в обязательном финальном блоке `## Инструкция пользователю`.
 
 ## Классификация дефекта

@@ -78,6 +78,27 @@ def main() -> int:
 - [ ] Обновить CURRENT_FUNCTIONAL_STATE.md
 - [ ] Проверить, нужен ли feedback в фабрику
 - [ ] Если был найден defect, создать или обновить bug report
+
+## Impact classification
+
+- [ ] impact.factory_sources
+- [ ] impact.downstream_template_sync
+- [ ] impact.downstream_project_sources
+- [ ] impact.manual_archive_required
+- [ ] impact.delete_before_replace
+
+## Completion Package For Source Update Changes
+
+- [ ] Что изменено
+- [ ] Какие файлы обновлены в repo
+- [ ] Нужно ли обновлять Sources factory-template ChatGPT Project
+- [ ] Нужно ли обновлять downstream template in battle repos
+- [ ] Нужно ли обновлять Sources battle ChatGPT Projects
+- [ ] Готовые артефакты для скачивания
+- [ ] Команды/скрипты для repo-level sync
+- [ ] Удалить перед заменой
+- [ ] Пошаговая инструкция по окнам
+- [ ] Что прислать обратно после внешнего шага
 """
 
     handoff_policy = policy.get('handoff_policy', 'forbidden')
@@ -98,6 +119,25 @@ def main() -> int:
         sources_line = f'Sources уже должны быть загружены; если есть сомнения, повторно экспортируйте единый scenario-pack через ./scripts/export-sources-pack.sh . Базовая точка входа: {entrypoint}.'
 
     route_line = 'Активные стартовые сценарии: ' + (', '.join(active_scenarios) if active_scenarios else 'еще не определены.')
+    impact_model = policy.get('boundary_actions', {}).get('completion_impacts', {}) if isinstance(policy.get('boundary_actions', {}), dict) else {}
+    impact_defaults = {
+        "factory_sources": "Обновление Sources проекта шаблона в ChatGPT",
+        "downstream_template_sync": "Обновление шаблона в боевых repo",
+        "downstream_project_sources": "Обновление Sources боевых ChatGPT Projects",
+        "manual_archive_required": "Нужен готовый архив или каталог для ручной загрузки",
+        "delete_before_replace": "Перед заменой нужно удалить старые Sources",
+    }
+    impact_lines = []
+    for key in [
+        "factory_sources",
+        "downstream_template_sync",
+        "downstream_project_sources",
+        "manual_archive_required",
+        "delete_before_replace",
+    ]:
+        impact_lines.append(f"- `impact.{key}` — {impact_model.get(key, impact_defaults[key])}")
+    impact_block = "\n".join(impact_lines)
+
     boundary_actions = f"""# Boundary Actions
 
 ## Для пользователя
@@ -114,6 +154,32 @@ def main() -> int:
 - {route_line}
 - Проверить, что Codex получает актуальные `codex-input.md`, `codex-context.md`, `codex-task-pack.md` и `boundary-actions.md`.
 
+## Impact Model
+
+{impact_block}
+
+## Completion Package For Source Update Changes
+
+Если change затрагивает source-pack, scenario-pack, launcher, validators, runbooks, codex-task-pack, `.chatgpt` artifacts или другой downstream-consumed template content, пользовательский boundary output должен включать:
+
+1. Что изменено
+2. Какие файлы обновлены в repo
+3. Нужно ли обновлять Sources factory-template ChatGPT Project
+4. Нужно ли обновлять downstream template in battle repos
+5. Нужно ли обновлять Sources battle ChatGPT Projects
+6. Готовые артефакты для скачивания
+7. Команды/скрипты для repo-level sync
+8. Удалить перед заменой
+9. Пошаговая инструкция по окнам
+10. Что прислать обратно после внешнего шага
+
+Обязательно различайте три контура:
+- Обновление Sources проекта шаблона в ChatGPT
+- Обновление шаблона в боевых repo
+- Обновление Sources боевых ChatGPT Projects
+
+Если contour не затронут, это нужно явно написать.
+
 ## Для handoff
 
 - {handoff_line}
@@ -128,6 +194,9 @@ def main() -> int:
 - GitHub / внешние UI / секреты не выполнять автоматически из Codex.
 - Все внешние действия фиксировать отдельной пошаговой инструкцией для пользователя с финальным блоком `Инструкция пользователю`.
 - `Инструкция пользователю` не должна подменять внутренний handoff, если internal repo follow-up еще не завершен.
+- Для factory Sources refresh используйте `bash EXPORT_FACTORY_TEMPLATE_SOURCES.sh` и generated артефакты в `_sources-export/factory-template/`.
+- Для downstream repo sync сначала используйте `workspace-packs/factory-ops/export-template-patch.sh` и `workspace-packs/factory-ops/apply-template-patch.sh`.
+- Если replacement может создать stale duplicates, добавляйте точный раздел `Удалить перед заменой`.
 """
 
     (chat / 'codex-context.md').write_text(context, encoding='utf-8')

@@ -28,6 +28,8 @@
 
 Если есть pending user/external step, ответ без финального блока `## Инструкция пользователю` считается неполным.
 
+Если external step связан с source updates или downstream sync, `## Инструкция пользователю` должен быть расширен до completion package, а не оставаться общим footer.
+
 ## Правило классификации задач
 
 Перед началом каждого нового подэтапа классифицируй задачу.
@@ -97,6 +99,13 @@
 - release bundle preparation.
 
 Если есть и внутренние, и внешние шаги, сначала выдай inline handoff на внутреннюю часть, затем отдельный `## Инструкция пользователю` на внешнюю границу.
+
+Для source-update changes в completion package обязательно различай:
+- factory template Sources;
+- downstream repo template sync;
+- downstream ChatGPT Project Sources.
+
+Если replacement может создать дубль или stale Source, всегда добавляй точный раздел `Удалить перед заменой`.
 
 ## Правило по release
 

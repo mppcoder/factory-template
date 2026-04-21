@@ -3,14 +3,15 @@
 ## Контекст
 - Repo: `factory-template`
 - Изменение уровня factory-template, а не project-only.
-- Нужно исправить reusable process bug в closeout semantics: internal repo follow-up после remediation/push не должен классифицироваться как user-only closeout.
+- Нужно усилить completion/handoff layer так, чтобы после relevant change Codex не останавливался на общем footer, а выдавал канонический source-update completion package.
 
 ## Что должен сделать исполнитель
-- Обновить router, global rules, decision policy, handoff rules и done-closeout.
-- Синхронизировать runbook, AGENTS, mode-routing, policy manifests и change classes.
-- Усилить codex-task-pack generation/validation и зафиксировать defect отдельным bug report.
+- Обновить scenario/done rules и runbook/AGENTS.
+- Добавить impact model в boundary policy.
+- Усилить codex-task-pack generation/validation и boundary-actions template.
+- Обновить closeout/release-facing artifacts и bug report.
 
 ## Ограничения
 - Не размывать release semantics.
-- Не убирать footer для реальных внешних границ.
-- Не перепридумывать всю фазовую модель.
+- Не добавлять автоматическое управление внешними UI.
+- Не делать новый тяжёлый subsystem, если достаточно policy/checklist/template extension.

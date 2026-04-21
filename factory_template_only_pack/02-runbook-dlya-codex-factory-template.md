@@ -27,6 +27,18 @@
 4. Ожидаемый результат
 5. Что прислать обратно
 
+Если внешний шаг связан с source update flows, не ограничивайся общим footer. Собирай расширенный completion package с секциями:
+- `Что изменено`
+- `Какие файлы обновлены в repo`
+- `Нужно ли обновлять Sources factory-template ChatGPT Project`
+- `Нужно ли обновлять downstream template in battle repos`
+- `Нужно ли обновлять Sources battle ChatGPT Projects`
+- `Готовые артефакты для скачивания`
+- `Команды/скрипты для repo-level sync`
+- `Удалить перед заменой`
+- `Пошаговая инструкция по окнам`
+- `Что прислать обратно после внешнего шага`
+
 ---
 
 ## 1. Главная задача
@@ -175,6 +187,15 @@ bash PRE_RELEASE_AUDIT.sh
 
 Если remaining steps смешанные, сначала выдай inline handoff на внутреннюю часть, а затем отдельно дай `## Инструкция пользователю` только для внешней границы.
 
+Если change влияет на downstream-consumed content, отдельно классифицируй affected contours:
+- `impact.factory_sources`
+- `impact.downstream_template_sync`
+- `impact.downstream_project_sources`
+- `impact.manual_archive_required`
+- `impact.delete_before_replace`
+
+Если какой-то contour не затронут, это всё равно нужно явно сказать в completion package.
+
 Для verified sync / release automation сначала делай reuse-check:
 
 - используй `VERIFIED_SYNC.sh` вместо ad-hoc `git add/commit/push`;
@@ -199,3 +220,12 @@ bash PRE_RELEASE_AUDIT.sh
 Если в завершении остается внешний шаг, следующий шаг пользователя, возврат в ChatGPT Project, ожидание verify/release decision или ожидание внешнего артефакта, финальный ответ обязан завершаться блоком `## Инструкция пользователю`.
 
 Этот footer не должен вытеснять внутренний handoff, если internal repo follow-up еще не завершен.
+
+Для repo-level sync в downstream/battle projects по умолчанию сначала используй существующий patch path:
+- `workspace-packs/factory-ops/export-template-patch.sh`
+- `workspace-packs/factory-ops/apply-template-patch.sh`
+
+Для Sources refresh по умолчанию используй:
+- `bash EXPORT_FACTORY_TEMPLATE_SOURCES.sh`
+- generated каталоги и архивы в `_sources-export/factory-template/`
+- generated guide `_boundary-actions/factory-template-boundary-actions.md`

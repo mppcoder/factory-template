@@ -1,14 +1,17 @@
 # Техническая спецификация
 
-## Архитектура правила
-- Router, decision policy, handoff rules и done-closeout должны одинаково различать `internal follow-up pending`, `external boundary pending`, `mixed follow-up` и `fully done`.
-- Internal repo follow-up имеет precedence над user footer: если внутренняя работа еще не закрыта, сначала обязателен inline handoff.
-- Footer `Инструкция пользователю` остается обязательным только для реальных external boundary steps.
+## Архитектура
+- Process layer должен требовать source-update completion package, когда change затрагивает downstream-consumed content.
+- Lightweight impact model живет в существующем boundary policy и done-checklist, а не в новом тяжёлом subsystem.
+- Codex task pack generation/validation должен проверять наличие impact model, source-update sections, delete-before-replace и repo-level sync script references.
 
-## Internal Follow-up
-- К internal repo follow-up относятся release-followup, source-pack refresh, export/manifests refresh, closeout artifact sync, verify/done/release-facing consistency pass и release bundle preparation внутри repo.
-- Такие задачи блокируют user-only closeout и `done_complete`, пока не будут закрыты или явно выведены за scope.
+## Impact Model
+- `impact.factory_sources`
+- `impact.downstream_template_sync`
+- `impact.downstream_project_sources`
+- `impact.manual_archive_required`
+- `impact.delete_before_replace`
 
-## Generation / Validation
-- `create-codex-task-pack.sh` должен явно писать, что internal repo follow-up остается работой Codex.
-- `validate-codex-task-pack.sh` должен проверять, что boundary-actions не подменяет внутренний handoff user footer'ом.
+## Boundary Actions
+- Boundary template должен перечислять affected contours, downloadable artifacts, repo-level sync scripts и window-by-window instructions.
+- Если contour не затронут, это должно быть сказано явно.

@@ -100,6 +100,16 @@ Codex делает внутреннюю работу по шаблону:
 4. Ожидаемый результат
 5. Что прислать обратно
 
+Если change затрагивает source-pack, runbook layer, scenario-pack, launcher, validators, codex-task-pack или другой downstream-consumed template content, инструкции должны быть расширены до completion package для трёх контуров:
+- обновление Sources проекта шаблона в ChatGPT;
+- обновление шаблона в downstream/battle repo;
+- обновление Sources downstream/battle ChatGPT Projects.
+
+Для manual replacement обязательно должны быть перечислены:
+- что удалить перед заменой;
+- что загрузить вместо этого;
+- какой архив или каталог уже готов для скачивания/загрузки.
+
 ---
 
 ## 4. Порядок запуска

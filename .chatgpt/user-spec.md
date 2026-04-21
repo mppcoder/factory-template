@@ -1,16 +1,16 @@
 # Пользовательская спецификация
 
 ## Цель изменения
-- Исправить reusable process gap в `factory-template`, из-за которого internal repo follow-up после remediation/push мог ошибочно уходить в user-only closeout.
-- Сохранить обязательный footer `Инструкция пользователю` для реальных внешних границ.
-- Не менять release semantics и не превращать closeout в automatic release.
+- Сделать source-update completion package нормой completion/handoff layer.
+- Обязать Codex явно различать factory Sources, downstream repo sync и downstream ChatGPT Project Sources.
+- Требовать delete-before-replace, ready artifacts и window-by-window instructions для manual external steps.
 
 ## Что должно получиться
-- Если remaining work еще выполняется внутри repo и остается Codex-eligible, ответ обязан выдавать inline handoff.
-- User-only closeout допустим только для реальных external boundary steps.
-- При mixed follow-up сначала идет inline handoff на внутреннюю часть, затем при необходимости отдельный footer для внешней границы.
+- После relevant change completion output явно показывает, какие external update contours затронуты.
+- Для manual replacement есть точный список `Удалить перед заменой`.
+- Для repo-level sync и Sources refresh указаны готовые артефакты и точные скрипты.
 
 ## Что не входит в объем
+- Автоматическое управление GitHub UI или ChatGPT UI.
+- Новый entry-mode matrix.
 - Автопубликация релиза.
-- Широкий rewrite всей фазовой модели.
-- Ослабление правила обязательного footer для внешних шагов.

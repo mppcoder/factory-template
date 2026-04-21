@@ -23,3 +23,5 @@
 Подмена internal repo follow-up user-only closeout'ом считается reusable process defect.
 
 Смешение internal repo work и external boundary action без явного разделения на handoff и user footer считается reusable process defect.
+
+Если change влияет на Sources или downstream template consumers, но completion output не различает affected contours, delete-before-replace semantics и boundary steps по окнам/папкам, это считается reusable process defect.

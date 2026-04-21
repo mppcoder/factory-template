@@ -1,20 +1,21 @@
 # Отчёт о проверке результата
 
 ## Что проверяли
-- semantic grep по `internal follow-up`, `external boundary`, `user-only closeout`, `inline handoff`, `release-followup`, `Инструкция пользователю`
-- согласованность router / decision policy / handoff / done-closeout / runbook / AGENTS / manifests
-- `python3 -m py_compile template-repo/scripts/create-codex-task-pack.sh template-repo/scripts/validate-codex-task-pack.sh`
-- `template-repo/scripts/create-codex-task-pack.sh`
-- `template-repo/scripts/validate-codex-task-pack.sh`
+- grep по `impact.factory_sources`, `Удалить перед заменой`, `Completion Package For Source Update Changes`, `workspace-packs/factory-ops/export-template-patch.sh`, `Обновление Sources проекта шаблона в ChatGPT`
+- `python3 template-repo/scripts/create-codex-task-pack.sh .`
+- `python3 template-repo/scripts/validate-codex-task-pack.sh .`
+- `bash GENERATE_BOUNDARY_ACTIONS.sh`
+- `bash VALIDATE_FACTORY_TEMPLATE_OPS.sh`
+- `git diff --check`
 
 ## Что подтверждено
-- Internal repo follow-up теперь явно отличается от external boundary step во всех канонических слоях.
-- User-only closeout запрещен, если remaining work еще остается внутренней Codex-eligible работой repo.
-- Для mixed follow-up правило одинаковое: сначала handoff, затем footer только для внешней границы.
-- Boundary-actions и validator теперь явно проверяют, что внутренний handoff не вытесняется footer'ом.
+- Process layer теперь требует source-update completion package для affected external contours.
+- Boundary-actions и done-checklist содержат impact model, delete-before-replace и ready artifact/script references.
+- Validators падают, если эти секции исчезают.
+- Existing export and downstream patch scripts используются повторно, а не заменяются новым subsystem.
 
 ## Что не подтверждено или требует повторной проверки
-- Семантическое качество будущих свободных формулировок модели все еще зависит от prompt compliance, хотя rule layer и validator теперь жёстче.
+- Реальная операторская читаемость большого completion package в длинных production answers может требовать future wording polish.
 
 ## Итоговый вывод
-- Reusable process gap закрыт без изменения release semantics: footer сохранен для реальных внешних границ, но больше не подменяет внутренний repo follow-up.
+- Factory-template теперь канонически покрывает factory Sources, downstream repo sync и battle ChatGPT Project Sources в completion/handoff layer без изменения release semantics.

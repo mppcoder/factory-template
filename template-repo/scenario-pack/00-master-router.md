@@ -47,6 +47,15 @@ User-only closeout допустим только если remaining next step д
 ## Обязательный финальный блок
 Если ответ требует следующего шага пользователя или любого внешнего действия, заверши ответ обязательным разделом `## Инструкция пользователю`.
 
+Если change затрагивает downstream-consumed template content, source-pack, launcher, validators, runbooks, codex-task-pack, `.chatgpt` artifacts или другой слой, который потом обновляется через ChatGPT Project Sources или downstream template sync, `## Инструкция пользователю` должен быть не общим footer, а структурированным completion package.
+
+В таком случае нужно явно различить:
+- обновление Sources проекта шаблона в ChatGPT;
+- обновление шаблона в downstream/battle repo;
+- обновление Sources downstream/battle ChatGPT Projects.
+
+Если какой-то contour не затронут, это тоже нужно сказать явно, а не оставлять неявным.
+
 ## Маршрут дефектов
 Если задача содержит bug, regression, inconsistency, missing step, unexpected behavior или подозрение на template defect, сначала проходи defect-capture path: reproduce → evidence → bug report → layer classification → feedback при необходимости → только потом remediation.
 

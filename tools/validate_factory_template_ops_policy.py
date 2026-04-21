@@ -279,6 +279,7 @@ def main() -> int:
     else:
         repo_name = boundary.get("repo_name")
         project_name = boundary.get("project_name")
+        completion_impacts = boundary.get("completion_impacts")
         default_phase = boundary.get("default_phase")
         recommended = boundary.get("recommended_sources_pack")
         phase_recommendations = boundary.get("phase_recommendations")
@@ -290,6 +291,19 @@ def main() -> int:
             fail("boundary_actions.repo_name должен быть непустой строкой", errors)
         if not isinstance(project_name, str) or not project_name.strip():
             fail("boundary_actions.project_name должен быть непустой строкой", errors)
+        if not isinstance(completion_impacts, dict) or not completion_impacts:
+            fail("boundary_actions.completion_impacts должен быть непустым mapping", errors)
+        else:
+            for key in [
+                "factory_sources",
+                "downstream_template_sync",
+                "downstream_project_sources",
+                "manual_archive_required",
+                "delete_before_replace",
+            ]:
+                value = completion_impacts.get(key)
+                if not isinstance(value, str) or not value.strip():
+                    fail(f"boundary_actions.completion_impacts.{key} должен быть непустой строкой", errors)
         if not isinstance(uploads_dir, str) or not uploads_dir.strip():
             fail("boundary_actions.uploads_dir должен быть непустой строкой", errors)
         if not isinstance(default_phase, str) or not default_phase.strip():
@@ -420,9 +434,25 @@ def main() -> int:
         "{{phase_override_packs_bullets}}",
         "{{phase_recommendations_bullets}}",
         "{{uploads_dir}}",
+        "{{impact_factory_sources}}",
+        "{{impact_downstream_template_sync}}",
+        "{{impact_downstream_project_sources}}",
+        "{{impact_manual_archive_required}}",
+        "{{impact_delete_before_replace}}",
+        "{{repo_patch_export_script}}",
+        "{{repo_patch_apply_script}}",
     ]:
         if placeholder not in template_text:
             fail(f"Шаблон boundary actions не содержит обязательный placeholder {placeholder}", errors)
+
+    for needle in [
+        "## Модель воздействия",
+        "## Completion package для source-update changes",
+        "Удалить перед заменой",
+        "Пошаговая инструкция по окнам",
+    ]:
+        if needle not in template_text:
+            fail(f"Шаблон boundary actions не содержит обязательный раздел {needle}", errors)
 
     if errors:
         print("FACTORY TEMPLATE OPS POLICY НЕВАЛИДНА")

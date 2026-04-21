@@ -3,6 +3,12 @@ sources_profiles_manifest: packaging/sources/sources-profiles.yaml
 boundary_actions:
   repo_name: factory-template
   project_name: Factory Template
+  completion_impacts:
+    factory_sources: Обновление Sources проекта шаблона в ChatGPT
+    downstream_template_sync: Обновление шаблона в боевых repo
+    downstream_project_sources: Обновление Sources боевых ChatGPT Projects
+    manual_archive_required: Нужен готовый архив или каталог для ручной загрузки
+    delete_before_replace: Перед заменой нужно удалить старые Sources
   default_phase: controlled-fixes
   recommended_sources_pack: sources-pack-core-20.tar.gz
   available_sources_packs:

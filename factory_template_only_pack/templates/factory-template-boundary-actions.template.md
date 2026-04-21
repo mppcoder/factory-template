@@ -5,6 +5,62 @@
 Используйте этот блок только для реальных внешних границ.
 Internal repo follow-up, включая release-followup, source-pack refresh, export refresh, closeout-sync и release-facing consistency pass внутри repo, остается работой Codex и не должен вытесняться этим footer.
 
+## Модель воздействия
+
+- `impact.factory_sources` — {{impact_factory_sources}}
+- `impact.downstream_template_sync` — {{impact_downstream_template_sync}}
+- `impact.downstream_project_sources` — {{impact_downstream_project_sources}}
+- `impact.manual_archive_required` — {{impact_manual_archive_required}}
+- `impact.delete_before_replace` — {{impact_delete_before_replace}}
+
+## Completion package для source-update changes
+
+Если completed change затрагивает downstream-consumed template content, финальный boundary output должен содержать:
+
+1. Что изменено
+2. Какие файлы обновлены в repo
+3. Нужно ли обновлять Sources factory-template ChatGPT Project
+4. Нужно ли обновлять downstream template in battle repos
+5. Нужно ли обновлять Sources battle ChatGPT Projects
+6. Готовые артефакты для скачивания
+7. Команды/скрипты для repo-level sync
+8. Удалить перед заменой
+9. Пошаговая инструкция по окнам
+10. Что прислать обратно после внешнего шага
+
+Контуры, которые нужно различать явно:
+
+- Обновление Sources проекта шаблона в ChatGPT
+- Обновление шаблона в боевых repo
+- Обновление Sources боевых ChatGPT Projects
+
+Если contour не затронут, это нужно написать явно.
+
+### Удалить перед заменой
+
+Если replacement может создать stale duplicates, перечислите точные файлы и архивы, которые нужно удалить из Sources до загрузки новых.
+
+### Готовые артефакты для скачивания
+
+- generated каталоги и архивы из `{{sources_export_dir}}`
+- direct hot-set `{{canonical_direct_profile}}`
+- cold archive `{{canonical_cold_archive_pack}}`
+- canonical archive `{{canonical_archive_pack}}`
+- downstream patch bundle через `{{repo_patch_export_script}}`
+
+### Команды/скрипты для repo-level sync
+
+- `bash EXPORT_FACTORY_TEMPLATE_SOURCES.sh`
+- `{{repo_patch_export_script}}`
+- `{{repo_patch_apply_script}}`
+
+### Пошаговая инструкция по окнам
+
+- VS Code Explorer — открыть каталог с export/patch артефактами
+- VS Code Terminal — запустить команды экспорта и sync
+- ChatGPT Project → Sources — удалить старые Sources и загрузить новые
+- GitHub/repo window — выполнить review commit/push, если это действительно внешний шаг
+
 ### GitHub Repo
 
 Цель: создать внешний GitHub-репозиторий для текущего состояния `{{repo_name}}`.
