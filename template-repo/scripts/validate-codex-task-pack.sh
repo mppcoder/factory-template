@@ -62,6 +62,7 @@ def main() -> int:
     ensure_contains(boundary, "## Для пользователя", errors, "boundary-actions.md")
     ensure_contains(boundary, "## Для handoff", errors, "boundary-actions.md")
     ensure_contains(boundary, "## Для внешних границ", errors, "boundary-actions.md")
+    ensure_contains(boundary, "Инструкция пользователю", errors, "boundary-actions.md")
     for required_file in ["`codex-input.md`", "`codex-context.md`", "`codex-task-pack.md`", "`boundary-actions.md`"]:
         ensure_contains(boundary, required_file, errors, "boundary-actions.md")
 

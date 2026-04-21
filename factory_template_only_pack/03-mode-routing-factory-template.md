@@ -125,6 +125,8 @@ Release verify не выполнять на `mini`.
 Работаю в профиле heavy-analysis.
 ```
 
+Если heavy-analysis уже закрыл обязательные gate'ы и задача стала достаточно определенной для handoff, следующий ответ должен содержать готовый inline handoff, а не еще один purely-analytic summary.
+
 ---
 
 ## 4. Что внедрять сразу

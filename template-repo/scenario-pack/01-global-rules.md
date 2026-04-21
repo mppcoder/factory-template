@@ -15,3 +15,7 @@
 
 ## Alignment Rule
 Фабрика, greenfield и brownfield могут различаться по предметным шагам, но не могут различаться по правилам фиксации дефектов, handoff и completion.
+
+Отсутствие inline Codex handoff в ответе, где handoff уже допустим и задача достаточно определена, считается reusable process defect.
+
+Отсутствие финального блока `Инструкция пользователю` в ответе, где есть pending external/user step, считается reusable process defect.

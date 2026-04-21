@@ -1,6 +1,8 @@
 # Boundary Actions For {{repo_name}}
 
-## GitHub Repo
+## Инструкция пользователю
+
+### GitHub Repo
 
 Цель: создать внешний GitHub-репозиторий для текущего состояния `{{repo_name}}`.
 
@@ -19,7 +21,7 @@
 - URL созданного GitHub repo
 - какой transport выбран: `ssh` или `https`
 
-## Подключение Local Repo К GitHub
+### Подключение Local Repo К GitHub
 
 Цель: подключить локальный `{{root_path}}` к уже созданному GitHub repo.
 
@@ -39,7 +41,7 @@
 - URL `origin`
 - имя основной ветки, которую хотите использовать
 
-## ChatGPT Project
+### ChatGPT Project
 
 Цель: создать внешний ChatGPT Project для сценарной работы по `{{repo_name}}`.
 
@@ -58,7 +60,7 @@
 - подтверждение, что Project создан
 - сколько Sources-слотов доступно сейчас
 
-## Upload Curated Sources
+### Upload Curated Sources
 
 Цель: использовать штатную hybrid-схему `direct hot-set + cold archive remainder + canonical archive` без ручной догадки по составу.
 
@@ -88,7 +90,7 @@
 - что загружено как постоянный direct hot-set
 - нужен ли phase-specific archive override
 
-## Upload New Incoming Archive
+### Upload New Incoming Archive
 
 Цель: положить новый внешний архив в `_incoming` без смешивания с repo.
 

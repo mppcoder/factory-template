@@ -18,6 +18,7 @@ policy_presets:
       codex-led: forbidden
     notes:
     - Используйте для небольших исправлений без масштабной перестройки системы.
+    - Если handoff уже разрешен и задача достаточно определена, выдать inline handoff в том же ответе; если нужен следующий шаг пользователя, завершить ответ блоком `Инструкция пользователю`.
   feature:
     default_scenarios:
     - 00-master-router.md
@@ -39,6 +40,8 @@ policy_presets:
       codex-led: required
     notes:
     - Для новой функции обязательны spec, decomposition и verify.
+    - Для change-class с required handoff отсутствие inline handoff в том же ответе запрещено.
+    - Если есть pending user action или external step, финальная секция `Инструкция пользователю` обязательна.
   refactor:
     default_scenarios:
     - 00-master-router.md
@@ -59,6 +62,8 @@ policy_presets:
       codex-led: required
     notes:
     - Рефакторинг нельзя делать без conflict detection.
+    - Для change-class с required handoff отсутствие inline handoff в том же ответе запрещено.
+    - Если есть pending user action или external step, финальная секция `Инструкция пользователю` обязательна.
   migration:
     default_scenarios:
     - 00-master-router.md
@@ -79,6 +84,8 @@ policy_presets:
       codex-led: required
     notes:
     - Для миграций обязательно фиксируйте риски совместимости.
+    - Для change-class с required handoff отсутствие inline handoff в том же ответе запрещено.
+    - Если есть pending user action или external step, финальная секция `Инструкция пользователю` обязательна.
   brownfield-audit:
     default_scenarios:
     - 00-master-router.md
@@ -99,6 +106,8 @@ policy_presets:
       codex-led: forbidden
     notes:
     - Аудит может завершаться без handoff в Codex, если цель — инвентаризация и нормализация.
+    - Если handoff все же уже разрешен и задача достаточно определена, по умолчанию выдать inline handoff в том же ответе.
+    - Если есть pending user action или external step, финальная секция `Инструкция пользователю` обязательна.
   brownfield-stabilization:
     default_scenarios:
     - 00-master-router.md
@@ -123,3 +132,5 @@ policy_presets:
     notes:
     - До завершения evidence pack handoff должен оставаться optional.
     - После фиксации safe zones и rollback плана можно переходить в codex-led.
+    - Для codex-led отсутствие inline handoff в том же ответе запрещено.
+    - Если есть pending user action или external step, финальная секция `Инструкция пользователю` обязательна.

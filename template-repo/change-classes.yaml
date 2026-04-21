@@ -17,6 +17,9 @@ change_classes:
     - analysis
     - docs
     - fix
+    notes:
+    - Если выбранный режим допускает handoff и обязательные gate'ы с артефактами уже достаточны, handoff нужно выдать inline в том же ответе, а не заканчивать ответ только аналитикой.
+    - Если остается pending external/user step, обязательна финальная секция `Инструкция пользователю`.
   feature:
     title: Новая функция
     allowed_execution_modes:
@@ -42,6 +45,9 @@ change_classes:
     - implementation
     - docs
     - verify
+    notes:
+    - Для `hybrid` и `codex-led` handoff не может оставаться только в аналитическом виде: при достаточности gate'ов и артефактов нужен inline handoff в том же ответе.
+    - Если остается pending external/user step, обязательна финальная секция `Инструкция пользователю`.
   refactor:
     title: Рефакторинг
     allowed_execution_modes:
@@ -65,6 +71,9 @@ change_classes:
     - refactor
     - docs
     - verify
+    notes:
+    - Для режимов, где handoff допустим, при достаточности gate'ов и артефактов нужен inline handoff в том же ответе.
+    - Если остается pending external/user step, обязательна финальная секция `Инструкция пользователю`.
   migration:
     title: Миграция или перенос
     allowed_execution_modes:
@@ -89,6 +98,9 @@ change_classes:
     - migration
     - docs
     - verify
+    notes:
+    - Для всех допустимых режимов handoff должен выдаваться inline сразу после закрытия обязательных gate'ов и артефактов.
+    - Если остается pending external/user step, обязательна финальная секция `Инструкция пользователю`.
   brownfield-audit:
     title: Аудит существующей системы
     allowed_execution_modes:
@@ -108,6 +120,10 @@ change_classes:
     - analysis
     - audit
     - docs
+    notes:
+    - Если handoff не нужен по цели аудита, допустим closeout без Codex handoff.
+    - Если handoff уже разрешен и задача достаточно определена, по умолчанию выдать inline handoff в том же ответе.
+    - Если остается pending external/user step, обязательна финальная секция `Инструкция пользователю`.
   brownfield-stabilization:
     title: Стабилизация brownfield-контура
     allowed_execution_modes:
@@ -136,3 +152,5 @@ change_classes:
     notes:
     - Используйте для evidence-first стабилизации live brownfield, а не для реконструкции
       истории исходного repo.
+    - После закрытия обязательных gate'ов и подготовки обязательных артефактов нельзя останавливаться на одной аналитике: нужен inline handoff в том же ответе.
+    - Если остается pending external/user step, обязательна финальная секция `Инструкция пользователю`.

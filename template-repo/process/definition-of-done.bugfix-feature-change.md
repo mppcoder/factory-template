@@ -5,6 +5,7 @@
 - reusable defect не имеет factory feedback;
 - verification не подтверждает результат;
 - в done-отчете не отражено, что было найдено и что было исправлено.
+- при наличии pending external/user step финальный ответ не содержит блока `Инструкция пользователю`.
 
 ## Минимум для Done
 - verification-report.md заполнен;
@@ -13,3 +14,4 @@
 - если defect reusable, существует запись в `reports/factory-feedback/` или meta-feedback;
 - stage-state.yaml согласован;
 - DoD и defect-capture валидации проходят.
+- если остаются внешние действия или следующий шаг пользователя, финальный ответ завершен блоком `## Инструкция пользователю`.

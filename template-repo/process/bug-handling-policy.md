@@ -17,3 +17,6 @@
 5. Если нужен дополнительный анализ, подготовить ChatGPT handoff bug note.
 6. Если дефект reusable или есть подозрение на factory issue, создать factory feedback.
 7. Только после этого переходить к fix / remediation / handoff в Codex.
+
+## Правило remediation handoff
+Если после defect-capture обязательные gate'ы уже закрыты, артефакты достаточны и задача достаточно определена, remediation-ответ должен содержать готовый inline handoff в Codex в том же ответе.
