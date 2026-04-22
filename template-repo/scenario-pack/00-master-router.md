@@ -35,6 +35,9 @@
 ## Internal vs External Follow-up Rule
 Если после remediation, verify, commit/push или closeout-stage остаются внутренние Codex-eligible задачи внутри repo, нельзя завершать ответ только инструкцией пользователю.
 
+Если verify green, `origin` настроен и canonical verified sync технически доступен, commit/push считаются внутренней работой Codex, а не отдельным ручным шагом пользователя.
+В таком случае нужно выполнить канонический sync path внутри repo, а не откладывать commit/push до дополнительного запроса.
+
 К внутреннему follow-up по умолчанию относятся:
 - release note и release-facing changelog/update внутри repo;
 - source-pack, curated sources, export/manifests refresh;

@@ -17,6 +17,9 @@
 - либо выполнить `VALIDATE_VERIFIED_SYNC_PREREQS.sh` и `VERIFIED_SYNC.sh`;
 - либо явно зафиксировать реальный blocker, почему sync сейчас невозможен.
 
+При этих prereqs commit/push не считаются отдельной ручной Git-операцией пользователя.
+Ожидаемое поведение: Codex сам доводит change до canonical auto commit + auto push через `VERIFIED_SYNC.sh` или через lightweight follow-up path, если он допустим.
+
 Ответ, который при доступном sync заканчивается только summary/done-report без verified sync или без явного blocker, считается неполным closeout.
 
 Closeout без handoff допустим только при реальном отсутствии внутренней работы внутри repo.
