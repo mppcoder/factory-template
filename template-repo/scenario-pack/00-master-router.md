@@ -79,6 +79,17 @@ User-only closeout допустим только если remaining next step д
 ## Правило выравнивания контуров
 Если найден defect, gap, regression, inconsistency или template flaw, сначала пройдите defect-capture path: bug report → classification → factory feedback при reusable issue → handoff / remediation / Codex.
 
+## Правило incidental / side bug
+Если во время исполнения основного handoff найден побочный defect, его нельзя silently drop, даже если основной scope закрывается успешно.
+
+Обязательное дерево решений:
+- если incidental bug исправлен в рамках текущего scope, зафиксируй defect-capture и упомяни его в closeout;
+- если incidental bug не исправлен, сначала создай структурированный bug report, затем выполни self-handoff именно для этого нового бага;
+- self-handoff обязан отдельно определить `task_class`, `selected_profile`, `selected_model`, `selected_reasoning_effort`, `selected_scenario`, `pipeline_stage`, `artifacts_to_update`, принадлежность к текущему scope и необходимость отдельной remediation-задачи;
+- если для нового бага executable routing указывает другой профиль, модель или reasoning, канонический путь — выдать готовый handoff и рекомендовать новый task launch / новую Codex chat-сессию;
+- продолжение в текущем live chat допустимо только как явно помеченная non-canonical fallback-опция с прямой оговоркой, что уже открытая сессия не является надежным механизмом автопереключения profile/model/reasoning;
+- если для бага нужен deep research, вместо слабой in-session remediation попытки выдай ChatGPT-ready research bug report / prompt.
+
 ## Direct Task Rule
 Если Codex получает прямую задачу вне ChatGPT Project, сначала требуется self-handoff по тем же полям и gate'ам, что и у внешнего handoff:
 - classification;

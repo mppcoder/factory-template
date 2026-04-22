@@ -51,3 +51,16 @@ Closeout без handoff допустим только при реальном о
 Если replacement может создать stale duplicates в project instruction или reference/export наборе, в блоке `## Инструкция пользователю` обязателен отдельный подраздел `Удалить перед заменой` с точными именами файлов или архивов.
 
 Closeout не считается завершенным, если обязательный внешний completion package был выдан не сразу, а только после дополнительного напоминания пользователя. Такой ответ считается неполным closeout и требует remediation.
+
+## Incidental defect closeout rule
+Если в ходе основной задачи был найден incidental / side bug, финальный closeout обязан явно зафиксировать один из исходов:
+- defect исправлен в текущем scope и отражен в done/verification closeout;
+- defect не исправлен, но подготовлены bug report + self-handoff, а route подтвержден как совместимый с текущим chat;
+- defect не исправлен, подготовлены bug report + self-handoff, и как канонический следующий шаг рекомендован новый Codex task/chat из-за другого route;
+- defect требует deep research, и вместо remediation-handoff подготовлен ChatGPT-ready research bug report/prompt.
+
+Unresolved incidental defect нельзя оставлять только в narrative summary. В closeout должны быть явно перечислены:
+- где лежит bug report;
+- был ли выполнен self-handoff;
+- можно ли продолжать в текущем chat или нужен новый task launch;
+- если выбран non-canonical fallback `продолжить в этом чате`, это должно быть помечено как fallback, а не как равноправный canonical path.

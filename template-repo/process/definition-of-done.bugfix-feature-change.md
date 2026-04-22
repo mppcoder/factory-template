@@ -9,12 +9,14 @@
 - при наличии pending external/user step финальный ответ не содержит блока `Инструкция пользователю`.
 - остаются internal repo follow-up задачи, но финальный ответ оформлен как user-only closeout без inline handoff.
 - required completion package для repo-first instruction/external contour был выдан только после дополнительного запроса пользователя, а не в основном финальном ответе.
+- unresolved incidental defect был найден, но не получил bug report, self-handoff и явный next-step route.
 
 ## Минимум для Done
 - verification-report.md заполнен;
 - done-report.md заполнен;
 - если `origin` настроен и verified sync был доступен, существует `.factory-runtime/reports/verified-sync-report.yaml` со статусом `pushed` или `no-op`;
 - если в ходе работы выявлен defect, существует bug report в `reports/bugs/`;
+- если найден unresolved incidental defect, существует bug report с route decision и self-handoff outcome;
 - если defect reusable, существует запись в `reports/factory-feedback/` или meta-feedback;
 - stage-state.yaml согласован;
 - DoD и defect-capture валидации проходят.

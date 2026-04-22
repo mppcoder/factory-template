@@ -14,9 +14,20 @@
    - `project-only`
    - `factory-template`
    - `shared/unknown`
-5. Если нужен дополнительный анализ, подготовить ChatGPT handoff bug note.
-6. Если дефект reusable или есть подозрение на factory issue, создать factory feedback.
-7. Только после этого переходить к fix / remediation / handoff в Codex.
+5. Определить, укладывается ли remediation в текущий scope или нужен отдельный task boundary.
+6. Выполнить self-handoff для этого defect.
+7. Если нужен дополнительный анализ, подготовить ChatGPT handoff bug note или research-ready bug prompt.
+8. Если дефект reusable или есть подозрение на factory issue, создать factory feedback.
+9. Только после этого переходить к fix / remediation / handoff в Codex.
+
+## Правило incidental defect
+Если defect найден incidental во время выполнения другой задачи и не исправляется в том же scope:
+- bug report обязателен;
+- self-handoff обязателен;
+- если новый route отличается по profile/model/reasoning, канонический путь — новый task launch;
+- продолжение в текущей live-сессии допускается только как явно помеченный fallback;
+- нельзя делать вид, что advisory rules автоматически переключили уже открытую сессию;
+- если без исследования remediation ненадежен, вместо фикса подготовь ChatGPT-ready deep research prompt.
 
 ## Правило remediation handoff
 Если после defect-capture обязательные gate'ы уже закрыты, артефакты достаточны и задача достаточно определена, remediation-ответ должен содержать готовый inline handoff в Codex в том же ответе.

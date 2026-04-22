@@ -6,6 +6,9 @@
 - [ ] Обновить CURRENT_FUNCTIONAL_STATE.md
 - [ ] Проверить, нужен ли feedback в фабрику
 - [ ] Если был найден defect, создать или обновить bug report
+- [ ] Если найден unresolved incidental defect, подготовить self-handoff и зафиксировать route decision
+- [ ] Если для incidental defect нужен другой route, подготовить готовый handoff для нового Codex task/chat
+- [ ] Если для incidental defect нужен deep research, подготовить ChatGPT-ready research bug report/prompt
 - [ ] Проверить `.chatgpt/task-launch.yaml`
 - [ ] Проверить `.chatgpt/normalized-codex-handoff.md`
 - [ ] Если `origin` настроен и verify green, прогнать `bash VALIDATE_VERIFIED_SYNC_PREREQS.sh`
@@ -34,3 +37,4 @@
 - [ ] Что прислать обратно после внешнего шага
 - [ ] Completion package выдан в том же финальном ответе, без дополнительного напоминания пользователя
 - [ ] Если есть pending external step, финальный ответ действительно заканчивается блоком `## Инструкция пользователю`
+- [ ] Если найден incidental defect, финальный ответ явно говорит: same-chat fallback / recommended new Codex task / deep research

@@ -16,6 +16,17 @@ Scope: работать только в пределах этого repo и св
 Verify: использовать актуальные validators, verification-report.md и done-report.md.
 ```
 
+## Wording для incidental defect
+
+1. Continue in current chat
+`Self-handoff для incidental bug подтвердил тот же route. Продолжение в этом чате допустимо, но только как continuation на уже текущем route, а не как auto-switch сессии.`
+
+2. Recommended new Codex task/chat
+`Self-handoff для incidental bug выбрал другой profile/model/reasoning. Канонический следующий шаг: скопировать новый handoff и запустить отдельный Codex task/chat для этого бага.`
+
+3. ChatGPT deep research
+`Bug требует отдельного исследования. Вместо remediation-handoff подготовь ChatGPT-ready deep research bug report/prompt и не делай вид, что текущая live-сессия безопасно покрывает этот маршрут.`
+
 ## Инструкция пользователю
 1. Цель
 Передать задачу в Codex уже по нормализованному handoff.
