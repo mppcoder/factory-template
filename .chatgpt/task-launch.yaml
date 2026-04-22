@@ -1,0 +1,40 @@
+launch:
+  timestamp_utc: '2026-04-22T08:09:39+00:00'
+  launch_unit: new-task-launch
+  launch_source: chatgpt-handoff
+  router_layer: executable
+  task_class: quick
+  task_class_reasons:
+  - 'keyword hit: docs'
+  - 'keyword hit: найти'
+  selected_profile: quick
+  selected_model: gpt-5.4-mini
+  selected_reasoning_effort: low
+  selected_plan_mode_reasoning_effort: medium
+  project_profile: unknown-project-profile
+  selected_scenario: 00-master-router.md
+  pipeline_stage: done
+  artifacts_to_update:
+  - .chatgpt/codex-input.md
+  - .chatgpt/codex-context.md
+  - .chatgpt/codex-task-pack.md
+  - .chatgpt/verification-report.md
+  - .chatgpt/done-report.md
+  handoff_allowed: yes (forbidden)
+  defect_capture_path: not-required-by-text-signal
+  task_summary: '# Codex handoff input'
+  launch_boundary_rule: Выбор модели и reasoning mode считается надежным только на
+    новом запуске Codex для новой задачи.
+  advisory_layers:
+  - AGENTS.md / AGENT.md
+  - ChatGPT Project Instructions
+  - scenario-pack
+  - .chatgpt docs и handoff guidance
+  executable_layers:
+  - scripts/resolve-codex-task-route.py
+  - scripts/bootstrap-codex-task.py
+  - scripts/launch-codex-task.sh
+  - .codex/config.toml named profiles
+  launch_command: codex --profile quick
+  direct_self_handoff_required: false
+  direct_self_handoff_completed: false

@@ -11,6 +11,10 @@ from factory_automation_common import now_utc, read_text, read_yaml, write_yaml
 
 def load_routing_spec(root: Path) -> dict:
     spec_path = root / "codex-routing.yaml"
+    if not spec_path.exists():
+        fallback = root / "template-repo" / "codex-routing.yaml"
+        if fallback.exists():
+            spec_path = fallback
     data = yaml.safe_load(spec_path.read_text(encoding="utf-8")) if spec_path.exists() else {}
     return data if isinstance(data, dict) else {}
 

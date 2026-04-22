@@ -1,22 +1,14 @@
-# Task pack для Codex
-
-## Change ID
-chg-20260422-001
-
-## Заголовок
-Canonicalize VPS project-root layout under /projects
-
-## Класс изменения
-small-fix
-
-## Режим выполнения
-single-pass
+# Normalized Codex Handoff
 
 ## Launch source
 chatgpt-handoff
 
 ## Task class
 quick
+
+## Task class evidence
+- keyword hit: docs
+- keyword hit: найти
 
 ## Selected profile
 quick
@@ -39,17 +31,26 @@ unknown-project-profile
 ## Pipeline stage
 done
 
+## Artifacts to update
+- .chatgpt/codex-input.md
+- .chatgpt/codex-context.md
+- .chatgpt/codex-task-pack.md
+- .chatgpt/verification-report.md
+- .chatgpt/done-report.md
+
 ## Handoff allowed
 yes (forbidden)
 
 ## Defect capture path
 not-required-by-text-signal
 
-## Repo Rules Priority
-При исполнении handoff приоритет у правил repo: `AGENTS`, runbook, scenario-pack, policy files и других канонических файлов этого репозитория.
-Общие рабочие инструкции применять только там, где они не конфликтуют с repo rules и старшими системными ограничениями среды.
+## Launch boundary rule
+Выбор модели и reasoning mode считается надежным только на новом запуске Codex для новой задачи.
 
-## Handoff input
+## Executable launch command
+`codex --profile quick`
+
+## Task payload
 # Codex handoff input
 
 ## Контекст

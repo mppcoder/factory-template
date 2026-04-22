@@ -18,6 +18,10 @@
   - generated `done-checklist.md` теперь требует `VALIDATE_VERIFIED_SYNC_PREREQS.sh` -> `VERIFIED_SYNC.sh`
   - closeout rules и Codex runbook теперь явно запрещают завершение без sync или без документированного blocker
   - template closeout example обновлён под sync/user-instruction discipline
+- Отдельно устранён root-level routing/config bug:
+  - `template-repo/scripts/codex_task_router.py` теперь умеет fallback на `template-repo/codex-routing.yaml`, если root-level `codex-routing.yaml` отсутствует
+  - `create-codex-task-pack.py .` снова работает на самом `factory-template` root
+  - `validate-codex-task-pack.py .` и `validate-codex-routing.py .` проходят на root
 
 ## Какие артефакты обновлены
 - `.chatgpt/*` для текущего change
@@ -46,11 +50,11 @@
 - `template-repo/scenario-pack/16-done-closeout.md`
 - `factory_template_only_pack/02-runbook-dlya-codex-factory-template.md`
 - `template-repo/template/.chatgpt/examples/done-report.example.md`
+- `template-repo/scripts/codex_task_router.py`
 
 ## Что осталось вне объёма
 - Массовое применение этих правок в уже созданных downstream project repos.
 - Перегенерация и раздача обновлённых exported sources/boundary artifacts для внешних контуров.
-- Отдельная remediation для pre-existing root routing/config inconsistency, из-за которой `create-codex-task-pack.py` не валидируется на самом factory root.
 
 ## Итог закрытия
 - Для VPS layout теперь действует единое правило: в `/projects` остаются только project roots, а вся служебная brownfield-инфраструктура уходит внутрь конкретного проекта.

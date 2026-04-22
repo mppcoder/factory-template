@@ -2,20 +2,28 @@
 
 ```text
 Repo: factory-template
-Цель: усилить process rules для completion/handoff layer и validator contour.
-Приоритет: сначала правила repo (`AGENTS`, runbook, scenario-pack, policy files), затем общие инструкции, если нет конфликта.
-Scope: обновить handoff/validator/docs слой без размывания release semantics.
-Verify: использовать существующие repo validators, smoke/matrix checks и semantic pack validation.
+Цель: выполнить текущий handoff по проекту factory-template.
+Приоритет: сначала правила repo (`AGENTS`, runbook, scenario-pack, policy files), затем общие инструкции без конфликта с ними.
+Entry point: 00-master-router.md
+Launch source: chatgpt-handoff
+Task class: quick
+Selected profile: quick
+Selected model: gpt-5.4-mini
+Selected reasoning effort: low
+Pipeline stage: done
+Handoff allowed: yes (forbidden)
+Scope: работать только в пределах этого repo и связанных project artifacts.
+Verify: использовать актуальные validators, verification-report.md и done-report.md.
 ```
 
 ## Инструкция пользователю
 1. Цель
-Понять, что handoff layer и validators уже синхронизированы.
+Передать задачу в Codex уже по нормализованному handoff.
 2. Где сделать
-В текущем repo `factory-template`.
+В текущем проекте.
 3. Точные шаги
-При необходимости посмотреть `README.md`, `CURRENT_FUNCTIONAL_STATE.md` и `TEST_REPORT.md`.
+Использовать подготовленный handoff-блок выше без пересборки из файлов вручную.
 4. Ожидаемый результат
-Repo отражает актуальные handoff rules и соответствующие verify checks.
+Codex получает один цельный copy-paste handoff и работает по правилам repo.
 5. Что прислать обратно
-Ничего, если дополнительный follow-up не нужен.
+Итог выполнения или уточнение, если появится внешний блокирующий шаг.
