@@ -1,11 +1,12 @@
 launch:
-  timestamp_utc: '2026-04-22T10:46:42+00:00'
+  timestamp_utc: '2026-04-22T12:10:59+00:00'
   launch_unit: new-task-launch
   launch_source: chatgpt-handoff
   router_layer: executable
   task_class: build
   task_class_reasons:
-  - 'keyword hit: change'
+  - 'keyword hit: fix'
+  - 'keyword hit: исправ'
   - 'explicit reasoning/model override matched default profile: build'
   selected_profile: build
   selected_model: gpt-5.4
@@ -20,8 +21,11 @@ launch:
   - .chatgpt/codex-task-pack.md
   - .chatgpt/verification-report.md
   - .chatgpt/done-report.md
+  - reports/bugs/
+  - reports/factory-feedback/
   handoff_allowed: yes (forbidden)
-  defect_capture_path: not-required-by-text-signal
+  defect_capture_path: reproduce -> evidence -> bug report -> layer classification
+    -> factory feedback if reusable -> remediation
   task_summary: '# Codex handoff input'
   launch_boundary_rule: Выбор модели и reasoning mode считается надежным только на
     новом запуске Codex для новой задачи.

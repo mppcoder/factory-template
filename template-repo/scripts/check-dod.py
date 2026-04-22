@@ -69,6 +69,21 @@ def meaningful(path: Path, min_lines: int = 3) -> bool:
 
 
 def has_origin_remote(root: Path) -> bool:
+    top = subprocess.run(
+        ['git', 'rev-parse', '--show-toplevel'],
+        cwd=root,
+        text=True,
+        capture_output=True,
+        check=False,
+    )
+    if top.returncode != 0:
+        return False
+    try:
+        git_root = Path(top.stdout.strip()).resolve()
+    except Exception:
+        return False
+    if git_root != root.resolve():
+        return False
     proc = subprocess.run(
         ['git', 'remote', 'get-url', '--push', 'origin'],
         cwd=root,

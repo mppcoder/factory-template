@@ -1,19 +1,16 @@
 change:
-  id: "chg-20260422-004"
-  title: "Require explicit no-user-action closeout wording"
+  id: "chg-20260422-005"
+  title: "Fix DoD validator for nested example fixtures"
   class: "small-fix"
   execution_mode: "single-pass"
   type: "brownfield"
   status: "done"
   priority: "medium"
-  summary: "Уточнить closeout contract: если `## Инструкция пользователю` не нужна, финальный ответ обязан явно сказать, что внешних действий не требуется."
+  summary: "Исправить `check-dod.py`, чтобы nested example fixtures внутри внешнего repo не наследовали `origin` родительского git root и не получали ложное требование verified-sync-report."
   outputs:
-    - "template-repo/scenario-pack/16-done-closeout.md"
-    - "template-repo/process/definition-of-done.bugfix-feature-change.md"
-    - "template-repo/scripts/create-codex-task-pack.py"
-    - "template-repo/scripts/validate-codex-task-pack.py"
-    - ".chatgpt/boundary-actions.md"
-    - ".chatgpt/done-checklist.md"
+    - "template-repo/scripts/check-dod.py"
+    - "reports/bugs/bug-016-check-dod-inherits-parent-origin-for-nested-example-fixtures.md"
+    - "reports/factory-feedback/feedback-016-check-dod-inherits-parent-origin-for-nested-example-fixtures.md"
     - ".chatgpt/task-index.yaml"
     - ".chatgpt/codex-input.md"
     - ".chatgpt/verification-report.md"
@@ -21,30 +18,27 @@ change:
 
 tasks:
   - id: "T-001"
-    title: "Закрепить явную no-user-action формулировку в closeout rules"
-    type: "documentation"
+    title: "Зафиксировать false positive в DoD validator"
+    type: "defect-capture"
     risk_level: "low"
     executor: "developer"
     depends_on: []
     outputs:
-      - "template-repo/scenario-pack/16-done-closeout.md"
-      - "template-repo/process/definition-of-done.bugfix-feature-change.md"
+      - "reports/bugs/bug-016-check-dod-inherits-parent-origin-for-nested-example-fixtures.md"
+      - "reports/factory-feedback/feedback-016-check-dod-inherits-parent-origin-for-nested-example-fixtures.md"
     acceptance:
-      - "closeout явно требует фразу о том, что внешних действий не требуется"
-      - "DoD считает отсутствие такой фразы незавершенным closeout"
+      - "bug report воспроизводит inherited parent origin path"
+      - "factory feedback описывает reusable validator risk"
 
   - id: "T-002"
-    title: "Синхронизировать generated .chatgpt guidance и validator"
+    title: "Починить git-root boundary в check-dod"
     type: "automation"
-    risk_level: "low"
+    risk_level: "medium"
     executor: "developer"
     depends_on:
       - "T-001"
     outputs:
-      - "template-repo/scripts/create-codex-task-pack.py"
-      - "template-repo/scripts/validate-codex-task-pack.py"
-      - ".chatgpt/boundary-actions.md"
-      - ".chatgpt/done-checklist.md"
+      - "template-repo/scripts/check-dod.py"
     acceptance:
-      - "generated checklist требует явного no-user-action wording"
-      - "validator проверяет наличие этой guidance"
+      - "nested examples больше не требуют verified-sync-report из-за origin родительского repo"
+      - "EXAMPLES_TEST, MATRIX_TEST, SMOKE_TEST и PRE_RELEASE_AUDIT проходят на чистой базе"

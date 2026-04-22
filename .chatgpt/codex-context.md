@@ -10,7 +10,7 @@ factory-template
 done
 
 ## Change ID
-chg-20260422-004
+chg-20260422-005
 
 ## Краткое резюме
-Уточнить closeout contract: если `## Инструкция пользователю` не нужна, финальный ответ обязан явно сказать, что внешних действий не требуется.
+Исправить `check-dod.py`, чтобы nested example fixtures внутри внешнего repo не наследовали `origin` родительского git root и не получали ложное требование verified-sync-report.

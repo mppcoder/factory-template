@@ -2,16 +2,20 @@
 
 ## Контекст
 - Repo: `factory-template`
-- Нужно уточнить closeout behavior.
-- Если финальный ответ не требует `## Инструкция пользователю`, он всё равно должен явно говорить, что внешних действий не требуется.
-- Сейчас это правило в repo описано недостаточно жёстко и из-за этого закрытый internal change может выглядеть как неявно незавершённый.
+- Проведен генеральный audit проекта на целостность, полноту и соответствие.
+- Главный реальный defect найден в `template-repo/scripts/check-dod.py`: validator наследовал `origin` родительского git repo для nested example fixtures и выдавал false positive по `verified-sync-report`.
 
 ## Что должен сделать исполнитель
-- Обновить scenario closeout rule и DoD.
-- Синхронизировать generated `.chatgpt` guidance и validator.
-- Подтвердить, что task-pack generation и validation проходят.
+- Зафиксировать reusable defect и factory feedback.
+- Исправить `check-dod.py`, чтобы remote-проверка срабатывала только когда проверяемый путь сам является git repo root.
+- Подтвердить исправление полным suite:
+  - `EXAMPLES_TEST.sh`
+  - `MATRIX_TEST.sh`
+  - `SMOKE_TEST.sh`
+  - `VALIDATE_FACTORY_TEMPLATE_OPS.sh`
+  - `PRE_RELEASE_AUDIT.sh`
 
 ## Ограничения
-- Не требовать `## Инструкция пользователю`, если внешнего шага реально нет.
-- Но и не оставлять отсутствие внешнего шага подразумеваемым.
+- Не маскировать проблему под правку example fixtures.
+- Не ослаблять verified-sync guard для реальных рабочих repo.
 - Приоритет у правил repo: `AGENTS`, runbook, scenario-pack и policy files репозитория.
