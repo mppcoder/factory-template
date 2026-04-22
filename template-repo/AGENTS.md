@@ -1,0 +1,50 @@
+# Repo-first scenario rule for Codex
+
+Работай строго repo-first.
+
+## Scenario path setting
+Используй единую настройку:
+
+`SCENARIO_PACK_PATH=template-repo/scenario-pack`
+
+Для проекта `factory-template` это значение является значением по умолчанию.
+
+Для боевых проектов на основе шаблона:
+- сохрани это же значение, если структура repo не менялась;
+- если папка сценариев перенесена, сначала обнови только `SCENARIO_PACK_PATH` на фактический repo-local path;
+- не угадывай путь к сценариям “по памяти”.
+
+## Обязательное первое действие на каждый новый запрос
+1. Открой `${SCENARIO_PACK_PATH}/00-master-router.md`.
+2. Прочитай его.
+3. Дальше действуй строго по маршруту, который он задаёт.
+4. Если router отправляет в другие repo-файлы, сначала прочитай их, затем продолжай работу.
+5. Не начинай реализацию до прохождения этого шага.
+
+## Что фиксировать в первом substantive ответе
+- selected project profile
+- selected scenario
+- current pipeline stage
+- artifacts to update
+- handoff allowed
+
+## Routing rule
+Всегда разделяй:
+- advisory/policy layer;
+- executable routing layer.
+
+Нельзя считать, что advisory-тексты сами переключают модель, профиль или reasoning mode внутри уже открытой сессии.
+
+Надёжная единица маршрутизации — только новый task launch.
+
+## Direct task rule
+Если задача пришла без внешнего handoff, сначала сделай self-handoff по repo rules, а уже потом переходи к remediation / implementation.
+
+## Handoff rule
+Если handoff уже допустим и задача достаточно определена, выдавай один цельный inline handoff block для copy-paste.
+
+## Запрещено
+- отвечать до чтения `${SCENARIO_PACK_PATH}/00-master-router.md`;
+- пересказывать сценарии из памяти вместо чтения repo;
+- подменять repo rules текстом из ChatGPT Project;
+- считать уже открытую сессию Codex надёжным механизмом автопереключения профиля под новую задачу.

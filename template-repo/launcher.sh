@@ -52,14 +52,16 @@ for p in Path(os.environ['DEST_DIR']).rglob("*"):
             txt = txt.replace(k, v)
         p.write_text(txt, encoding="utf-8")
 PY
+rm -f "$DEST_DIR/AGENT.md"
+python3 "$SCRIPT_DIR/scripts/sync-agents.py" "$SCRIPT_DIR/AGENTS.md" "$DEST_DIR/AGENTS.md"
 mkdir -p "$DEST_DIR/scripts"
 cp -R "$SCRIPT_DIR/scripts/." "$DEST_DIR/scripts/"
 cp "$SCRIPT_DIR/change-classes.yaml" "$DEST_DIR/change-classes.yaml"
 cp "$SCRIPT_DIR/policy-presets.yaml" "$DEST_DIR/policy-presets.yaml"
 cp "$SCRIPT_DIR/project-presets.yaml" "$DEST_DIR/project-presets.yaml"
 cp "$SCRIPT_DIR/codex-routing.yaml" "$DEST_DIR/codex-routing.yaml"
-mkdir -p "$DEST_DIR/.factory-sources"
-cp -R "$SCRIPT_DIR/scenario-pack" "$DEST_DIR/.factory-sources/scenario-pack"
+mkdir -p "$DEST_DIR/template-repo"
+cp -R "$SCRIPT_DIR/scenario-pack" "$DEST_DIR/template-repo/scenario-pack"
 mkdir -p "$DEST_DIR/reports/bugs" "$DEST_DIR/reports/factory-feedback" "$DEST_DIR/tasks/chatgpt" "$DEST_DIR/tasks/codex"
 
 CHANGE_ID="$($DEST_DIR/scripts/new-change-id.sh "$DEST_DIR")"

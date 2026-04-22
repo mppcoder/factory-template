@@ -58,6 +58,11 @@ Internal repo follow-up, включая release-followup, source-pack refresh, e
 - `{{repo_patch_export_script}}`
 - `{{repo_patch_apply_script}}`
 
+Для repo-first instruction layer downstream repo:
+- source-of-truth: `template-repo/AGENTS.md`
+- materialized clone: root `AGENTS.md` боевого repo
+- после штатного sync/update flow Codex в battle repo должен читать именно root `AGENTS.md`
+
 ### Ограничение repo-first режима
 
 - ChatGPT Project не должен хранить сценарии как source of truth

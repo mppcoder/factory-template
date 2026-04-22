@@ -7,6 +7,10 @@ sync_zones:
   - template-repo/scenario-pack
   - template-repo/template/.chatgpt/examples
   - template-repo/template/meta-feedback
+materialized_files:
+  - source: template-repo/AGENTS.md
+    target: AGENTS.md
+    mode: materialized-clone
 advisory_only_zones:
   - template-repo/template/.chatgpt
   - template-repo/template/brownfield

@@ -5,14 +5,14 @@ root = Path('.')
 chat = root / '.chatgpt'
 (chat / 'evidence-register.md').write_text('''# Реестр доказательств
 
-- [PROJECT] В каталоге `.factory-sources/scenario-pack` подтверждено наличие сценарного слоя и файлов маршрутизации.
+- [PROJECT] В каталоге `template-repo/scenario-pack` подтверждено наличие сценарного слоя и файлов маршрутизации.
 - [DOC] В `bootstrap/04-как-работает-stage-pipeline.md` зафиксировано требование закрывать этапные шлюзы до handoff.
 - [REAL] Живой smoke-test подтвердил, что launcher создает проект, копирует скрипты и заполняет стартовые YAML-файлы.
 ''', encoding='utf-8')
 (chat / 'reality-check.md').write_text('''# Проверка реальности
 
 ## Что подтверждено в проекте
-- В проекте уже созданы каталоги `.chatgpt`, `scripts`, `work` и `.factory-sources`.
+- В проекте уже созданы каталоги `.chatgpt`, `scripts`, `work` и `template-repo`.
 - Версия пакета: 2.4.1.
 - В репозитории подтверждено наличие `project-presets.yaml`, `policy-presets.yaml` и `change-classes.yaml`.
 

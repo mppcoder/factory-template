@@ -20,9 +20,18 @@ case "$MODE" in
     ;;
   --apply-safe-zones)
     APPLY_DIR="$PATCH_BUNDLE/applied-safe-zones"
+    PROJECT_ROOT="$(cd "$PATCH_BUNDLE/.." && pwd)"
     mkdir -p "$APPLY_DIR"
     for f in changed-files.txt patch-summary.md template-sync.patch; do [ -f "$PATCH_BUNDLE/$f" ] && cp "$PATCH_BUNDLE/$f" "$APPLY_DIR/$f"; done
+    if [ -d "$PATCH_BUNDLE/generated-files" ]; then
+      while IFS= read -r -d '' file; do
+        rel="${file#"$PATCH_BUNDLE/generated-files/"}"
+        mkdir -p "$PROJECT_ROOT/$(dirname "$rel")"
+        cp "$file" "$PROJECT_ROOT/$rel"
+      done < <(find "$PATCH_BUNDLE/generated-files" -type f -print0)
+    fi
     echo "Safe-зоны отмечены как применимые. Фактическое применение выполняется только после ручного подтверждения в template-repo."
+    echo "Materialized files, включая root AGENTS.md, синхронизированы в repo root через canonical sync path."
     echo "Каталог результата: $APPLY_DIR"
     ;;
   *)

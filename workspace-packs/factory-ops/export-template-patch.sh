@@ -14,14 +14,31 @@ mkdir -p "$OUT"
 python3 - <<PYCODE
 from pathlib import Path
 import yaml, difflib
+
+SYNC_HEADER = """<!--
+SYNCED FILE - DO NOT EDIT MANUALLY
+Source of truth: template-repo/AGENTS.md
+This root AGENTS.md is a materialized clone for the downstream repo.
+Manual edits in this clone will be overwritten by the canonical template sync flow.
+-->
+"""
+
+
+def render_materialized_clone(text: str) -> str:
+    return f"{SYNC_HEADER}\n{text.strip()}\n"
+
+
 manifest = yaml.safe_load(Path(r"$MANIFEST").read_text(encoding='utf-8')) or {}
 template = Path(r"$TEMPLATE_ROOT").resolve()
 project = Path(r"$PROJECT_ROOT").resolve()
 out = Path(r"$OUT").resolve()
 summary = []
 changed = []
+generated_dir = out / 'generated-files'
 def project_zone(zone: str) -> Path:
-    return project / zone.replace('template-repo/template/', '').replace('template-repo/', '')
+    if zone.startswith('template-repo/template/'):
+        return project / zone.replace('template-repo/template/', '', 1)
+    return project / zone
 for zone in manifest.get('sync_zones', []):
     t_zone = template / zone
     p_zone = project_zone(zone)
@@ -46,6 +63,34 @@ for zone in manifest.get('sync_zones', []):
         (out / name).write_text(patch, encoding='utf-8')
         changed.append(f"{zone}/{rel}")
         summary.append(f"- зона: {zone}\n  файл: {rel}\n  режим: safe-sync")
+for mapping in manifest.get('materialized_files', []):
+    source = template / mapping['source']
+    target = project / mapping['target']
+    if not source.exists():
+        continue
+    rendered = source.read_text(encoding='utf-8')
+    if mapping.get('mode') == 'materialized-clone':
+        rendered = render_materialized_clone(rendered)
+    current = target.read_text(encoding='utf-8') if target.exists() else ''
+    if current == rendered:
+        continue
+    generated_target = generated_dir / mapping['target']
+    generated_target.parent.mkdir(parents=True, exist_ok=True)
+    generated_target.write_text(rendered, encoding='utf-8')
+    patch = ''.join(
+        difflib.unified_diff(
+            current.splitlines(keepends=True),
+            rendered.splitlines(keepends=True),
+            fromfile=str(target),
+            tofile=str(target),
+        )
+    )
+    name = mapping['target'].replace('/', '__') + '.patch'
+    (out / name).write_text(patch, encoding='utf-8')
+    changed.append(f"{mapping['source']} => {mapping['target']}")
+    summary.append(
+        f"- materialized clone: {mapping['source']}\n  target: {mapping['target']}\n  режим: generated-sync"
+    )
 for zone in manifest.get('advisory_only_zones', []):
     if (template / zone).exists() and project_zone(zone).exists():
         summary.append(f"- advisory-only зона: {zone}")

@@ -134,6 +134,23 @@ python3 template-repo/scripts/validate-codex-routing.py <working-project>
 - если repo-first инструкция не обновлена после смены repo/path, модель может читать не тот репозиторий;
 - нельзя заменять чтение `00-master-router.md` пересказом по памяти.
 
+## AGENTS Canonical Sync Scheme
+
+- root [AGENTS.md](/projects/factory-template/AGENTS.md) — persistent instruction для работы внутри самого `factory-template`;
+- [template-repo/AGENTS.md](/projects/factory-template/template-repo/AGENTS.md) — canonical template source для downstream/battle repos;
+- root `AGENTS.md` в боевом repo — materialized clone из `template-repo/AGENTS.md`, а не самостоятельный source of truth.
+
+Для downstream repo разрешено менять только значение `SCENARIO_PACK_PATH`, если repo-local путь к scenario-pack отличается.
+
+Канонический sync path для этого контура:
+
+1. launcher создаёт initial root `AGENTS.md` через `template-repo/scripts/sync-agents.py`;
+2. downstream refresh использует `workspace-packs/factory-ops/export-template-patch.sh`;
+3. `workspace-packs/factory-ops/apply-template-patch.sh --apply-safe-zones` materializes generated root `AGENTS.md` в боевом repo;
+4. `workspace-packs/factory-ops/check-template-drift.py` ловит отсутствие root clone и drift относительно `template-repo/AGENTS.md`.
+
+Это не "магическое" обновление GitHub само по себе: sync происходит только как часть канонического template-sync/update flow внутри repo/tooling.
+
 Состав archive pack и direct profile теперь берётся из единого declarative manifest:
 
 - `packaging/sources/sources-profiles.yaml`

@@ -3,7 +3,9 @@ set -euo pipefail
 ROOT="${1:-.}"
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 DEST="$ROOT/_sources-export"
-if [ -d "$ROOT/.factory-sources/scenario-pack" ]; then
+if [ -d "$ROOT/template-repo/scenario-pack" ]; then
+  SRC="$ROOT/template-repo/scenario-pack"
+elif [ -d "$ROOT/.factory-sources/scenario-pack" ]; then
   SRC="$ROOT/.factory-sources/scenario-pack"
 elif [ -d "$SCRIPT_DIR/../scenario-pack" ]; then
   SRC="$SCRIPT_DIR/../scenario-pack"

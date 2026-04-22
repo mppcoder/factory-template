@@ -30,6 +30,14 @@
 - `AGENTS`, repo instructions и scenario-pack не переключают модель сами по себе;
 - выбор profile/model/reasoning должен происходить на новом task launch через `./scripts/launch-codex-task.sh`.
 
+## AGENTS For Downstream Repos
+
+- [template-repo/AGENTS.md](/projects/factory-template/template-repo/AGENTS.md) является source-of-truth для downstream/battle repos;
+- launcher materializes root `AGENTS.md` в созданном проекте через `scripts/sync-agents.py`;
+- root `AGENTS.md` downstream repo должен читаться Codex как repo-first instruction;
+- ручные правки в downstream clone запрещены и будут перезаписаны штатным sync/update flow;
+- если repo-local путь к scenario-pack отличается, в downstream clone разрешено менять только `SCENARIO_PACK_PATH`.
+
 ## Правило фиксации дефектов
 Любой обнаруженный defect должен быть зафиксирован как bug report до исправления или одновременно с ним. Silent fixes запрещены.
 
