@@ -36,7 +36,8 @@
 - для factory-template ChatGPT Project canonical instruction не менялась по сути, но должна ссылаться на актуальный repo и repo-first rule set;
 - для downstream/battle repos source-of-truth по `AGENTS` остаётся в `template-repo/AGENTS.md`;
 - completion package и source/export contours теперь должны использовать новый `RELEASE_NOTES.md` как часть release-facing канона;
-- для `hot15` сохраняется правило flat folder без подпапок.
+- для `hot15` сохраняется правило flat folder без подпапок;
+- обновление `Sources` не требуется по умолчанию и используется только там, где legacy/hybrid contour ещё оставлен как явный fallback.
 
 ### Проверка и выпуск
 

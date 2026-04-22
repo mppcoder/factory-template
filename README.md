@@ -182,6 +182,7 @@ bash PHASE_DETECTION_TEST.sh
 ```
 
 Эта рекомендация автоматически попадает в `_sources-export/factory-template/SUMMARY.md` и `_boundary-actions/factory-template-boundary-actions.md`, но для ежедневной работы ChatGPT Project должен опираться на GitHub repo, а не на отдельный Drive/Sources sync-контур.
+Перезаливка `Sources` не является обязательным release-step и допускается только как compatibility fallback для проектов, которые ещё не переведены на чистый repo-first режим.
 
 Состав curated packs и параметры boundary-инструкций задаются декларативно в:
 

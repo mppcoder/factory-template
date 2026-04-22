@@ -542,7 +542,7 @@ flowchart TD
 4. Собрать release bundle и auxiliary artifacts.
 5. Подготовить `.chatgpt` closeout.
 
-## 13. Workflow: completion package / Sources / downstream sync
+## 13. Workflow: completion package / optional Sources fallback / downstream sync
 
 ### Входы
 
@@ -576,7 +576,7 @@ flowchart TD
     C --> D[Write completion package]
     D --> E[Factory ChatGPT update]
     D --> F[Downstream repo sync]
-    D --> G[Downstream ChatGPT sources refresh]
+    D --> G[Optional downstream ChatGPT Sources fallback]
 ```
 
 ### Шаги
@@ -589,6 +589,7 @@ flowchart TD
    - обновление downstream/battle ChatGPT Project instructions.
 4. Добавить delete-before-replace semantics.
 5. Для `hot15` учитывать flat folder без подпапок.
+6. Не предлагать refresh `Sources` как default path: он допустим только для legacy/hybrid проектов, которые ещё не работают полностью в repo-first режиме.
 
 ## 14. Workflow: incidental bugs
 

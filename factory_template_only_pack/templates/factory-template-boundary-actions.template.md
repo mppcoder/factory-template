@@ -53,6 +53,11 @@ Internal repo follow-up, включая release-followup, source-pack refresh, e
 - direct profile dir: `{{direct_sources_dir}}`
 - recommended pack: `{{recommended_sources_pack}}`
 
+Важно:
+- эти export/reference артефакты не означают обязательный шаг обновления `Sources`;
+- по умолчанию ChatGPT Project должен работать напрямую с GitHub repo;
+- используйте packs и direct profile только как optional compatibility fallback для legacy/hybrid Projects.
+
 ### Команды/скрипты для repo-level sync
 
 - `{{repo_patch_export_script}}`
@@ -68,6 +73,7 @@ Internal repo follow-up, включая release-followup, source-pack refresh, e
 - ChatGPT Project не должен хранить сценарии как source of truth
 - сначала всегда читается GitHub repo, потом `00-master-router.md`
 - старые инструкции про project artifacts и старый staging-workflow нужно удалять, если они конфликтуют с новым правилом
+- не предлагайте refresh `Sources` как обязательный шаг после релиза, если project уже работает в repo-first режиме
 - текущая phase recommendation: `{{current_phase}}`
 - phase detection reason: `{{phase_detection_reason}}`
 - phase recommendations:

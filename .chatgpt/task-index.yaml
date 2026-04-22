@@ -6,7 +6,7 @@ change:
   type: brownfield
   status: done
   priority: high
-  summary: Smoke-test изменение для проверки фабрики.
+  summary: Нормализовать release-facing документацию по `factory-template`, синхронизировать versioning/release layer, выпустить patch-релиз 2.4.3 и закрепить, что `Sources` не являются default post-release path.
   outputs:
   - README.md
   - docs/template-architecture-and-event-workflows.md
@@ -18,6 +18,8 @@ change:
   - template-repo/CHANGELOG.md
   - meta-template-project/RELEASE_NOTES.md
   - packaging/sources/sources-profiles.yaml
+  - factory_template_only_pack/01-runbook-dlya-polzovatelya-factory-template.md
+  - factory_template_only_pack/templates/factory-template-boundary-actions.template.md
   - .chatgpt/task-index.yaml
   - .chatgpt/task-launch.yaml
   - .chatgpt/codex-input.md
@@ -57,3 +59,19 @@ tasks:
   acceptance:
   - release docs и manifests согласованы на версии 2.4.3
   - repo готов к verify, verified sync и release execution
+- id: T-003
+  title: "Закрепить repo-first wording: Sources only as optional fallback"
+  type: docs-followup
+  risk_level: low
+  executor: developer
+  depends_on:
+  - T-002
+  outputs:
+  - README.md
+  - RELEASE_NOTES.md
+  - docs/template-architecture-and-event-workflows.md
+  - factory_template_only_pack/01-runbook-dlya-polzovatelya-factory-template.md
+  - factory_template_only_pack/templates/factory-template-boundary-actions.template.md
+  acceptance:
+  - release-facing docs не предлагают Sources как default post-release action
+  - boundary/completion wording оставляет Sources только как optional compatibility fallback
