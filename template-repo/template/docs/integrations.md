@@ -16,3 +16,5 @@
 Для запуска Codex этого недостаточно:
 - Instructions и router-сценарии являются advisory layer;
 - model/profile selection должен происходить через новый task launch и `./scripts/launch-codex-task.sh`.
+- сначала выполняйте launch command, а потом вставляйте handoff в свежую Codex chat-сессию;
+- если проявился sticky last-used state, закройте текущую сессию и запустите новый task launch повторно.

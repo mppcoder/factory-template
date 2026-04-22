@@ -28,4 +28,4 @@
 <!-- да / нет -->
 
 ## Канонический следующий шаг
-<!-- новый Codex task/chat с handoff / продолжение в текущем чате как fallback / ChatGPT deep research -->
+<!-- новый task launch / новая Codex chat-сессия через launch command + handoff / продолжение в текущем чате как fallback / ChatGPT deep research -->

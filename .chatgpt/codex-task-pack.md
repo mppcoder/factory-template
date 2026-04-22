@@ -1,10 +1,10 @@
 # Task pack для Codex
 
 ## Change ID
-chg-20260422-006
+chg-20260422-007
 
 ## Заголовок
-Prepare release-facing package and ship patch release 2.4.3
+Normalize canonical factory hierarchy and ship 2.4.4
 
 ## Класс изменения
 feature
@@ -16,10 +16,10 @@ codex-led
 chatgpt-handoff
 
 ## Task class
-deep
+review
 
 ## Selected profile
-deep
+review
 
 ## Selected model
 gpt-5.4
@@ -30,48 +30,42 @@ high
 ## Selected plan mode reasoning
 high
 
+## Executable launch command
+./scripts/launch-codex-task.sh --launch-source chatgpt-handoff --task-file .chatgpt/codex-input.md --execute
+
+## Direct Codex command behind launcher
+codex --profile review
+
 ## Project profile
-factory-template
+unknown-project-profile
 
 ## Selected scenario
-00-master-router.md -> change/release-docs-and-release-followup
+00-master-router.md
 
 ## Pipeline stage
-definition-and-release-planning -> done
+done
 
 ## Handoff allowed
-yes
+yes (forbidden)
 
 ## Defect capture path
-not-required-by-text-signal; incidental defects still require capture if discovered
+not-required-by-text-signal
 
 ## Repo Rules Priority
 При исполнении handoff приоритет у правил repo: `AGENTS`, runbook, scenario-pack, policy files и других канонических файлов этого репозитория.
 Общие рабочие инструкции применять только там, где они не конфликтуют с repo rules и старшими системными ограничениями среды.
 
 ## Handoff input
-# Codex handoff input
+# Входной пакет для Codex
 
 ## Контекст
-- Repo: `factory-template`
-- Требуется подготовить полный release-facing пакет по пункту 12 и выпустить новый patch-релиз.
-- В repo уже есть сильный канон по scenario-pack, runbooks, launcher и release automation, но root-level `RELEASE_NOTES.md` отсутствовал, а release-facing описания были распределены между несколькими документами.
+- Это smoke-test ядра фабрики проектов.
+- Базовые проверки уже закрыты и подтверждены evidence-артефактами.
+- При исполнении этого handoff приоритет у правил repo: `AGENTS`, runbook, scenario-pack и policy files репозитория.
 
 ## Что должен сделать исполнитель
-- Провести discovery и gap-analysis по release-facing документации.
-- Нормализовать канонический пакет вокруг `README.md`, `docs/template-architecture-and-event-workflows.md`, `RELEASE_NOTES.md`, versioning layer и `.chatgpt` closeout artifacts.
-- Синхронизировать `VERSION.md`, `CHANGELOG.md`, manifests, template/meta release docs и source/export profiles под новый релиз.
-- Подтвердить изменения полным suite:
-  - `EXAMPLES_TEST.sh`
-  - `MATRIX_TEST.sh`
-  - `SMOKE_TEST.sh`
-  - `VALIDATE_FACTORY_TEMPLATE_OPS.sh`
-  - `PRE_RELEASE_AUDIT.sh`
-  - `VALIDATE_VERIFIED_SYNC_PREREQS.sh`
-  - `VALIDATE_RELEASE_DECISION.sh`
-  - `VALIDATE_RELEASE_NOTES_SOURCE.sh`
+- Считать smoke-test завершенным без дополнительных изменений.
 
 ## Ограничения
-- Не плодить параллельные источники истины по release notes и workflow.
-- Не заменять repo-first канон ad hoc release-файлами.
-- Приоритет у правил repo: `AGENTS`, runbook, scenario-pack и policy files репозитория.
+- Не менять core-структуру проекта.
+- Общие рабочие инструкции применять только там, где они не противоречат repo rules и старшим системным ограничениям среды.

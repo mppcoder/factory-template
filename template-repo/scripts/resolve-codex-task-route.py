@@ -41,7 +41,9 @@ def main() -> int:
     print(f"pipeline_stage={launch['pipeline_stage']}")
     print(f"handoff_allowed={launch['handoff_allowed']}")
     print(f"defect_capture_path={launch['defect_capture_path']}")
+    print(f"launch_artifact_path={launch['launch_artifact_path']}")
     print(f"launch_command={launch['launch_command']}")
+    print(f"codex_profile_command={launch['codex_profile_command']}")
     return 0
 
 

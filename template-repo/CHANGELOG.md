@@ -1,6 +1,13 @@
 # Журнал изменений шаблона
 
 ## [Unreleased]
+### Изменено
+- completion/handoff routing layer теперь выдает явный `Launch в Codex` boundary с launcher command вместо неявного ожидания, что новый чат сам переключит route
+- source-facing routing docs и generated `.chatgpt` guidance теперь везде различают advisory handoff text и executable profile switch
+
+### Исправлено
+- устранен defect completion/handoff layer: handoff package больше не подменяет новый task launch понятием "новый чат"
+- добавлены troubleshooting и validators против sticky last-used profile/reasoning state и неподтвержденных model mappings
 
 ## [2.4.4] - 2026-04-22
 ### Добавлено

@@ -93,6 +93,12 @@ def main() -> int:
 ## Selected plan mode reasoning
 {launch.get('selected_plan_mode_reasoning_effort', 'не определен')}
 
+## Executable launch command
+{launch.get('launch_command', 'не определен')}
+
+## Direct Codex command behind launcher
+{launch.get('codex_profile_command', 'не определен')}
+
 ## Project profile
 {launch.get('project_profile', 'не определен')}
 
@@ -239,7 +245,9 @@ def main() -> int:
 - {handoff_line}
 - Рабочая единица выбора модели и reasoning mode: только новый task launch, а не старая уже закрепленная сессия.
 - `AGENTS`, ChatGPT Project instructions, scenario-pack и `.chatgpt` guidance являются advisory layer; profile/model выбирает executable launcher/router.
+- `selected_profile` — это исполнимая граница маршрутизации; `selected_model` и `selected_reasoning_effort` описывают ожидаемую конфигурацию этого profile, а не auto-switch от текста handoff.
 - Проверяемая фиксация реального выбора хранится в `.chatgpt/task-launch.yaml`.
+- Перед передачей handoff сначала выполните явный launch command из `.chatgpt/task-launch.yaml`, а уже потом вставляйте handoff в свежий Codex task.
 - При исполнении handoff приоритет у правил repo: `AGENTS`, runbook, scenario-pack, policy files и других канонических файлов этого репозитория.
 - Общие рабочие инструкции применять только там, где они не конфликтуют с repo rules и старшими системными ограничениями среды.
 - Если выбран `hybrid` или `codex-led`, передать Codex актуальный `codex-task-pack.md`.
@@ -249,6 +257,10 @@ def main() -> int:
 - Нельзя заменять handoff ссылкой на файл, несколькими разрозненными блоками или инструкцией собрать handoff из `codex-input.md`, `codex-context.md`, `codex-task-pack.md`.
 - Если remaining work еще остается внутренним repo follow-up, handoff не должен исчезать из-за будущего user footer.
 - Release-followup, source-pack refresh, export refresh, closeout-sync и release-facing consistency pass внутри repo считаются внутренней работой Codex.
+- Troubleshooting sticky state:
+  - если пользователь открыл случайную или уже существующую Codex chat-сессию и просто вставил handoff, profile/model/reasoning могли не переключиться;
+  - канонический путь: закрыть такую сессию и выполнить новый task launch через `./scripts/launch-codex-task.sh`;
+  - если после этого route все еще выглядит stale, проверить named profile в local Codex config и сверить `selected_model` с live `codex debug models`.
 
 ## Для внешних границ
 
@@ -267,7 +279,18 @@ def main() -> int:
 - `Следующий пользовательский шаг отсутствует; change закрыт полностью внутри repo.`
 """
 
-    handoff_response = f"""## Handoff в Codex
+    handoff_response = f"""## Launch в Codex
+
+```bash
+{launch.get('launch_command', './scripts/launch-codex-task.sh --launch-source chatgpt-handoff --task-file .chatgpt/codex-input.md --execute')}
+```
+
+- Выполняйте этот launch command из корня repo как новый task launch.
+- Advisory handoff text сам по себе не переключает profile/model/reasoning в уже открытой или случайной Codex chat-сессии.
+- `selected_profile` — исполнимая граница; `selected_model` и `selected_reasoning_effort` — ожидаемая конфигурация profile, а не promise auto-switch.
+- Если видите sticky last-used state, закройте текущую сессию и снова выполните launch command, а затем проверьте local named profile.
+
+## Handoff в Codex
 
 ```text
 Repo: {root.name}
@@ -279,6 +302,9 @@ Task class: {launch.get('task_class', 'build')}
 Selected profile: {launch.get('selected_profile', 'build')}
 Selected model: {launch.get('selected_model', 'gpt-5.4')}
 Selected reasoning effort: {launch.get('selected_reasoning_effort', 'medium')}
+Executable launch command: {launch.get('launch_command', './scripts/launch-codex-task.sh --launch-source chatgpt-handoff --task-file .chatgpt/codex-input.md --execute')}
+Direct Codex command behind launcher: {launch.get('codex_profile_command', 'codex --profile build')}
+Routing rule: advisory/handoff text != executable profile switch; reliable routing unit = new task launch only.
 Pipeline stage: {launch.get('pipeline_stage', 'unknown-stage')}
 Handoff allowed: {launch.get('handoff_allowed', 'unknown')}
 Scope: работать только в пределах этого repo и связанных project artifacts.
@@ -291,9 +317,9 @@ Verify: использовать актуальные validators, verification-r
 2. Где сделать
 В текущем проекте.
 3. Точные шаги
-Использовать подготовленный handoff-блок выше без пересборки из файлов вручную.
+Сначала выполнить launch command из блока `Launch в Codex`, затем вставить handoff-блок без пересборки из файлов вручную.
 4. Ожидаемый результат
-Codex получает один цельный copy-paste handoff и работает по правилам repo.
+Codex стартует на явной launch boundary и получает один цельный copy-paste handoff по правилам repo.
 5. Что прислать обратно
 Итог выполнения или уточнение, если появится внешний блокирующий шаг.
 """

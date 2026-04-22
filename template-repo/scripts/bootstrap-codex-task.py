@@ -32,6 +32,8 @@ def main() -> int:
     record = build_launch_record(root, args.launch_source, task_text, args.task_class)
 
     launch_path = write_launch_record(root, record)
+    launch_input_path = root / record["launch"]["launch_artifact_path"]
+    write_markdown(launch_input_path, task_text.strip() or "-")
     handoff_path = root / ".chatgpt" / "normalized-codex-handoff.md"
     write_markdown(handoff_path, render_normalized_handoff(record, task_text, "Normalized Codex Handoff"))
 
@@ -47,11 +49,14 @@ def main() -> int:
         print(f"direct_task_response={direct_response_path}")
 
     print(f"task_launch={launch_path}")
+    print(f"launch_input={launch_input_path}")
     print(f"normalized_handoff={handoff_path}")
     print(f"selected_profile={launch['selected_profile']}")
     print(f"selected_model={launch['selected_model']}")
     print(f"selected_reasoning_effort={launch['selected_reasoning_effort']}")
+    print(f"launch_artifact_path={launch['launch_artifact_path']}")
     print(f"launch_command={launch['launch_command']}")
+    print(f"codex_profile_command={launch['codex_profile_command']}")
     return 0
 
 

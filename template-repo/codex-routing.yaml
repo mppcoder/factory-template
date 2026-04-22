@@ -1,6 +1,8 @@
 routing_contract:
   launch_unit: "new-task-launch"
   launch_boundary_rule: "Выбор модели и reasoning mode считается надежным только на новом запуске Codex для новой задачи."
+  executable_switch_rule: "Надежно исполняемый switch в live Codex для этого repo: явный новый task launch через launcher и selected_profile."
+  model_expectation_rule: "selected_model и selected_reasoning_effort фиксируют ожидаемую конфигурацию выбранного executable profile; advisory handoff text сам по себе ничего не переключает."
   advisory_layers:
     - "AGENTS.md / AGENT.md"
     - "ChatGPT Project Instructions"
@@ -26,6 +28,15 @@ routing_contract:
     - "artifacts_to_update"
     - "handoff_allowed"
     - "defect_capture_path"
+    - "launch_command"
+    - "codex_profile_command"
+
+validation:
+  live_catalog_check: "Проверять model IDs и reasoning support против `codex debug models`; если live catalog недоступен, не обещать, что mapping гарантированно исполним."
+  troubleshooting:
+    - "Если handoff вставлен в уже открытую или случайную Codex chat-сессию, это non-canonical path: завершите сессию и выполните новый task launch."
+    - "Если после launch виден sticky last-used profile/model/reasoning, снова выполните launch_command и проверьте named profile в local Codex config."
+    - "Если selected_model отсутствует в live catalog, обновите codex-routing.yaml или local profile mapping, прежде чем обещать этот model ID пользователю."
 
 profiles:
   quick:

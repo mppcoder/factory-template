@@ -27,8 +27,9 @@ def main() -> int:
     checklist_path = chat / "done-checklist.md"
     launch_path = chat / "task-launch.yaml"
     normalized_handoff_path = chat / "normalized-codex-handoff.md"
+    handoff_response_path = chat / "handoff-response.md"
 
-    for path in [context_path, pack_path, boundary_path, checklist_path, launch_path, normalized_handoff_path]:
+    for path in [context_path, pack_path, boundary_path, checklist_path, launch_path, normalized_handoff_path, handoff_response_path]:
         if not path.exists():
             errors.append(f"Не найден {path.name}")
 
@@ -44,6 +45,7 @@ def main() -> int:
     checklist = read_text(checklist_path)
     launch_yaml = yaml.safe_load(read_text(launch_path)) or {}
     normalized_handoff = read_text(normalized_handoff_path)
+    handoff_response = read_text(handoff_response_path)
 
     ensure_contains(context, "# Контекст для Codex", errors, "codex-context.md")
     ensure_contains(context, "## Проект", errors, "codex-context.md")
@@ -63,6 +65,8 @@ def main() -> int:
     ensure_contains(pack, "## Selected profile", errors, "codex-task-pack.md")
     ensure_contains(pack, "## Selected model", errors, "codex-task-pack.md")
     ensure_contains(pack, "## Selected reasoning effort", errors, "codex-task-pack.md")
+    ensure_contains(pack, "## Executable launch command", errors, "codex-task-pack.md")
+    ensure_contains(pack, "## Direct Codex command behind launcher", errors, "codex-task-pack.md")
     ensure_contains(pack, "## Selected scenario", errors, "codex-task-pack.md")
     ensure_contains(pack, "## Pipeline stage", errors, "codex-task-pack.md")
     ensure_contains(pack, "## Handoff allowed", errors, "codex-task-pack.md")
@@ -80,6 +84,8 @@ def main() -> int:
     ensure_contains(boundary, "Рабочая единица выбора модели и reasoning mode: только новый task launch", errors, "boundary-actions.md")
     ensure_contains(boundary, "advisory layer", errors, "boundary-actions.md")
     ensure_contains(boundary, "`.chatgpt/task-launch.yaml`", errors, "boundary-actions.md")
+    ensure_contains(boundary, "`selected_profile` — это исполнимая граница маршрутизации", errors, "boundary-actions.md")
+    ensure_contains(boundary, "Перед передачей handoff сначала выполните явный launch command", errors, "boundary-actions.md")
     ensure_contains(boundary, "При исполнении handoff приоритет у правил repo", errors, "boundary-actions.md")
     ensure_contains(boundary, "только один цельный блок для copy-paste в Codex", errors, "boundary-actions.md")
     ensure_contains(boundary, "Нельзя заменять handoff ссылкой на файл", errors, "boundary-actions.md")
@@ -97,6 +103,7 @@ def main() -> int:
     ensure_contains(boundary, "workspace-packs/factory-ops/export-template-patch.sh", errors, "boundary-actions.md")
     ensure_contains(boundary, "workspace-packs/factory-ops/apply-template-patch.sh", errors, "boundary-actions.md")
     ensure_contains(boundary, "выполняет Codex внутри repo", errors, "boundary-actions.md")
+    ensure_contains(boundary, "Troubleshooting sticky state", errors, "boundary-actions.md")
     if "описание не задано" in boundary:
         errors.append("boundary-actions.md содержит незаполненные impact descriptions")
     for required_file in ["`codex-input.md`", "`codex-context.md`", "`codex-task-pack.md`", "`boundary-actions.md`"]:
@@ -152,12 +159,20 @@ def main() -> int:
         "artifacts_to_update",
         "handoff_allowed",
         "defect_capture_path",
+        "launch_artifact_path",
         "launch_command",
+        "codex_profile_command",
     ]:
         if not launch.get(key):
             errors.append(f"task-launch.yaml не содержит launch.{key}")
-    if launch.get("selected_profile") and f"--profile {launch.get('selected_profile')}" not in str(launch.get("launch_command", "")):
-        errors.append("task-launch.yaml не фиксирует selected_profile внутри launch_command")
+    if launch.get("launch_command") and "launch-codex-task.sh" not in str(launch.get("launch_command", "")):
+        errors.append("task-launch.yaml не фиксирует repo launcher внутри launch_command")
+    if launch.get("selected_profile") and f"--profile {launch.get('selected_profile')}" not in str(launch.get("codex_profile_command", "")):
+        errors.append("task-launch.yaml не фиксирует selected_profile внутри codex_profile_command")
+    if launch.get("launch_command") and str(launch.get("launch_artifact_path", "")) not in str(launch.get("launch_command", "")):
+        errors.append("task-launch.yaml не фиксирует launch_artifact_path внутри launch_command")
+    if launch.get("launch_artifact_path") and not (chat.parent / str(launch.get("launch_artifact_path"))).exists():
+        errors.append("task-launch.yaml ссылается на отсутствующий launch_artifact_path")
 
     ensure_contains(normalized_handoff, "# Normalized Codex Handoff", errors, "normalized-codex-handoff.md")
     for section in [
@@ -172,8 +187,18 @@ def main() -> int:
         "## Artifacts to update",
         "## Handoff allowed",
         "## Defect capture path",
+        "## Executable launch command",
+        "## Direct Codex command behind launcher",
+        "## Troubleshooting",
     ]:
         ensure_contains(normalized_handoff, section, errors, "normalized-codex-handoff.md")
+
+    ensure_contains(handoff_response, "## Launch в Codex", errors, "handoff-response.md")
+    ensure_contains(handoff_response, "## Handoff в Codex", errors, "handoff-response.md")
+    ensure_contains(handoff_response, "launch-codex-task.sh", errors, "handoff-response.md")
+    ensure_contains(handoff_response, "new task launch", errors, "handoff-response.md")
+    ensure_contains(handoff_response, "advisory/handoff text != executable profile switch", errors, "handoff-response.md")
+    ensure_contains(handoff_response, "sticky last-used state", errors, "handoff-response.md")
 
     if errors:
         print("CODEX TASK PACK НЕВАЛИДЕН")

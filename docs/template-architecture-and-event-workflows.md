@@ -61,6 +61,7 @@ executable routing layer
   выбирает task_class / selected_profile / selected_model
   работает только на границе нового task launch
   фиксирует выбор в `.chatgpt/task-launch.yaml`
+  дает явный launch command; pasted handoff в случайную сессию не считается switch boundary
 ```
 
 ### 2.4. Handoff / closeout / completion contours
@@ -403,7 +404,7 @@ flowchart TD
 
 1. Открыть router.
 2. Классифицировать задачу.
-3. Выбрать profile/model/reasoning через executable layer.
+3. Выбрать profile/model/reasoning через executable layer и зафиксировать явный launch command.
 4. Зафиксировать launch record.
 5. Показать пользователю self-handoff.
 6. Только потом переходить к implementation/review.
@@ -634,7 +635,7 @@ flowchart TD
 1. Зафиксировать bug.
 2. Решить, можно ли исправить его в текущем scope.
 3. Если нет, подготовить отдельный route decision.
-4. Если нужен другой profile/model/reasoning, рекомендовать новый task launch.
+4. Если нужен другой profile/model/reasoning, рекомендовать новый task launch через явный launch command, а не просто новый чат.
 
 ## 15. Workflow: выпуск релиза
 

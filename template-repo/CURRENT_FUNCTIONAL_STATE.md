@@ -20,6 +20,7 @@
 - подготавливает generated project к launch-time self-handoff и routing verification
 - direct-task contour теперь включает отдельный visible response artifact для стартового self-handoff
 - smoke и pre-release layer теперь прикрывают наличие этого visible direct-task response artifact
+- handoff/completion layer теперь выдает отдельный executable launch boundary и troubleshooting для sticky last-used route state
 
 ## Что еще описано на уровне фабрики
 - единая визуальная архитектура шаблона и подробные workflows по запуску, развёртыванию и downstream-update contour
@@ -29,3 +30,4 @@
 - matrix runner и bugflow требуют рабочей оболочки bash/pyyaml
 - auto GitHub Release publication в generated project зависит от доступности и авторизации `gh`
 - выбор `task_class` пока делается по эвристике keyword matching, а не по semantic classifier
+- named profile mapping по-прежнему зависит от local Codex config, поэтому source docs и validators теперь отдельно различают executable `selected_profile` и ожидаемые `selected_model` / `selected_reasoning_effort`

@@ -1,6 +1,11 @@
 # Журнал изменений фабрики
 
 ## [Unreleased]
+### Изменено
+- completion/handoff routing layer в template source теперь требует явный `Launch в Codex` boundary и launcher command для нового task launch
+
+### Исправлено
+- устранено ложное ожидание, что новый Codex chat сам переключает profile/model/reasoning без явного launcher path
 
 ## [2.4.4] - 2026-04-22
 ### Добавлено

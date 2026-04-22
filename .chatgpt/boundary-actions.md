@@ -49,7 +49,9 @@
 - Handoff в Codex сейчас не является обязательным для выбранного профиля.
 - Рабочая единица выбора модели и reasoning mode: только новый task launch, а не старая уже закрепленная сессия.
 - `AGENTS`, ChatGPT Project instructions, scenario-pack и `.chatgpt` guidance являются advisory layer; profile/model выбирает executable launcher/router.
+- `selected_profile` — это исполнимая граница маршрутизации; `selected_model` и `selected_reasoning_effort` описывают ожидаемую конфигурацию этого profile, а не auto-switch от текста handoff.
 - Проверяемая фиксация реального выбора хранится в `.chatgpt/task-launch.yaml`.
+- Перед передачей handoff сначала выполните явный launch command из `.chatgpt/task-launch.yaml`, а уже потом вставляйте handoff в свежий Codex task.
 - При исполнении handoff приоритет у правил repo: `AGENTS`, runbook, scenario-pack, policy files и других канонических файлов этого репозитория.
 - Общие рабочие инструкции применять только там, где они не конфликтуют с repo rules и старшими системными ограничениями среды.
 - Если выбран `hybrid` или `codex-led`, передать Codex актуальный `codex-task-pack.md`.
@@ -59,6 +61,10 @@
 - Нельзя заменять handoff ссылкой на файл, несколькими разрозненными блоками или инструкцией собрать handoff из `codex-input.md`, `codex-context.md`, `codex-task-pack.md`.
 - Если remaining work еще остается внутренним repo follow-up, handoff не должен исчезать из-за будущего user footer.
 - Release-followup, source-pack refresh, export refresh, closeout-sync и release-facing consistency pass внутри repo считаются внутренней работой Codex.
+- Troubleshooting sticky state:
+  - если пользователь открыл случайную или уже существующую Codex chat-сессию и просто вставил handoff, profile/model/reasoning могли не переключиться;
+  - канонический путь: закрыть такую сессию и выполнить новый task launch через `./scripts/launch-codex-task.sh`;
+  - если после этого route все еще выглядит stale, проверить named profile в local Codex config и сверить `selected_model` с live `codex debug models`.
 
 ## Для внешних границ
 

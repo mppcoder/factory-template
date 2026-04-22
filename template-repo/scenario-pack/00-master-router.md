@@ -16,6 +16,7 @@
 
 Нельзя считать, что advisory слой сам по себе переключает модель или reasoning mode внутри уже открытой сессии.
 Надежная единица маршрутизации: только новый task launch / новый запуск Codex под новую задачу.
+Если нужен другой profile/model/reasoning, канонический путь — явный launch path через repo launcher, а не просто "новый чат" и не вставка handoff в случайную уже открытую сессию.
 
 ## Inline handoff rule
 Если handoff в Codex уже разрешен и задача достаточно определена, выдай готовый Codex handoff в том же ответе. Не останавливайся на одной аналитике.
@@ -86,7 +87,7 @@ User-only closeout допустим только если remaining next step д
 - если incidental bug исправлен в рамках текущего scope, зафиксируй defect-capture и упомяни его в closeout;
 - если incidental bug не исправлен, сначала создай структурированный bug report, затем выполни self-handoff именно для этого нового бага;
 - self-handoff обязан отдельно определить `task_class`, `selected_profile`, `selected_model`, `selected_reasoning_effort`, `selected_scenario`, `pipeline_stage`, `artifacts_to_update`, принадлежность к текущему scope и необходимость отдельной remediation-задачи;
-- если для нового бага executable routing указывает другой профиль, модель или reasoning, канонический путь — выдать готовый handoff и рекомендовать новый task launch / новую Codex chat-сессию;
+- если для нового бага executable routing указывает другой профиль, модель или reasoning, канонический путь — выдать готовый handoff и рекомендовать новый task launch / новую Codex chat-сессию через явный launch command;
 - продолжение в текущем live chat допустимо только как явно помеченная non-canonical fallback-опция с прямой оговоркой, что уже открытая сессия не является надежным механизмом автопереключения profile/model/reasoning;
 - если для бага нужен deep research, вместо слабой in-session remediation попытки выдай ChatGPT-ready research bug report / prompt.
 

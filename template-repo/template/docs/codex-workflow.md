@@ -14,8 +14,10 @@
 ## Как запускать
 - не проверяйте routing в старой уже открытой сессии Codex;
 - для новой задачи запускайте `./scripts/launch-codex-task.sh --launch-source <chatgpt-handoff|direct-task> ...`;
+- `selected_profile` — единственный надежно исполнимый switch через launcher; `selected_model` и `selected_reasoning_effort` описывают ожидаемую конфигурацию этого profile;
 - для direct task launcher сначала создает `.chatgpt/direct-task-self-handoff.md` и `.chatgpt/direct-task-response.md`, а затем фиксирует route в `.chatgpt/task-launch.yaml`;
 - первый substantive ответ Codex по direct task должен явно показать self-handoff block до remediation.
+- если после старта виден sticky last-used state, завершите текущую сессию и выполните launcher еще раз, а затем сверьте model с `codex debug models`.
 
 ## Когда handoff допустим
 Переключение в рабочий Codex launch допустимо только после того, как:

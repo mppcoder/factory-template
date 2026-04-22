@@ -57,10 +57,10 @@ def parse_structured_handoff(text: str) -> dict:
 
 def normalize_model_name(model: str) -> str:
     normalized = _normalize(model)
-    if "gpt-5.4" in normalized:
-        return "gpt-5.4"
     if "gpt-5.4-mini" in normalized:
         return "gpt-5.4-mini"
+    if "gpt-5.4" in normalized:
+        return "gpt-5.4"
     return normalized
 
 
@@ -241,6 +241,23 @@ def artifacts_to_update(spec: dict, root: Path, defect_path: str) -> list[str]:
     return defaults
 
 
+def launch_artifact_path(launch_source: str) -> str:
+    if launch_source == "direct-task":
+        return ".chatgpt/direct-task-source.md"
+    return ".chatgpt/codex-input.md"
+
+
+def repo_launch_command(launch_source: str, artifact_path: str) -> str:
+    return (
+        f"./scripts/launch-codex-task.sh --launch-source {launch_source} "
+        f"--task-file {artifact_path} --execute"
+    )
+
+
+def codex_profile_command(profile_name: str) -> str:
+    return f"codex --profile {profile_name}"
+
+
 def build_launch_record(
     root: Path,
     launch_source: str,
@@ -272,6 +289,9 @@ def build_launch_record(
         artifacts_list = artifacts_to_update(spec, root, defect_path)
     handoff_allowed_value = stringify_override(overrides.get("handoff_allowed")) or handoff_allowed(root)
     defect_capture_path = stringify_override(overrides.get("defect_capture_path")) or defect_path
+    handoff_artifact = launch_artifact_path(launch_source)
+    selected_codex_command = codex_profile_command(profile_name)
+    selected_launch_command = repo_launch_command(launch_source, handoff_artifact)
     return {
         "launch": {
             "timestamp_utc": now_utc(),
@@ -292,9 +312,14 @@ def build_launch_record(
             "defect_capture_path": defect_capture_path,
             "task_summary": task_text.splitlines()[0].strip()[:240] if task_text.strip() else "",
             "launch_boundary_rule": spec.get("routing_contract", {}).get("launch_boundary_rule", ""),
+            "executable_switch_rule": spec.get("routing_contract", {}).get("executable_switch_rule", ""),
+            "model_expectation_rule": spec.get("routing_contract", {}).get("model_expectation_rule", ""),
             "advisory_layers": spec.get("routing_contract", {}).get("advisory_layers", []),
             "executable_layers": spec.get("routing_contract", {}).get("executable_layers", []),
-            "launch_command": f"codex --profile {profile_name}",
+            "launch_artifact_path": handoff_artifact,
+            "launch_command": selected_launch_command,
+            "codex_profile_command": selected_codex_command,
+            "troubleshooting": spec.get("validation", {}).get("troubleshooting", []),
             "direct_self_handoff_required": launch_source == "direct-task",
             "direct_self_handoff_completed": False,
             "requested_task_class": requested_task_class or None,
@@ -317,6 +342,8 @@ def render_normalized_handoff(record: dict, task_text: str, title: str) -> str:
     artifacts_lines = "\n".join(f"- {item}" for item in artifacts) if artifacts else "- none"
     reasons = launch.get("task_class_reasons", [])
     reason_lines = "\n".join(f"- {item}" for item in reasons) if reasons else "- none"
+    troubleshooting = launch.get("troubleshooting", [])
+    troubleshooting_lines = "\n".join(f"- {item}" for item in troubleshooting) if troubleshooting else "- none"
     return f"""# {title}
 
 ## Launch source
@@ -361,8 +388,23 @@ def render_normalized_handoff(record: dict, task_text: str, title: str) -> str:
 ## Launch boundary rule
 {launch.get('launch_boundary_rule', '')}
 
+## Executable switch rule
+{launch.get('executable_switch_rule', '')}
+
+## Model expectation rule
+{launch.get('model_expectation_rule', '')}
+
+## Launch artifact path
+`{launch.get('launch_artifact_path', '')}`
+
 ## Executable launch command
 `{launch.get('launch_command', '')}`
+
+## Direct Codex command behind launcher
+`{launch.get('codex_profile_command', '')}`
+
+## Troubleshooting
+{troubleshooting_lines}
 
 ## Task payload
 {task_text.strip() or '-'}"""
@@ -372,6 +414,8 @@ def render_direct_task_response(record: dict, task_text: str) -> str:
     launch = record.get("launch", {})
     artifacts = launch.get("artifacts_to_update", [])
     artifacts_lines = "\n".join(f"- {item}" for item in artifacts) if artifacts else "- none"
+    troubleshooting = launch.get("troubleshooting", [])
+    troubleshooting_lines = "\n".join(f"- {item}" for item in troubleshooting) if troubleshooting else "- none"
     return f"""## Direct Task Self-Handoff
 
 ## Classification
@@ -412,6 +456,21 @@ direct-task
 
 ## Launch boundary rule
 {launch.get('launch_boundary_rule', '')}
+
+## Executable switch rule
+{launch.get('executable_switch_rule', '')}
+
+## Model expectation rule
+{launch.get('model_expectation_rule', '')}
+
+## Executable launch command
+`{launch.get('launch_command', '')}`
+
+## Direct Codex command behind launcher
+`{launch.get('codex_profile_command', '')}`
+
+## Troubleshooting
+{troubleshooting_lines}
 
 ## Task payload
 {task_text.strip() or '-'}

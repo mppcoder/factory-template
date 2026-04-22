@@ -61,7 +61,7 @@ Closeout не считается завершенным, если обязате
 Если в ходе основной задачи был найден incidental / side bug, финальный closeout обязан явно зафиксировать один из исходов:
 - defect исправлен в текущем scope и отражен в done/verification closeout;
 - defect не исправлен, но подготовлены bug report + self-handoff, а route подтвержден как совместимый с текущим chat;
-- defect не исправлен, подготовлены bug report + self-handoff, и как канонический следующий шаг рекомендован новый Codex task/chat из-за другого route;
+- defect не исправлен, подготовлены bug report + self-handoff, и как канонический следующий шаг рекомендован новый task launch / новая Codex chat-сессия через явный launch command из-за другого route;
 - defect требует deep research, и вместо remediation-handoff подготовлен ChatGPT-ready research bug report/prompt.
 
 Unresolved incidental defect нельзя оставлять только в narrative summary. В closeout должны быть явно перечислены:

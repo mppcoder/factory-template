@@ -69,11 +69,13 @@ fi
 
 python3 "$ROOT/scripts/bootstrap-codex-task.py" "${BOOTSTRAP_ARGS[@]}"
 PROFILE="$(python3 "$ROOT/scripts/resolve-codex-task-route.py" "${RESOLVE_ARGS[@]}" --json | python3 -c 'import json,sys; print(json.load(sys.stdin)["launch"]["selected_profile"])')"
-COMMAND="cd \"$TASK_ROOT\" && codex --profile \"$PROFILE\""
+LAUNCH_COMMAND="$(python3 "$ROOT/scripts/resolve-codex-task-route.py" "${RESOLVE_ARGS[@]}" --json | python3 -c 'import json,sys; print(json.load(sys.stdin)["launch"]["launch_command"])')"
+CODEX_COMMAND="$(python3 "$ROOT/scripts/resolve-codex-task-route.py" "${RESOLVE_ARGS[@]}" --json | python3 -c 'import json,sys; print(json.load(sys.stdin)["launch"]["codex_profile_command"])')"
 
 echo "launch_boundary=new-task-launch"
 echo "selected_profile=$PROFILE"
-echo "command=$COMMAND"
+echo "launch_command=$LAUNCH_COMMAND"
+echo "codex_command=$CODEX_COMMAND"
 
 if [[ "$DRY_RUN" -eq 1 ]]; then
   exit 0

@@ -4,24 +4,24 @@
 chatgpt-handoff
 
 ## Task class
-build
+review
 
 ## Task class evidence
-- keyword hit: fix
-- keyword hit: исправ
-- explicit reasoning/model override matched default profile: build
+- keyword hit: test
+- keyword hit: провер
+- explicit reasoning/model override matched default profile: review
 
 ## Selected profile
-build
+review
 
 ## Selected model
 gpt-5.4
 
 ## Selected reasoning effort
-medium
+high
 
 ## Selected plan mode reasoning
-medium
+high
 
 ## Project profile
 unknown-project-profile
@@ -38,40 +38,47 @@ done
 - .chatgpt/codex-task-pack.md
 - .chatgpt/verification-report.md
 - .chatgpt/done-report.md
-- reports/bugs/
-- reports/factory-feedback/
 
 ## Handoff allowed
 yes (forbidden)
 
 ## Defect capture path
-reproduce -> evidence -> bug report -> layer classification -> factory feedback if reusable -> remediation
+not-required-by-text-signal
 
 ## Launch boundary rule
 Выбор модели и reasoning mode считается надежным только на новом запуске Codex для новой задачи.
 
+## Executable switch rule
+Надежно исполняемый switch в live Codex для этого repo: явный новый task launch через launcher и selected_profile.
+
+## Model expectation rule
+selected_model и selected_reasoning_effort фиксируют ожидаемую конфигурацию выбранного executable profile; advisory handoff text сам по себе ничего не переключает.
+
+## Launch artifact path
+`.chatgpt/codex-input.md`
+
 ## Executable launch command
-`codex --profile build`
+`./scripts/launch-codex-task.sh --launch-source chatgpt-handoff --task-file .chatgpt/codex-input.md --execute`
+
+## Direct Codex command behind launcher
+`codex --profile review`
+
+## Troubleshooting
+- Если handoff вставлен в уже открытую или случайную Codex chat-сессию, это non-canonical path: завершите сессию и выполните новый task launch.
+- Если после launch виден sticky last-used profile/model/reasoning, снова выполните launch_command и проверьте named profile в local Codex config.
+- Если selected_model отсутствует в live catalog, обновите codex-routing.yaml или local profile mapping, прежде чем обещать этот model ID пользователю.
 
 ## Task payload
-# Codex handoff input
+# Входной пакет для Codex
 
 ## Контекст
-- Repo: `factory-template`
-- Проведен генеральный audit проекта на целостность, полноту и соответствие.
-- Главный реальный defect найден в `template-repo/scripts/check-dod.py`: validator наследовал `origin` родительского git repo для nested example fixtures и выдавал false positive по `verified-sync-report`.
+- Это smoke-test ядра фабрики проектов.
+- Базовые проверки уже закрыты и подтверждены evidence-артефактами.
+- При исполнении этого handoff приоритет у правил repo: `AGENTS`, runbook, scenario-pack и policy files репозитория.
 
 ## Что должен сделать исполнитель
-- Зафиксировать reusable defect и factory feedback.
-- Исправить `check-dod.py`, чтобы remote-проверка срабатывала только когда проверяемый путь сам является git repo root.
-- Подтвердить исправление полным suite:
-  - `EXAMPLES_TEST.sh`
-  - `MATRIX_TEST.sh`
-  - `SMOKE_TEST.sh`
-  - `VALIDATE_FACTORY_TEMPLATE_OPS.sh`
-  - `PRE_RELEASE_AUDIT.sh`
+- Считать smoke-test завершенным без дополнительных изменений.
 
 ## Ограничения
-- Не маскировать проблему под правку example fixtures.
-- Не ослаблять verified-sync guard для реальных рабочих repo.
-- Приоритет у правил repo: `AGENTS`, runbook, scenario-pack и policy files репозитория.
+- Не менять core-структуру проекта.
+- Общие рабочие инструкции применять только там, где они не противоречат repo rules и старшим системным ограничениям среды.

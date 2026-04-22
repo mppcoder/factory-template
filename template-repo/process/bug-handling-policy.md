@@ -24,7 +24,7 @@
 Если defect найден incidental во время выполнения другой задачи и не исправляется в том же scope:
 - bug report обязателен;
 - self-handoff обязателен;
-- если новый route отличается по profile/model/reasoning, канонический путь — новый task launch;
+- если новый route отличается по profile/model/reasoning, канонический путь — новый task launch через явный launch command;
 - продолжение в текущей live-сессии допускается только как явно помеченный fallback;
 - нельзя делать вид, что advisory rules автоматически переключили уже открытую сессию;
 - если без исследования remediation ненадежен, вместо фикса подготовь ChatGPT-ready deep research prompt.

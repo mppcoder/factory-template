@@ -13,3 +13,4 @@
 
 Для Codex используйте named profiles `quick / build / deep / review` через task launcher.
 Не ожидайте, что один static profile в `.codex/config.toml` будет сам переключаться по типу задачи внутри старой сессии.
+Если handoff уже готов, сначала выполняйте launcher-команду нового task launch, а не просто вставляйте handoff в случайный старый чат.
