@@ -28,5 +28,10 @@
 Эти действия остаются за оператором:
 - создание новых GitHub repos;
 - подключение репозиториев и app sources в ChatGPT Projects;
-- загрузка архивов в `/projects/_incoming`;
+- загрузка архивов в `/projects/<project-root>/_incoming/`;
 - ввод секретов и работа с внешними UI.
+
+## Canonical VPS layout
+- `/projects` содержит только project roots;
+- `_incoming` допускается только как подпапка проекта: `/projects/<project-root>/_incoming/`;
+- brownfield temporary, intermediate и reconstructed repos нельзя раскладывать плоско рядом в `/projects`.

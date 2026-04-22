@@ -2,16 +2,18 @@
 
 ## Контекст
 - Repo: `factory-template`
-- Нужно зафиксировать новый reusable process gap: completion package был обязателен по смыслу, но реально появился только после дополнительного напоминания пользователя.
-- При исполнении этого handoff приоритет у правил repo: `AGENTS`, runbook, scenario-pack и policy files репозитория.
+- Нужно внедрить каноническое правило хранения repo-папок на VPS.
+- В `/projects` должны лежать только project roots.
+- `_incoming` допускается только внутри project root.
+- brownfield temporary, intermediate и reconstructed repo должны жить только внутри `/projects/<project-root>/...`.
 
 ## Что должен сделать исполнитель
-- Усилить process rules для immediate same-response completion.
-- Обновить DoD, runbook/AGENTS и codex-task-pack checklist/validator.
-- Зафиксировать defect отдельным bug report и closeout artifacts.
+- Найти repo-файлы, где допускается плоская раскладка под `/projects`.
+- Обновить scenario-pack, runbooks, examples, workspace/bootstrap docs и boundary templates.
+- Исправить scripts/templates, если они обещают или генерируют плоский layout.
+- Подготовить completion package по обновлению factory sources и downstream контуров.
 
 ## Ограничения
-- Не менять формат completion package заново.
-- Не размывать release semantics.
-- Общие рабочие инструкции применять только там, где они не противоречат repo rules и старшим системным ограничениям среды.
-- Handoff для пользователя допустим только как один цельный copy-paste блок, а не как ссылка на файл или несколько фрагментов.
+- Не вводить отдельную плоскую зону для brownfield temp repos.
+- Сохранить совместимость внутреннего нейминга подпапок, если верхнеуровневое правило `/projects` соблюдено.
+- Приоритет у правил repo: `AGENTS`, runbook, scenario-pack и policy files репозитория.

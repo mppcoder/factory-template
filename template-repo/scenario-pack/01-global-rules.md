@@ -10,6 +10,19 @@
    - `[ASSUMPTION]` — предположение.
 4. Если есть конфликт между реальностью проекта и документацией, зафиксируй его отдельно.
 
+## Canonical VPS Layout Rule
+В `/projects` разрешены только корневые папки отдельных проектов.
+
+Каноническая структура:
+- `/projects/<project-root>/` — корень конкретного проекта;
+- `/projects/<project-root>/_incoming/` — необязательная подпапка для входящих архивов и установочных файлов;
+- любые temporary, intermediate, reconstructed и другие вспомогательные repo — только внутри `/projects/<project-root>/...`.
+
+Запрещено:
+- создавать в `/projects` служебные верхнеуровневые папки вроде `_incoming`, `_release`, `_artifacts`;
+- раскладывать brownfield temporary/intermediate/reconstructed repo как соседние project roots;
+- использовать `/projects` как плоскую staging-зону.
+
 ## Правило фиксации дефектов
 Любой обнаруженный дефект, регрессия, расхождение, пропущенный шаг, шаблонный сбой или reusable process failure должен быть оформлен как структурированный bug report до исправления или одновременно с ним. Silent fixes запрещены.
 

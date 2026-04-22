@@ -1,26 +1,35 @@
 # Итоговый отчёт по закрытию изменения
 
 ## Что было запрошено
-- Переделать логику так, чтобы всё, что надо выгружать, лежало в одной подпапке, а служебные файлы не мешались рядом.
+- Внедрить каноническое правило хранения repo-папок на VPS: `/projects` содержит только project roots, `_incoming` живёт внутри проекта, brownfield temporary/intermediate/reconstructed repos не раскладываются плоско рядом.
 
 ## Что реально сделано
-- Export logic теперь кладёт все uploadable файлы в `core-hot-15/upload-to-sources/`.
-- Manifest direct profile фиксирует `upload_subdir` и `upload_subdir_files`.
-- Operator-facing docs и boundary template синхронизированы под subfolder-driven upload flow.
+- Сценарный слой получил явное canonical VPS layout rule.
+- Brownfield entry и codex-assisted stabilization теперь отдельно запрещают top-level temporary/intermediate/reconstructed repos в `/projects`.
+- User/operator/workspace docs переведены на project-local `_incoming` и иерархию `/projects/<project-root>/...`.
+- Boundary template и generator default path синхронизированы с project-local incoming layout.
+- `_boundary-actions/factory-template-boundary-actions.md` перегенерирован на новых правилах.
+- Текущие `.chatgpt` артефакты обновлены под этот change.
 
 ## Какие артефакты обновлены
 - `.chatgpt/*` для текущего change
- - `packaging/sources/sources-profiles.yaml`
-- `tools/export_factory_template_sources.py`
-- `tools/validate_factory_template_ops_policy.py`
-- `docs/releases/sources-pack-usage.md`
-- `factory_template_only_pack/04-chatgpt-project-sources-factory-template-20-cap.md`
+- `template-repo/scenario-pack/01-global-rules.md`
+- `template-repo/scenario-pack/brownfield/00-brownfield-entry.md`
+- `template-repo/scenario-pack/brownfield/11-codex-assisted-stabilization.md`
+- `template-repo/template/docs/codex-workflow.md`
+- `factory_template_only_pack/01-runbook-dlya-polzovatelya-factory-template.md`
+- `factory_template_only_pack/README.md`
 - `factory_template_only_pack/templates/factory-template-boundary-actions.template.md`
-- `README.md`, `CHANGELOG.md`, `CURRENT_FUNCTIONAL_STATE.md`
+- `tools/generate_factory_template_boundary_actions.py`
+- `workspace-packs/vscode-codex-dogfood-bootstrap/*`
+- `factory-template.code-workspace`
+- `README.md`
+- `ENTRY_MODES.md`
+- `docs/template-architecture-and-event-workflows.md`
 
 ## Что осталось вне объёма
-- Изменение состава hot-set
-- Перестройка canonical archive layer
+- Массовое применение этих правок в уже созданных downstream project repos.
+- Перегенерация и раздача обновлённых exported sources/boundary artifacts для внешних контуров.
 
 ## Итог закрытия
-- Для ручной загрузки в `core-hot-15` теперь достаточно открыть одну подпапку `upload-to-sources/` и загрузить всё её содержимое.
+- Для VPS layout теперь действует единое правило: в `/projects` остаются только project roots, а вся служебная brownfield-инфраструктура уходит внутрь конкретного проекта.

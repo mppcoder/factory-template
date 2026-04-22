@@ -12,6 +12,7 @@
 - изменяемая зона наблюдаема;
 - зафиксированы evidence before/after;
 - нет притворства, что reconstructed repo уже равен исходному repo.
+- если работа идёт на VPS, reconstructed repo и любые intermediate repos живут только внутри `/projects/<project-root>/...`, а не как соседи верхнего уровня в `/projects`.
 
 ## Что должен сделать ChatGPT Project перед handoff
 - подготовить `codex-input.md` без пустых шаблонных секций;

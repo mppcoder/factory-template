@@ -39,7 +39,7 @@ boundary_actions:
         - FACTORY_MANIFEST.yaml
         - meta-template-project/RELEASE_NOTES.md
       path_prefixes:
-        - /projects/_release/
+        - /projects/factory-template/_release/
       document_signals:
         RELEASE_CHECKLIST.md:
           - '\[x\]\s+Проверить `CHANGELOG\.md`'
@@ -70,4 +70,4 @@ boundary_actions:
           - '## Временный обход'
           - '## Статус\s+зафиксировано'
           - '## Граница ответственности'
-  uploads_dir: /projects/_incoming
+  uploads_dir: /projects/factory-template/_incoming

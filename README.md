@@ -28,6 +28,17 @@
 
 Различается не набор загружаемых файлов, а стартовый маршрут по сценариям и выбранный preset.
 
+## Canonical VPS Layout
+
+Для VPS действует безусловное правило верхнего уровня:
+
+- `/projects` содержит только project roots;
+- каждый проект живёт в `/projects/<project-root>/`;
+- `_incoming` допускается только как подпапка проекта: `/projects/<project-root>/_incoming/`;
+- temporary, intermediate и reconstructed repos допускаются только внутри соответствующего project root.
+
+Запрещена плоская раскладка вспомогательных repo и служебных каталогов прямо в `/projects`.
+
 Единая визуальная схема фабрики и подробные workflows по ключевым событиям собраны в:
 
 - `docs/template-architecture-and-event-workflows.md`

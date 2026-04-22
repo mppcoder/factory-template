@@ -2,14 +2,14 @@
   "version": "2.0.0",
   "tasks": [
     {
-      "label": "Открыть корень /projects",
+      "label": "Показать project roots",
       "type": "shell",
       "command": "pwd && ls -la /projects"
     },
     {
-      "label": "Проверить входящий архив",
+      "label": "Проверить factory incoming",
       "type": "shell",
-      "command": "ls -lh /projects/_incoming"
+      "command": "ls -lh /projects/factory-template/_incoming"
     }
   ]
 }

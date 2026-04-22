@@ -1,16 +1,16 @@
 {
   "folders": [
-    { "path": "/projects/_incoming", "name": "00-incoming" },
     { "path": "/projects/factory-template", "name": "01-factory-template" },
-    { "path": "/projects/dogfood-brownfield-shell", "name": "02-brownfield-shell" },
-    { "path": "/projects/brownfield-evidence", "name": "03-brownfield-evidence" },
-    { "path": "/projects/reconstructed-brownfield-repo", "name": "04-reconstructed-repo" },
-    { "path": "/projects/product-greenfield-package", "name": "05-greenfield-package" }
+    { "path": "/projects/factory-template/_incoming", "name": "02-factory-incoming" },
+    { "path": "/projects/dogfood-brownfield-project", "name": "03-brownfield-project-root" },
+    { "path": "/projects/dogfood-brownfield-project/_incoming", "name": "04-brownfield-incoming" },
+    { "path": "/projects/dogfood-brownfield-project/evidence", "name": "05-brownfield-evidence" },
+    { "path": "/projects/dogfood-brownfield-project/reconstructed-repo", "name": "06-reconstructed-repo" }
   ],
   "settings": {
     "files.autoSave": "afterDelay",
     "terminal.integrated.defaultProfile.linux": "bash",
-    "terminal.integrated.cwd": "/projects",
+    "terminal.integrated.cwd": "/projects/factory-template",
     "git.autoRepositoryDetection": true,
     "search.exclude": {
       "**/.git": true,

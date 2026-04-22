@@ -87,6 +87,24 @@ template improvement inside factory-template
     -> downstream template sync
     -> battle repo update
     -> battle ChatGPT Project instruction refresh
+
+### 1.4. Canonical VPS layout
+
+```text
+/projects/
+├── factory-template/
+│   └── _incoming/
+├── project-a/
+│   ├── _incoming/
+│   ├── evidence/
+│   └── reconstructed-repo/
+└── project-b/
+```
+
+Правило:
+- в `/projects` лежат только project roots;
+- `_incoming` и другие служебные папки живут внутри project root;
+- brownfield temporary, intermediate и reconstructed repos нельзя размещать плоско рядом в `/projects`.
 ```
 
 ## 2. Workflow событий
@@ -179,6 +197,7 @@ template improvement inside factory-template
 7. Зафиксировать evidence-first режим:
    - не притворяться, что repo уже существует;
    - сначала собрать реальность системы.
+   - все incoming/evidence/intermediate/reconstructed каталоги держать только внутри `/projects/<project-root>/`.
 8. Построить brownfield ядро:
    - `system-inventory.md`
    - `repo-audit.md` или явная фиксация отсутствия repo

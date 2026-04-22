@@ -14,6 +14,11 @@
 /projects/factory-template/
 ```
 
+Правило верхнего уровня:
+- в `/projects` лежат только project roots;
+- `_incoming` допускается только внутри project root;
+- brownfield temporary/intermediate/reconstructed repos не должны появляться как соседи `factory-template` в `/projects`.
+
 ## Состав
 
 1. `01-runbook-dlya-polzovatelya-factory-template.md`

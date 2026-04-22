@@ -3,7 +3,7 @@
 ## Scope
 
 - Repo under audit: `/projects/factory-template`
-- Source pack unpacked from: `/projects/_incoming/factory_template_only_pack.zip`
+- Source pack unpacked from: `/projects/factory-template/_incoming/factory_template_only_pack.zip`  (historical path normalized to current canonical VPS layout)
 - Boundary mode: repo-only, no external actions
 - Git status: not available, because `/projects/factory-template` is currently not initialized as a git repository
 

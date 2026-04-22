@@ -5,7 +5,7 @@
 - затем переход на отдельные окна по проектам.
 
 ## Что внутри
-- multi-root workspace для `/projects/*`
+- multi-root workspace только для project roots и project-local подпапок
 - рекомендуемые VS Code settings/tasks
 - пример глобального Codex config
 - инструкция по раскладке окон
@@ -13,7 +13,12 @@
 ## Рекомендуемый порядок
 1. Открыть `bootstrap-hub.code-workspace`.
 2. Поднять `factory-template`.
-3. Создать `dogfood-brownfield-shell`.
-4. Создать `brownfield-evidence`.
-5. После старта работ открыть отдельные окна для `factory-template`, `dogfood-brownfield-shell`, `brownfield-evidence`.
-6. После stabilization добавить окна `reconstructed-brownfield-repo` и `product-greenfield-package`.
+3. Для brownfield dogfood создать отдельный project root, например `dogfood-brownfield-project`.
+4. Внутри него использовать project-local папки, например `_incoming`, `evidence/`, `reconstructed-repo/`.
+5. После старта работ открывать отдельные окна для `factory-template` и для нужных project roots.
+6. Если появляется reconstructed repo, он должен жить внутри соответствующего project root, а не соседом верхнего уровня в `/projects`.
+
+## Canonical VPS layout
+- `/projects` содержит только project roots;
+- `_incoming` допускается только как `/projects/<project-root>/_incoming/`;
+- brownfield temporary, intermediate и reconstructed repo допускаются только внутри своего project root.

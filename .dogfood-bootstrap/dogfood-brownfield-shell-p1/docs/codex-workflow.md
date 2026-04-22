@@ -18,5 +18,5 @@
 Эти действия остаются за оператором:
 - создание новых GitHub repos;
 - подключение репозиториев и app sources в ChatGPT Projects;
-- загрузка архивов в `/projects/_incoming`;
+- загрузка архивов в `/projects/<project-root>/_incoming/`;
 - ввод секретов и работа с внешними UI.

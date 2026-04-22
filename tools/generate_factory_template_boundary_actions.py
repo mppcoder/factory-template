@@ -71,7 +71,7 @@ def main() -> int:
             "recommended_sources_pack": current_pack,
             "phase_override_packs_bullets": phase_override_bullets,
             "phase_recommendations_bullets": phase_bullets,
-            "uploads_dir": cfg.get("uploads_dir", "/projects/_incoming"),
+            "uploads_dir": cfg.get("uploads_dir", "/projects/factory-template/_incoming"),
             "impact_factory_sources": impact_cfg.get("factory_sources", "Обновление repo-first инструкции проекта шаблона в ChatGPT"),
             "impact_downstream_template_sync": impact_cfg.get("downstream_template_sync", "Обновление шаблона в боевых repo"),
             "impact_downstream_project_sources": impact_cfg.get("downstream_project_sources", "Обновление repo-first инструкции боевых ChatGPT Projects"),
