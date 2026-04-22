@@ -224,6 +224,58 @@ def render_normalized_handoff(record: dict, task_text: str, title: str) -> str:
 {task_text.strip() or '-'}"""
 
 
+def render_direct_task_response(record: dict, task_text: str) -> str:
+    launch = record.get("launch", {})
+    artifacts = launch.get("artifacts_to_update", [])
+    artifacts_lines = "\n".join(f"- {item}" for item in artifacts) if artifacts else "- none"
+    return f"""## Direct Task Self-Handoff
+
+## Classification
+direct-task
+
+## Selected project profile
+{launch.get('project_profile', '')}
+
+## Selected scenario
+{launch.get('selected_scenario', '')}
+
+## Current pipeline stage
+{launch.get('pipeline_stage', '')}
+
+## Task class
+{launch.get('task_class', '')}
+
+## Selected profile
+{launch.get('selected_profile', '')}
+
+## Selected model
+{launch.get('selected_model', '')}
+
+## Selected reasoning effort
+{launch.get('selected_reasoning_effort', '')}
+
+## Artifacts to update
+{artifacts_lines}
+
+## Handoff allowed
+{launch.get('handoff_allowed', '')}
+
+## Defect capture path
+{launch.get('defect_capture_path', '')}
+
+## Launch source
+{launch.get('launch_source', '')}
+
+## Launch boundary rule
+{launch.get('launch_boundary_rule', '')}
+
+## Task payload
+{task_text.strip() or '-'}
+
+## Next step
+Только после этого блока допустимы remediation / implementation / verification."""
+
+
 def write_markdown(path: Path, text: str) -> Path:
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(text.rstrip() + "\n", encoding="utf-8")

@@ -22,6 +22,18 @@ REQUIRED_FIELDS = [
     "launch_command",
 ]
 
+DIRECT_TASK_RESPONSE_SECTIONS = [
+    "## Direct Task Self-Handoff",
+    "## Classification",
+    "## Selected project profile",
+    "## Selected scenario",
+    "## Current pipeline stage",
+    "## Artifacts to update",
+    "## Handoff allowed",
+    "## Defect capture path",
+    "## Next step",
+]
+
 
 def main() -> int:
     root = Path(sys.argv[1] if len(sys.argv) > 1 else ".").resolve()
@@ -44,6 +56,14 @@ def main() -> int:
             errors.append("Для direct-task отсутствует .chatgpt/direct-task-self-handoff.md")
         if not launch.get("direct_self_handoff_completed"):
             errors.append("Для direct-task не отмечен direct_self_handoff_completed")
+        direct_response = root / ".chatgpt" / "direct-task-response.md"
+        if not direct_response.exists():
+            errors.append("Для direct-task отсутствует .chatgpt/direct-task-response.md")
+        else:
+            direct_response_text = direct_response.read_text(encoding="utf-8")
+            for section in DIRECT_TASK_RESPONSE_SECTIONS:
+                if section not in direct_response_text:
+                    errors.append(f"direct-task response не содержит обязательный раздел `{section}`")
 
     normalized = root / ".chatgpt" / "normalized-codex-handoff.md"
     if not normalized.exists():

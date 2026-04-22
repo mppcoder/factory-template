@@ -86,4 +86,7 @@ User-only closeout допустим только если remaining next step д
 - handoff allowed;
 - defect-capture path, если задача defect-class.
 
+Этот self-handoff должен быть не только внутренним артефактом, но и явным стартовым блоком в первом substantive ответе Codex.
+Нельзя пропускать его только потому, что "контекст уже понятен" или "задача очевидна".
+
 Только после этого допустим remediation / implementation.

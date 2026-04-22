@@ -79,6 +79,7 @@
 3. `AGENTS`, project instructions и scenario-pack сами по себе профиль не переключают.
 4. Для direct task сначала создай self-handoff по repo-сценариям.
 5. Проверяемый выбор хранится в `.chatgpt/task-launch.yaml`.
+6. Для direct task self-handoff должен быть явно показан в первом substantive ответе, а не оставаться только внутренним артефактом или неявным рассуждением.
 
 ## Правило inline handoff
 

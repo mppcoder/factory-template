@@ -10,8 +10,13 @@
 5. Запустить executable router для выбора `task_class` и `selected_profile`.
 6. Зафиксировать launch record в `.chatgpt/task-launch.yaml`.
 7. Сформировать `.chatgpt/direct-task-self-handoff.md`.
-8. Только после этого переходить к remediation / implementation / review.
+8. Сформировать готовый visible self-handoff block для стартового ответа Codex.
+9. Только после этого переходить к remediation / implementation / review.
 
 ## Важное ограничение
 Нельзя считать старую уже открытую сессию Codex надежной единицей маршрутизации.
 Self-handoff и profile selection должны быть привязаны к новому task launch boundary.
+
+## Правило visible gate
+Для direct task self-handoff должен быть видим пользователю в первом substantive ответе Codex.
+Недостаточно только записать `.chatgpt/direct-task-self-handoff.md` или молча держать классификацию в памяти.

@@ -7,6 +7,7 @@ from pathlib import Path
 from codex_task_router import (
     build_launch_record,
     read_task_text,
+    render_direct_task_response,
     render_normalized_handoff,
     write_launch_record,
     write_markdown,
@@ -38,9 +39,12 @@ def main() -> int:
     if args.launch_source == "direct-task":
         self_handoff_path = root / ".chatgpt" / "direct-task-self-handoff.md"
         write_markdown(self_handoff_path, render_normalized_handoff(record, task_text, "Direct Task Self-Handoff"))
+        direct_response_path = root / ".chatgpt" / "direct-task-response.md"
+        write_markdown(direct_response_path, render_direct_task_response(record, task_text))
         record["launch"]["direct_self_handoff_completed"] = True
         write_launch_record(root, record)
         print(f"direct_self_handoff={self_handoff_path}")
+        print(f"direct_task_response={direct_response_path}")
 
     print(f"task_launch={launch_path}")
     print(f"normalized_handoff={handoff_path}")

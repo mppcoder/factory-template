@@ -18,6 +18,8 @@
 - добавляет release decision template и reusable sync/release scripts
 - копирует executable routing contract: `codex-routing.yaml`, router scripts и named Codex profiles
 - подготавливает generated project к launch-time self-handoff и routing verification
+- direct-task contour теперь включает отдельный visible response artifact для стартового self-handoff
+- smoke и pre-release layer теперь прикрывают наличие этого visible direct-task response artifact
 
 ## Что еще описано на уровне фабрики
 - единая визуальная архитектура шаблона и подробные workflows по запуску, развёртыванию и downstream-update contour

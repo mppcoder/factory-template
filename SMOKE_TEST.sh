@@ -54,6 +54,7 @@ run ./scripts/validate-evidence.py .
 run ./scripts/validate-quality.py .
 run ./scripts/validate-handoff.py .
 run ./scripts/validate-codex-task-pack.py .
+run ./scripts/bootstrap-codex-task.py . --launch-source direct-task --task-text "bug regression requires visible self handoff before remediation"
 run ./scripts/validate-codex-routing.py .
 run ./scripts/validate-handoff-response-format.py .chatgpt/handoff-response.md
 run ./scripts/check-dod.py .

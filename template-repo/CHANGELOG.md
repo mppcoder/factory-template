@@ -10,7 +10,7 @@
 - immediate completion-package rule для generated closeout/handoff behavior
 - generated boundary guidance больше не должна перекладывать internal prepare/export commands на пользователя
 - executable routing layer для каждой новой Codex-задачи: `codex-routing.yaml`, named profiles и launcher/router scripts
-- direct-task self-handoff standard с `.chatgpt/task-launch.yaml`, `.chatgpt/normalized-codex-handoff.md` и `.chatgpt/direct-task-self-handoff.md`
+- direct-task self-handoff standard с `.chatgpt/task-launch.yaml`, `.chatgpt/normalized-codex-handoff.md`, `.chatgpt/direct-task-self-handoff.md` и `.chatgpt/direct-task-response.md`
 - root-level visual/workflow reference doc для архитектуры шаблона и основных deployment/update событий
 
 ### Изменено
@@ -18,10 +18,12 @@
 - template guidance теперь требует финальный блок `Инструкция пользователю` при любом pending user/external step
 - generated projects теперь могут отделять verified sync от release publication
 - generated docs, `.chatgpt` artifacts и validators теперь различают advisory layer и executable routing layer
+- generated direct-task contour теперь требует отдельный visible response artifact до remediation и проверяется routing validator-ом
 
 ### Исправлено
 - устранен reusable process gap между router, handoff rules, runbook, AGENTS и closeout layer
 - устранен template defect: routing по типу задачи больше не сводится к одному static profile без launch-time фиксации
+- устранен template process gap, при котором direct task мог не показывать self-handoff явно в первом substantive ответе
 
 ## [2.4.2] - 2026-04-20
 ### Изменено

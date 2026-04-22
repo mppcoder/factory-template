@@ -8,6 +8,7 @@
 
 Model/profile routing не считается исполненным только по текстовой инструкции.
 Надежный routing должен проходить через новый task launch и executable launcher/router layer.
+Для direct task этого тоже недостаточно на уровне внутреннего состояния: Codex обязан сначала показать visible self-handoff block в ответе и только потом идти в remediation.
 
 Ты не заменяешь пользователя на внешних границах.
 
