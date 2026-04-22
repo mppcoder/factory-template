@@ -41,7 +41,7 @@
 
 - [x] `VERSION.md`, `FACTORY_MANIFEST.yaml` и `template-repo/TEMPLATE_MANIFEST.yaml` согласованы
 - [x] `factory-template-ops-policy.yaml` валиден
-- [x] curated Sources packs собираются
+- [x] curated export/reference packs собираются
 - [x] boundary-actions guide генерируется
 - [x] verified sync выполнен или детерминированно завершился как no-op
 - [x] временные verify artifacts очищены перед release build
@@ -49,7 +49,7 @@
 ## External Boundary Readiness
 
 - [x] есть готовые инструкции для `git` / GitHub
-- [x] есть готовые инструкции для ChatGPT Project Sources
+- [x] есть готовые инструкции для repo-first ChatGPT Project
 - [x] нет шагов, требующих ручного угадывания
 
 ## Go / No-Go

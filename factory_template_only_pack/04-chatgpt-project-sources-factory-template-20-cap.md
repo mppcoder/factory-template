@@ -57,4 +57,4 @@
 ## 4. Вспомогательные export-артефакты
 
 Repo по-прежнему может собирать export/reference packs для внутренней автоматизации, проверок и архивов.
-Но ежедневная работа ChatGPT Project должна опираться на GitHub repo, а не на обязательную ручную загрузку `Sources` или внешний staging-sync.
+Но ежедневная работа ChatGPT Project должна опираться на GitHub repo, а не на обязательную ручную загрузку project artifacts или внешний staging-sync.

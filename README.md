@@ -22,9 +22,9 @@
    Основа: `brownfield` путь для уже существующего репозитория или инженерного контура.
    Типовые входы: `legacy-modernization`, `integration-project`, `audit-only`.
 
-Во всех трех случаях для generated project используется один и тот же базовый Sources pack:
+Во всех трех случаях для generated project используется один и тот же базовый repo-first контур:
 
-- экспорт полного `scenario-pack`
+- прямое чтение `scenario-pack` из GitHub repo
 
 Различается не набор загружаемых файлов, а стартовый маршрут по сценариям и выбранный preset.
 
@@ -61,14 +61,14 @@ bash TRIAGE_INCOMING_LEARNINGS.sh --dry-run
 Для handoff в Codex:
 
 ```bash
-python3 template-repo/scripts/create-codex-task-pack.sh <working-project>
-python3 template-repo/scripts/validate-codex-task-pack.sh <working-project>
+python3 template-repo/scripts/create-codex-task-pack.py <working-project>
+python3 template-repo/scripts/validate-codex-task-pack.py <working-project>
 ```
 
-`validate-codex-task-pack.sh` проверяет, что `codex-context.md`, `codex-task-pack.md`, `boundary-actions.md` и `done-checklist.md` не только созданы, но и согласованы с `active-scenarios.yaml`.
+`validate-codex-task-pack.py` проверяет, что `codex-context.md`, `codex-task-pack.md`, `boundary-actions.md` и `done-checklist.md` не только созданы, но и согласованы с `active-scenarios.yaml`.
 При формировании handoff в Codex явно фиксируйте, что приоритет у правил репозитория: `AGENTS`, runbook, scenario-pack и policy files repo.
 Пользователю handoff выдаётся только одним цельным блоком для copy-paste в Codex, а не ссылкой на файл и не несколькими разрозненными блоками.
-`template-repo/scripts/validate-handoff-response-format.sh` дополнительно валидирует уже готовый markdown-ответ handoff и ловит file-based / multi-block handoff как process defect.
+`template-repo/scripts/validate-handoff-response-format.py` дополнительно валидирует уже готовый markdown-ответ handoff и ловит file-based / multi-block handoff как process defect.
 
 `VALIDATE_FACTORY_TEMPLATE_OPS.sh` теперь проверяет не только структуру `sources-pack-*`, но и semantic profile repo-артефактов, если они используются как reference/export layer:
 
@@ -174,7 +174,7 @@ bash PHASE_DETECTION_TEST.sh
 - логи и служебные следы локальной сборки.
 
 ## Что нового в релизе 2.4.2
-- добавлен declarative direct Sources profile `core-hot-15` для ежедневной работы в ChatGPT Project;
+- добавлен declarative direct reference profile `core-hot-15` для ежедневной работы в ChatGPT Project;
 - добавлен cold/reference remainder archive `core-cold-5` для hybrid-схемы без дублей;
 - canonical archive `sources-pack-core-20` зафиксирован как steady-work snapshot;
 - export, validation и boundary guidance теперь поддерживают hybrid-схему `direct hot-set + cold archive remainder + canonical archive`;

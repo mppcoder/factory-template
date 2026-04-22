@@ -4,7 +4,7 @@ ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 bash "$ROOT/POST_UNZIP_SETUP.sh" >/dev/null 2>&1 || true
 SCRIPTS="$ROOT/template-repo/scripts"
 EXAMPLES=(working-project-examples/example-change-small-fix working-project-examples/example-change-brownfield-audit working-project-examples/example-change-end-to-end)
-CHECKS=(validate-project-preset.sh validate-policy-preset.sh validate-change-profile.sh validate-task-graph.sh validate-stage.sh validate-evidence.sh validate-quality.sh validate-handoff.sh check-dod.sh validate-versioning-layer.sh validate-defect-capture.sh validate-alignment.sh)
+CHECKS=(validate-project-preset.py validate-policy-preset.py validate-change-profile.py validate-task-graph.py validate-stage.py validate-evidence.py validate-quality.py validate-handoff.py check-dod.py validate-versioning-layer.py validate-defect-capture.py validate-alignment.py)
 FAILS=0
 printf '%-48s | %-28s | %-8s\n' 'Пример' 'Проверка' 'Статус'
 printf '%s\n' '--------------------------------------------------------------------------------------------------------------'

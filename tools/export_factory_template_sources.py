@@ -72,7 +72,7 @@ def render_readme(profile_name: str, export_name: str, profile: dict, profiles: 
         f"- Kind: `{kind}`",
         f"- Export layout: `{export_layout}`",
         f"- Files: {len(rel_paths)} content files",
-        f"- Purpose: {purpose or 'factory-template Sources export profile'}",
+        f"- Purpose: {purpose or 'factory-template export profile'}",
         "",
     ]
     if kind == "archive_pack":
@@ -87,7 +87,7 @@ def render_readme(profile_name: str, export_name: str, profile: dict, profiles: 
                 [
                     "## Role",
                     "",
-                    "Это cold/reference remainder archive для hybrid-модели ChatGPT Project Sources.",
+                    "Это cold/reference remainder archive для reference/export модели ChatGPT Project.",
                     "",
                     "## Recommended Workflow",
                     "",
@@ -133,11 +133,11 @@ def render_readme(profile_name: str, export_name: str, profile: dict, profiles: 
             [
                 "## Role",
                 "",
-                "Это direct Sources profile для ежедневной загрузки в ChatGPT Project.",
+                "Это direct reference profile для ежедневной работы с ChatGPT Project guidance.",
                 "",
                 "## Recommended Workflow",
                 "",
-                f"- Откройте подпапку `{upload_subdir}/` и загружайте в Sources только файлы из неё.",
+                f"- Откройте подпапку `{upload_subdir}/` и используйте только файлы из неё как reference/export набор.",
                 f"- Cold/archive remainder `{cold_archive_export}` загружайте как отдельный архив без дублей hot-set.",
                 f"- Canonical archive `{archive_export}` храните как полный steady-work snapshot и reference bundle.",
                 "- Hot-set не заменяет archive pack и не живет как ручная копия: он генерируется из декларативного manifest.",
@@ -294,7 +294,7 @@ def main() -> int:
     cold_archive = profiles.get(cold_archive_name, {}) if isinstance(cold_archive_name, str) else {}
     cold_archive_export = str(cold_archive.get("export_name", "core-cold-5"))
     lines = [
-        "# Factory Template Sources Packs",
+        "# Factory Template Export Packs",
         "",
         f"Текущая phase recommendation для archive pack: `{current_phase}` -> `{current_pack}`.",
         f"Причина: {detection_reason}",
@@ -314,12 +314,12 @@ def main() -> int:
     lines.extend(
         [
             "",
-            "Рекомендуемая стратегия Sources:",
+            "Рекомендуемая стратегия export/reference packs:",
             "",
             f"- для ежедневной работы загружать напрямую файлы из flat-подпапки `{direct_export}/upload-to-sources/`",
             f"- `{cold_archive_export}.tar.gz` загружать как cold/reference archive remainder без дублей hot-set",
             f"- `{canonical_archive_export}.tar.gz` держать как canonical archive snapshot и полный reference bundle",
-            "- phase-specific archive packs использовать только как operator override, а не как постоянный Sources set",
+            "- phase-specific archive packs использовать только как operator override, а не как постоянный project-instruction set",
             "",
             "Phase-aware рекомендации:",
             "",

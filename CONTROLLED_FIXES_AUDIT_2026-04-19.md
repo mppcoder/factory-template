@@ -46,7 +46,7 @@ Closed in this iteration:
 - root and template changelogs moved from pseudo-version `2.4.0-codex-dogfood-p1` to `Unreleased`
 - canonical state filename unified to `CURRENT_FUNCTIONAL_STATE.md` across scripts, scenario-pack, template README, and ops tooling
 - runbooks updated to point at actual repo topology
-- Sources guide rewritten to reference real files from the repo
+- repo-first guidance rewritten to reference real files from the repo
 - `CLEAN_VERIFY_ARTIFACTS.sh` added to make self-test -> cleanup -> pre-release audit reproducible
 
 Current validation state after fixes:
@@ -86,9 +86,9 @@ e43f45e62fe9ab4e  CHANGELOG.md
 4005420e4e00c08c  template-repo/README.md
 b81e6f68560695c9  template-repo/CHANGELOG.md
 9d69ef183a586de2  template-repo/launcher.sh
-087746eb358acd9a  template-repo/scripts/check-dod.sh
-336796ca3038b9e0  template-repo/scripts/validate-versioning-layer.sh
-e1e2211a7ac9f7f0  template-repo/scripts/create-codex-task-pack.sh
+087746eb358acd9a  template-repo/scripts/check-dod.py
+336796ca3038b9e0  template-repo/scripts/validate-versioning-layer.py
+e1e2211a7ac9f7f0  template-repo/scripts/create-codex-task-pack.py
 8572c0fd6b7029c4  template-repo/scenario-pack/16-done-closeout.md
 5376f2cf730353b3  template-repo/scenario-pack/brownfield/09-brownfield-closeout.md
 774787a8d0969088  factory_template_only_pack/01-runbook-dlya-polzovatelya-factory-template.md
@@ -113,12 +113,12 @@ Impact:
 
 Current canonical validator expectation:
 
-- `template-repo/scripts/validate-versioning-layer.sh` requires `CURRENT_FUNCTIONAL_STATE.md`
+- `template-repo/scripts/validate-versioning-layer.py` requires `CURRENT_FUNCTIONAL_STATE.md`
 
 Legacy references still active:
 
-- `template-repo/scripts/check-dod.sh` requires `CURRENT_STATE.md`
-- `template-repo/scripts/create-codex-task-pack.sh` tells user to update `CURRENT_STATE.md`
+- `template-repo/scripts/check-dod.py` requires `CURRENT_STATE.md`
+- `template-repo/scripts/create-codex-task-pack.py` tells user to update `CURRENT_STATE.md`
 - `template-repo/scenario-pack/16-done-closeout.md` refers to `CURRENT_STATE.md`
 - `template-repo/scenario-pack/brownfield/09-brownfield-closeout.md` refers to `CURRENT_STATE.md`
 - `template-repo/template/README.md` lists `CURRENT_STATE.md`
@@ -151,7 +151,7 @@ Impact:
 - runbook inventory instructions do not match the real repository layout
 - a new operator can search the wrong paths first
 
-### D. Sources Pack Policy Drift
+### D. Repo-First / Reference Pack Policy Drift
 
 `factory_template_only_pack/04-chatgpt-project-sources-factory-template-20-cap.md` recommends permanent Sources files that are absent from repo:
 
@@ -168,7 +168,7 @@ Impact:
 
 Impact:
 
-- the curated Sources guidance is not executable as written
+- the curated repo-first/reference guidance is not executable as written
 - user cannot follow the documented 20-file pack literally
 
 ### E. Verify/Release Lifecycle Drift
@@ -209,8 +209,8 @@ Impact:
 1. Pick one canonical file name:
    `CURRENT_FUNCTIONAL_STATE.md` is already enforced by validators and root docs, so it is the safest candidate.
 2. Update legacy references in:
-   - `template-repo/scripts/check-dod.sh`
-   - `template-repo/scripts/create-codex-task-pack.sh`
+   - `template-repo/scripts/check-dod.py`
+   - `template-repo/scripts/create-codex-task-pack.py`
    - `template-repo/scenario-pack/16-done-closeout.md`
    - `template-repo/scenario-pack/brownfield/09-brownfield-closeout.md`
    - `template-repo/template/README.md`
@@ -227,11 +227,11 @@ Impact:
    - clarify that project `.chatgpt/` lives inside generated/example projects, not repo root
 2. Add one concise repo map section to reduce path ambiguity.
 
-### Priority 3: Make Sources Guidance Executable
+### Priority 3: Make Repo-First Guidance Executable
 
 1. Replace non-existent file names in the 20-cap guide with real files, or create the missing policy/index docs intentionally.
 2. Decide whether root-level `.chatgpt/codex-task-pack.md` is meant to exist; if not, remove it from the permanent Sources recommendation.
-3. Align Sources guidance with the actual export flow from `template-repo/scripts/export-sources-pack.sh`.
+3. Align repo-first/reference guidance with the actual export flow from `template-repo/scripts/export-sources-pack.sh`.
 
 ### Priority 4: Clean Verify/Release Ergonomics
 

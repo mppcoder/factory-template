@@ -4,11 +4,11 @@
 
 Шаблон `factory-template` поддерживает 3 канонических режима запуска и сопровождения.
 
-## Единый Sources Pack
+## Единый Repo-First Contour
 
-Для generated projects используется один и тот же базовый Sources pack:
+Для generated projects используется один и тот же базовый repo-first контур:
 
-- общий `scenario-pack`, экспортируемый через `./scripts/export-sources-pack.sh .`
+- общий `scenario-pack` в repo, который читается напрямую из GitHub
 
 Различие между режимами задается не разными наборами загружаемых файлов, а через:
 

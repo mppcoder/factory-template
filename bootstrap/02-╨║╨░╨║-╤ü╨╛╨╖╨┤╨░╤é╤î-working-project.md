@@ -2,4 +2,4 @@
 
 1. Запусти `./launcher.sh`
 2. Выбери режим и класс изменения
-3. Загрузи `scenario-pack` в Sources
+3. Добавь в ChatGPT Project repo-first инструкцию и начинай с `template-repo/scenario-pack/00-master-router.md`

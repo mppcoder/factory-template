@@ -39,13 +39,13 @@
 
 - docs only;
 - rename only;
-- export packs;
+- export/reference packs;
 - dry-run и повторные recheck'и repo-side export/reference artifacts;
 - mechanical cleanup;
 - простых validator runs;
 - repeated no-op/recheck runs для `VALIDATE_*` и `VERIFIED_SYNC.sh`.
 - post-verify lightweight follow-up changes вроде `.gitignore` и небольших docs/closeout cleanup.
-- сбор completion package для source-update instructions по уже известному impact model.
+- сбор completion package для repo-first instruction updates по уже известному impact model.
 
 Рекомендуемый профиль:
 
@@ -80,7 +80,7 @@
 - release bundle review;
 - complete self-test pass review;
 - `EXECUTE_RELEASE_DECISION.sh` и publish/fallback review;
-- release-followup, source-pack refresh и closeout consistency pass как внутренней repo-работы.
+- release-followup, export/reference pack refresh и closeout consistency pass как внутренней repo-работы.
 - final review операторских инструкций для factory ChatGPT Project, downstream repo sync и battle ChatGPT Projects.
 - финальный review repo-first инструкции и внешних шагов обновления ChatGPT Project UI.
 

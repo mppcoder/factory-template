@@ -66,6 +66,10 @@ def main() -> int:
 ## Режим выполнения
 {change.get('execution_mode', 'не заполнен')}
 
+## Repo Rules Priority
+При исполнении handoff приоритет у правил repo: `AGENTS`, runbook, scenario-pack, policy files и других канонических файлов этого репозитория.
+Общие рабочие инструкции применять только там, где они не конфликтуют с repo rules и старшими системными ограничениями среды.
+
 ## Handoff input
 {codex_input}{bug_block}
 """
@@ -199,16 +203,41 @@ def main() -> int:
 - GitHub / внешние UI / секреты не выполнять автоматически из Codex.
 - Все внешние действия фиксировать отдельной пошаговой инструкцией для пользователя с финальным блоком `Инструкция пользователю`.
 - `Инструкция пользователю` не должна подменять внутренний handoff, если internal repo follow-up еще не завершен.
-- Для factory Sources refresh сначала сам выполните `bash EXPORT_FACTORY_TEMPLATE_SOURCES.sh`; этот шаг выполняет Codex внутри repo, после чего пользователю передаются уже готовые generated артефакты в `_sources-export/factory-template/`.
+- Для обновления factory ChatGPT Project сначала сам подготовьте точный repo-first instruction text; этот шаг выполняет Codex внутри repo до пользовательского блока.
 - Для downstream repo sync сначала используйте `workspace-packs/factory-ops/export-template-patch.sh` и `workspace-packs/factory-ops/apply-template-patch.sh`.
-- Не перекладывайте на пользователя запуск внутренних repo-команд вроде `EXPORT_FACTORY_TEMPLATE_SOURCES.sh` или `GENERATE_BOUNDARY_ACTIONS.sh`, если эти шаги может выполнить Codex.
+- Не перекладывайте на пользователя запуск внутренних repo-команд вроде `GENERATE_BOUNDARY_ACTIONS.sh`, если эти шаги может выполнить Codex.
 - Если replacement может создать stale duplicates, добавляйте точный раздел `Удалить перед заменой`.
+"""
+
+    handoff_response = f"""## Handoff в Codex
+
+```text
+Repo: {root.name}
+Цель: выполнить текущий handoff по проекту {root.name}.
+Приоритет: сначала правила repo (`AGENTS`, runbook, scenario-pack, policy files), затем общие инструкции без конфликта с ними.
+Entry point: {entrypoint}
+Scope: работать только в пределах этого repo и связанных project artifacts.
+Verify: использовать актуальные validators, verification-report.md и done-report.md.
+```
+
+## Инструкция пользователю
+1. Цель
+Передать задачу в Codex уже по нормализованному handoff.
+2. Где сделать
+В текущем проекте.
+3. Точные шаги
+Использовать подготовленный handoff-блок выше без пересборки из файлов вручную.
+4. Ожидаемый результат
+Codex получает один цельный copy-paste handoff и работает по правилам repo.
+5. Что прислать обратно
+Итог выполнения или уточнение, если появится внешний блокирующий шаг.
 """
 
     (chat / 'codex-context.md').write_text(context, encoding='utf-8')
     (chat / 'codex-task-pack.md').write_text(pack, encoding='utf-8')
     (chat / 'boundary-actions.md').write_text(boundary_actions, encoding='utf-8')
     (chat / 'done-checklist.md').write_text(checklist, encoding='utf-8')
+    (chat / 'handoff-response.md').write_text(handoff_response, encoding='utf-8')
     print('Codex task pack собран.')
     return 0
 

@@ -34,9 +34,9 @@ Evidence / quality / DoD до смыслового наполнения арте
 - `PHASE_DETECTION_TEST.sh` автоматически проверяет synthetic `controlled-fixes`, `release` и `bugfix-drift` сценарии.
 - launcher smoke на временном scaffold подтверждает, что создание проекта больше не зависит от внешнего staging URL и сразу переводит проект в repo-first режим.
 - `POST_UNZIP_SETUP.sh` остаётся безопасным для non-interactive verify path и не блокирует test runs prompt'ом.
-- validator `validate-codex-task-pack.sh` теперь требует, чтобы handoff pack явно фиксировал приоритет правил repo.
-- validator `validate-codex-task-pack.sh` теперь также требует правило: handoff пользователю выдаётся только одним цельным copy-paste блоком, а не ссылкой на файл и не несколькими блоками.
-- `validate-handoff-response-format.sh` проверяет готовый markdown handoff-response и ловит file-based handoff, несколько handoff-заголовков и отсутствие fenced copy-paste блока.
+- validator `validate-codex-task-pack.py` теперь требует, чтобы handoff pack явно фиксировал приоритет правил repo.
+- validator `validate-codex-task-pack.py` теперь также требует правило: handoff пользователю выдаётся только одним цельным copy-paste блоком, а не ссылкой на файл и не несколькими блоками.
+- `validate-handoff-response-format.py` проверяет готовый markdown handoff-response и ловит file-based handoff, несколько handoff-заголовков и отсутствие fenced copy-paste блока.
 - `release` определяется только при сочетании release-path signals и checked intent markers в `RELEASE_CHECKLIST.md`.
 - `bugfix-drift` определяется только при сочетании bug/validator path signals и bug-report intent markers в `reports/bugs/*.md`.
 - Golden examples и fresh scaffold синхронизированы с финальным versioning layer.

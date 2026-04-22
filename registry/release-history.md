@@ -1,8 +1,8 @@
 # Общая история изменений фабрики
 
 ## 2.4.2
-- в релиз добавлен direct Sources profile `core-hot-15`
-- archive/direct Sources generation переведены на один declarative manifest
+- в релиз добавлен direct reference profile `core-hot-15`
+- archive/direct reference generation переведены на один declarative manifest
 - release bundle и GitHub release синхронизированы под `factory-v2.4.2`
 
 ## 2.4.1

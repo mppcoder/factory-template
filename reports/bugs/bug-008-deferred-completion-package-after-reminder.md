@@ -14,7 +14,7 @@ Repo: `factory-template`, completion / closeout / handoff behavior layer:
 - codex-task-pack checklist
 
 ## Ожидаемое поведение
-- Если change требует `## Инструкция пользователю` или source-update completion package, этот блок должен быть выдан в том же финальном ответе, где сообщается о завершении change.
+- Если change требует `## Инструкция пользователю` или completion package для repo-first instruction update, этот блок должен быть выдан в том же финальном ответе, где сообщается о завершении change.
 
 ## Фактическое поведение
 - Даже после усиления completion package model мог появляться только после дополнительного вопроса пользователя.

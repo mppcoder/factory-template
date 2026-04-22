@@ -17,13 +17,13 @@
 
 Краткая сводка по этим режимам вынесена в root-level `ENTRY_MODES.md`.
 
-## Sources Principle For Generated Projects
+## Repo-First Principle For Generated Projects
 
-Во всех режимах generated project использует один и тот же базовый Sources pack:
+Во всех режимах generated project использует один и тот же repo-first принцип:
 
-- общий `scenario-pack`
-
-Entry mode влияет не на состав загружаемых файлов, а на то, с какого сценария начинать и какой preset/policy применять первым.
+- сценарии читаются прямо из GitHub repo проекта;
+- первое обязательное чтение: `template-repo/scenario-pack/00-master-router.md`;
+- entry mode влияет не на набор загружаемых файлов, а на стартовый маршрут и preset/policy.
 
 ## Правило фиксации дефектов
 Любой обнаруженный defect должен быть зафиксирован как bug report до исправления или одновременно с ним. Silent fixes запрещены.

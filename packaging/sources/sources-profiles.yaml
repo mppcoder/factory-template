@@ -37,7 +37,7 @@ profiles:
   core_hot_direct:
     export_name: core-hot-15
     kind: direct_sources
-    purpose: direct upload profile for daily ChatGPT Project work
+    purpose: direct reference profile for daily ChatGPT Project work
     export_layout: flat
     upload_subdir: upload-to-sources
     naming_strategy: basename_unless_conflict_then_path_joined_with_double_underscore
@@ -63,7 +63,7 @@ profiles:
   core_cold_archive:
     export_name: core-cold-5
     kind: archive_pack
-    purpose: cold/reference remainder archive for hybrid ChatGPT Project Sources work
+    purpose: cold/reference remainder archive for hybrid repo-first ChatGPT Project work
     canonical_archive_profile: core_archive
     direct_profile: core_hot_direct
     files:
@@ -76,7 +76,7 @@ profiles:
   release_archive:
     export_name: sources-pack-release-20
     kind: archive_pack
-    purpose: release-oriented Sources pack for final verification and packaging
+    purpose: release-oriented reference/export pack for final verification and packaging
     files:
       - README.md
       - VERSION.md
@@ -102,24 +102,24 @@ profiles:
   bugfix_archive:
     export_name: sources-pack-bugfix-20
     kind: archive_pack
-    purpose: bugfix-oriented Sources pack for launcher and validator drift work
+    purpose: bugfix-oriented reference/export pack for launcher and validator drift work
     files:
       - template-repo/launcher.sh
-      - template-repo/scripts/validate-project-preset.sh
-      - template-repo/scripts/validate-policy-preset.sh
-      - template-repo/scripts/validate-change-profile.sh
-      - template-repo/scripts/validate-task-graph.sh
-      - template-repo/scripts/validate-stage.sh
-      - template-repo/scripts/validate-evidence.sh
-      - template-repo/scripts/validate-quality.sh
-      - template-repo/scripts/validate-handoff.sh
-      - template-repo/scripts/check-dod.sh
-      - template-repo/scripts/validate-versioning-layer.sh
-      - template-repo/scripts/validate-defect-capture.sh
-      - template-repo/scripts/validate-alignment.sh
-      - template-repo/scripts/validate-codex-task-pack.sh
-      - template-repo/scripts/validate-handoff-response-format.sh
-      - template-repo/scripts/create-codex-task-pack.sh
+      - template-repo/scripts/validate-project-preset.py
+      - template-repo/scripts/validate-policy-preset.py
+      - template-repo/scripts/validate-change-profile.py
+      - template-repo/scripts/validate-task-graph.py
+      - template-repo/scripts/validate-stage.py
+      - template-repo/scripts/validate-evidence.py
+      - template-repo/scripts/validate-quality.py
+      - template-repo/scripts/validate-handoff.py
+      - template-repo/scripts/check-dod.py
+      - template-repo/scripts/validate-versioning-layer.py
+      - template-repo/scripts/validate-defect-capture.py
+      - template-repo/scripts/validate-alignment.py
+      - template-repo/scripts/validate-codex-task-pack.py
+      - template-repo/scripts/validate-handoff-response-format.py
+      - template-repo/scripts/create-codex-task-pack.py
       - VALIDATE_FACTORY_FEEDBACK.sh
       - factory_template_only_pack/02-runbook-dlya-codex-factory-template.md
       - factory_template_only_pack/07-AGENTS-factory-template.md

@@ -3,7 +3,7 @@
 ## [2.4.2] - 2026-04-20
 ### Изменено
 - релизный контур синхронизирован под patch-релиз `2.4.2`
-- release notes отражают hybrid-модель Sources для ChatGPT Project
+- release notes отражают repo-first модель для ChatGPT Project
 
 ## [2.4.1] - 2026-04-20
 ### Изменено

@@ -13,7 +13,7 @@ Optional layer `workspace-packs/factory-ops/` позволяет:
 - принимать решение о selective sync.
 
 ## Codex task pack
-Скрипт `create-codex-task-pack.sh` собирает из текущего проекта:
+Скрипт `create-codex-task-pack.py` собирает из текущего проекта:
 - `codex-context.md`
 - `codex-task-pack.md`
 - `done-checklist.md`

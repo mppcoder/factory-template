@@ -7,7 +7,7 @@
 - validators для verified sync prereqs, release decision, release notes source и publish outcome
 - lightweight follow-up mode для `VERIFIED_SYNC.sh`, чтобы low-risk post-verify `.gitignore` и docs/closeout изменения тоже коммитились и пушились автоматически
 - internal-followup precedence rule: user footer больше не должен вытеснять inline handoff, если remaining work еще остается внутренней Codex-eligible работой repo
-- completion/handoff layer теперь требует source-update completion package для factory Sources, downstream repo sync и battle ChatGPT Project Sources, когда change затрагивает downstream-consumed content
+- completion/handoff layer теперь требует completion package для factory ChatGPT Project instruction, downstream repo sync и battle ChatGPT Project instructions, когда change затрагивает downstream-consumed content
 - immediate completion-package rule: обязательная инструкция пользователю должна быть в том же финальном ответе, а не после напоминания пользователя
 - completion package больше не должен перекладывать на пользователя внутренние prepare/export команды; такие шаги выполняет Codex до финального ответа
 - удалён legacy staging-sync contour для `core-hot-15/upload-to-sources/`
@@ -17,9 +17,9 @@
 - launcher больше не требует внешний URL при создании проекта
 - `POST_UNZIP_SETUP.sh` больше не требует внешнюю конфигурацию staging-контура
 - repo полностью переведён на repo-first режим для ChatGPT Projects
-- handoff source files и validator `validate-codex-task-pack.sh` усилены явным правилом: при формировании handoff в Codex приоритет у правил repo
+- handoff source files и validator `validate-codex-task-pack.py` усилены явным правилом: при формировании handoff в Codex приоритет у правил repo
 - handoff format rule усилен: пользователю нельзя выдавать handoff ссылкой на файл или несколькими блоками, только одним цельным copy-paste блоком
-- добавлен validator `template-repo/scripts/validate-handoff-response-format.sh` для проверки готового handoff markdown-ответа на single-block и anti-file-based rules
+- добавлен validator `template-repo/scripts/validate-handoff-response-format.py` для проверки готового handoff markdown-ответа на single-block и anti-file-based rules
 
 ### Изменено
 - release-facing слой зафиксировал factory-template defect remediation из `a9b05c0` без смены release semantics
@@ -29,7 +29,7 @@
 - `core-cold-5.tar.gz` теперь дублируется прямо в папке `core-hot-15/` как companion archive для ручной загрузки
 - `core-hot-15` теперь физически разделяет uploadable и служебные файлы: всё для Sources лежит в `upload-to-sources/`
 - export manifest теперь публикует детерминированные checksum metadata для hot export и bundled artifacts, чтобы compare layer мог строить `create/update/delete/skipped` план без эвристики только по mtime
-- docs и completion layer теперь явно различают Codex connector contour для Drive folder и отдельный внешний шаг обновления ChatGPT Project Sources
+- docs и completion layer теперь явно различают internal export/reference contour и отдельный внешний шаг обновления ChatGPT Project instruction
 
 ### Исправлено
 - устранен reusable process gap, из-за которого ChatGPT мог остановиться на аналитике вместо готового handoff
@@ -38,13 +38,13 @@
 
 ## [2.4.2] - 2026-04-20
 ### Добавлено
-- declarative manifest `packaging/sources/sources-profiles.yaml` для archive/direct Sources profiles
-- direct Sources profile `core-hot-15` для ежедневной работы в ChatGPT Project
+- declarative manifest `packaging/sources/sources-profiles.yaml` для archive/direct reference profiles
+- direct reference profile `core-hot-15` для ежедневной работы в ChatGPT Project
 - usage doc `docs/releases/sources-pack-usage.md` для hybrid-схемы `direct hot-set + canonical archive`
 
 ### Изменено
 - export Sources теперь строит и canonical archive packs, и direct hot-set из одного источника правды
-- boundary-actions и summary теперь рекомендуют `core-hot-15` как постоянный direct Sources set
+- boundary-actions и summary теперь рекомендуют `core-hot-15` как постоянный direct reference set
 - `sources-pack-core-20` явно закреплён как canonical archive snapshot, а не как единственный ежедневный способ загрузки
 
 ## [2.4.1] - 2026-04-20
@@ -53,9 +53,9 @@
 - класс изменения `brownfield-stabilization` с поддержкой `hybrid` и `codex-led`
 - шаблонные `.codex` конфиги и подагенты для автоматического переключения режимов внутри одной живой сессии
 - workspace pack `vscode-codex-dogfood-bootstrap` для старта из одного окна VS Code с дальнейшим переходом на отдельные окна по проектам
-- декларативный `factory-template-ops-policy.yaml` для curated Sources packs и boundary-actions settings
+- декларативный `factory-template-ops-policy.yaml` для curated export/reference packs и boundary-actions settings
 - validator `VALIDATE_FACTORY_TEMPLATE_OPS.sh` / `tools/validate_factory_template_ops_policy.py`
-- validator `template-repo/scripts/validate-codex-task-pack.sh` для generated Codex handoff pack
+- validator `template-repo/scripts/validate-codex-task-pack.py` для generated Codex handoff pack
 - semantic checks для `sources-pack-core-20`, `sources-pack-release-20` и `sources-pack-bugfix-20` внутри `tools/validate_factory_template_ops_policy.py`
 - phase-aware recommendation matrix для `controlled-fixes`, `release` и `bugfix-drift` внутри `factory-template-ops-policy.yaml`
 - automatic phase detection helper `DETECT_FACTORY_TEMPLATE_PHASE.sh` / `tools/factory_template_phase_detection.py`
@@ -66,10 +66,10 @@
 ### Изменено
 - launcher теперь предлагает новый профиль и новый класс изменения
 - policy preset и scenario-pack расширены под evidence-first → stabilization → reconstructed repo → clean package flow
-- curated Sources packs и boundary-actions generator теперь собираются из policy/template слоя, а не из хардкода
+- curated export/reference packs и boundary-actions generator теперь собираются из policy/template слоя, а не из хардкода
 - `PRE_RELEASE_AUDIT.sh`, `SMOKE_TEST.sh` и `MATRIX_TEST.sh` теперь учитывают ops-policy validator
 - feedback ingest теперь явно фиксирует режим `validated` / `allow-incomplete` в `incoming-learnings/INDEX.md`
-- `create-codex-task-pack.sh` теперь корректно подхватывает `active_scenarios` и `scenario_pack.entrypoint` из `active-scenarios.yaml`
+- `create-codex-task-pack.py` теперь корректно подхватывает `active_scenarios` и `scenario_pack.entrypoint` из `active-scenarios.yaml`
 - `sources-pack-release-20` теперь ориентирован на release-facing docs, а `sources-pack-bugfix-20` включает feedback/handoff validators
 - `SUMMARY.md` и boundary-actions guide теперь публикуют текущую phase recommendation и матрицу выбора pack'ов
 - phase recommendation теперь вычисляется из `git` changed paths и policy rules, а не переключается вручную через `current_phase`
@@ -103,12 +103,12 @@
 ### Исправлено
 - устранен legacy-id `factory-v2.3.9-alignment-layer` в build-слое
 - template launcher больше не генерирует устаревший `2.4.0-versioning-layer`
-- golden examples синхронизированы и по `.chatgpt/project-origin.md`, чтобы `validate-versioning-layer.sh` проходил на rc2
+- golden examples синхронизированы и по `.chatgpt/project-origin.md`, чтобы `validate-versioning-layer.py` проходил на rc2
 
 ## [2.4.0-rc1-consistency] - 2026-04-15
 ### Добавлено
 - единый versioning/documentation layer для фабрики, шаблона и generated projects
-- валидатор `validate-versioning-layer.sh`
+- валидатор `validate-versioning-layer.py`
 - стандартные `VERSION.md`, `CHANGELOG.md`, `CURRENT_FUNCTIONAL_STATE.md`
 
 ### Изменено

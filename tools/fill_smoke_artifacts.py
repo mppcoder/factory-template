@@ -22,7 +22,7 @@ chat = root / '.chatgpt'
 
 ## Реальные наблюдения и кейсы
 - Реальный smoke-test подтвердил создание рабочего проекта через launcher.
-- После создания доступны валидаторы `validate-stage.sh`, `validate-evidence.sh` и `validate-quality.sh`.
+- После создания доступны валидаторы `validate-stage.py`, `validate-evidence.py` и `validate-quality.py`.
 - На свежем scaffold проверки evidence, quality и DoD корректно не проходят до заполнения артефактов.
 
 ## Расхождения и выводы
@@ -98,7 +98,7 @@ chat = root / '.chatgpt'
 - Создан проект через launcher.
 - Заполнены ключевые артефакты `.chatgpt`.
 - Пройдены stage, evidence, quality, handoff и DoD проверки.
-- Выполнен экспорт сценариев для загрузки в Sources.
+- Выполнен экспорт сценариев как reference/archive набора.
 
 ## Какие артефакты обновлены
 - `.chatgpt/reality-check.md`

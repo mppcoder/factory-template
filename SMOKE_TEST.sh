@@ -26,34 +26,34 @@ cat "$LOG"
 
 log '=== 2. Проверки на свежем проекте ==='
 cd "$PROJECT_DIR"
-run ./scripts/validate-project-preset.sh .
-run ./scripts/validate-policy-preset.sh .
-run ./scripts/validate-change-profile.sh .
-run ./scripts/validate-task-graph.sh .
-run ./scripts/validate-stage.sh .
-run_expect_fail ./scripts/validate-evidence.sh . && log 'OK: свежий scaffold корректно не проходит evidence' || { log 'ОШИБКА: свежий scaffold не должен проходить evidence'; exit 1; }
-run_expect_fail ./scripts/validate-quality.sh . && log 'OK: свежий scaffold корректно не проходит quality' || { log 'ОШИБКА: свежий scaffold не должен проходить quality'; exit 1; }
-run_expect_fail ./scripts/check-dod.sh . && log 'OK: свежий scaffold корректно не проходит DoD' || { log 'ОШИБКА: свежий scaffold не должен проходить DoD'; exit 1; }
+run ./scripts/validate-project-preset.py .
+run ./scripts/validate-policy-preset.py .
+run ./scripts/validate-change-profile.py .
+run ./scripts/validate-task-graph.py .
+run ./scripts/validate-stage.py .
+run_expect_fail ./scripts/validate-evidence.py . && log 'OK: свежий scaffold корректно не проходит evidence' || { log 'ОШИБКА: свежий scaffold не должен проходить evidence'; exit 1; }
+run_expect_fail ./scripts/validate-quality.py . && log 'OK: свежий scaffold корректно не проходит quality' || { log 'ОШИБКА: свежий scaffold не должен проходить quality'; exit 1; }
+run_expect_fail ./scripts/check-dod.py . && log 'OK: свежий scaffold корректно не проходит DoD' || { log 'ОШИБКА: свежий scaffold не должен проходить DoD'; exit 1; }
 cat "$LOG"
 : > "$LOG"
 
 log '=== 3. Наполнение артефактов ==='
 run python3 "$ROOT/tools/fill_smoke_artifacts.py"
-run ./scripts/init-work-item.sh .
+run ./scripts/init-work-item.py .
 cat "$LOG"
 : > "$LOG"
 
 echo '=== 4. Проверки после наполнения ==='
-run ./scripts/validate-project-preset.sh .
-run ./scripts/validate-policy-preset.sh .
-run ./scripts/validate-task-graph.sh .
-run ./scripts/validate-change-profile.sh .
-run ./scripts/validate-stage.sh .
-run ./scripts/validate-evidence.sh .
-run ./scripts/validate-quality.sh .
-run ./scripts/validate-handoff.sh .
-run ./scripts/validate-handoff-response-format.sh .chatgpt/handoff-response.md
-run ./scripts/check-dod.sh .
+run ./scripts/validate-project-preset.py .
+run ./scripts/validate-policy-preset.py .
+run ./scripts/validate-task-graph.py .
+run ./scripts/validate-change-profile.py .
+run ./scripts/validate-stage.py .
+run ./scripts/validate-evidence.py .
+run ./scripts/validate-quality.py .
+run ./scripts/validate-handoff.py .
+run ./scripts/validate-handoff-response-format.py .chatgpt/handoff-response.md
+run ./scripts/check-dod.py .
 run ./scripts/export-sources-pack.sh .
 cat "$LOG"
 

@@ -81,8 +81,8 @@ active['project_preset'] = os.environ['PROJECT_PRESET']
 PY
 (
   cd "$DEST_DIR"
-  ./scripts/apply-project-preset.sh "$PROJECT_PRESET" project-presets.yaml .chatgpt/project-profile.yaml .chatgpt/active-scenarios.yaml
-  ./scripts/apply-policy-preset.sh .chatgpt/task-index.yaml policy-presets.yaml .chatgpt/policy-status.yaml
+  ./scripts/apply-project-preset.py "$PROJECT_PRESET" project-presets.yaml .chatgpt/project-profile.yaml .chatgpt/active-scenarios.yaml
+  ./scripts/apply-policy-preset.py .chatgpt/task-index.yaml policy-presets.yaml .chatgpt/policy-status.yaml
 )
 
 PROJECT_NAME="$PROJECT_NAME" PROJECT_SLUG="$PROJECT_SLUG" PROJECT_MODE="$PROJECT_MODE" PROJECT_PRESET="$PROJECT_PRESET" CHANGE_CLASS="$CHANGE_CLASS" EXEC_MODE="$EXEC_MODE" CHANGE_ID="$CHANGE_ID" DEST_DIR="$DEST_DIR" python3 - <<'PY'
@@ -285,9 +285,9 @@ echo "   - brownfield без repo: brownfield/00-brownfield-entry.md"
 echo "   - brownfield с repo: brownfield/00-brownfield-entry.md -> brownfield/01-system-inventory.md"
 echo "4. Обновляйте .chatgpt/ по мере прохождения сценариев"
 echo "5. Перед handoff запустите проверки:"
-echo "   ./scripts/validate-task-graph.sh"
-echo "   ./scripts/validate-change-profile.sh"
-echo "   ./scripts/validate-project-preset.sh"
-echo "   ./scripts/validate-policy-preset.sh"
+echo "   ./scripts/validate-task-graph.py"
+echo "   ./scripts/validate-change-profile.py"
+echo "   ./scripts/validate-project-preset.py"
+echo "   ./scripts/validate-policy-preset.py"
 
-echo "   ./scripts/validate-versioning-layer.sh"
+echo "   ./scripts/validate-versioning-layer.py"

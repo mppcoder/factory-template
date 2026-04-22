@@ -6,7 +6,7 @@
 
 ---
 
-## 1. Стабилизировать source packs
+## 1. Стабилизировать export/reference packs
 
 Нужно сделать штатные curated exports:
 
@@ -14,7 +14,7 @@
 - `sources-pack-release-20/`
 - `sources-pack-bugfix-20/`
 
-Чтобы пользователь не собирал состав Sources вручную.
+Чтобы пользователь не собирал reference/export набор вручную.
 
 Статус:
 
@@ -45,9 +45,9 @@
 
 Статус:
 
-- `create-codex-task-pack.sh` уже собирает `codex-context.md`, `codex-task-pack.md`, `done-checklist.md`
+- `create-codex-task-pack.py` уже собирает `codex-context.md`, `codex-task-pack.md`, `done-checklist.md`
 - добавлена автоматическая генерация `.chatgpt/boundary-actions.md`
-- добавлен validator `template-repo/scripts/validate-codex-task-pack.sh` для semantic-проверки handoff contents
+- добавлен validator `template-repo/scripts/validate-codex-task-pack.py` для semantic-проверки handoff contents
 - исправлена синхронизация route line с `active-scenarios.yaml`
 - дальше можно усиливать качество самого `classification.md` / `codex-input.md`, а не только generated pack
 

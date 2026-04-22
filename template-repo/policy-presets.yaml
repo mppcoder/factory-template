@@ -20,7 +20,7 @@ policy_presets:
     - Используйте для небольших исправлений без масштабной перестройки системы.
     - Если handoff уже разрешен и задача достаточно определена, выдать inline handoff в том же ответе; если нужен следующий шаг пользователя, завершить ответ блоком `Инструкция пользователю`.
     - Internal repo follow-up не должен подменяться user-only closeout; для mixed follow-up сначала нужен inline handoff, затем user footer только для внешней границы.
-    - Если change затрагивает Sources или downstream template consumers, `Инструкция пользователю` должна быть расширена до source-update completion package с affected contours, delete-before-replace и repo-level sync steps.
+    - Если change затрагивает repo-first instruction layer или downstream template consumers, `Инструкция пользователю` должна быть расширена до completion package с affected contours, delete-before-replace и repo-level sync steps.
   feature:
     default_scenarios:
     - 00-master-router.md
@@ -45,7 +45,7 @@ policy_presets:
     - Для change-class с required handoff отсутствие inline handoff в том же ответе запрещено.
     - Если есть pending user action или external step, финальная секция `Инструкция пользователю` обязательна.
     - Internal repo follow-up не должен подменяться user-only closeout; для mixed follow-up сначала нужен inline handoff, затем user footer только для внешней границы.
-    - Если change затрагивает Sources или downstream template consumers, `Инструкция пользователю` должна быть расширена до source-update completion package с affected contours, delete-before-replace и repo-level sync steps.
+    - Если change затрагивает repo-first instruction layer или downstream template consumers, `Инструкция пользователю` должна быть расширена до completion package с affected contours, delete-before-replace и repo-level sync steps.
   refactor:
     default_scenarios:
     - 00-master-router.md
@@ -69,7 +69,7 @@ policy_presets:
     - Для change-class с required handoff отсутствие inline handoff в том же ответе запрещено.
     - Если есть pending user action или external step, финальная секция `Инструкция пользователю` обязательна.
     - Internal repo follow-up не должен подменяться user-only closeout; для mixed follow-up сначала нужен inline handoff, затем user footer только для внешней границы.
-    - Если change затрагивает Sources или downstream template consumers, `Инструкция пользователю` должна быть расширена до source-update completion package с affected contours, delete-before-replace и repo-level sync steps.
+    - Если change затрагивает repo-first instruction layer или downstream template consumers, `Инструкция пользователю` должна быть расширена до completion package с affected contours, delete-before-replace и repo-level sync steps.
   migration:
     default_scenarios:
     - 00-master-router.md
@@ -93,7 +93,7 @@ policy_presets:
     - Для change-class с required handoff отсутствие inline handoff в том же ответе запрещено.
     - Если есть pending user action или external step, финальная секция `Инструкция пользователю` обязательна.
     - Internal repo follow-up не должен подменяться user-only closeout; для mixed follow-up сначала нужен inline handoff, затем user footer только для внешней границы.
-    - Если change затрагивает Sources или downstream template consumers, `Инструкция пользователю` должна быть расширена до source-update completion package с affected contours, delete-before-replace и repo-level sync steps.
+    - Если change затрагивает repo-first instruction layer или downstream template consumers, `Инструкция пользователю` должна быть расширена до completion package с affected contours, delete-before-replace и repo-level sync steps.
   brownfield-audit:
     default_scenarios:
     - 00-master-router.md
@@ -117,7 +117,7 @@ policy_presets:
     - Если handoff все же уже разрешен и задача достаточно определена, по умолчанию выдать inline handoff в том же ответе.
     - Если есть pending user action или external step, финальная секция `Инструкция пользователю` обязательна.
     - Internal repo follow-up не должен подменяться user-only closeout; для mixed follow-up сначала нужен inline handoff, затем user footer только для внешней границы.
-    - Если change затрагивает Sources или downstream template consumers, `Инструкция пользователю` должна быть расширена до source-update completion package с affected contours, delete-before-replace и repo-level sync steps.
+    - Если change затрагивает repo-first instruction layer или downstream template consumers, `Инструкция пользователю` должна быть расширена до completion package с affected contours, delete-before-replace и repo-level sync steps.
   brownfield-stabilization:
     default_scenarios:
     - 00-master-router.md
@@ -145,4 +145,4 @@ policy_presets:
     - Для codex-led отсутствие inline handoff в том же ответе запрещено.
     - Если есть pending user action или external step, финальная секция `Инструкция пользователю` обязательна.
     - Internal repo follow-up не должен подменяться user-only closeout; для mixed follow-up сначала нужен inline handoff, затем user footer только для внешней границы.
-    - Если change затрагивает Sources или downstream template consumers, `Инструкция пользователю` должна быть расширена до source-update completion package с affected contours, delete-before-replace и repo-level sync steps.
+    - Если change затрагивает repo-first instruction layer или downstream template consumers, `Инструкция пользователю` должна быть расширена до completion package с affected contours, delete-before-replace и repo-level sync steps.

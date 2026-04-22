@@ -8,40 +8,40 @@ printf '%s\n' '-----------------------------------------------------------------
 record(){ printf '%-42s | %-30s | %-10s | %-10s | %-8s\n' "$1" "$2" "$3" "$4" "$5"; }
 assert_pass(){ local s="$1" c="$2"; shift 2; if "$@" >/dev/null 2>&1; then record "$s" "$c" pass pass OK; else record "$s" "$c" pass fail FAIL; FAILS=$((FAILS+1)); fi; }
 assert_fail(){ local s="$1" c="$2"; shift 2; if "$@" >/dev/null 2>&1; then record "$s" "$c" fail pass FAIL; FAILS=$((FAILS+1)); else record "$s" "$c" fail fail OK; fi; }
-assert_pass 'factory-template' validate-factory-template-ops.sh bash "$ROOT/VALIDATE_FACTORY_TEMPLATE_OPS.sh"
+assert_pass 'factory-template' validate-factory-template-ops.py bash "$ROOT/VALIDATE_FACTORY_TEMPLATE_OPS.sh"
 make_project(){
   local workdir="$1" pname="$2" slug="$3" preset="$4" mode="$5" cls="$6" execm="$7" reg="${8:-skip}"
   rm -rf "$workdir"; mkdir -p "$workdir"
   (cd "$workdir" && printf '%s\n%s\n%s\n%s\n%s\n%s\n' "$pname" "$slug" "$preset" "$mode" "$cls" "$execm" | FACTORY_REGISTRY_MODE="$reg" timeout 60s bash "$ROOT/launcher.sh" >/dev/null)
 }
 SBASE="$ROOT/.matrix-test"; rm -rf "$SBASE"; mkdir -p "$SBASE"
-POSITIVE_COMMON=(validate-project-preset.sh validate-policy-preset.sh validate-change-profile.sh validate-task-graph.sh validate-stage.sh validate-versioning-layer.sh validate-defect-capture.sh validate-alignment.sh)
+POSITIVE_COMMON=(validate-project-preset.py validate-policy-preset.py validate-change-profile.py validate-task-graph.py validate-stage.py validate-versioning-layer.py validate-defect-capture.py validate-alignment.py)
 
 make_project "$SBASE/green-small-fix" 'Матрица greenfield small-fix' 'green-small-fix' product-dev greenfield small-fix manual
 P="$SBASE/green-small-fix/green-small-fix"
 for c in "${POSITIVE_COMMON[@]}"; do assert_pass 'greenfield+small-fix+manual' "$c" "$P/scripts/$c" "$P"; done
-for c in validate-evidence.sh validate-quality.sh check-dod.sh; do assert_fail 'greenfield+small-fix+manual' "$c" "$P/scripts/$c" "$P"; done
-assert_pass 'greenfield+small-fix+manual' validate-handoff.sh "$P/scripts/validate-handoff.sh" "$P"
+for c in validate-evidence.py validate-quality.py check-dod.py; do assert_fail 'greenfield+small-fix+manual' "$c" "$P/scripts/$c" "$P"; done
+assert_pass 'greenfield+small-fix+manual' validate-handoff.py "$P/scripts/validate-handoff.py" "$P"
 
 make_project "$SBASE/green-feature" 'Матрица greenfield feature' 'green-feature' product-dev greenfield feature hybrid
 P="$SBASE/green-feature/green-feature"
 for c in "${POSITIVE_COMMON[@]}"; do assert_pass 'greenfield+feature+hybrid' "$c" "$P/scripts/$c" "$P"; done
-for c in validate-evidence.sh validate-quality.sh check-dod.sh validate-handoff.sh; do assert_fail 'greenfield+feature+hybrid' "$c" "$P/scripts/$c" "$P"; done
+for c in validate-evidence.py validate-quality.py check-dod.py validate-handoff.py; do assert_fail 'greenfield+feature+hybrid' "$c" "$P/scripts/$c" "$P"; done
 
 make_project "$SBASE/brown-feature" 'Матрица brownfield feature' 'brown-feature' legacy-modernization brownfield feature hybrid
 P="$SBASE/brown-feature/brown-feature"
 for c in "${POSITIVE_COMMON[@]}"; do assert_pass 'brownfield+feature+hybrid' "$c" "$P/scripts/$c" "$P"; done
-for c in validate-evidence.sh validate-quality.sh check-dod.sh validate-handoff.sh; do assert_fail 'brownfield+feature+hybrid' "$c" "$P/scripts/$c" "$P"; done
+for c in validate-evidence.py validate-quality.py check-dod.py validate-handoff.py; do assert_fail 'brownfield+feature+hybrid' "$c" "$P/scripts/$c" "$P"; done
 
 make_project "$SBASE/brown-audit" 'Матрица brownfield audit' 'brown-audit' audit-only brownfield brownfield-audit manual
 P="$SBASE/brown-audit/brown-audit"
 for c in "${POSITIVE_COMMON[@]}"; do assert_pass 'brownfield+audit+manual' "$c" "$P/scripts/$c" "$P"; done
-for c in validate-evidence.sh validate-quality.sh check-dod.sh; do assert_fail 'brownfield+audit+manual' "$c" "$P/scripts/$c" "$P"; done
-assert_pass 'brownfield+audit+manual' validate-handoff.sh "$P/scripts/validate-handoff.sh" "$P"
+for c in validate-evidence.py validate-quality.py check-dod.py; do assert_fail 'brownfield+audit+manual' "$c" "$P/scripts/$c" "$P"; done
+assert_pass 'brownfield+audit+manual' validate-handoff.py "$P/scripts/validate-handoff.py" "$P"
 
 for ex in example-change-small-fix example-change-brownfield-audit example-change-end-to-end; do
   P="$ROOT/working-project-examples/$ex"
-  for c in validate-project-preset.sh validate-policy-preset.sh validate-change-profile.sh validate-task-graph.sh validate-stage.sh validate-evidence.sh validate-quality.sh validate-handoff.sh check-dod.sh validate-versioning-layer.sh validate-defect-capture.sh validate-alignment.sh; do
+  for c in validate-project-preset.py validate-policy-preset.py validate-change-profile.py validate-task-graph.py validate-stage.py validate-evidence.py validate-quality.py validate-handoff.py check-dod.py validate-versioning-layer.py validate-defect-capture.py validate-alignment.py; do
     assert_pass "$ex" "$c" "$ROOT/template-repo/scripts/$c" "$P"
   done
 done
@@ -68,13 +68,13 @@ p.write_text(t, encoding='utf-8')
 PYCODE
 assert_pass 'factory-bugflow' detect-factory-issues.py python3 "$ROOT/workspace-packs/factory-ops/detect-factory-issues.py" "$P"
 assert_pass 'factory-bugflow' check-template-drift.py python3 "$ROOT/workspace-packs/factory-ops/check-template-drift.py" "$ROOT" "$P"
-assert_pass 'factory-bugflow' create-codex-task-pack.sh "$ROOT/template-repo/scripts/create-codex-task-pack.sh" "$P"
-assert_pass 'factory-bugflow' validate-codex-task-pack.sh "$ROOT/template-repo/scripts/validate-codex-task-pack.sh" "$P"
-assert_pass 'factory-bugflow' validate-handoff-response-format.sh "$ROOT/template-repo/scripts/validate-handoff-response-format.sh" "$P/.chatgpt/handoff-response.md"
+assert_pass 'factory-bugflow' create-codex-task-pack.py "$ROOT/template-repo/scripts/create-codex-task-pack.py" "$P"
+assert_pass 'factory-bugflow' validate-codex-task-pack.py "$ROOT/template-repo/scripts/validate-codex-task-pack.py" "$P"
+assert_pass 'factory-bugflow' validate-handoff-response-format.py "$ROOT/template-repo/scripts/validate-handoff-response-format.py" "$P/.chatgpt/handoff-response.md"
 assert_pass 'factory-bugflow' boundary-actions.md test -f "$P/.chatgpt/boundary-actions.md"
-assert_pass 'factory-bugflow' validate-defect-capture.sh "$ROOT/template-repo/scripts/validate-defect-capture.sh" "$P"
-assert_pass 'factory-bugflow' validate-alignment.sh "$ROOT/template-repo/scripts/validate-alignment.sh" "$P"
-assert_fail 'factory-bugflow' validate-factory-feedback.sh bash "$ROOT/VALIDATE_FACTORY_FEEDBACK.sh" "$P"
+assert_pass 'factory-bugflow' validate-defect-capture.py "$ROOT/template-repo/scripts/validate-defect-capture.py" "$P"
+assert_pass 'factory-bugflow' validate-alignment.py "$ROOT/template-repo/scripts/validate-alignment.py" "$P"
+assert_fail 'factory-bugflow' validate-factory-feedback.py bash "$ROOT/VALIDATE_FACTORY_FEEDBACK.sh" "$P"
 python3 - <<PYCODE >/dev/null
 from pathlib import Path
 root = Path(r"$P") / "meta-feedback"
@@ -83,7 +83,7 @@ for old, new in {
     "<!-- Почему фабрику нужно доработать -->": "Codex task pack должен фиксированно включать boundary-actions.md в handoff-артефакты.",
     "<!-- Из какого проекта или цикла пришел feedback -->": "Матрица проверки factory-bugflow в factory-template.",
     "<!-- Опишите требуемое изменение -->": "Нужно валидировать и воспроизводимо собирать feedback loop через self-tests.",
-    "<!-- Перечислите основные файлы -->": "template-repo/scripts/create-codex-task-pack.sh, MATRIX_TEST.sh, tools/ingest_factory_feedback.py",
+    "<!-- Перечислите основные файлы -->": "template-repo/scripts/create-codex-task-pack.py, MATRIX_TEST.sh, tools/ingest_factory_feedback.py",
     "<!-- Как понять, что доработка завершена -->": "VALIDATE_FACTORY_FEEDBACK.sh проходит, ingest не падает, matrix green.",
     "<!-- Да / нет / определить позже -->": "Нет",
 }.items():
@@ -103,7 +103,7 @@ for old, new in {
     bug = bug.replace(old, new)
 (root / "factory-bug-report.md").write_text(bug, encoding="utf-8")
 PYCODE
-assert_pass 'factory-bugflow' validate-factory-feedback.sh bash "$ROOT/VALIDATE_FACTORY_FEEDBACK.sh" "$P"
+assert_pass 'factory-bugflow' validate-factory-feedback.py bash "$ROOT/VALIDATE_FACTORY_FEEDBACK.sh" "$P"
 assert_pass 'factory-bugflow' ingest-factory-feedback.sh bash "$ROOT/INGEST_FACTORY_FEEDBACK.sh" "$P" --dry-run
 assert_pass 'factory-bugflow' export-template-patch.sh "$ROOT/workspace-packs/factory-ops/export-template-patch.sh" "$ROOT" "$P" --dry-run
 assert_pass 'factory-bugflow' 'apply-template-patch.sh --check' "$ROOT/workspace-packs/factory-ops/apply-template-patch.sh" "$P/_factory-sync-export" --check

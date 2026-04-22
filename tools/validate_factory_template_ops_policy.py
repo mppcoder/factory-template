@@ -84,14 +84,14 @@ def validate_pack_semantics(name: str, files: list[str], errors: list[str]) -> N
             file_set,
             [
                 "template-repo/launcher.sh",
-                "template-repo/scripts/validate-project-preset.sh",
-                "template-repo/scripts/validate-policy-preset.sh",
-                "template-repo/scripts/validate-quality.sh",
-                "template-repo/scripts/validate-handoff.sh",
-                "template-repo/scripts/validate-codex-task-pack.sh",
-                "template-repo/scripts/validate-handoff-response-format.sh",
-                "template-repo/scripts/validate-defect-capture.sh",
-                "template-repo/scripts/create-codex-task-pack.sh",
+                "template-repo/scripts/validate-project-preset.py",
+                "template-repo/scripts/validate-policy-preset.py",
+                "template-repo/scripts/validate-quality.py",
+                "template-repo/scripts/validate-handoff.py",
+                "template-repo/scripts/validate-codex-task-pack.py",
+                "template-repo/scripts/validate-handoff-response-format.py",
+                "template-repo/scripts/validate-defect-capture.py",
+                "template-repo/scripts/create-codex-task-pack.py",
                 "VALIDATE_FACTORY_FEEDBACK.sh",
                 "TEST_REPORT.md",
             ],
@@ -256,8 +256,8 @@ def validate_exported_artifacts(profiles: dict[str, dict], errors: list[str]) ->
             elif "canonical archive pack" not in readme:
                 fail(f"{export_name}: README должен явно помечать canonical archive pack", errors)
         if profile.get("kind") == "direct_sources":
-            if "direct Sources profile" not in readme:
-                fail(f"{export_name}: README должен явно помечать direct Sources profile", errors)
+            if "direct reference profile" not in readme:
+                fail(f"{export_name}: README должен явно помечать direct reference profile", errors)
             if profile.get("export_layout") == "flat":
                 if "flat-подпапке" not in readme:
                     fail(f"{export_name}: README должен явно описывать flat upload subdir", errors)
@@ -494,7 +494,7 @@ def main() -> int:
 
     for needle in [
         "## Модель воздействия",
-        "## Completion package для source-update changes",
+        "## Completion package для repo-first instruction changes",
         "Удалить перед заменой",
         "Пошаговая инструкция по окнам",
     ]:

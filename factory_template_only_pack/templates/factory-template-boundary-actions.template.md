@@ -15,6 +15,8 @@ Internal repo follow-up, включая release-followup, source-pack refresh, e
 
 ## Completion package для repo-first instruction changes
 
+Этот раздел описывает обновление repo-first instruction changes.
+
 Если completed change затрагивает downstream-consumed template content, финальный boundary output должен содержать:
 
 1. Что изменено
@@ -44,6 +46,12 @@ Internal repo follow-up, включая release-followup, source-pack refresh, e
 
 - готовый текст repo-first инструкции для ChatGPT Project
 - downstream patch bundle через `{{repo_patch_export_script}}`
+- reference export dir: `{{sources_export_dir}}`
+- canonical archive pack: `{{canonical_archive_pack}}`
+- cold archive pack: `{{canonical_cold_archive_pack}}`
+- direct profile: `{{canonical_direct_profile}}`
+- direct profile dir: `{{direct_sources_dir}}`
+- recommended pack: `{{recommended_sources_pack}}`
 
 ### Команды/скрипты для repo-level sync
 
@@ -54,7 +62,13 @@ Internal repo follow-up, включая release-followup, source-pack refresh, e
 
 - ChatGPT Project не должен хранить сценарии как source of truth
 - сначала всегда читается GitHub repo, потом `00-master-router.md`
-- старые инструкции про `Sources` и старый staging-workflow нужно удалять, если они конфликтуют с новым правилом
+- старые инструкции про project artifacts и старый staging-workflow нужно удалять, если они конфликтуют с новым правилом
+- текущая phase recommendation: `{{current_phase}}`
+- phase detection reason: `{{phase_detection_reason}}`
+- phase recommendations:
+{{phase_recommendations_bullets}}
+- phase override packs:
+{{phase_override_packs_bullets}}
 
 ### Пошаговая инструкция по окнам
 
@@ -132,7 +146,7 @@ Internal repo follow-up, включая release-followup, source-pack refresh, e
 Шаги:
 
 1. Откройте текущие инструкции проекта.
-2. Удалите старый текст про `Sources`, upload packs и staging-workflow, если он конфликтует с новым правилом.
+2. Удалите старый текст про project artifacts, upload packs и staging-workflow, если он конфликтует с новым правилом.
 3. Вставьте новую repo-first инструкцию, подготовленную Codex.
 4. Проверьте, что в инструкции явно указан repo `{{repo_name}}` и путь `template-repo/scenario-pack/00-master-router.md`.
 

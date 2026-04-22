@@ -80,7 +80,7 @@ assert_phase(
     "bugfix-drift",
     [
         "reports/bugs/bug-002-sample.md",
-        "template-repo/scripts/validate-quality.sh",
+        "template-repo/scripts/validate-quality.py",
     ],
     {
         "reports/bugs/bug-002-sample.md": bug_report,

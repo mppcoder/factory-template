@@ -8,7 +8,7 @@
 
 - развивать сам шаблон;
 - исправлять баги фабрики;
-- улучшать launcher / validators / scenario-pack / source-pack / codex handoff;
+- улучшать launcher / validators / scenario-pack / export/reference packs / codex handoff;
 - собирать новые релизные версии фабрики.
 
 ## 0.1. Три канонических режима шаблона
@@ -27,8 +27,8 @@
 
 Важно:
 
-- для generated projects Sources pack остается единым
-- не нужно поддерживать разные загружаемые пакеты файлов под каждый entry mode
+- для generated projects repo-first контур остается единым
+- не нужно поддерживать разные проектные инструкции под каждый entry mode
 - различие задается через entry path, preset и сценарный маршрут
 
 ---
@@ -77,14 +77,14 @@ Codex делает внутреннюю работу по шаблону:
 2. self-tests;
 3. анализ багов фабрики;
 4. реализация улучшений;
-5. обновление scenario-pack / source-pack / codex-task-pack;
+5. обновление scenario-pack / export/reference packs / codex-task-pack;
 6. smoke / audit / matrix / examples;
 7. подготовка release bundle;
 8. формирование для вас инструкций на внешние действия.
 
 К этой внутренней работе также относятся release-facing и closeout follow-up внутри repo:
 - release notes и changelog;
-- source-pack / curated sources refresh;
+- export/reference packs refresh;
 - export / manifests refresh;
 - closeout artifacts;
 - verify / done / release-facing consistency pass.

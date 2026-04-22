@@ -21,7 +21,7 @@
 - В `## Инструкция пользователю` попадают только уже готовые пути, архивы, delete-before-replace правила и внешний upload/replace/review flow.
 
 ## Root Cause
-Канонический source-update completion package требовал перечислять `Команды/скрипты для repo-level sync`, но не фиксировал достаточно жёстко, что внутренние prepare-команды должны выполняться Codex до финального ответа.
+Канонический completion package для repo-first instruction updates требовал перечислять `Команды/скрипты для repo-level sync`, но не фиксировал достаточно жёстко, что внутренние prepare-команды должны выполняться Codex до финального ответа.
 
 ## Remediation
 - Явно зафиксировать это правило в router, decision policy, handoff rules, done-closeout, runbook и AGENTS.

@@ -12,4 +12,4 @@ else
 fi
 mkdir -p "$DEST"; rm -rf "$DEST/scenario-pack"; cp -R "$SRC" "$DEST/scenario-pack"; tar -czf "$DEST/scenario-pack.tar.gz" -C "$DEST" scenario-pack
 echo "Сценарии экспортированы в: $DEST/scenario-pack"
-echo "Архив для загрузки в Sources: $DEST/scenario-pack.tar.gz"
+echo "Reference archive сценариев: $DEST/scenario-pack.tar.gz"

@@ -33,9 +33,9 @@
 - completion/handoff layer теперь различает готовые внешние boundary steps и внутренние prepare/export commands: сборка export artifacts выполняется Codex внутри repo до пользовательского блока
 - repo-first instruction layer для ChatGPT Projects: сценарии читаются прямо из GitHub repo, а не из локально загруженных project artifacts
 - launcher и template docs больше не требуют отдельную project-local staging-конфигурацию
-- handoff source files и validator `validate-codex-task-pack.sh` теперь явно требуют фиксировать приоритет repo rules при передаче задачи в Codex
+- handoff source files и validator `validate-codex-task-pack.py` теперь явно требуют фиксировать приоритет repo rules при передаче задачи в Codex
 - handoff layer теперь явно запрещает выдачу handoff через файл или несколькими блоками: пользователю разрешён только один цельный copy-paste блок для Codex
-- generated project tooling теперь включает validator `validate-handoff-response-format.sh`, который проверяет сам markdown-ответ на single-block handoff и запрещает file-based handoff patterns
+- generated project tooling теперь включает validator `validate-handoff-response-format.py`, который проверяет сам markdown-ответ на single-block handoff и запрещает file-based handoff patterns
 
 ## Что работает частично
 - matrix runner как единый источник истины

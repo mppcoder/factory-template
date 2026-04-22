@@ -4,11 +4,11 @@ boundary_actions:
   repo_name: factory-template
   project_name: Factory Template
   completion_impacts:
-    factory_sources: Обновление Sources проекта шаблона в ChatGPT
+    factory_sources: Обновление repo-first инструкции проекта шаблона в ChatGPT
     downstream_template_sync: Обновление шаблона в боевых repo
-    downstream_project_sources: Обновление Sources боевых ChatGPT Projects
+    downstream_project_sources: Обновление repo-first инструкции боевых ChatGPT Projects
     manual_archive_required: Нужен готовый архив или каталог для ручной загрузки
-    delete_before_replace: Перед заменой нужно удалить старые Sources
+    delete_before_replace: Перед заменой нужно удалить старую conflicting instruction
   default_phase: controlled-fixes
   recommended_sources_pack: sources-pack-core-20.tar.gz
   available_sources_packs:
@@ -59,8 +59,8 @@ boundary_actions:
         - tools/validate_factory_feedback.py
         - tools/ingest_factory_feedback.py
         - tools/triage_incoming_learnings.py
-        - template-repo/scripts/create-codex-task-pack.sh
-        - template-repo/scripts/validate-codex-task-pack.sh
+        - template-repo/scripts/create-codex-task-pack.py
+        - template-repo/scripts/validate-codex-task-pack.py
       path_prefixes:
         - template-repo/scripts/validate-
         - reports/bugs/

@@ -5,14 +5,14 @@
 - reusable process gap закрыт: inline Codex handoff теперь обязателен при допустимом handoff и достаточной определенности задачи
 - reusable process gap закрыт: финальный блок `Инструкция пользователю` теперь обязателен при любом pending user/external step
 - reusable process gap закрыт: internal repo follow-up после remediation/push больше не должен ошибочно уходить в user-only closeout
-- reusable process hardening добавил source-update completion package для factory Sources, downstream repo sync и battle ChatGPT Project Sources
+- reusable process hardening добавил completion package для factory ChatGPT Project instruction, downstream repo sync и battle ChatGPT Project instructions
 - reusable process hardening добавил immediate completion-package rule: обязательная инструкция пользователю должна появляться в том же финальном ответе
-- reusable process hardening закрепил, что internal prepare/export commands для source-update completion package выполняет Codex внутри repo, а не пользователь
+- reusable process hardening закрепил, что internal prepare/export commands для repo-first instruction completion package выполняет Codex внутри repo, а не пользователь
 - downstream process behavior обновлен без изменения release semantics: автопубликация релиза не добавлена, release discipline сохранена
 - добавлен separate contour для auto commit/push после successful verify и отдельный release executor после явного release decision
 
 ## 2.4.2
-- добавлен declarative direct Sources profile `core-hot-15` для ежедневной работы в ChatGPT Project
+- ChatGPT Project переведён на repo-first режим с обязательным чтением GitHub repo и `00-master-router.md`
 - canonical archive `sources-pack-core-20` закреплён как steady-work snapshot, а не как единственный daily upload
 - boundary guidance и release docs выровнены под hybrid-модель `direct hot-set + canonical archive`
 

@@ -6,7 +6,7 @@
 - templates для `release-decision`, `sync-report` и `release-report`
 - lightweight follow-up mode для low-risk post-verify docs/ignore cleanup
 - internal-followup precedence rule для handoff/boundary layers generated project
-- source-update completion package и impact model для boundary/handoff layers generated project
+- completion package и impact model для repo-first instruction layers generated project
 - immediate completion-package rule для generated closeout/handoff behavior
 - generated boundary guidance больше не должна перекладывать internal prepare/export commands на пользователя
 
@@ -20,8 +20,8 @@
 
 ## [2.4.2] - 2026-04-20
 ### Изменено
-- template layer синхронизирован с hybrid-моделью Sources: direct hot-set для daily use и canonical archive pack для steady snapshot
-- generated guidance теперь исходит из единого declarative Sources manifest
+- template layer синхронизирован с repo-first режимом для ChatGPT Projects
+- generated guidance теперь требует сначала читать GitHub repo и `00-master-router.md`
 
 ## [2.4.1] - 2026-04-20
 ### Добавлено
