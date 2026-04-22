@@ -2,57 +2,67 @@
 
 ## Базовая схема
 
-Для `factory-template` не нужен тяжелый routing как для brownfield shell.
+Для `factory-template` нужен явный task-based routing layer на границе новой задачи.
+
+Надежная единица выбора модели/режима:
+- новый task launch;
+- новый запуск Codex под новую задачу;
+- `--profile` или эквивалентный override layer.
+
+Advisory слой:
+- `AGENTS`
+- ChatGPT Project instructions
+- scenario-pack
+- runbooks
+
+Executable слой:
+- `.codex/config.toml` named profiles
+- `template-repo/codex-routing.yaml`
+- `./scripts/resolve-codex-task-route.py`
+- `./scripts/bootstrap-codex-task.py`
+- `./scripts/launch-codex-task.sh`
 
 Достаточно 4 профилей:
 
-- `default-dev`
-- `fast-routine`
-- `heavy-analysis`
-- `release-verify`
+- `quick`
+- `build`
+- `deep`
+- `review`
 
 ---
 
 ## 1. Профили
 
-### default-dev
-
-Использовать по умолчанию.
+### quick
 
 Подходит для:
+- docs/triage/search;
+- lightweight inventory;
+- short repo lookup;
+- low-risk docs follow-up.
 
-- обычной правки repo;
-- синхронизации docs и scripts;
-- стандартных улучшений;
-- работы по готовому spec.
+Рекомендуемый профиль:
+
+- модель: `gpt-5.4-mini`
+- reasoning: `low`
+
+### build
+
+Использовать для обычной реализации.
+
+Подходит для:
+- feature/fix;
+- remediation;
+- scripts/docs sync;
+- launcher/validator updates;
+- обычные repo changes.
 
 Рекомендуемый профиль:
 
 - модель: `gpt-5.4`
 - reasoning: `medium`
 
-### fast-routine
-
-Использовать для механических подзадач.
-
-Подходит для:
-
-- docs only;
-- rename only;
-- export/reference packs;
-- dry-run и повторные recheck'и repo-side export/reference artifacts;
-- mechanical cleanup;
-- простых validator runs;
-- repeated no-op/recheck runs для `VALIDATE_*` и `VERIFIED_SYNC.sh`.
-- post-verify lightweight follow-up changes вроде `.gitignore` и небольших docs/closeout cleanup.
-- сбор completion package для repo-first instruction updates по уже известному impact model.
-
-Рекомендуемый профиль:
-
-- модель: `gpt-5.4-mini`
-- reasoning: `low` или `medium`
-
-### heavy-analysis
+### deep
 
 Использовать для тяжелого анализа.
 
@@ -69,20 +79,17 @@
 - модель: `gpt-5.4`
 - reasoning: `high`
 
-### release-verify
+### review
 
-Использовать для финального контрольного прохода.
+Использовать для review/tests/cleanup.
 
 Подходит для:
 
-- final audit;
-- diff review;
-- release bundle review;
-- complete self-test pass review;
-- `EXECUTE_RELEASE_DECISION.sh` и publish/fallback review;
-- release-followup, export/reference pack refresh и closeout consistency pass как внутренней repo-работы.
-- final review операторских инструкций для factory ChatGPT Project, downstream repo sync и battle ChatGPT Projects.
-- финальный review repo-first инструкции и внешних шагов обновления ChatGPT Project UI.
+- review;
+- tests;
+- cleanup;
+- final verification;
+- release-facing consistency pass.
 
 Рекомендуемый профиль:
 
@@ -91,61 +98,37 @@
 
 ---
 
-## 2. Правила переключения
+## 2. Правила маршрутизации
 
 ### Правило 1
 
-Глобальный дефолт:
-
-- `gpt-5.4`
-- `medium`
+Не проверять routing в старой уже открытой сессии.
 
 ### Правило 2
 
-Не держать `high` как постоянный режим.
+Не считать один static profile в `~/.codex/config.toml` умным task router.
 
 ### Правило 3
 
-После тяжелого анализа возвращаться на `default-dev`.
+Каждая новая задача должна идти через новый launcher/router run.
 
 ### Правило 4
 
-На рутинные подзадачи переключаться на `fast-routine`.
+ChatGPT handoff и direct task обязаны использовать один vocabulary: `quick / build / deep / review`.
 
 ### Правило 5
 
-Release verify не выполнять на `mini`.
-
-### Правило 6
-
-`VERIFIED_SYNC.sh` запускать из `default-dev` или `fast-routine` только после зеленого verify.
-Для low-risk post-verify follow-up diff допускается lightweight follow-up mode в `fast-routine`: достаточно минимального deterministic verify без полного повторного regression pass.
-
-### Правило 7
-
-`EXECUTE_RELEASE_DECISION.sh` запускать только в `release-verify`, когда есть явный `release-decision.yaml`.
+Direct task сначала проходит self-handoff и только потом remediation.
 
 ---
 
-## 3. Практический протокол внутри живой сессии
+## 3. Практический протокол
 
-Перед началом каждого нового подэтапа Codex должен:
-
-1. коротко классифицировать задачу;
-2. выбрать профиль;
-3. продолжить работу уже в соответствующем режиме.
-
-Пример:
-
-```text
-Класс задачи: heavy-analysis.
-Причина: есть расхождение между launcher, validators и scenario-pack.
-Работаю в профиле heavy-analysis.
-```
-
-Если heavy-analysis уже закрыл обязательные gate'ы и задача стала достаточно определенной для handoff, следующий ответ должен содержать готовый inline handoff, а не еще один purely-analytic summary.
-
-Если heavy-analysis показал, что remaining work остается внутренним release-followup внутри repo, следующий ответ не должен уходить в user-only closeout.
+1. Пройти router/scenario layer.
+2. Запустить `./scripts/launch-codex-task.sh --launch-source ...`.
+3. Проверить `.chatgpt/task-launch.yaml`.
+4. Убедиться, что `selected_profile / selected_model / selected_reasoning_effort` совпали с ожиданием.
+5. Только после этого считать routing подтвержденным.
 
 ---
 
@@ -153,8 +136,9 @@ Release verify не выполнять на `mini`.
 
 Сразу внедрить:
 
-- `.codex/config.toml` с профилями;
-- `AGENTS.md` с правилами классификации;
-- правило: перед новым подэтапом фиксируй профиль.
+- `.codex/config.toml` с профилями `quick / build / deep / review`;
+- executable launcher/router scripts;
+- launch logging в `.chatgpt/task-launch.yaml`;
+- self-handoff standard для direct task.
 
-Этого достаточно для быстрого старта именно на одном проекте `factory-template`.
+Этого достаточно, чтобы routing был не advisory, а executable.

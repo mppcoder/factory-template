@@ -89,11 +89,12 @@ def validate_pack_semantics(name: str, files: list[str], errors: list[str]) -> N
                 "template-repo/scripts/validate-quality.py",
                 "template-repo/scripts/validate-handoff.py",
                 "template-repo/scripts/validate-codex-task-pack.py",
+                "template-repo/scripts/validate-codex-routing.py",
                 "template-repo/scripts/validate-handoff-response-format.py",
                 "template-repo/scripts/validate-defect-capture.py",
                 "template-repo/scripts/create-codex-task-pack.py",
+                "template-repo/codex-routing.yaml",
                 "VALIDATE_FACTORY_FEEDBACK.sh",
-                "TEST_REPORT.md",
             ],
             errors,
         )

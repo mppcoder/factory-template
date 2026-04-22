@@ -109,7 +109,6 @@ profiles:
       - template-repo/scripts/validate-policy-preset.py
       - template-repo/scripts/validate-change-profile.py
       - template-repo/scripts/validate-task-graph.py
-      - template-repo/scripts/validate-stage.py
       - template-repo/scripts/validate-evidence.py
       - template-repo/scripts/validate-quality.py
       - template-repo/scripts/validate-handoff.py
@@ -118,9 +117,10 @@ profiles:
       - template-repo/scripts/validate-defect-capture.py
       - template-repo/scripts/validate-alignment.py
       - template-repo/scripts/validate-codex-task-pack.py
+      - template-repo/scripts/validate-codex-routing.py
       - template-repo/scripts/validate-handoff-response-format.py
       - template-repo/scripts/create-codex-task-pack.py
       - VALIDATE_FACTORY_FEEDBACK.sh
       - factory_template_only_pack/02-runbook-dlya-codex-factory-template.md
       - factory_template_only_pack/07-AGENTS-factory-template.md
-      - TEST_REPORT.md
+      - template-repo/codex-routing.yaml

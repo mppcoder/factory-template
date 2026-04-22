@@ -36,28 +36,26 @@
 
 ## Правило классификации задач
 
-Перед началом каждого нового подэтапа классифицируй задачу.
+Перед каждой новой задачей классифицируй ее на launch boundary.
 
-### fast-routine
+### quick
 
 Использовать для:
+- docs;
+- triage;
+- search;
+- lightweight inventory.
 
-- docs only;
-- rename only;
-- export pack;
-- mechanical cleanup;
-- simple validator run.
-
-### default-dev
+### build
 
 Использовать для:
 
 - standard implementation;
 - docs + scripts sync;
 - launcher/validator updates;
-- routine packaging.
+- обычные repo changes.
 
-### heavy-analysis
+### deep
 
 Использовать для:
 
@@ -66,23 +64,21 @@
 - scenario architecture analysis;
 - feedback ingestion from downstream projects.
 
-### release-verify
+### review
 
 Использовать для:
-
-- final release pass;
-- complete self-test review;
-- diff review before publish;
-- release bundle verification;
-- explicit release decision execution.
+- review;
+- tests;
+- cleanup;
+- final verification.
 
 ## Правило переключения профиля
 
-1. по умолчанию работай в `default-dev`;
-2. на рутинные подзадачи переключайся в `fast-routine`;
-3. на тяжелый анализ — в `heavy-analysis`;
-4. на финальный выпуск — в `release-verify`;
-5. после heavy-analysis возвращайся в `default-dev`.
+1. Не полагайся на mid-session auto-switch внутри старой сессии.
+2. Для новой задачи используй новый Codex launch через `--profile`.
+3. `AGENTS`, project instructions и scenario-pack сами по себе профиль не переключают.
+4. Для direct task сначала создай self-handoff по repo-сценариям.
+5. Проверяемый выбор хранится в `.chatgpt/task-launch.yaml`.
 
 ## Правило inline handoff
 

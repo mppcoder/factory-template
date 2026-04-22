@@ -25,8 +25,10 @@ def main() -> int:
     pack_path = chat / "codex-task-pack.md"
     boundary_path = chat / "boundary-actions.md"
     checklist_path = chat / "done-checklist.md"
+    launch_path = chat / "task-launch.yaml"
+    normalized_handoff_path = chat / "normalized-codex-handoff.md"
 
-    for path in [context_path, pack_path, boundary_path, checklist_path]:
+    for path in [context_path, pack_path, boundary_path, checklist_path, launch_path, normalized_handoff_path]:
         if not path.exists():
             errors.append(f"Не найден {path.name}")
 
@@ -40,6 +42,8 @@ def main() -> int:
     pack = read_text(pack_path)
     boundary = read_text(boundary_path)
     checklist = read_text(checklist_path)
+    launch_yaml = yaml.safe_load(read_text(launch_path)) or {}
+    normalized_handoff = read_text(normalized_handoff_path)
 
     ensure_contains(context, "# Контекст для Codex", errors, "codex-context.md")
     ensure_contains(context, "## Проект", errors, "codex-context.md")
@@ -54,6 +58,15 @@ def main() -> int:
     ensure_contains(pack, "## Заголовок", errors, "codex-task-pack.md")
     ensure_contains(pack, "## Класс изменения", errors, "codex-task-pack.md")
     ensure_contains(pack, "## Режим выполнения", errors, "codex-task-pack.md")
+    ensure_contains(pack, "## Launch source", errors, "codex-task-pack.md")
+    ensure_contains(pack, "## Task class", errors, "codex-task-pack.md")
+    ensure_contains(pack, "## Selected profile", errors, "codex-task-pack.md")
+    ensure_contains(pack, "## Selected model", errors, "codex-task-pack.md")
+    ensure_contains(pack, "## Selected reasoning effort", errors, "codex-task-pack.md")
+    ensure_contains(pack, "## Selected scenario", errors, "codex-task-pack.md")
+    ensure_contains(pack, "## Pipeline stage", errors, "codex-task-pack.md")
+    ensure_contains(pack, "## Handoff allowed", errors, "codex-task-pack.md")
+    ensure_contains(pack, "## Defect capture path", errors, "codex-task-pack.md")
     ensure_contains(pack, "## Handoff input", errors, "codex-task-pack.md")
     ensure_contains(pack, "приоритет у правил repo", errors, "codex-task-pack.md")
     if "codex-input.md еще не заполнен." in pack:
@@ -64,6 +77,9 @@ def main() -> int:
     ensure_contains(boundary, "## Impact Model", errors, "boundary-actions.md")
     ensure_contains(boundary, "## Completion Package For Repo-First Instruction Changes", errors, "boundary-actions.md")
     ensure_contains(boundary, "## Для handoff", errors, "boundary-actions.md")
+    ensure_contains(boundary, "Рабочая единица выбора модели и reasoning mode: только новый task launch", errors, "boundary-actions.md")
+    ensure_contains(boundary, "advisory layer", errors, "boundary-actions.md")
+    ensure_contains(boundary, "`.chatgpt/task-launch.yaml`", errors, "boundary-actions.md")
     ensure_contains(boundary, "При исполнении handoff приоритет у правил repo", errors, "boundary-actions.md")
     ensure_contains(boundary, "только один цельный блок для copy-paste в Codex", errors, "boundary-actions.md")
     ensure_contains(boundary, "Нельзя заменять handoff ссылкой на файл", errors, "boundary-actions.md")
@@ -107,6 +123,8 @@ def main() -> int:
     ensure_contains(checklist, "impact.delete_before_replace", errors, "done-checklist.md")
     ensure_contains(checklist, "## Completion Package For Repo-First Instruction Changes", errors, "done-checklist.md")
     ensure_contains(checklist, "Completion package выдан в том же финальном ответе", errors, "done-checklist.md")
+    ensure_contains(checklist, ".chatgpt/task-launch.yaml", errors, "done-checklist.md")
+    ensure_contains(checklist, ".chatgpt/normalized-codex-handoff.md", errors, "done-checklist.md")
     for item in [
         "verification-report.md",
         "done-report.md",
@@ -114,6 +132,42 @@ def main() -> int:
         "bug report",
     ]:
         ensure_contains(checklist, item, errors, "done-checklist.md")
+
+    launch = launch_yaml.get("launch", {})
+    for key in [
+        "launch_source",
+        "task_class",
+        "selected_profile",
+        "selected_model",
+        "selected_reasoning_effort",
+        "project_profile",
+        "selected_scenario",
+        "pipeline_stage",
+        "artifacts_to_update",
+        "handoff_allowed",
+        "defect_capture_path",
+        "launch_command",
+    ]:
+        if not launch.get(key):
+            errors.append(f"task-launch.yaml не содержит launch.{key}")
+    if launch.get("selected_profile") and f"--profile {launch.get('selected_profile')}" not in str(launch.get("launch_command", "")):
+        errors.append("task-launch.yaml не фиксирует selected_profile внутри launch_command")
+
+    ensure_contains(normalized_handoff, "# Normalized Codex Handoff", errors, "normalized-codex-handoff.md")
+    for section in [
+        "## Launch source",
+        "## Task class",
+        "## Selected profile",
+        "## Selected model",
+        "## Selected reasoning effort",
+        "## Project profile",
+        "## Selected scenario",
+        "## Pipeline stage",
+        "## Artifacts to update",
+        "## Handoff allowed",
+        "## Defect capture path",
+    ]:
+        ensure_contains(normalized_handoff, section, errors, "normalized-codex-handoff.md")
 
     if errors:
         print("CODEX TASK PACK НЕВАЛИДЕН")

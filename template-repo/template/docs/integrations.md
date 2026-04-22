@@ -12,3 +12,7 @@
 4. Ответ формируется только после прохождения маршрута из router-сценария.
 
 Если где-то остаются legacy export-артефакты, считайте их вспомогательным reference-слоем, а не основным источником сценариев.
+
+Для запуска Codex этого недостаточно:
+- Instructions и router-сценарии являются advisory layer;
+- model/profile selection должен происходить через новый task launch и `./scripts/launch-codex-task.sh`.

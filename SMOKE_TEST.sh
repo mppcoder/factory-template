@@ -40,6 +40,7 @@ cat "$LOG"
 log '=== 3. Наполнение артефактов ==='
 run python3 "$ROOT/tools/fill_smoke_artifacts.py"
 run ./scripts/init-work-item.py .
+run ./scripts/create-codex-task-pack.py .
 cat "$LOG"
 : > "$LOG"
 
@@ -52,6 +53,8 @@ run ./scripts/validate-stage.py .
 run ./scripts/validate-evidence.py .
 run ./scripts/validate-quality.py .
 run ./scripts/validate-handoff.py .
+run ./scripts/validate-codex-task-pack.py .
+run ./scripts/validate-codex-routing.py .
 run ./scripts/validate-handoff-response-format.py .chatgpt/handoff-response.md
 run ./scripts/check-dod.py .
 run ./scripts/export-sources-pack.sh .

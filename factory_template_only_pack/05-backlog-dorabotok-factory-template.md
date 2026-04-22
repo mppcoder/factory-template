@@ -105,12 +105,16 @@
 
 Минимум:
 
-- `default-dev`
-- `fast-routine`
-- `heavy-analysis`
-- `release-verify`
+- `quick`
+- `build`
+- `deep`
+- `review`
 
-Пока достаточно как правил в `AGENTS.md` + примера `.codex/config.toml`.
+Статус:
+
+- routing больше не должен жить только как advisory правило в `AGENTS.md`;
+- нужен executable launcher/router на границе новой задачи;
+- direct task должен начинаться с self-handoff по тем же сценарным полям, что и ChatGPT handoff.
 
 ---
 

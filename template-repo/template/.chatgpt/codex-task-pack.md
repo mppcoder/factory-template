@@ -3,17 +3,44 @@
 ## Change ID
 <!-- Укажите change.id -->
 
-## Цель
-<!-- Кратко опишите цель изменения -->
+## Заголовок
+<!-- Короткий заголовок задачи -->
 
-## Что нужно сделать
-<!-- Сведите сюда задачи верхнего уровня -->
+## Класс изменения
+<!-- small-fix / feature / refactor / migration / brownfield-audit -->
 
-## Основные ограничения
-<!-- Укажите ограничения и риски -->
+## Режим выполнения
+<!-- manual / hybrid / codex-led -->
 
-## Артефакты для проверки
-<!-- Укажите, какие документы и отчеты нужно обновить -->
+## Launch source
+<!-- chatgpt-handoff / direct-task -->
 
-## Ожидаемый результат
-<!-- Опишите ожидаемый итог -->
+## Task class
+<!-- quick / build / deep / review -->
+
+## Selected profile
+<!-- quick / build / deep / review -->
+
+## Selected model
+<!-- например gpt-5.4 -->
+
+## Selected reasoning effort
+<!-- low / medium / high -->
+
+## Project profile
+<!-- из .chatgpt/project-profile.yaml -->
+
+## Selected scenario
+<!-- активный сценарий -->
+
+## Pipeline stage
+<!-- текущий этап -->
+
+## Handoff allowed
+<!-- yes/no + policy -->
+
+## Defect capture path
+<!-- defect path или not-required -->
+
+## Handoff input
+<!-- Сведите сюда ключевой handoff input -->

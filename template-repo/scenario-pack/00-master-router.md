@@ -9,6 +9,14 @@
 - какие артефакты нужно обновить;
 - разрешен ли handoff в Codex.
 
+## Routing contract
+Всегда разделяй:
+- advisory/policy layer: `AGENTS`, ChatGPT Project instructions, scenario-pack, runbooks, `.chatgpt` guidance;
+- executable routing layer: named profiles в `.codex/config.toml` и task launcher/router scripts.
+
+Нельзя считать, что advisory слой сам по себе переключает модель или reasoning mode внутри уже открытой сессии.
+Надежная единица маршрутизации: только новый task launch / новый запуск Codex под новую задачу.
+
 ## Inline handoff rule
 Если handoff в Codex уже разрешен и задача достаточно определена, выдай готовый Codex handoff в том же ответе. Не останавливайся на одной аналитике.
 
@@ -67,3 +75,15 @@ User-only closeout допустим только если remaining next step д
 
 ## Правило выравнивания контуров
 Если найден defect, gap, regression, inconsistency или template flaw, сначала пройдите defect-capture path: bug report → classification → factory feedback при reusable issue → handoff / remediation / Codex.
+
+## Direct Task Rule
+Если Codex получает прямую задачу вне ChatGPT Project, сначала требуется self-handoff по тем же полям и gate'ам, что и у внешнего handoff:
+- classification;
+- selected project profile;
+- selected scenario;
+- current pipeline stage;
+- artifacts to update;
+- handoff allowed;
+- defect-capture path, если задача defect-class.
+
+Только после этого допустим remediation / implementation.

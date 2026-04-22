@@ -1,14 +1,23 @@
 # Codex workflow для этого проекта
 
-## Базовый режим
-- дефолт: `gpt-5.4`, reasoning `medium`
-- для тяжёлого brownfield RCA: подагент `brownfield_reviewer`
-- для быстрого inventory/evidence: подагент `inventory_explorer`
-- для рутинных правок после фиксации плана: подагент `repo_worker`
-- для финальной упаковки clean package: подагент `release_packager`
+## Routing contract
+- advisory layer: `AGENTS`, scenario-pack, runbooks, ChatGPT Project instructions;
+- executable layer: `codex-routing.yaml`, `.codex/config.toml` named profiles и `./scripts/launch-codex-task.sh`;
+- надежная единица маршрутизации: новый task launch.
 
-## Когда переключаться из hybrid в codex-led
-Переключение допустимо только после того, как:
+## Named profiles
+- `quick`: docs / triage / search
+- `build`: feature / fix / implementation
+- `deep`: root-cause / audit / architecture
+- `review`: review / tests / cleanup
+
+## Как запускать
+- не проверяйте routing в старой уже открытой сессии Codex;
+- для новой задачи запускайте `./scripts/launch-codex-task.sh --launch-source <chatgpt-handoff|direct-task> ...`;
+- для direct task launcher сначала создает `.chatgpt/direct-task-self-handoff.md`, а затем фиксирует route в `.chatgpt/task-launch.yaml`.
+
+## Когда handoff допустим
+Переключение в рабочий Codex launch допустимо только после того, как:
 - собран минимальный evidence pack;
 - заполнены `reality-check.md`, `evidence-register.md`, `reverse-engineering-summary.md`;
 - определены safe zones и rollback plan;

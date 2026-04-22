@@ -5,6 +5,8 @@ import sys
 from pathlib import Path
 import yaml
 
+from codex_task_router import build_launch_record, render_normalized_handoff, write_launch_record
+
 
 def read_text(path: Path) -> str:
     return path.read_text(encoding='utf-8') if path.exists() else ''
@@ -26,6 +28,13 @@ def main() -> int:
     change = task.get('change', {})
     classification = read_text(chat / 'classification.md').strip() or 'Классификация еще не заполнена.'
     codex_input = read_text(chat / 'codex-input.md').strip() or 'codex-input.md еще не заполнен.'
+    routing_record = build_launch_record(root, "chatgpt-handoff", codex_input)
+    write_launch_record(root, routing_record)
+    launch = routing_record["launch"]
+    (chat / 'normalized-codex-handoff.md').write_text(
+        render_normalized_handoff(routing_record, codex_input, "Normalized Codex Handoff"),
+        encoding='utf-8',
+    )
 
     defect_active = bool(bugflow.get('defect_detected')) or ('## Есть ли обнаруженный дефект\nда' in classification) or bool(re.search(r'\bbug\b|дефект|регрес|ошибк|gap', codex_input, re.I))
 
@@ -66,6 +75,39 @@ def main() -> int:
 ## Режим выполнения
 {change.get('execution_mode', 'не заполнен')}
 
+## Launch source
+{launch.get('launch_source', 'не определен')}
+
+## Task class
+{launch.get('task_class', 'не определен')}
+
+## Selected profile
+{launch.get('selected_profile', 'не определен')}
+
+## Selected model
+{launch.get('selected_model', 'не определен')}
+
+## Selected reasoning effort
+{launch.get('selected_reasoning_effort', 'не определен')}
+
+## Selected plan mode reasoning
+{launch.get('selected_plan_mode_reasoning_effort', 'не определен')}
+
+## Project profile
+{launch.get('project_profile', 'не определен')}
+
+## Selected scenario
+{launch.get('selected_scenario', 'не определен')}
+
+## Pipeline stage
+{launch.get('pipeline_stage', 'не определен')}
+
+## Handoff allowed
+{launch.get('handoff_allowed', 'не определен')}
+
+## Defect capture path
+{launch.get('defect_capture_path', 'не определен')}
+
 ## Repo Rules Priority
 При исполнении handoff приоритет у правил repo: `AGENTS`, runbook, scenario-pack, policy files и других канонических файлов этого репозитория.
 Общие рабочие инструкции применять только там, где они не конфликтуют с repo rules и старшими системными ограничениями среды.
@@ -82,6 +124,8 @@ def main() -> int:
 - [ ] Обновить CURRENT_FUNCTIONAL_STATE.md
 - [ ] Проверить, нужен ли feedback в фабрику
 - [ ] Если был найден defect, создать или обновить bug report
+- [ ] Проверить `.chatgpt/task-launch.yaml`
+- [ ] Проверить `.chatgpt/normalized-codex-handoff.md`
 
 ## Impact classification
 
@@ -188,6 +232,9 @@ def main() -> int:
 ## Для handoff
 
 - {handoff_line}
+- Рабочая единица выбора модели и reasoning mode: только новый task launch, а не старая уже закрепленная сессия.
+- `AGENTS`, ChatGPT Project instructions, scenario-pack и `.chatgpt` guidance являются advisory layer; profile/model выбирает executable launcher/router.
+- Проверяемая фиксация реального выбора хранится в `.chatgpt/task-launch.yaml`.
 - При исполнении handoff приоритет у правил repo: `AGENTS`, runbook, scenario-pack, policy files и других канонических файлов этого репозитория.
 - Общие рабочие инструкции применять только там, где они не конфликтуют с repo rules и старшими системными ограничениями среды.
 - Если выбран `hybrid` или `codex-led`, передать Codex актуальный `codex-task-pack.md`.
@@ -216,6 +263,13 @@ Repo: {root.name}
 Цель: выполнить текущий handoff по проекту {root.name}.
 Приоритет: сначала правила repo (`AGENTS`, runbook, scenario-pack, policy files), затем общие инструкции без конфликта с ними.
 Entry point: {entrypoint}
+Launch source: {launch.get('launch_source', 'chatgpt-handoff')}
+Task class: {launch.get('task_class', 'build')}
+Selected profile: {launch.get('selected_profile', 'build')}
+Selected model: {launch.get('selected_model', 'gpt-5.4')}
+Selected reasoning effort: {launch.get('selected_reasoning_effort', 'medium')}
+Pipeline stage: {launch.get('pipeline_stage', 'unknown-stage')}
+Handoff allowed: {launch.get('handoff_allowed', 'unknown')}
 Scope: работать только в пределах этого repo и связанных project artifacts.
 Verify: использовать актуальные validators, verification-report.md и done-report.md.
 ```

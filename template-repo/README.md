@@ -25,6 +25,10 @@
 - первое обязательное чтение: `template-repo/scenario-pack/00-master-router.md`;
 - entry mode влияет не на набор загружаемых файлов, а на стартовый маршрут и preset/policy.
 
+Для Codex task routing advisory слоя недостаточно:
+- `AGENTS`, repo instructions и scenario-pack не переключают модель сами по себе;
+- выбор profile/model/reasoning должен происходить на новом task launch через `./scripts/launch-codex-task.sh`.
+
 ## Правило фиксации дефектов
 Любой обнаруженный defect должен быть зафиксирован как bug report до исправления или одновременно с ним. Silent fixes запрещены.
 

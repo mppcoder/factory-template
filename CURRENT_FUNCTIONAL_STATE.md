@@ -36,6 +36,9 @@
 - handoff source files и validator `validate-codex-task-pack.py` теперь явно требуют фиксировать приоритет repo rules при передаче задачи в Codex
 - handoff layer теперь явно запрещает выдачу handoff через файл или несколькими блоками: пользователю разрешён только один цельный copy-paste блок для Codex
 - generated project tooling теперь включает validator `validate-handoff-response-format.py`, который проверяет сам markdown-ответ на single-block handoff и запрещает file-based handoff patterns
+- task-based profile/model selection для Codex теперь вынесен в executable launch layer: named profiles, router scripts и launch log на границе новой задачи
+- direct task to Codex теперь проходит такой же нормализованный self-handoff, как и handoff из ChatGPT Project, включая `task_class`, `selected_profile`, `selected_model` и `defect_capture_path`
+- репо больше не считает один static profile или старую сессию Codex надежной единицей маршрутизации
 
 ## Что работает частично
 - matrix runner как единый источник истины
@@ -44,6 +47,7 @@
 - phase-aware состав curated packs пока задается статическим policy manifest без отдельного сценарного роутинга
 - auto GitHub Release publication зависит от доступности и авторизации `gh` CLI в конкретной среде
 - phase-aware export/reference packs остаются вспомогательным слоем, а не каноническим хранилищем сценариев
+- эвристика классификации `task_class` пока keyword-based, а не semantic classifier
 
 ## Что еще не закрыто
 - финальное dogfooding на реальных greenfield и brownfield проектах

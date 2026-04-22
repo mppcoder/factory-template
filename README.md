@@ -65,10 +65,28 @@ python3 template-repo/scripts/create-codex-task-pack.py <working-project>
 python3 template-repo/scripts/validate-codex-task-pack.py <working-project>
 ```
 
-`validate-codex-task-pack.py` проверяет, что `codex-context.md`, `codex-task-pack.md`, `boundary-actions.md` и `done-checklist.md` не только созданы, но и согласованы с `active-scenarios.yaml`.
+`validate-codex-task-pack.py` проверяет, что `codex-context.md`, `codex-task-pack.md`, `boundary-actions.md`, `done-checklist.md`, `task-launch.yaml` и `normalized-codex-handoff.md` не только созданы, но и согласованы с `active-scenarios.yaml`.
 При формировании handoff в Codex явно фиксируйте, что приоритет у правил репозитория: `AGENTS`, runbook, scenario-pack и policy files repo.
 Пользователю handoff выдаётся только одним цельным блоком для copy-paste в Codex, а не ссылкой на файл и не несколькими разрозненными блоками.
 `template-repo/scripts/validate-handoff-response-format.py` дополнительно валидирует уже готовый markdown-ответ handoff и ловит file-based / multi-block handoff как process defect.
+
+Для реального task-based routing используйте новый launch boundary.
+Если вы уже находитесь внутри working project, запускайте:
+
+```bash
+./scripts/launch-codex-task.sh --launch-source chatgpt-handoff --task-file .chatgpt/codex-input.md --dry-run
+./scripts/launch-codex-task.sh --launch-source direct-task --task-text "проведи root-cause analysis ..." --dry-run
+```
+
+Если вы проверяете generated project из корня `factory-template`, используйте явный вызов script layer на целевом проекте:
+
+```bash
+python3 template-repo/scripts/bootstrap-codex-task.py <working-project> --launch-source direct-task --task-text "проведи root-cause analysis ..."
+python3 template-repo/scripts/validate-codex-routing.py <working-project>
+```
+
+Проверка routing должна делаться только на новой задаче.
+Нельзя считать старую уже открытую сессию Codex надежной единицей автоматической маршрутизации.
 
 `VALIDATE_FACTORY_TEMPLATE_OPS.sh` теперь проверяет не только структуру `sources-pack-*`, но и semantic profile repo-артефактов, если они используются как reference/export layer:
 

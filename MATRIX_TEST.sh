@@ -70,6 +70,7 @@ assert_pass 'factory-bugflow' detect-factory-issues.py python3 "$ROOT/workspace-
 assert_pass 'factory-bugflow' check-template-drift.py python3 "$ROOT/workspace-packs/factory-ops/check-template-drift.py" "$ROOT" "$P"
 assert_pass 'factory-bugflow' create-codex-task-pack.py "$ROOT/template-repo/scripts/create-codex-task-pack.py" "$P"
 assert_pass 'factory-bugflow' validate-codex-task-pack.py "$ROOT/template-repo/scripts/validate-codex-task-pack.py" "$P"
+assert_pass 'factory-bugflow' validate-codex-routing.py "$ROOT/template-repo/scripts/validate-codex-routing.py" "$P"
 assert_pass 'factory-bugflow' validate-handoff-response-format.py "$ROOT/template-repo/scripts/validate-handoff-response-format.py" "$P/.chatgpt/handoff-response.md"
 assert_pass 'factory-bugflow' boundary-actions.md test -f "$P/.chatgpt/boundary-actions.md"
 assert_pass 'factory-bugflow' validate-defect-capture.py "$ROOT/template-repo/scripts/validate-defect-capture.py" "$P"
@@ -108,6 +109,12 @@ assert_pass 'factory-bugflow' ingest-factory-feedback.sh bash "$ROOT/INGEST_FACT
 assert_pass 'factory-bugflow' export-template-patch.sh "$ROOT/workspace-packs/factory-ops/export-template-patch.sh" "$ROOT" "$P" --dry-run
 assert_pass 'factory-bugflow' 'apply-template-patch.sh --check' "$ROOT/workspace-packs/factory-ops/apply-template-patch.sh" "$P/_factory-sync-export" --check
 assert_pass 'factory-bugflow' 'apply-template-patch.sh --apply-safe-zones' "$ROOT/workspace-packs/factory-ops/apply-template-patch.sh" "$P/_factory-sync-export" --apply-safe-zones
+assert_pass 'routing-quick' resolve-codex-task-route.py bash -lc "python3 '$ROOT/template-repo/scripts/resolve-codex-task-route.py' '$P' --launch-source chatgpt-handoff --task-text 'docs triage search in repo' | grep -q 'selected_profile=quick'"
+assert_pass 'routing-build' resolve-codex-task-route.py bash -lc "python3 '$ROOT/template-repo/scripts/resolve-codex-task-route.py' '$P' --launch-source chatgpt-handoff --task-text 'fix feature remediation in launcher' | grep -q 'selected_profile=build'"
+assert_pass 'routing-deep' resolve-codex-task-route.py bash -lc "python3 '$ROOT/template-repo/scripts/resolve-codex-task-route.py' '$P' --launch-source chatgpt-handoff --task-text 'root cause audit architecture inconsistency' | grep -q 'selected_profile=deep'"
+assert_pass 'routing-review' resolve-codex-task-route.py bash -lc "python3 '$ROOT/template-repo/scripts/resolve-codex-task-route.py' '$P' --launch-source chatgpt-handoff --task-text 'review tests cleanup verification' | grep -q 'selected_profile=review'"
+assert_pass 'direct-task-bootstrap' bootstrap-codex-task.py python3 "$ROOT/template-repo/scripts/bootstrap-codex-task.py" "$P" --launch-source direct-task --task-text "bug regression root cause review the failure"
+assert_pass 'direct-task-routing' validate-codex-routing.py "$ROOT/template-repo/scripts/validate-codex-routing.py" "$P"
 
 printf '%s\n' '----------------------------------------------------------------------------------------------------------------------------'
 if [ "$FAILS" -gt 0 ]; then echo "MATRIX TEST НЕ ПРОЙДЕН: fail=$FAILS"; exit 1; fi

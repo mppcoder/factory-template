@@ -6,6 +6,9 @@
 - отдельный contour `EXECUTE_RELEASE_DECISION.sh` для tag/release path только после явного release decision
 - validators для verified sync prereqs, release decision, release notes source и publish outcome
 - lightweight follow-up mode для `VERIFIED_SYNC.sh`, чтобы low-risk post-verify `.gitignore` и docs/closeout изменения тоже коммитились и пушились автоматически
+- executable task router для Codex на границе новой задачи: `template-repo/codex-routing.yaml`, `resolve-codex-task-route.py`, `bootstrap-codex-task.py`, `launch-codex-task.sh`
+- named profiles `quick / build / deep / review` и launch logging в `.chatgpt/task-launch.yaml`
+- normalised routing artifacts `.chatgpt/normalized-codex-handoff.md` и `.chatgpt/direct-task-self-handoff.md`
 - internal-followup precedence rule: user footer больше не должен вытеснять inline handoff, если remaining work еще остается внутренней Codex-eligible работой repo
 - completion/handoff layer теперь требует completion package для factory ChatGPT Project instruction, downstream repo sync и battle ChatGPT Project instructions, когда change затрагивает downstream-consumed content
 - immediate completion-package rule: обязательная инструкция пользователю должна быть в том же финальном ответе, а не после напоминания пользователя
@@ -25,6 +28,8 @@
 - release-facing слой зафиксировал factory-template defect remediation из `a9b05c0` без смены release semantics
 - `CURRENT_FUNCTIONAL_STATE.md` и release notes теперь явно отражают обязательный inline Codex handoff при допустимом handoff и достаточной определенности задачи
 - root `.chatgpt` и template `.chatgpt` теперь несут release decision templates и closeout artifacts для sync/release automation
+- advisory layer и executable routing layer теперь явно разделены в runbooks, scenario-pack, template docs и Codex task pack artifacts
+- direct task to Codex теперь обязан сначала проходить self-handoff по тем же routing fields и defect gates, что и handoff из ChatGPT Project
 - direct hot-set `core-hot-15` теперь экспортируется как одна flat-папка без подпапок, с deterministic naming strategy при конфликтах имён
 - `core-cold-5.tar.gz` теперь дублируется прямо в папке `core-hot-15/` как companion archive для ручной загрузки
 - `core-hot-15` теперь физически разделяет uploadable и служебные файлы: всё для Sources лежит в `upload-to-sources/`
@@ -34,6 +39,8 @@
 ### Исправлено
 - устранен reusable process gap, из-за которого ChatGPT мог остановиться на аналитике вместо готового handoff
 - устранен reusable process gap, из-за которого ответ мог завершаться без финального блока `Инструкция пользователю` при pending user/external step
+- устранен defect, из-за которого task-based выбор модели/режима оставался advisory и фактически сваливался в один static session profile
+- устранено ложное ожидание mid-session auto-switch: routing теперь проверяется и фиксируется только на новом task launch
 - подтверждено, что автопубликация релиза не добавлялась и existing release discipline сохранена
 
 ## [2.4.2] - 2026-04-20
@@ -51,7 +58,7 @@
 ### Добавлено
 - профиль `brownfield-dogfood-codex-assisted` для dogfood-сценария brownfield without repo
 - класс изменения `brownfield-stabilization` с поддержкой `hybrid` и `codex-led`
-- шаблонные `.codex` конфиги и подагенты для автоматического переключения режимов внутри одной живой сессии
+- шаблонные `.codex` конфиги и подагенты для session-specific specialization внутри Codex; task-based routing для новых задач позже вынесен в отдельный launcher/router layer
 - workspace pack `vscode-codex-dogfood-bootstrap` для старта из одного окна VS Code с дальнейшим переходом на отдельные окна по проектам
 - декларативный `factory-template-ops-policy.yaml` для curated export/reference packs и boundary-actions settings
 - validator `VALIDATE_FACTORY_TEMPLATE_OPS.sh` / `tools/validate_factory_template_ops_policy.py`
