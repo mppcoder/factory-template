@@ -267,7 +267,14 @@ def resolve_sync_plan(root: Path, paths: list[str]) -> dict:
         return validate_lightweight_followup(root, paths)
 
     stage = read_yaml(root / ".chatgpt" / "stage-state.yaml")
-    if stage.get("stage", {}).get("current") == "done" and not full_cycle_indicators:
+    stage_current = stage.get("stage", {}).get("current")
+    if stage_current == "done" and not lightweight_indicators and ".chatgpt/task-index.yaml" not in paths:
+        raise AutomationError(
+            "Post-done non-lightweight verified sync требует обновленного `.chatgpt/task-index.yaml`; "
+            "иначе change metadata и commit message могут остаться stale. "
+            "Сначала зафиксируйте новый task/self-handoff и обновите task-index, либо сведите diff к lightweight follow-up."
+        )
+    if stage_current == "done" and not full_cycle_indicators:
         raise AutomationError(
             "Diff не похож ни на lightweight follow-up, ни на новый full verify cycle; "
             "обновите `.chatgpt` verify artifacts перед VERIFIED_SYNC.sh"

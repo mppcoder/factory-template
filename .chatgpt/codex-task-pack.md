@@ -1,10 +1,10 @@
 # Task pack для Codex
 
 ## Change ID
-chg-20260422-001
+chg-20260422-002
 
 ## Заголовок
-Canonicalize VPS project-root layout under /projects
+Guard verified sync against stale task-index metadata
 
 ## Класс изменения
 small-fix
@@ -16,16 +16,16 @@ single-pass
 chatgpt-handoff
 
 ## Task class
-quick
+build
 
 ## Selected profile
-quick
+build
 
 ## Selected model
-gpt-5.4-mini
+gpt-5.4
 
 ## Selected reasoning effort
-low
+medium
 
 ## Selected plan mode reasoning
 medium
@@ -43,7 +43,7 @@ done
 yes (forbidden)
 
 ## Defect capture path
-not-required-by-text-signal
+reproduce -> evidence -> bug report -> layer classification -> factory feedback if reusable -> remediation
 
 ## Repo Rules Priority
 При исполнении handoff приоритет у правил repo: `AGENTS`, runbook, scenario-pack, policy files и других канонических файлов этого репозитория.
@@ -54,18 +54,30 @@ not-required-by-text-signal
 
 ## Контекст
 - Repo: `factory-template`
-- Нужно внедрить каноническое правило хранения repo-папок на VPS.
-- В `/projects` должны лежать только project roots.
-- `_incoming` допускается только внутри project root.
-- brownfield temporary, intermediate и reconstructed repo должны жить только внутри `/projects/<project-root>/...`.
+- Нужно устранить defect в verified-sync metadata layer.
+- После `stage.current = done` новый non-lightweight diff мог пройти prereqs с commit message из stale `.chatgpt/task-index.yaml`.
+- Это создавало риск commit/push с неверным `change_id` и `title`.
 
 ## Что должен сделать исполнитель
-- Найти repo-файлы, где допускается плоская раскладка под `/projects`.
-- Обновить scenario-pack, runbooks, examples, workspace/bootstrap docs и boundary templates.
-- Исправить scripts/templates, если они обещают или генерируют плоский layout.
-- Подготовить completion package по обновлению factory sources и downstream контуров.
+- Зафиксировать bug report и factory feedback для reusable verified-sync defect.
+- Добавить guard в automation, который блокирует post-done non-lightweight verified sync без обновленного `.chatgpt/task-index.yaml`.
+- Обновить текущие `.chatgpt` metadata под этот новый change.
+- Подтвердить проверкой, что stale path теперь падает с явным blocker.
 
 ## Ограничения
-- Не вводить отдельную плоскую зону для brownfield temp repos.
-- Сохранить совместимость внутреннего нейминга подпапок, если верхнеуровневое правило `/projects` соблюдено.
+- Не делать вид, что stale metadata можно безопасно использовать для нового commit intent.
+- Не ослаблять существующий lightweight follow-up path.
 - Приоритет у правил repo: `AGENTS`, runbook, scenario-pack и policy files репозитория.
+
+## Обязательное правило фиксации дефектов
+Если в ходе анализа, реализации, тестирования, reverse engineering или verification обнаружен дефект, регрессия, расхождение, пропущенный шаг, шаблонный сбой или reusable process failure, его нельзя silently patch.
+
+Нужно:
+1. создать или обновить bug report в `reports/bugs/`;
+2. собрать evidence и шаги воспроизведения;
+3. указать слой дефекта: `project-only`, `factory-template` или `shared/unknown`;
+4. определить, исправляется ли дефект в текущем scope или требует отдельного task boundary;
+5. выполнить self-handoff для нового defect;
+6. при необходимости подготовить ChatGPT handoff bug note или deep-research prompt;
+7. если проблема reusable — создать или обновить factory feedback в `reports/factory-feedback/` или `meta-feedback/`;
+8. только после этого или одновременно с этим делать fix.

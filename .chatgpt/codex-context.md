@@ -10,7 +10,7 @@ factory-template
 done
 
 ## Change ID
-chg-20260422-001
+chg-20260422-002
 
 ## Краткое резюме
-Убрать плоскую раскладку под `/projects` и закрепить правило: в корне лежат только project roots, а `_incoming` и brownfield temporary/intermediate/reconstructed repos живут внутри соответствующего проекта.
+Защитить verified-sync от post-done non-lightweight diff без обновленного task-index, чтобы commit message и change metadata не брались из stale предыдущей задачи.

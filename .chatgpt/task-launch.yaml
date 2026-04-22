@@ -1,15 +1,14 @@
 launch:
-  timestamp_utc: '2026-04-22T08:09:39+00:00'
+  timestamp_utc: '2026-04-22T10:23:29+00:00'
   launch_unit: new-task-launch
   launch_source: chatgpt-handoff
   router_layer: executable
-  task_class: quick
+  task_class: build
   task_class_reasons:
-  - 'keyword hit: docs'
-  - 'keyword hit: найти'
-  selected_profile: quick
-  selected_model: gpt-5.4-mini
-  selected_reasoning_effort: low
+  - 'keyword hit: change'
+  selected_profile: build
+  selected_model: gpt-5.4
+  selected_reasoning_effort: medium
   selected_plan_mode_reasoning_effort: medium
   project_profile: unknown-project-profile
   selected_scenario: 00-master-router.md
@@ -20,8 +19,11 @@ launch:
   - .chatgpt/codex-task-pack.md
   - .chatgpt/verification-report.md
   - .chatgpt/done-report.md
+  - reports/bugs/
+  - reports/factory-feedback/
   handoff_allowed: yes (forbidden)
-  defect_capture_path: not-required-by-text-signal
+  defect_capture_path: reproduce -> evidence -> bug report -> layer classification
+    -> factory feedback if reusable -> remediation
   task_summary: '# Codex handoff input'
   launch_boundary_rule: Выбор модели и reasoning mode считается надежным только на
     новом запуске Codex для новой задачи.
@@ -35,6 +37,6 @@ launch:
   - scripts/bootstrap-codex-task.py
   - scripts/launch-codex-task.sh
   - .codex/config.toml named profiles
-  launch_command: codex --profile quick
+  launch_command: codex --profile build
   direct_self_handoff_required: false
   direct_self_handoff_completed: false

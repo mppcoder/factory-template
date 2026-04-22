@@ -4,20 +4,19 @@
 chatgpt-handoff
 
 ## Task class
-quick
+build
 
 ## Task class evidence
-- keyword hit: docs
-- keyword hit: найти
+- keyword hit: change
 
 ## Selected profile
-quick
+build
 
 ## Selected model
-gpt-5.4-mini
+gpt-5.4
 
 ## Selected reasoning effort
-low
+medium
 
 ## Selected plan mode reasoning
 medium
@@ -37,36 +36,37 @@ done
 - .chatgpt/codex-task-pack.md
 - .chatgpt/verification-report.md
 - .chatgpt/done-report.md
+- reports/bugs/
+- reports/factory-feedback/
 
 ## Handoff allowed
 yes (forbidden)
 
 ## Defect capture path
-not-required-by-text-signal
+reproduce -> evidence -> bug report -> layer classification -> factory feedback if reusable -> remediation
 
 ## Launch boundary rule
 Выбор модели и reasoning mode считается надежным только на новом запуске Codex для новой задачи.
 
 ## Executable launch command
-`codex --profile quick`
+`codex --profile build`
 
 ## Task payload
 # Codex handoff input
 
 ## Контекст
 - Repo: `factory-template`
-- Нужно внедрить каноническое правило хранения repo-папок на VPS.
-- В `/projects` должны лежать только project roots.
-- `_incoming` допускается только внутри project root.
-- brownfield temporary, intermediate и reconstructed repo должны жить только внутри `/projects/<project-root>/...`.
+- Нужно устранить defect в verified-sync metadata layer.
+- После `stage.current = done` новый non-lightweight diff мог пройти prereqs с commit message из stale `.chatgpt/task-index.yaml`.
+- Это создавало риск commit/push с неверным `change_id` и `title`.
 
 ## Что должен сделать исполнитель
-- Найти repo-файлы, где допускается плоская раскладка под `/projects`.
-- Обновить scenario-pack, runbooks, examples, workspace/bootstrap docs и boundary templates.
-- Исправить scripts/templates, если они обещают или генерируют плоский layout.
-- Подготовить completion package по обновлению factory sources и downstream контуров.
+- Зафиксировать bug report и factory feedback для reusable verified-sync defect.
+- Добавить guard в automation, который блокирует post-done non-lightweight verified sync без обновленного `.chatgpt/task-index.yaml`.
+- Обновить текущие `.chatgpt` metadata под этот новый change.
+- Подтвердить проверкой, что stale path теперь падает с явным blocker.
 
 ## Ограничения
-- Не вводить отдельную плоскую зону для brownfield temp repos.
-- Сохранить совместимость внутреннего нейминга подпапок, если верхнеуровневое правило `/projects` соблюдено.
+- Не делать вид, что stale metadata можно безопасно использовать для нового commit intent.
+- Не ослаблять существующий lightweight follow-up path.
 - Приоритет у правил repo: `AGENTS`, runbook, scenario-pack и policy files репозитория.
