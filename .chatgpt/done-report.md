@@ -10,6 +10,9 @@
 - Boundary template и generator default path синхронизированы с project-local incoming layout.
 - `_boundary-actions/factory-template-boundary-actions.md` перегенерирован на новых правилах.
 - Текущие `.chatgpt` артефакты обновлены под этот change.
+- После выявленного process miss дополнительно оформлен defect capture:
+  - `reports/bugs/bug-012-missed-verified-sync-and-user-instruction-after-closeout.md`
+  - `reports/factory-feedback/feedback-012-missed-verified-sync-and-user-instruction-after-closeout.md`
 
 ## Какие артефакты обновлены
 - `.chatgpt/*` для текущего change
@@ -26,6 +29,8 @@
 - `README.md`
 - `ENTRY_MODES.md`
 - `docs/template-architecture-and-event-workflows.md`
+- `reports/bugs/bug-012-missed-verified-sync-and-user-instruction-after-closeout.md`
+- `reports/factory-feedback/feedback-012-missed-verified-sync-and-user-instruction-after-closeout.md`
 
 ## Что осталось вне объёма
 - Массовое применение этих правок в уже созданных downstream project repos.

@@ -23,6 +23,8 @@ change:
     - "README.md"
     - "ENTRY_MODES.md"
     - "docs/template-architecture-and-event-workflows.md"
+    - "reports/bugs/bug-012-missed-verified-sync-and-user-instruction-after-closeout.md"
+    - "reports/factory-feedback/feedback-012-missed-verified-sync-and-user-instruction-after-closeout.md"
 
 tasks:
   - id: "T-001"

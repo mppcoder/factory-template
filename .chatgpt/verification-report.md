@@ -13,6 +13,7 @@
 - Brownfield without repo теперь явно запрещает создавать temporary/intermediate/reconstructed repos прямо в `/projects`.
 - Workspace/bootstrap материалы больше не продвигают плоскую россыпь служебных каталогов в корне `/projects`.
 - Boundary actions guide regenerated successfully and now points to `/projects/factory-template/_incoming`.
+- Process miss after initial closeout separately captured as reusable defect in `reports/bugs/bug-012-missed-verified-sync-and-user-instruction-after-closeout.md`.
 
 ## Что не подтверждено или требует повторной проверки
 - Полный downstream sync в уже созданных боевых repo не выполнялся в рамках этого change.
