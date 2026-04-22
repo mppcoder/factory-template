@@ -19,6 +19,9 @@
 - копирует executable routing contract: `codex-routing.yaml`, router scripts и named Codex profiles
 - подготавливает generated project к launch-time self-handoff и routing verification
 
+## Что еще описано на уровне фабрики
+- единая визуальная архитектура шаблона и подробные workflows по запуску, развёртыванию и downstream-update contour
+
 ## Ограничения
 - содержательное наполнение versioning файлов после генерации выполняется пользователем или сценариями
 - matrix runner и bugflow требуют рабочей оболочки bash/pyyaml

@@ -28,6 +28,10 @@
 
 Различается не набор загружаемых файлов, а стартовый маршрут по сценариям и выбранный preset.
 
+Единая визуальная схема фабрики и подробные workflows по ключевым событиям собраны в:
+
+- `docs/template-architecture-and-event-workflows.md`
+
 ## Подготовка после распаковки
 
 ```bash
@@ -166,6 +170,7 @@ bash PHASE_DETECTION_TEST.sh
 Короткая карта поддерживаемых режимов:
 
 - `ENTRY_MODES.md`
+- `docs/template-architecture-and-event-workflows.md`
 
 Примечание по git sync в этом окружении:
 

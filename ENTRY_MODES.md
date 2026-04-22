@@ -4,6 +4,10 @@
 
 Шаблон `factory-template` поддерживает 3 канонических режима запуска и сопровождения.
 
+Для одной визуальной схемы шаблона и подробных workflows по событиям запуска/развертывания/доработки смотрите:
+
+- `docs/template-architecture-and-event-workflows.md`
+
 ## Единый Repo-First Contour
 
 Для generated projects используется один и тот же базовый repo-first контур:

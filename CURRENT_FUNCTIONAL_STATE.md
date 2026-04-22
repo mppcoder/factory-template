@@ -39,6 +39,7 @@
 - task-based profile/model selection для Codex теперь вынесен в executable launch layer: named profiles, router scripts и launch log на границе новой задачи
 - direct task to Codex теперь проходит такой же нормализованный self-handoff, как и handoff из ChatGPT Project, включая `task_class`, `selected_profile`, `selected_model` и `defect_capture_path`
 - репо больше не считает один static profile или старую сессию Codex надежной единицей маршрутизации
+- в repo появился единый visual/workflow reference layer по самому шаблону, greenfield, brownfield и downstream update contour
 
 ## Что работает частично
 - matrix runner как единый источник истины

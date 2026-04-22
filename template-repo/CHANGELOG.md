@@ -11,6 +11,7 @@
 - generated boundary guidance больше не должна перекладывать internal prepare/export commands на пользователя
 - executable routing layer для каждой новой Codex-задачи: `codex-routing.yaml`, named profiles и launcher/router scripts
 - direct-task self-handoff standard с `.chatgpt/task-launch.yaml`, `.chatgpt/normalized-codex-handoff.md` и `.chatgpt/direct-task-self-handoff.md`
+- root-level visual/workflow reference doc для архитектуры шаблона и основных deployment/update событий
 
 ### Изменено
 - template/runtime/policy layer теперь закрепляет обязательный inline Codex handoff, если handoff уже допустим и задача достаточно определена

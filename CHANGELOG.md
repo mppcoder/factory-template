@@ -9,6 +9,7 @@
 - executable task router для Codex на границе новой задачи: `template-repo/codex-routing.yaml`, `resolve-codex-task-route.py`, `bootstrap-codex-task.py`, `launch-codex-task.sh`
 - named profiles `quick / build / deep / review` и launch logging в `.chatgpt/task-launch.yaml`
 - normalised routing artifacts `.chatgpt/normalized-codex-handoff.md` и `.chatgpt/direct-task-self-handoff.md`
+- единый reference-doc `docs/template-architecture-and-event-workflows.md` с визуальной архитектурой шаблона и подробными workflows по ключевым событиям
 - internal-followup precedence rule: user footer больше не должен вытеснять inline handoff, если remaining work еще остается внутренней Codex-eligible работой repo
 - completion/handoff layer теперь требует completion package для factory ChatGPT Project instruction, downstream repo sync и battle ChatGPT Project instructions, когда change затрагивает downstream-consumed content
 - immediate completion-package rule: обязательная инструкция пользователю должна быть в том же финальном ответе, а не после напоминания пользователя

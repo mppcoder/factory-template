@@ -16,6 +16,7 @@
    Используйте brownfield-путь через `legacy-modernization`, `integration-project` или `audit-only`.
 
 Краткая сводка по этим режимам вынесена в root-level `ENTRY_MODES.md`.
+Единая визуальная архитектура шаблона и подробные event workflows описаны в root-level `docs/template-architecture-and-event-workflows.md`.
 
 ## Repo-First Principle For Generated Projects
 
