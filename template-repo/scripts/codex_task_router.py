@@ -31,6 +31,71 @@ def _normalize(value: str) -> str:
     return re.sub(r"\s+", " ", value.lower()).strip()
 
 
+def parse_structured_handoff(text: str) -> dict:
+    if not text.strip():
+        return {}
+    try:
+        data = yaml.safe_load(text)
+    except yaml.YAMLError:
+        data = None
+    if isinstance(data, dict):
+        return data
+
+    result: dict[str, object] = {}
+    for raw in text.splitlines():
+        line = raw.strip()
+        if not line or line.startswith("#") or ":" not in line:
+            continue
+        key, value = line.split(":", 1)
+        key = key.strip()
+        value = value.strip()
+        if not key:
+            continue
+        result[key] = value
+    return result
+
+
+def normalize_model_name(model: str) -> str:
+    normalized = _normalize(model)
+    if "gpt-5.4" in normalized:
+        return "gpt-5.4"
+    if "gpt-5.4-mini" in normalized:
+        return "gpt-5.4-mini"
+    return normalized
+
+
+def stringify_override(value: object) -> str:
+    if isinstance(value, bool):
+        return "true" if value else "false"
+    if value is None:
+        return ""
+    return str(value).strip()
+
+
+def explicit_routing_overrides(text: str) -> dict:
+    data = parse_structured_handoff(text)
+    if not isinstance(data, dict):
+        return {}
+    overrides: dict[str, object] = {}
+    for key in [
+        "task_class",
+        "selected_profile",
+        "selected_model",
+        "selected_reasoning_effort",
+        "selected_plan_mode_reasoning_effort",
+        "project_profile",
+        "selected_scenario",
+        "pipeline_stage",
+        "artifacts_to_update",
+        "handoff_allowed",
+        "defect_capture_path",
+    ]:
+        value = data.get(key)
+        if value not in (None, "", []):
+            overrides[key] = value
+    return overrides
+
+
 def infer_task_class(spec: dict, text: str, explicit_task_class: str | None = None) -> tuple[str, list[str]]:
     task_classes = spec.get("task_classes", {})
     default_task_class = spec.get("defaults", {}).get("task_class", "build")
@@ -69,6 +134,56 @@ def selected_profile(spec: dict, task_class: str) -> tuple[str, dict]:
     if not profile:
         raise ValueError(f"Для task class `{task_class}` не найден profile `{profile_name}`")
     return profile_name, profile
+
+
+def choose_profile_from_overrides(spec: dict, task_class: str, overrides: dict) -> tuple[str, dict, list[str]] | None:
+    profiles = spec.get("profiles", {}) or {}
+    requested_profile = str(overrides.get("selected_profile") or "").strip()
+    if requested_profile and requested_profile in profiles:
+        return requested_profile, profiles[requested_profile], [f"explicit selected_profile override: {requested_profile}"]
+
+    requested_model = normalize_model_name(str(overrides.get("selected_model") or "").strip())
+    requested_reasoning = _normalize(str(overrides.get("selected_reasoning_effort") or "").strip())
+    requested_plan_reasoning = _normalize(str(overrides.get("selected_plan_mode_reasoning_effort") or "").strip())
+    candidates: list[tuple[str, dict]] = []
+    for name, profile in profiles.items():
+        profile_model = normalize_model_name(str(profile.get("model", "")))
+        profile_reasoning = _normalize(str(profile.get("reasoning_effort", "")))
+        profile_plan_reasoning = _normalize(str(profile.get("plan_mode_reasoning_effort", "")))
+        if requested_model and requested_model != profile_model:
+            continue
+        if requested_reasoning and requested_reasoning != profile_reasoning:
+            continue
+        if requested_plan_reasoning and requested_plan_reasoning != profile_plan_reasoning:
+            continue
+        candidates.append((name, profile))
+
+    if not candidates:
+        return None
+
+    task_meta = (spec.get("task_classes", {}) or {}).get(task_class, {})
+    default_profile_name = str(task_meta.get("profile", task_class))
+    for name, profile in candidates:
+        if name == default_profile_name:
+            reasons = [
+                f"explicit reasoning/model override matched default profile: {name}",
+            ]
+            return name, profile, reasons
+
+    preferred_order = ["deep", "review", "build", "quick"]
+    for preferred in preferred_order:
+        for name, profile in candidates:
+            if name == preferred:
+                reasons = [f"explicit reasoning/model override selected compatible profile: {name}"]
+                if requested_profile and requested_profile not in profiles:
+                    reasons.append(f"requested profile `{requested_profile}` is not executable in routing spec")
+                return name, profile, reasons
+
+    name, profile = candidates[0]
+    reasons = [f"explicit reasoning/model override selected compatible profile: {name}"]
+    if requested_profile and requested_profile not in profiles:
+        reasons.append(f"requested profile `{requested_profile}` is not executable in routing spec")
+    return name, profile, reasons
 
 
 def detect_defect_path(text: str) -> str:
@@ -133,9 +248,30 @@ def build_launch_record(
     explicit_task_class: str | None = None,
 ) -> dict:
     spec = load_routing_spec(root)
-    task_class, reasons = infer_task_class(spec, task_text, explicit_task_class)
-    profile_name, profile = selected_profile(spec, task_class)
+    overrides = explicit_routing_overrides(task_text)
+    requested_task_class = str(overrides.get("task_class") or "").strip()
+    task_class_override = explicit_task_class
+    if not task_class_override and requested_task_class in (spec.get("task_classes", {}) or {}):
+        task_class_override = requested_task_class
+
+    task_class, reasons = infer_task_class(spec, task_text, task_class_override)
+    explicit_profile = choose_profile_from_overrides(spec, task_class, overrides)
+    if explicit_profile is not None:
+        profile_name, profile, profile_reasons = explicit_profile
+        reasons.extend(profile_reasons)
+    else:
+        profile_name, profile = selected_profile(spec, task_class)
     defect_path = detect_defect_path(task_text)
+    project_profile = stringify_override(overrides.get("project_profile")) or gather_project_profile(root)
+    selected_scenario = stringify_override(overrides.get("selected_scenario")) or gather_selected_scenario(root)
+    pipeline_stage = stringify_override(overrides.get("pipeline_stage")) or gather_pipeline_stage(root)
+    artifacts = overrides.get("artifacts_to_update")
+    if isinstance(artifacts, list) and artifacts:
+        artifacts_list = [str(item) for item in artifacts if str(item).strip()]
+    else:
+        artifacts_list = artifacts_to_update(spec, root, defect_path)
+    handoff_allowed_value = stringify_override(overrides.get("handoff_allowed")) or handoff_allowed(root)
+    defect_capture_path = stringify_override(overrides.get("defect_capture_path")) or defect_path
     return {
         "launch": {
             "timestamp_utc": now_utc(),
@@ -148,12 +284,12 @@ def build_launch_record(
             "selected_model": profile.get("model", ""),
             "selected_reasoning_effort": profile.get("reasoning_effort", ""),
             "selected_plan_mode_reasoning_effort": profile.get("plan_mode_reasoning_effort", ""),
-            "project_profile": gather_project_profile(root),
-            "selected_scenario": gather_selected_scenario(root),
-            "pipeline_stage": gather_pipeline_stage(root),
-            "artifacts_to_update": artifacts_to_update(spec, root, defect_path),
-            "handoff_allowed": handoff_allowed(root),
-            "defect_capture_path": defect_path,
+            "project_profile": project_profile,
+            "selected_scenario": selected_scenario,
+            "pipeline_stage": pipeline_stage,
+            "artifacts_to_update": artifacts_list,
+            "handoff_allowed": handoff_allowed_value,
+            "defect_capture_path": defect_capture_path,
             "task_summary": task_text.splitlines()[0].strip()[:240] if task_text.strip() else "",
             "launch_boundary_rule": spec.get("routing_contract", {}).get("launch_boundary_rule", ""),
             "advisory_layers": spec.get("routing_contract", {}).get("advisory_layers", []),
@@ -161,6 +297,10 @@ def build_launch_record(
             "launch_command": f"codex --profile {profile_name}",
             "direct_self_handoff_required": launch_source == "direct-task",
             "direct_self_handoff_completed": False,
+            "requested_task_class": requested_task_class or None,
+            "requested_selected_profile": stringify_override(overrides.get("selected_profile")) or None,
+            "requested_selected_model": stringify_override(overrides.get("selected_model")) or None,
+            "requested_selected_reasoning_effort": stringify_override(overrides.get("selected_reasoning_effort")) or None,
         }
     }
 

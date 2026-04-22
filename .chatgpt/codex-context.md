@@ -10,7 +10,7 @@ factory-template
 done
 
 ## Change ID
-chg-20260422-002
+chg-20260422-003
 
 ## Краткое резюме
-Защитить verified-sync от post-done non-lightweight diff без обновленного task-index, чтобы commit message и change metadata не брались из stale предыдущей задачи.
+Научить executable router уважать explicit selected_model/selected_reasoning_effort из structured handoff и выбирать совместимый executable profile вместо silent keyword downgrade до medium.

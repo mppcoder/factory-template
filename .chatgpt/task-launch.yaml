@@ -1,11 +1,12 @@
 launch:
-  timestamp_utc: '2026-04-22T10:23:29+00:00'
+  timestamp_utc: '2026-04-22T10:40:29+00:00'
   launch_unit: new-task-launch
   launch_source: chatgpt-handoff
   router_layer: executable
   task_class: build
   task_class_reasons:
-  - 'keyword hit: change'
+  - 'keyword hit: исправ'
+  - 'explicit reasoning/model override matched default profile: build'
   selected_profile: build
   selected_model: gpt-5.4
   selected_reasoning_effort: medium
@@ -40,3 +41,7 @@ launch:
   launch_command: codex --profile build
   direct_self_handoff_required: false
   direct_self_handoff_completed: false
+  requested_task_class: null
+  requested_selected_profile: null
+  requested_selected_model: null
+  requested_selected_reasoning_effort: null

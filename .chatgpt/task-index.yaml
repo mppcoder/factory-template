@@ -1,16 +1,16 @@
 change:
-  id: "chg-20260422-002"
-  title: "Guard verified sync against stale task-index metadata"
+  id: "chg-20260422-003"
+  title: "Respect explicit reasoning in structured Codex handoff"
   class: "small-fix"
   execution_mode: "single-pass"
   type: "brownfield"
   status: "done"
   priority: "medium"
-  summary: "Защитить verified-sync от post-done non-lightweight diff без обновленного task-index, чтобы commit message и change metadata не брались из stale предыдущей задачи."
+  summary: "Научить executable router уважать explicit selected_model/selected_reasoning_effort из structured handoff и выбирать совместимый executable profile вместо silent keyword downgrade до medium."
   outputs:
-    - "template-repo/scripts/factory_automation_common.py"
-    - "reports/bugs/bug-014-verified-sync-stale-task-index-commit-message.md"
-    - "reports/factory-feedback/feedback-014-verified-sync-stale-task-index-commit-message.md"
+    - "template-repo/scripts/codex_task_router.py"
+    - "reports/bugs/bug-015-explicit-handoff-reasoning-overridden-by-keyword-routing.md"
+    - "reports/factory-feedback/feedback-015-explicit-handoff-reasoning-overridden-by-keyword-routing.md"
     - ".chatgpt/task-index.yaml"
     - ".chatgpt/codex-input.md"
     - ".chatgpt/verification-report.md"
@@ -18,27 +18,27 @@ change:
 
 tasks:
   - id: "T-001"
-    title: "Зафиксировать verified-sync metadata defect"
+    title: "Зафиксировать routing mismatch как reusable defect"
     type: "defect-capture"
     risk_level: "low"
     executor: "developer"
     depends_on: []
     outputs:
-      - "reports/bugs/bug-014-verified-sync-stale-task-index-commit-message.md"
-      - "reports/factory-feedback/feedback-014-verified-sync-stale-task-index-commit-message.md"
+      - "reports/bugs/bug-015-explicit-handoff-reasoning-overridden-by-keyword-routing.md"
+      - "reports/factory-feedback/feedback-015-explicit-handoff-reasoning-overridden-by-keyword-routing.md"
     acceptance:
-      - "bug report воспроизводит stale commit message path"
-      - "factory feedback описывает reusable process risk"
+      - "bug report воспроизводит downgrade high -> medium"
+      - "factory feedback описывает reusable routing risk"
 
   - id: "T-002"
-    title: "Заблокировать stale task-index в verified-sync"
+    title: "Сделать structured handoff routing executable"
     type: "automation"
     risk_level: "medium"
     executor: "developer"
     depends_on:
       - "T-001"
     outputs:
-      - "template-repo/scripts/factory_automation_common.py"
+      - "template-repo/scripts/codex_task_router.py"
     acceptance:
-      - "post-done non-lightweight diff без `.chatgpt/task-index.yaml` не проходит verified sync prereqs"
-      - "automation больше не печатает stale commit message от предыдущего change"
+      - "explicit selected_reasoning_effort из structured handoff сохраняется в generated launch artifacts"
+      - "unknown requested profile маппится в совместимый executable profile без silent downgrade до medium"
