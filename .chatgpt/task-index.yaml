@@ -25,6 +25,13 @@ change:
     - "docs/template-architecture-and-event-workflows.md"
     - "reports/bugs/bug-012-missed-verified-sync-and-user-instruction-after-closeout.md"
     - "reports/factory-feedback/feedback-012-missed-verified-sync-and-user-instruction-after-closeout.md"
+    - ".chatgpt/reuse-check.md"
+    - "template-repo/scripts/check-dod.py"
+    - "template-repo/scripts/create-codex-task-pack.py"
+    - "template-repo/scripts/validate-codex-task-pack.py"
+    - "template-repo/process/definition-of-done.bugfix-feature-change.md"
+    - "template-repo/scenario-pack/16-done-closeout.md"
+    - "factory_template_only_pack/02-runbook-dlya-codex-factory-template.md"
 
 tasks:
   - id: "T-001"

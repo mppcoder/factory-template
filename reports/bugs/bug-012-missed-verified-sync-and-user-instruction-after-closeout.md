@@ -51,4 +51,4 @@ factory-template
 Да, потому что это reusable process failure в source-of-truth repo фабрики: existing rules were present, but execution still escaped the required closeout path.
 
 ## Статус
-зафиксировано
+исправлен

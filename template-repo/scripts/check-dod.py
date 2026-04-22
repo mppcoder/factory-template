@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 from __future__ import annotations
 import re
+import subprocess
 import sys
 from pathlib import Path
 import yaml
@@ -14,6 +15,7 @@ CLASS = ROOT / '.chatgpt' / 'classification.md'
 BUGFLOW = ROOT / '.chatgpt' / 'bugflow-status.yaml'
 BUGDIR = ROOT / 'reports' / 'bugs'
 FEEDBACK = ROOT / 'reports' / 'factory-feedback'
+SYNC_REPORT = ROOT / '.factory-runtime' / 'reports' / 'verified-sync-report.yaml'
 CLASSES_FILE = ROOT / 'change-classes.yaml'
 if not CLASSES_FILE.exists():
     CLASSES_FILE = Path(__file__).resolve().parents[1] / 'change-classes.yaml'
@@ -66,6 +68,26 @@ def meaningful(path: Path, min_lines: int = 3) -> bool:
     return len(lines) >= min_lines
 
 
+def has_origin_remote(root: Path) -> bool:
+    proc = subprocess.run(
+        ['git', 'remote', 'get-url', '--push', 'origin'],
+        cwd=root,
+        text=True,
+        capture_output=True,
+        check=False,
+    )
+    if proc.returncode == 0 and proc.stdout.strip():
+        return True
+    proc = subprocess.run(
+        ['git', 'remote', 'get-url', 'origin'],
+        cwd=root,
+        text=True,
+        capture_output=True,
+        check=False,
+    )
+    return proc.returncode == 0 and bool(proc.stdout.strip())
+
+
 if not meaningful(VERIFY):
     print('DOD НЕ ПРОЙДЕН')
     print('- verification-report.md заполнен слишком слабо')
@@ -91,4 +113,20 @@ if defect_active and bugflow.get('factory_feedback_required', False) and not fee
     print('DOD НЕ ПРОЙДЕН')
     print('- defect reusable, но отсутствует factory feedback в reports/factory-feedback/')
     raise SystemExit(1)
+if has_origin_remote(ROOT):
+    if not SYNC_REPORT.exists():
+        print('DOD НЕ ПРОЙДЕН')
+        print('- при настроенном origin требуется .factory-runtime/reports/verified-sync-report.yaml')
+        raise SystemExit(1)
+    sync_report = yaml.safe_load(SYNC_REPORT.read_text(encoding='utf-8')) or {}
+    status = str(sync_report.get('status', '')).strip()
+    push_status = str(sync_report.get('push_status', '')).strip()
+    if status not in {'pushed', 'no-op'}:
+        print('DOD НЕ ПРОЙДЕН')
+        print(f'- verified sync report должен иметь status `pushed` или `no-op`, сейчас `{status or "empty"}`')
+        raise SystemExit(1)
+    if status == 'pushed' and push_status != 'success':
+        print('DOD НЕ ПРОЙДЕН')
+        print(f'- verified sync report для pushed-state должен иметь push_status `success`, сейчас `{push_status or "empty"}`')
+        raise SystemExit(1)
 print('DOD ПРОЙДЕН')

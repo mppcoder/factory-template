@@ -212,6 +212,7 @@ bash PRE_RELEASE_AUDIT.sh
 - используй `EXECUTE_RELEASE_DECISION.sh` вместо ручного смешивания verify, tag и publish;
 - перед запуском прогоняй validators контура.
 - если после уже green verify остался только low-risk follow-up diff, не откладывай commit: используй lightweight follow-up mode и синхронизируй изменение сразу.
+- если `origin` уже настроен и prereqs green, завершение change без `VALIDATE_VERIFIED_SYNC_PREREQS.sh` -> `VERIFIED_SYNC.sh` допустимо только при явно зафиксированном реальном blocker.
 
 ---
 
@@ -228,6 +229,8 @@ bash PRE_RELEASE_AUDIT.sh
 7. нужно ли обновление source-pack / scenario-pack / codex-task-pack.
 
 Если в завершении остается внешний шаг, следующий шаг пользователя, возврат в ChatGPT Project, ожидание verify/release decision или ожидание внешнего артефакта, финальный ответ обязан завершаться блоком `## Инструкция пользователю`.
+
+Если verified sync уже доступен, `done_complete` нельзя считать честно достигнутым до появления успешного runtime sync report или явного документированного блокера.
 
 Этот footer не должен вытеснять внутренний handoff, если internal repo follow-up еще не завершен.
 

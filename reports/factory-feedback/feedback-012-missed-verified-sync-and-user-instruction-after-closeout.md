@@ -30,3 +30,6 @@
 1. Для change с green verify и configured remote final closeout automatically runs canonical verified sync or explicitly explains the real blocker.
 2. Если change затрагивает downstream-consumed content, `## Инструкция пользователю` появляется в том же финальном ответе без follow-up reminder.
 3. Если такое правило всё же нарушено, defect capture создаётся immediately in the same remediation/closeout turn, а не только после отдельного напоминания пользователя.
+
+## Статус
+исправлено в source-of-truth repo через DoD/checklist/closeout guardrails.

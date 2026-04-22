@@ -126,6 +126,9 @@ def main() -> int:
 - [ ] Если был найден defect, создать или обновить bug report
 - [ ] Проверить `.chatgpt/task-launch.yaml`
 - [ ] Проверить `.chatgpt/normalized-codex-handoff.md`
+- [ ] Если `origin` настроен и verify green, прогнать `bash VALIDATE_VERIFIED_SYNC_PREREQS.sh`
+- [ ] Если prereqs green и diff допустим, прогнать `bash VERIFIED_SYNC.sh` до финального closeout
+- [ ] Если verified sync не выполнен, явно зафиксировать реальный blocker и не помечать change как `done`
 
 ## Impact classification
 
@@ -148,6 +151,7 @@ def main() -> int:
 - [ ] Пошаговая инструкция по окнам
 - [ ] Что прислать обратно после внешнего шага
 - [ ] Completion package выдан в том же финальном ответе, без дополнительного напоминания пользователя
+- [ ] Если есть pending external step, финальный ответ действительно заканчивается блоком `## Инструкция пользователю`
 """
 
     handoff_policy = policy.get('handoff_policy', 'forbidden')

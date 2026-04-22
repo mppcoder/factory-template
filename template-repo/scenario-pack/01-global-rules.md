@@ -42,3 +42,5 @@
 Если обязательный `## Инструкция пользователю` или completion package появляется только после дополнительного запроса пользователя, это считается reusable process defect completion/handoff layer.
 
 Если Codex перекладывает на пользователя внутренние repo-операции вроде export refresh, boundary-actions generation, manifest refresh или сборки patch/export artifacts, это считается reusable process defect boundary/completion layer.
+
+Если verify уже green, `origin` настроен и verified sync технически доступен, но ответ завершает change без canonical `VERIFIED_SYNC.sh` и без явного блокера, это считается reusable process defect closeout/sync layer.

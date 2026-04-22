@@ -12,6 +12,13 @@
 
 Если остается хотя бы один pending external/user step, closeout без блока `## Инструкция пользователю` недопустим.
 
+Если `origin` настроен, verify green и canonical verified sync технически доступен, closeout без `VERIFIED_SYNC.sh` недопустим.
+Вместо этого нужно:
+- либо выполнить `VALIDATE_VERIFIED_SYNC_PREREQS.sh` и `VERIFIED_SYNC.sh`;
+- либо явно зафиксировать реальный blocker, почему sync сейчас невозможен.
+
+Ответ, который при доступном sync заканчивается только summary/done-report без verified sync или без явного blocker, считается неполным closeout.
+
 Closeout без handoff допустим только при реальном отсутствии внутренней работы внутри repo.
 
 Если остаются internal repo follow-up задачи, user-only closeout запрещен. К таким задачам относятся:

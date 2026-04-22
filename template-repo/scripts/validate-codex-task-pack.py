@@ -123,6 +123,9 @@ def main() -> int:
     ensure_contains(checklist, "impact.delete_before_replace", errors, "done-checklist.md")
     ensure_contains(checklist, "## Completion Package For Repo-First Instruction Changes", errors, "done-checklist.md")
     ensure_contains(checklist, "Completion package выдан в том же финальном ответе", errors, "done-checklist.md")
+    ensure_contains(checklist, "bash VALIDATE_VERIFIED_SYNC_PREREQS.sh", errors, "done-checklist.md")
+    ensure_contains(checklist, "bash VERIFIED_SYNC.sh", errors, "done-checklist.md")
+    ensure_contains(checklist, "финальный ответ действительно заканчивается блоком `## Инструкция пользователю`", errors, "done-checklist.md")
     ensure_contains(checklist, ".chatgpt/task-launch.yaml", errors, "done-checklist.md")
     ensure_contains(checklist, ".chatgpt/normalized-codex-handoff.md", errors, "done-checklist.md")
     for item in [
