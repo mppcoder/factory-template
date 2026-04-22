@@ -16,6 +16,7 @@
 ## Verified Layers
 
 - release metadata and version sync
+- root release notes source and release-facing reference package
 - launcher and generated project scaffolding
 - structural validators
 - defect-capture / alignment / handoff checks
@@ -27,6 +28,7 @@
 - repo-first ChatGPT Project instruction layer
 - automatic phase detection
 - automatic phase detection self-test
+- consistency between README, release docs, scenario-pack guidance and actual repo structure
 
 ## Known Residual Limits
 

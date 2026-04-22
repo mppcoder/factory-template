@@ -1,44 +1,59 @@
 change:
-  id: "chg-20260422-005"
-  title: "Fix DoD validator for nested example fixtures"
-  class: "small-fix"
-  execution_mode: "single-pass"
-  type: "brownfield"
-  status: "done"
-  priority: "medium"
-  summary: "Исправить `check-dod.py`, чтобы nested example fixtures внутри внешнего repo не наследовали `origin` родительского git root и не получали ложное требование verified-sync-report."
+  id: chg-20260422-006
+  title: Prepare release-facing package and ship 2.4.3
+  class: feature
+  execution_mode: codex-led
+  type: brownfield
+  status: done
+  priority: high
+  summary: Smoke-test изменение для проверки фабрики.
   outputs:
-    - "template-repo/scripts/check-dod.py"
-    - "reports/bugs/bug-016-check-dod-inherits-parent-origin-for-nested-example-fixtures.md"
-    - "reports/factory-feedback/feedback-016-check-dod-inherits-parent-origin-for-nested-example-fixtures.md"
-    - ".chatgpt/task-index.yaml"
-    - ".chatgpt/codex-input.md"
-    - ".chatgpt/verification-report.md"
-    - ".chatgpt/done-report.md"
-
+  - README.md
+  - docs/template-architecture-and-event-workflows.md
+  - RELEASE_NOTES.md
+  - VERSION.md
+  - CHANGELOG.md
+  - CURRENT_FUNCTIONAL_STATE.md
+  - template-repo/VERSION.md
+  - template-repo/CHANGELOG.md
+  - meta-template-project/RELEASE_NOTES.md
+  - packaging/sources/sources-profiles.yaml
+  - .chatgpt/task-index.yaml
+  - .chatgpt/task-launch.yaml
+  - .chatgpt/codex-input.md
+  - .chatgpt/codex-context.md
+  - .chatgpt/codex-task-pack.md
+  - .chatgpt/release-decision.yaml
+  - .chatgpt/verification-report.md
+  - .chatgpt/done-report.md
 tasks:
-  - id: "T-001"
-    title: "Зафиксировать false positive в DoD validator"
-    type: "defect-capture"
-    risk_level: "low"
-    executor: "developer"
-    depends_on: []
-    outputs:
-      - "reports/bugs/bug-016-check-dod-inherits-parent-origin-for-nested-example-fixtures.md"
-      - "reports/factory-feedback/feedback-016-check-dod-inherits-parent-origin-for-nested-example-fixtures.md"
-    acceptance:
-      - "bug report воспроизводит inherited parent origin path"
-      - "factory feedback описывает reusable validator risk"
-
-  - id: "T-002"
-    title: "Починить git-root boundary в check-dod"
-    type: "automation"
-    risk_level: "medium"
-    executor: "developer"
-    depends_on:
-      - "T-001"
-    outputs:
-      - "template-repo/scripts/check-dod.py"
-    acceptance:
-      - "nested examples больше не требуют verified-sync-report из-за origin родительского repo"
-      - "EXAMPLES_TEST, MATRIX_TEST, SMOKE_TEST и PRE_RELEASE_AUDIT проходят на чистой базе"
+- id: T-001
+  title: Провести release-facing discovery и gap-analysis
+  type: analysis
+  risk_level: medium
+  executor: developer
+  depends_on: []
+  outputs:
+  - README.md
+  - docs/template-architecture-and-event-workflows.md
+  - RELEASE_NOTES.md
+  acceptance:
+  - канонические release-facing документы определены без параллельных источников истины
+  - gap-analysis отражает отсутствующие и расходящиеся release-facing слои
+- id: T-002
+  title: Синхронизировать versioning, release docs и closeout artifacts под 2.4.3
+  type: release-followup
+  risk_level: medium
+  executor: developer
+  depends_on:
+  - T-001
+  outputs:
+  - VERSION.md
+  - CHANGELOG.md
+  - template-repo/VERSION.md
+  - template-repo/CHANGELOG.md
+  - meta-template-project/RELEASE_NOTES.md
+  - .chatgpt/release-decision.yaml
+  acceptance:
+  - release docs и manifests согласованы на версии 2.4.3
+  - repo готов к verify, verified sync и release execution

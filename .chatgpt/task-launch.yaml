@@ -1,31 +1,33 @@
 launch:
-  timestamp_utc: '2026-04-22T12:10:59+00:00'
+  timestamp_utc: '2026-04-22T12:16:14Z'
   launch_unit: new-task-launch
   launch_source: chatgpt-handoff
   router_layer: executable
-  task_class: build
+  task_class: deep
   task_class_reasons:
-  - 'keyword hit: fix'
-  - 'keyword hit: исправ'
-  - 'explicit reasoning/model override matched default profile: build'
-  selected_profile: build
+  - 'explicit handoff marked task as deep release-facing normalization'
+  - 'scope spans architecture docs, release layer, closeout artifacts and release follow-up'
+  selected_profile: deep
   selected_model: gpt-5.4
-  selected_reasoning_effort: medium
-  selected_plan_mode_reasoning_effort: medium
-  project_profile: unknown-project-profile
-  selected_scenario: 00-master-router.md
-  pipeline_stage: done
+  selected_reasoning_effort: high
+  selected_plan_mode_reasoning_effort: high
+  project_profile: factory-template
+  selected_scenario: 00-master-router.md -> change/release-docs-and-release-followup
+  pipeline_stage: definition-and-release-planning
   artifacts_to_update:
   - .chatgpt/codex-input.md
   - .chatgpt/codex-context.md
   - .chatgpt/codex-task-pack.md
   - .chatgpt/verification-report.md
   - .chatgpt/done-report.md
-  - reports/bugs/
-  - reports/factory-feedback/
-  handoff_allowed: yes (forbidden)
-  defect_capture_path: reproduce -> evidence -> bug report -> layer classification
-    -> factory feedback if reusable -> remediation
+  - RELEASE_NOTES.md
+  - CHANGELOG.md
+  - VERSION.md
+  - release-facing project documentation
+  - source-pack / curated sources / export manifests
+  - release bundle artifacts
+  handoff_allowed: yes
+  defect_capture_path: not-required-by-text-signal
   task_summary: '# Codex handoff input'
   launch_boundary_rule: Выбор модели и reasoning mode считается надежным только на
     новом запуске Codex для новой задачи.
@@ -39,7 +41,7 @@ launch:
   - scripts/bootstrap-codex-task.py
   - scripts/launch-codex-task.sh
   - .codex/config.toml named profiles
-  launch_command: codex --profile build
+  launch_command: codex --profile deep
   direct_self_handoff_required: false
   direct_self_handoff_completed: false
   requested_task_class: null

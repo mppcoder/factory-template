@@ -3,8 +3,8 @@
 ## Scope
 
 - Repo: `factory-template`
-- Current release line: `2.4.2`
-- Current working section in changelog: `2.4.2`
+- Current release line: `2.4.3`
+- Current working section in changelog: `2.4.3`
 
 ## Intent Signals
 
@@ -18,11 +18,13 @@
 - [x] Проверить `CURRENT_FUNCTIONAL_STATE.md`
 - [x] Проверить `TEST_REPORT.md`
 - [x] Проверить `VERIFY_SUMMARY.md`
+- [x] Проверить `RELEASE_NOTES.md`
 - [x] Проверить `RELEASE_NOTE_TEMPLATE.md`
 - [x] Проверить `.chatgpt/release-decision.yaml`
 - [x] При необходимости свериться с `COMMIT_MESSAGE_GUIDE.md`
 - [x] Проверить `meta-template-project/RELEASE_NOTES.md`
 - [x] Убедиться, что release note отражает изменения в template/runtime/policy layer
+- [x] Убедиться, что `RELEASE_NOTES.md` является notes source в `.chatgpt/release-decision.yaml`
 
 ## Required Commands
 

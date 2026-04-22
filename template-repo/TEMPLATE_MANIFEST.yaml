@@ -1,4 +1,4 @@
-version: 2.4.2
+version: 2.4.3
 template_name: template-repo
 language: ru
 supports_modes:
@@ -10,4 +10,4 @@ supports_project_presets:
 - integration-project
 - audit-only
 - brownfield-dogfood-codex-assisted
-factory_version: 2.4.2
+factory_version: 2.4.3

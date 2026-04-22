@@ -1,5 +1,10 @@
 # Общая история изменений фабрики
 
+## 2.4.3
+- собран root-level `RELEASE_NOTES.md` и включён в release executor / release pack
+- канонический reference-doc по архитектуре, дереву проекта и workflow расширен до полного release-facing пакета
+- release bundle, manifests и `.chatgpt` closeout-артефакты синхронизированы под `factory-v2.4.3`
+
 ## 2.4.2
 - в релиз добавлен direct reference profile `core-hot-15`
 - archive/direct reference generation переведены на один declarative manifest

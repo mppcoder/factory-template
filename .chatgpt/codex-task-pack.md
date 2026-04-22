@@ -1,49 +1,49 @@
 # Task pack для Codex
 
 ## Change ID
-chg-20260422-005
+chg-20260422-006
 
 ## Заголовок
-Fix DoD validator for nested example fixtures
+Prepare release-facing package and ship patch release 2.4.3
 
 ## Класс изменения
-small-fix
+feature
 
 ## Режим выполнения
-single-pass
+codex-led
 
 ## Launch source
 chatgpt-handoff
 
 ## Task class
-build
+deep
 
 ## Selected profile
-build
+deep
 
 ## Selected model
 gpt-5.4
 
 ## Selected reasoning effort
-medium
+high
 
 ## Selected plan mode reasoning
-medium
+high
 
 ## Project profile
-unknown-project-profile
+factory-template
 
 ## Selected scenario
-00-master-router.md
+00-master-router.md -> change/release-docs-and-release-followup
 
 ## Pipeline stage
-done
+definition-and-release-planning -> done
 
 ## Handoff allowed
-yes (forbidden)
+yes
 
 ## Defect capture path
-reproduce -> evidence -> bug report -> layer classification -> factory feedback if reusable -> remediation
+not-required-by-text-signal; incidental defects still require capture if discovered
 
 ## Repo Rules Priority
 При исполнении handoff приоритет у правил repo: `AGENTS`, runbook, scenario-pack, policy files и других канонических файлов этого репозитория.
@@ -54,20 +54,24 @@ reproduce -> evidence -> bug report -> layer classification -> factory feedback 
 
 ## Контекст
 - Repo: `factory-template`
-- Проведен генеральный audit проекта на целостность, полноту и соответствие.
-- Главный реальный defect найден в `template-repo/scripts/check-dod.py`: validator наследовал `origin` родительского git repo для nested example fixtures и выдавал false positive по `verified-sync-report`.
+- Требуется подготовить полный release-facing пакет по пункту 12 и выпустить новый patch-релиз.
+- В repo уже есть сильный канон по scenario-pack, runbooks, launcher и release automation, но root-level `RELEASE_NOTES.md` отсутствовал, а release-facing описания были распределены между несколькими документами.
 
 ## Что должен сделать исполнитель
-- Зафиксировать reusable defect и factory feedback.
-- Исправить `check-dod.py`, чтобы remote-проверка срабатывала только когда проверяемый путь сам является git repo root.
-- Подтвердить исправление полным suite:
+- Провести discovery и gap-analysis по release-facing документации.
+- Нормализовать канонический пакет вокруг `README.md`, `docs/template-architecture-and-event-workflows.md`, `RELEASE_NOTES.md`, versioning layer и `.chatgpt` closeout artifacts.
+- Синхронизировать `VERSION.md`, `CHANGELOG.md`, manifests, template/meta release docs и source/export profiles под новый релиз.
+- Подтвердить изменения полным suite:
   - `EXAMPLES_TEST.sh`
   - `MATRIX_TEST.sh`
   - `SMOKE_TEST.sh`
   - `VALIDATE_FACTORY_TEMPLATE_OPS.sh`
   - `PRE_RELEASE_AUDIT.sh`
+  - `VALIDATE_VERIFIED_SYNC_PREREQS.sh`
+  - `VALIDATE_RELEASE_DECISION.sh`
+  - `VALIDATE_RELEASE_NOTES_SOURCE.sh`
 
 ## Ограничения
-- Не маскировать проблему под правку example fixtures.
-- Не ослаблять verified-sync guard для реальных рабочих repo.
+- Не плодить параллельные источники истины по release notes и workflow.
+- Не заменять repo-first канон ad hoc release-файлами.
 - Приоритет у правил repo: `AGENTS`, runbook, scenario-pack и policy files репозитория.

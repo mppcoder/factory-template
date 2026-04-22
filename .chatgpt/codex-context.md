@@ -4,13 +4,13 @@
 factory-template
 
 ## Классификация
-Классификация еще не заполнена.
+release-facing docs normalization + release follow-up for factory-template root repo
 
 ## Текущий этап
 done
 
 ## Change ID
-chg-20260422-005
+chg-20260422-006
 
 ## Краткое резюме
-Исправить `check-dod.py`, чтобы nested example fixtures внутри внешнего repo не наследовали `origin` родительского git root и не получали ложное требование verified-sync-report.
+Собрать полный release-facing пакет по проекту `factory-template`, синхронизировать versioning/release docs/exports и выпустить patch-релиз `2.4.3`.

@@ -97,7 +97,7 @@ profiles:
       - template-repo/TEMPLATE_MANIFEST.yaml
       - factory_template_only_pack/01-runbook-dlya-polzovatelya-factory-template.md
       - factory_template_only_pack/02-runbook-dlya-codex-factory-template.md
-      - factory_template_only_pack/04-chatgpt-project-sources-factory-template-20-cap.md
+      - RELEASE_NOTES.md
 
   bugfix_archive:
     export_name: sources-pack-bugfix-20

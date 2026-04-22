@@ -1,6 +1,20 @@
 # Журнал изменений шаблона
 
 ## [Unreleased]
+
+## [2.4.3] - 2026-04-22
+### Добавлено
+- root-level `RELEASE_NOTES.md` в factory root включен в канонический release-facing пакет и release/export layer
+- полный reference-doc по архитектуре, дереву проекта и workflow для `factory-template`
+
+### Изменено
+- template docs и release metadata синхронизированы с patch-релизом `2.4.3`
+- generated release-facing guidance теперь ожидает root `RELEASE_NOTES.md` как notes source в factory repo
+
+### Исправлено
+- устранён gap между release bundle, published notes source и обзорной release documentation
+
+## [2.4.2] - 2026-04-20
 ### Добавлено
 - reusable scripts `verified-sync` и `execute-release-decision` для generated project automation
 - templates для `release-decision`, `sync-report` и `release-report`
@@ -25,22 +39,10 @@
 - устранен template defect: routing по типу задачи больше не сводится к одному static profile без launch-time фиксации
 - устранен template process gap, при котором direct task мог не показывать self-handoff явно в первом substantive ответе
 
-## [2.4.2] - 2026-04-20
+## [2.4.1] - 2026-04-20
 ### Изменено
 - template layer синхронизирован с repo-first режимом для ChatGPT Projects
 - generated guidance теперь требует сначала читать GitHub repo и `00-master-router.md`
-
-## [2.4.1] - 2026-04-20
-### Добавлено
-- профиль `brownfield-dogfood-codex-assisted` для dogfood-сценария brownfield without repo
-- класс изменения `brownfield-stabilization` с поддержкой `hybrid` и `codex-led`
-- шаблонные `.codex` конфиги и подагенты для session-specific specialization внутри Codex; task-based routing для новых задач позже вынесен в launcher/router layer
-- workspace pack `vscode-codex-dogfood-bootstrap` для старта из одного окна VS Code с дальнейшим переходом на отдельные окна по проектам
-
-### Изменено
-- launcher теперь предлагает новый профиль и новый класс изменения
-- policy preset и scenario-pack расширены под evidence-first → stabilization → reconstructed repo → clean package flow
-
 
 ## [2.4.0] - 2026-04-16
 ### Изменено

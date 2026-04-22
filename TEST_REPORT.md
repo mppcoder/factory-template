@@ -1,4 +1,4 @@
-# TEST REPORT v2.4.2
+# TEST REPORT v2.4.3
 
 ## Что проверено
 - pre-release audit
@@ -15,6 +15,7 @@
 - automatic phase detection helper
 - synthetic phase detection self-test
 - repo-first ChatGPT Project instruction mode
+- release-facing reference package and canonical root release notes source
 
 ## Ожидаемое поведение на fresh scaffold
 Проходят structural / versioning / defect / alignment проверки.
@@ -43,18 +44,12 @@ Evidence / quality / DoD до смыслового наполнения арте
 - curated `sources-pack-core-20`, `sources-pack-release-20`, `sources-pack-bugfix-20` собираются из декларативного policy manifest.
 - boundary-actions guide генерируется из markdown template и проверяется вместе с ops-policy слоем.
 
-## Что вошло в релиз 2.4.2
-- синхронизированы root/template/meta-template/example версии и release labels;
-- `RELEASE_BUILD.sh` перестал использовать вручную вшитый legacy-id релиза;
-- prerelease-аудит усилен проверками version drift и запрещенных legacy-ссылок.
-- golden examples дополнительно синхронизированы по `project-origin.md`, чтобы versioning validator проходил end-to-end.
-- для `factory-template` добавлен декларативный ops-policy layer и его автоматический validator.
-- release-oriented pack теперь несет release-facing docs (`RELEASE_CHECKLIST.md`, `VERIFY_SUMMARY.md`, `RELEASE_NOTE_TEMPLATE.md`) вместо временного audit snapshot.
-- bugfix-oriented pack теперь включает handoff/feedback validators, которые реально нужны для drift-исправлений.
-- policy layer теперь хранит `default_phase`, phase-specific recommendation matrix и detection rules для Sources upload.
-- policy layer теперь хранит `default_phase`, phase detection rules и recommendation matrix для reference/export packs.
-- archive/reference pack generation теперь строятся из единого declarative manifest.
-- ChatGPT Project переведён на repo-first режим с обязательным чтением `00-master-router.md` из GitHub repo.
+## Что вошло в релиз 2.4.3
+- собран root-level `RELEASE_NOTES.md` и включён в release-facing канон;
+- `docs/template-architecture-and-event-workflows.md` теперь покрывает функционал, архитектуру, дерево проекта и полный workflow map;
+- `README.md`, `CURRENT_FUNCTIONAL_STATE.md`, `VERIFY_SUMMARY.md`, `RELEASE_CHECKLIST.md` и `.chatgpt` closeout artifacts синхронизированы под один release task;
+- `sources-pack-release-20` и pre-release audit включают новый root release notes layer;
+- template/meta/root versioning и release metadata синхронизированы под `2.4.3`.
 
 ## Известные ограничения
 - `MATRIX_TEST.sh` остаётся representative prerelease runner, а не exhaustive full-matrix coverage для всех 22 допустимых комбинаций;

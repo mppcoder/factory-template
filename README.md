@@ -1,4 +1,4 @@
-# Русское ядро фабрики проектов v2.4.2
+# Русское ядро фабрики проектов v2.4.3
 
 Это стабилизационный релиз фабрики проектов для связки:
 
@@ -39,14 +39,15 @@
 
 Запрещена плоская раскладка вспомогательных repo и служебных каталогов прямо в `/projects`.
 
-Единая визуальная схема фабрики и подробные workflows по ключевым событиям собраны в:
+Канонический release-facing reference по архитектуре, дереву проекта и workflow собран в:
 
 - `docs/template-architecture-and-event-workflows.md`
+- `RELEASE_NOTES.md`
 
 ## Подготовка после распаковки
 
 ```bash
-cd factory-v2.4.2
+cd factory-v2.4.3
 bash POST_UNZIP_SETUP.sh
 bash MATRIX_TEST.sh
 bash CLEAN_VERIFY_ARTIFACTS.sh
@@ -227,20 +228,19 @@ bash PHASE_DETECTION_TEST.sh
 - временные каталоги smoke/matrix прогонов;
 - логи и служебные следы локальной сборки.
 
-## Что нового в релизе 2.4.2
-- добавлен declarative direct reference profile `core-hot-15` для ежедневной работы в ChatGPT Project;
-- добавлен cold/reference remainder archive `core-cold-5` для hybrid-схемы без дублей;
-- canonical archive `sources-pack-core-20` зафиксирован как steady-work snapshot;
-- export, validation и boundary guidance теперь поддерживают hybrid-схему `direct hot-set + cold archive remainder + canonical archive`;
-- release metadata и build output синхронизированы под имя `factory-v2.4.2`.
+## Что нового в релизе 2.4.3
+- собран единый release-facing пакет по самому `factory-template`, а не только по generated project контурам;
+- `docs/template-architecture-and-event-workflows.md` теперь является каноническим документом по архитектуре, дереву проекта и ключевым workflow;
+- добавлен root-level `RELEASE_NOTES.md` как канонический источник публикуемых release notes;
+- release docs, manifests, source/export profiles и closeout artifacts синхронизированы под `factory-v2.4.3`;
+- release bundle и downstream completion contour теперь опираются на один и тот же набор канонических release-facing файлов.
 
-## Базовый функционал ветки 2.4.2
-- введен обязательный defect-capture layer;
-- добавлены process-файлы по обработке дефектов и DoD для bugfix/feature/change;
-- добавлены шаблоны bug report, factory feedback и ChatGPT handoff для дефектов;
-- в generated project появились `reports/bugs/`, `reports/factory-feedback/`, `tasks/chatgpt/`, `tasks/codex/`;
-- Codex task pack теперь умеет включать обязательный bug-capture block;
-- DoD учитывает defect flow.
+## Базовый функционал ветки 2.4.3
+- `factory-template` поддерживает greenfield, brownfield без repo и brownfield с repo в одном repo-first контуре;
+- advisory/policy layer и executable routing layer остаются явным образом разделены;
+- defect-capture, handoff, self-handoff, verification, release-followup и completion package описаны как обязательные контуры;
+- generated projects продолжают получать единый template/versioning/documentation layer;
+- release-facing docs и packaging layer теперь описывают не только инструменты, но и полный жизненный цикл выпуска релиза.
 
 ## Известные ограничения
 - quality-валидация остаётся эвристической, а не семантической;

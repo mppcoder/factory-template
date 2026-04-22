@@ -1,5 +1,10 @@
 # Журнал изменений мета-проекта
 
+## [2.4.3] - 2026-04-22
+### Изменено
+- meta-template release notes и version layer синхронизированы с patch-релизом `2.4.3`
+- release-facing описание фабрики теперь опирается на root `RELEASE_NOTES.md` и расширенный architecture/workflow reference doc
+
 ## [2.4.2] - 2026-04-20
 ### Изменено
 - релизный контур синхронизирован под patch-релиз `2.4.2`

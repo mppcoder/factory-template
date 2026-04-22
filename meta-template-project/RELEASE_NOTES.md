@@ -1,15 +1,12 @@
 # Журнал изменений
 
 ## Unreleased
-- зафиксирован release-followup для factory-template defect remediation из `a9b05c0`
-- reusable process gap закрыт: inline Codex handoff теперь обязателен при допустимом handoff и достаточной определенности задачи
-- reusable process gap закрыт: финальный блок `Инструкция пользователю` теперь обязателен при любом pending user/external step
-- reusable process gap закрыт: internal repo follow-up после remediation/push больше не должен ошибочно уходить в user-only closeout
-- reusable process hardening добавил completion package для factory ChatGPT Project instruction, downstream repo sync и battle ChatGPT Project instructions
-- reusable process hardening добавил immediate completion-package rule: обязательная инструкция пользователю должна появляться в том же финальном ответе
-- reusable process hardening закрепил, что internal prepare/export commands для repo-first instruction completion package выполняет Codex внутри repo, а не пользователь
-- downstream process behavior обновлен без изменения release semantics: автопубликация релиза не добавлена, release discipline сохранена
-- добавлен separate contour для auto commit/push после successful verify и отдельный release executor после явного release decision
+
+## 2.4.3
+- собран полный release-facing пакет по самому `factory-template`
+- добавлен root-level `RELEASE_NOTES.md` как canonical published notes source
+- архитектурный reference-doc теперь покрывает функционал, дерево repo и все ключевые workflow от intake до выпуска релиза
+- release-facing docs, source/export profiles и closeout artifacts синхронизированы под `factory-v2.4.3`
 
 ## 2.4.2
 - ChatGPT Project переведён на repo-first режим с обязательным чтением GitHub repo и `00-master-router.md`

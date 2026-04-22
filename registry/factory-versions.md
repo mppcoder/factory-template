@@ -1,5 +1,6 @@
 # Версии фабрики
 
+- 2.4.3 — patch-релиз: полный release-facing пакет, canonical `RELEASE_NOTES.md` и расширенный architecture/workflow reference layer
 - 2.4.2 — patch-релиз: declarative direct reference profile, hybrid hot/cold strategy и repo-first ChatGPT Project guidance
 - 2.4.1 — patch-релиз: ops-policy layer, phase detection, curated packs и release-facing синхронизация
 - 2.4.0 — финальный релиз: smoke-fix, финальный version alignment и подтвержденные release-gates

@@ -9,6 +9,7 @@
 - drift detection, patch export и safe apply для разрешенных зон
 - golden examples и scaffold-only examples
 - curated reference/export packs, boundary-actions generator и ops-policy layer
+- единый release-facing reference package по функционалу, архитектуре, дереву проекта и workflow
 
 ## Что работает стабильно
 - создание fresh scaffold через launcher
@@ -41,6 +42,8 @@
 - direct task теперь дополнительно требует visible self-handoff block в первом substantive ответе, а не только artifact-level фиксацию
 - репо больше не считает один static profile или старую сессию Codex надежной единицей маршрутизации
 - в repo появился единый visual/workflow reference layer по самому шаблону, greenfield, brownfield и downstream update contour
+- root-level `RELEASE_NOTES.md` теперь является каноническим source для опубликованных release notes и release executor
+- release-facing документация нормализована вокруг одного reference-doc и больше не зависит от разрозненных описаний в runbooks и release-note draft
 
 ## Что работает частично
 - matrix runner как единый источник истины
@@ -50,6 +53,7 @@
 - auto GitHub Release publication зависит от доступности и авторизации `gh` CLI в конкретной среде
 - phase-aware export/reference packs остаются вспомогательным слоем, а не каноническим хранилищем сценариев
 - эвристика классификации `task_class` пока keyword-based, а не semantic classifier
+- release-facing описание дерева проекта и workflow требует дальнейшего поддержания в sync при каждой новой process-доработке шаблона
 
 ## Что еще не закрыто
 - финальное dogfooding на реальных greenfield и brownfield проектах

@@ -1,6 +1,27 @@
 # Журнал изменений фабрики
 
 ## [Unreleased]
+
+## [2.4.3] - 2026-04-22
+### Добавлено
+- root-level `RELEASE_NOTES.md` как канонический источник публикуемых release notes и release executor notes source
+- полный release-facing reference package по `factory-template`: функционал, архитектура, дерево проекта и ключевые workflows
+- явное описание workflow `intake / classification`, `scenario routing`, `defect-capture`, `handoff`, `self-handoff`, `remediation`, `verification`, `release-followup`, `completion package`, `incidental bugs` и `release`
+- release bundle artifacts и source/export manifests, синхронизированные с новым release-facing пакетом
+
+### Изменено
+- `docs/template-architecture-and-event-workflows.md` расширен до канонического reference-doc вместо частично обзорной заметки
+- `README.md`, `CURRENT_FUNCTIONAL_STATE.md`, `VERIFY_SUMMARY.md`, `TEST_REPORT.md` и release checklist выровнены под один release-facing канон
+- `RELEASE_NOTE_TEMPLATE.md` теперь является шаблоном подготовки следующего релиза, а не вторым опубликованным источником истины
+- `sources-pack-release-20` теперь включает `RELEASE_NOTES.md` как часть канонического release-facing набора
+- versioning layer и template/meta manifests синхронизированы под `2.4.3`
+
+### Исправлено
+- закрыт release-facing gap: в root repo отсутствовал канонический `RELEASE_NOTES.md`
+- устранено дублирование роли release notes между draft-template и фактическим notes source
+- `.chatgpt` closeout artifacts больше не описывают прошлый bugfix и синхронизированы с текущим release task
+
+## [2.4.2] - 2026-04-20
 ### Добавлено
 - отдельный contour `VERIFIED_SYNC.sh` для auto commit/push после successful verify
 - отдельный contour `EXECUTE_RELEASE_DECISION.sh` для tag/release path только после явного release decision
@@ -46,7 +67,7 @@
 - устранен process gap, позволявший direct task пропустить явный self-handoff в самом ответе Codex и перейти к работе по неявному контексту
 - подтверждено, что автопубликация релиза не добавлялась и existing release discipline сохранена
 
-## [2.4.2] - 2026-04-20
+## [2.4.1] - 2026-04-20
 ### Добавлено
 - declarative manifest `packaging/sources/sources-profiles.yaml` для archive/direct reference profiles
 - direct reference profile `core-hot-15` для ежедневной работы в ChatGPT Project
@@ -57,41 +78,15 @@
 - boundary-actions и summary теперь рекомендуют `core-hot-15` как постоянный direct reference set
 - `sources-pack-core-20` явно закреплён как canonical archive snapshot, а не как единственный ежедневный способ загрузки
 
-## [2.4.1] - 2026-04-20
-### Добавлено
-- профиль `brownfield-dogfood-codex-assisted` для dogfood-сценария brownfield without repo
-- класс изменения `brownfield-stabilization` с поддержкой `hybrid` и `codex-led`
-- шаблонные `.codex` конфиги и подагенты для session-specific specialization внутри Codex; task-based routing для новых задач позже вынесен в отдельный launcher/router layer
-- workspace pack `vscode-codex-dogfood-bootstrap` для старта из одного окна VS Code с дальнейшим переходом на отдельные окна по проектам
-- декларативный `factory-template-ops-policy.yaml` для curated export/reference packs и boundary-actions settings
-- validator `VALIDATE_FACTORY_TEMPLATE_OPS.sh` / `tools/validate_factory_template_ops_policy.py`
-- validator `template-repo/scripts/validate-codex-task-pack.py` для generated Codex handoff pack
-- semantic checks для `sources-pack-core-20`, `sources-pack-release-20` и `sources-pack-bugfix-20` внутри `tools/validate_factory_template_ops_policy.py`
-- phase-aware recommendation matrix для `controlled-fixes`, `release` и `bugfix-drift` внутри `factory-template-ops-policy.yaml`
-- automatic phase detection helper `DETECT_FACTORY_TEMPLATE_PHASE.sh` / `tools/factory_template_phase_detection.py`
-- composite release-intent detection через checked markers в `RELEASE_CHECKLIST.md`
-- bugfix-intent detection через document signals в `reports/bugs/*.md`
-- synthetic self-test `PHASE_DETECTION_TEST.sh` для `controlled-fixes / release / bugfix-drift`
-
+## [2.4.0] - 2026-04-16
 ### Изменено
-- launcher теперь предлагает новый профиль и новый класс изменения
-- policy preset и scenario-pack расширены под evidence-first → stabilization → reconstructed repo → clean package flow
-- curated export/reference packs и boundary-actions generator теперь собираются из policy/template слоя, а не из хардкода
-- `PRE_RELEASE_AUDIT.sh`, `SMOKE_TEST.sh` и `MATRIX_TEST.sh` теперь учитывают ops-policy validator
-- feedback ingest теперь явно фиксирует режим `validated` / `allow-incomplete` в `incoming-learnings/INDEX.md`
-- `create-codex-task-pack.py` теперь корректно подхватывает `active_scenarios` и `scenario_pack.entrypoint` из `active-scenarios.yaml`
-- `sources-pack-release-20` теперь ориентирован на release-facing docs, а `sources-pack-bugfix-20` включает feedback/handoff validators
-- `SUMMARY.md` и boundary-actions guide теперь публикуют текущую phase recommendation и матрицу выбора pack'ов
-- phase recommendation теперь вычисляется из `git` changed paths и policy rules, а не переключается вручную через `current_phase`
-- `release` phase теперь требует не только release-path changes, но и document intent signals из checklist
-- `bugfix-drift` phase теперь требует не только bug/validator path changes, но и document intent signals из bug reports
-- `PRE_RELEASE_AUDIT.sh` теперь включает synthetic phase detection self-test
+- подтвержден полный release-gate набор на чисто распакованном архиве: smoke, examples и matrix
+- стабилизационный smoke-fix включен в основной финальный пакет
+- release metadata переведены из `2.4.0-rc2` в финальную `2.4.0`
 
 ### Исправлено
-- `tools/ingest_factory_feedback.py` больше не падает на runtime `NameError` при запуске validator перед ingest
-- `MATRIX_TEST.sh` теперь проверяет feedback validator и dry-run ingest path на generated project
-- очищены шумовые backlog/incoming-learning записи, появившиеся из placeholder feedback
-- `boundary-actions.md` больше не теряет route line из-за чтения неверного ключа `active-scenarios.yaml`
+- устранено зависание packaged `SMOKE_TEST.sh` за счет детерминированного наполнения smoke-артефактов через `tools/fill_smoke_artifacts.py`
+- финальный архив и внутренний root-folder синхронизированы по имени `factory-v2.4.0`
 
 
 ## [2.4.0] - 2026-04-16
