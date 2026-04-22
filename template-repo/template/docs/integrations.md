@@ -6,7 +6,7 @@
 
 Для проекта задайте repo-first правило:
 
-1. ChatGPT Project хранит только короткую инструкцию.
+1. В поле `Instructions` ChatGPT Project внесите только короткую repo-first инструкцию.
 2. На каждый запрос сначала открывается GitHub repo проекта.
 3. Первое обязательное чтение: `template-repo/scenario-pack/00-master-router.md`.
 4. Ответ формируется только после прохождения маршрута из router-сценария.

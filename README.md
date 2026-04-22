@@ -92,6 +92,9 @@ python3 template-repo/scripts/validate-codex-task-pack.py <working-project>
 
 - `mppcoder/factory-template`
 
+Во время первичной настройки ChatGPT Project это правило нужно внести именно в поле `Instructions` до первого рабочего запроса.
+В `Instructions` должен быть явно указан repo `mppcoder/factory-template`, обязательное чтение `template-repo/scenario-pack/00-master-router.md` и запрет на сценарии "из памяти" или из текста внутри Project.
+
 Риски этого контура:
 
 - если в ChatGPT Project останется старый текст про `Sources` или старый staging-workflow, агент может пойти по неверному workflow;

@@ -9,4 +9,4 @@
 - `PROJECT_BRIEF.md`
 - `CURRENT_FUNCTIONAL_STATE.md`
 
-Для ChatGPT Project используйте repo-first инструкцию: сценарии читаются из GitHub repo проекта, а не хранятся внутри самого проекта как source of truth.
+Для ChatGPT Project используйте repo-first инструкцию: её нужно внести в поле `Instructions`, а сценарии должны читаться из GitHub repo проекта, а не храниться внутри самого проекта как source of truth.
