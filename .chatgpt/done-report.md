@@ -22,6 +22,9 @@
   - `template-repo/scripts/codex_task_router.py` теперь умеет fallback на `template-repo/codex-routing.yaml`, если root-level `codex-routing.yaml` отсутствует
   - `create-codex-task-pack.py .` снова работает на самом `factory-template` root
   - `validate-codex-task-pack.py .` и `validate-codex-routing.py .` проходят на root
+- После этого отдельно оформлен ещё один process defect:
+  - `reports/bugs/bug-013-manual-verification-step-leaked-instead-of-autonomous-completion.md`
+  - `reports/factory-feedback/feedback-013-manual-verification-step-leaked-instead-of-autonomous-completion.md`
 
 ## Какие артефакты обновлены
 - `.chatgpt/*` для текущего change
@@ -51,6 +54,8 @@
 - `factory_template_only_pack/02-runbook-dlya-codex-factory-template.md`
 - `template-repo/template/.chatgpt/examples/done-report.example.md`
 - `template-repo/scripts/codex_task_router.py`
+- `reports/bugs/bug-013-manual-verification-step-leaked-instead-of-autonomous-completion.md`
+- `reports/factory-feedback/feedback-013-manual-verification-step-leaked-instead-of-autonomous-completion.md`
 
 ## Что осталось вне объёма
 - Массовое применение этих правок в уже созданных downstream project repos.

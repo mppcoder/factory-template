@@ -20,6 +20,7 @@
 - Process miss after initial closeout separately captured as reusable defect in `reports/bugs/bug-012-missed-verified-sync-and-user-instruction-after-closeout.md`.
 - Remediation for bug-012 works as intended: `check-dod.py` now blocks dishonest closeout without successful verified sync report and passes after required closeout artifacts are present.
 - Root-level routing/config drift is fixed: `create-codex-task-pack.py .` now successfully resolves profile selection through fallback routing spec and produced a valid task pack on `factory-template` root.
+- New reusable process miss separately captured in `reports/bugs/bug-013-manual-verification-step-leaked-instead-of-autonomous-completion.md`: internal verification leaked into user guidance instead of staying autonomous.
 
 ## Что не подтверждено или требует повторной проверки
 - Полный downstream sync в уже созданных боевых repo не выполнялся в рамках этого change.

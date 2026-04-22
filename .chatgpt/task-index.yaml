@@ -32,6 +32,8 @@ change:
     - "template-repo/process/definition-of-done.bugfix-feature-change.md"
     - "template-repo/scenario-pack/16-done-closeout.md"
     - "factory_template_only_pack/02-runbook-dlya-codex-factory-template.md"
+    - "reports/bugs/bug-013-manual-verification-step-leaked-instead-of-autonomous-completion.md"
+    - "reports/factory-feedback/feedback-013-manual-verification-step-leaked-instead-of-autonomous-completion.md"
 
 tasks:
   - id: "T-001"
