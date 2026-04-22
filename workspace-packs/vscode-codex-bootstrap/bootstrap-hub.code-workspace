@@ -2,10 +2,10 @@
   "folders": [
     { "path": "/projects/factory-template", "name": "01-factory-template" },
     { "path": "/projects/factory-template/_incoming", "name": "02-factory-incoming" },
-    { "path": "/projects/dogfood-brownfield-project", "name": "03-brownfield-project-root" },
-    { "path": "/projects/dogfood-brownfield-project/_incoming", "name": "04-brownfield-incoming" },
-    { "path": "/projects/dogfood-brownfield-project/evidence", "name": "05-brownfield-evidence" },
-    { "path": "/projects/dogfood-brownfield-project/reconstructed-repo", "name": "06-reconstructed-repo" }
+    { "path": "/projects/brownfield-without-repo-project", "name": "03-brownfield-project-root" },
+    { "path": "/projects/brownfield-without-repo-project/_incoming", "name": "04-brownfield-incoming" },
+    { "path": "/projects/brownfield-without-repo-project/evidence", "name": "05-brownfield-evidence" },
+    { "path": "/projects/brownfield-without-repo-project/reconstructed-repo", "name": "06-reconstructed-repo" }
   ],
   "settings": {
     "files.autoSave": "afterDelay",

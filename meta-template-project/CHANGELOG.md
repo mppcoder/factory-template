@@ -1,5 +1,10 @@
 # Журнал изменений мета-проекта
 
+## [2.4.4] - 2026-04-22
+### Изменено
+- meta-template notes и version layer синхронизированы с patch-релизом `2.4.4`
+- release-facing описание фабрики теперь отражает semantic cleanup core hierarchy и optional domain reference contour
+
 ## [2.4.3] - 2026-04-22
 ### Изменено
 - meta-template release notes и version layer синхронизированы с patch-релизом `2.4.3`

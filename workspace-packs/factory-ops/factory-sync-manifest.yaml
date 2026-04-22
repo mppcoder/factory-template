@@ -20,5 +20,5 @@ exclude_zones:
   - template-repo/template/work
   - registry
   - working-project-examples
-  - domain-packs
+  - optional-domain-packs
   - workspace-packs

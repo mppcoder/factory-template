@@ -2,7 +2,7 @@ scenario_pack:
   name: standard-project-discovery-pack
   version: 1
   entrypoint: 00-master-router.md
-project_preset: audit-only
+project_preset: brownfield-with-repo-audit
 active:
   - 00-master-router.md
   - brownfield/00-brownfield-entry.md

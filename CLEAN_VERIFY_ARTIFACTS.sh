@@ -11,6 +11,7 @@ TARGETS=(
   "_factory-sync-export"
   "_boundary-actions"
   ".release-stage"
+  ".factory-runtime"
 )
 
 for rel in "${TARGETS[@]}"; do

@@ -1,4 +1,4 @@
-project_preset: audit-only
+project_preset: brownfield-with-repo-audit
 project_title: Аудит без обязательной реализации
 recommended_mode: brownfield
 recommended_change_class: brownfield-audit

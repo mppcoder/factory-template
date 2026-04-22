@@ -1,5 +1,10 @@
 # Общая история изменений фабрики
 
+## 2.4.4
+- canonical preset naming переведён на нейтральные factory names с compatibility aliases для legacy names
+- `optional-domain-packs/openclaw-reference` и `workspace-packs/vscode-codex-bootstrap` закреплены как некорневые optional/reference layers
+- release docs, manifests, examples и `.chatgpt` closeout-артефакты синхронизированы под `factory-v2.4.4`
+
 ## 2.4.3
 - собран root-level `RELEASE_NOTES.md` и включён в release executor / release pack
 - канонический reference-doc по архитектуре, дереву проекта и workflow расширен до полного release-facing пакета

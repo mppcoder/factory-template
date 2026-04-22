@@ -17,6 +17,7 @@
 
 - release metadata and version sync
 - root release notes source and release-facing reference package
+- canonical preset naming and optional/reference contour separation
 - launcher and generated project scaffolding
 - structural validators
 - defect-capture / alignment / handoff checks

@@ -11,7 +11,7 @@
   версия_фабрики: 2.3.6
   режим: greenfield|brownfield
   статус_записи: production|test
-  project_preset: product-dev|legacy-modernization|integration-project|audit-only
+  project_preset: greenfield-product|brownfield-with-repo-modernization|brownfield-with-repo-integration|brownfield-with-repo-audit|brownfield-without-repo
   change_class: small-fix|feature|refactor|migration|brownfield-audit
   execution_mode: manual|hybrid|codex-led
   примечание: свободный комментарий

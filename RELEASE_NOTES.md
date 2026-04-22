@@ -1,43 +1,45 @@
 # Release Notes
 
-## 2.4.3 - 2026-04-22
+## 2.4.4 - 2026-04-22
 
 ### О чём этот релиз
 
-Релиз `2.4.3` собирает полный release-facing пакет по самому `factory-template`.
-Главная цель релиза: сделать описание проекта, архитектуры, дерева репозитория, ключевых workflow и release contour полным, каноническим и пригодным для downstream-consumed repo-first работы без параллельных источников истины.
+Релиз `2.4.4` приводит `factory-template` к семантически чистой универсальной иерархии.
+Главная цель релиза: убрать product-specific naming из canonical core/release-facing слоя, синхронизировать presets, manifests и docs tree, а domain-specific reference-cases отделить от core без потери compatibility.
 
 ### Что вошло
 
-- добавлен root-level `RELEASE_NOTES.md` как канонический notes source для релиза и release executor;
-- `docs/template-architecture-and-event-workflows.md` расширен до полного reference-doc по:
-  - функциональному назначению проекта;
-  - архитектуре и разделению advisory/executable layers;
-  - дереву репозитория и source-of-truth boundaries;
-  - ключевым workflow от intake до выпуска релиза;
-- release-facing пакет нормализован вокруг одного набора файлов:
-  - `README.md`
-  - `VERSION.md`
-  - `CHANGELOG.md`
-  - `RELEASE_NOTES.md`
-  - `CURRENT_FUNCTIONAL_STATE.md`
-  - `docs/template-architecture-and-event-workflows.md`
-- release pack, manifests, meta-template notes и `.chatgpt` closeout artifacts синхронизированы под `2.4.3`.
+- canonical preset naming переведён на универсальные factory names:
+  - `greenfield-product`
+  - `brownfield-without-repo`
+  - `brownfield-with-repo-modernization`
+  - `brownfield-with-repo-integration`
+  - `brownfield-with-repo-audit`
+- `workspace-packs/vscode-codex-bootstrap` заменяет dogfood naming в canonical workspace bootstrap слое;
+- `optional-domain-packs/openclaw-reference` закрепляет `OpenClaw` как optional reference-case, а не как часть core factory tree;
+- release docs, manifests, template metadata, examples и `.chatgpt` closeout artifacts синхронизированы под `2.4.4`;
+- launcher/runtime сохраняют compatibility aliases для legacy preset names, чтобы переход не ломал existing downstream flows.
+- cleanup path теперь также убирает `.factory-runtime`, чтобы pre-release audit не наследовал stale runtime reports между verify/release циклами.
+- verified-sync/release automation теперь устойчиво обрабатывает non-ASCII git paths, встречающиеся в repo bootstrap/docs слоях.
 
 ### Архитектурные изменения в документации
 
-- теперь явно разделены `advisory/policy layer` и `executable routing layer`;
-- отдельно описаны handoff, self-handoff, remediation, verification, release-followup и completion-package contours;
-- зафиксировано, какие каталоги и файлы являются source-of-truth для текущего repo и для downstream repos;
-- release-facing reference layer больше не опирается на разрозненные частичные описания.
+- canonical release-facing tree теперь явно отделяет:
+  - core factory layers;
+  - universal template source;
+  - greenfield;
+  - brownfield with repo;
+  - brownfield without repo;
+  - optional domain references;
+- release-facing naming больше не закрепляет dogfood/openclaw как canonical структуру фабрики;
+- advisory/policy layer и executable routing layer по-прежнему описаны раздельно, но теперь это согласовано с новой физической и логической иерархией.
 
 ### Что важно для downstream
 
-- для factory-template ChatGPT Project canonical instruction не менялась по сути, но должна ссылаться на актуальный repo и repo-first rule set;
-- для downstream/battle repos source-of-truth по `AGENTS` остаётся в `template-repo/AGENTS.md`;
-- completion package и source/export contours теперь должны использовать новый `RELEASE_NOTES.md` как часть release-facing канона;
-- для `hot15` сохраняется правило flat folder без подпапок;
-- обновление `Sources` не требуется по умолчанию и используется только там, где legacy/hybrid contour ещё оставлен как явный fallback.
+- для downstream/battle repos canonical docs и presets теперь должны использовать новые neutral names;
+- legacy preset names допускаются только как compatibility aliases и не считаются release-facing canon;
+- optional domain references должны жить вне core naming и не маскироваться под обязательный factory layer;
+- обновление `Sources` по-прежнему не требуется по умолчанию и используется только как compatibility fallback, если такой contour ещё сохранён.
 
 ### Проверка и выпуск
 
@@ -57,4 +59,5 @@
 
 - semantic quality проверки по-прежнему частично эвристические;
 - публикация GitHub Release зависит от доступности и авторизации `gh`;
-- release-facing reference layer остаётся живым каноном и требует синхронного обновления при следующих process changes.
+- release-facing reference layer остаётся живым каноном и требует синхронного обновления при следующих process changes;
+- compatibility aliases пока сохраняются, поэтому legacy names ещё могут встречаться в historical registry data и migration notes.

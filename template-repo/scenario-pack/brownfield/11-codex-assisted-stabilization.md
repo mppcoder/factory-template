@@ -1,7 +1,7 @@
 # Сценарий: codex-assisted stabilization
 
 ## Логика
-1. Сначала facts-first и audit-only.
+1. Сначала facts-first и brownfield-with-repo-audit.
 2. Затем определить safe zones.
 3. Затем сделать минимальный обратимый stabilization fix.
 4. Только после этого разрешать Codex более широкий execution contour.

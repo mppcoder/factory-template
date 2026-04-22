@@ -3,10 +3,10 @@
 Project preset — это профиль проекта более высокого уровня.
 
 ## Примеры профилей
-- `product-dev` — развитие продукта
-- `legacy-modernization` — модернизация старой системы
-- `integration-project` — интеграционный проект
-- `audit-only` — аудит без обязательной реализации
+- `greenfield-product` — развитие продукта
+- `brownfield-with-repo-modernization` — модернизация старой системы
+- `brownfield-with-repo-integration` — интеграционный проект
+- `brownfield-with-repo-audit` — аудит без обязательной реализации
 
 ## Что задает профиль проекта
 - рекомендуемый режим старта;

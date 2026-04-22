@@ -1,4 +1,4 @@
-project_preset: "legacy-modernization"
+project_preset: "brownfield-with-repo-modernization"
 recommended_mode: "brownfield"
 recommended_change_class: "brownfield-audit"
 recommended_execution_mode: "manual"

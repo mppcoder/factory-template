@@ -123,6 +123,36 @@ def run_git(root: Path, args: list[str], check: bool = True) -> subprocess.Compl
     return proc
 
 
+def iter_status_paths(root: Path) -> list[str]:
+    proc = subprocess.run(
+        ["git", "status", "--porcelain", "-z", "--untracked-files=all"],
+        cwd=root,
+        capture_output=True,
+        check=False,
+    )
+    if proc.returncode != 0:
+        raise AutomationError("Не удалось прочитать git status")
+    raw_items = [item for item in proc.stdout.decode("utf-8", errors="surrogateescape").split("\0") if item]
+    result: list[str] = []
+    i = 0
+    while i < len(raw_items):
+        item = raw_items[i]
+        if len(item) < 4:
+            i += 1
+            continue
+        rel = item[3:]
+        status = item[:2]
+        if status[0] in {"R", "C"} or status[1] in {"R", "C"}:
+            if i + 1 >= len(raw_items):
+                raise AutomationError("git status вернул некорректную rename/copy запись")
+            rel = raw_items[i + 1]
+            i += 2
+        else:
+            i += 1
+        result.append(rel)
+    return result
+
+
 def ensure_git_repo(root: Path) -> None:
     run_git(root, ["rev-parse", "--git-dir"])
 
@@ -367,16 +397,8 @@ def is_denied_path(rel: str) -> bool:
 
 
 def changed_paths(root: Path) -> list[str]:
-    proc = run_git(root, ["status", "--porcelain", "--untracked-files=all"], check=False)
-    if proc.returncode != 0:
-        raise AutomationError("Не удалось прочитать git status")
     result: list[str] = []
-    for line in proc.stdout.splitlines():
-        if len(line) < 4:
-            continue
-        rel = line[3:]
-        if " -> " in rel:
-            rel = rel.split(" -> ", 1)[1]
+    for rel in iter_status_paths(root):
         if is_denied_path(rel):
             continue
         result.append(rel)
@@ -414,13 +436,8 @@ def parse_version_md(root: Path) -> str:
 
 
 def ensure_clean_repo(root: Path) -> None:
-    proc = run_git(root, ["status", "--porcelain"], check=False)
-    lines = [line for line in proc.stdout.splitlines() if line.strip()]
     dirty = []
-    for line in lines:
-        rel = line[3:]
-        if " -> " in rel:
-            rel = rel.split(" -> ", 1)[1]
+    for rel in iter_status_paths(root):
         if not is_denied_path(rel):
             dirty.append(rel)
     if dirty:

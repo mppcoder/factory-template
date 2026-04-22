@@ -2,6 +2,7 @@
 
 ## Что уже реализовано
 - 3 canonical entry modes: новый проект с нуля, brownfield без репо, brownfield с репо
+- нейтральная canonical иерархия core vs optional/reference layers без product-specific naming в core
 - генерация greenfield и brownfield проектов
 - scenario-pack, `.chatgpt` и launcher
 - project presets, policy presets и change classes
@@ -44,6 +45,7 @@
 - в repo появился единый visual/workflow reference layer по самому шаблону, greenfield, brownfield и downstream update contour
 - root-level `RELEASE_NOTES.md` теперь является каноническим source для опубликованных release notes и release executor
 - release-facing документация нормализована вокруг одного reference-doc и больше не зависит от разрозненных описаний в runbooks и release-note draft
+- canonical preset naming, workspace bootstrap naming и optional domain reference contour синхронизированы между docs, manifests и физической структурой repo
 
 ## Что работает частично
 - matrix runner как единый источник истины
@@ -56,7 +58,7 @@
 - release-facing описание дерева проекта и workflow требует дальнейшего поддержания в sync при каждой новой process-доработке шаблона
 
 ## Что еще не закрыто
-- финальное dogfooding на реальных greenfield и brownfield проектах
+- финальная проверка на реальных greenfield и brownfield проектах
 - окончательная polish-фаза для runner layer и operational reports
 - отдельный release-facing validator/report для curated pack quality beyond structural checks
 - дальнейшее production hardening runtime-нестабильности git sync beyond current fallback strategy
@@ -66,5 +68,5 @@ Core включает фабрику, шаблон, versioning/documentation lay
 
 ## Optional layers
 - workspace-packs
-- domain-packs
+- optional-domain-packs
 - advisory factory ops

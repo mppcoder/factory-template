@@ -1,29 +1,21 @@
 ## Handoff в Codex
 
 ```text
-Repo: factory-template
-Цель: выполнить текущий handoff по проекту factory-template.
-Приоритет: сначала правила repo (`AGENTS`, runbook, scenario-pack, policy files), затем общие инструкции без конфликта с ними.
-Entry point: 00-master-router.md
-Launch source: chatgpt-handoff
-Task class: build
-Selected profile: build
-Selected model: gpt-5.4
-Selected reasoning effort: medium
-Pipeline stage: done
-Handoff allowed: yes (forbidden)
-Scope: работать только в пределах этого repo и связанных project artifacts.
-Verify: использовать актуальные validators, verification-report.md и done-report.md.
+Repo: smoke-test project
+Цель: завершить smoke-test без дополнительных изменений кода.
+Приоритет: сначала правила repo, затем общие инструкции, если нет конфликта.
+Scope: не менять core-структуру проекта.
+Verify: использовать уже заполненные smoke artifacts и существующие validators.
 ```
 
 ## Инструкция пользователю
 1. Цель
-Передать задачу в Codex уже по нормализованному handoff.
+Подтвердить, что smoke-test уже закрыт.
 2. Где сделать
 В текущем проекте.
 3. Точные шаги
-Использовать подготовленный handoff-блок выше без пересборки из файлов вручную.
+Посмотреть verification-report и done-report.
 4. Ожидаемый результат
-Codex получает один цельный copy-paste handoff и работает по правилам repo.
+Состояние проекта подтверждено как green smoke baseline.
 5. Что прислать обратно
-Итог выполнения или уточнение, если появится внешний блокирующий шаг.
+Ничего, если follow-up не нужен.

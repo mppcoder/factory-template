@@ -2,6 +2,24 @@
 
 ## [Unreleased]
 
+## [2.4.4] - 2026-04-22
+### Добавлено
+- отдельный optional/reference contour `optional-domain-packs/` для domain-specific reference-cases вне canonical core tree
+- compatibility alias map для legacy preset names в `template-repo/project-presets.yaml` и runtime preset application
+- универсальный workspace pack `workspace-packs/vscode-codex-bootstrap` вместо release-facing dogfood naming
+
+### Изменено
+- canonical entry naming приведён к нейтральным factory names: `greenfield-product`, `brownfield-without-repo`, `brownfield-with-repo-*`
+- `README.md`, `ENTRY_MODES.md`, `docs/template-architecture-and-event-workflows.md`, manifests и template metadata теперь описывают одну и ту же универсальную иерархию
+- `openclaw` вынесен из core/release-facing слоя в optional domain reference contour
+- examples, bootstrap docs, runbooks и matrix/smoke routing синхронизированы с новым canonical naming
+
+### Исправлено
+- устранён release-facing drift между docs tree, manifests и фактической структурой optional/core слоёв
+- устранён stale smoke-task контекст в root `.chatgpt` closeout/handoff артефактах перед новым релизом
+- `CLEAN_VERIFY_ARTIFACTS.sh` теперь удаляет `.factory-runtime`, чтобы pre-release audit не падал на stale runtime reports
+- automation layer `VERIFIED_SYNC` и release checks теперь корректно обрабатывают non-ASCII git paths через NUL-safe status parsing
+
 ## [2.4.3] - 2026-04-22
 ### Добавлено
 - root-level `RELEASE_NOTES.md` как канонический источник публикуемых release notes и release executor notes source

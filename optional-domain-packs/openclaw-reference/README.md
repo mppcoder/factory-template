@@ -1,6 +1,6 @@
-# Доменный пакет: OpenClaw
+# Optional domain reference: OpenClaw
 
-Этот пакет не является частью core фабрики.
+Этот reference-case не является частью core фабрики.
 Он нужен как reference-case для brownfield-проектов с CLI, runtime и инфраструктурной спецификой.
 
 ## Что здесь хранится

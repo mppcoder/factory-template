@@ -1,10 +1,10 @@
 # Происхождение проекта
 
 ## Название проекта
-example-brownfield-openclaw
+example-brownfield-domain-reference
 
 ## Slug
-example-brownfield-openclaw
+example-brownfield-domain-reference
 
 ## Тип проекта
 brownfield
@@ -19,7 +19,7 @@ factory-v2.4.0
 2026-04-15
 
 ## Исходный project preset
-legacy-modernization
+brownfield-with-repo-modernization
 
 ## Исходный change class
 brownfield-audit

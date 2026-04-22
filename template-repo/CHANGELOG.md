@@ -2,6 +2,20 @@
 
 ## [Unreleased]
 
+## [2.4.4] - 2026-04-22
+### Добавлено
+- canonical preset alias map для совместимости со старыми preset names
+- нейтральный workspace bootstrap pack и optional domain reference contour в release-facing guidance
+
+### Изменено
+- template docs, launcher metadata и generated versioning strings синхронизированы с patch-релизом `2.4.4`
+- canonical presets переведены на универсальные factory names без product-specific naming в core слое
+
+### Исправлено
+- устранён gap, при котором downstream guidance продолжала выдавать legacy preset/workspace names как canonical
+- cleanup path теперь убирает `.factory-runtime`, чтобы generated release prep не наследовал stale runtime reports
+- verified-sync/release automation больше не ломается на non-ASCII git paths из-за quoted porcelain output
+
 ## [2.4.3] - 2026-04-22
 ### Добавлено
 - root-level `RELEASE_NOTES.md` в factory root включен в канонический release-facing пакет и release/export layer

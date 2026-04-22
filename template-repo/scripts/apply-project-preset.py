@@ -1,16 +1,28 @@
 #!/usr/bin/env python3
 from __future__ import annotations
-import sys, yaml, pathlib
-preset_name = sys.argv[1] if len(sys.argv) > 1 else "product-dev"
+
+import pathlib
+import sys
+
+import yaml
+
+
+preset_name = sys.argv[1] if len(sys.argv) > 1 else "greenfield-product"
 presets_file = pathlib.Path(sys.argv[2] if len(sys.argv) > 2 else "project-presets.yaml")
 out_file = pathlib.Path(sys.argv[3] if len(sys.argv) > 3 else ".chatgpt/project-profile.yaml")
 active_file = pathlib.Path(sys.argv[4] if len(sys.argv) > 4 else ".chatgpt/active-scenarios.yaml")
-presets = yaml.safe_load(presets_file.read_text(encoding="utf-8")).get("project_presets", {})
-if preset_name not in presets:
+
+data = yaml.safe_load(presets_file.read_text(encoding="utf-8")) or {}
+aliases = data.get("preset_aliases", {})
+presets = data.get("project_presets", {})
+resolved_preset_name = aliases.get(preset_name, preset_name)
+if resolved_preset_name not in presets:
     raise SystemExit(f"Неизвестный профиль проекта: {preset_name}")
-preset = presets[preset_name]
+
+preset = presets[resolved_preset_name]
 out = {
-    "project_preset": preset_name,
+    "project_preset": resolved_preset_name,
+    "requested_project_preset": preset_name,
     "project_title": preset.get("title", ""),
     "recommended_mode": preset.get("default_mode", ""),
     "recommended_change_class": preset.get("recommended_change_class", ""),
@@ -24,7 +36,8 @@ out = {
 out_file.parent.mkdir(parents=True, exist_ok=True)
 out_file.write_text(yaml.safe_dump(out, allow_unicode=True, sort_keys=False), encoding="utf-8")
 active = yaml.safe_load(active_file.read_text(encoding="utf-8")) or {}
-active["project_preset"] = preset_name
+active["project_preset"] = resolved_preset_name
+active["requested_project_preset"] = preset_name
 active["active"] = preset.get("default_scenarios", [])
 active_file.write_text(yaml.safe_dump(active, allow_unicode=True, sort_keys=False), encoding="utf-8")
-print(f"Профиль проекта применен: {preset_name}")
+print(f"Профиль проекта применен: {resolved_preset_name}")

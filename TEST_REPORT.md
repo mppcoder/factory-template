@@ -1,4 +1,4 @@
-# TEST REPORT v2.4.3
+# TEST REPORT v2.4.4
 
 ## Что проверено
 - pre-release audit
@@ -44,12 +44,12 @@ Evidence / quality / DoD до смыслового наполнения арте
 - curated `sources-pack-core-20`, `sources-pack-release-20`, `sources-pack-bugfix-20` собираются из декларативного policy manifest.
 - boundary-actions guide генерируется из markdown template и проверяется вместе с ops-policy слоем.
 
-## Что вошло в релиз 2.4.3
-- собран root-level `RELEASE_NOTES.md` и включён в release-facing канон;
-- `docs/template-architecture-and-event-workflows.md` теперь покрывает функционал, архитектуру, дерево проекта и полный workflow map;
-- `README.md`, `CURRENT_FUNCTIONAL_STATE.md`, `VERIFY_SUMMARY.md`, `RELEASE_CHECKLIST.md` и `.chatgpt` closeout artifacts синхронизированы под один release task;
-- `sources-pack-release-20` и pre-release audit включают новый root release notes layer;
-- template/meta/root versioning и release metadata синхронизированы под `2.4.3`.
+## Что вошло в релиз 2.4.4
+- canonical factory hierarchy очищена от dogfood/openclaw naming в core/release-facing слоях;
+- presets, manifests и docs tree синхронизированы под нейтральные universal names;
+- `optional-domain-packs/openclaw-reference` и `workspace-packs/vscode-codex-bootstrap` проходят через release-facing verify как optional/reference слои;
+- launcher compatibility aliases подтверждают безопасный переход со старых preset names;
+- template/meta/root versioning и release metadata синхронизированы под `2.4.4`.
 
 ## Известные ограничения
 - `MATRIX_TEST.sh` остаётся representative prerelease runner, а не exhaustive full-matrix coverage для всех 22 допустимых комбинаций;

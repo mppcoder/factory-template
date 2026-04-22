@@ -1,3 +1,3 @@
 # Универсальный brownfield-режим
 
-Brownfield-режим универсален; OpenClaw — только reference case.
+Brownfield-режим универсален; domain reference — только reference case.

@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+## 2.4.4
+- canonical preset naming переведён на нейтральные factory names с compatibility aliases для legacy preset names
+- `openclaw` вынесен из core/release-facing слоя в `optional-domain-packs/openclaw-reference`
+- release docs, manifests, examples и closeout artifacts синхронизированы под `factory-v2.4.4`
+
 ## 2.4.3
 - собран полный release-facing пакет по самому `factory-template`
 - добавлен root-level `RELEASE_NOTES.md` как canonical published notes source

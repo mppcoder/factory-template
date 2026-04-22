@@ -19,7 +19,7 @@ factory-v2.4.0
 2026-04-15
 
 ## Исходный project preset
-product-dev
+greenfield-product
 
 ## Исходный change class
 feature

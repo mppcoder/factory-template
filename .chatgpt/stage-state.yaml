@@ -1,11 +1,11 @@
 project:
-  name: "factory-template"
-  slug: "factory-template"
-  mode: "brownfield"
+  name: factory-template
+  slug: factory-template
+  mode: brownfield
 stage:
-  current: "done"
-  previous: "verification"
-  next: "none"
+  current: done
+  previous: verification
+  next: none
 gates:
   intake_complete: true
   classification_complete: true
@@ -19,3 +19,6 @@ gates:
   execution_complete: true
   verification_complete: true
   done_complete: true
+  spec_ready: true
+  tech_spec_ready: true
+  decomposition_complete: true

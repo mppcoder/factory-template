@@ -1,77 +1,89 @@
 change:
-  id: chg-20260422-006
-  title: Prepare release-facing package and ship 2.4.3
+  id: chg-20260422-007
+  title: Normalize canonical factory hierarchy and ship 2.4.4
   class: feature
   execution_mode: codex-led
   type: brownfield
   status: done
   priority: high
-  summary: Нормализовать release-facing документацию по `factory-template`, синхронизировать versioning/release layer, выпустить patch-релиз 2.4.3 и закрепить, что `Sources` не являются default post-release path.
+  summary: Smoke-test изменение для проверки фабрики.
   outputs:
+  - ENTRY_MODES.md
   - README.md
   - docs/template-architecture-and-event-workflows.md
   - RELEASE_NOTES.md
   - VERSION.md
   - CHANGELOG.md
   - CURRENT_FUNCTIONAL_STATE.md
+  - FACTORY_MANIFEST.yaml
   - template-repo/VERSION.md
   - template-repo/CHANGELOG.md
+  - template-repo/README.md
+  - template-repo/TEMPLATE_MANIFEST.yaml
+  - template-repo/project-presets.yaml
+  - template-repo/launcher.sh
   - meta-template-project/RELEASE_NOTES.md
-  - packaging/sources/sources-profiles.yaml
+  - meta-template-project/CHANGELOG.md
   - factory_template_only_pack/01-runbook-dlya-polzovatelya-factory-template.md
-  - factory_template_only_pack/templates/factory-template-boundary-actions.template.md
+  - workspace-packs/vscode-codex-bootstrap/**
+  - optional-domain-packs/openclaw-reference/**
+  - working-project-examples/example-brownfield-domain-reference/**
   - .chatgpt/task-index.yaml
-  - .chatgpt/task-launch.yaml
-  - .chatgpt/codex-input.md
-  - .chatgpt/codex-context.md
-  - .chatgpt/codex-task-pack.md
   - .chatgpt/release-decision.yaml
   - .chatgpt/verification-report.md
   - .chatgpt/done-report.md
+  - work/completed/chg-20260422-007.md
 tasks:
 - id: T-001
-  title: Провести release-facing discovery и gap-analysis
+  title: Зафиксировать safe release scope и version-bump inventory
   type: analysis
   risk_level: medium
   executor: developer
   depends_on: []
   outputs:
-  - README.md
-  - docs/template-architecture-and-event-workflows.md
-  - RELEASE_NOTES.md
+  - VERSION.md
+  - CHANGELOG.md
+  - FACTORY_MANIFEST.yaml
+  - template-repo/TEMPLATE_MANIFEST.yaml
   acceptance:
-  - канонические release-facing документы определены без параллельных источников истины
-  - gap-analysis отражает отсутствующие и расходящиеся release-facing слои
+  - определены все release-facing места, где версия и canonical naming должны быть
+    синхронизированы
+  - подтверждено, что release scope совместим с patch-релизом 2.4.4
 - id: T-002
-  title: Синхронизировать versioning, release docs и closeout artifacts под 2.4.3
+  title: Синхронизировать hierarchy refactor, release docs и closeout artifacts под
+    2.4.4
   type: release-followup
   risk_level: medium
   executor: developer
   depends_on:
   - T-001
   outputs:
+  - ENTRY_MODES.md
+  - README.md
+  - docs/template-architecture-and-event-workflows.md
   - VERSION.md
   - CHANGELOG.md
   - template-repo/VERSION.md
   - template-repo/CHANGELOG.md
+  - template-repo/project-presets.yaml
   - meta-template-project/RELEASE_NOTES.md
   - .chatgpt/release-decision.yaml
   acceptance:
-  - release docs и manifests согласованы на версии 2.4.3
-  - repo готов к verify, verified sync и release execution
+  - release docs, manifests, presets и examples согласованы на версии 2.4.4
+  - canonical core hierarchy больше не использует dogfood/openclaw как release-facing
+    naming
 - id: T-003
-  title: "Закрепить repo-first wording: Sources only as optional fallback"
-  type: docs-followup
-  risk_level: low
+  title: Выполнить verify, verified sync и release execution для 2.4.4
+  type: release
+  risk_level: medium
   executor: developer
   depends_on:
   - T-002
   outputs:
-  - README.md
-  - RELEASE_NOTES.md
-  - docs/template-architecture-and-event-workflows.md
-  - factory_template_only_pack/01-runbook-dlya-polzovatelya-factory-template.md
-  - factory_template_only_pack/templates/factory-template-boundary-actions.template.md
+  - VERIFY_SUMMARY.md
+  - TEST_REPORT.md
+  - .chatgpt/verification-report.md
+  - .chatgpt/done-report.md
   acceptance:
-  - release-facing docs не предлагают Sources как default post-release action
-  - boundary/completion wording оставляет Sources только как optional compatibility fallback
+  - verify green, verified sync выполнен, release decision исполнен
+  - release report отражает статус публикации или deterministic manual fallback

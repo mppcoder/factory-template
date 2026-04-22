@@ -5,24 +5,29 @@ TEMPLATE_DIR="$SCRIPT_DIR/template"
 
 read -rp "Название проекта: " PROJECT_NAME
 read -rp "Slug проекта: " PROJECT_SLUG
-read -rp "Профиль проекта (product-dev/legacy-modernization/integration-project/audit-only/brownfield-dogfood-codex-assisted) [product-dev]: " PROJECT_PRESET
-PROJECT_PRESET="${PROJECT_PRESET:-product-dev}"
+read -rp "Профиль проекта (greenfield-product/brownfield-with-repo-modernization/brownfield-with-repo-integration/brownfield-with-repo-audit/brownfield-without-repo) [greenfield-product]: " PROJECT_PRESET
+PROJECT_PRESET="${PROJECT_PRESET:-greenfield-product}"
 
 PROJECT_PRESET_FILE="$SCRIPT_DIR/project-presets.yaml"
 readarray -t PRESET_VALUES < <(PROJECT_PRESET="$PROJECT_PRESET" PROJECT_PRESET_FILE="$PROJECT_PRESET_FILE" python3 - <<'PY'
 import os, yaml
 from pathlib import Path
 preset_file = Path(os.environ['PROJECT_PRESET_FILE'])
-presets = yaml.safe_load(preset_file.read_text(encoding='utf-8')).get('project_presets', {})
-preset = presets.get(os.environ['PROJECT_PRESET'], {})
+data = yaml.safe_load(preset_file.read_text(encoding='utf-8')) or {}
+presets = data.get('project_presets', {})
+aliases = data.get('preset_aliases', {})
+resolved = aliases.get(os.environ['PROJECT_PRESET'], os.environ['PROJECT_PRESET'])
+preset = presets.get(resolved, {})
+print(resolved)
 print(preset.get('default_mode', 'greenfield'))
 print(preset.get('recommended_change_class', 'feature'))
 print(preset.get('recommended_execution_mode', 'codex-led'))
 PY
 )
-DEFAULT_MODE="${PRESET_VALUES[0]:-greenfield}"
-DEFAULT_CLASS="${PRESET_VALUES[1]:-feature}"
-DEFAULT_EXEC="${PRESET_VALUES[2]:-codex-led}"
+PROJECT_PRESET="${PRESET_VALUES[0]:-greenfield-product}"
+DEFAULT_MODE="${PRESET_VALUES[1]:-greenfield}"
+DEFAULT_CLASS="${PRESET_VALUES[2]:-feature}"
+DEFAULT_EXEC="${PRESET_VALUES[3]:-codex-led}"
 
 read -rp "Режим старта (greenfield/brownfield) [${DEFAULT_MODE}]: " PROJECT_MODE
 PROJECT_MODE="${PROJECT_MODE:-$DEFAULT_MODE}"
@@ -110,10 +115,10 @@ origin = f"""# Происхождение проекта
 {os.environ['PROJECT_MODE']}
 
 ## Создан из фабрики
-factory-v2.4.3
+factory-v2.4.4
 
 ## Версия фабрики
-2.4.3
+2.4.4
 
 ## Дата создания
 {datetime.date.today().isoformat()}
@@ -212,7 +217,7 @@ version_md = f'''# Версия проекта
 {today}
 
 ## Версия фабрики-источника
-2.4.3
+2.4.4
 
 ## Тип проекта
 {os.environ['PROJECT_MODE']}
@@ -223,7 +228,7 @@ changelog_md = f'''# Журнал изменений проекта
 
 ## [0.1.0] - {today}
 ### Добавлено
-- первичная генерация проекта из фабрики 2.4.3
+- первичная генерация проекта из фабрики 2.4.4
 
 ### Изменено
 - 
@@ -265,7 +270,7 @@ if [ "$REGISTRY_MODE" != "skip" ] && [ -f "$REGISTRY_FILE" ] && [ -w "$REGISTRY_
     echo "- дата: $(date +%F)"
     echo "  проект: $PROJECT_NAME"
     echo "  slug: $PROJECT_SLUG"
-    echo "  версия_фабрики: 2.4.3"
+    echo "  версия_фабрики: 2.4.4"
     echo "  режим: $PROJECT_MODE"
     echo "  статус_записи: $REGISTRY_MODE"
     echo "  project_preset: $PROJECT_PRESET"

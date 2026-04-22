@@ -34,7 +34,7 @@
 ## 1. Новый проект с нуля
 
 - Тип контура: `greenfield`
-- Типовой профиль: `product-dev`
+- Типовой профиль: `greenfield-product`
 - Когда использовать:
   когда нужно запустить новый продукт, сервис или внутренний проект с пустого старта
 - Основной сценарный вход:
@@ -43,7 +43,7 @@
 ## 2. Перевод на шаблон имеющегося проекта без репо
 
 - Тип контура: `brownfield`
-- Типовой профиль: `brownfield-dogfood-codex-assisted`
+- Типовой профиль: `brownfield-without-repo`
 - Когда использовать:
   когда есть живая система, файлы, окружение или знания о продукте, но нет нормализованного рабочего repo
 - Основной сценарный вход:
@@ -55,9 +55,9 @@
 
 - Тип контура: `brownfield`
 - Типовые профили:
-  - `legacy-modernization`
-  - `integration-project`
-  - `audit-only`
+  - `brownfield-with-repo-modernization`
+  - `brownfield-with-repo-integration`
+  - `brownfield-with-repo-audit`
 - Когда использовать:
   когда уже есть существующий репозиторий, который нужно привести к фабричному процессу и артефактному слою
 - Основной сценарный вход:
@@ -67,6 +67,14 @@
 
 ## Quick Mapping
 
-- новый проект с нуля -> `greenfield` -> `product-dev`
-- существующий проект без repo -> `brownfield` -> `brownfield-dogfood-codex-assisted`
-- существующий проект с repo -> `brownfield` -> `legacy-modernization` / `integration-project` / `audit-only`
+- новый проект с нуля -> `greenfield` -> `greenfield-product`
+- существующий проект без repo -> `brownfield` -> `brownfield-without-repo`
+- существующий проект с repo -> `brownfield` -> `brownfield-with-repo-modernization` / `brownfield-with-repo-integration` / `brownfield-with-repo-audit`
+
+## Legacy Aliases
+
+- `product-dev` -> `greenfield-product`
+- `brownfield-dogfood-codex-assisted` -> `brownfield-without-repo`
+- `legacy-modernization` -> `brownfield-with-repo-modernization`
+- `integration-project` -> `brownfield-with-repo-integration`
+- `audit-only` -> `brownfield-with-repo-audit`

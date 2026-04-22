@@ -1,7 +1,7 @@
 # Профили проектов более высокого уровня.
 # Подсказка: сначала выберите профиль проекта, а уже потом уточняйте конкретный класс изменения.
 project_presets:
-  product-dev:
+  greenfield-product:
     title: "Развитие продукта"
     default_mode: greenfield
     recommended_change_class: feature
@@ -10,7 +10,7 @@ project_presets:
     required_artifacts: [.chatgpt/intake.yaml, .chatgpt/user-spec.md, .chatgpt/tech-spec.md, .chatgpt/task-index.yaml]
     notes:
       - "Подходит для продуктовой разработки, где ожидается реализация и последующая верификация."
-  legacy-modernization:
+  brownfield-with-repo-modernization:
     title: "Модернизация старой системы"
     default_mode: brownfield
     recommended_change_class: refactor
@@ -19,7 +19,7 @@ project_presets:
     required_artifacts: [brownfield/system-inventory.md, brownfield/repo-audit.md, brownfield/as-is-architecture.md, .chatgpt/conflict-report.md]
     notes:
       - "Начинайте с фиксации реальности и ограничений."
-  integration-project:
+  brownfield-with-repo-integration:
     title: "Интеграционный проект"
     default_mode: brownfield
     recommended_change_class: migration
@@ -28,7 +28,7 @@ project_presets:
     required_artifacts: [docs/integrations.md, .chatgpt/reality-check.md, .chatgpt/tech-spec.md, .chatgpt/task-index.yaml]
     notes:
       - "Для интеграций обязательно фиксируйте зависимости, версии и внешние ограничения."
-  audit-only:
+  brownfield-with-repo-audit:
     title: "Аудит без обязательной реализации"
     default_mode: brownfield
     recommended_change_class: brownfield-audit

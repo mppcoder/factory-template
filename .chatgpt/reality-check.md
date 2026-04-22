@@ -1,19 +1,23 @@
-# Reality Check
+# Проверка реальности
 
 ## Что подтверждено в проекте
-- Repo `factory-template` уже содержит canonical `VERIFIED_SYNC.sh`, `VALIDATE_VERIFIED_SYNC_PREREQS.sh` и runtime report layer в `.factory-runtime/reports/`.
-- В scenario-pack и runbook уже есть явные правила про обязательный `## Инструкция пользователю` и запрет deferred completion package.
-- Реальный miss воспроизвёлся не из-за отсутствия правил, а из-за недостаточно жёсткого closeout enforcement.
+- В проекте уже созданы каталоги `.chatgpt`, `scripts`, `work` и `template-repo`.
+- Версия пакета: 2.4.1.
+- В репозитории подтверждено наличие `project-presets.yaml`, `policy-presets.yaml` и `change-classes.yaml`.
 
-## Какие расхождения найдены
-- `check-dod.py` раньше не требовал successful `verified-sync-report` даже при настроенном `origin`.
-- Generated `done-checklist.md` раньше не фиксировал обязательную связку `VALIDATE_VERIFIED_SYNC_PREREQS.sh` -> `VERIFIED_SYNC.sh`.
-- Template closeout examples и closeout rule layer не делали omission of available verified sync отдельным reusable process defect.
+## Что говорит официальная документация
+- В bootstrap описано, что сначала нужно пройти сценарии, закрыть проверки и только потом делать handoff в Codex.
+- В документации фабрики указано, что артефакты должны жить в repo, а не только в чате.
 
-## Что это означает
-- Проблема находится в closeout/validation discipline, а не в отсутствии automation contour.
-- Для remediation нужно усиливать существующие validator/checklist/rule layers, а не изобретать новый sync path.
+## Реальные наблюдения и кейсы
+- Реальный smoke-test подтвердил создание рабочего проекта через launcher.
+- После создания доступны валидаторы `validate-stage.py`, `validate-evidence.py` и `validate-quality.py`.
+- На свежем scaffold проверки evidence, quality и DoD корректно не проходят до заполнения артефактов.
 
-## Предварительный вывод
-- Исправление должно блокировать `done` без successful verified sync report при доступном `origin`.
-- Исправление должно отдельно закреплять, что same-response `## Инструкция пользователю` и verified sync являются частью честного closeout.
+## Расхождения и выводы
+- Внешних расхождений по сценарию smoke-test не выявлено.
+- Основное ограничение: quality-проверка остается эвристической и требует содержательного текста, а не только заголовков.
+
+## Вывод
+- Текущего состояния достаточно для перехода к user-spec, tech-spec и подготовке handoff.
+- Для полноценного использования нужно поддерживать реестр доказательств и закрывать gate-флаги.

@@ -1,4 +1,4 @@
-# Русское ядро фабрики проектов v2.4.3
+# Русское ядро фабрики проектов v2.4.4
 
 Это стабилизационный релиз фабрики проектов для связки:
 
@@ -12,15 +12,15 @@
 
 1. Новый проект с нуля
    Основа: `greenfield` путь для нового продукта или сервиса.
-   Типовой вход: `product-dev`.
+   Типовой вход: `greenfield-product`.
 
 2. Перевод на шаблон имеющегося проекта без репо
    Основа: `brownfield` путь для live-системы, где нет нормализованного исходного repo и сначала нужен evidence-first контур.
-   Типовой вход: `brownfield-dogfood-codex-assisted`.
+   Типовой вход: `brownfield-without-repo`.
 
 3. Перевод на шаблон имеющегося проекта с репо
    Основа: `brownfield` путь для уже существующего репозитория или инженерного контура.
-   Типовые входы: `legacy-modernization`, `integration-project`, `audit-only`.
+   Типовые входы: `brownfield-with-repo-modernization`, `brownfield-with-repo-integration`, `brownfield-with-repo-audit`.
 
 Во всех трех случаях для generated project используется один и тот же базовый repo-first контур:
 
@@ -47,7 +47,7 @@
 ## Подготовка после распаковки
 
 ```bash
-cd factory-v2.4.3
+cd factory-v2.4.4
 bash POST_UNZIP_SETUP.sh
 bash MATRIX_TEST.sh
 bash CLEAN_VERIFY_ARTIFACTS.sh
@@ -229,14 +229,14 @@ bash PHASE_DETECTION_TEST.sh
 - временные каталоги smoke/matrix прогонов;
 - логи и служебные следы локальной сборки.
 
-## Что нового в релизе 2.4.3
-- собран единый release-facing пакет по самому `factory-template`, а не только по generated project контурам;
-- `docs/template-architecture-and-event-workflows.md` теперь является каноническим документом по архитектуре, дереву проекта и ключевым workflow;
-- добавлен root-level `RELEASE_NOTES.md` как канонический источник публикуемых release notes;
-- release docs, manifests, source/export profiles и closeout artifacts синхронизированы под `factory-v2.4.3`;
-- release bundle и downstream completion contour теперь опираются на один и тот же набор канонических release-facing файлов.
+## Что нового в релизе 2.4.4
+- canonical core-иерархия очищена от продуктовых/исторических имен в release-facing слоях;
+- presets, workspace packs и example/reference contours переведены на универсальные factory names;
+- `openclaw` вынесен из core-дерева в `optional-domain-packs/openclaw-reference`;
+- launcher и preset application теперь принимают legacy preset names только как compatibility aliases;
+- release docs, manifests, template metadata и examples синхронизированы под `factory-v2.4.4`.
 
-## Базовый функционал ветки 2.4.3
+## Базовый функционал ветки 2.4.4
 - `factory-template` поддерживает greenfield, brownfield без repo и brownfield с repo в одном repo-first контуре;
 - advisory/policy layer и executable routing layer остаются явным образом разделены;
 - defect-capture, handoff, self-handoff, verification, release-followup и completion package описаны как обязательные контуры;

@@ -1,4 +1,4 @@
-project_preset: integration-project
+project_preset: brownfield-with-repo-integration
 project_title: Интеграционный проект
 recommended_mode: brownfield
 recommended_change_class: feature

@@ -107,6 +107,7 @@ factory-template/
 ├── reports/
 ├── tools/
 ├── work/
+├── optional-domain-packs/
 ├── working-project-examples/
 └── workspace-packs/
 ```
@@ -126,6 +127,7 @@ factory-template/
 - `registry/`: release history, versions, projects created.
 - `reports/`: bug reports и factory feedback.
 - `work/completed/`: закрытые work items.
+- `optional-domain-packs/`: optional reference-cases, не входящие в canonical core tree.
 - `working-project-examples/`: golden fixtures и compatibility examples.
 - `workspace-packs/`: optional downstream operational tooling.
 

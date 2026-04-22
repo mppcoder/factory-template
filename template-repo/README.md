@@ -7,16 +7,18 @@
 Этот шаблон рассчитан на 3 канонических режима:
 
 1. Новый проект с нуля
-   Используйте greenfield-путь и профиль `product-dev`.
+   Используйте greenfield-путь и профиль `greenfield-product`.
 
 2. Перевод на шаблон имеющегося проекта без репо
-   Используйте brownfield evidence-first путь и профиль `brownfield-dogfood-codex-assisted`.
+   Используйте brownfield evidence-first путь и профиль `brownfield-without-repo`.
 
 3. Перевод на шаблон имеющегося проекта с репо
-   Используйте brownfield-путь через `legacy-modernization`, `integration-project` или `audit-only`.
+   Используйте brownfield-путь через `brownfield-with-repo-modernization`, `brownfield-with-repo-integration` или `brownfield-with-repo-audit`.
 
 Краткая сводка по этим режимам вынесена в root-level `ENTRY_MODES.md`.
 Единая визуальная архитектура шаблона и подробные event workflows описаны в root-level `docs/template-architecture-and-event-workflows.md`.
+
+Legacy aliases старых preset names допускаются только как compatibility input в launcher/scripts и не считаются canonical release-facing naming.
 
 ## Repo-First Principle For Generated Projects
 
@@ -44,5 +46,5 @@
 
 ## Связь версий шаблона и фабрики
 
-Этот шаблон соответствует версии фабрики **2.4.3**.
+Этот шаблон соответствует версии фабрики **2.4.4**.
 Сведения о текущем функциональном состоянии шаблона находятся в `CURRENT_FUNCTIONAL_STATE.md`, а изменения фиксируются в `CHANGELOG.md`.

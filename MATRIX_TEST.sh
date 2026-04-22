@@ -17,23 +17,23 @@ make_project(){
 SBASE="$ROOT/.matrix-test"; rm -rf "$SBASE"; mkdir -p "$SBASE"
 POSITIVE_COMMON=(validate-project-preset.py validate-policy-preset.py validate-change-profile.py validate-task-graph.py validate-stage.py validate-versioning-layer.py validate-defect-capture.py validate-alignment.py)
 
-make_project "$SBASE/green-small-fix" 'Матрица greenfield small-fix' 'green-small-fix' product-dev greenfield small-fix manual
+make_project "$SBASE/green-small-fix" 'Матрица greenfield small-fix' 'green-small-fix' greenfield-product greenfield small-fix manual
 P="$SBASE/green-small-fix/green-small-fix"
 for c in "${POSITIVE_COMMON[@]}"; do assert_pass 'greenfield+small-fix+manual' "$c" "$P/scripts/$c" "$P"; done
 for c in validate-evidence.py validate-quality.py check-dod.py; do assert_fail 'greenfield+small-fix+manual' "$c" "$P/scripts/$c" "$P"; done
 assert_pass 'greenfield+small-fix+manual' validate-handoff.py "$P/scripts/validate-handoff.py" "$P"
 
-make_project "$SBASE/green-feature" 'Матрица greenfield feature' 'green-feature' product-dev greenfield feature hybrid
+make_project "$SBASE/green-feature" 'Матрица greenfield feature' 'green-feature' greenfield-product greenfield feature hybrid
 P="$SBASE/green-feature/green-feature"
 for c in "${POSITIVE_COMMON[@]}"; do assert_pass 'greenfield+feature+hybrid' "$c" "$P/scripts/$c" "$P"; done
 for c in validate-evidence.py validate-quality.py check-dod.py validate-handoff.py; do assert_fail 'greenfield+feature+hybrid' "$c" "$P/scripts/$c" "$P"; done
 
-make_project "$SBASE/brown-feature" 'Матрица brownfield feature' 'brown-feature' legacy-modernization brownfield feature hybrid
+make_project "$SBASE/brown-feature" 'Матрица brownfield feature' 'brown-feature' brownfield-with-repo-modernization brownfield feature hybrid
 P="$SBASE/brown-feature/brown-feature"
 for c in "${POSITIVE_COMMON[@]}"; do assert_pass 'brownfield+feature+hybrid' "$c" "$P/scripts/$c" "$P"; done
 for c in validate-evidence.py validate-quality.py check-dod.py validate-handoff.py; do assert_fail 'brownfield+feature+hybrid' "$c" "$P/scripts/$c" "$P"; done
 
-make_project "$SBASE/brown-audit" 'Матрица brownfield audit' 'brown-audit' audit-only brownfield brownfield-audit manual
+make_project "$SBASE/brown-audit" 'Матрица brownfield audit' 'brown-audit' brownfield-with-repo-audit brownfield brownfield-audit manual
 P="$SBASE/brown-audit/brown-audit"
 for c in "${POSITIVE_COMMON[@]}"; do assert_pass 'brownfield+audit+manual' "$c" "$P/scripts/$c" "$P"; done
 for c in validate-evidence.py validate-quality.py check-dod.py; do assert_fail 'brownfield+audit+manual' "$c" "$P/scripts/$c" "$P"; done
@@ -46,7 +46,7 @@ for ex in example-change-small-fix example-change-brownfield-audit example-chang
   done
 done
 
-make_project "$SBASE/bugflow" 'Factory bugflow' 'factory-bugflow' product-dev brownfield feature hybrid
+make_project "$SBASE/bugflow" 'Factory bugflow' 'factory-bugflow' greenfield-product brownfield feature hybrid
 P="$SBASE/bugflow/factory-bugflow"
 python3 "$ROOT/tools/fill_smoke_artifacts.py" "$P" >/dev/null 2>&1 || (
   cd "$P" && python3 "$ROOT/tools/fill_smoke_artifacts.py" >/dev/null

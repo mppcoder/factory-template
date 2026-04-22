@@ -1,6 +1,6 @@
 decision: "release"
-version: "2.4.3"
+version: "2.4.4"
 channel: "patch"
 notes_source: "RELEASE_NOTES.md"
 approved_by: "factory-template-operator"
-timestamp: "2026-04-22T12:16:14Z"
+timestamp: "2026-04-22T15:55:21Z"

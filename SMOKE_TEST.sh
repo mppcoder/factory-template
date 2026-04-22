@@ -20,7 +20,7 @@ cat "$LOG"
 
 log '=== 1. Создание проекта ==='
 cd "$WORKDIR"
-printf 'Тестовый проект\n%s\nproduct-dev\nbrownfield\nfeature\nhybrid\n' "$PROJECT_SLUG" | FACTORY_REGISTRY_MODE=skip bash "$ROOT/launcher.sh" >>"$LOG" 2>&1
+printf 'Тестовый проект\n%s\ngreenfield-product\nbrownfield\nfeature\nhybrid\n' "$PROJECT_SLUG" | FACTORY_REGISTRY_MODE=skip bash "$ROOT/launcher.sh" >>"$LOG" 2>&1
 cat "$LOG"
 : > "$LOG"
 

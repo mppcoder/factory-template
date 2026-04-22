@@ -1,4 +1,4 @@
-project_preset: product-dev
+project_preset: greenfield-product
 project_title: Развитие продукта
 recommended_mode: brownfield
 recommended_change_class: small-fix
