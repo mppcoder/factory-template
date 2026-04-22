@@ -10,7 +10,7 @@ factory-template
 done
 
 ## Change ID
-chg-20260422-003
+chg-20260422-004
 
 ## Краткое резюме
-Научить executable router уважать explicit selected_model/selected_reasoning_effort из structured handoff и выбирать совместимый executable profile вместо silent keyword downgrade до medium.
+Уточнить closeout contract: если `## Инструкция пользователю` не нужна, финальный ответ обязан явно сказать, что внешних действий не требуется.

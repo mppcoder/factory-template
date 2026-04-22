@@ -152,6 +152,7 @@ def main() -> int:
 - [ ] Что прислать обратно после внешнего шага
 - [ ] Completion package выдан в том же финальном ответе, без дополнительного напоминания пользователя
 - [ ] Если есть pending external step, финальный ответ действительно заканчивается блоком `## Инструкция пользователю`
+- [ ] Если pending external step нет, финальный ответ явно говорит, что внешних действий не требуется
 """
 
     handoff_policy = policy.get('handoff_policy', 'forbidden')
@@ -254,11 +255,16 @@ def main() -> int:
 - GitHub / внешние UI / секреты не выполнять автоматически из Codex.
 - Все внешние действия фиксировать отдельной пошаговой инструкцией для пользователя с финальным блоком `Инструкция пользователю`.
 - `Инструкция пользователю` не должна подменять внутренний handoff, если internal repo follow-up еще не завершен.
+- Если внешнего шага нет, финальный ответ все равно должен явно сказать, что внешних действий не требуется.
 - Для обновления factory ChatGPT Project сначала сам подготовьте точный repo-first instruction text; этот шаг выполняет Codex внутри repo до пользовательского блока.
 - Для downstream repo sync сначала используйте `workspace-packs/factory-ops/export-template-patch.sh` и `workspace-packs/factory-ops/apply-template-patch.sh`.
 - Для downstream repo instruction layer source-of-truth хранится в `template-repo/AGENTS.md`, а Codex в battle repo должен читать materialized root `AGENTS.md`.
 - Не перекладывайте на пользователя запуск внутренних repo-команд вроде `GENERATE_BOUNDARY_ACTIONS.sh`, если эти шаги может выполнить Codex.
 - Если replacement может создать stale duplicates, добавляйте точный раздел `Удалить перед заменой`.
+
+Если closeout полностью внутренний и `Инструкция пользователю` не нужна, используйте явную формулировку вроде:
+- `Внешних действий не требуется.`
+- `Следующий пользовательский шаг отсутствует; change закрыт полностью внутри repo.`
 """
 
     handoff_response = f"""## Handoff в Codex

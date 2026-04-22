@@ -1,16 +1,19 @@
 change:
-  id: "chg-20260422-003"
-  title: "Respect explicit reasoning in structured Codex handoff"
+  id: "chg-20260422-004"
+  title: "Require explicit no-user-action closeout wording"
   class: "small-fix"
   execution_mode: "single-pass"
   type: "brownfield"
   status: "done"
   priority: "medium"
-  summary: "Научить executable router уважать explicit selected_model/selected_reasoning_effort из structured handoff и выбирать совместимый executable profile вместо silent keyword downgrade до medium."
+  summary: "Уточнить closeout contract: если `## Инструкция пользователю` не нужна, финальный ответ обязан явно сказать, что внешних действий не требуется."
   outputs:
-    - "template-repo/scripts/codex_task_router.py"
-    - "reports/bugs/bug-015-explicit-handoff-reasoning-overridden-by-keyword-routing.md"
-    - "reports/factory-feedback/feedback-015-explicit-handoff-reasoning-overridden-by-keyword-routing.md"
+    - "template-repo/scenario-pack/16-done-closeout.md"
+    - "template-repo/process/definition-of-done.bugfix-feature-change.md"
+    - "template-repo/scripts/create-codex-task-pack.py"
+    - "template-repo/scripts/validate-codex-task-pack.py"
+    - ".chatgpt/boundary-actions.md"
+    - ".chatgpt/done-checklist.md"
     - ".chatgpt/task-index.yaml"
     - ".chatgpt/codex-input.md"
     - ".chatgpt/verification-report.md"
@@ -18,27 +21,30 @@ change:
 
 tasks:
   - id: "T-001"
-    title: "Зафиксировать routing mismatch как reusable defect"
-    type: "defect-capture"
+    title: "Закрепить явную no-user-action формулировку в closeout rules"
+    type: "documentation"
     risk_level: "low"
     executor: "developer"
     depends_on: []
     outputs:
-      - "reports/bugs/bug-015-explicit-handoff-reasoning-overridden-by-keyword-routing.md"
-      - "reports/factory-feedback/feedback-015-explicit-handoff-reasoning-overridden-by-keyword-routing.md"
+      - "template-repo/scenario-pack/16-done-closeout.md"
+      - "template-repo/process/definition-of-done.bugfix-feature-change.md"
     acceptance:
-      - "bug report воспроизводит downgrade high -> medium"
-      - "factory feedback описывает reusable routing risk"
+      - "closeout явно требует фразу о том, что внешних действий не требуется"
+      - "DoD считает отсутствие такой фразы незавершенным closeout"
 
   - id: "T-002"
-    title: "Сделать structured handoff routing executable"
+    title: "Синхронизировать generated .chatgpt guidance и validator"
     type: "automation"
-    risk_level: "medium"
+    risk_level: "low"
     executor: "developer"
     depends_on:
       - "T-001"
     outputs:
-      - "template-repo/scripts/codex_task_router.py"
+      - "template-repo/scripts/create-codex-task-pack.py"
+      - "template-repo/scripts/validate-codex-task-pack.py"
+      - ".chatgpt/boundary-actions.md"
+      - ".chatgpt/done-checklist.md"
     acceptance:
-      - "explicit selected_reasoning_effort из structured handoff сохраняется в generated launch artifacts"
-      - "unknown requested profile маппится в совместимый executable profile без silent downgrade до medium"
+      - "generated checklist требует явного no-user-action wording"
+      - "validator проверяет наличие этой guidance"

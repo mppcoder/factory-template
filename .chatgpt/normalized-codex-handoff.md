@@ -7,7 +7,7 @@ chatgpt-handoff
 build
 
 ## Task class evidence
-- keyword hit: исправ
+- keyword hit: change
 - explicit reasoning/model override matched default profile: build
 
 ## Selected profile
@@ -37,14 +37,12 @@ done
 - .chatgpt/codex-task-pack.md
 - .chatgpt/verification-report.md
 - .chatgpt/done-report.md
-- reports/bugs/
-- reports/factory-feedback/
 
 ## Handoff allowed
 yes (forbidden)
 
 ## Defect capture path
-reproduce -> evidence -> bug report -> layer classification -> factory feedback if reusable -> remediation
+not-required-by-text-signal
 
 ## Launch boundary rule
 Выбор модели и reasoning mode считается надежным только на новом запуске Codex для новой задачи.
@@ -57,17 +55,16 @@ reproduce -> evidence -> bug report -> layer classification -> factory feedback 
 
 ## Контекст
 - Repo: `factory-template`
-- Нужно устранить bug в executable routing layer.
-- Structured handoff мог явно просить `selected_reasoning_effort: high`, но generated `.chatgpt` artifacts фиксировали `medium`.
-- Причина: router уважал keyword fallback сильнее, чем explicit handoff routing fields.
+- Нужно уточнить closeout behavior.
+- Если финальный ответ не требует `## Инструкция пользователю`, он всё равно должен явно говорить, что внешних действий не требуется.
+- Сейчас это правило в repo описано недостаточно жёстко и из-за этого закрытый internal change может выглядеть как неявно незавершённый.
 
 ## Что должен сделать исполнитель
-- Зафиксировать bug report и factory feedback для reusable routing defect.
-- Обновить `template-repo/scripts/codex_task_router.py`, чтобы он читал structured handoff поля и подбирал совместимый executable profile по model/reasoning.
-- Сохранить keyword fallback только как запасной путь, а не как override поверх explicit handoff.
-- Подтвердить reproduce path до и после исправления.
+- Обновить scenario closeout rule и DoD.
+- Синхронизировать generated `.chatgpt` guidance и validator.
+- Подтвердить, что task-pack generation и validation проходят.
 
 ## Ограничения
-- Не делать вид, что уже открытая сессия auto-switches reasoning без нового launch boundary.
-- Если requested profile из handoff не существует в routing spec, нужно подобрать совместимый executable profile и явно зафиксировать это в reasons.
+- Не требовать `## Инструкция пользователю`, если внешнего шага реально нет.
+- Но и не оставлять отсутствие внешнего шага подразумеваемым.
 - Приоритет у правил repo: `AGENTS`, runbook, scenario-pack и policy files репозитория.

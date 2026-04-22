@@ -88,6 +88,8 @@ def main() -> int:
     ensure_contains(boundary, "internal repo follow-up", errors, "boundary-actions.md")
     ensure_contains(boundary, "Release-followup, source-pack refresh, export refresh, closeout-sync и release-facing consistency pass внутри repo считаются внутренней работой Codex.", errors, "boundary-actions.md")
     ensure_contains(boundary, "`Инструкция пользователю` не должна подменять внутренний handoff", errors, "boundary-actions.md")
+    ensure_contains(boundary, "Если внешнего шага нет, финальный ответ все равно должен явно сказать, что внешних действий не требуется.", errors, "boundary-actions.md")
+    ensure_contains(boundary, "Внешних действий не требуется.", errors, "boundary-actions.md")
     ensure_contains(boundary, "Обновление repo-first инструкции проекта шаблона в ChatGPT", errors, "boundary-actions.md")
     ensure_contains(boundary, "Обновление шаблона в боевых repo", errors, "boundary-actions.md")
     ensure_contains(boundary, "Обновление repo-first инструкции боевых ChatGPT Projects", errors, "boundary-actions.md")
@@ -126,6 +128,7 @@ def main() -> int:
     ensure_contains(checklist, "bash VALIDATE_VERIFIED_SYNC_PREREQS.sh", errors, "done-checklist.md")
     ensure_contains(checklist, "bash VERIFIED_SYNC.sh", errors, "done-checklist.md")
     ensure_contains(checklist, "финальный ответ действительно заканчивается блоком `## Инструкция пользователю`", errors, "done-checklist.md")
+    ensure_contains(checklist, "финальный ответ явно говорит, что внешних действий не требуется", errors, "done-checklist.md")
     ensure_contains(checklist, ".chatgpt/task-launch.yaml", errors, "done-checklist.md")
     ensure_contains(checklist, ".chatgpt/normalized-codex-handoff.md", errors, "done-checklist.md")
     for item in [
