@@ -1,5 +1,5 @@
 launch:
-  timestamp_utc: '2026-04-23T06:37:28+00:00'
+  timestamp_utc: '2026-04-23T06:45:08+00:00'
   launch_unit: new-task-launch
   launch_source: chatgpt-handoff
   router_layer: executable
@@ -28,8 +28,8 @@ launch:
   - .chatgpt/codex-task-pack.md
   - .chatgpt/verification-report.md
   - .chatgpt/done-report.md
-  - reports/bugs/bug-020-repo-first-completion-package-overstates-downstream-chatgpt-updates.md
-  - reports/factory-feedback/feedback-020-repo-first-completion-package-overstates-downstream-chatgpt-updates.md
+  - reports/bugs/bug-021-repo-first-completion-package-overstates-factory-chatgpt-update.md
+  - reports/factory-feedback/feedback-021-repo-first-completion-package-overstates-factory-chatgpt-update.md
   handoff_allowed: 'yes'
   defect_capture_path: reproduce -> evidence -> bug report -> layer classification
     -> remediation

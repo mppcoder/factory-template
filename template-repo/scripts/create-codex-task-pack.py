@@ -160,6 +160,7 @@ def main() -> int:
 - [ ] Что изменено
 - [ ] Какие файлы обновлены в repo
 - [ ] Нужно ли обновлять repo-first инструкцию factory-template ChatGPT Project
+- [ ] По умолчанию: нет, если canonical repo/path/entrypoint/instruction text не менялись
 - [ ] Нужно ли обновлять downstream template in battle repos
 - [ ] Нужно ли обновлять repo-first инструкции battle ChatGPT Projects
   По умолчанию: нет для чистого repo-first режима; да только для legacy/hybrid fallback
@@ -193,7 +194,7 @@ def main() -> int:
     route_line = 'Активные стартовые сценарии: ' + (', '.join(active_scenarios) if active_scenarios else 'еще не определены.')
     impact_model = policy.get('boundary_actions', {}).get('completion_impacts', {}) if isinstance(policy.get('boundary_actions', {}), dict) else {}
     impact_defaults = {
-        "factory_sources": "Обновление repo-first инструкции проекта шаблона в ChatGPT",
+        "factory_sources": "Обновление repo-first инструкции проекта шаблона в ChatGPT только если изменились canonical repo/path/entrypoint или короткая instruction text; иначе по умолчанию не требуется",
         "downstream_template_sync": "Обновление шаблона в боевых repo",
         "downstream_project_sources": "Обновление repo-first инструкции боевых ChatGPT Projects только для legacy/hybrid fallback; для чистого repo-first режима по умолчанию не требуется",
         "manual_archive_required": "Нужен готовый архив или каталог для ручной загрузки",
@@ -237,6 +238,7 @@ def main() -> int:
 1. Что изменено
 2. Какие файлы обновлены в repo
 3. Нужно ли обновлять repo-first инструкцию factory-template ChatGPT Project
+   По умолчанию: нет, если canonical repo/path/entrypoint/instruction text не менялись
 4. Нужно ли обновлять downstream template in battle repos
 5. Нужно ли обновлять repo-first инструкции battle ChatGPT Projects
    По умолчанию: нет для чистого repo-first режима; да только для legacy/hybrid fallback
@@ -252,6 +254,7 @@ def main() -> int:
 - Обновление repo-first инструкции боевых ChatGPT Projects
 
 Если contour не затронут, это нужно явно написать.
+Для contour `Обновление repo-first инструкции проекта шаблона в ChatGPT` canonical default — `нет`, если canonical repo/path/entrypoint/instruction text не менялись.
 Для contour `Обновление repo-first инструкции боевых ChatGPT Projects` canonical default — `нет`, если downstream уже живет в чистом repo-first режиме.
 
 ## Для handoff

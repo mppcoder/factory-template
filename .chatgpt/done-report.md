@@ -1,12 +1,12 @@
 # Отчет о завершении
 
 ## Что было запрошено
-- Убрать из completion-layer ложное ожидание, что downstream ChatGPT Projects нужно обновлять по умолчанию, хотя инструкции уже давно берутся из репо.
+- Убрать из completion-layer ложное ожидание, что `factory-template ChatGPT Project` нужно обновлять по умолчанию, хотя instruction contract в этом change не менялся.
 
 ## Что реально сделано
-- Зафиксирован reusable defect `bug-020` и оформлен factory feedback.
+- Зафиксирован reusable defect `bug-021` и оформлен factory feedback.
 - Уточнены source-of-truth scenario rules для completion package и closeout.
-- Generator и validator обновлены так, чтобы для чистого repo-first режима contour `battle ChatGPT Projects` по умолчанию трактовался как `нет`.
+- Generator и validator обновлены так, чтобы для чистого repo-first режима contour `factory-template ChatGPT Project` по умолчанию трактовался как `нет`.
 - Current `.chatgpt` completion artifacts пересобраны под новую формулировку.
 
 ## Какие артефакты обновлены
@@ -19,14 +19,17 @@
 - `.chatgpt/codex-input.md`
 - `.chatgpt/codex-context.md`
 - `.chatgpt/codex-task-pack.md`
+- `.chatgpt/boundary-actions.md`
+- `.chatgpt/done-checklist.md`
 - `.chatgpt/verification-report.md`
 - `.chatgpt/done-report.md`
-- `reports/bugs/bug-020-repo-first-completion-package-overstates-downstream-chatgpt-updates.md`
-- `reports/factory-feedback/feedback-020-repo-first-completion-package-overstates-downstream-chatgpt-updates.md`
-- `work/completed/chg-20260423-020.md`
+- `CURRENT_FUNCTIONAL_STATE.md`
+- `reports/bugs/bug-021-repo-first-completion-package-overstates-factory-chatgpt-update.md`
+- `reports/factory-feedback/feedback-021-repo-first-completion-package-overstates-factory-chatgpt-update.md`
+- `work/completed/chg-20260423-021.md`
 
 ## Что осталось вне объема
-- Реальные downstream repos в legacy/hybrid режиме, если такие еще есть вне текущего рабочего tree.
+- Реальные future cases, где instruction contract проекта шаблона действительно будет меняться вместе с repo/path/entrypoint.
 
 ## Итог закрытия
-- Completion package больше не подталкивает к обновлению downstream ChatGPT Projects там, где battle repos уже живут в чистом repo-first режиме.
+- Completion package больше не подталкивает к обновлению `factory-template ChatGPT Project` там, где instruction contract остается прежним и source-of-truth уже стабильно живет в repo.

@@ -76,6 +76,10 @@ User-only closeout допустим только если remaining next step д
 - обновление шаблона в downstream/battle repo;
 - обновление repo-first инструкции downstream/battle ChatGPT Projects.
 
+Для первого contour по умолчанию тоже не предполагай `да`.
+Если canonical repo, repo/path setting, entrypoint и короткая repo-first instruction text не менялись, canonical answer обычно `нет`.
+`Да` допустимо только если реально изменился instruction contract для `factory-template` ChatGPT Project.
+
 Для третьего contour по умолчанию не предполагай `да`.
 Если downstream уже работает в чистом repo-first режиме и source-of-truth читается из репо, canonical answer обычно `нет`.
 `Да` допустимо только для legacy/hybrid fallback, где в ChatGPT Project еще живет дублированный instruction/source layer вне репо.

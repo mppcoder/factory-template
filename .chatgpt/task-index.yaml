@@ -1,12 +1,12 @@
 change:
-  id: chg-20260423-020
-  title: Default downstream ChatGPT Projects to no in clean repo-first mode
+  id: chg-20260423-021
+  title: Default factory-template ChatGPT Project to no unless instruction contract changed
   class: small-fix
   execution_mode: codex-led
   type: brownfield
   status: done
   priority: medium
-  summary: Исправлен reusable completion-layer defect, из-за которого contour `downstream/battle ChatGPT Projects` слишком легко воспринимался как обязательный даже в чистом repo-first режиме.
+  summary: Исправлен reusable completion-layer defect, из-за которого contour `factory-template ChatGPT Project` слишком легко трактовался как обязательный даже без изменения repo/path/entrypoint/instruction text.
   outputs:
     - template-repo/scenario-pack/00-master-router.md
     - template-repo/scenario-pack/15-handoff-to-codex.md
@@ -19,25 +19,25 @@ change:
     - .chatgpt/codex-task-pack.md
     - .chatgpt/verification-report.md
     - .chatgpt/done-report.md
-    - reports/bugs/bug-020-repo-first-completion-package-overstates-downstream-chatgpt-updates.md
-    - reports/factory-feedback/feedback-020-repo-first-completion-package-overstates-downstream-chatgpt-updates.md
-    - work/completed/chg-20260423-020.md
+    - reports/bugs/bug-021-repo-first-completion-package-overstates-factory-chatgpt-update.md
+    - reports/factory-feedback/feedback-021-repo-first-completion-package-overstates-factory-chatgpt-update.md
+    - work/completed/chg-20260423-021.md
 tasks:
   - id: T-001
-    title: Зафиксировать bug-020 и уточнить closeout contours для чистого repo-first режима
+    title: Зафиксировать bug-021 и уточнить completion contour для factory-template ChatGPT Project
     type: analysis
     risk_level: low
     executor: developer
     depends_on: []
     outputs:
-      - reports/bugs/bug-020-repo-first-completion-package-overstates-downstream-chatgpt-updates.md
-      - reports/factory-feedback/feedback-020-repo-first-completion-package-overstates-downstream-chatgpt-updates.md
+      - reports/bugs/bug-021-repo-first-completion-package-overstates-factory-chatgpt-update.md
+      - reports/factory-feedback/feedback-021-repo-first-completion-package-overstates-factory-chatgpt-update.md
       - template-repo/scenario-pack/00-master-router.md
       - template-repo/scenario-pack/15-handoff-to-codex.md
       - template-repo/scenario-pack/16-done-closeout.md
     acceptance:
-      - 'downstream ChatGPT Project contour явно имеет default "нет" для чистого repo-first режима'
-      - '"да" разрешено только для legacy/hybrid fallback'
+      - 'factory-template ChatGPT Project contour явно имеет default "нет", если instruction contract не менялся'
+      - '"да" разрешено только при реальном изменении repo/path/entrypoint/instruction text'
   - id: T-002
     title: Обновить generator и validator completion package под новый default
     type: implementation
@@ -50,7 +50,7 @@ tasks:
       - template-repo/scripts/validate-codex-task-pack.py
       - docs/template-architecture-and-event-workflows.md
     acceptance:
-      - 'generated boundary-actions и done-checklist больше не подталкивают к обновлению downstream ChatGPT Projects в чистом repo-first режиме'
+      - 'generated boundary-actions и done-checklist больше не подталкивают к обновлению factory-template ChatGPT Project без изменения instruction contract'
       - 'validator закрепляет новую формулировку'
   - id: T-003
     title: Пересобрать artifacts, проверить и запушить
@@ -63,8 +63,8 @@ tasks:
       - .chatgpt/task-index.yaml
       - .chatgpt/verification-report.md
       - .chatgpt/done-report.md
-      - work/completed/chg-20260423-020.md
+      - work/completed/chg-20260423-021.md
       - .factory-runtime/reports/verified-sync-report.yaml
     acceptance:
-      - 'generated .chatgpt completion layer отражает default "нет" для battle ChatGPT Projects в чистом repo-first режиме'
+      - 'generated .chatgpt completion layer отражает default "нет" для factory-template ChatGPT Project, если instruction contract не менялся'
       - 'validators и verified sync проходят'

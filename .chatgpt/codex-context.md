@@ -10,7 +10,7 @@ factory-template
 done
 
 ## Change ID
-chg-20260423-020
+chg-20260423-021
 
 ## Краткое резюме
-Исправлен reusable completion-layer defect, из-за которого contour `downstream/battle ChatGPT Projects` слишком легко воспринимался как обязательный даже в чистом repo-first режиме.
+Исправлен reusable completion-layer defect, из-за которого contour `factory-template ChatGPT Project` слишком легко трактовался как обязательный даже без изменения repo/path/entrypoint/instruction text.

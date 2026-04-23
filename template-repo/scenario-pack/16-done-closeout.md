@@ -51,6 +51,9 @@ Closeout без handoff допустим только при реальном о
 - downstream repo template sync;
 - downstream/battle ChatGPT Project instructions.
 
+Для `factory-template ChatGPT Project instruction` по умолчанию ожидается `нет`, если repo/path/entrypoint/короткая repo-first instruction не менялись.
+Отдельное обновление этого contour допустимо только при реальном изменении instruction contract.
+
 Для `downstream/battle ChatGPT Project instructions` по умолчанию ожидается `нет`, если battle repo уже живет в чистом repo-first режиме.
 Отдельное обновление этого contour допустимо только как legacy/hybrid fallback.
 
