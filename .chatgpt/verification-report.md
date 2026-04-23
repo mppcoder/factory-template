@@ -1,19 +1,17 @@
 # Отчет о проверке результата
 
 ## Что проверяли
-- Обновленный routing contract и scenario guidance для dual-path handoff.
-- Генерацию `.chatgpt/task-launch.yaml`, `.chatgpt/normalized-codex-handoff.md`, `.chatgpt/codex-task-pack.md`, `.chatgpt/boundary-actions.md`, `.chatgpt/handoff-response.md`.
-- Validator layer для routing/task-pack/handoff-response.
+- Обновленный completion-package contract для чистого repo-first режима.
+- Генерацию `.chatgpt/boundary-actions.md` и `.chatgpt/done-checklist.md`.
+- Валидаторы `validate-codex-task-pack.py`, `validate-codex-routing.py` и `validate-defect-capture.py`.
 
 ## Что подтверждено
-- Source-facing guidance теперь различает `manual-ui (default)`, `launcher-first strict mode (optional)` и `already-open live session = non-canonical fallback`.
-- Generated handoff/completion artifacts больше не заставляют пользователя VS Code Codex extension идти в terminal по умолчанию.
-- Launcher path сохранен как optional strict executable boundary и не выдается за обязательный default.
-- Router, bootstrap, generator и validators согласованы по новым полям `apply_mode` и `strict_launch_mode`.
+- Contour `Нужно ли обновлять repo-first инструкции battle ChatGPT Projects` теперь явно имеет default `нет` для чистого repo-first режима.
+- Legacy/hybrid fallback сохранен как отдельное исключение, а не как default path.
+- Generated boundary-actions и done-checklist согласованы с обновленными scenario rules и validator expectations.
 
 ## Что требует внимания
-- Текущий root `.chatgpt/task-index.yaml` и часть release-facing smoke-test metadata остались историческими и не были полностью перестроены под новый change log.
-- Downstream repos и ChatGPT Project Sources нужно синхронизировать отдельно по completion package.
+- Если какой-то downstream проект все еще живет в legacy/hybrid режиме, это нужно указывать явно в completion package, а не выводить из шаблона по умолчанию.
 
 ## Итоговый вывод
-- Defect исправлен в source-of-truth шаблоне и отражен в текущих generated handoff artifacts.
+- Reusable completion-layer defect исправлен в source-of-truth шаблоне и отражен в текущих generated artifacts.

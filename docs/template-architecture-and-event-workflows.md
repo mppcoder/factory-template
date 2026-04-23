@@ -599,6 +599,7 @@ flowchart TD
 4. Добавить delete-before-replace semantics.
 5. Для `hot15` учитывать flat folder без подпапок.
 6. Не предлагать refresh `Sources` как default path: он допустим только для legacy/hybrid проектов, которые ещё не работают полностью в repo-first режиме.
+7. Для чистого repo-first режима downstream/battle ChatGPT Project instructions по умолчанию отмечать как `не требуется`; этот contour становится `да` только в legacy/hybrid fallback.
 
 ## 14. Workflow: incidental bugs
 

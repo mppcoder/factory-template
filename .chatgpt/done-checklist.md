@@ -27,6 +27,7 @@
 - [ ] Нужно ли обновлять repo-first инструкцию factory-template ChatGPT Project
 - [ ] Нужно ли обновлять downstream template in battle repos
 - [ ] Нужно ли обновлять repo-first инструкции battle ChatGPT Projects
+  По умолчанию: нет для чистого repo-first режима; да только для legacy/hybrid fallback
 - [ ] Готовые артефакты для скачивания
 - [ ] Команды/скрипты для repo-level sync
 - [ ] Удалить перед заменой

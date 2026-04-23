@@ -162,6 +162,7 @@ def main() -> int:
 - [ ] Нужно ли обновлять repo-first инструкцию factory-template ChatGPT Project
 - [ ] Нужно ли обновлять downstream template in battle repos
 - [ ] Нужно ли обновлять repo-first инструкции battle ChatGPT Projects
+  По умолчанию: нет для чистого repo-first режима; да только для legacy/hybrid fallback
 - [ ] Готовые артефакты для скачивания
 - [ ] Команды/скрипты для repo-level sync
 - [ ] Удалить перед заменой
@@ -194,7 +195,7 @@ def main() -> int:
     impact_defaults = {
         "factory_sources": "Обновление repo-first инструкции проекта шаблона в ChatGPT",
         "downstream_template_sync": "Обновление шаблона в боевых repo",
-        "downstream_project_sources": "Обновление repo-first инструкции боевых ChatGPT Projects",
+        "downstream_project_sources": "Обновление repo-first инструкции боевых ChatGPT Projects только для legacy/hybrid fallback; для чистого repo-first режима по умолчанию не требуется",
         "manual_archive_required": "Нужен готовый архив или каталог для ручной загрузки",
         "delete_before_replace": "Перед заменой нужно удалить старую repo-first инструкцию, если она конфликтует с новой",
     }
@@ -238,6 +239,7 @@ def main() -> int:
 3. Нужно ли обновлять repo-first инструкцию factory-template ChatGPT Project
 4. Нужно ли обновлять downstream template in battle repos
 5. Нужно ли обновлять repo-first инструкции battle ChatGPT Projects
+   По умолчанию: нет для чистого repo-first режима; да только для legacy/hybrid fallback
 6. Готовые артефакты для скачивания
 7. Команды/скрипты для repo-level sync
 8. Удалить перед заменой
@@ -250,6 +252,7 @@ def main() -> int:
 - Обновление repo-first инструкции боевых ChatGPT Projects
 
 Если contour не затронут, это нужно явно написать.
+Для contour `Обновление repo-first инструкции боевых ChatGPT Projects` canonical default — `нет`, если downstream уже живет в чистом repo-first режиме.
 
 ## Для handoff
 
@@ -300,7 +303,7 @@ def main() -> int:
 - Для VS Code Codex extension откройте новый чат/окно Codex.
 - Вручную выберите model `{launch.get('selected_model', 'gpt-5.4')}` и reasoning `{launch.get('selected_reasoning_effort', 'medium')}` в picker.
 - Только после этого вставьте handoff-блок ниже.
-- Новый чат + вставка handoff и новый task launch через executable launcher — не одно и то же.
+- новый чат + вставка handoff и новый task launch через executable launcher — не одно и то же.
 - Advisory handoff text сам по себе не переключает profile/model/reasoning в уже открытой или случайной Codex chat-сессии.
 - Уже открытая live session не является надежным механизмом автопереключения.
 - `selected_profile` — исполнимая граница; `selected_model` и `selected_reasoning_effort` — ожидаемая конфигурация profile, а не promise auto-switch.

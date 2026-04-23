@@ -1,96 +1,61 @@
 change:
-  id: chg-20260423-018
-  title: Make VS Code Codex handoff UI-first by default
+  id: chg-20260423-020
+  title: Default downstream ChatGPT Projects to no in clean repo-first mode
   class: small-fix
   execution_mode: codex-led
   type: brownfield
   status: done
-  priority: high
-  summary: Исправлен reusable template defect в handoff/completion UX для VS Code Codex extension и закрыт incidental parser bug в structured handoff routing.
+  priority: medium
+  summary: Исправлен reusable completion-layer defect, из-за которого contour `downstream/battle ChatGPT Projects` слишком легко воспринимался как обязательный даже в чистом repo-first режиме.
   outputs:
-    - README.md
-    - docs/template-architecture-and-event-workflows.md
-    - template-repo/README.md
-    - template-repo/codex-routing.yaml
-    - template-repo/launcher.sh
     - template-repo/scenario-pack/00-master-router.md
-    - template-repo/scenario-pack/12-bug-analysis.md
     - template-repo/scenario-pack/15-handoff-to-codex.md
-    - template-repo/scripts/bootstrap-codex-task.py
-    - template-repo/scripts/codex_task_router.py
+    - template-repo/scenario-pack/16-done-closeout.md
     - template-repo/scripts/create-codex-task-pack.py
-    - template-repo/scripts/launch-codex-task.sh
-    - template-repo/scripts/resolve-codex-task-route.py
-    - template-repo/scripts/validate-codex-routing.py
     - template-repo/scripts/validate-codex-task-pack.py
-    - template-repo/scripts/validate-handoff-response-format.py
-    - template-repo/template/README.md
-    - template-repo/template/docs/codex-workflow.md
-    - template-repo/template/docs/integrations.md
-    - template-repo/template/.chatgpt/codex-task-pack.md
-    - template-repo/template/.chatgpt/direct-task-response.md
-    - template-repo/template/.chatgpt/direct-task-self-handoff.md
-    - template-repo/template/.chatgpt/normalized-codex-handoff.md
-    - template-repo/template/.chatgpt/task-launch.yaml
-    - .chatgpt/bugflow-status.yaml
-    - .chatgpt/boundary-actions.md
-    - .chatgpt/codex-context.md
+    - docs/template-architecture-and-event-workflows.md
     - .chatgpt/codex-input.md
+    - .chatgpt/codex-context.md
     - .chatgpt/codex-task-pack.md
-    - .chatgpt/done-report.md
-    - .chatgpt/handoff-response.md
-    - .chatgpt/normalized-codex-handoff.md
-    - .chatgpt/task-index.yaml
-    - .chatgpt/task-launch.yaml
     - .chatgpt/verification-report.md
-    - reports/bugs/bug-018-vscode-codex-manual-ui-default-gap.md
-    - reports/factory-feedback/feedback-018-vscode-codex-manual-ui-default-gap.md
-    - reports/bugs/bug-019-structured-handoff-yaml-block-not-parsed.md
-    - reports/factory-feedback/feedback-019-structured-handoff-yaml-block-not-parsed.md
-    - work/completed/chg-20260423-018.md
+    - .chatgpt/done-report.md
+    - reports/bugs/bug-020-repo-first-completion-package-overstates-downstream-chatgpt-updates.md
+    - reports/factory-feedback/feedback-020-repo-first-completion-package-overstates-downstream-chatgpt-updates.md
+    - work/completed/chg-20260423-020.md
 tasks:
   - id: T-001
-    title: Зафиксировать defect-capture и dual-path routing contract для VS Code Codex extension
+    title: Зафиксировать bug-020 и уточнить closeout contours для чистого repo-first режима
     type: analysis
-    risk_level: medium
+    risk_level: low
     executor: developer
     depends_on: []
     outputs:
+      - reports/bugs/bug-020-repo-first-completion-package-overstates-downstream-chatgpt-updates.md
+      - reports/factory-feedback/feedback-020-repo-first-completion-package-overstates-downstream-chatgpt-updates.md
       - template-repo/scenario-pack/00-master-router.md
-      - template-repo/scenario-pack/12-bug-analysis.md
       - template-repo/scenario-pack/15-handoff-to-codex.md
-      - template-repo/codex-routing.yaml
-      - reports/bugs/bug-018-vscode-codex-manual-ui-default-gap.md
-      - reports/factory-feedback/feedback-018-vscode-codex-manual-ui-default-gap.md
+      - template-repo/scenario-pack/16-done-closeout.md
     acceptance:
-      - source-facing contract различает `manual-ui (default)`, `launcher-first strict mode (optional)` и non-canonical live-session fallback
-      - bug-018 оформлен как reusable defect и отражен в factory feedback
+      - 'downstream ChatGPT Project contour явно имеет default "нет" для чистого repo-first режима'
+      - '"да" разрешено только для legacy/hybrid fallback'
   - id: T-002
-    title: Пересобрать generators и validators под apply_mode/manual-ui default и закрыть incidental parser defect
+    title: Обновить generator и validator completion package под новый default
     type: implementation
-    risk_level: medium
+    risk_level: low
     executor: developer
     depends_on:
       - T-001
     outputs:
-      - template-repo/scripts/bootstrap-codex-task.py
-      - template-repo/scripts/codex_task_router.py
       - template-repo/scripts/create-codex-task-pack.py
-      - template-repo/scripts/launch-codex-task.sh
-      - template-repo/scripts/resolve-codex-task-route.py
-      - template-repo/scripts/validate-codex-routing.py
       - template-repo/scripts/validate-codex-task-pack.py
-      - template-repo/scripts/validate-handoff-response-format.py
-      - reports/bugs/bug-019-structured-handoff-yaml-block-not-parsed.md
-      - reports/factory-feedback/feedback-019-structured-handoff-yaml-block-not-parsed.md
+      - docs/template-architecture-and-event-workflows.md
     acceptance:
-      - generated artifacts по умолчанию выдают UI-first handoff
-      - structured handoff overrides корректно читаются даже если YAML идет после markdown heading
-      - incidental parser defect оформлен и закрыт в текущем scope
+      - 'generated boundary-actions и done-checklist больше не подталкивают к обновлению downstream ChatGPT Projects в чистом repo-first режиме'
+      - 'validator закрепляет новую формулировку'
   - id: T-003
-    title: Обновить generated artifacts, verify, verified sync и closeout
+    title: Пересобрать artifacts, проверить и запушить
     type: verification
-    risk_level: medium
+    risk_level: low
     executor: developer
     depends_on:
       - T-002
@@ -98,9 +63,8 @@ tasks:
       - .chatgpt/task-index.yaml
       - .chatgpt/verification-report.md
       - .chatgpt/done-report.md
-      - work/completed/chg-20260423-018.md
+      - work/completed/chg-20260423-020.md
       - .factory-runtime/reports/verified-sync-report.yaml
     acceptance:
-      - routing, task-pack, handoff-response и defect-capture validators green
-      - verified sync выполнен успешно
-      - closeout отражает bug-018 и bug-019 как fixed-in-current-scope
+      - 'generated .chatgpt completion layer отражает default "нет" для battle ChatGPT Projects в чистом repo-first режиме'
+      - 'validators и verified sync проходят'

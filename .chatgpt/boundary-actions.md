@@ -18,7 +18,7 @@
 
 - `impact.factory_sources` — Обновление repo-first инструкции проекта шаблона в ChatGPT
 - `impact.downstream_template_sync` — Обновление шаблона в боевых repo
-- `impact.downstream_project_sources` — Обновление repo-first инструкции боевых ChatGPT Projects
+- `impact.downstream_project_sources` — Обновление repo-first инструкции боевых ChatGPT Projects только для legacy/hybrid fallback; для чистого repo-first режима по умолчанию не требуется
 - `impact.manual_archive_required` — Нужен готовый архив или каталог для ручной загрузки
 - `impact.delete_before_replace` — Перед заменой нужно удалить старую repo-first инструкцию, если она конфликтует с новой
 
@@ -31,6 +31,7 @@
 3. Нужно ли обновлять repo-first инструкцию factory-template ChatGPT Project
 4. Нужно ли обновлять downstream template in battle repos
 5. Нужно ли обновлять repo-first инструкции battle ChatGPT Projects
+   По умолчанию: нет для чистого repo-first режима; да только для legacy/hybrid fallback
 6. Готовые артефакты для скачивания
 7. Команды/скрипты для repo-level sync
 8. Удалить перед заменой
@@ -43,12 +44,13 @@
 - Обновление repo-first инструкции боевых ChatGPT Projects
 
 Если contour не затронут, это нужно явно написать.
+Для contour `Обновление repo-first инструкции боевых ChatGPT Projects` canonical default — `нет`, если downstream уже живет в чистом repo-first режиме.
 
 ## Для handoff
 
-- Handoff в Codex для этого defect-class уже допустим после defect-capture и должен оставаться inline, если задача достаточно определена.
+- Handoff в Codex сейчас не является обязательным для выбранного профиля.
 - `apply_mode: manual-ui (default)` — основной user-facing путь для интерактивной работы через VS Code Codex extension.
-- Для manual UI apply откройте новый чат/окно Codex, вручную выберите `selected_model=gpt-5.4` и `selected_reasoning_effort=high` в picker, затем вставьте handoff.
+- Для manual UI apply откройте новый чат/окно Codex, вручную выберите `selected_model=gpt-5.4` и `selected_reasoning_effort=medium` в picker, затем вставьте handoff.
 - `strict_launch_mode: optional` — используйте launch command из `.chatgpt/task-launch.yaml`, если нужна automation, reproducibility, shell-first или scripted launch.
 - `новый чат + вставка handoff` и `new task launch через executable launcher` — не одно и то же.
 - Уже открытая live session является только non-canonical fallback и не должна подаваться как надежный auto-switch path.

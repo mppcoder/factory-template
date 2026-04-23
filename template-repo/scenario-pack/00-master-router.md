@@ -76,6 +76,10 @@ User-only closeout допустим только если remaining next step д
 - обновление шаблона в downstream/battle repo;
 - обновление repo-first инструкции downstream/battle ChatGPT Projects.
 
+Для третьего contour по умолчанию не предполагай `да`.
+Если downstream уже работает в чистом repo-first режиме и source-of-truth читается из репо, canonical answer обычно `нет`.
+`Да` допустимо только для legacy/hybrid fallback, где в ChatGPT Project еще живет дублированный instruction/source layer вне репо.
+
 Если какой-то contour не затронут, это тоже нужно сказать явно, а не оставлять неявным.
 
 Этот completion package должен быть выдан в том же финальном ответе, где сообщается о завершении change. Нельзя считать задачу закрытой, если инструкция появилась только после дополнительного напоминания пользователя.

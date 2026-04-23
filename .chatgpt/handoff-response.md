@@ -2,7 +2,7 @@
 
 - `apply_mode: manual-ui (default)`
 - Для VS Code Codex extension откройте новый чат/окно Codex.
-- Вручную выберите model `gpt-5.4` и reasoning `high` в picker.
+- Вручную выберите model `gpt-5.4` и reasoning `medium` в picker.
 - Только после этого вставьте handoff-блок ниже.
 - новый чат + вставка handoff и новый task launch через executable launcher — не одно и то же.
 - Advisory handoff text сам по себе не переключает profile/model/reasoning в уже открытой или случайной Codex chat-сессии.
@@ -30,18 +30,18 @@ Repo: factory-template
 Приоритет: сначала правила repo (`AGENTS`, runbook, scenario-pack, policy files), затем общие инструкции без конфликта с ними.
 Entry point: 00-master-router.md
 Launch source: chatgpt-handoff
-Task class: deep
-Selected profile: deep
+Task class: build
+Selected profile: build
 Selected model: gpt-5.4
-Selected reasoning effort: high
+Selected reasoning effort: medium
 Apply mode: manual-ui (default)
 Strict launch mode: optional
 Optional strict launch command: ./scripts/launch-codex-task.sh --launch-source chatgpt-handoff --task-file .chatgpt/codex-input.md --execute
-Direct Codex command behind launcher: codex --profile deep
+Direct Codex command behind launcher: codex --profile build
 Routing rule: advisory/handoff text != executable profile switch; reliable routing unit = new task launch only.
 Manual UI rule: для VS Code Codex extension откройте новый чат/окно, вручную выберите model/reasoning в picker, затем вставьте этот handoff.
 Live session rule: уже открытая live session = non-canonical fallback; не обещать auto-switch.
-Pipeline stage: defect-capture -> classification -> remediation
+Pipeline stage: defect-capture -> classification -> remediation -> verify
 Handoff allowed: yes
 Scope: работать только в пределах этого repo и связанных project artifacts.
 Verify: использовать актуальные validators, verification-report.md и done-report.md.

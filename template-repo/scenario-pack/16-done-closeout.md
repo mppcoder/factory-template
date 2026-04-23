@@ -51,6 +51,9 @@ Closeout без handoff допустим только при реальном о
 - downstream repo template sync;
 - downstream/battle ChatGPT Project instructions.
 
+Для `downstream/battle ChatGPT Project instructions` по умолчанию ожидается `нет`, если battle repo уже живет в чистом repo-first режиме.
+Отдельное обновление этого contour допустимо только как legacy/hybrid fallback.
+
 Перед таким closeout Codex обязан сам выполнить внутренний repo prep: boundary-actions generation, текстовую нормализацию инструкции и другую сборку артефактов, если она нужна для внешнего шага. Ответ, который вместо этого отправляет пользователя запускать внутренние repo-команды, считается неполным closeout.
 
 Если replacement может создать stale duplicates в project instruction или reference/export наборе, в блоке `## Инструкция пользователю` обязателен отдельный подраздел `Удалить перед заменой` с точными именами файлов или архивов.
