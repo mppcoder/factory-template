@@ -37,6 +37,8 @@ Evidence / quality / DoD до смыслового наполнения арте
 - `VALIDATE_FACTORY_TEMPLATE_OPS.sh` проходит на чистом пакете.
 - `SMOKE_TEST.sh` проходит на чисто распакованном финальном архиве.
 - `EXAMPLES_TEST.sh` проверяет 36 из 36 комбинаций и проходит зелёно.
+- `EXAMPLES_TEST.sh` теперь выводит diagnostic block `[DETAIL]` при падении checker-а и больше не скрывает root cause за `/dev/null`.
+- `template-repo/scripts/validate-versioning-layer.py` переведен на self-contained Python-проверку (без runtime-зависимости от `rg`).
 - `MATRIX_TEST.sh` проходит на чисто распакованном финальном архиве.
 - `MATRIX_TEST.sh` подтверждает, что сырой `meta-feedback` блокируется validator, а после заполнения dry-run ingest проходит.
 - `MATRIX_TEST.sh` подтверждает, что generated `codex task pack` проходит отдельный semantic validator и подхватывает active scenario routing.
@@ -72,5 +74,5 @@ Evidence / quality / DoD до смыслового наполнения арте
 - phase-aware export/reference packs остаются вспомогательным слоем и не заменяют чтение сценариев из GitHub repo.
 
 ## CI baseline status
-- Статус: `green` (локально подтвержден через `verify-all.sh quick` и `verify-all.sh ci`).
+- Статус: `green` (GitHub Actions run `24840192862`, 2026-04-23: `verify-baseline` = success, `release-bundle-dry-run` = success; локально подтверждено через `verify-all.sh quick` и `verify-all.sh ci`).
 - Residual risk: шаг `release-executor` в release workflow остаётся manual/optional и по-прежнему зависит от валидного verified-sync контекста и GitHub auth.
