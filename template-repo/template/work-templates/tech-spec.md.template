@@ -1,0 +1,19 @@
+# Tech Spec: {{FEATURE_TITLE}}
+
+> generated_at: {{GENERATED_AT}}
+> В этом документе описано "как" делаем решение простыми шагами.
+
+## Кратко о подходе
+{{IMPLEMENTATION_OVERVIEW}}
+
+## Что меняем
+{{CHANGES}}
+
+## Какие артефакты затрагиваем
+{{TOUCHED_COMPONENTS}}
+
+## Как проверяем
+{{VERIFICATION}}
+
+## Ограничения и риски
+{{RISKS_AND_CONSTRAINTS}}

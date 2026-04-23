@@ -1,0 +1,62 @@
+schema_version: 1
+
+feature:
+  id: ""
+  title: ""
+  rough_idea: ""
+  workspace: ""
+
+progress:
+  current_stage: interview
+  last_completed_stage: intake
+  next_step_hint: "Ответьте на первый незаполненный вопрос интервью"
+
+interview:
+  question_order:
+    - problem
+    - users
+    - value
+    - in_scope
+    - out_of_scope
+    - constraints
+    - acceptance
+
+  questions:
+    problem:
+      prompt: "Какую проблему вы хотите решить?"
+      required: true
+    users:
+      prompt: "Кто основной пользователь результата?"
+      required: true
+    value:
+      prompt: "Почему это ценно для пользователя/команды?"
+      required: true
+    in_scope:
+      prompt: "Что точно входит в первый релиз?"
+      required: true
+    out_of_scope:
+      prompt: "Что точно не входит в первый релиз?"
+      required: true
+    constraints:
+      prompt: "Какие ограничения уже известны (время, доступы, legacy)?"
+      required: false
+    acceptance:
+      prompt: "Как понять, что результат принят?"
+      required: true
+
+  answers:
+    problem: ""
+    users: ""
+    value: ""
+    in_scope: ""
+    out_of_scope: ""
+    constraints: ""
+    acceptance: ""
+
+timeline:
+  created_at: ""
+  updated_at: ""
+
+session:
+  last_actor: ""
+  resume_note: "Можно остановиться и продолжить позже: состояние сохраняется в interview-state.yaml"

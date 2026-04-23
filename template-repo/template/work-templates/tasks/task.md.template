@@ -1,0 +1,22 @@
+# {{TASK_ID}} — {{TASK_TITLE}}
+
+> generated_at: {{GENERATED_AT}}
+> Задача должна быть маленькой и завершаться проверяемым результатом.
+
+## Цель
+{{TASK_GOAL}}
+
+## Входной контекст
+{{TASK_INPUT_CONTEXT}}
+
+## Действия
+{{TASK_ACTIONS}}
+
+## Критерии приемки
+{{TASK_ACCEPTANCE}}
+
+## Зависимости
+{{TASK_DEPENDENCIES}}
+
+## Риски
+{{TASK_RISKS}}
