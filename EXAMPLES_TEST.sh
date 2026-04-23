@@ -11,12 +11,16 @@ printf '%s\n' '-----------------------------------------------------------------
 for ex in "${EXAMPLES[@]}"; do
   base="$(basename "$ex")"
   for chk in "${CHECKS[@]}"; do
-    if timeout 40s "$SCRIPTS/$chk" "$ROOT/$ex" >/dev/null 2>&1; then
+    tmp_log="$(mktemp)"
+    if timeout 40s "$SCRIPTS/$chk" "$ROOT/$ex" >"$tmp_log" 2>&1; then
       status='OK'
     else
       status='FAIL'
       FAILS=$((FAILS+1))
+      printf '\n[DETAIL] %s :: %s\n' "$base" "$chk"
+      sed -n '1,80p' "$tmp_log"
     fi
+    rm -f "$tmp_log"
     printf '%-48s | %-28s | %-8s\n' "$base" "$chk" "$status"
   done
 done
