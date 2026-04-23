@@ -108,7 +108,12 @@ assert_pass 'factory-bugflow' validate-factory-feedback.py bash "$ROOT/VALIDATE_
 assert_pass 'factory-bugflow' ingest-factory-feedback.sh bash "$ROOT/INGEST_FACTORY_FEEDBACK.sh" "$P" --dry-run
 assert_pass 'factory-bugflow' export-template-patch.sh "$ROOT/workspace-packs/factory-ops/export-template-patch.sh" "$ROOT" "$P" --dry-run
 assert_pass 'factory-bugflow' 'apply-template-patch.sh --check' "$ROOT/workspace-packs/factory-ops/apply-template-patch.sh" "$P/_factory-sync-export" --check
-assert_pass 'factory-bugflow' 'apply-template-patch.sh --apply-safe-zones' "$ROOT/workspace-packs/factory-ops/apply-template-patch.sh" "$P/_factory-sync-export" --apply-safe-zones
+assert_pass 'factory-bugflow' 'apply-template-patch.sh --apply-safe-zones --with-project-snapshot' "$ROOT/workspace-packs/factory-ops/apply-template-patch.sh" "$P/_factory-sync-export" --apply-safe-zones --with-project-snapshot
+printf '\nMATRIX_MANUAL_CHANGE_MARKER\n' >> "$P/README.md"
+assert_pass 'factory-bugflow' upgrade-report.py python3 "$ROOT/workspace-packs/factory-ops/upgrade-report.py" "$ROOT" "$P" --format text
+assert_pass 'factory-bugflow' 'rollback-template-patch.sh --check' "$ROOT/workspace-packs/factory-ops/rollback-template-patch.sh" "$P/_factory-sync-export" --check
+assert_pass 'factory-bugflow' 'rollback-template-patch.sh --rollback --restore-project-snapshot' "$ROOT/workspace-packs/factory-ops/rollback-template-patch.sh" "$P/_factory-sync-export" --rollback --restore-project-snapshot
+assert_fail 'factory-bugflow' 'manual-marker-after-rollback' grep -q 'MATRIX_MANUAL_CHANGE_MARKER' "$P/README.md"
 assert_pass 'routing-quick' resolve-codex-task-route.py bash -lc "python3 '$ROOT/template-repo/scripts/resolve-codex-task-route.py' '$P' --launch-source chatgpt-handoff --task-text 'docs triage search in repo' | grep -q 'selected_profile=quick'"
 assert_pass 'routing-build' resolve-codex-task-route.py bash -lc "python3 '$ROOT/template-repo/scripts/resolve-codex-task-route.py' '$P' --launch-source chatgpt-handoff --task-text 'fix feature remediation in launcher' | grep -q 'selected_profile=build'"
 assert_pass 'routing-deep' resolve-codex-task-route.py bash -lc "python3 '$ROOT/template-repo/scripts/resolve-codex-task-route.py' '$P' --launch-source chatgpt-handoff --task-text 'root cause audit architecture inconsistency' | grep -q 'selected_profile=deep'"

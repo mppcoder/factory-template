@@ -1,4 +1,4 @@
-# TEST REPORT v2.4.4
+# TEST REPORT v2.5 RC (verify-closeout)
 
 ## Что проверено
 - consolidated verify entrypoint (`template-repo/scripts/verify-all.sh`)
@@ -22,6 +22,8 @@
 - synthetic phase detection self-test
 - repo-first ChatGPT Project instruction mode
 - release-facing reference package and canonical root release notes source
+- novice onboarding acceptance fixtures (`onboarding-smoke/run-novice-e2e.sh`)
+- downstream upgrade dry-run/apply/rollback UX (`upgrade-report.py`, `rollback-template-patch.sh`)
 
 ## Ожидаемое поведение на fresh scaffold
 Проходят structural / versioning / defect / alignment проверки.
@@ -30,6 +32,7 @@ Evidence / quality / DoD до смыслового наполнения арте
 ## Фактический результат
 - `bash template-repo/scripts/verify-all.sh quick` проходит.
 - `bash template-repo/scripts/verify-all.sh ci` проходит.
+- `bash onboarding-smoke/run-novice-e2e.sh` проходит: `greenfield-novice` и `brownfield-novice` в статусе `green`.
 - `bash RELEASE_BUILD.sh /tmp/factory-template-release.zip` проходит как packaging dry-run.
 - `validate-codex-routing.py` теперь корректно проверяет и template repo, и generated repos (без false-negative по `template/docs/*`).
 - `tools/fill_smoke_artifacts.py` теперь поддерживает target path и не перезаписывает root `.chatgpt/*` при `MATRIX_TEST.sh`.
@@ -42,11 +45,13 @@ Evidence / quality / DoD до смыслового наполнения арте
 - `MATRIX_TEST.sh` проходит на чисто распакованном финальном архиве.
 - `MATRIX_TEST.sh` подтверждает, что сырой `meta-feedback` блокируется validator, а после заполнения dry-run ingest проходит.
 - `MATRIX_TEST.sh` подтверждает, что generated `codex task pack` проходит отдельный semantic validator и подхватывает active scenario routing.
+- `MATRIX_TEST.sh` подтверждает upgrade closeout path: `upgrade-report.py`, `apply-template-patch.sh --apply-safe-zones`, `rollback-template-patch.sh --check|--rollback`.
 - `VALIDATE_FACTORY_TEMPLATE_OPS.sh` подтверждает semantic profile для `sources-pack-core-20`, `sources-pack-release-20` и `sources-pack-bugfix-20`.
 - `EXPORT_FACTORY_TEMPLATE_SOURCES.sh` и `GENERATE_BOUNDARY_ACTIONS.sh` публикуют phase-aware рекомендацию для `controlled-fixes`, `release` и `bugfix-drift`.
 - `DETECT_FACTORY_TEMPLATE_PHASE.sh` корректно различает `release` и `bugfix-drift` на rule-based changed path signals.
 - `PHASE_DETECTION_TEST.sh` автоматически проверяет synthetic `controlled-fixes`, `release` и `bugfix-drift` сценарии.
 - launcher smoke на временном scaffold подтверждает, что создание проекта больше не зависит от внешнего staging URL и сразу переводит проект в repo-first режим.
+- `UPGRADE_SUMMARY.md` подтверждает человекочитаемый downstream upgrade UX и рабочий rollback path с tracked files.
 - `POST_UNZIP_SETUP.sh` остаётся безопасным для non-interactive verify path и не блокирует test runs prompt'ом.
 - validator `validate-codex-task-pack.py` теперь требует, чтобы handoff pack явно фиксировал приоритет правил repo.
 - validator `validate-codex-task-pack.py` теперь также требует правило: handoff пользователю выдаётся только одним цельным copy-paste блоком, а не ссылкой на файл и не несколькими блоками.
@@ -56,6 +61,7 @@ Evidence / quality / DoD до смыслового наполнения арте
 - Golden examples и fresh scaffold синхронизированы с финальным versioning layer.
 - curated `sources-pack-core-20`, `sources-pack-release-20`, `sources-pack-bugfix-20` собираются из декларативного policy manifest.
 - boundary-actions guide генерируется из markdown template и проверяется вместе с ops-policy слоем.
+- incidental defect `utcnow()` warning зафиксирован и исправлен in-scope: `reports/bugs/2026-04-23-factory-ops-utcnow-warning.md`.
 
 ## Что вошло в релиз 2.4.4
 - canonical factory hierarchy очищена от dogfood/openclaw naming в core/release-facing слоях;
@@ -72,6 +78,10 @@ Evidence / quality / DoD до смыслового наполнения арте
 - документальные intent signals сейчас реализованы только для `release`, а не для всех фаз.
 - document intent signals сейчас реализованы для `release` и `bugfix-drift`, но ещё не покрывают возможные более тонкие подфазы внутри controlled fixes.
 - phase-aware export/reference packs остаются вспомогательным слоем и не заменяют чтение сценариев из GitHub repo.
+
+## Open Issues
+- По bug set `bug-026/027/028` критичных открытых дефектов после remediation не осталось.
+- Follow-up для будущего улучшения (не blocker текущего RC): расширить novice long-flow с synthetic smoke до более предметных domain сценариев в downstream проектах.
 
 ## CI baseline status
 - Статус: `green` (GitHub Actions run `24840192862`, 2026-04-23: `verify-baseline` = success, `release-bundle-dry-run` = success; локально подтверждено через `verify-all.sh quick` и `verify-all.sh ci`).

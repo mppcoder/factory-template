@@ -1,33 +1,39 @@
 # Release Notes
 
-## 2.5 - Program Framing (planned, not released) - 2026-04-23
+## 2.5 - RC Closeout Candidate (not GA) - 2026-04-23
 
 ### О чём этот контур
 
-Это не опубликованный release note для тега, а канонический framing следующей линии `2.5`.
-Линия `2.5` определена как dual-track программа:
+Линия `2.5` остается dual-track программой:
 
 - `2.5-A` — engineering hardening;
-- `2.5-B` — beginner-first productization (UI-friendly и безопасный для downstream evolution UX).
+- `2.5-B` — beginner-first productization (UI-friendly и безопасный downstream UX).
 
-### Что нормализовано
+Этот блок фиксирует не только framing, но и фактический RC closeout для downstream + novice acceptance.
 
-- единый roadmap: `docs/releases/2.5-roadmap.md`;
-- единые success metrics с порогами MVP/full: `docs/releases/2.5-success-metrics.md`;
-- release-facing документы обновлены так, чтобы `2.5` не трактовался как "ещё один process-hardening-only релиз".
+### Что вошло в RC closeout
 
-### Gate-фокус следующих handoff
+- human-readable downstream upgrade отчет: `workspace-packs/factory-ops/upgrade-report.py`;
+- safe apply теперь сохраняет rollback state и backup для materialized safe-зон;
+- safe apply дополнительно поддерживает full-project snapshot режим (`--with-project-snapshot`);
+- rollback path: `workspace-packs/factory-ops/rollback-template-patch.sh --check|--rollback`;
+- rollback path поддерживает full snapshot restore (`--restore-project-snapshot`) для mixed manual sessions;
+- `check-template-drift.py` поддерживает human-readable отчет (`--format human`) и строгий режим (`--strict`);
+- novice acceptance fixtures: `onboarding-smoke/run-novice-e2e.sh` + `onboarding-smoke/ACCEPTANCE_REPORT.md`;
+- novice acceptance теперь включает post-bootstrap long-flow (`fill_smoke_artifacts` + `validate-evidence/quality/handoff/check-dod`);
+- consolidated verify path (`template-repo/scripts/verify-all.sh ci`) теперь включает novice onboarding smoke перед `SMOKE/EXAMPLES/MATRIX`.
 
-1. `H25-01`: hardening backlog и risk register.
-2. `H25-02`: beginner onboarding flow и UI contracts.
-3. `H25-03`: safe defaults и compatibility для downstream.
-4. `H25-04`: MVP DoD подтвержден по порогам.
-5. `H25-05`: full 2.5 DoD и release closeout.
+### RC verification evidence
 
-### Определение готовности
+- `UPGRADE_SUMMARY.md` — dry-run/apply/rollback UX summary на реальном novice brownfield downstream;
+- `onboarding-smoke/ACCEPTANCE_REPORT.md` — greenfield novice + brownfield novice сценарии зеленые;
+- `TEST_REPORT.md` — обновлен под beginner-first acceptance и downstream hardening, а не только process/docs polish.
 
-- `MVP 2.5` требует закрытия hardening + beginner контуров в минимально достаточном наборе и достижения MVP-порогов.
-- `Full 2.5` требует закрытия всех фаз roadmap и full-порогов метрик из `docs/releases/2.5-success-metrics.md`.
+### Статус готовности
+
+- `2.5` как GA-релиз не объявлен;
+- RC candidate готов для downstream trial;
+- переход к GA возможен только после дальнейшего подтверждения KPI из `docs/releases/2.5-success-metrics.md`.
 
 ## 2.4.4 - 2026-04-22
 

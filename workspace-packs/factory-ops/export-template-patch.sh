@@ -39,10 +39,25 @@ def project_zone(zone: str) -> Path:
     if zone.startswith('template-repo/template/'):
         return project / zone.replace('template-repo/template/', '', 1)
     return project / zone
-for zone in manifest.get('sync_zones', []):
+
+
+def normalize_zone_entry(entry):
+    if isinstance(entry, str):
+        return entry, {}
+    if isinstance(entry, dict):
+        return str(entry.get('path', '')).strip(), entry
+    return '', {}
+
+
+for zone_entry in manifest.get('sync_zones', []):
+    zone, meta = normalize_zone_entry(zone_entry)
+    if not zone:
+        continue
     t_zone = template / zone
     p_zone = project_zone(zone)
     if not t_zone.exists() or not p_zone.exists():
+        if t_zone.exists() and not p_zone.exists() and bool(meta.get('optional_in_project', False)):
+            summary.append(f"- optional sync зона отсутствует в downstream (expected): {zone}")
         continue
     for p_file in p_zone.rglob('*'):
         if not p_file.is_file():

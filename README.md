@@ -72,6 +72,7 @@ Wizard задает три простых вопроса:
 ```bash
 cd factory-v2.4.4
 bash POST_UNZIP_SETUP.sh
+bash onboarding-smoke/run-novice-e2e.sh
 bash MATRIX_TEST.sh
 bash CLEAN_VERIFY_ARTIFACTS.sh
 ```
@@ -179,6 +180,17 @@ python3 template-repo/scripts/validate-codex-routing.py <working-project>
 2. downstream refresh использует `workspace-packs/factory-ops/export-template-patch.sh`;
 3. `workspace-packs/factory-ops/apply-template-patch.sh --apply-safe-zones` materializes generated root `AGENTS.md` в боевом repo;
 4. `workspace-packs/factory-ops/check-template-drift.py` ловит отсутствие root clone и drift относительно `template-repo/AGENTS.md`.
+
+Human-readable upgrade/rollback операторский маршрут:
+
+```bash
+python3 workspace-packs/factory-ops/upgrade-report.py <factory-root> <downstream-root> --format markdown --output UPGRADE_SUMMARY.md
+bash workspace-packs/factory-ops/apply-template-patch.sh <downstream-root>/_factory-sync-export --apply-safe-zones
+bash workspace-packs/factory-ops/apply-template-patch.sh <downstream-root>/_factory-sync-export --apply-safe-zones --with-project-snapshot
+bash workspace-packs/factory-ops/rollback-template-patch.sh <downstream-root>/_factory-sync-export --check
+bash workspace-packs/factory-ops/rollback-template-patch.sh <downstream-root>/_factory-sync-export --rollback
+bash workspace-packs/factory-ops/rollback-template-patch.sh <downstream-root>/_factory-sync-export --rollback --restore-project-snapshot
+```
 
 Это не "магическое" обновление GitHub само по себе: sync происходит только как часть канонического template-sync/update flow внутри repo/tooling.
 

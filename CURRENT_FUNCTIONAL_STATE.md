@@ -8,6 +8,7 @@
 - project presets, policy presets и change classes
 - defect-capture layer и feedback loop
 - drift detection, patch export и safe apply для разрешенных зон
+- human-readable downstream upgrade report и rollback path для safe-zone materialization
 - golden examples и scaffold-only examples
 - curated reference/export packs, boundary-actions generator и ops-policy layer
 - единый release-facing reference package по функционалу, архитектуре, дереву проекта и workflow
@@ -36,6 +37,8 @@
 - completion/handoff layer теперь различает готовые внешние boundary steps и внутренние prepare/export commands: сборка export artifacts выполняется Codex внутри repo до пользовательского блока
 - repo-first instruction layer для ChatGPT Projects: сценарии читаются прямо из GitHub repo, а не из локально загруженных project artifacts
 - launcher и template docs больше не требуют отдельную project-local staging-конфигурацию
+- beginner-friendly acceptance smoke (`onboarding-smoke/run-novice-e2e.sh`) регулярно воспроизводит greenfield и brownfield novice launch path через wizard
+- downstream apply-safe-zones теперь сохраняет rollback-state и backup, а `rollback-template-patch.sh` выполняет воспроизводимый откат; для mixed manual sessions доступен full-project snapshot restore
 - handoff source files и validator `validate-codex-task-pack.py` теперь явно требуют фиксировать приоритет repo rules при передаче задачи в Codex
 - handoff layer теперь явно запрещает выдачу handoff через файл или несколькими блоками: пользователю разрешён только один цельный copy-paste блок для Codex
 - generated project tooling теперь включает validator `validate-handoff-response-format.py`, который проверяет сам markdown-ответ на single-block handoff и запрещает file-based handoff patterns
@@ -52,11 +55,13 @@
 - release-facing docs теперь фиксируют, что линия `2.5` не сводится к process hardening и требует отдельного beginner-first/UI-friendly контура
 
 ## Программа 2.5 (статус на 2026-04-23)
-- текущая стадия: `remediation-prep`
+- текущая стадия: `verify-closeout (RC prep)`
 - канонический roadmap: `docs/releases/2.5-roadmap.md`
 - канонические метрики: `docs/releases/2.5-success-metrics.md`
 - dependency order зафиксирован: foundation hardening (`2.5-A`) -> beginner UX contracts (`2.5-B`) -> интеграция и downstream safety -> release closeout
 - gate-лист для следующих 5 handoff нормализован в release-facing документах
+- novice E2E acceptance (greenfield + brownfield) зафиксирован в `onboarding-smoke/ACCEPTANCE_REPORT.md`
+- downstream upgrade UX closeout зафиксирован в `UPGRADE_SUMMARY.md`
 
 ## Что работает частично
 - matrix runner как единый источник истины
@@ -76,6 +81,7 @@
 - дальнейшее production hardening runtime-нестабильности git sync beyond current fallback strategy
 - выполнение следующих 5 handoff по roadmap `2.5` и закрытие gate'ов MVP/full
 - подтверждение beginner-first KPI и downstream safety KPI из `docs/releases/2.5-success-metrics.md`
+- дальнейшее расширение novice acceptance от текущего long-flow smoke к предметным domain-сценариям реальных downstream систем
 
 ## Граница core
 Core включает фабрику, шаблон, versioning/documentation layer, `.chatgpt`, scenario-pack, examples и feedback loop.

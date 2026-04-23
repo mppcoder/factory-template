@@ -18,6 +18,8 @@
 - [x] Проверить `CHANGELOG.md`
 - [x] Проверить `CURRENT_FUNCTIONAL_STATE.md`
 - [x] Проверить `TEST_REPORT.md`
+- [x] Проверить `UPGRADE_SUMMARY.md`
+- [x] Проверить `onboarding-smoke/ACCEPTANCE_REPORT.md`
 - [x] Проверить `VERIFY_SUMMARY.md`
 - [x] Проверить `RELEASE_NOTES.md`
 - [x] Проверить `RELEASE_NOTE_TEMPLATE.md`
@@ -30,6 +32,7 @@
 ## Required Commands
 
 - [x] `bash template-repo/scripts/verify-all.sh ci`
+- [x] `bash onboarding-smoke/run-novice-e2e.sh`
 - [x] `bash POST_UNZIP_SETUP.sh`
 - [x] `bash VALIDATE_FACTORY_TEMPLATE_OPS.sh`
 - [x] `bash VALIDATE_VERIFIED_SYNC_PREREQS.sh`
@@ -40,6 +43,11 @@
 - [x] `bash MATRIX_TEST.sh`
 - [x] `bash CLEAN_VERIFY_ARTIFACTS.sh`
 - [x] `bash PRE_RELEASE_AUDIT.sh`
+- [x] `python3 workspace-packs/factory-ops/upgrade-report.py <factory-root> <downstream-root> --format markdown --output UPGRADE_SUMMARY.md`
+- [x] `bash workspace-packs/factory-ops/apply-template-patch.sh <downstream-root>/_factory-sync-export --apply-safe-zones`
+- [x] `bash workspace-packs/factory-ops/apply-template-patch.sh <downstream-root>/_factory-sync-export --apply-safe-zones --with-project-snapshot`
+- [x] `bash workspace-packs/factory-ops/rollback-template-patch.sh <downstream-root>/_factory-sync-export --rollback`
+- [x] `bash workspace-packs/factory-ops/rollback-template-patch.sh <downstream-root>/_factory-sync-export --rollback --restore-project-snapshot`
 
 ## Required CI Checks (Branch Protection Contract)
 
@@ -80,6 +88,15 @@
 - [x] Канонические метрики и пороги MVP/full зафиксированы: `docs/releases/2.5-success-metrics.md`
 - [x] `README.md`, `CURRENT_FUNCTIONAL_STATE.md` и `RELEASE_NOTES.md` синхронизированы с новой целью `2.5`
 - [x] Repo-first и scenario-pack принципы сохранены в release-facing описании
+
+## 2.5 RC Closeout Gate (Verify-Closeout)
+
+- [x] Downstream dry-run/apply/rollback path человекочитаемо описан и проверен (`UPGRADE_SUMMARY.md`)
+- [x] `greenfield novice` E2E зеленый (`onboarding-smoke/ACCEPTANCE_REPORT.md`)
+- [x] `brownfield novice` E2E зеленый (`onboarding-smoke/ACCEPTANCE_REPORT.md`)
+- [x] `TEST_REPORT.md` и release-facing docs обновлены как beginner-first + hardening, а не docs-only polish
+- [x] инцидентные дефекты из verify-прохода зафиксированы через defect-capture path
+- [ ] GA-ready объявлен
 
 ## 2.5 Next 5 Handoff Gates
 

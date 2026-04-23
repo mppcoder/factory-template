@@ -3,7 +3,9 @@
 # advisory_only_zones можно сравнивать и экспортировать, но применять только вручную.
 # exclude_zones исключаются из автоматической обратной синхронизации.
 sync_zones:
-  - bootstrap
+  - path: bootstrap
+    optional_in_project: true
+    note: generated downstream project usually does not include bootstrap at project root
   - template-repo/scenario-pack
   - template-repo/template/.chatgpt/examples
   - template-repo/template/meta-feedback
