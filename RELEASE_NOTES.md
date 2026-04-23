@@ -1,5 +1,34 @@
 # Release Notes
 
+## 2.5 - Program Framing (planned, not released) - 2026-04-23
+
+### О чём этот контур
+
+Это не опубликованный release note для тега, а канонический framing следующей линии `2.5`.
+Линия `2.5` определена как dual-track программа:
+
+- `2.5-A` — engineering hardening;
+- `2.5-B` — beginner-first productization (UI-friendly и безопасный для downstream evolution UX).
+
+### Что нормализовано
+
+- единый roadmap: `docs/releases/2.5-roadmap.md`;
+- единые success metrics с порогами MVP/full: `docs/releases/2.5-success-metrics.md`;
+- release-facing документы обновлены так, чтобы `2.5` не трактовался как "ещё один process-hardening-only релиз".
+
+### Gate-фокус следующих handoff
+
+1. `H25-01`: hardening backlog и risk register.
+2. `H25-02`: beginner onboarding flow и UI contracts.
+3. `H25-03`: safe defaults и compatibility для downstream.
+4. `H25-04`: MVP DoD подтвержден по порогам.
+5. `H25-05`: full 2.5 DoD и release closeout.
+
+### Определение готовности
+
+- `MVP 2.5` требует закрытия hardening + beginner контуров в минимально достаточном наборе и достижения MVP-порогов.
+- `Full 2.5` требует закрытия всех фаз roadmap и full-порогов метрик из `docs/releases/2.5-success-metrics.md`.
+
 ## 2.4.4 - 2026-04-22
 
 ### О чём этот релиз

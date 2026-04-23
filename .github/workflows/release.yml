@@ -1,0 +1,111 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+    inputs:
+      run_release_executor:
+        description: "Run EXECUTE_RELEASE_DECISION.sh after preflight/build"
+        required: true
+        default: false
+        type: boolean
+
+permissions:
+  contents: write
+
+concurrency:
+  group: release-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  release-preflight:
+    name: release-preflight
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: "pip"
+          cache-dependency-path: |
+            requirements.txt
+            requirements.lock
+
+      - name: Install Python dependencies
+        run: python -m pip install --upgrade pip && pip install -r requirements.txt
+
+      - name: Run release-facing verification
+        run: bash template-repo/scripts/verify-all.sh quick
+
+  release-bundle:
+    name: release-bundle
+    runs-on: ubuntu-latest
+    needs: release-preflight
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: "pip"
+          cache-dependency-path: |
+            requirements.txt
+            requirements.lock
+
+      - name: Install Python dependencies
+        run: python -m pip install --upgrade pip && pip install -r requirements.txt
+
+      - name: Build release archive
+        run: |
+          bash CLEAN_VERIFY_ARTIFACTS.sh
+          OUT_ZIP="$RUNNER_TEMP/factory-template-${GITHUB_REF_NAME:-manual}.zip"
+          bash RELEASE_BUILD.sh "$OUT_ZIP"
+          test -s "$OUT_ZIP"
+
+      - name: Upload release artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: factory-template-release-${{ github.ref_name || 'manual' }}
+          path: ${{ runner.temp }}/factory-template-${{ github.ref_name || 'manual' }}.zip
+          if-no-files-found: error
+          retention-days: 30
+
+  release-executor:
+    name: release-executor
+    runs-on: ubuntu-latest
+    needs: release-bundle
+    if: ${{ github.event_name == 'workflow_dispatch' && (inputs.run_release_executor == true || inputs.run_release_executor == 'true') }}
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: "pip"
+          cache-dependency-path: |
+            requirements.txt
+            requirements.lock
+
+      - name: Install Python dependencies
+        run: python -m pip install --upgrade pip && pip install -r requirements.txt
+
+      - name: Validate sync prereqs
+        run: bash VALIDATE_VERIFIED_SYNC_PREREQS.sh
+
+      - name: Execute release decision
+        run: bash EXECUTE_RELEASE_DECISION.sh

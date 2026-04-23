@@ -1,0 +1,2 @@
+# Pinned runtime dependencies for template-repo Python utilities.
+PyYAML==6.0.2

@@ -11,6 +11,7 @@
 - golden examples и scaffold-only examples
 - curated reference/export packs, boundary-actions generator и ops-policy layer
 - единый release-facing reference package по функционалу, архитектуре, дереву проекта и workflow
+- нормализованный release-program framing для линии `2.5` с разделением треков `2.5-A` (engineering hardening) и `2.5-B` (beginner-first productization)
 
 ## Что работает стабильно
 - создание fresh scaffold через launcher
@@ -48,6 +49,14 @@
 - root-level `RELEASE_NOTES.md` теперь является каноническим source для опубликованных release notes и release executor
 - release-facing документация нормализована вокруг одного reference-doc и больше не зависит от разрозненных описаний в runbooks и release-note draft
 - canonical preset naming, workspace bootstrap naming и optional domain reference contour синхронизированы между docs, manifests и физической структурой repo
+- release-facing docs теперь фиксируют, что линия `2.5` не сводится к process hardening и требует отдельного beginner-first/UI-friendly контура
+
+## Программа 2.5 (статус на 2026-04-23)
+- текущая стадия: `remediation-prep`
+- канонический roadmap: `docs/releases/2.5-roadmap.md`
+- канонические метрики: `docs/releases/2.5-success-metrics.md`
+- dependency order зафиксирован: foundation hardening (`2.5-A`) -> beginner UX contracts (`2.5-B`) -> интеграция и downstream safety -> release closeout
+- gate-лист для следующих 5 handoff нормализован в release-facing документах
 
 ## Что работает частично
 - matrix runner как единый источник истины
@@ -58,12 +67,15 @@
 - phase-aware export/reference packs остаются вспомогательным слоем, а не каноническим хранилищем сценариев
 - эвристика классификации `task_class` пока keyword-based, а не semantic classifier
 - release-facing описание дерева проекта и workflow требует дальнейшего поддержания в sync при каждой новой process-доработке шаблона
+- roadmap `2.5` сформирован, но implementation-треки `2.5-A` и `2.5-B` ещё не закрыты фактическими engineering/product изменениями
 
 ## Что еще не закрыто
 - финальная проверка на реальных greenfield и brownfield проектах
 - окончательная polish-фаза для runner layer и operational reports
 - отдельный release-facing validator/report для curated pack quality beyond structural checks
 - дальнейшее production hardening runtime-нестабильности git sync beyond current fallback strategy
+- выполнение следующих 5 handoff по roadmap `2.5` и закрытие gate'ов MVP/full
+- подтверждение beginner-first KPI и downstream safety KPI из `docs/releases/2.5-success-metrics.md`
 
 ## Граница core
 Core включает фабрику, шаблон, versioning/documentation layer, `.chatgpt`, scenario-pack, examples и feedback loop.

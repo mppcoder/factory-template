@@ -1,0 +1,10 @@
+# Default ownership
+* @mppcoder
+
+# Critical automation and policy layers
+/.github/workflows/* @mppcoder
+/.github/dependabot.yml @mppcoder
+/template-repo/scripts/** @mppcoder
+/template-repo/scenario-pack/** @mppcoder
+/SECURITY.md @mppcoder
+/CODEOWNERS @mppcoder

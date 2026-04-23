@@ -1,6 +1,12 @@
 # TEST REPORT v2.4.4
 
 ## Что проверено
+- consolidated verify entrypoint (`template-repo/scripts/verify-all.sh`)
+- CI baseline checks (`CI / verify-baseline`, `CI / release-bundle-dry-run`)
+- release workflow preflight + bundle baseline (`.github/workflows/release.yml`)
+- Dependabot baseline (`.github/dependabot.yml`)
+- routing validator normalization for generated repos
+- security baseline (`SECURITY.md`, `CODEOWNERS`, secret-handling guidance)
 - pre-release audit
 - factory-template ops policy validator
 - fresh scaffold: greenfield + small-fix + manual
@@ -22,6 +28,11 @@
 Evidence / quality / DoD до смыслового наполнения артефактов не проходят.
 
 ## Фактический результат
+- `bash template-repo/scripts/verify-all.sh quick` проходит.
+- `bash template-repo/scripts/verify-all.sh ci` проходит.
+- `bash RELEASE_BUILD.sh /tmp/factory-template-release.zip` проходит как packaging dry-run.
+- `validate-codex-routing.py` теперь корректно проверяет и template repo, и generated repos (без false-negative по `template/docs/*`).
+- `tools/fill_smoke_artifacts.py` теперь поддерживает target path и не перезаписывает root `.chatgpt/*` при `MATRIX_TEST.sh`.
 - `PRE_RELEASE_AUDIT.sh` проходит на чистом пакете.
 - `VALIDATE_FACTORY_TEMPLATE_OPS.sh` проходит на чистом пакете.
 - `SMOKE_TEST.sh` проходит на чисто распакованном финальном архиве.
@@ -59,3 +70,7 @@ Evidence / quality / DoD до смыслового наполнения арте
 - документальные intent signals сейчас реализованы только для `release`, а не для всех фаз.
 - document intent signals сейчас реализованы для `release` и `bugfix-drift`, но ещё не покрывают возможные более тонкие подфазы внутри controlled fixes.
 - phase-aware export/reference packs остаются вспомогательным слоем и не заменяют чтение сценариев из GitHub repo.
+
+## CI baseline status
+- Статус: `green` (локально подтвержден через `verify-all.sh quick` и `verify-all.sh ci`).
+- Residual risk: шаг `release-executor` в release workflow остаётся manual/optional и по-прежнему зависит от валидного verified-sync контекста и GitHub auth.

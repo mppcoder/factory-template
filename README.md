@@ -6,6 +6,8 @@
 - **Codex** — исполнение по подготовленному handoff.
 - **Repo** — единственный источник правды по документам и изменениям.
 
+Следующая линия `2.5` уже оформлена как отдельная release-программа: не только hardening процесса, но и beginner-first productization с UI-friendly контуром и безопасной эволюцией downstream-репозиториев.
+
 ## Canonical Entry Modes
 
 Шаблон сейчас поддерживает 3 канонических режима запуска и сопровождения:
@@ -43,6 +45,8 @@
 
 - `docs/template-architecture-and-event-workflows.md`
 - `RELEASE_NOTES.md`
+- `docs/releases/2.5-roadmap.md`
+- `docs/releases/2.5-success-metrics.md`
 
 ## Подготовка после распаковки
 
@@ -242,6 +246,13 @@ bash PHASE_DETECTION_TEST.sh
 - `openclaw` вынесен из core-дерева в `optional-domain-packs/openclaw-reference`;
 - launcher и preset application теперь принимают legacy preset names только как compatibility aliases;
 - release docs, manifests, template metadata и examples синхронизированы под `factory-v2.4.4`.
+
+## Программа релиза 2.5 (в работе)
+- канонический план зафиксирован в `docs/releases/2.5-roadmap.md`;
+- success metrics и пороги MVP/full 2.5 зафиксированы в `docs/releases/2.5-success-metrics.md`;
+- трек `2.5-A` закрепляет engineering hardening (валидаторы, устойчивость, безопасные default paths);
+- трек `2.5-B` закрепляет beginner-first productization (UI-friendly entry path, понятный onboarding, снижение порога входа);
+- выпуск `2.5` считается полным только при совместном закрытии `2.5-A` и `2.5-B`, чтобы релиз не остался "только process-hardening".
 
 ## Базовый функционал ветки 2.4.4
 - `factory-template` поддерживает greenfield, brownfield без repo и brownfield с repo в одном repo-first контуре;

@@ -1,8 +1,12 @@
 from pathlib import Path
+import sys
+
 import yaml
 
-root = Path('.')
+root = Path(sys.argv[1]).resolve() if len(sys.argv) > 1 else Path(".").resolve()
 chat = root / '.chatgpt'
+if not chat.exists():
+    raise SystemExit(f"Не найден каталог .chatgpt в target: {root}")
 (chat / 'evidence-register.md').write_text('''# Реестр доказательств
 
 - [PROJECT] В каталоге `template-repo/scenario-pack` подтверждено наличие сценарного слоя и файлов маршрутизации.

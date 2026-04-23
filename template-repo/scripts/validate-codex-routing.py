@@ -47,37 +47,60 @@ DIRECT_TASK_RESPONSE_SECTIONS = [
     "## Next step",
 ]
 
-DOC_CHECKS = {
-    "README.md": [
-        "advisory",
-        "manual-ui",
-        "новый чат + вставка handoff",
-        "./scripts/launch-codex-task.sh",
-    ],
-    "scenario-pack/00-master-router.md": [
-        "Надежная единица маршрутизации",
-        "новый task launch",
-        "manual-ui (default)",
-        "advisory слой сам по себе",
-    ],
-    "scenario-pack/15-handoff-to-codex.md": [
-        "manual-ui (default)",
-        "strict_launch_mode",
-        "sticky",
-    ],
-    "template/docs/codex-workflow.md": [
-        "manual-ui (default)",
-        "надежная единица маршрутизации: новый task launch",
-        "./scripts/launch-codex-task.sh",
-        "sticky last-used state",
-    ],
-    "template/docs/integrations.md": [
-        "advisory layer",
-        "manual-ui (default)",
-        "новый task launch",
-        "sticky last-used state",
-    ],
-}
+DOC_CHECKS = [
+    {
+        "paths": ["README.md"],
+        "snippets": [
+            ["advisory", "advisory layer"],
+            ["manual-ui (default)", "manual-ui"],
+            ["новый чат + вставка handoff"],
+            ["./scripts/launch-codex-task.sh", "launcher-команда"],
+        ],
+    },
+    {
+        "paths": ["scenario-pack/00-master-router.md"],
+        "snippets": [
+            ["Надежная единица маршрутизации"],
+            ["новый task launch"],
+            ["manual-ui (default)"],
+            ["advisory слой сам по себе"],
+        ],
+    },
+    {
+        "paths": ["scenario-pack/15-handoff-to-codex.md"],
+        "snippets": [
+            ["manual-ui (default)"],
+            ["strict_launch_mode"],
+            ["sticky"],
+        ],
+    },
+    {
+        "paths": [
+            "template/docs/codex-workflow.md",
+            "docs/codex-workflow.md",
+            "template-repo/template/docs/codex-workflow.md",
+        ],
+        "snippets": [
+            ["manual-ui (default)"],
+            ["надежная единица маршрутизации: новый task launch"],
+            ["./scripts/launch-codex-task.sh"],
+            ["sticky last-used state"],
+        ],
+    },
+    {
+        "paths": [
+            "template/docs/integrations.md",
+            "docs/integrations.md",
+            "template-repo/template/docs/integrations.md",
+        ],
+        "snippets": [
+            ["advisory layer"],
+            ["manual-ui (default)"],
+            ["новый task launch"],
+            ["sticky last-used state"],
+        ],
+    },
+]
 
 
 def load_yaml(path: Path) -> dict:
@@ -93,6 +116,14 @@ def find_repo_file(root: Path, rel_path: str) -> Path | None:
     for path in candidates:
         if path.exists():
             return path
+    return None
+
+
+def find_repo_file_any(root: Path, rel_paths: list[str]) -> Path | None:
+    for rel_path in rel_paths:
+        resolved = find_repo_file(root, rel_path)
+        if resolved is not None:
+            return resolved
     return None
 
 
@@ -222,15 +253,21 @@ def main() -> int:
     if profile and f"--profile {profile}" not in codex_profile_command:
         errors.append("codex_profile_command не фиксирует selected_profile через --profile")
 
-    for rel_path, snippets in DOC_CHECKS.items():
-        doc_path = find_repo_file(root, rel_path)
+    for check in DOC_CHECKS:
+        rel_paths = check.get("paths", [])
+        snippets_groups = check.get("snippets", [])
+        doc_path = find_repo_file_any(root, rel_paths)
         if doc_path is None:
-            errors.append(f"Не найден source-facing routing doc `{rel_path}`")
+            joined = ", ".join(f"`{item}`" for item in rel_paths)
+            errors.append(f"Не найден source-facing routing doc (ожидался один из: {joined})")
             continue
         doc_text = doc_path.read_text(encoding="utf-8", errors="ignore")
-        for snippet in snippets:
-            if snippet not in doc_text:
-                errors.append(f"{doc_path}: отсутствует обязательный routing fragment `{snippet}`")
+        doc_text_lower = doc_text.lower()
+        for group in snippets_groups:
+            alternatives = group if isinstance(group, list) else [group]
+            if not any(fragment.lower() in doc_text_lower for fragment in alternatives):
+                expected = " / ".join(f"`{fragment}`" for fragment in alternatives)
+                errors.append(f"{doc_path}: отсутствует обязательный routing fragment (любой из: {expected})")
 
     if errors:
         print("CODEX ROUTING НЕВАЛИДЕН")

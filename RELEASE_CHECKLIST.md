@@ -5,6 +5,7 @@
 - Repo: `factory-template`
 - Current release line: `2.4.4`
 - Current working section in changelog: `2.4.4`
+- Next planned release program line: `2.5`
 
 ## Intent Signals
 
@@ -28,6 +29,7 @@
 
 ## Required Commands
 
+- [x] `bash template-repo/scripts/verify-all.sh ci`
 - [x] `bash POST_UNZIP_SETUP.sh`
 - [x] `bash VALIDATE_FACTORY_TEMPLATE_OPS.sh`
 - [x] `bash VALIDATE_VERIFIED_SYNC_PREREQS.sh`
@@ -38,6 +40,17 @@
 - [x] `bash MATRIX_TEST.sh`
 - [x] `bash CLEAN_VERIFY_ARTIFACTS.sh`
 - [x] `bash PRE_RELEASE_AUDIT.sh`
+
+## Required CI Checks (Branch Protection Contract)
+
+- [x] `CI / verify-baseline`
+- [x] `CI / release-bundle-dry-run`
+
+## Verify Entrypoint
+
+- [x] Операторский единый запуск: `bash template-repo/scripts/verify-all.sh`
+- [x] Быстрый режим: `bash template-repo/scripts/verify-all.sh quick`
+- [x] CI-режим: `bash template-repo/scripts/verify-all.sh ci`
 
 ## Release Layer Checks
 
@@ -58,3 +71,19 @@
 
 - [x] release bundle можно собирать
 - [ ] или явно зафиксирован `no-release` с причиной
+
+## 2.5 Program Framing Gate (Remediation-Prep)
+
+- [x] Зафиксирован dual-track контур: `2.5-A` (engineering hardening) и `2.5-B` (beginner-first productization)
+- [x] Канонический roadmap создан: `docs/releases/2.5-roadmap.md`
+- [x] Канонические метрики и пороги MVP/full зафиксированы: `docs/releases/2.5-success-metrics.md`
+- [x] `README.md`, `CURRENT_FUNCTIONAL_STATE.md` и `RELEASE_NOTES.md` синхронизированы с новой целью `2.5`
+- [x] Repo-first и scenario-pack принципы сохранены в release-facing описании
+
+## 2.5 Next 5 Handoff Gates
+
+1. `H25-01 / Gate G25-1a` — hardening backlog normalization и risk register готовы; артефакты: `docs/releases/2.5-roadmap.md`, `RELEASE_NOTES.md`.
+2. `H25-02 / Gate G25-2a` — beginner-first onboarding flow и UI-contract baseline зафиксированы; артефакты: `README.md`, `docs/releases/2.5-roadmap.md`.
+3. `H25-03 / Gate G25-1` — safe-defaults и compatibility contracts формализованы для downstream evolution; артефакты: `CURRENT_FUNCTIONAL_STATE.md`, `docs/releases/2.5-success-metrics.md`.
+4. `H25-04 / Gate G25-3` — MVP-срез `2.5-A + 2.5-B` подтвержден по MVP-порогам; артефакты: `RELEASE_CHECKLIST.md`, `docs/releases/2.5-success-metrics.md`.
+5. `H25-05 / Gate G25-4` — full `2.5` release readiness подтверждён по full-порогам и release closeout; артефакты: `RELEASE_NOTES.md`, `RELEASE_CHECKLIST.md`, `docs/releases/2.5-roadmap.md`.
