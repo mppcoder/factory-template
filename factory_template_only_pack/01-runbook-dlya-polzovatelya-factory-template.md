@@ -35,6 +35,23 @@
 - не нужно поддерживать разные проектные инструкции под каждый entry mode
 - различие задается через entry path, preset и сценарный маршрут
 
+## 0.2. Первый запуск для новичка (wizard-first)
+
+Для первого проекта используйте wizard, а не ручной ввод preset-терминов:
+
+```bash
+python3 template-repo/scripts/first-project-wizard.py
+```
+
+Wizard в понятной форме:
+- спрашивает, что у вас уже есть;
+- спрашивает, что вы хотите запустить;
+- показывает, что система сделает дальше;
+- сам выбирает нужный preset и запускает preflight VPS-проверку.
+
+Отдельный документ для первого прохода:
+- `docs/first-project.md`
+
 ---
 
 ## 1. Целевой контур
@@ -197,6 +214,19 @@ mkdir -p /projects/factory-template/_incoming
 Загрузите в `/projects/factory-template/_incoming` архив фабрики и дополнительные входящие артефакты.
 
 После распаковки и первого `bash POST_UNZIP_SETUP.sh` дополнительных действий по внешнему staging-контуру больше не требуется.
+
+После распаковки можно запустить preflight-проверку:
+
+```bash
+cd /projects/factory-template
+python3 template-repo/scripts/preflight-vps-check.py --project-slug my-first-project
+```
+
+Если вы создаете первый рабочий проект из шаблона, используйте wizard-first вход:
+
+```bash
+python3 template-repo/scripts/first-project-wizard.py
+```
 
 ## Шаг 4. Открыть VS Code по SSH
 
