@@ -46,12 +46,15 @@
 
 ## Для handoff
 
-- Handoff в Codex сейчас не является обязательным для выбранного профиля.
-- Рабочая единица выбора модели и reasoning mode: только новый task launch, а не старая уже закрепленная сессия.
+- Handoff в Codex для этого defect-class уже допустим после defect-capture и должен оставаться inline, если задача достаточно определена.
+- `apply_mode: manual-ui (default)` — основной user-facing путь для интерактивной работы через VS Code Codex extension.
+- Для manual UI apply откройте новый чат/окно Codex, вручную выберите `selected_model=gpt-5.4` и `selected_reasoning_effort=high` в picker, затем вставьте handoff.
+- `strict_launch_mode: optional` — используйте launch command из `.chatgpt/task-launch.yaml`, если нужна automation, reproducibility, shell-first или scripted launch.
+- `новый чат + вставка handoff` и `new task launch через executable launcher` — не одно и то же.
+- Уже открытая live session является только non-canonical fallback и не должна подаваться как надежный auto-switch path.
 - `AGENTS`, ChatGPT Project instructions, scenario-pack и `.chatgpt` guidance являются advisory layer; profile/model выбирает executable launcher/router.
 - `selected_profile` — это исполнимая граница маршрутизации; `selected_model` и `selected_reasoning_effort` описывают ожидаемую конфигурацию этого profile, а не auto-switch от текста handoff.
 - Проверяемая фиксация реального выбора хранится в `.chatgpt/task-launch.yaml`.
-- Перед передачей handoff сначала выполните явный launch command из `.chatgpt/task-launch.yaml`, а уже потом вставляйте handoff в свежий Codex task.
 - При исполнении handoff приоритет у правил repo: `AGENTS`, runbook, scenario-pack, policy files и других канонических файлов этого репозитория.
 - Общие рабочие инструкции применять только там, где они не конфликтуют с repo rules и старшими системными ограничениями среды.
 - Если выбран `hybrid` или `codex-led`, передать Codex актуальный `codex-task-pack.md`.
@@ -63,7 +66,8 @@
 - Release-followup, source-pack refresh, export refresh, closeout-sync и release-facing consistency pass внутри repo считаются внутренней работой Codex.
 - Troubleshooting sticky state:
   - если пользователь открыл случайную или уже существующую Codex chat-сессию и просто вставил handoff, profile/model/reasoning могли не переключиться;
-  - канонический путь: закрыть такую сессию и выполнить новый task launch через `./scripts/launch-codex-task.sh`;
+  - для interactive workflow сначала закройте stale-сессию, откройте новую и вручную проверьте picker;
+  - если нужна строгая boundary-гарантия, выполните optional strict launch command через `./scripts/launch-codex-task.sh`;
   - если после этого route все еще выглядит stale, проверить named profile в local Codex config и сверить `selected_model` с live `codex debug models`.
 
 ## Для внешних границ

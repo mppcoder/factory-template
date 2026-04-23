@@ -41,6 +41,33 @@ def parse_structured_handoff(text: str) -> dict:
     if isinstance(data, dict):
         return data
 
+    yaml_block: list[str] = []
+    in_block = False
+    for raw in text.splitlines():
+        line = raw.rstrip("\n")
+        stripped = line.strip()
+        if not stripped and not in_block:
+            continue
+        if stripped.startswith("#") and not in_block:
+            continue
+        if stripped.startswith("## ") and in_block:
+            break
+        looks_like_mapping = ":" in line and not stripped.startswith("```")
+        looks_like_list_item = bool(yaml_block) and (line.startswith("  - ") or line.startswith("- "))
+        if looks_like_mapping or looks_like_list_item or (yaml_block and line.startswith(" ")):
+            yaml_block.append(line)
+            in_block = True
+            continue
+        if in_block:
+            break
+    if yaml_block:
+        try:
+            data = yaml.safe_load("\n".join(yaml_block))
+        except yaml.YAMLError:
+            data = None
+        if isinstance(data, dict):
+            return data
+
     result: dict[str, object] = {}
     for raw in text.splitlines():
         line = raw.strip()
@@ -72,6 +99,18 @@ def stringify_override(value: object) -> str:
     return str(value).strip()
 
 
+def stringify_yes_no_override(value: object) -> str:
+    if isinstance(value, bool):
+        return "yes" if value else "no"
+    text = stringify_override(value)
+    lowered = _normalize(text)
+    if lowered in {"true", "yes"}:
+        return "yes"
+    if lowered in {"false", "no"}:
+        return "no"
+    return text
+
+
 def explicit_routing_overrides(text: str) -> dict:
     data = parse_structured_handoff(text)
     if not isinstance(data, dict):
@@ -83,6 +122,8 @@ def explicit_routing_overrides(text: str) -> dict:
         "selected_model",
         "selected_reasoning_effort",
         "selected_plan_mode_reasoning_effort",
+        "apply_mode",
+        "strict_launch_mode",
         "project_profile",
         "selected_scenario",
         "pipeline_stage",
@@ -282,12 +323,18 @@ def build_launch_record(
     project_profile = stringify_override(overrides.get("project_profile")) or gather_project_profile(root)
     selected_scenario = stringify_override(overrides.get("selected_scenario")) or gather_selected_scenario(root)
     pipeline_stage = stringify_override(overrides.get("pipeline_stage")) or gather_pipeline_stage(root)
+    apply_mode = stringify_override(overrides.get("apply_mode")) or str(
+        (spec.get("validation", {}) or {}).get("apply_mode_default", "manual-ui")
+    )
+    strict_launch_mode = stringify_override(overrides.get("strict_launch_mode")) or str(
+        (spec.get("validation", {}) or {}).get("strict_launch_mode_default", "optional")
+    )
     artifacts = overrides.get("artifacts_to_update")
     if isinstance(artifacts, list) and artifacts:
         artifacts_list = [str(item) for item in artifacts if str(item).strip()]
     else:
         artifacts_list = artifacts_to_update(spec, root, defect_path)
-    handoff_allowed_value = stringify_override(overrides.get("handoff_allowed")) or handoff_allowed(root)
+    handoff_allowed_value = stringify_yes_no_override(overrides.get("handoff_allowed")) or handoff_allowed(root)
     defect_capture_path = stringify_override(overrides.get("defect_capture_path")) or defect_path
     handoff_artifact = launch_artifact_path(launch_source)
     selected_codex_command = codex_profile_command(profile_name)
@@ -304,6 +351,8 @@ def build_launch_record(
             "selected_model": profile.get("model", ""),
             "selected_reasoning_effort": profile.get("reasoning_effort", ""),
             "selected_plan_mode_reasoning_effort": profile.get("plan_mode_reasoning_effort", ""),
+            "apply_mode": apply_mode,
+            "strict_launch_mode": strict_launch_mode,
             "project_profile": project_profile,
             "selected_scenario": selected_scenario,
             "pipeline_stage": pipeline_stage,
@@ -312,13 +361,17 @@ def build_launch_record(
             "defect_capture_path": defect_capture_path,
             "task_summary": task_text.splitlines()[0].strip()[:240] if task_text.strip() else "",
             "launch_boundary_rule": spec.get("routing_contract", {}).get("launch_boundary_rule", ""),
+            "interactive_default_rule": spec.get("routing_contract", {}).get("interactive_default_rule", ""),
             "executable_switch_rule": spec.get("routing_contract", {}).get("executable_switch_rule", ""),
+            "strict_launch_rule": spec.get("routing_contract", {}).get("strict_launch_rule", ""),
+            "live_session_fallback_rule": spec.get("routing_contract", {}).get("live_session_fallback_rule", ""),
             "model_expectation_rule": spec.get("routing_contract", {}).get("model_expectation_rule", ""),
             "advisory_layers": spec.get("routing_contract", {}).get("advisory_layers", []),
             "executable_layers": spec.get("routing_contract", {}).get("executable_layers", []),
             "launch_artifact_path": handoff_artifact,
             "launch_command": selected_launch_command,
             "codex_profile_command": selected_codex_command,
+            "strict_launch_use_cases": (spec.get("validation", {}) or {}).get("strict_launch_use_cases", []),
             "troubleshooting": spec.get("validation", {}).get("troubleshooting", []),
             "direct_self_handoff_required": launch_source == "direct-task",
             "direct_self_handoff_completed": False,
@@ -342,6 +395,16 @@ def render_normalized_handoff(record: dict, task_text: str, title: str) -> str:
     artifacts_lines = "\n".join(f"- {item}" for item in artifacts) if artifacts else "- none"
     reasons = launch.get("task_class_reasons", [])
     reason_lines = "\n".join(f"- {item}" for item in reasons) if reasons else "- none"
+    manual_ui_lines = "\n".join(
+        [
+            "- Откройте новый чат/окно Codex в VS Code extension.",
+            f"- Вручную выберите model `{launch.get('selected_model', '')}` и reasoning `{launch.get('selected_reasoning_effort', '')}` в picker.",
+            "- Только после этого вставьте handoff.",
+            "- Уже открытая live session не считается надежным auto-switch boundary.",
+        ]
+    )
+    strict_launch_use_cases = launch.get("strict_launch_use_cases", [])
+    strict_launch_lines = "\n".join(f"- {item}" for item in strict_launch_use_cases) if strict_launch_use_cases else "- none"
     troubleshooting = launch.get("troubleshooting", [])
     troubleshooting_lines = "\n".join(f"- {item}" for item in troubleshooting) if troubleshooting else "- none"
     return f"""# {title}
@@ -367,6 +430,15 @@ def render_normalized_handoff(record: dict, task_text: str, title: str) -> str:
 ## Selected plan mode reasoning
 {launch.get('selected_plan_mode_reasoning_effort', '')}
 
+## Apply mode
+{launch.get('apply_mode', '')}
+
+## Manual UI apply
+{manual_ui_lines}
+
+## Strict launch mode
+{launch.get('strict_launch_mode', '')}
+
 ## Project profile
 {launch.get('project_profile', '')}
 
@@ -388,8 +460,17 @@ def render_normalized_handoff(record: dict, task_text: str, title: str) -> str:
 ## Launch boundary rule
 {launch.get('launch_boundary_rule', '')}
 
+## Interactive default rule
+{launch.get('interactive_default_rule', '')}
+
 ## Executable switch rule
 {launch.get('executable_switch_rule', '')}
+
+## Strict launch rule
+{launch.get('strict_launch_rule', '')}
+
+## Live session fallback rule
+{launch.get('live_session_fallback_rule', '')}
 
 ## Model expectation rule
 {launch.get('model_expectation_rule', '')}
@@ -397,8 +478,11 @@ def render_normalized_handoff(record: dict, task_text: str, title: str) -> str:
 ## Launch artifact path
 `{launch.get('launch_artifact_path', '')}`
 
-## Executable launch command
+## Optional strict launch command
 `{launch.get('launch_command', '')}`
+
+## Strict launch use cases
+{strict_launch_lines}
 
 ## Direct Codex command behind launcher
 `{launch.get('codex_profile_command', '')}`
@@ -414,6 +498,16 @@ def render_direct_task_response(record: dict, task_text: str) -> str:
     launch = record.get("launch", {})
     artifacts = launch.get("artifacts_to_update", [])
     artifacts_lines = "\n".join(f"- {item}" for item in artifacts) if artifacts else "- none"
+    manual_ui_lines = "\n".join(
+        [
+            "- Откройте новый чат/окно Codex.",
+            f"- Вручную выберите model `{launch.get('selected_model', '')}` и reasoning `{launch.get('selected_reasoning_effort', '')}` в picker.",
+            "- Только после этого продолжайте работу по self-handoff.",
+            "- Уже открытая live session не является надежным auto-switch boundary.",
+        ]
+    )
+    strict_launch_use_cases = launch.get("strict_launch_use_cases", [])
+    strict_launch_lines = "\n".join(f"- {item}" for item in strict_launch_use_cases) if strict_launch_use_cases else "- none"
     troubleshooting = launch.get("troubleshooting", [])
     troubleshooting_lines = "\n".join(f"- {item}" for item in troubleshooting) if troubleshooting else "- none"
     return f"""## Direct Task Self-Handoff
@@ -442,6 +536,15 @@ direct-task
 ## Selected reasoning effort
 {launch.get('selected_reasoning_effort', '')}
 
+## Apply mode
+{launch.get('apply_mode', '')}
+
+## Manual UI apply
+{manual_ui_lines}
+
+## Strict launch mode
+{launch.get('strict_launch_mode', '')}
+
 ## Artifacts to update
 {artifacts_lines}
 
@@ -457,14 +560,26 @@ direct-task
 ## Launch boundary rule
 {launch.get('launch_boundary_rule', '')}
 
+## Interactive default rule
+{launch.get('interactive_default_rule', '')}
+
 ## Executable switch rule
 {launch.get('executable_switch_rule', '')}
+
+## Strict launch rule
+{launch.get('strict_launch_rule', '')}
+
+## Live session fallback rule
+{launch.get('live_session_fallback_rule', '')}
 
 ## Model expectation rule
 {launch.get('model_expectation_rule', '')}
 
-## Executable launch command
+## Optional strict launch command
 `{launch.get('launch_command', '')}`
+
+## Strict launch use cases
+{strict_launch_lines}
 
 ## Direct Codex command behind launcher
 `{launch.get('codex_profile_command', '')}`

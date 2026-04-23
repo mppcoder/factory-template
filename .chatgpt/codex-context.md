@@ -4,13 +4,13 @@
 factory-template
 
 ## Классификация
-Классификация еще не заполнена.
+Reusable template defect в handoff/completion UX: шаблон верно отделял advisory/policy layer от executable routing layer, но default user-facing path для VS Code Codex extension ошибочно подавался как launcher-first вместо `manual-ui (default)`.
 
 ## Текущий этап
-done
+defect-capture -> classification -> remediation
 
 ## Change ID
-chg-20260422-007
+chg-20260423-018
 
 ## Краткое резюме
-Smoke-test изменение для проверки фабрики.
+Перевести handoff/completion слой на dual-path contract: `manual-ui (default)` для интерактивной работы через VS Code Codex extension и `launcher-first strict mode (optional)` для automation/reproducibility/shell-first, не обещая auto-switch в уже открытой live session.

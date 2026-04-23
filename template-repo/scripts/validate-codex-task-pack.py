@@ -65,7 +65,10 @@ def main() -> int:
     ensure_contains(pack, "## Selected profile", errors, "codex-task-pack.md")
     ensure_contains(pack, "## Selected model", errors, "codex-task-pack.md")
     ensure_contains(pack, "## Selected reasoning effort", errors, "codex-task-pack.md")
-    ensure_contains(pack, "## Executable launch command", errors, "codex-task-pack.md")
+    ensure_contains(pack, "## Apply mode", errors, "codex-task-pack.md")
+    ensure_contains(pack, "## Strict launch mode", errors, "codex-task-pack.md")
+    ensure_contains(pack, "## Manual UI default", errors, "codex-task-pack.md")
+    ensure_contains(pack, "## Optional strict launch command", errors, "codex-task-pack.md")
     ensure_contains(pack, "## Direct Codex command behind launcher", errors, "codex-task-pack.md")
     ensure_contains(pack, "## Selected scenario", errors, "codex-task-pack.md")
     ensure_contains(pack, "## Pipeline stage", errors, "codex-task-pack.md")
@@ -81,11 +84,13 @@ def main() -> int:
     ensure_contains(boundary, "## Impact Model", errors, "boundary-actions.md")
     ensure_contains(boundary, "## Completion Package For Repo-First Instruction Changes", errors, "boundary-actions.md")
     ensure_contains(boundary, "## Для handoff", errors, "boundary-actions.md")
-    ensure_contains(boundary, "Рабочая единица выбора модели и reasoning mode: только новый task launch", errors, "boundary-actions.md")
+    ensure_contains(boundary, "manual-ui (default)", errors, "boundary-actions.md")
+    ensure_contains(boundary, "strict_launch_mode: optional", errors, "boundary-actions.md")
+    ensure_contains(boundary, "новый чат + вставка handoff", errors, "boundary-actions.md")
+    ensure_contains(boundary, "non-canonical fallback", errors, "boundary-actions.md")
     ensure_contains(boundary, "advisory layer", errors, "boundary-actions.md")
     ensure_contains(boundary, "`.chatgpt/task-launch.yaml`", errors, "boundary-actions.md")
     ensure_contains(boundary, "`selected_profile` — это исполнимая граница маршрутизации", errors, "boundary-actions.md")
-    ensure_contains(boundary, "Перед передачей handoff сначала выполните явный launch command", errors, "boundary-actions.md")
     ensure_contains(boundary, "При исполнении handoff приоритет у правил repo", errors, "boundary-actions.md")
     ensure_contains(boundary, "только один цельный блок для copy-paste в Codex", errors, "boundary-actions.md")
     ensure_contains(boundary, "Нельзя заменять handoff ссылкой на файл", errors, "boundary-actions.md")
@@ -153,6 +158,8 @@ def main() -> int:
         "selected_profile",
         "selected_model",
         "selected_reasoning_effort",
+        "apply_mode",
+        "strict_launch_mode",
         "project_profile",
         "selected_scenario",
         "pipeline_stage",
@@ -181,21 +188,27 @@ def main() -> int:
         "## Selected profile",
         "## Selected model",
         "## Selected reasoning effort",
+        "## Apply mode",
+        "## Manual UI apply",
+        "## Strict launch mode",
         "## Project profile",
         "## Selected scenario",
         "## Pipeline stage",
         "## Artifacts to update",
         "## Handoff allowed",
         "## Defect capture path",
-        "## Executable launch command",
+        "## Optional strict launch command",
         "## Direct Codex command behind launcher",
         "## Troubleshooting",
     ]:
         ensure_contains(normalized_handoff, section, errors, "normalized-codex-handoff.md")
 
-    ensure_contains(handoff_response, "## Launch в Codex", errors, "handoff-response.md")
+    ensure_contains(handoff_response, "## Применение в Codex UI", errors, "handoff-response.md")
+    ensure_contains(handoff_response, "## Строгий launch mode (опционально)", errors, "handoff-response.md")
     ensure_contains(handoff_response, "## Handoff в Codex", errors, "handoff-response.md")
+    ensure_contains(handoff_response, "manual-ui", errors, "handoff-response.md")
     ensure_contains(handoff_response, "launch-codex-task.sh", errors, "handoff-response.md")
+    ensure_contains(handoff_response, "новый чат + вставка handoff", errors, "handoff-response.md")
     ensure_contains(handoff_response, "new task launch", errors, "handoff-response.md")
     ensure_contains(handoff_response, "advisory/handoff text != executable profile switch", errors, "handoff-response.md")
     ensure_contains(handoff_response, "sticky last-used state", errors, "handoff-response.md")

@@ -7,7 +7,8 @@ from pathlib import Path
 
 
 HANDOFF_HEADING = "## Handoff в Codex"
-LAUNCH_HEADING = "## Launch в Codex"
+UI_HEADING = "## Применение в Codex UI"
+STRICT_HEADING = "## Строгий launch mode (опционально)"
 FORBIDDEN_PATTERNS = [
     r"см\.\s*файл",
     r"смотри\s+файл",
@@ -55,41 +56,62 @@ def main() -> int:
             f"Ожидается ровно один блок `{HANDOFF_HEADING}`, сейчас {handoff_heading_count}"
         )
 
-    launch_heading_count = len(re.findall(rf"(?m)^{re.escape(LAUNCH_HEADING)}\s*$", text))
-    if launch_heading_count != 1:
+    ui_heading_count = len(re.findall(rf"(?m)^{re.escape(UI_HEADING)}\s*$", text))
+    if ui_heading_count != 1:
         errors.append(
-            f"Ожидается ровно один блок `{LAUNCH_HEADING}`, сейчас {launch_heading_count}"
+            f"Ожидается ровно один блок `{UI_HEADING}`, сейчас {ui_heading_count}"
+        )
+
+    strict_heading_count = len(re.findall(rf"(?m)^{re.escape(STRICT_HEADING)}\s*$", text))
+    if strict_heading_count != 1:
+        errors.append(
+            f"Ожидается ровно один блок `{STRICT_HEADING}`, сейчас {strict_heading_count}"
         )
 
     any_handoff_headings = re.findall(r"(?m)^##\s+.*handoff.*$", text, flags=re.IGNORECASE)
     if len(any_handoff_headings) > 1:
         errors.append("Найдено несколько handoff-заголовков; пользователю разрешен только один цельный handoff-блок")
 
-    launch_section = find_section(text, LAUNCH_HEADING)
+    ui_section = find_section(text, UI_HEADING)
+    strict_section = find_section(text, STRICT_HEADING)
     section = find_section(text, HANDOFF_HEADING)
-    if launch_section is None:
-        errors.append(f"Не найден обязательный заголовок `{LAUNCH_HEADING}`")
-        launch_text = ""
+    if ui_section is None:
+        errors.append(f"Не найден обязательный заголовок `{UI_HEADING}`")
+        ui_text = ""
     else:
-        launch_text = text[launch_section[0]:launch_section[1]]
+        ui_text = text[ui_section[0]:ui_section[1]]
+    if strict_section is None:
+        errors.append(f"Не найден обязательный заголовок `{STRICT_HEADING}`")
+        strict_text = ""
+    else:
+        strict_text = text[strict_section[0]:strict_section[1]]
     if section is None:
         errors.append(f"Не найден обязательный заголовок `{HANDOFF_HEADING}`")
         handoff_text = ""
     else:
         handoff_text = text[section[0]:section[1]]
-        if launch_section is not None and launch_section[0] > section[0]:
-            errors.append("Блок `## Launch в Codex` должен идти раньше handoff-блока")
+        if ui_section is not None and ui_section[0] > section[0]:
+            errors.append("Блок `## Применение в Codex UI` должен идти раньше handoff-блока")
+        if strict_section is not None and strict_section[0] > section[0]:
+            errors.append("Блок `## Строгий launch mode (опционально)` должен идти раньше handoff-блока")
 
     lowered = text.lower()
-    if launch_text:
-        if "```" not in launch_text:
-            errors.append("Внутри launch-блока ожидается fenced code block с launch command")
-        if "launch-codex-task.sh" not in launch_text and "codex --profile" not in launch_text:
-            errors.append("Launch-блок не содержит явный executable launch command")
+    if ui_text:
+        if "manual-ui" not in lowered:
+            errors.append("UI-блок должен явно фиксировать `manual-ui` как default apply mode")
+        if "picker" not in lowered:
+            errors.append("UI-блок должен требовать ручной выбор model/reasoning в picker")
+        if "новый чат + вставка handoff" not in lowered:
+            errors.append("UI-блок должен различать новый чат + вставка handoff и executable launch path")
         if "new task launch" not in lowered:
             errors.append("Ответ должен явно фиксировать, что надежная единица маршрутизации — новый task launch")
         if "advisory" not in lowered or "не переключает" not in lowered:
             errors.append("Ответ должен явно различать advisory layer и executable switch")
+    if strict_text:
+        if "```" not in strict_text:
+            errors.append("Внутри strict launch-блока ожидается fenced code block с launch command")
+        if "launch-codex-task.sh" not in strict_text and "codex --profile" not in strict_text:
+            errors.append("Strict launch-блок не содержит явный executable launch command")
 
     if handoff_text:
         if "```" not in handoff_text:

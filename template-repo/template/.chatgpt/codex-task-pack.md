@@ -27,6 +27,18 @@
 ## Selected reasoning effort
 <!-- low / medium / high -->
 
+## Apply mode
+<!-- manual-ui -->
+
+## Strict launch mode
+<!-- optional -->
+
+## Manual UI default
+<!-- new chat/window, manual picker selection, then paste handoff -->
+
+## Optional strict launch command
+<!-- launch command only when needed for strict routing -->
+
 ## Project profile
 <!-- из .chatgpt/project-profile.yaml -->
 

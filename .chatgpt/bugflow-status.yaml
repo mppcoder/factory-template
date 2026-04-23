@@ -1,0 +1,14 @@
+defect_detected: true  # Обнаружен ли дефект
+bug_report_required: true  # Требуется ли bug report
+bug_report_created: true  # Создан ли bug report
+
+defect_layer: "factory-template"  # project-only / factory-template / shared-unknown
+
+factory_feedback_required: true  # Требуется ли feedback в фабрику
+factory_feedback_created: true  # Создан ли feedback в фабрику
+
+chatgpt_bug_handoff_required: false  # Нужен ли отдельный ChatGPT handoff
+chatgpt_bug_handoff_created: false  # Создан ли handoff
+
+codex_bug_capture_required: true  # Должен ли Codex получить defect-capture block
+silent_fix_forbidden: true  # Silent fix запрещен

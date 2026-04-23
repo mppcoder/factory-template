@@ -69,11 +69,15 @@ fi
 
 python3 "$ROOT/scripts/bootstrap-codex-task.py" "${BOOTSTRAP_ARGS[@]}"
 PROFILE="$(python3 "$ROOT/scripts/resolve-codex-task-route.py" "${RESOLVE_ARGS[@]}" --json | python3 -c 'import json,sys; print(json.load(sys.stdin)["launch"]["selected_profile"])')"
+APPLY_MODE="$(python3 "$ROOT/scripts/resolve-codex-task-route.py" "${RESOLVE_ARGS[@]}" --json | python3 -c 'import json,sys; print(json.load(sys.stdin)["launch"]["apply_mode"])')"
+STRICT_LAUNCH_MODE="$(python3 "$ROOT/scripts/resolve-codex-task-route.py" "${RESOLVE_ARGS[@]}" --json | python3 -c 'import json,sys; print(json.load(sys.stdin)["launch"]["strict_launch_mode"])')"
 LAUNCH_COMMAND="$(python3 "$ROOT/scripts/resolve-codex-task-route.py" "${RESOLVE_ARGS[@]}" --json | python3 -c 'import json,sys; print(json.load(sys.stdin)["launch"]["launch_command"])')"
 CODEX_COMMAND="$(python3 "$ROOT/scripts/resolve-codex-task-route.py" "${RESOLVE_ARGS[@]}" --json | python3 -c 'import json,sys; print(json.load(sys.stdin)["launch"]["codex_profile_command"])')"
 
 echo "launch_boundary=new-task-launch"
 echo "selected_profile=$PROFILE"
+echo "apply_mode=$APPLY_MODE"
+echo "strict_launch_mode=$STRICT_LAUNCH_MODE"
 echo "launch_command=$LAUNCH_COMMAND"
 echo "codex_command=$CODEX_COMMAND"
 

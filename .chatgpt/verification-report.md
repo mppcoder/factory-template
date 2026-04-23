@@ -1,17 +1,19 @@
 # Отчет о проверке результата
 
 ## Что проверяли
-- Создание проекта через launcher.sh.
-- Применение профиля проекта и политики.
-- Прохождение основных валидаторов после заполнения артефактов.
+- Обновленный routing contract и scenario guidance для dual-path handoff.
+- Генерацию `.chatgpt/task-launch.yaml`, `.chatgpt/normalized-codex-handoff.md`, `.chatgpt/codex-task-pack.md`, `.chatgpt/boundary-actions.md`, `.chatgpt/handoff-response.md`.
+- Validator layer для routing/task-pack/handoff-response.
 
 ## Что подтверждено
-- Проект создан, стартовые YAML-файлы заполнены.
-- Скрипты в working project доступны и работают.
-- Проверки stage, evidence, quality и DoD пройдены после заполнения артефактов.
+- Source-facing guidance теперь различает `manual-ui (default)`, `launcher-first strict mode (optional)` и `already-open live session = non-canonical fallback`.
+- Generated handoff/completion artifacts больше не заставляют пользователя VS Code Codex extension идти в terminal по умолчанию.
+- Launcher path сохранен как optional strict executable boundary и не выдается за обязательный default.
+- Router, bootstrap, generator и validators согласованы по новым полям `apply_mode` и `strict_launch_mode`.
 
 ## Что требует внимания
-- Семантическое качество артефактов вне smoke-test остается зоной ответственности сценарного слоя.
+- Текущий root `.chatgpt/task-index.yaml` и часть release-facing smoke-test metadata остались историческими и не были полностью перестроены под новый change log.
+- Downstream repos и ChatGPT Project Sources нужно синхронизировать отдельно по completion package.
 
 ## Итоговый вывод
-- Стартовый контур фабрики работоспособен и готов к дальнейшей работе.
+- Defect исправлен в source-of-truth шаблоне и отражен в текущих generated handoff artifacts.

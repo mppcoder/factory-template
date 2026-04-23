@@ -37,6 +37,8 @@ def main() -> int:
     print(f"selected_model={launch['selected_model']}")
     print(f"selected_reasoning_effort={launch['selected_reasoning_effort']}")
     print(f"selected_plan_mode_reasoning_effort={launch['selected_plan_mode_reasoning_effort']}")
+    print(f"apply_mode={launch['apply_mode']}")
+    print(f"strict_launch_mode={launch['strict_launch_mode']}")
     print(f"selected_scenario={launch['selected_scenario']}")
     print(f"pipeline_stage={launch['pipeline_stage']}")
     print(f"handoff_allowed={launch['handoff_allowed']}")

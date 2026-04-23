@@ -329,7 +329,7 @@ flowchart TD
 
 - один цельный copy-paste handoff block;
 - нормализованные `.chatgpt` artifacts;
-- launch metadata.
+- routing metadata для `manual-ui (default)` и `strict launch mode (optional)`.
 
 ### Артефакты
 
@@ -353,8 +353,10 @@ flowchart TD
     A[Validated task] --> B[Prepare codex-input]
     B --> C[Prepare context and task pack]
     C --> D[Fix routing fields]
-    D --> E[Render single handoff block]
-    E --> F[Codex execution]
+    D --> E[Render manual-ui default instructions]
+    E --> F[Render optional strict launch block]
+    F --> G[Render single handoff block]
+    G --> H[Codex execution]
 ```
 
 ### Шаги
@@ -362,8 +364,11 @@ flowchart TD
 1. Подготовить `codex-input.md`.
 2. Зафиксировать контекст, route и artifacts.
 3. Указать priority repo rules и ограничения scope.
-4. Выдать пользователю только один handoff block.
-5. Не заменять handoff ссылкой на файл.
+4. Для VS Code Codex extension по умолчанию выдать `manual-ui` инструкцию: новый чат/окно, ручной выбор model/reasoning в picker, затем вставка handoff.
+5. Отдельно показать optional strict launch block для automation / reproducibility / shell-first сценариев.
+6. Явно зафиксировать, что новый чат + вставка handoff и executable launcher path — не одно и то же.
+7. Выдать пользователю только один handoff block.
+8. Не заменять handoff ссылкой на файл.
 
 ## 9. Workflow: self-handoff для direct task
 
@@ -405,9 +410,10 @@ flowchart TD
 1. Открыть router.
 2. Классифицировать задачу.
 3. Выбрать profile/model/reasoning через executable layer и зафиксировать явный launch command.
-4. Зафиксировать launch record.
+4. Зафиксировать launch record, включая `manual-ui (default)` и `strict launch mode (optional)`.
 5. Показать пользователю self-handoff.
-6. Только потом переходить к implementation/review.
+6. Отдельно оговорить, что уже открытая live session не является надежным auto-switch boundary.
+7. Только потом переходить к implementation/review.
 
 ## 10. Workflow: remediation
 

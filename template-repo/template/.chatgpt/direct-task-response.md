@@ -24,6 +24,15 @@
 ## Selected reasoning effort
 <!-- low / medium / high -->
 
+## Apply mode
+<!-- manual-ui -->
+
+## Manual UI apply
+<!-- new chat/window, manual picker selection, then continue -->
+
+## Strict launch mode
+<!-- optional -->
+
 ## Artifacts to update
 <!-- list required artifacts -->
 
@@ -33,10 +42,13 @@
 ## Defect capture path
 <!-- reproduce -> evidence -> bug report -> classification -> feedback -> remediation -->
 
-## Launch source
-<!-- direct-task -->
+## Optional strict launch command
+<!-- launch command only when needed for strict routing -->
 
-## Launch boundary rule
+## Direct Codex command behind launcher
+<!-- codex --profile <profile> -->
+
+## Troubleshooting
 <!-- routing is reliable only on a new task launch -->
 
 ## Task payload

@@ -36,3 +36,10 @@
 10. create Codex task
 11. verify
 12. sync reusable change back
+
+## UX-class defect note
+Если defect относится к user-facing handoff/completion UX, отдельно проверь:
+- проблема действительно в поведении шаблона, а не в "ошибке пользователя";
+- различены ли `manual-ui (default)` и `launcher-first strict mode (optional)`;
+- явно ли зафиксировано, что "новый чат + вставка handoff" и "new task launch через executable launcher" — не одно и то же;
+- не деградирует ли default UX для VS Code Codex extension из-за forcing launcher как обязательного шага там, где достаточно manual picker selection в новом окне/чате.

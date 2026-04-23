@@ -86,7 +86,14 @@ python3 template-repo/scripts/validate-codex-task-pack.py <working-project>
 Пользователю handoff выдаётся только одним цельным блоком для copy-paste в Codex, а не ссылкой на файл и не несколькими разрозненными блоками.
 `template-repo/scripts/validate-handoff-response-format.py` дополнительно валидирует уже готовый markdown-ответ handoff и ловит file-based / multi-block handoff как process defect.
 
-Для реального task-based routing используйте новый launch boundary.
+Для VS Code Codex extension используйте dual-path:
+- `manual-ui (default)`: новый чат/окно Codex, ручной выбор model/reasoning в picker, затем вставка handoff;
+- `launcher-first strict mode (optional)`: когда нужен executable launch boundary для automation, reproducibility и shell-first работы.
+
+Новый чат + вставка handoff и новый task launch через executable launcher — не одно и то же.
+Уже открытая live session не является надежным auto-switch механизмом.
+
+Для strict launch path используйте новый launch boundary.
 Если вы уже находитесь внутри working project, запускайте:
 
 ```bash

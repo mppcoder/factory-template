@@ -15,6 +15,15 @@
 ## Selected reasoning effort
 <!-- low / medium / high -->
 
+## Apply mode
+<!-- manual-ui -->
+
+## Manual UI apply
+<!-- new chat/window, manual picker selection, then continue -->
+
+## Strict launch mode
+<!-- optional -->
+
 ## Project profile
 <!-- from .chatgpt/project-profile.yaml -->
 
@@ -32,6 +41,9 @@
 
 ## Defect capture path
 <!-- reproduce -> evidence -> bug report -> classification -> feedback -> remediation -->
+
+## Optional strict launch command
+<!-- launch command only when needed for strict routing -->
 
 ## Task payload
 <!-- normalized direct task text -->

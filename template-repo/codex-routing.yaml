@@ -1,7 +1,10 @@
 routing_contract:
   launch_unit: "new-task-launch"
   launch_boundary_rule: "Выбор модели и reasoning mode считается надежным только на новом запуске Codex для новой задачи."
-  executable_switch_rule: "Надежно исполняемый switch в live Codex для этого repo: явный новый task launch через launcher и selected_profile."
+  interactive_default_rule: "Для интерактивной работы в VS Code Codex extension основной user-facing path: открыть новое окно/чат Codex, вручную выбрать model/reasoning в picker и затем вставить handoff."
+  executable_switch_rule: "Строго воспроизводимый executable switch в live Codex для этого repo: явный новый task launch через launcher и selected_profile."
+  strict_launch_rule: "Launcher-first path остается optional strict mode для automation, reproducibility, shell-first и scripted launch."
+  live_session_fallback_rule: "Уже открытая live session не является надежным механизмом автопереключения profile/model/reasoning и допустима только как non-canonical fallback."
   model_expectation_rule: "selected_model и selected_reasoning_effort фиксируют ожидаемую конфигурацию выбранного executable profile; advisory handoff text сам по себе ничего не переключает."
   advisory_layers:
     - "AGENTS.md / AGENT.md"
@@ -22,6 +25,8 @@ routing_contract:
     - "selected_profile"
     - "selected_model"
     - "selected_reasoning_effort"
+    - "apply_mode"
+    - "strict_launch_mode"
     - "project_profile"
     - "selected_scenario"
     - "pipeline_stage"
@@ -33,9 +38,19 @@ routing_contract:
 
 validation:
   live_catalog_check: "Проверять model IDs и reasoning support против `codex debug models`; если live catalog недоступен, не обещать, что mapping гарантированно исполним."
+  apply_mode_default: "manual-ui"
+  strict_launch_mode_default: "optional"
+  strict_launch_use_cases:
+    - "automation"
+    - "reproducibility"
+    - "shell-first"
+    - "scripted launch"
   troubleshooting:
-    - "Если handoff вставлен в уже открытую или случайную Codex chat-сессию, это non-canonical path: завершите сессию и выполните новый task launch."
-    - "Если после launch виден sticky last-used profile/model/reasoning, снова выполните launch_command и проверьте named profile в local Codex config."
+    - "Если вы работаете через VS Code Codex extension интерактивно, используйте новый чат/окно, вручную выставьте selected_model и selected_reasoning_effort в picker, а затем вставьте handoff."
+    - "Новый чат + вставка handoff и новый task launch через executable launcher — не одно и то же; не выдавайте manual UI apply за auto-switch."
+    - "Если handoff вставлен в уже открытую или случайную Codex chat-сессию без ручной проверки picker, это non-canonical path: route может остаться stale."
+    - "Если нужна строгая воспроизводимость, automation или shell-first запуск, используйте optional strict launch_command."
+    - "Если после launch или manual UI apply виден sticky last-used profile/model/reasoning, закройте текущую сессию, откройте новую и при необходимости выполните launch_command, затем проверьте named profile в local Codex config."
     - "Если selected_model отсутствует в live catalog, обновите codex-routing.yaml или local profile mapping, прежде чем обещать этот model ID пользователю."
 
 profiles:

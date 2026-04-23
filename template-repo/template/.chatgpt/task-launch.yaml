@@ -10,6 +10,8 @@ launch:
   selected_model: ""
   selected_reasoning_effort: ""
   selected_plan_mode_reasoning_effort: ""
+  apply_mode: "manual-ui"
+  strict_launch_mode: "optional"
   project_profile: ""
   selected_scenario: ""
   pipeline_stage: ""
@@ -18,8 +20,16 @@ launch:
   defect_capture_path: ""
   task_summary: ""
   launch_boundary_rule: ""
+  interactive_default_rule: ""
+  executable_switch_rule: ""
+  strict_launch_rule: ""
+  live_session_fallback_rule: ""
+  model_expectation_rule: ""
   advisory_layers: []
   executable_layers: []
+  launch_artifact_path: ""
   launch_command: ""
+  codex_profile_command: ""
+  strict_launch_use_cases: []
   direct_self_handoff_required: false
   direct_self_handoff_completed: false

@@ -15,8 +15,14 @@
 - executable routing layer: named profiles в `.codex/config.toml` и task launcher/router scripts.
 
 Нельзя считать, что advisory слой сам по себе переключает модель или reasoning mode внутри уже открытой сессии.
-Надежная единица маршрутизации: только новый task launch / новый запуск Codex под новую задачу.
-Если нужен другой profile/model/reasoning, канонический путь — явный launch path через repo launcher, а не просто "новый чат" и не вставка handoff в случайную уже открытую сессию.
+Надежная единица маршрутизации для executable layer: только новый task launch / новый запуск Codex под новую задачу.
+Но для интерактивного VS Code Codex extension default user-facing path должен отличаться от strict automation path:
+- `manual-ui (default)`: открыть новое окно/чат Codex, вручную выбрать model/reasoning в picker и только потом вставить handoff;
+- `launcher-first strict mode (optional)`: использовать repo launcher, если нужна automation / reproducibility / shell-driven launch;
+- `already-open live session`: только non-canonical fallback, без обещаний auto-switch.
+
+Отдельно фиксируй, что "новый чат + вставка handoff" и "new task launch через executable launcher" — не одно и то же.
+Нельзя выдавать manual UI apply за авто-переключение profile/model/reasoning внутри уже открытой live session.
 
 ## Inline handoff rule
 Если handoff в Codex уже разрешен и задача достаточно определена, выдай готовый Codex handoff в том же ответе. Не останавливайся на одной аналитике.
@@ -87,7 +93,7 @@ User-only closeout допустим только если remaining next step д
 - если incidental bug исправлен в рамках текущего scope, зафиксируй defect-capture и упомяни его в closeout;
 - если incidental bug не исправлен, сначала создай структурированный bug report, затем выполни self-handoff именно для этого нового бага;
 - self-handoff обязан отдельно определить `task_class`, `selected_profile`, `selected_model`, `selected_reasoning_effort`, `selected_scenario`, `pipeline_stage`, `artifacts_to_update`, принадлежность к текущему scope и необходимость отдельной remediation-задачи;
-- если для нового бага executable routing указывает другой профиль, модель или reasoning, канонический путь — выдать готовый handoff и рекомендовать новый task launch / новую Codex chat-сессию через явный launch command;
+- если для нового бага executable routing указывает другой профиль, модель или reasoning, user-facing guidance должна различать `manual-ui (default)` и `launcher-first strict mode (optional)`, а как строго воспроизводимый путь рекомендовать новый task launch через явный launch command;
 - продолжение в текущем live chat допустимо только как явно помеченная non-canonical fallback-опция с прямой оговоркой, что уже открытая сессия не является надежным механизмом автопереключения profile/model/reasoning;
 - если для бага нужен deep research, вместо слабой in-session remediation попытки выдай ChatGPT-ready research bug report / prompt.
 

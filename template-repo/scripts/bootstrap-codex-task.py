@@ -54,6 +54,8 @@ def main() -> int:
     print(f"selected_profile={launch['selected_profile']}")
     print(f"selected_model={launch['selected_model']}")
     print(f"selected_reasoning_effort={launch['selected_reasoning_effort']}")
+    print(f"apply_mode={launch['apply_mode']}")
+    print(f"strict_launch_mode={launch['strict_launch_mode']}")
     print(f"launch_artifact_path={launch['launch_artifact_path']}")
     print(f"launch_command={launch['launch_command']}")
     print(f"codex_profile_command={launch['codex_profile_command']}")

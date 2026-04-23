@@ -15,6 +15,9 @@
 
 Для запуска Codex этого недостаточно:
 - Instructions и router-сценарии являются advisory layer;
-- model/profile selection должен происходить через новый task launch и `./scripts/launch-codex-task.sh`.
-- сначала выполняйте launch command, а потом вставляйте handoff в свежую Codex chat-сессию;
-- если проявился sticky last-used state, закройте текущую сессию и запустите новый task launch повторно.
+- для интерактивной работы в VS Code Codex extension используйте `manual-ui (default)`: новый чат/окно Codex, ручной выбор model/reasoning в picker, затем вставка handoff;
+- launcher-first через `./scripts/launch-codex-task.sh` остается optional strict mode для automation, reproducibility и shell-first запуска;
+- новый чат + вставка handoff и executable new task launch — не одно и то же;
+- строгая executable-маршрутизация по-прежнему подтверждается только через новый task launch;
+- уже открытая live session не является надежным auto-switch механизмом;
+- если проявился sticky last-used state, закройте текущую сессию, откройте новую и при необходимости используйте strict launch path.
