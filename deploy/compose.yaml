@@ -1,0 +1,18 @@
+services:
+  app:
+    image: ${APP_IMAGE:-nginx:1.27-alpine}
+    container_name: ${APP_CONTAINER_NAME:-factory-template-app}
+    restart: unless-stopped
+    ports:
+      - "${APP_PORT:-8080}:80"
+    networks:
+      - app_net
+    volumes:
+      - app_data:/usr/share/nginx/html
+
+networks:
+  app_net:
+    driver: bridge
+
+volumes:
+  app_data:

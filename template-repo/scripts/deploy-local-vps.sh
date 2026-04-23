@@ -1,0 +1,140 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+usage() {
+  cat <<'USAGE'
+Usage: bash template-repo/scripts/deploy-local-vps.sh [--yes] [--skip-pull] [--init-env]
+
+Options:
+  --yes        Run non-interactively (skip confirmation).
+  --skip-pull  Skip `docker compose pull`.
+  --init-env   If deploy/.env is missing, create it from deploy/.env.example.
+  -h, --help   Show help.
+USAGE
+}
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+if [[ -f "$SCRIPT_DIR/../project-presets.yaml" && -d "$SCRIPT_DIR/../scenario-pack" ]]; then
+  REPO_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
+else
+  REPO_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
+fi
+
+AUTO_YES=0
+SKIP_PULL=0
+INIT_ENV=0
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    --yes)
+      AUTO_YES=1
+      shift
+      ;;
+    --skip-pull)
+      SKIP_PULL=1
+      shift
+      ;;
+    --init-env)
+      INIT_ENV=1
+      shift
+      ;;
+    -h|--help|help)
+      usage
+      exit 0
+      ;;
+    *)
+      echo "Unknown option: $1" >&2
+      usage >&2
+      exit 2
+      ;;
+  esac
+done
+
+BASE_COMPOSE="$REPO_ROOT/deploy/compose.yaml"
+PROD_COMPOSE="$REPO_ROOT/deploy/compose.production.yaml"
+ENV_FILE="$REPO_ROOT/deploy/.env"
+ENV_EXAMPLE="$REPO_ROOT/deploy/.env.example"
+REPORT_DIR="$REPO_ROOT/.factory-runtime/reports"
+REPORT_FILE="$REPORT_DIR/deploy-last-run.txt"
+DRY_RUN_SCRIPT="$SCRIPT_DIR/deploy-dry-run.sh"
+
+if [[ ! -x "$DRY_RUN_SCRIPT" ]]; then
+  echo "Missing helper script: $DRY_RUN_SCRIPT" >&2
+  exit 1
+fi
+
+echo "Step 1/3: dry-run safety check"
+DRY_ARGS=()
+if [[ "$INIT_ENV" -eq 1 ]]; then
+  DRY_ARGS+=("--init-env")
+fi
+bash "$DRY_RUN_SCRIPT" "${DRY_ARGS[@]}"
+
+ACTIVE_ENV="$ENV_FILE"
+if [[ ! -f "$ACTIVE_ENV" ]]; then
+  if [[ -f "$ENV_EXAMPLE" ]]; then
+    ACTIVE_ENV="$ENV_EXAMPLE"
+  else
+    echo "No env file found (deploy/.env or deploy/.env.example)." >&2
+    exit 1
+  fi
+fi
+
+if command -v docker >/dev/null 2>&1 && docker compose version >/dev/null 2>&1; then
+  COMPOSE_BIN="docker compose"
+  COMPOSE=(docker compose)
+elif command -v docker-compose >/dev/null 2>&1; then
+  COMPOSE_BIN="docker-compose"
+  COMPOSE=(docker-compose)
+else
+  echo "Docker Compose is not available. Install 'docker compose' or 'docker-compose'." >&2
+  exit 1
+fi
+
+if [[ "$AUTO_YES" -ne 1 ]]; then
+  echo
+  read -r -p "Dry-run passed. Continue with deploy? [y/N]: " CONFIRM
+  CONFIRM="${CONFIRM:-n}"
+  if [[ ! "$CONFIRM" =~ ^[Yy]$ ]]; then
+    echo "Deploy cancelled by operator."
+    exit 0
+  fi
+fi
+
+COMPOSE_ARGS=(-f "$BASE_COMPOSE" -f "$PROD_COMPOSE" --env-file "$ACTIVE_ENV")
+
+echo
+echo "Step 2/3: deploy"
+echo "------------------------------------------------------------------------"
+echo "Repo root: $REPO_ROOT"
+echo "Compose binary: $COMPOSE_BIN"
+echo "Env source: ${ACTIVE_ENV#$REPO_ROOT/}"
+echo
+
+if [[ "$SKIP_PULL" -ne 1 ]]; then
+  "${COMPOSE[@]}" "${COMPOSE_ARGS[@]}" pull
+fi
+"${COMPOSE[@]}" "${COMPOSE_ARGS[@]}" up -d --remove-orphans
+
+echo
+echo "Step 3/3: running services"
+SERVICES="$("${COMPOSE[@]}" "${COMPOSE_ARGS[@]}" config --services | tr '\n' ' ' | sed 's/[[:space:]]\+$//')"
+SERVICES="${SERVICES:-none}"
+SERVICES_CSV="$(echo "$SERVICES" | tr ' ' ',' | sed 's/,$//')"
+"${COMPOSE[@]}" "${COMPOSE_ARGS[@]}" ps
+
+mkdir -p "$REPORT_DIR"
+{
+  echo "timestamp=$(date -u +"%Y-%m-%dT%H:%M:%SZ")"
+  echo "status=deployed"
+  echo "env_file=${ACTIVE_ENV#$REPO_ROOT/}"
+  echo "compose_bin=$COMPOSE_BIN"
+  echo "services=$SERVICES_CSV"
+} > "$REPORT_FILE"
+
+echo
+echo "Deploy completed."
+if [[ -x "$REPO_ROOT/template-repo/scripts/operator-dashboard.py" ]]; then
+  echo "Next: python3 template-repo/scripts/operator-dashboard.py --verify-summary"
+else
+  echo "Next: python3 scripts/operator-dashboard.py --verify-summary"
+fi

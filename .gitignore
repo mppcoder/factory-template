@@ -4,6 +4,7 @@ __pycache__/
 .env
 .env.*
 !.env.example
+deploy/.env
 *.pem
 *.key
 .release-stage/

@@ -341,3 +341,37 @@ python3 template-repo/scripts/first-project-wizard.py
 6. новый релиз фабрики собирается воспроизводимо.
 
 Если Codex, ChatGPT Project или boundary-step заканчиваются ожиданием вашего действия, ответ без финального блока `Инструкция пользователю` считается неполным.
+
+---
+
+## 10. Минимальная operator-панель и deploy path
+
+Для сценария, где нужен максимально простой и безопасный deploy на одном VPS, используйте новый минимальный контур:
+
+1. Понять текущее состояние:
+
+```bash
+python3 template-repo/scripts/operator-dashboard.py
+```
+
+2. Запустить безопасный dry-run:
+
+```bash
+bash template-repo/scripts/deploy-dry-run.sh
+```
+
+3. Запустить one-button-ish deploy (dry-run внутри обязателен и запускается автоматически):
+
+```bash
+bash template-repo/scripts/deploy-local-vps.sh --yes
+```
+
+4. Проверить краткий verify summary:
+
+```bash
+python3 template-repo/scripts/operator-dashboard.py --verify-summary
+```
+
+Подробные инструкции:
+- `docs/operator-next-step.md`
+- `docs/deploy-on-vps.md`
