@@ -45,7 +45,7 @@
 
 - [x] `CI / verify-baseline`
 - [x] `CI / release-bundle-dry-run`
-- [x] Последняя верификация на GitHub Actions: run `24840192862` (2026-04-23), оба job в статусе `success`
+- [x] Верификация fix-пакета на GitHub Actions: run `24840192862` (2026-04-23), оба job в статусе `success`
 
 ## Verify Entrypoint
 
