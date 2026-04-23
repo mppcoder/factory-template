@@ -280,6 +280,41 @@ def validate_lightweight_followup(root: Path, paths: list[str]) -> dict:
     }
 
 
+def build_post_done_commit_message(paths: list[str]) -> str:
+    if any(path.startswith(".github/workflows/") for path in paths):
+        return "ci: sync post-done workflow follow-up"
+    if any(path in {"SECURITY.md", "CODEOWNERS"} for path in paths):
+        return "chore: sync post-done security baseline follow-up"
+    if any(path.startswith("template-repo/scripts/") for path in paths):
+        return "chore: sync post-done automation follow-up"
+    if all(path.endswith(".md") for path in paths):
+        return "docs: sync post-done follow-up"
+    return "chore: sync post-done follow-up"
+
+
+def validate_post_done_followup(root: Path, paths: list[str]) -> dict:
+    ensure_git_repo(root)
+    if not paths:
+        raise AutomationError("Post-done follow-up невозможен без diff")
+    if not has_green_verify_baseline(root):
+        raise AutomationError("Post-done follow-up требует уже зафиксированный green verify baseline")
+    diff_check = run_git(root, ["diff", "--check", "--", *paths], check=False)
+    if diff_check.returncode != 0:
+        raise AutomationError(diff_check.stderr.strip() or diff_check.stdout.strip() or "git diff --check failed")
+    return {
+        "mode": "post-done-followup",
+        "branch": current_branch(root),
+        "push_url": remote_url(root, "origin", "push"),
+        "commit_message": build_post_done_commit_message(paths),
+        "change": {
+            "id": "post-done-followup",
+            "title": "Post-done verified sync follow-up",
+            "summary": "Post-done sync was executed with deterministic follow-up metadata.",
+            "class": "brownfield-audit",
+        },
+    }
+
+
 def resolve_sync_plan(root: Path, paths: list[str]) -> dict:
     lightweight_indicators = all(is_lightweight_followup_path(path) for path in paths) if paths else False
     full_cycle_indicators = any(
@@ -299,11 +334,7 @@ def resolve_sync_plan(root: Path, paths: list[str]) -> dict:
     stage = read_yaml(root / ".chatgpt" / "stage-state.yaml")
     stage_current = stage.get("stage", {}).get("current")
     if stage_current == "done" and not lightweight_indicators and ".chatgpt/task-index.yaml" not in paths:
-        raise AutomationError(
-            "Post-done non-lightweight verified sync требует обновленного `.chatgpt/task-index.yaml`; "
-            "иначе change metadata и commit message могут остаться stale. "
-            "Сначала зафиксируйте новый task/self-handoff и обновите task-index, либо сведите diff к lightweight follow-up."
-        )
+        return validate_post_done_followup(root, paths)
     if stage_current == "done" and not full_cycle_indicators:
         raise AutomationError(
             "Diff не похож ни на lightweight follow-up, ни на новый full verify cycle; "
