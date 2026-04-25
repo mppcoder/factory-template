@@ -55,6 +55,7 @@
 - release-facing документация нормализована вокруг одного reference-doc и больше не зависит от разрозненных описаний в runbooks и release-note draft
 - canonical preset naming, workspace bootstrap naming и optional domain reference contour синхронизированы между docs, manifests и физической структурой repo
 - release-facing docs теперь фиксируют, что линия `2.5` не сводится к process hardening и требует отдельного beginner-first/UI-friendly контура
+- GitHub Actions workflow dependency backlog consolidated: CI и Release используют согласованные `checkout@v6`, `setup-python@v6` и `upload-artifact@v7`, а stale Dependabot PR cluster закрывается через единый human-owned remediation path
 
 ## Программа 2.5 (release truth)
 - release truth source: `docs/releases/release-scorecard.yaml`
