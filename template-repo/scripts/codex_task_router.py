@@ -84,6 +84,8 @@ def parse_structured_handoff(text: str) -> dict:
 
 def normalize_model_name(model: str) -> str:
     normalized = _normalize(model)
+    if "gpt-5.5" in normalized:
+        return "gpt-5.5"
     if "gpt-5.4-mini" in normalized:
         return "gpt-5.4-mini"
     if "gpt-5.4" in normalized:

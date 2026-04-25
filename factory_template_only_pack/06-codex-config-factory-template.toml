@@ -1,5 +1,5 @@
 # Static default нужен только как fallback; task routing делается launcher-слоем.
-model = "gpt-5.4"
+model = "gpt-5.5"
 model_reasoning_effort = "medium"
 approval_policy = "on-request"
 profile = "build"
@@ -13,16 +13,16 @@ model_reasoning_effort = "low"
 approval_policy = "on-request"
 
 [profiles.build]
-model = "gpt-5.4"
+model = "gpt-5.5"
 model_reasoning_effort = "medium"
 approval_policy = "on-request"
 
 [profiles.deep]
-model = "gpt-5.4"
+model = "gpt-5.5"
 model_reasoning_effort = "high"
 approval_policy = "on-request"
 
 [profiles.review]
-model = "gpt-5.4"
+model = "gpt-5.5"
 model_reasoning_effort = "high"
 approval_policy = "on-request"

@@ -1,38 +1,40 @@
 # Отчет о завершении
 
 ## Что было запрошено
-- Добавить в `factory-template` облегченный meta-QA цикл для skills и prompt-like artifacts:
-  `создал -> протестировал -> улучшил trigger/usefulness`.
-- Не переносить внешний comparison repo целиком.
-- Оставить workflow optional advanced mode, не частью beginner default path.
+- Поправить список рекомендуемых моделей для выполнения handoff с учетом выхода GPT-5.5.
 
 ## Что реально сделано
-- Добавлен `skill-master-lite` для создания и улучшения небольших skills/prompt-like artifacts.
-- Добавлен `skill-tester-lite` для lightweight trigger/usefulness QA.
-- Добавлены references для дизайна тест-кейсов и короткого QA report.
-- Добавлен `docs/skills-quality-loop.md` с простым объяснением ценности и примером на artifact из `factory-template`.
-- README получил короткий раздел `Optional Skills Quality Loop`.
-- Handoff/routing artifacts `.chatgpt/codex-input.md`, `.chatgpt/task-launch.yaml` и `.chatgpt/normalized-codex-handoff.md` нормализованы под `FT-2.5.6-skill-meta-qa`.
+- Обновлен executable routing:
+  - `quick`: `gpt-5.4-mini`, reasoning `low`;
+  - `build`: `gpt-5.5`, reasoning `medium`;
+  - `deep`: `gpt-5.5`, reasoning `high`;
+  - `review`: `gpt-5.5`, reasoning `high`.
+- Обновлены Codex config examples и template `.codex/config.toml`.
+- Обновлен source-pack routing doc для factory-template.
+- Router normalization теперь распознает `gpt-5.5`.
+- Direct-task launch artifacts пересобраны и фиксируют `selected_model: gpt-5.5`.
 
 ## Какие артефакты обновлены
-- `template-repo/skills/skill-master-lite/SKILL.md`
-- `template-repo/skills/skill-tester-lite/SKILL.md`
-- `template-repo/skills/skill-tester-lite/references/test-design-guide.md`
-- `template-repo/skills/skill-tester-lite/references/report-template.md`
-- `docs/skills-quality-loop.md`
-- `README.md`
-- `.chatgpt/codex-input.md`
-- `.chatgpt/task-launch.yaml`
+- `template-repo/codex-routing.yaml`
+- `template-repo/scripts/codex_task_router.py`
+- `template-repo/template/.codex/config.toml`
+- `workspace-packs/vscode-codex-bootstrap/codex/global-codex-config.example.toml`
+- `factory_template_only_pack/03-mode-routing-factory-template.md`
+- `factory_template_only_pack/06-codex-config-factory-template.toml`
+- `.dogfood-bootstrap/dogfood-brownfield-shell-p1/.codex/config.toml`
+- `.chatgpt/direct-task-source.md`
+- `.chatgpt/direct-task-self-handoff.md`
+- `.chatgpt/direct-task-response.md`
 - `.chatgpt/normalized-codex-handoff.md`
+- `.chatgpt/task-launch.yaml`
 - `.chatgpt/verification-report.md`
 - `.chatgpt/done-report.md`
 - `CURRENT_FUNCTIONAL_STATE.md`
-- `work/completed/chg-20260425-skill-meta-qa.md`
+- `work/completed/chg-20260425-gpt-55-codex-routing.md`
 
 ## Что осталось вне объема
-- Полноценный evaluator/benchmark harness.
-- Обязательное включение quality loop в novice onboarding.
-- Перенос внешнего comparison repo.
+- Перевод lightweight `quick` path на GPT-5.5: он намеренно оставлен на `gpt-5.4-mini`.
+- Изменение launch-boundary semantics: новый чат/manual picker и strict launcher остаются обязательным различением.
 
 ## Итог закрытия
-- Optional skills/prompt-artifact quality loop добавлен и отделен от beginner default path.
+- Recommended model list для Codex handoff обновлен под GPT-5.5.

@@ -1,31 +1,33 @@
 launch:
-  timestamp_utc: '2026-04-25T11:06:31+00:00'
+  timestamp_utc: '2026-04-25T11:14:47+00:00'
   launch_unit: new-task-launch
-  launch_source: chatgpt-handoff
+  launch_source: direct-task
   router_layer: executable
   task_class: build
   task_class_reasons:
   - 'explicit task class override: build'
   - 'explicit selected_profile override: build'
   selected_profile: build
-  selected_model: gpt-5.4
+  selected_model: gpt-5.5
   selected_reasoning_effort: medium
   selected_plan_mode_reasoning_effort: medium
   apply_mode: manual-ui
   strict_launch_mode: optional
   project_profile: factory-template
-  selected_scenario: 15-handoff-to-codex.md -> 14-docs-normalization.md -> implementation/remediation
+  selected_scenario: 17-direct-task-self-handoff.md -> 15-handoff-to-codex.md -> implementation/remediation
   pipeline_stage: implementation
   artifacts_to_update:
-  - template-repo/skills/skill-master-lite/SKILL.md
-  - template-repo/skills/skill-tester-lite/SKILL.md
-  - template-repo/skills/skill-tester-lite/references/test-design-guide.md
-  - template-repo/skills/skill-tester-lite/references/report-template.md
-  - docs/skills-quality-loop.md
-  - README.md
+  - template-repo/codex-routing.yaml
+  - template-repo/scripts/codex_task_router.py
+  - template-repo/template/.codex/config.toml
+  - workspace-packs/vscode-codex-bootstrap/codex/global-codex-config.example.toml
+  - factory_template_only_pack/03-mode-routing-factory-template.md
+  - factory_template_only_pack/06-codex-config-factory-template.toml
+  - .chatgpt/direct-task-self-handoff.md
+  - .chatgpt/direct-task-response.md
+  - .chatgpt/task-launch.yaml
   handoff_allowed: 'yes'
-  defect_capture_path: not-required-by-text-signal; use reports/bugs/YYYY-MM-DD-skill-meta-qa-loop.md
-    only for incidental/regression evidence
+  defect_capture_path: not-required-by-text-signal
   task_summary: 'task_class: build'
   launch_boundary_rule: Выбор модели и reasoning mode считается надежным только на
     новом запуске Codex для новой задачи.
@@ -52,9 +54,9 @@ launch:
   - scripts/bootstrap-codex-task.py
   - scripts/launch-codex-task.sh
   - .codex/config.toml named profiles
-  launch_artifact_path: .chatgpt/codex-input.md
-  launch_command: ./scripts/launch-codex-task.sh --launch-source chatgpt-handoff --task-file
-    .chatgpt/codex-input.md --execute
+  launch_artifact_path: .chatgpt/direct-task-source.md
+  launch_command: ./scripts/launch-codex-task.sh --launch-source direct-task --task-file
+    .chatgpt/direct-task-source.md --execute
   codex_profile_command: codex --profile build
   strict_launch_use_cases:
   - automation
@@ -76,8 +78,8 @@ launch:
     затем проверьте named profile в local Codex config.
   - Если selected_model отсутствует в live catalog, обновите codex-routing.yaml или
     local profile mapping, прежде чем обещать этот model ID пользователю.
-  direct_self_handoff_required: false
-  direct_self_handoff_completed: false
+  direct_self_handoff_required: true
+  direct_self_handoff_completed: true
   requested_task_class: build
   requested_selected_profile: build
   requested_selected_model: null

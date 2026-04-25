@@ -1,24 +1,22 @@
 # Отчет о проверке результата
 
 ## Что проверяли
-- Новый optional skills/prompt-artifact QA contour для `factory-template`.
-- Валидность новых skills:
-  - `template-repo/skills/skill-master-lite/SKILL.md`
-  - `template-repo/skills/skill-tester-lite/SKILL.md`
-- Согласованность Codex routing/task-pack artifacts после нормализации handoff `FT-2.5.6-skill-meta-qa`.
-- Быстрый repo verify path.
+- Обновление recommended Codex handoff models с учетом доступности `gpt-5.5`.
+- Согласованность executable routing в `template-repo/codex-routing.yaml`.
+- Нормализацию explicit model override для `GPT-5.5 Thinking` / `gpt-5.5`.
+- Согласованность generated direct-task launch artifacts.
 
 ## Что подтверждено
-- `skill-master-lite` и `skill-tester-lite` проходят базовую skill validation.
-- Документирован optional workflow `создал -> протестировал -> улучшил trigger/usefulness`.
-- Beginner default path отделен от advanced QA loop в README и `docs/skills-quality-loop.md`.
-- В документации есть пример проверки на factory-template artifact: `template-repo/skills/skill-master-lite/SKILL.md`.
-- `validate-codex-task-pack.py`, `validate-codex-routing.py` и `VALIDATE_FACTORY_TEMPLATE_OPS.sh` проходят.
-- `bash template-repo/scripts/verify-all.sh quick` проходит.
+- Local `codex debug models` показывает `gpt-5.5` как доступную модель Codex с reasoning `low`, `medium`, `high`, `xhigh`.
+- Official OpenAI release note "Introducing GPT-5.5" описывает GPT-5.5 как более сильную модель для Codex agentic coding и указывает доступность в Codex.
+- `build`, `deep` и `review` теперь рекомендуют `gpt-5.5`.
+- `quick` остается на `gpt-5.4-mini`, потому что это lightweight/low-cost path.
+- `validate-codex-routing.py` проходит.
+- `validate-codex-task-pack.py` проходит.
 
 ## Что требует внимания
-- Этот контур не является benchmark harness и не должен попадать в mandatory onboarding.
-- Если позже понадобится полноценный evaluator/benchmark owner, это отдельная задача, а не расширение текущего lite-loop по умолчанию.
+- `gpt-5.5` является recommended default для substantive handoff work, но advisory text по-прежнему не переключает уже открытую live session.
+- Для strict reproducibility остается нужен новый task launch или manual UI picker в новом Codex chat/window.
 
 ## Итоговый вывод
-- Lightweight skill meta-QA loop добавлен как optional advanced mode и проверен быстрым repo verify path.
+- Список рекомендуемых моделей для handoff обновлен под GPT-5.5 без изменения launch-boundary contract.

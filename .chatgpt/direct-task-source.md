@@ -1,13 +1,19 @@
-classification: direct-task
+task_class: build
+selected_profile: build
 project_profile: factory-template
-selected_scenario: 16-done-closeout.md + 17-direct-task-self-handoff.md
-pipeline_stage: closeout sync
-artifacts_to_update:
-  - .chatgpt/task-launch.yaml
-  - .chatgpt/direct-task-self-handoff.md
-  - .chatgpt/direct-task-response.md
-  - git commit
-  - origin/main
+selected_scenario: 17-direct-task-self-handoff.md -> 15-handoff-to-codex.md -> implementation/remediation
+pipeline_stage: implementation
 handoff_allowed: yes
 defect_capture_path: not-required-by-text-signal
-task: закрывай, комить и пуш
+artifacts_to_update:
+  - template-repo/codex-routing.yaml
+  - template-repo/scripts/codex_task_router.py
+  - template-repo/template/.codex/config.toml
+  - workspace-packs/vscode-codex-bootstrap/codex/global-codex-config.example.toml
+  - factory_template_only_pack/03-mode-routing-factory-template.md
+  - factory_template_only_pack/06-codex-config-factory-template.toml
+  - .chatgpt/direct-task-self-handoff.md
+  - .chatgpt/direct-task-response.md
+  - .chatgpt/task-launch.yaml
+
+task: обновить список рекомендуемых моделей для выполнения handoff с учетом выхода GPT-5.5
