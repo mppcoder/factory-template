@@ -41,12 +41,20 @@ print(f"Rollback state: {state_path}")
 print(f"project_root: {state.get('project_root')}")
 print(f"patch_bundle: {state.get('patch_bundle')}")
 print(f"applied_at: {state.get('applied_at')}")
+metadata = state.get("bundle_metadata") or {}
+print(f"template_version: {metadata.get('template_version', 'unknown')}")
+print(f"sync_contract_version: {metadata.get('sync_contract_version', 'unknown')}")
+print(f"project_snapshot_enabled: {state.get('project_snapshot_enabled', False)}")
+print(f"project_snapshot_path: {state.get('project_snapshot_path_relative_to_apply_dir')}")
 print(f"tracked_files: {len(files)}")
 for item in files:
     rel = item.get("relative_path")
     existed = item.get("existed_before")
     backup = item.get("backup_path_relative_to_apply_dir")
     print(f"- {rel}: existed_before={existed}, backup={backup}")
+print("")
+print("Guidance: --rollback restores tracked safe-tier generated files only.")
+print("Guidance: --rollback --restore-project-snapshot also restores the full project snapshot when available.")
 PYCODE
     ;;
   --rollback)

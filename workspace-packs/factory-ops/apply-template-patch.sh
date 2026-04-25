@@ -20,6 +20,46 @@ case "$MODE" in
     fi
     echo "Найден patch bundle: $PATCH_BUNDLE"
     find "$PATCH_BUNDLE" -maxdepth 1 -type f | sort
+    python3 - <<'PYCODE' "$PATCH_BUNDLE"
+from __future__ import annotations
+
+import json
+import sys
+from pathlib import Path
+
+bundle = Path(sys.argv[1]).resolve()
+metadata_file = bundle / "bundle-metadata.json"
+preview_file = bundle / "preview-changes.json"
+generated_root = bundle / "generated-files"
+metadata = json.loads(metadata_file.read_text(encoding="utf-8")) if metadata_file.exists() else {}
+preview = json.loads(preview_file.read_text(encoding="utf-8")) if preview_file.exists() else []
+generated_files = sorted(
+    str(path.relative_to(generated_root)).replace("\\", "/")
+    for path in generated_root.rglob("*")
+    if path.is_file()
+) if generated_root.exists() else []
+
+print("")
+print("Tiered apply preview:")
+print(f"- template_version: {metadata.get('template_version', 'unknown')}")
+print(f"- sync_contract_version: {metadata.get('sync_contract_version', 'unknown')}")
+for tier in ("safe", "advisory", "manual-only"):
+    bucket = (metadata.get("tiers") or {}).get(tier, {})
+    print(
+        f"- {tier}: preview={bucket.get('total', 0)}, "
+        f"generated={bucket.get('generated', 0)}, apply_eligible={bucket.get('apply_eligible', tier == 'safe')}"
+    )
+print(f"- generated files ready for safe apply: {len(generated_files)}")
+if generated_files:
+    for item in generated_files:
+        print(f"  - {item}")
+blocked = [item for item in preview if item.get("tier") != "safe" and item.get("will_generate")]
+if blocked:
+    raise SystemExit("ОШИБКА: advisory/manual-only item marked will_generate=true")
+print("")
+print("Guidance: --apply-safe-zones copies only generated safe-tier files and records rollback metadata.")
+print("Guidance: advisory/manual-only entries are preview-only; review patch-summary.md before any manual copy.")
+PYCODE
     ;;
   --dry-run)
     if [ -n "$EXTRA" ]; then
@@ -79,11 +119,14 @@ if create_project_snapshot:
             tar.add(source, arcname=Path("project-snapshot") / rel)
 
 state = {
-    "version": 1,
+    "version": 2,
     "patch_bundle": str(patch_bundle),
     "project_root": str(project_root),
     "applied_at": dt.datetime.now(dt.timezone.utc).replace(microsecond=0).isoformat().replace("+00:00", "Z"),
     "files": [],
+    "bundle_metadata": json.loads((patch_bundle / "bundle-metadata.json").read_text(encoding="utf-8"))
+    if (patch_bundle / "bundle-metadata.json").exists()
+    else {},
     "project_snapshot_enabled": create_project_snapshot,
     "project_snapshot_path_relative_to_apply_dir": snapshot_path.relative_to(apply_dir).as_posix() if create_project_snapshot else None,
 }
@@ -128,11 +171,12 @@ state_path = apply_dir / "rollback-state.json"
 state_path.write_text(json.dumps(state, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 print(f"Rollback state сохранен: {state_path}")
 print(f"Отслеживаемых файлов: {len(state['files'])}")
+print(f"Safe-tier generated files applied: {len(state['files'])}")
 if create_project_snapshot:
     print(f"Project snapshot сохранен: {snapshot_path}")
 PYCODE
-    echo "Safe-зоны отмечены как применимые. Фактическое применение выполняется только после ручного подтверждения в template-repo."
-    echo "Materialized files, включая root AGENTS.md, синхронизированы в repo root через canonical sync path."
+    echo "Safe-tier generated files синхронизированы в downstream repo root через controlled sync path."
+    echo "Advisory/manual-only preview остался в patch-summary.md и preview-changes.json без автоматического применения."
     echo "Для отката используйте: $SCRIPT_DIR/rollback-template-patch.sh $PATCH_BUNDLE --rollback"
     echo "Для полного отката с project snapshot (если создавался): $SCRIPT_DIR/rollback-template-patch.sh $PATCH_BUNDLE --rollback --restore-project-snapshot"
     echo "Каталог результата: $APPLY_DIR"

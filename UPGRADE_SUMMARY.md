@@ -1,30 +1,49 @@
 # Safe Upgrade UX Summary
 
-- Generated (UTC): `2026-04-23T17:28:19+00:00`
+- Generated (UTC): `2026-04-25T11:01:19+00:00`
 - Factory root: `/projects/factory-template`
 - Downstream project root: `/projects/factory-template/onboarding-smoke/.tmp-run/brownfield-novice/novice-brownfield-smoke`
+- Template version: `2.4.4`
+- Sync contract version: `2`
 - Verdict: `patch-ready`
 
 ## Drift Snapshot
 
-- Sync zones: `ok=4` / `drift=0` / `missing=0` / `total=4`
+- Sync zones: `ok=12` / `drift=0` / `missing=0` / `total=12`
 - Materialized files: `ok=1` / `issues=0` / `total=1`
+
+## Tiered Impact Preview
+
+| Tier | Manifest Items | Preview Items | Generated For Apply | Apply Eligible |
+| --- | ---: | ---: | ---: | --- |
+| `safe` | `7` | `3` | `2` | `True` |
+| `advisory` | `2` | `0` | `0` | `False` |
+| `manual-only` | `4` | `0` | `0` | `False` |
+
+### Preview Items
+
+- `[safe]` `bootstrap` status=`optional-missing-project` generated=`False`
+- `[safe]` `.chatgpt/examples/done-report.example.md` status=`drift` generated=`True`
+- `[safe]` `tasks/codex/codex-task-mandatory-bug-capture.block.md` status=`drift` generated=`True`
 
 ## Upgrade Bundle Snapshot
 
 - Bundle path: `/projects/factory-template/onboarding-smoke/.tmp-run/brownfield-novice/novice-brownfield-smoke/_factory-sync-export`
-- Changed files in bundle: `1`
-- Generated files to materialize: `1`
+- Changed files in bundle: `2`
+- Safe generated targets: `2`
+- Generated files to materialize: `2`
 - Rollback state present: `True`
-- Rollback tracked files: `1`
+- Rollback tracked files: `2`
 
 ### Changed Files
 
-- `template-repo/AGENTS.md => AGENTS.md`
+- `template-repo/template/.chatgpt/examples/done-report.example.md`
+- `template-repo/template/tasks/codex/codex-task-mandatory-bug-capture.block.md`
 
 ### Generated Files (safe materialization)
 
-- `AGENTS.md`
+- `.chatgpt/examples/done-report.example.md`
+- `tasks/codex/codex-task-mandatory-bug-capture.block.md`
 
 ## Canonical Operator Commands
 

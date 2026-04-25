@@ -35,12 +35,19 @@ def read_text(path: Path) -> str:
 def load_bundle(bundle: Path) -> dict:
     changed_files_file = bundle / "changed-files.txt"
     changed_files = [line.strip() for line in read_text(changed_files_file).splitlines() if line.strip()]
+    safe_changed_files_file = bundle / "safe-changed-files.txt"
+    safe_changed_files = [line.strip() for line in read_text(safe_changed_files_file).splitlines() if line.strip()]
     generated_root = bundle / "generated-files"
     generated_files: list[str] = []
     if generated_root.exists():
         for file in sorted(generated_root.rglob("*")):
             if file.is_file():
                 generated_files.append(str(file.relative_to(generated_root)).replace("\\", "/"))
+
+    metadata_file = bundle / "bundle-metadata.json"
+    preview_file = bundle / "preview-changes.json"
+    metadata = json.loads(read_text(metadata_file)) if metadata_file.exists() else {}
+    preview_changes = json.loads(read_text(preview_file)) if preview_file.exists() else []
 
     rollback_state_file = bundle / "applied-safe-zones" / "rollback-state.json"
     rollback_state = {}
@@ -51,7 +58,11 @@ def load_bundle(bundle: Path) -> dict:
         "exists": bundle.exists(),
         "path": str(bundle),
         "changed_files": changed_files,
+        "safe_changed_files": safe_changed_files,
         "generated_files": generated_files,
+        "metadata": metadata,
+        "preview_changes": preview_changes,
+        "tier_preview": metadata.get("tiers", {}),
         "patch_summary_md": read_text(bundle / "patch-summary.md"),
         "rollback_state_exists": rollback_state_file.exists(),
         "rollback_state_path": str(rollback_state_file),
@@ -86,6 +97,8 @@ def build_report(factory_root: Path, project_root: Path, patch_bundle: Path, scr
         verdict = "drift-detected"
     if bundle.get("changed_files") or bundle.get("generated_files"):
         verdict = "patch-ready"
+    if bundle.get("preview_changes") and not (bundle.get("changed_files") or bundle.get("generated_files")):
+        verdict = "manual-review"
 
     return {
         "generated_at_utc": datetime.now(timezone.utc).isoformat(timespec="seconds"),
@@ -102,6 +115,7 @@ def build_report(factory_root: Path, project_root: Path, patch_bundle: Path, scr
 def render_text(report: dict) -> str:
     patch = report["patch_bundle"]
     summary = report["drift"]["summary"]
+    tier_preview = patch.get("tier_preview") or {}
     lines = [
         "Safe Upgrade UX Summary",
         f"generated_at_utc: {report['generated_at_utc']}",
@@ -119,9 +133,24 @@ def render_text(report: dict) -> str:
         ),
         f"- has_drift: {summary.get('has_drift', False)}",
         "",
+        "Tiered impact preview:",
+    ]
+    for tier in ("safe", "advisory", "manual-only"):
+        bucket = tier_preview.get(tier, {})
+        drift_bucket = (summary.get("tiers") or {}).get(tier, {})
+        lines.append(
+            f"- {tier}: manifest_total={drift_bucket.get('total', 0)}, "
+            f"preview={bucket.get('total', 0)}, generated={bucket.get('generated', 0)}, "
+            f"apply_eligible={bucket.get('apply_eligible', tier == 'safe')}"
+        )
+    lines.extend(
+        [
+        "",
         "Patch bundle:",
         f"- path: {patch['path']}",
+        f"- template_version: {patch.get('metadata', {}).get('template_version', 'unknown')}",
         f"- changed_files: {len(patch['changed_files'])}",
+        f"- safe_changed_files: {len(patch['safe_changed_files'])}",
         f"- generated_files: {len(patch['generated_files'])}",
         f"- rollback_state_exists: {patch['rollback_state_exists']}",
         f"- rollback_files_count: {patch['rollback_files_count']}",
@@ -137,7 +166,8 @@ def render_text(report: dict) -> str:
         "",
         f"safe_upgrade_verdict: {report['safe_upgrade_verdict']}",
         f"rollback_ready: {report['rollback_ready']}",
-    ]
+        ]
+    )
     return "\n".join(lines) + "\n"
 
 
@@ -145,12 +175,15 @@ def render_markdown(report: dict) -> str:
     patch = report["patch_bundle"]
     summary = report["drift"]["summary"]
     cmd = report["commands"]
+    tier_preview = patch.get("tier_preview") or {}
     lines = [
         "# Safe Upgrade UX Summary",
         "",
         f"- Generated (UTC): `{report['generated_at_utc']}`",
         f"- Factory root: `{report['factory_root']}`",
         f"- Downstream project root: `{report['project_root']}`",
+        f"- Template version: `{patch.get('metadata', {}).get('template_version', 'unknown')}`",
+        f"- Sync contract version: `{patch.get('metadata', {}).get('sync_contract_version', 'unknown')}`",
         f"- Verdict: `{report['safe_upgrade_verdict']}`",
         "",
         "## Drift Snapshot",
@@ -169,14 +202,43 @@ def render_markdown(report: dict) -> str:
             f"`total={summary.get('materialized_total', 0)}`"
         ),
         "",
+        "## Tiered Impact Preview",
+        "",
+        "| Tier | Manifest Items | Preview Items | Generated For Apply | Apply Eligible |",
+        "| --- | ---: | ---: | ---: | --- |",
+    ]
+    for tier in ("safe", "advisory", "manual-only"):
+        bucket = tier_preview.get(tier, {})
+        drift_bucket = (summary.get("tiers") or {}).get(tier, {})
+        lines.append(
+            f"| `{tier}` | `{drift_bucket.get('total', 0)}` | `{bucket.get('total', 0)}` | "
+            f"`{bucket.get('generated', 0)}` | `{bucket.get('apply_eligible', tier == 'safe')}` |"
+        )
+
+    preview_changes = patch.get("preview_changes") or []
+    if preview_changes:
+        lines.extend(["", "### Preview Items", ""])
+        for item in preview_changes[:40]:
+            lines.append(
+                f"- `[{item.get('tier')}]` `{item.get('target')}` "
+                f"status=`{item.get('status')}` generated=`{item.get('will_generate')}`"
+            )
+        if len(preview_changes) > 40:
+            lines.append(f"- ...plus `{len(preview_changes) - 40}` more preview items")
+
+    lines.extend(
+        [
+        "",
         "## Upgrade Bundle Snapshot",
         "",
         f"- Bundle path: `{patch['path']}`",
         f"- Changed files in bundle: `{len(patch['changed_files'])}`",
+        f"- Safe generated targets: `{len(patch['safe_changed_files'])}`",
         f"- Generated files to materialize: `{len(patch['generated_files'])}`",
         f"- Rollback state present: `{patch['rollback_state_exists']}`",
         f"- Rollback tracked files: `{patch['rollback_files_count']}`",
-    ]
+        ]
+    )
 
     if patch["changed_files"]:
         lines.extend(["", "### Changed Files", ""])

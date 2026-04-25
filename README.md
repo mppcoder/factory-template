@@ -185,12 +185,14 @@ python3 template-repo/scripts/validate-codex-routing.py <working-project>
 
 1. launcher создаёт initial root `AGENTS.md` через `template-repo/scripts/sync-agents.py`;
 2. downstream refresh использует `workspace-packs/factory-ops/export-template-patch.sh`;
-3. `workspace-packs/factory-ops/apply-template-patch.sh --apply-safe-zones` materializes generated root `AGENTS.md` в боевом repo;
-4. `workspace-packs/factory-ops/check-template-drift.py` ловит отсутствие root clone и drift относительно `template-repo/AGENTS.md`.
+3. `workspace-packs/factory-ops/factory-sync-manifest.yaml` разделяет impact на `safe`, `advisory`, `manual-only`;
+4. `workspace-packs/factory-ops/apply-template-patch.sh --apply-safe-zones` materializes только generated safe-tier files в боевом repo;
+5. `workspace-packs/factory-ops/check-template-drift.py` ловит отсутствие root clone и tiered drift относительно template source.
 
 Human-readable upgrade/rollback операторский маршрут:
 
 ```bash
+bash workspace-packs/factory-ops/export-template-patch.sh <factory-root> <downstream-root> --dry-run
 python3 workspace-packs/factory-ops/upgrade-report.py <factory-root> <downstream-root> --format markdown --output UPGRADE_SUMMARY.md
 bash workspace-packs/factory-ops/apply-template-patch.sh <downstream-root>/_factory-sync-export --apply-safe-zones
 bash workspace-packs/factory-ops/apply-template-patch.sh <downstream-root>/_factory-sync-export --apply-safe-zones --with-project-snapshot
@@ -200,6 +202,8 @@ bash workspace-packs/factory-ops/rollback-template-patch.sh <downstream-root>/_f
 ```
 
 Это не "магическое" обновление GitHub само по себе: sync происходит только как часть канонического template-sync/update flow внутри repo/tooling.
+
+Policy detail: `docs/downstream-upgrade-policy.md`.
 
 Состав archive pack и direct profile теперь берётся из единого declarative manifest:
 

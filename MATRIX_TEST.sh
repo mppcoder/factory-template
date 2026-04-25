@@ -109,7 +109,20 @@ for old, new in {
 PYCODE
 assert_pass 'factory-bugflow' validate-factory-feedback.py bash "$ROOT/VALIDATE_FACTORY_FEEDBACK.sh" "$P"
 assert_pass 'factory-bugflow' ingest-factory-feedback.sh bash "$ROOT/INGEST_FACTORY_FEEDBACK.sh" "$P" --dry-run
+printf '\nMATRIX_SAFE_ZONE_EXAMPLE_DRIFT\n' >> "$P/.chatgpt/examples/done-report.example.md"
+printf '\nMATRIX_SAFE_ZONE_TASK_BLOCK_DRIFT\n' >> "$P/tasks/codex/codex-task-mandatory-bug-capture.block.md"
 assert_pass 'factory-bugflow' export-template-patch.sh "$ROOT/workspace-packs/factory-ops/export-template-patch.sh" "$ROOT" "$P" --dry-run
+assert_pass 'factory-bugflow' 'tiered-preview-generated>1' python3 - <<PYCODE
+import json
+from pathlib import Path
+bundle = Path(r"$P/_factory-sync-export")
+metadata = json.loads((bundle / "bundle-metadata.json").read_text(encoding="utf-8"))
+preview = json.loads((bundle / "preview-changes.json").read_text(encoding="utf-8"))
+assert set(metadata["tiers"]) >= {"safe", "advisory", "manual-only"}
+assert metadata["tiers"]["safe"]["generated"] > 1
+assert any(item["tier"] == "safe" and item["will_generate"] for item in preview)
+assert all(not item.get("will_generate") for item in preview if item["tier"] != "safe")
+PYCODE
 assert_pass 'factory-bugflow' 'apply-template-patch.sh --check' "$ROOT/workspace-packs/factory-ops/apply-template-patch.sh" "$P/_factory-sync-export" --check
 assert_pass 'factory-bugflow' 'apply-template-patch.sh --apply-safe-zones --with-project-snapshot' "$ROOT/workspace-packs/factory-ops/apply-template-patch.sh" "$P/_factory-sync-export" --apply-safe-zones --with-project-snapshot
 printf '\nMATRIX_MANUAL_CHANGE_MARKER\n' >> "$P/README.md"

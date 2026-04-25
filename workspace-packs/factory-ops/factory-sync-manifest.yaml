@@ -1,25 +1,47 @@
 # Манифест зон синхронизации фабрики.
-# sync_zones безопасны для controlled apply.
-# advisory_only_zones можно сравнивать и экспортировать, но применять только вручную.
-# exclude_zones исключаются из автоматической обратной синхронизации.
-sync_zones:
-  - path: bootstrap
-    optional_in_project: true
-    note: generated downstream project usually does not include bootstrap at project root
-  - template-repo/scenario-pack
-  - template-repo/template/.chatgpt/examples
-  - template-repo/template/meta-feedback
-materialized_files:
-  - source: template-repo/AGENTS.md
-    target: AGENTS.md
-    mode: materialized-clone
-advisory_only_zones:
-  - template-repo/template/.chatgpt
-  - template-repo/template/brownfield
-  - template-repo/template/greenfield
-  - template-repo/template/docs
+# safe: можно materialize через controlled apply + rollback metadata.
+# advisory: можно сравнивать и показывать в preview, но применять только вручную.
+# manual-only: сравнение допускается как impact signal; автоматический patch не генерируется.
+sync_contract_version: 2
+
+tiers:
+  safe:
+    description: Controlled generated updates with rollback support.
+    zones:
+      - path: bootstrap
+        optional_in_project: true
+        note: generated downstream project usually does not include bootstrap at project root
+      - path: template-repo/scenario-pack
+        note: repo-first routing pack; safe only when downstream keeps template-repo layout
+      - path: template-repo/template/.chatgpt/examples
+        note: example artifacts are template-owned reference files
+      - path: template-repo/template/meta-feedback
+        note: feedback templates are template-owned starters; rollback is required before manual edits are discarded
+      - path: template-repo/template/tasks/codex
+        note: codex reusable task blocks are template-owned
+      - path: template-repo/template/work-templates
+        note: task/spec templates are template-owned
+    materialized_files:
+      - source: template-repo/AGENTS.md
+        target: AGENTS.md
+        mode: materialized-clone
+        note: downstream root instruction clone from template source
+
+  advisory:
+    description: Diff and preview only; operator decides whether to copy manually.
+    zones:
+      - template-repo/template/.codex
+      - template-repo/template/docs
+
+  manual-only:
+    description: Project-specific lifecycle content; never apply automatically from bundle.
+    zones:
+      - template-repo/template/brownfield
+      - template-repo/template/greenfield
+      - template-repo/template/project-knowledge
+      - template-repo/template/work
+
 exclude_zones:
-  - template-repo/template/work
   - registry
   - working-project-examples
   - optional-domain-packs
