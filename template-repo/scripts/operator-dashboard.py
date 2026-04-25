@@ -4,6 +4,7 @@ from __future__ import annotations
 import argparse
 import shutil
 import subprocess
+import sys
 from dataclasses import dataclass
 from datetime import datetime
 from pathlib import Path
@@ -20,6 +21,13 @@ STATUS_LABEL = {
     "ok": "OK",
     "warn": "ВНИМАНИЕ",
     "fail": "НУЖНО ИСПРАВИТЬ",
+}
+
+PRESET_COMPOSE_FILES = {
+    "starter": [],
+    "app-db": ["deploy/presets/app-db.yaml"],
+    "reverse-proxy": ["deploy/presets/reverse-proxy.yaml"],
+    "production": ["deploy/presets/app-db.yaml", "deploy/presets/reverse-proxy.yaml"],
 }
 
 
@@ -59,6 +67,70 @@ def parse_report(path: Path) -> dict[str, str]:
     return result
 
 
+def parse_env_file(path: Path) -> dict[str, str]:
+    if not path.exists():
+        return {}
+    result: dict[str, str] = {}
+    for raw in path.read_text(encoding="utf-8", errors="ignore").splitlines():
+        line = raw.strip()
+        if not line or line.startswith("#") or "=" not in line:
+            continue
+        key, value = line.split("=", 1)
+        result[key.strip()] = value.strip().strip('"').strip("'")
+    return result
+
+
+def active_env(root: Path) -> tuple[Path | None, str]:
+    env_file = root / "deploy" / ".env"
+    env_example = root / "deploy" / ".env.example"
+    if env_file.exists():
+        return env_file, "custom"
+    if env_example.exists():
+        return env_example, "example"
+    return None, "missing"
+
+
+def selected_preset(root: Path, preset_override: str | None = None) -> str:
+    if preset_override:
+        return preset_override
+    env_path, _mode = active_env(root)
+    env = parse_env_file(env_path) if env_path else {}
+    return env.get("OPERATOR_PRESET") or "starter"
+
+
+def validate_operator_env(root: Path, env_path: Path | None, env_mode: str, preset: str) -> dict[str, str]:
+    if env_path is None:
+        return {"status": "fail", "failures": "1", "warnings": "0"}
+    validator = script_path(root, "validate-operator-env.py")
+    if not validator.exists():
+        return {"status": "fail", "failures": "1", "warnings": "0"}
+    command = [
+        sys.executable,
+        str(validator),
+        str(root),
+        "--env-file",
+        str(env_path),
+        "--preset",
+        preset,
+        "--format",
+        "report",
+    ]
+    if env_mode == "example":
+        command.append("--allow-example-placeholders")
+    proc = subprocess.run(command, text=True, capture_output=True, check=False)
+    data: dict[str, str] = {}
+    for line in proc.stdout.splitlines():
+        if "=" not in line:
+            continue
+        key, value = line.split("=", 1)
+        data[key.strip()] = value.strip()
+    if not data:
+        data["status"] = "fail"
+        data["failures"] = "1"
+        data["warnings"] = "0"
+    return data
+
+
 def _compose_status() -> tuple[str, str]:
     if shutil.which("docker"):
         proc = subprocess.run(
@@ -74,14 +146,14 @@ def _compose_status() -> tuple[str, str]:
     return "fail", "Не найден Docker Compose (`docker compose` или `docker-compose`)."
 
 
-def build_status_rows(root: Path) -> list[StatusRow]:
+def build_status_rows(root: Path, preset_override: str | None = None) -> list[StatusRow]:
     compose_base = root / "deploy" / "compose.yaml"
     compose_prod = root / "deploy" / "compose.production.yaml"
-    env_file = root / "deploy" / ".env"
-    env_example = root / "deploy" / ".env.example"
+    env_path, env_mode = active_env(root)
     verify_summary = root / "VERIFY_SUMMARY.md"
     dry_run_report = root / ".factory-runtime" / "reports" / "deploy-dry-run-latest.txt"
     deploy_report = root / ".factory-runtime" / "reports" / "deploy-last-run.txt"
+    preset = selected_preset(root, preset_override)
 
     rows: list[StatusRow] = []
 
@@ -103,7 +175,7 @@ def build_status_rows(root: Path) -> list[StatusRow]:
             )
         )
 
-    if env_file.exists():
+    if env_mode == "custom" and env_path is not None:
         rows.append(
             StatusRow(
                 title="Environment файл",
@@ -111,7 +183,7 @@ def build_status_rows(root: Path) -> list[StatusRow]:
                 details="Найден `deploy/.env` (используются ваши переменные окружения).",
             )
         )
-    elif env_example.exists():
+    elif env_mode == "example" and env_path is not None:
         rows.append(
             StatusRow(
                 title="Environment файл",
@@ -128,6 +200,53 @@ def build_status_rows(root: Path) -> list[StatusRow]:
             )
         )
 
+    preset_files = PRESET_COMPOSE_FILES.get(preset)
+    if preset_files is None:
+        rows.append(
+            StatusRow(
+                title="Operator preset",
+                status="fail",
+                details=f"Неизвестный preset `{preset}`. Допустимо: starter, app-db, reverse-proxy, production.",
+            )
+        )
+    elif preset == "starter":
+        rows.append(
+            StatusRow(
+                title="Operator preset",
+                status="ok",
+                details="`starter`: минимальный single-app baseline без обязательных DB/TLS секретов.",
+            )
+        )
+    else:
+        missing_preset_files = [rel for rel in preset_files if not (root / rel).exists()]
+        status = "fail" if missing_preset_files else "ok"
+        detail = (
+            f"`{preset}` активен; подключаются overlays: {', '.join(preset_files)}."
+            if not missing_preset_files
+            else f"`{preset}` активен, но не хватает overlays: {', '.join(missing_preset_files)}."
+        )
+        rows.append(StatusRow(title="Operator preset", status=status, details=detail))
+
+    env_validation = validate_operator_env(root, env_path, env_mode, preset)
+    if env_validation.get("status") == "pass":
+        warnings = env_validation.get("warnings", "0")
+        status = "warn" if warnings not in {"", "0"} else "ok"
+        rows.append(
+            StatusRow(
+                title="Operator env validation",
+                status=status,
+                details=f"Проверка preset env прошла; warnings={warnings}.",
+            )
+        )
+    else:
+        rows.append(
+            StatusRow(
+                title="Operator env validation",
+                status="fail",
+                details=f"Env validation failed; failures={env_validation.get('failures', 'unknown')}, warnings={env_validation.get('warnings', 'unknown')}.",
+            )
+        )
+
     compose_state, compose_details = _compose_status()
     rows.append(StatusRow(title="Docker Compose", status=compose_state, details=compose_details))
 
@@ -136,11 +255,13 @@ def build_status_rows(root: Path) -> list[StatusRow]:
     if dry_status == "pass":
         when = dry_data.get("timestamp", "unknown time")
         services = dry_data.get("services", "unknown")
+        dry_preset = dry_data.get("preset", "unknown")
+        row_status = "ok" if dry_preset == preset else "warn"
         rows.append(
             StatusRow(
                 title="Последний dry-run",
-                status="ok",
-                details=f"PASS ({when}), services: {services}.",
+                status=row_status,
+                details=f"PASS ({when}), preset: {dry_preset}, services: {services}.",
             )
         )
     elif dry_data:
@@ -165,11 +286,13 @@ def build_status_rows(root: Path) -> list[StatusRow]:
     if deploy_status == "deployed":
         when = deploy_data.get("timestamp", "unknown time")
         services = deploy_data.get("services", "unknown")
+        deploy_preset = deploy_data.get("preset", "unknown")
+        row_status = "ok" if deploy_preset == preset else "warn"
         rows.append(
             StatusRow(
                 title="Последний deploy",
-                status="ok",
-                details=f"Завершён ({when}), services: {services}.",
+                status=row_status,
+                details=f"Завершён ({when}), preset: {deploy_preset}, services: {services}.",
             )
         )
     elif deploy_data:
@@ -212,10 +335,11 @@ def build_status_rows(root: Path) -> list[StatusRow]:
     return rows
 
 
-def recommend_next_step(root: Path, rows: list[StatusRow]) -> str:
+def recommend_next_step(root: Path, rows: list[StatusRow], preset: str) -> str:
     by_title = {row.title: row for row in rows}
-    dry_run_cmd = f"bash {script_hint(root, 'deploy-dry-run.sh')}"
-    deploy_cmd = f"bash {script_hint(root, 'deploy-local-vps.sh')} --yes"
+    preset_arg = "" if preset == "starter" else f" --preset {preset}"
+    dry_run_cmd = f"bash {script_hint(root, 'deploy-dry-run.sh')}{preset_arg}"
+    deploy_cmd = f"bash {script_hint(root, 'deploy-local-vps.sh')} --yes{preset_arg}"
     verify_cmd = f"bash {script_hint(root, 'verify-all.sh')} quick"
     env_cmd = "cp deploy/.env.example deploy/.env"
 
@@ -223,13 +347,19 @@ def recommend_next_step(root: Path, rows: list[StatusRow]) -> str:
         return "Сначала восстановите deploy baseline (`deploy/compose*.yaml`)."
     if by_title["Environment файл"].status == "fail":
         return f"Создайте env-файл: `{env_cmd}`."
+    if by_title["Operator preset"].status == "fail":
+        return "Исправьте `OPERATOR_PRESET` или восстановите preset overlay-файлы."
+    if by_title["Operator env validation"].status == "fail":
+        return f"Исправьте deploy env: `python3 {script_hint(root, 'validate-operator-env.py')} --preset {preset}`."
     if by_title["Последний dry-run"].status != "ok":
         return f"Запустите безопасную проверку перед деплоем: `{dry_run_cmd}`."
     if by_title["Последний deploy"].status != "ok":
         return f"Запустите one-button-ish deploy (с автоматическим dry-run): `{deploy_cmd}`."
     if by_title["Verify summary"].status != "ok":
         return f"Обновите верификацию: `{verify_cmd}`."
-    return "Система в рабочем состоянии. Повторите dry-run перед каждым новым деплоем."
+    if preset == "starter":
+        return "Starter baseline в рабочем состоянии. Повторите dry-run перед каждым новым деплоем."
+    return f"`{preset}` в рабочем состоянии. Проверьте backup restore drill и rollback перед production cutover."
 
 
 def print_verify_summary(root: Path, max_lines: int = 12) -> None:
@@ -279,24 +409,32 @@ def main() -> int:
         action="store_true",
         help="Запустить dry-run и показать verify summary.",
     )
+    parser.add_argument(
+        "--preset",
+        choices=sorted(PRESET_COMPOSE_FILES),
+        help="Override OPERATOR_PRESET from env for dashboard and optional dry-run.",
+    )
     args = parser.parse_args()
 
     root = detect_repo_root()
+    preset = selected_preset(root, args.preset)
 
     if args.run_dry_run or args.full:
         dry_script = script_path(root, "deploy-dry-run.sh")
         if dry_script.exists():
-            print(f"Запуск dry-run: bash {script_hint(root, 'deploy-dry-run.sh')}")
-            code = run_shell(root, ["bash", str(dry_script)])
+            preset_args = ["--preset", preset] if args.preset else []
+            print(f"Запуск dry-run: bash {script_hint(root, 'deploy-dry-run.sh')} {' '.join(preset_args)}".rstrip())
+            code = run_shell(root, ["bash", str(dry_script), *preset_args])
             if code != 0:
                 print(f"\nDry-run завершился с кодом {code}.")
         else:
             print("Dry-run скрипт не найден.")
 
-    rows = build_status_rows(root)
+    rows = build_status_rows(root, args.preset)
     print("Operator Dashboard")
     print("-" * 72)
     print(f"Repo root: {root}")
+    print(f"Operator preset: {preset}")
     print(f"Updated: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
     print()
     for row in rows:
@@ -305,7 +443,7 @@ def main() -> int:
         print(f"  {row.details}")
     print()
     print("Recommended next step:")
-    print(f"- {recommend_next_step(root, rows)}")
+    print(f"- {recommend_next_step(root, rows, preset)}")
     print(f"- Guided launcher: python3 {script_hint(root, 'factory-launcher.py')} --mode continue")
 
     if args.verify_summary or args.full:

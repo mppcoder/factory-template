@@ -4,11 +4,17 @@ services:
     container_name: ${APP_CONTAINER_NAME:-factory-template-app}
     restart: unless-stopped
     ports:
-      - "${APP_PORT:-8080}:80"
+      - "${APP_BIND_ADDRESS:-0.0.0.0}:${APP_PORT:-8080}:80"
     networks:
       - app_net
     volumes:
       - app_data:/usr/share/nginx/html
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://127.0.0.1${APP_HEALTHCHECK_PATH:-/} >/dev/null || exit 1"]
+      interval: ${APP_HEALTHCHECK_INTERVAL:-30s}
+      timeout: ${APP_HEALTHCHECK_TIMEOUT:-5s}
+      retries: ${APP_HEALTHCHECK_RETRIES:-3}
+      start_period: ${APP_HEALTHCHECK_START_PERIOD:-20s}
 
 networks:
   app_net:

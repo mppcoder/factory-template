@@ -3,12 +3,13 @@ set -euo pipefail
 
 usage() {
   cat <<'USAGE'
-Usage: bash template-repo/scripts/deploy-local-vps.sh [--yes] [--skip-pull] [--init-env]
+Usage: bash template-repo/scripts/deploy-local-vps.sh [--yes] [--skip-pull] [--init-env] [--preset starter|app-db|reverse-proxy|production]
 
 Options:
   --yes        Run non-interactively (skip confirmation).
   --skip-pull  Skip `docker compose pull`.
   --init-env   If deploy/.env is missing, create it from deploy/.env.example.
+  --preset     Override OPERATOR_PRESET from env for this deploy.
   -h, --help   Show help.
 USAGE
 }
@@ -23,6 +24,7 @@ fi
 AUTO_YES=0
 SKIP_PULL=0
 INIT_ENV=0
+PRESET_OVERRIDE=""
 while [[ $# -gt 0 ]]; do
   case "$1" in
     --yes)
@@ -36,6 +38,10 @@ while [[ $# -gt 0 ]]; do
     --init-env)
       INIT_ENV=1
       shift
+      ;;
+    --preset)
+      PRESET_OVERRIDE="$2"
+      shift 2
       ;;
     -h|--help|help)
       usage
@@ -63,9 +69,12 @@ if [[ ! -x "$DRY_RUN_SCRIPT" ]]; then
 fi
 
 echo "Step 1/3: dry-run safety check"
-DRY_ARGS=()
+DRY_ARGS=(--strict-env)
 if [[ "$INIT_ENV" -eq 1 ]]; then
   DRY_ARGS+=("--init-env")
+fi
+if [[ -n "$PRESET_OVERRIDE" ]]; then
+  DRY_ARGS+=("--preset" "$PRESET_OVERRIDE")
 fi
 bash "$DRY_RUN_SCRIPT" "${DRY_ARGS[@]}"
 
@@ -100,13 +109,47 @@ if [[ "$AUTO_YES" -ne 1 ]]; then
   fi
 fi
 
-COMPOSE_ARGS=(-f "$BASE_COMPOSE" -f "$PROD_COMPOSE" --env-file "$ACTIVE_ENV")
+env_value() {
+  local key="$1"
+  local file="$2"
+  awk -F= -v key="$key" '
+    $1 == key {
+      value = substr($0, index($0, "=") + 1)
+      gsub(/^["'\'' ]+|["'\'' ]+$/, "", value)
+      print value
+      exit
+    }
+  ' "$file"
+}
+
+PRESET="${PRESET_OVERRIDE:-$(env_value OPERATOR_PRESET "$ACTIVE_ENV")}"
+PRESET="${PRESET:-starter}"
+COMPOSE_ARGS=(-f "$BASE_COMPOSE" -f "$PROD_COMPOSE")
+case "$PRESET" in
+  starter)
+    ;;
+  app-db)
+    COMPOSE_ARGS+=(-f "$REPO_ROOT/deploy/presets/app-db.yaml")
+    ;;
+  reverse-proxy)
+    COMPOSE_ARGS+=(-f "$REPO_ROOT/deploy/presets/reverse-proxy.yaml")
+    ;;
+  production)
+    COMPOSE_ARGS+=(-f "$REPO_ROOT/deploy/presets/app-db.yaml" -f "$REPO_ROOT/deploy/presets/reverse-proxy.yaml")
+    ;;
+  *)
+    echo "Unknown operator preset: $PRESET" >&2
+    exit 2
+    ;;
+esac
+COMPOSE_ARGS+=(--env-file "$ACTIVE_ENV")
 
 echo
 echo "Step 2/3: deploy"
 echo "------------------------------------------------------------------------"
 echo "Repo root: $REPO_ROOT"
 echo "Compose binary: $COMPOSE_BIN"
+echo "Operator preset: $PRESET"
 echo "Env source: ${ACTIVE_ENV#$REPO_ROOT/}"
 echo
 
@@ -126,6 +169,7 @@ mkdir -p "$REPORT_DIR"
 {
   echo "timestamp=$(date -u +"%Y-%m-%dT%H:%M:%SZ")"
   echo "status=deployed"
+  echo "preset=$PRESET"
   echo "env_file=${ACTIVE_ENV#$REPO_ROOT/}"
   echo "compose_bin=$COMPOSE_BIN"
   echo "services=$SERVICES_CSV"

@@ -1,17 +1,17 @@
 # Normalized Codex Handoff
 
 ## Launch source
-direct-task
+chatgpt-handoff
 
 ## Task class
-review
+deep
 
 ## Task class evidence
-- explicit task class override: review
-- explicit reasoning/model override matched default profile: review
+- explicit task class override: deep
+- explicit selected_profile override: deep
 
 ## Selected profile
-review
+deep
 
 ## Selected model
 gpt-5.4
@@ -38,23 +38,30 @@ optional
 factory-template
 
 ## Selected scenario
-16-done-closeout.md + 17-direct-task-self-handoff.md
+15-handoff-to-codex.md -> implementation/remediation
 
 ## Pipeline stage
-closeout sync
+implementation
 
 ## Artifacts to update
-- .chatgpt/task-launch.yaml
-- .chatgpt/direct-task-self-handoff.md
-- .chatgpt/direct-task-response.md
-- git commit
-- origin/main
+- deploy/compose.yaml
+- deploy/compose.production.yaml
+- deploy/.env.example
+- deploy/presets/app-db.yaml
+- deploy/presets/reverse-proxy.yaml
+- template-repo/scripts/deploy-dry-run.sh
+- template-repo/scripts/deploy-local-vps.sh
+- template-repo/scripts/operator-dashboard.py
+- template-repo/scripts/validate-operator-env.py
+- docs/deploy-on-vps.md
+- docs/operator-next-step.md
+- template-repo/scripts/verify-all.sh
 
 ## Handoff allowed
 yes
 
 ## Defect capture path
-not-required-by-text-signal
+not-required-by-text-signal; use reports/bugs/YYYY-MM-DD-production-operator-preset.md only for incidental/regression evidence
 
 ## Launch boundary rule
 Выбор модели и reasoning mode считается надежным только на новом запуске Codex для новой задачи.
@@ -75,10 +82,10 @@ Launcher-first path остается optional strict mode для automation, rep
 selected_model и selected_reasoning_effort фиксируют ожидаемую конфигурацию выбранного executable profile; advisory handoff text сам по себе ничего не переключает.
 
 ## Launch artifact path
-`.chatgpt/direct-task-source.md`
+`.chatgpt/codex-input.md`
 
 ## Optional strict launch command
-`./scripts/launch-codex-task.sh --launch-source direct-task --task-file .chatgpt/direct-task-source.md --execute`
+`./scripts/launch-codex-task.sh --launch-source chatgpt-handoff --task-file .chatgpt/codex-input.md --execute`
 
 ## Strict launch use cases
 - automation
@@ -87,7 +94,7 @@ selected_model и selected_reasoning_effort фиксируют ожидаему�
 - scripted launch
 
 ## Direct Codex command behind launcher
-`codex --profile review`
+`codex --profile deep`
 
 ## Troubleshooting
 - Если вы работаете через VS Code Codex extension интерактивно, используйте новый чат/окно, вручную выставьте selected_model и selected_reasoning_effort в picker, а затем вставьте handoff.
@@ -98,16 +105,47 @@ selected_model и selected_reasoning_effort фиксируют ожидаему�
 - Если selected_model отсутствует в live catalog, обновите codex-routing.yaml или local profile mapping, прежде чем обещать этот model ID пользователю.
 
 ## Task payload
-classification: direct-task
+task_class: deep
+selected_profile: deep
 project_profile: factory-template
-selected_scenario: 16-done-closeout.md + 17-direct-task-self-handoff.md
-pipeline_stage: closeout sync
-artifacts_to_update:
-  - .chatgpt/task-launch.yaml
-  - .chatgpt/direct-task-self-handoff.md
-  - .chatgpt/direct-task-response.md
-  - git commit
-  - origin/main
+selected_scenario: 15-handoff-to-codex.md -> implementation/remediation
+pipeline_stage: implementation
 handoff_allowed: yes
-defect_capture_path: not-required-by-text-signal
-task: закрывай, комить и пуш
+defect_capture_path: not-required-by-text-signal; use reports/bugs/YYYY-MM-DD-production-operator-preset.md only for incidental/regression evidence
+artifacts_to_update:
+  - deploy/compose.yaml
+  - deploy/compose.production.yaml
+  - deploy/.env.example
+  - deploy/presets/app-db.yaml
+  - deploy/presets/reverse-proxy.yaml
+  - template-repo/scripts/deploy-dry-run.sh
+  - template-repo/scripts/deploy-local-vps.sh
+  - template-repo/scripts/operator-dashboard.py
+  - template-repo/scripts/validate-operator-env.py
+  - docs/deploy-on-vps.md
+  - docs/operator-next-step.md
+  - template-repo/scripts/verify-all.sh
+
+HANDOFF: FT-2.5.4-production-operator-presets
+
+Objective:
+Усилить operator surface до production-ready baseline для типовых single-VPS проектов, не ломая минимальный starter profile.
+
+Scope:
+- Добавить optional presets: app+db, reverse proxy/TLS, backup hooks, health checks.
+- Улучшить env validation и operator diagnostics.
+- Добавить безопасный remote-VPS readiness checklist.
+- Обновить dashboard так, чтобы он понимал preset profile и показывал targeted recommendations.
+
+Acceptance criteria:
+- baseline starter profile остаётся рабочим
+- optional profiles документированы и валидируются dry-run path
+- dashboard различает starter profile и production preset
+- operator docs покрывают secrets, backups, health checks, rollback path
+- verify-all / matrix test включают минимум один preset-oriented сценарий
+
+Required roles / skills:
+- DevOps / Docker Compose
+- Bash/Python scripting
+- security review
+- documentation

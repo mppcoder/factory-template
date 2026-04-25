@@ -1,0 +1,41 @@
+services:
+  reverse-proxy:
+    image: ${REVERSE_PROXY_IMAGE:-caddy:2.8-alpine}
+    container_name: ${REVERSE_PROXY_CONTAINER_NAME:-factory-template-proxy}
+    restart: unless-stopped
+    depends_on:
+      app:
+        condition: service_healthy
+    ports:
+      - "80:80"
+      - "443:443"
+    environment:
+      DOMAIN: ${DOMAIN}
+      TLS_EMAIL: ${TLS_EMAIL}
+      APP_UPSTREAM: app:80
+    entrypoint: ["/bin/sh", "-lc"]
+    command:
+      - >
+        printf '{\n  email %s\n}\n%s {\n  reverse_proxy %s\n}\n' "$${TLS_EMAIL}" "$${DOMAIN}" "$${APP_UPSTREAM}" > /etc/caddy/Caddyfile &&
+        caddy run --config /etc/caddy/Caddyfile --adapter caddyfile
+    volumes:
+      - caddy_data:/data
+      - caddy_config:/config
+    networks:
+      - app_net
+    healthcheck:
+      test: ["CMD-SHELL", "caddy version >/dev/null"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+    security_opt:
+      - no-new-privileges:true
+
+volumes:
+  caddy_data:
+  caddy_config:

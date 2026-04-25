@@ -1,12 +1,15 @@
 services:
   app:
     pull_policy: always
+    init: true
     stop_grace_period: 30s
     logging:
       driver: json-file
       options:
         max-size: "10m"
         max-file: "3"
+    environment:
+      OPERATOR_PRESET: ${OPERATOR_PRESET:-starter}
     read_only: true
     tmpfs:
       - /var/cache/nginx

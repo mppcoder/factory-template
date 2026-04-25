@@ -18,6 +18,8 @@ python3 template-repo/scripts/operator-dashboard.py
 
 Панель показывает:
 - готовность deploy baseline;
+- выбранный `OPERATOR_PRESET`;
+- env validation для starter/production presets;
 - доступность Docker Compose;
 - статус последнего dry-run;
 - статус последнего deploy;
@@ -30,13 +32,43 @@ python3 template-repo/scripts/operator-dashboard.py
 bash template-repo/scripts/deploy-dry-run.sh
 ```
 
+Для production presets:
+
+```bash
+bash template-repo/scripts/deploy-dry-run.sh --preset app-db
+bash template-repo/scripts/deploy-dry-run.sh --preset reverse-proxy
+bash template-repo/scripts/deploy-dry-run.sh --preset production
+```
+
+Для отдельного env-файла:
+
+```bash
+bash template-repo/scripts/deploy-dry-run.sh --env-file /path/to/prod.env --preset production --strict-env
+```
+
 Что делает dry-run:
 - проверяет `deploy/compose.yaml` и `deploy/compose.production.yaml`;
+- подключает `deploy/presets/*.yaml` для выбранного preset;
 - выбирает `deploy/.env` (или безопасный fallback `deploy/.env.example`);
+- запускает `template-repo/scripts/validate-operator-env.py`;
 - валидирует итоговый compose config без запуска контейнеров;
 - сохраняет короткий отчёт в `.factory-runtime/reports/deploy-dry-run-latest.txt`.
 
-## 3) One-button-ish deploy на локальный VPS
+## 3) Проверить readiness для remote VPS
+
+Перед реальным удалённым VPS deploy:
+
+- создайте `deploy/.env` из примера и замените все secrets/placeholders;
+- для `production` задайте `APP_BIND_ADDRESS=127.0.0.1`, `DOMAIN`, `TLS_EMAIL`, `ACME_AGREE=true`;
+- убедитесь, что DNS указывает на VPS, а порты `80/443` открыты;
+- проверьте backup path и restore drill для `app-db`/`production`;
+- выполните strict dry-run:
+
+```bash
+bash template-repo/scripts/deploy-dry-run.sh --preset production --strict-env
+```
+
+## 4) One-button-ish deploy на локальный VPS
 
 ```bash
 bash template-repo/scripts/deploy-local-vps.sh --yes
@@ -48,7 +80,24 @@ bash template-repo/scripts/deploy-local-vps.sh --yes
 3. показывает `docker compose ps`;
 4. сохраняет отчёт в `.factory-runtime/reports/deploy-last-run.txt`.
 
-## 4) Короткая проверка после deploy
+Для opt-in preset:
+
+```bash
+bash template-repo/scripts/deploy-local-vps.sh --yes --preset production
+```
+
+## 5) Backup hook
+
+```bash
+docker compose \
+  -f deploy/compose.yaml \
+  -f deploy/compose.production.yaml \
+  -f deploy/presets/app-db.yaml \
+  --env-file deploy/.env \
+  run --rm db-backup
+```
+
+## 6) Короткая проверка после deploy
 
 ```bash
 python3 template-repo/scripts/operator-dashboard.py --verify-summary

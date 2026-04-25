@@ -9,6 +9,9 @@ record(){ printf '%-42s | %-30s | %-10s | %-10s | %-8s\n' "$1" "$2" "$3" "$4" "$
 assert_pass(){ local s="$1" c="$2"; shift 2; if "$@" >/dev/null 2>&1; then record "$s" "$c" pass pass OK; else record "$s" "$c" pass fail FAIL; FAILS=$((FAILS+1)); fi; }
 assert_fail(){ local s="$1" c="$2"; shift 2; if "$@" >/dev/null 2>&1; then record "$s" "$c" fail pass FAIL; FAILS=$((FAILS+1)); else record "$s" "$c" fail fail OK; fi; }
 assert_pass 'factory-template' validate-factory-template-ops.py bash "$ROOT/VALIDATE_FACTORY_TEMPLATE_OPS.sh"
+assert_pass 'operator-preset-starter' validate-operator-env.py python3 "$ROOT/template-repo/scripts/validate-operator-env.py" "$ROOT" --env-file "$ROOT/deploy/.env.example" --preset starter
+assert_pass 'operator-preset-production-example' validate-operator-env.py python3 "$ROOT/template-repo/scripts/validate-operator-env.py" "$ROOT" --env-file "$ROOT/deploy/.env.example" --preset production --allow-example-placeholders
+assert_fail 'operator-preset-production-strict' validate-operator-env.py python3 "$ROOT/template-repo/scripts/validate-operator-env.py" "$ROOT" --env-file "$ROOT/deploy/.env.example" --preset production
 make_project(){
   local workdir="$1" pname="$2" slug="$3" preset="$4" mode="$5" cls="$6" execm="$7" reg="${8:-skip}"
   rm -rf "$workdir"; mkdir -p "$workdir"
