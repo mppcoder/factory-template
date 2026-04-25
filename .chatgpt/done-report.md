@@ -1,26 +1,21 @@
 # Отчет о завершении
 
 ## Что было запрошено
-- Implement feature 16: automatic checking of newly available Codex/OpenAI models.
-- Add controlled update/proposal path for files that map task classes to selected_profile, selected_model, selected_reasoning_effort and selected_plan_mode_reasoning_effort.
-- Keep repo-configured mapping separate from live Codex catalog, manual VS Code picker and optional strict launcher profile selection.
+- Исправить повторный сбой closeout: англоязычный человекочитаемый слой и формулировки, похожие на handoff обратно в ChatGPT.
+- Сначала пройти defect-capture path, затем remediation.
 
 ## Что реально сделано
-- Added canonical `template-repo/codex-model-routing.yaml`.
-- Added reusable catalog helper and `template-repo/scripts/check-codex-model-catalog.py`.
-- Resolver now merges canonical model routing into executable route selection.
-- Bootstrap/launcher/generated task-pack surfaces preserve selected model, reasoning and plan-mode reasoning.
-- Validator checks model-routing consistency, live catalog support and strict unavailable mode.
-- Proposal generated at `reports/model-routing/model-routing-proposal.md`.
-- Source-facing docs/runbooks explain model availability auto-check and troubleshooting.
-- Scenario-pack handoff rules now require plan-mode reasoning and honest live-availability wording.
-- Scenario-pack source export refreshed into `_sources-export/scenario-pack.tar.gz`.
+- Создан `reports/bugs/bug-031-closeout-language-and-chatgpt-handoff-drift.md`.
+- Создан `reports/factory-feedback/feedback-031-closeout-language-and-chatgpt-handoff-drift.md`.
+- `scenario-pack/16-done-closeout.md` усилен запретом англоязычных closeout-заголовков и неясных формулировок про `ChatGPT Project`.
+- `validate-handoff-response-format.py` теперь ловит типовые англоязычные closeout headings вроде `What Changed`, `Completion Package`, `Known limitation`.
+- `check-codex-model-catalog.py` теперь генерирует proposal с русскими человекочитаемыми заголовками.
+- Текущие `.chatgpt` отчеты и model-routing proposal очищены от англоязычных описательных блоков, оставлены только технические literal values.
 
 ## Какие артефакты обновлены
 - `.chatgpt/boundary-actions.md`
 - `.chatgpt/codex-input.md`
 - `.chatgpt/codex-task-pack.md`
-- `.chatgpt/handoff-response.md`
 - `.chatgpt/normalized-codex-handoff.md`
 - `.chatgpt/task-launch.yaml`
 - `.chatgpt/verification-report.md`
@@ -28,29 +23,20 @@
 - `README.md`
 - `template-repo/README.md`
 - `template-repo/codex-routing.yaml`
-- `template-repo/codex-model-routing.yaml`
-- `template-repo/scenario-pack/15-handoff-to-codex.md`
-- `template-repo/scripts/codex_task_router.py`
-- `template-repo/scripts/codex_model_catalog.py`
+- `template-repo/scenario-pack/16-done-closeout.md`
 - `template-repo/scripts/check-codex-model-catalog.py`
 - `template-repo/scripts/create-codex-task-pack.py`
-- `template-repo/scripts/launch-codex-task.sh`
-- `template-repo/scripts/validate-codex-routing.py`
-- `template-repo/template/.chatgpt/codex-task-pack.md`
-- `template-repo/template/.chatgpt/task-launch.yaml`
-- `template-repo/template/.codex/config.toml`
+- `template-repo/scripts/validate-handoff-response-format.py`
+- `template-repo/template/README.md`
 - `template-repo/template/docs/codex-workflow.md`
-- `template-repo/template/docs/integrations.md`
-- `template-repo/tests/fixtures/codex-model-catalog-limited.yaml`
 - `reports/model-routing/model-routing-proposal.md`
-- `CHANGELOG.md`
-- `template-repo/CHANGELOG.md`
+- `reports/bugs/bug-031-closeout-language-and-chatgpt-handoff-drift.md`
+- `reports/factory-feedback/feedback-031-closeout-language-and-chatgpt-handoff-drift.md`
 
 ## Что не потребовалось
-- Automatic profile promotion не выполнялась; policy оставлен proposal-only.
-- Новое defect-capture не потребовалось: routing drift/remediation blocker не был найден.
+- Новый handoff обратно в ChatGPT не требуется.
+- Обновление repo-first инструкции `factory-template ChatGPT Project` не требуется: repo/path/entrypoint/instruction contract не менялись.
 
 ## Итог закрытия
-- Feature 16 завершена и проверена.
-- Live catalog был доступен.
-- Known limitation: `codex debug models` availability зависит от local Codex CLI; unavailable mode intentionally warns unless strict mode is requested.
+- `bug-031` исправлен в текущем scope.
+- Человекочитаемый closeout должен оставаться русским; технические identifiers допускаются как literal values.

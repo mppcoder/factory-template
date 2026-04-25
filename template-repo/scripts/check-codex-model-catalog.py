@@ -22,9 +22,9 @@ from factory_automation_common import write_yaml
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Check Codex live model catalog against repo model routing.")
     parser.add_argument("root", nargs="?", default=".", help="Repo root")
-    parser.add_argument("--json", action="store_true", help="Print JSON summary")
-    parser.add_argument("--write-proposal", action="store_true", help="Write a model routing proposal artifact")
-    parser.add_argument("--apply-safe", action="store_true", help="Refresh safe catalog metadata only")
+    parser.add_argument("--json", action="store_true", help="Напечатать JSON summary")
+    parser.add_argument("--write-proposal", action="store_true", help="Записать proposal artifact для model routing")
+    parser.add_argument("--apply-safe", action="store_true", help="Обновить только безопасные catalog metadata")
     parser.add_argument("--catalog-fixture", help="JSON/YAML fixture with a `codex debug models` payload or discovered_models map")
     return parser.parse_args()
 
@@ -84,36 +84,36 @@ def render_proposal(root: Path, summary: dict) -> str:
     )
     risks = []
     if findings["missing_configured_models"]:
-        risks.append("configured model missing from live catalog")
+        risks.append("настроенная модель отсутствует в live catalog")
     if findings["unsupported_reasoning"]:
-        risks.append("configured reasoning effort unsupported by live catalog")
+        risks.append("настроенный reasoning effort не поддерживается live catalog")
     if findings["profiles_that_can_be_upgraded"]:
-        risks.append("profile model promotion changes executable routing and needs manual review")
-    risk_lines = "\n".join(f"- {item}" for item in risks) if risks else "- no compatibility risk detected"
-    return f"""# Model Routing Proposal
+        risks.append("promotion модели для profile меняет executable routing и требует ручного review")
+    risk_lines = "\n".join(f"- {item}" for item in risks) if risks else "- риски совместимости не обнаружены"
+    return f"""# Proposal по маршрутизации моделей
 
-## Current Mapping
+## Текущий mapping
 {current_lines}
 
-## Live Catalog Summary
-source: {summary['catalog_source']}
-status: {summary['catalog_status']}
+## Сводка live catalog
+источник: {summary['catalog_source']}
+статус: {summary['catalog_status']}
 
 {live_lines}
 
-## Proposed Mapping
+## Предложенный mapping
 {proposed_lines}
 
-## Reasoning Support Evidence
+## Evidence поддержки reasoning
 {live_lines}
 
-## Compatibility Risks
+## Риски совместимости
 {risk_lines}
 
-## Exact Files To Update
+## Точные файлы для обновления
 {file_lines}
 
-## Manual Review Required
+## Нужен ручной review
 {str(manual_review_required).lower()}
 
 ## Findings JSON
@@ -168,7 +168,7 @@ def main() -> int:
         print(json.dumps(summary, ensure_ascii=False, indent=2))
         return 0
 
-    print("CODEX MODEL CATALOG CHECK")
+    print("ПРОВЕРКА CODEX MODEL CATALOG")
     print(f"catalog_source={source}")
     print(f"catalog_status={status}")
     if summary["catalog_warning"]:

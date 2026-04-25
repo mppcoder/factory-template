@@ -274,7 +274,7 @@ def main() -> int:
 - `AGENTS`, ChatGPT Project instructions, scenario-pack и `.chatgpt` guidance являются advisory layer; profile/model выбирает executable launcher/router.
 - `selected_profile` — это исполнимая граница маршрутизации; `selected_model` и `selected_reasoning_effort` описывают repo-configured mapping этого profile, а не auto-switch от текста handoff.
 - Model availability auto-check выполняется через `scripts/check-codex-model-catalog.py` / `codex debug models`; если catalog недоступен или stale, не утверждайте, что selected_model точно live-available.
-- Если новый model появляется в live catalog, сначала создайте proposal через `--write-proposal`; promotion существующего profile требует manual review.
+- Если новый model появляется в live catalog, сначала создайте proposal через `--write-proposal`; promotion существующего profile требует ручного review.
 - Проверяемая фиксация реального выбора хранится в `.chatgpt/task-launch.yaml`.
 - При исполнении handoff приоритет у правил repo: `AGENTS`, runbook, scenario-pack, policy files и других канонических файлов этого репозитория.
 - Общие рабочие инструкции применять только там, где они не конфликтуют с repo rules и старшими системными ограничениями среды.

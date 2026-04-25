@@ -150,7 +150,7 @@ python3 template-repo/scripts/check-codex-model-catalog.py . --json
 python3 template-repo/scripts/check-codex-model-catalog.py . --write-proposal
 ```
 
-`template-repo/codex-model-routing.yaml` хранит task class -> selected_profile -> selected_model / selected_reasoning_effort / selected_plan_mode_reasoning_effort. Live catalog берется из `codex debug models`, когда CLI доступен; если catalog недоступен, validator предупреждает и не делает automatic mapping promotion. Новый model ID в live catalog сначала попадает в proposal, configured model disappearance и unsupported reasoning считаются routing risk, а VS Code sticky picker или handoff pasted into already-open session остаются manual boundary issues.
+`template-repo/codex-model-routing.yaml` хранит task class -> selected_profile -> selected_model / selected_reasoning_effort / selected_plan_mode_reasoning_effort. Live catalog берется из `codex debug models`, когда CLI доступен; если catalog недоступен, validator предупреждает и не делает automatic promotion mapping. Новый model ID в live catalog сначала попадает в proposal, исчезновение настроенной model и неподдерживаемый reasoning считаются routing risk, а sticky picker в VS Code или handoff, вставленный в уже открытую сессию, остаются manual boundary issues.
 
 ## Optional Skills Quality Loop
 

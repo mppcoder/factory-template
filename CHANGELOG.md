@@ -14,6 +14,7 @@
 ### Исправлено
 - устранено ложное ожидание, что новый Codex chat сам переключает profile/model/reasoning без явного launcher path
 - validators now warn honestly when live catalog is unavailable and fail strict mode only when requested
+- зафиксирован и исправлен `bug-031`: closeout больше не должен использовать англоязычные человекочитаемые headings или звучать как handoff обратно в ChatGPT, если внешний action не требуется
 
 ## [2.4.4] - 2026-04-22
 ### Добавлено

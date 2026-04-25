@@ -1,1 +1,1 @@
-feature 16: automatic Codex model catalog checking and controlled model routing update
+bugfix: исправить англоязычный closeout и ложное ощущение handoff обратно в ChatGPT

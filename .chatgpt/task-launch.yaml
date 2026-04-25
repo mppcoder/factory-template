@@ -1,11 +1,13 @@
 launch:
-  timestamp_utc: '2026-04-25T18:32:44+00:00'
+  timestamp_utc: '2026-04-25T18:41:52+00:00'
   launch_unit: new-task-launch
   launch_source: chatgpt-handoff
   router_layer: executable
   task_class: build
   task_class_reasons:
-  - 'keyword hit: feature'
+  - 'keyword hit: fix'
+  - 'keyword hit: bugfix'
+  - 'keyword hit: исправ'
   - 'explicit reasoning/model override matched default profile: build'
   selected_profile: build
   selected_model: gpt-5.5
@@ -24,8 +26,8 @@ launch:
   - .chatgpt/done-report.md
   handoff_allowed: yes (forbidden)
   defect_capture_path: not-required-by-text-signal
-  task_summary: 'feature 16: automatic Codex model catalog checking and controlled
-    model routing update'
+  task_summary: 'bugfix: исправить англоязычный closeout и ложное ощущение handoff
+    обратно в ChatGPT'
   launch_boundary_rule: Выбор модели и reasoning mode считается надежным только на
     новом запуске Codex для новой задачи.
   interactive_default_rule: 'Для интерактивной работы в VS Code Codex extension основной
@@ -83,7 +85,7 @@ launch:
   - Если selected_model отсутствует в live catalog, обновите codex-routing.yaml или
     local profile mapping, прежде чем обещать этот model ID пользователю.
   - Если новый model ID появился в live catalog, сначала создайте proposal через `scripts/check-codex-model-catalog.py
-    --write-proposal`; promotion profile mapping требует manual review.
+    --write-proposal`; promotion profile mapping требует ручного review.
   direct_self_handoff_required: false
   direct_self_handoff_completed: false
   requested_task_class: null

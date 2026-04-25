@@ -25,7 +25,7 @@
 
 Repo-configured mapping живет в `codex-model-routing.yaml`: `task_class_routing` выбирает profile, `profile_routes` выбирает model/reasoning/plan-mode reasoning. Live Codex catalog не является тем же самым: его нужно проверять командой `python3 scripts/check-codex-model-catalog.py .`, которая вызывает `codex debug models`, когда CLI доступен.
 
-`--write-proposal` создает `reports/model-routing/model-routing-proposal.md` с current mapping, live catalog summary, proposed mapping, reasoning support evidence, risks and exact files to update. `--apply-safe` может обновить только catalog snapshot fields; promotion newly discovered models в profile mapping требует manual review.
+`--write-proposal` создает `reports/model-routing/model-routing-proposal.md` с текущим mapping, сводкой live catalog, предложенным mapping, evidence поддержки reasoning, рисками и точными файлами для обновления. `--apply-safe` может обновить только snapshot-поля catalog; promotion новых моделей в profile mapping требует ручного review.
 
 Troubleshooting:
 - new model in live catalog but not routing: write proposal first, then update `codex-model-routing.yaml` and `.codex/config.toml` named profiles intentionally;

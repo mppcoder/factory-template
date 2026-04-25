@@ -22,6 +22,14 @@ FORBIDDEN_PATTERNS = [
     r"собери.*codex-input\.md",
     r"собери.*codex-context\.md",
     r"собери.*boundary-actions\.md",
+    r"^##\s+what changed\s*$",
+    r"^##\s+model-routing policy\s*$",
+    r"^##\s+validation\s*$",
+    r"^##\s+completion package\s*$",
+    r"^##\s+known limitations?\s*$",
+    r"^##\s+next steps?\s*$",
+    r"known limitation:",
+    r"manual steps only",
 ]
 
 
@@ -122,7 +130,7 @@ def main() -> int:
             errors.append("Внутри handoff-блока найден дополнительный `##`-заголовок; handoff должен быть цельным")
 
     for pattern in FORBIDDEN_PATTERNS:
-        if re.search(pattern, lowered, flags=re.IGNORECASE):
+        if re.search(pattern, lowered, flags=re.IGNORECASE | re.MULTILINE):
             errors.append(f"Найден запрещенный file-based handoff pattern: `{pattern}`")
 
     if errors:

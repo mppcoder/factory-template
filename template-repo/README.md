@@ -48,7 +48,7 @@ python3 scripts/check-codex-model-catalog.py . --json
 python3 scripts/check-codex-model-catalog.py . --write-proposal
 ```
 
-Если `codex debug models` недоступен, checker и validator должны честно предупредить и не продвигать mapping автоматически. `--apply-safe` разрешает только безопасное обновление snapshot catalog metadata; смена model для существующего profile остается proposal-only и требует manual review.
+Если `codex debug models` недоступен, checker и validator должны честно предупредить и не продвигать mapping автоматически. `--apply-safe` разрешает только безопасное обновление snapshot metadata catalog; смена model для существующего profile остается proposal-only и требует ручного review.
 
 Troubleshooting:
 - new model appears in live Codex catalog but not in routing file: run `scripts/check-codex-model-catalog.py --write-proposal`, review `reports/model-routing/model-routing-proposal.md`, then update `codex-model-routing.yaml` and named profiles intentionally;

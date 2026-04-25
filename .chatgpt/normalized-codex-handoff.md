@@ -7,7 +7,9 @@ chatgpt-handoff
 build
 
 ## Evidence для класса задачи
-- keyword hit: feature
+- keyword hit: fix
+- keyword hit: bugfix
+- keyword hit: исправ
 - explicit reasoning/model override matched default profile: build
 
 ## Выбранный профиль
@@ -105,7 +107,7 @@ selected_model matched the latest stored repo catalog snapshot; rerun live catal
 - Если нужна строгая воспроизводимость, автоматизация или запуск из shell, используйте optional strict launch_command.
 - Если после launch или manual UI apply виден sticky last-used profile/model/reasoning, закройте текущую сессию, откройте новую и при необходимости выполните launch_command, затем проверьте именованный profile в local Codex config.
 - Если selected_model отсутствует в live catalog, обновите codex-routing.yaml или local profile mapping, прежде чем обещать этот model ID пользователю.
-- Если новый model ID появился в live catalog, сначала создайте proposal через `scripts/check-codex-model-catalog.py --write-proposal`; promotion profile mapping требует manual review.
+- Если новый model ID появился в live catalog, сначала создайте proposal через `scripts/check-codex-model-catalog.py --write-proposal`; promotion profile mapping требует ручного review.
 
 ## Текст задачи
-feature 16: automatic Codex model catalog checking and controlled model routing update
+bugfix: исправить англоязычный closeout и ложное ощущение handoff обратно в ChatGPT

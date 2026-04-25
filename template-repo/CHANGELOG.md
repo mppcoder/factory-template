@@ -14,6 +14,7 @@
 - устранен defect completion/handoff layer: handoff package больше не подменяет новый task launch понятием "новый чат"
 - добавлены troubleshooting и validators против sticky last-used profile/reasoning state и неподтвержденных model mappings
 - live catalog unavailable mode теперь деградирует в warning без automatic mapping promotion; strict mode остается opt-in
+- зафиксирован и исправлен `bug-031`: closeout guidance и validators теперь запрещают типовые англоязычные человекочитаемые headings в финальном closeout
 
 ## [2.4.4] - 2026-04-22
 ### Добавлено

@@ -20,4 +20,4 @@ Launcher-команда `./scripts/launch-codex-task.sh` для нового tas
 
 Model availability auto-check хранится в `codex-model-routing.yaml` и выполняется командой `./scripts/check-codex-model-catalog.py .`, если доступен `codex debug models`.
 Repo-configured mapping, live Codex catalog, manual UI picker selection и strict launcher profile selection — разные контуры.
-Если новый model ID появился в live catalog, сначала создайте proposal через `--write-proposal`; существующие profiles не продвигаются автоматически без manual review.
+Если новый model ID появился в live catalog, сначала создайте proposal через `--write-proposal`; существующие profiles не продвигаются автоматически без ручного review.
