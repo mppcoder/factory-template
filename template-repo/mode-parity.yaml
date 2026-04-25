@@ -193,6 +193,7 @@ core_capabilities:
       - work/_task-template.md
       - work-templates/user-spec.md.template
       - work-templates/tech-spec.md.template
+      - work-templates/decisions.md.template
       - work-templates/tasks/task.md.template
       - scripts/init-feature-workspace.sh
     source_paths:
@@ -201,6 +202,7 @@ core_capabilities:
       - template-repo/template/work/_task-template.md
       - template-repo/template/work-templates/user-spec.md.template
       - template-repo/template/work-templates/tech-spec.md.template
+      - template-repo/template/work-templates/decisions.md.template
       - template-repo/template/work-templates/tasks/task.md.template
       - template-repo/scripts/init-feature-workspace.sh
   verify_done_checklist:

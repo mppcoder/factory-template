@@ -14,6 +14,10 @@ import yaml
 
 FALLBACK_TEMPLATE = """# User Spec: {{FEATURE_TITLE}}
 
+> generated_at: {{GENERATED_AT}}
+> feature_id: {{FEATURE_ID}}
+> Этот документ отвечает на вопрос "что хочет пользователь" и должен быть понятен человеку без технического бэкграунда.
+
 ## Короткое описание
 {{SHORT_DESCRIPTION}}
 
@@ -39,9 +43,13 @@ FALLBACK_TEMPLATE = """# User Spec: {{FEATURE_TITLE}}
 {{ACCEPTANCE}}
 
 ## User Intent Anchors
+Короткие метки исходного пользовательского намерения. На них ссылаются tech-spec и задачи.
+
 {{USER_INTENT_ANCHORS}}
 
 ## User-Spec Deviations
+Обычно здесь `Нет`. Если позже агент предлагает отойти от исходного intent, deviation нужно перенести в tech-spec и утвердить отдельно.
+
 {{USER_SPEC_DEVIATIONS}}
 
 ## Открытые вопросы
@@ -166,8 +174,8 @@ def build_user_intent_anchors(answers: dict, idea: str) -> str:
 def default_deviations() -> str:
     return "\n".join(
         [
-            "- None.",
-            "- Если решение расходится с user-spec, добавьте запись: DEV-001 | anchor=US-xxx | decision=... | reason=... | validation=...",
+            "- Нет.",
+            "- Формат при необходимости: DEV-001 | anchor=US-xxx | decision=... | reason=... | validation=... | approval=pending",
         ]
     )
 

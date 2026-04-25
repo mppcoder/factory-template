@@ -30,6 +30,7 @@ TEST_REPORT.md is verification evidence, not the canonical release-status source
 - novice onboarding acceptance fixtures (`onboarding-smoke/run-novice-e2e.sh`)
 - mode parity manifest, matrix and validator (`template-repo/mode-parity.yaml`, `docs/mode-parity-matrix.md`, `validate-mode-parity.py`)
 - downstream upgrade dry-run/apply/rollback UX (`upgrade-report.py`, `rollback-template-patch.sh`)
+- lightweight spec-governance traceability: `decisions.md.template`, expanded tech/task templates, approval-aware deviations, task verification anchors
 
 ## Ожидаемое поведение на fresh scaffold
 Проходят structural / versioning / defect / alignment проверки.
@@ -44,6 +45,10 @@ Evidence / quality / DoD до смыслового наполнения арте
 - Compatibility aliases проверены через `apply-project-preset.py`: старый greenfield alias резолвится в `greenfield-product`, старый no-repo brownfield alias резолвится в `brownfield-without-repo`.
 - `bash onboarding-smoke/run-novice-e2e.sh` проходит: покрыты `greenfield-product`, `brownfield-without-repo`, `brownfield-with-repo-modernization`, `brownfield-with-repo-integration`, `brownfield-with-repo-audit`, плюс guided launcher для greenfield и brownfield audit.
 - `validate-mode-parity.py` подключен в `verify-all.sh quick`, поэтому входит и в `verify-all.sh ci`.
+- `validate-spec-traceability.py` входит в `verify-all.sh quick` и `verify-all.sh ci`; подтверждает наличие `User Intent Anchors`, `User Intent Binding`, `User-Spec Deviations`, `Decisions`, `Acceptance Criteria`, `Audit Wave Lite`, `Final Verification` и task verification anchors в шаблонах.
+- Synthetic feature workspace подтверждает green path: `init-feature-workspace.sh` -> `resume-setup.py` -> `generate-user-spec.py` -> `decompose-feature.py` -> `validate-spec-traceability.py`.
+- Negative traceability checks подтверждены: validator ловит task без verification path и approved tech-spec с `DEV-* approval=pending`.
+- Incidental placeholder audit defect зафиксирован и исправлен in-scope: `reports/bugs/2026-04-25-user-spec-audit-placeholder-tech-spec.md`.
 - `template-repo/project-presets.yaml` теперь явно фиксирует `parity_mode` и общий required core artifact set для каждого canonical preset.
 - `template-repo/launcher.sh` materializes `template-repo/mode-parity.yaml` в generated projects.
 - Incidental parity defect `work/features` gap зафиксирован и исправлен in-scope: `reports/bugs/2026-04-25-mode-parity-gap.md`.
@@ -98,5 +103,5 @@ Evidence / quality / DoD до смыслового наполнения арте
 - Follow-up для будущего улучшения (не blocker текущего RC): расширить novice long-flow с synthetic smoke до более предметных domain сценариев в downstream проектах.
 
 ## Статус CI baseline
-- Статус: `green` (GitHub Actions run `24840192862`, 2026-04-23: `verify-baseline` = success, `release-bundle-dry-run` = success; локально подтверждено через `verify-all.sh quick` и `verify-all.sh ci`).
+- Статус: `green` (GitHub Actions run `24840192862`, 2026-04-23: `verify-baseline` = success, `release-bundle-dry-run` = success; локально подтверждено 2026-04-25 через `verify-all.sh quick` и `verify-all.sh ci`).
 - Residual risk: шаг `release-executor` в release workflow остаётся manual/optional и по-прежнему зависит от валидного verified-sync контекста и GitHub auth.

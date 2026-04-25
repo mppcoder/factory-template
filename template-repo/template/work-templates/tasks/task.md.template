@@ -1,3 +1,10 @@
+---
+task_id: {{TASK_ID}}
+status: planned
+depends_on: {{TASK_DEPENDS_ON_INLINE}}
+verify: {{TASK_VERIFY_TYPES}}
+---
+
 # {{TASK_ID}} — {{TASK_TITLE}}
 
 > generated_at: {{GENERATED_AT}}
@@ -10,10 +17,20 @@
 {{TASK_INPUT_CONTEXT}}
 
 ## User Intent Binding
+На какой `US-*` anchor опирается задача.
+
 {{USER_INTENT_BINDING}}
 
 ## User-Spec Deviations
+Обычно `Нет`. Если задача отходит от user-spec, укажите `DEV-*` и убедитесь, что tech-spec тоже содержит это deviation.
+
 {{USER_SPEC_DEVIATIONS}}
+
+## Files to Read
+{{FILES_TO_READ}}
+
+## Files to Modify
+{{FILES_TO_MODIFY}}
 
 ## Действия
 {{TASK_ACTIONS}}
@@ -21,8 +38,23 @@
 ## Критерии приемки
 {{TASK_ACCEPTANCE}}
 
+## Verify-smoke
+Что агент может проверить сам без внешнего approval.
+
+{{VERIFY_SMOKE}}
+
+## Verify-user
+Что нужно показать или попросить проверить у пользователя. Если ручная проверка не нужна, напишите `Не требуется`.
+
+{{VERIFY_USER}}
+
 ## Зависимости
 {{TASK_DEPENDENCIES}}
 
 ## Риски
 {{TASK_RISKS}}
+
+## Reviewer / audit hints
+Необязательное поле для продвинутого режима. Укажите reviewer или audit-подсказки только если задача рискованная.
+
+{{REVIEWER_AUDIT_HINTS}}

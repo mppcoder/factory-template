@@ -108,6 +108,27 @@ copy_template_if_needed "$USER_TEMPLATE" "$WORKSPACE/specs/user-spec.md"
 copy_template_if_needed "$TECH_TEMPLATE" "$WORKSPACE/specs/tech-spec.md"
 copy_template_if_needed "$TASK_TEMPLATE" "$WORKSPACE/tasks/task.template.md"
 
+DECISIONS_TITLE="${FEATURE_TITLE:-$FEATURE_ID}"
+if [[ ! -f "$WORKSPACE/decisions.md" || "$FORCE" == "true" ]]; then
+  cat > "$WORKSPACE/decisions.md" <<DECISIONS
+# Decisions Log: $DECISIONS_TITLE
+
+> generated_at: $(date -Iseconds)
+> feature_id: $FEATURE_ID
+> Этот файл хранит важные решения, отклонения и проверки после выполнения задач.
+
+## Как пользоваться
+
+- Записывайте только решения, которые помогут будущему участнику понять, почему работа сделана именно так.
+- Если задача отклонилась от user-spec, укажите связанный \`DEV-*\` и \`US-*\`.
+- Если решение стало устойчивым правилом проекта, перенесите вывод в \`project-knowledge/\`.
+
+## Записи
+
+- Пока записей нет.
+DECISIONS
+fi
+
 RESUME_SCRIPT="$SCRIPT_DIR/resume-setup.py"
 if [[ ! -f "$RESUME_SCRIPT" ]]; then
   RESUME_SCRIPT="$ROOT/scripts/resume-setup.py"
@@ -151,6 +172,7 @@ echo "- $WORKSPACE/interview-state.yaml"
 echo "- $WORKSPACE/specs/user-spec.md"
 echo "- $WORKSPACE/specs/tech-spec.md"
 echo "- $WORKSPACE/tasks/task.template.md"
+echo "- $WORKSPACE/decisions.md"
 echo "Следующий шаг:"
 echo "python3 $RESUME_SCRIPT --workspace \"$WORKSPACE\""
 echo "Или вернитесь в guided launcher:"

@@ -1,25 +1,51 @@
 # Tech Spec: {{FEATURE_TITLE}}
 
 > generated_at: {{GENERATED_AT}}
-> В этом документе описано "как" делаем решение простыми шагами.
+> status: draft
+> feature_id: {{FEATURE_ID}}
+> В этом документе описано "как" агент делает решение простыми шагами.
 
 ## Кратко о подходе
 {{IMPLEMENTATION_OVERVIEW}}
 
+## User Intent Binding
+Какие `US-*` из user-spec закрывает этот технический план.
+
+{{USER_INTENT_BINDING}}
+
+## Decisions
+Лёгкий список решений. Если решение спорное или повлияло на scope, позже перенесите его в `decisions.md`.
+
+{{DECISIONS}}
+
+## User-Spec Deviations
+Заполняйте только если tech-spec меняет, сужает, расширяет или иначе переосмысливает user-spec. В approved tech-spec не должно оставаться `approval=pending`.
+
+{{USER_SPEC_DEVIATIONS}}
+
 ## Что меняем
 {{CHANGES}}
 
-## User Intent Binding
-{{USER_INTENT_BINDING}}
+## Acceptance Criteria
+Технические критерии приемки, которые дополняют пользовательские критерии из user-spec.
 
-## User-Spec Deviations
-{{USER_SPEC_DEVIATIONS}}
+{{ACCEPTANCE_CRITERIA}}
 
 ## Какие артефакты затрагиваем
 {{TOUCHED_COMPONENTS}}
 
 ## Как проверяем
 {{VERIFICATION}}
+
+## Audit Wave Lite
+Необязательная лёгкая финальная проверка. Для маленькой feature достаточно одного прохода глазами по коду/докам/тестам.
+
+{{AUDIT_WAVE_LITE}}
+
+## Final Verification
+Последний проход перед handoff/done: что запустить, что показать пользователю, что записать в decisions.
+
+{{FINAL_VERIFICATION}}
 
 ## Ограничения и риски
 {{RISKS_AND_CONSTRAINTS}}

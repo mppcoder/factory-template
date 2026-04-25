@@ -14,17 +14,36 @@ import yaml
 
 FALLBACK_TECH_TEMPLATE = """# Tech Spec: {{FEATURE_TITLE}}
 
+> generated_at: {{GENERATED_AT}}
+> status: draft
+> feature_id: {{FEATURE_ID}}
+> В этом документе описано "как" агент делает решение простыми шагами.
+
 ## Кратко о подходе
 {{IMPLEMENTATION_OVERVIEW}}
+
+## User Intent Binding
+Какие `US-*` из user-spec закрывает этот технический план.
+
+{{USER_INTENT_BINDING}}
+
+## Decisions
+Лёгкий список решений. Если решение спорное или повлияло на scope, позже перенесите его в `decisions.md`.
+
+{{DECISIONS}}
+
+## User-Spec Deviations
+Заполняйте только если tech-spec меняет, сужает, расширяет или иначе переосмысливает user-spec. В approved tech-spec не должно оставаться `approval=pending`.
+
+{{USER_SPEC_DEVIATIONS}}
 
 ## Что меняем
 {{CHANGES}}
 
-## User Intent Binding
-{{USER_INTENT_BINDING}}
+## Acceptance Criteria
+Технические критерии приемки, которые дополняют пользовательские критерии из user-spec.
 
-## User-Spec Deviations
-{{USER_SPEC_DEVIATIONS}}
+{{ACCEPTANCE_CRITERIA}}
 
 ## Какие артефакты затрагиваем
 {{TOUCHED_COMPONENTS}}
@@ -32,12 +51,32 @@ FALLBACK_TECH_TEMPLATE = """# Tech Spec: {{FEATURE_TITLE}}
 ## Как проверяем
 {{VERIFICATION}}
 
+## Audit Wave Lite
+Необязательная лёгкая финальная проверка. Для маленькой feature достаточно одного прохода глазами по коду/докам/тестам.
+
+{{AUDIT_WAVE_LITE}}
+
+## Final Verification
+Последний проход перед handoff/done: что запустить, что показать пользователю, что записать в decisions.
+
+{{FINAL_VERIFICATION}}
+
 ## Ограничения и риски
 {{RISKS_AND_CONSTRAINTS}}
 """
 
 
-FALLBACK_TASK_TEMPLATE = """# {{TASK_ID}} — {{TASK_TITLE}}
+FALLBACK_TASK_TEMPLATE = """---
+task_id: {{TASK_ID}}
+status: planned
+depends_on: {{TASK_DEPENDS_ON_INLINE}}
+verify: {{TASK_VERIFY_TYPES}}
+---
+
+# {{TASK_ID}} — {{TASK_TITLE}}
+
+> generated_at: {{GENERATED_AT}}
+> Задача должна быть маленькой и завершаться проверяемым результатом.
 
 ## Цель
 {{TASK_GOAL}}
@@ -46,10 +85,20 @@ FALLBACK_TASK_TEMPLATE = """# {{TASK_ID}} — {{TASK_TITLE}}
 {{TASK_INPUT_CONTEXT}}
 
 ## User Intent Binding
+На какой `US-*` anchor опирается задача.
+
 {{USER_INTENT_BINDING}}
 
 ## User-Spec Deviations
+Обычно `Нет`. Если задача отходит от user-spec, укажите `DEV-*` и убедитесь, что tech-spec тоже содержит это deviation.
+
 {{USER_SPEC_DEVIATIONS}}
+
+## Files to Read
+{{FILES_TO_READ}}
+
+## Files to Modify
+{{FILES_TO_MODIFY}}
 
 ## Действия
 {{TASK_ACTIONS}}
@@ -57,11 +106,26 @@ FALLBACK_TASK_TEMPLATE = """# {{TASK_ID}} — {{TASK_TITLE}}
 ## Критерии приемки
 {{TASK_ACCEPTANCE}}
 
+## Verify-smoke
+Что агент может проверить сам без внешнего approval.
+
+{{VERIFY_SMOKE}}
+
+## Verify-user
+Что нужно показать или попросить проверить у пользователя. Если ручная проверка не нужна, напишите `Не требуется`.
+
+{{VERIFY_USER}}
+
 ## Зависимости
 {{TASK_DEPENDENCIES}}
 
 ## Риски
 {{TASK_RISKS}}
+
+## Reviewer / audit hints
+Необязательное поле для продвинутого режима. Укажите reviewer или audit-подсказки только если задача рискованная.
+
+{{REVIEWER_AUDIT_HINTS}}
 """
 
 
@@ -234,6 +298,12 @@ def format_user_intent_binding(intents: list[tuple[str, str]], source: str, limi
     return "\n".join(lines)
 
 
+def inline_yaml_list(values: list[str]) -> str:
+    if not values:
+        return "[]"
+    return "[" + ", ".join(values) + "]"
+
+
 def format_task_user_intent_binding(
     intents: list[tuple[str, str]],
     source: str,
@@ -254,10 +324,37 @@ def format_task_user_intent_binding(
 def default_deviations() -> str:
     return "\n".join(
         [
-            "- None.",
-            "- Если решение расходится с user-spec, добавьте запись: DEV-001 | anchor=US-xxx | decision=... | reason=... | validation=...",
+            "- Нет.",
+            "- Формат при необходимости: DEV-001 | anchor=US-xxx | decision=... | reason=... | validation=... | approval=pending",
         ]
     )
+
+
+def format_decisions(intents: list[tuple[str, str]]) -> str:
+    anchor = intents[0][0] if intents else "US-001"
+    return "\n".join(
+        [
+            f"- DEC-001: Делаем минимальный проверяемый первый вариант. user_anchor={anchor}. why=Сохраняем beginner-safe scope.",
+            "- Если появится спорное решение, добавьте отдельную строку DEC-xxx и свяжите её с US-* или пометьте как technical.",
+        ]
+    )
+
+
+def format_audit_wave_lite() -> str:
+    return "\n".join(
+        [
+            "- Проверить, что все `US-*` из user-spec покрыты tech-spec или documented deviation.",
+            "- Проверить, что каждая задача имеет критерии приемки и Verify-smoke или Verify-user.",
+            "- Для рискованных изменений добавить reviewer/audit hint в задаче.",
+        ]
+    )
+
+
+def format_final_verification(acceptance: list[str]) -> str:
+    lines = ["- Запустить `python3 template-repo/scripts/validate-spec-traceability.py --workspace <feature-workspace>`."]
+    lines.extend(f"- Подтвердить acceptance: {item}" for item in acceptance[:3])
+    lines.append("- Обновить `decisions.md`, если в реализации появились устойчивые решения или deviations.")
+    return "\n".join(lines)
 
 
 def clean_title(value: str, fallback: str) -> str:
@@ -342,11 +439,13 @@ def main() -> int:
 
     user_intents = extract_user_intents(sections) or build_fallback_intents(goals, in_scope, acceptance)
     user_spec_rel = relpath_for_human(user_spec_path, workspace)
+    feature_id = workspace.name
     tech_template, tech_template_source = locate_template(project_root, args.tech_template, "tech-spec.md.template")
     task_template, task_template_source = locate_template(project_root, args.task_template, "tasks/task.md.template")
 
     tech_mapping = {
         "FEATURE_TITLE": feature_title,
+        "FEATURE_ID": feature_id,
         "IMPLEMENTATION_OVERVIEW": markdown_list(
             [
                 "Используем пошаговый flow: interview -> user-spec -> tech-spec -> tasks.",
@@ -357,13 +456,16 @@ def main() -> int:
         ),
         "CHANGES": markdown_list(in_scope, "Список изменений пока не определен"),
         "USER_INTENT_BINDING": format_user_intent_binding(user_intents, user_spec_rel),
+        "DECISIONS": format_decisions(user_intents),
         "USER_SPEC_DEVIATIONS": default_deviations(),
+        "ACCEPTANCE_CRITERIA": markdown_list(acceptance, "Технические критерии приемки пока не указаны"),
         "TOUCHED_COMPONENTS": markdown_list(
             [
                 user_spec_rel,
                 relpath_for_human(tech_output, workspace),
                 relpath_for_human(tasks_dir, workspace),
                 relpath_for_human(state_file, workspace),
+                "decisions.md",
             ],
             "Компоненты пока не определены",
         ),
@@ -375,6 +477,8 @@ def main() -> int:
             ],
             "План проверки пока не указан",
         ),
+        "AUDIT_WAVE_LITE": format_audit_wave_lite(),
+        "FINAL_VERIFICATION": format_final_verification(acceptance),
         "RISKS_AND_CONSTRAINTS": markdown_list(
             constraints + [f"Out-of-scope для первого релиза: {', '.join(out_of_scope) if out_of_scope else 'не задано'}"],
             "Риски и ограничения пока не зафиксированы",
@@ -407,9 +511,12 @@ def main() -> int:
         for index, item in enumerate(task_inputs, start=1):
             task_id = f"T-{index:03d}"
             depends_on = "- []" if index == 1 else f"- [T-{index - 1:03d}]"
+            depends_on_inline = "[]" if index == 1 else f"[T-{index - 1:03d}]"
             task_mapping = {
                 "TASK_ID": task_id,
                 "TASK_TITLE": clean_title(item, f"Шаг {index}"),
+                "TASK_DEPENDS_ON_INLINE": depends_on_inline,
+                "TASK_VERIFY_TYPES": inline_yaml_list(["smoke"]),
                 "TASK_GOAL": markdown_list([item], "Цель пока не указана"),
                 "TASK_INPUT_CONTEXT": markdown_list(
                     [
@@ -420,6 +527,18 @@ def main() -> int:
                 ),
                 "USER_INTENT_BINDING": format_task_user_intent_binding(user_intents, user_spec_rel, index, item),
                 "USER_SPEC_DEVIATIONS": default_deviations(),
+                "FILES_TO_READ": markdown_list(
+                    [
+                        user_spec_rel,
+                        relpath_for_human(tech_output, workspace),
+                        "decisions.md",
+                    ],
+                    "Файлы для чтения пока не указаны",
+                ),
+                "FILES_TO_MODIFY": markdown_list(
+                    ["Укажите конкретные файлы, когда задача перейдет к реализации."],
+                    "Файлы для изменения пока не указаны",
+                ),
                 "TASK_ACTIONS": markdown_list(
                     [
                         "Прочитать связанный фрагмент user-spec.",
@@ -432,10 +551,28 @@ def main() -> int:
                     acceptance[:2] or ["Есть проверяемый критерий завершения"],
                     "Критерии приемки пока не указаны",
                 ),
+                "VERIFY_SMOKE": markdown_list(
+                    [
+                        "Проверить, что результат задачи закрывает primary `US-*` из User Intent Binding.",
+                        "Запустить доступные тесты/валидаторы проекта или записать, почему автоматической проверки нет.",
+                    ],
+                    "Smoke-проверка пока не указана",
+                ),
+                "VERIFY_USER": markdown_list(
+                    [
+                        "Не требуется, если задача не меняет пользовательский сценарий или интерфейс.",
+                        "Если меняет UX/поведение: показать пользователю результат и попросить подтвердить связанный acceptance criterion.",
+                    ],
+                    "Пользовательская проверка пока не указана",
+                ),
                 "TASK_DEPENDENCIES": depends_on,
                 "TASK_RISKS": markdown_list(
                     constraints[:2] or ["Риск: недостающая детализация требований"],
                     "Риски пока не определены",
+                ),
+                "REVIEWER_AUDIT_HINTS": markdown_list(
+                    ["Не требуется для простого beginner flow. Добавьте reviewer только при риске безопасности, данных или деплоя."],
+                    "Audit hints пока не указаны",
                 ),
                 "GENERATED_AT": now_iso(),
             }
@@ -449,6 +586,29 @@ def main() -> int:
         for task_file in created_tasks:
             index_md.append(f"- {task_file}")
         write_if_needed(tasks_dir / "index.md", "\n".join(index_md), args.force)
+
+    decisions_path = workspace / "decisions.md"
+    if not decisions_path.exists() or args.force:
+        decisions_content = "\n".join(
+            [
+                f"# Decisions Log: {feature_title}",
+                "",
+                f"> generated_at: {now_iso()}",
+                f"> feature_id: {feature_id}",
+                "> Этот файл хранит важные решения, отклонения и проверки после выполнения задач.",
+                "",
+                "## Как пользоваться",
+                "",
+                "- Записывайте только решения, которые помогут будущему участнику понять, почему работа сделана именно так.",
+                "- Если задача отклонилась от user-spec, укажите связанный `DEV-*` и `US-*`.",
+                "- Если решение стало устойчивым правилом проекта, перенесите вывод в `project-knowledge/`.",
+                "",
+                "## Записи",
+                "",
+                "- Пока записей нет.",
+            ]
+        )
+        write_if_needed(decisions_path, decisions_content, True)
 
     state = deep_merge(DEFAULT_STATE, yaml_load(state_file))
     progress = state.setdefault("progress", {})
