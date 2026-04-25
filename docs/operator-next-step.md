@@ -4,6 +4,14 @@
 
 ## 1) Открыть минимальную панель оператора
 
+Рекомендуемый unified entrypoint:
+
+```bash
+python3 template-repo/scripts/factory-launcher.py --mode continue
+```
+
+Прямой fallback:
+
 ```bash
 python3 template-repo/scripts/operator-dashboard.py
 ```

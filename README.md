@@ -35,23 +35,25 @@ GA-ready: `false`.
 
 Различается не набор загружаемых файлов, а стартовый маршрут по сценариям и выбранный preset.
 
-## Beginner-First Entry (Wizard)
+## Beginner-First Entry (Guided Launcher)
 
 Для первого запуска больше не нужно вручную помнить preset-термины.
-Используйте guided wizard:
+Используйте единый guided launcher:
 
 ```bash
-python3 template-repo/scripts/first-project-wizard.py
+python3 template-repo/scripts/factory-launcher.py
 ```
 
-Wizard задает три простых вопроса:
-- что у вас уже есть;
-- что вы пытаетесь запустить;
-- что система сделает для вас дальше.
+Launcher ведет по трем маршрутам:
+- `greenfield` - новый проект с нуля;
+- `brownfield` - существующий проект или система;
+- `continue` - уже созданный flow, planning workspace или operator next step.
 
-По ответам wizard автоматически сопоставляет корректный `project preset`, запускает `preflight-vps-check.py` с человекочитаемым отчетом и затем передает параметры в существующий `template-repo/launcher.sh`.
+По ответам launcher автоматически сопоставляет корректный `project preset`, показывает next-step recommendation и вызывает существующие fallback scripts: `first-project-wizard.py`, `preflight-vps-check.py`, `init-feature-workspace.sh`, `operator-dashboard.py`.
+Старые команды остаются рабочими прямыми входами.
 
 Отдельная инструкция для первого запуска:
+- `docs/guided-launcher.md`
 - `docs/first-project.md`
 
 ## Canonical VPS Layout

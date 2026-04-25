@@ -2,7 +2,18 @@
 
 Этот документ - главный вход для первого запуска.
 
-Вместо ручного выбора внутренних preset-терминов используйте wizard:
+Вместо ручного выбора внутренних preset-терминов используйте guided launcher:
+
+```bash
+python3 template-repo/scripts/factory-launcher.py
+```
+
+Он покрывает:
+- новый проект с нуля;
+- старт с существующим проектом или системой;
+- продолжение уже созданного flow до planning/deploy next step.
+
+Прямой wizard остается fallback-командой:
 
 ```bash
 python3 template-repo/scripts/first-project-wizard.py
@@ -58,4 +69,7 @@ python3 template-repo/scripts/preflight-vps-check.py --project-slug my-first-ser
 - не было понятного preflight отчета по VPS layout;
 - не было прозрачного объяснения, что система сделает после ответов.
 
-Текущий wizard закрывает эти блокеры guided-слоем поверх существующих preset/scenario механизмов.
+Текущий guided launcher закрывает эти блокеры единым входом поверх существующих preset/scenario механизмов.
+
+Подробно:
+- `docs/guided-launcher.md`

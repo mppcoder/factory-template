@@ -9,31 +9,10 @@ REPORT_PATH="${2:-$SMOKE_DIR/ACCEPTANCE_REPORT.md}"
 rm -rf "$RUN_ROOT"
 mkdir -p "$RUN_ROOT"
 
-run_wizard_scenario() {
-  local scenario_key="$1"
-  local project_name="$2"
-  local project_slug="$3"
-  local asset_choice="$4"
-  local goal_choice="$5"
-  local expected_preset="$6"
-
-  local scenario_root="$RUN_ROOT/$scenario_key"
-  local log_file="$RUN_ROOT/${scenario_key}.txt"
-  mkdir -p "$scenario_root"
-
-  (
-    cd "$scenario_root"
-    printf '%s\n%s\n%s\n%s\ny\ny\n' \
-      "$project_name" "$project_slug" "$asset_choice" "$goal_choice" \
-      | FACTORY_REGISTRY_MODE=skip python3 "$ROOT/template-repo/scripts/first-project-wizard.py" --template-repo-root "$ROOT/template-repo" \
-      >"$log_file" 2>&1
-  )
-
-  local project_root="$scenario_root/$project_slug"
-  if [ ! -d "$project_root" ]; then
-    echo "ОШИБКА: проект не создан для сценария $scenario_key" >&2
-    return 1
-  fi
+validate_generated_project() {
+  local project_root="$1"
+  local expected_preset="$2"
+  local log_file="$3"
 
   python3 - <<'PYCODE' "$project_root/.chatgpt/active-scenarios.yaml" "$expected_preset"
 from __future__ import annotations
@@ -78,6 +57,68 @@ PYCODE
   do
     python3 "$ROOT/template-repo/scripts/$validator" "$project_root" >>"$log_file" 2>&1
   done
+}
+
+run_wizard_scenario() {
+  local scenario_key="$1"
+  local project_name="$2"
+  local project_slug="$3"
+  local asset_choice="$4"
+  local goal_choice="$5"
+  local expected_preset="$6"
+
+  local scenario_root="$RUN_ROOT/$scenario_key"
+  local log_file="$RUN_ROOT/${scenario_key}.txt"
+  mkdir -p "$scenario_root"
+
+  (
+    cd "$scenario_root"
+    printf '%s\n%s\n%s\n%s\ny\ny\n' \
+      "$project_name" "$project_slug" "$asset_choice" "$goal_choice" \
+      | FACTORY_REGISTRY_MODE=skip python3 "$ROOT/template-repo/scripts/first-project-wizard.py" --template-repo-root "$ROOT/template-repo" \
+      >"$log_file" 2>&1
+  )
+
+  local project_root="$scenario_root/$project_slug"
+  if [ ! -d "$project_root" ]; then
+    echo "ОШИБКА: проект не создан для сценария $scenario_key" >&2
+    return 1
+  fi
+
+  validate_generated_project "$project_root" "$expected_preset" "$log_file"
+
+  printf '%s|%s|%s|%s\n' "$scenario_key" "$project_root" "$expected_preset" "$log_file"
+}
+
+run_launcher_scenario() {
+  local scenario_key="$1"
+  local project_name="$2"
+  local project_slug="$3"
+  local expected_preset="$4"
+
+  local scenario_root="$RUN_ROOT/$scenario_key"
+  local log_file="$RUN_ROOT/${scenario_key}.txt"
+  mkdir -p "$scenario_root"
+
+  (
+    cd "$scenario_root"
+    FACTORY_REGISTRY_MODE=skip python3 "$ROOT/template-repo/scripts/factory-launcher.py" \
+      --template-repo-root "$ROOT/template-repo" \
+      --mode greenfield \
+      --project-name "$project_name" \
+      --project-slug "$project_slug" \
+      --skip-preflight \
+      --yes \
+      >"$log_file" 2>&1
+  )
+
+  local project_root="$scenario_root/$project_slug"
+  if [ ! -d "$project_root" ]; then
+    echo "ОШИБКА: проект не создан через guided launcher для сценария $scenario_key" >&2
+    return 1
+  fi
+
+  validate_generated_project "$project_root" "$expected_preset" "$log_file"
 
   printf '%s|%s|%s|%s\n' "$scenario_key" "$project_root" "$expected_preset" "$log_file"
 }
@@ -102,8 +143,17 @@ BROWNFIELD_RESULT="$(
     "brownfield-with-repo-modernization"
 )"
 
+LAUNCHER_RESULT="$(
+  run_launcher_scenario \
+    "guided-launcher-greenfield" \
+    "Guided Launcher Smoke" \
+    "guided-launcher-smoke" \
+    "greenfield-product"
+)"
+
 IFS='|' read -r GF_KEY GF_PROJECT GF_PRESET GF_LOG <<<"$GREENFIELD_RESULT"
 IFS='|' read -r BF_KEY BF_PROJECT BF_PRESET BF_LOG <<<"$BROWNFIELD_RESULT"
+IFS='|' read -r GL_KEY GL_PROJECT GL_PRESET GL_LOG <<<"$LAUNCHER_RESULT"
 RUN_TS="$(date -u +"%Y-%m-%dT%H:%M:%SZ")"
 
 cat >"$REPORT_PATH" <<EOF
@@ -127,9 +177,16 @@ cat >"$REPORT_PATH" <<EOF
 - generated project: \`$BF_PROJECT\`
 - log: \`$BF_LOG\`
 
+3. \`$GL_KEY\`
+- status: \`green\`
+- expected preset: \`$GL_PRESET\`
+- generated project: \`$GL_PROJECT\`
+- log: \`$GL_LOG\`
+
 ## What Was Verified
 
 - Beginner wizard route selection without manual preset terminology.
+- Guided launcher route selection and project creation through the unified entrypoint.
 - Generated project preset alignment in \`.chatgpt/active-scenarios.yaml\`.
 - Baseline validators (bootstrap path):
   - \`validate-project-preset.py\`

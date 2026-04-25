@@ -267,7 +267,10 @@ def main() -> int:
         sys.stdout.reconfigure(line_buffering=True)
 
     parser = argparse.ArgumentParser(
-        description="Beginner-friendly wizard: подбирает правильный вход и запускает проект без знания preset-терминов.",
+        description=(
+            "Beginner-friendly wizard: подбирает правильный вход и запускает проект без знания preset-терминов. "
+            "Для единого greenfield/brownfield/continue входа используйте factory-launcher.py."
+        ),
     )
     parser.add_argument(
         "--template-repo-root",
@@ -350,8 +353,8 @@ def main() -> int:
     print(f"Папка проекта: {destination}")
     print("Что делать дальше:")
     print("1. Откройте созданную папку проекта.")
-    print("2. Заполните project-knowledge и базовые .chatgpt-файлы.")
-    print("3. Двигайтесь по маршруту из template-repo/scenario-pack/00-master-router.md.")
+    print("2. Для planning workspace запустите: bash scripts/init-feature-workspace.sh --feature-id first-feature")
+    print("3. Для operator next step запустите: python3 scripts/factory-launcher.py --mode continue")
     return 0
 
 

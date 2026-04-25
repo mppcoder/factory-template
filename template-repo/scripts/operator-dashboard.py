@@ -306,6 +306,7 @@ def main() -> int:
     print()
     print("Recommended next step:")
     print(f"- {recommend_next_step(root, rows)}")
+    print(f"- Guided launcher: python3 {script_hint(root, 'factory-launcher.py')} --mode continue")
 
     if args.verify_summary or args.full:
         print_verify_summary(root)

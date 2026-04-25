@@ -1,6 +1,6 @@
 # Onboarding Smoke Acceptance
 
-- Run timestamp (UTC): `2026-04-23T17:25:48Z`
+- Run timestamp (UTC): `2026-04-25T07:47:56Z`
 - Runner: `onboarding-smoke/run-novice-e2e.sh`
 - Root: `/projects/factory-template`
 
@@ -18,9 +18,16 @@
 - generated project: `/projects/factory-template/onboarding-smoke/.tmp-run/brownfield-novice/novice-brownfield-smoke`
 - log: `/projects/factory-template/onboarding-smoke/.tmp-run/brownfield-novice.txt`
 
+3. `guided-launcher-greenfield`
+- status: `green`
+- expected preset: `greenfield-product`
+- generated project: `/projects/factory-template/onboarding-smoke/.tmp-run/guided-launcher-greenfield/guided-launcher-smoke`
+- log: `/projects/factory-template/onboarding-smoke/.tmp-run/guided-launcher-greenfield.txt`
+
 ## What Was Verified
 
 - Beginner wizard route selection without manual preset terminology.
+- Guided launcher route selection and project creation through the unified entrypoint.
 - Generated project preset alignment in `.chatgpt/active-scenarios.yaml`.
 - Baseline validators (bootstrap path):
   - `validate-project-preset.py`
