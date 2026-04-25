@@ -17,3 +17,7 @@
 Для интерактивной работы в VS Code Codex extension основной путь `manual-ui (default)`: откройте новый чат/окно Codex, вручную выберите model/reasoning в picker и только потом вставьте handoff.
 Launcher-команда `./scripts/launch-codex-task.sh` для нового task launch остается optional strict mode для automation, reproducibility и shell-first запуска.
 Не считайте уже открытую live session надежным auto-switch механизмом. Новый чат + вставка handoff и executable launch path — не одно и то же.
+
+Model availability auto-check хранится в `codex-model-routing.yaml` и выполняется командой `./scripts/check-codex-model-catalog.py .`, если доступен `codex debug models`.
+Repo-configured mapping, live Codex catalog, manual UI picker selection и strict launcher profile selection — разные контуры.
+Если новый model ID появился в live catalog, сначала создайте proposal через `--write-proposal`; существующие profiles не продвигаются автоматически без manual review.

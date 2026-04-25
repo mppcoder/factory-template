@@ -93,6 +93,12 @@ def main() -> int:
 ## Выбранное reasoning effort для plan mode
 {launch.get('selected_plan_mode_reasoning_effort', 'не определен')}
 
+## Статус model catalog
+{launch.get('model_catalog_status', 'не определен')}
+
+## Примечание по live availability
+{launch.get('model_catalog_validation_note', 'selected_model является repo-configured mapping и требует live validation через codex debug models')}
+
 ## Режим применения
 {launch.get('apply_mode', 'не определен')}
 
@@ -266,7 +272,9 @@ def main() -> int:
 - `новый чат + вставка handoff` и `новый task launch через executable launcher` — не одно и то же.
 - Уже открытая live session является только non-canonical fallback и не должна подаваться как надежный auto-switch path.
 - `AGENTS`, ChatGPT Project instructions, scenario-pack и `.chatgpt` guidance являются advisory layer; profile/model выбирает executable launcher/router.
-- `selected_profile` — это исполнимая граница маршрутизации; `selected_model` и `selected_reasoning_effort` описывают ожидаемую конфигурацию этого profile, а не auto-switch от текста handoff.
+- `selected_profile` — это исполнимая граница маршрутизации; `selected_model` и `selected_reasoning_effort` описывают repo-configured mapping этого profile, а не auto-switch от текста handoff.
+- Model availability auto-check выполняется через `scripts/check-codex-model-catalog.py` / `codex debug models`; если catalog недоступен или stale, не утверждайте, что selected_model точно live-available.
+- Если новый model появляется в live catalog, сначала создайте proposal через `--write-proposal`; promotion существующего profile требует manual review.
 - Проверяемая фиксация реального выбора хранится в `.chatgpt/task-launch.yaml`.
 - При исполнении handoff приоритет у правил repo: `AGENTS`, runbook, scenario-pack, policy files и других канонических файлов этого репозитория.
 - Общие рабочие инструкции применять только там, где они не конфликтуют с repo rules и старшими системными ограничениями среды.
@@ -312,7 +320,8 @@ def main() -> int:
 - новый чат + вставка handoff и новый task launch через executable launcher — не одно и то же.
 - Advisory handoff text сам по себе не переключает profile/model/reasoning в уже открытой или случайной Codex chat-сессии.
 - Уже открытая live session не является надежным механизмом автопереключения.
-- `selected_profile` — исполнимая граница; `selected_model` и `selected_reasoning_effort` — ожидаемая конфигурация profile, а не promise auto-switch.
+- `selected_profile` — исполнимая граница; `selected_model` и `selected_reasoning_effort` — repo-configured mapping profile, а не promise auto-switch или live availability guarantee.
+- `model_catalog_status: {launch.get('model_catalog_status', 'unknown')}`; `selected_model` требует live validation, если catalog недоступен или stale.
 - Если видите sticky last-used state, закройте текущую сессию, откройте новую и заново проверьте picker.
 
 ## Строгий launch mode (опционально)
@@ -339,6 +348,9 @@ Entry point: {entrypoint}
 Выбранный профиль: {launch.get('selected_profile', 'build')}
 Выбранная модель: {launch.get('selected_model', 'gpt-5.4')}
 Выбранное reasoning effort: {launch.get('selected_reasoning_effort', 'medium')}
+Выбранное plan mode reasoning effort: {launch.get('selected_plan_mode_reasoning_effort', 'medium')}
+Статус model catalog: {launch.get('model_catalog_status', 'unknown')}
+Live availability note: {launch.get('model_catalog_validation_note', 'selected_model repo-configured; requires live validation')}
 Режим применения: {launch.get('apply_mode', 'manual-ui')} (default)
 Строгий режим запуска: {launch.get('strict_launch_mode', 'optional')}
 Опциональная команда строгого запуска: {launch.get('launch_command', './scripts/launch-codex-task.sh --launch-source chatgpt-handoff --task-file .chatgpt/codex-input.md --execute')}

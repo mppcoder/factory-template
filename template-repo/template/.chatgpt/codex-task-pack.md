@@ -27,6 +27,12 @@
 ## Selected reasoning effort
 <!-- low / medium / high -->
 
+## Selected plan mode reasoning effort
+<!-- low / medium / high / xhigh -->
+
+## Model catalog status
+<!-- repo-configured / available / unavailable; live validation comes from codex debug models -->
+
 ## Apply mode
 <!-- manual-ui -->
 

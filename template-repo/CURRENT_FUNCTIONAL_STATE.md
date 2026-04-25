@@ -17,10 +17,12 @@
 - создает начальный versioning layer
 - добавляет release decision template и reusable sync/release scripts
 - копирует executable routing contract: `codex-routing.yaml`, router scripts и named Codex profiles
+- копирует canonical model routing policy: `codex-model-routing.yaml`
 - подготавливает generated project к launch-time self-handoff и routing verification
 - direct-task contour теперь включает отдельный visible response artifact для стартового self-handoff
 - smoke и pre-release layer теперь прикрывают наличие этого visible direct-task response artifact
 - handoff/completion layer теперь выдает отдельный executable launch boundary и troubleshooting для sticky last-used route state
+- model availability auto-check сравнивает repo-configured mapping с live `codex debug models` и генерирует proposal без automatic profile promotion
 
 ## Что еще описано на уровне фабрики
 - единая визуальная архитектура шаблона и подробные workflows по запуску, развёртыванию и downstream-update contour
@@ -30,4 +32,4 @@
 - matrix runner и bugflow требуют рабочей оболочки bash/pyyaml
 - auto GitHub Release publication в generated project зависит от доступности и авторизации `gh`
 - выбор `task_class` пока делается по эвристике keyword matching, а не по semantic classifier
-- named profile mapping по-прежнему зависит от local Codex config, поэтому source docs и validators теперь отдельно различают executable `selected_profile` и ожидаемые `selected_model` / `selected_reasoning_effort`
+- named profile execution по-прежнему зависит от local Codex config, поэтому source docs и validators отдельно различают executable `selected_profile`, repo-configured `selected_model` / `selected_reasoning_effort` / `selected_plan_mode_reasoning_effort` и live Codex catalog availability

@@ -25,6 +25,9 @@ launch:
   strict_launch_rule: ""
   live_session_fallback_rule: ""
   model_expectation_rule: ""
+  model_catalog_status: ""
+  model_catalog_last_checked_utc: ""
+  model_catalog_validation_note: ""
   advisory_layers: []
   executable_layers: []
   launch_artifact_path: ""

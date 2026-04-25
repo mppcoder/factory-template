@@ -1,13 +1,19 @@
 # Журнал изменений шаблона
 
 ## [Unreleased]
+### Добавлено
+- canonical `codex-model-routing.yaml` для model availability policy and selected profile/model/reasoning mapping
+- `scripts/check-codex-model-catalog.py` и reusable catalog helper для live `codex debug models` checks, proposal generation and fixture-based validation
+
 ### Изменено
 - completion/handoff routing layer теперь выдает явный `Launch в Codex` boundary с launcher command вместо неявного ожидания, что новый чат сам переключит route
 - source-facing routing docs и generated `.chatgpt` guidance теперь везде различают advisory handoff text и executable profile switch
+- resolver/bootstrap/launcher/validators теперь читают canonical model routing, сохраняют plan-mode reasoning и фиксируют catalog status в normalized handoffs
 
 ### Исправлено
 - устранен defect completion/handoff layer: handoff package больше не подменяет новый task launch понятием "новый чат"
 - добавлены troubleshooting и validators против sticky last-used profile/reasoning state и неподтвержденных model mappings
+- live catalog unavailable mode теперь деградирует в warning без automatic mapping promotion; strict mode остается opt-in
 
 ## [2.4.4] - 2026-04-22
 ### Добавлено

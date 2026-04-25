@@ -1,0 +1,86 @@
+model_catalog:
+  last_checked_utc: "2026-04-25T18:26:17Z"
+  catalog_source: "codex debug models"
+  catalog_check_status: "available"
+  discovered_models:
+    gpt-5.5:
+      supported_reasoning_efforts: ["low", "medium", "high", "xhigh"]
+      default_reasoning_effort: "medium"
+    gpt-5.4:
+      supported_reasoning_efforts: ["low", "medium", "high", "xhigh"]
+      default_reasoning_effort: "medium"
+    gpt-5.4-mini:
+      supported_reasoning_efforts: ["low", "medium", "high", "xhigh"]
+      default_reasoning_effort: "medium"
+    gpt-5.3-codex:
+      supported_reasoning_efforts: ["low", "medium", "high", "xhigh"]
+      default_reasoning_effort: "medium"
+    gpt-5.3-codex-spark:
+      supported_reasoning_efforts: ["low", "medium", "high", "xhigh"]
+      default_reasoning_effort: "high"
+    gpt-5.2:
+      supported_reasoning_efforts: ["low", "medium", "high", "xhigh"]
+      default_reasoning_effort: "medium"
+    codex-auto-review:
+      supported_reasoning_efforts: ["low", "medium", "high", "xhigh"]
+      default_reasoning_effort: "medium"
+
+model_policy:
+  allowed_profiles: ["quick", "build", "deep", "review"]
+  fallback_policy:
+    if_live_catalog_unavailable: "warn and keep repo-configured mapping; do not claim live availability"
+    if_configured_model_missing: "fail in strict mode; warn/error in normal validation depending on validator context"
+    if_reasoning_unsupported: "fail in strict mode; report remediation before handoff confidence"
+  promotion_policy:
+    default_action: "proposal-only"
+    safe_apply_scope:
+      - "refresh model_catalog.last_checked_utc"
+      - "refresh model_catalog.discovered_models"
+      - "refresh model_catalog.catalog_check_status"
+    auto_promote_profiles: false
+    candidate_order:
+      - "gpt-5.5"
+      - "gpt-5.4"
+      - "gpt-5.4-mini"
+      - "gpt-5.3-codex"
+      - "gpt-5.3-codex-spark"
+      - "gpt-5.2"
+    manual_review_required_for:
+      - "changing selected_model for any existing selected_profile"
+      - "lowering reasoning effort"
+      - "using a model not present in model_policy.candidate_order"
+      - "switching to codex-auto-review outside review-only automation"
+      - "removing a configured model"
+  manual_review_marker: "manual_review_required"
+
+task_class_routing:
+  quick:
+    selected_profile: "quick"
+  build:
+    selected_profile: "build"
+  deep:
+    selected_profile: "deep"
+  review:
+    selected_profile: "review"
+
+profile_routes:
+  quick:
+    selected_model: "gpt-5.4-mini"
+    selected_reasoning_effort: "low"
+    selected_plan_mode_reasoning_effort: "medium"
+    manual_review_required: false
+  build:
+    selected_model: "gpt-5.5"
+    selected_reasoning_effort: "medium"
+    selected_plan_mode_reasoning_effort: "medium"
+    manual_review_required: false
+  deep:
+    selected_model: "gpt-5.5"
+    selected_reasoning_effort: "high"
+    selected_plan_mode_reasoning_effort: "high"
+    manual_review_required: false
+  review:
+    selected_model: "gpt-5.5"
+    selected_reasoning_effort: "high"
+    selected_plan_mode_reasoning_effort: "high"
+    manual_review_required: false

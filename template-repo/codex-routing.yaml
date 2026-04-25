@@ -5,15 +5,17 @@ routing_contract:
   executable_switch_rule: "Строго воспроизводимое executable-переключение в live Codex для этого repo: явный новый task launch через launcher и selected_profile."
   strict_launch_rule: "Launcher-first path остается опциональным строгим режимом для автоматизации, воспроизводимости, запуска из shell и scripted launch."
   live_session_fallback_rule: "Уже открытая live session не является надежным механизмом автопереключения profile/model/reasoning и допустима только как неканонический fallback."
-  model_expectation_rule: "selected_model и selected_reasoning_effort фиксируют ожидаемую конфигурацию выбранного executable profile; advisory handoff text сам по себе ничего не переключает."
+  model_expectation_rule: "selected_model и selected_reasoning_effort фиксируют repo-configured mapping выбранного executable profile; live availability подтверждается отдельной проверкой `codex debug models`, а advisory handoff text сам по себе ничего не переключает."
   advisory_layers:
     - "AGENTS.md / AGENT.md"
     - "ChatGPT Project instructions"
     - "scenario-pack"
     - ".chatgpt docs и handoff guidance"
   executable_layers:
+    - "codex-model-routing.yaml"
     - "scripts/resolve-codex-task-route.py"
     - "scripts/bootstrap-codex-task.py"
+    - "scripts/check-codex-model-catalog.py"
     - "scripts/launch-codex-task.sh"
     - ".codex/config.toml с именованными profiles"
   launch_sources:
@@ -37,7 +39,7 @@ routing_contract:
     - "codex_profile_command"
 
 validation:
-  live_catalog_check: "Проверять model IDs и поддержку reasoning через `codex debug models`; если live catalog недоступен, не обещать, что mapping гарантированно исполним."
+  live_catalog_check: "Model availability auto-check выполняется через `scripts/check-codex-model-catalog.py` и `codex debug models`; если live catalog недоступен, не обещать, что mapping гарантированно исполним."
   apply_mode_default: "manual-ui"
   strict_launch_mode_default: "optional"
   strict_launch_use_cases:
@@ -52,6 +54,7 @@ validation:
     - "Если нужна строгая воспроизводимость, автоматизация или запуск из shell, используйте optional strict launch_command."
     - "Если после launch или manual UI apply виден sticky last-used profile/model/reasoning, закройте текущую сессию, откройте новую и при необходимости выполните launch_command, затем проверьте именованный profile в local Codex config."
     - "Если selected_model отсутствует в live catalog, обновите codex-routing.yaml или local profile mapping, прежде чем обещать этот model ID пользователю."
+    - "Если новый model ID появился в live catalog, сначала создайте proposal через `scripts/check-codex-model-catalog.py --write-proposal`; promotion profile mapping требует manual review."
 
 profiles:
   quick:

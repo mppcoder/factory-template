@@ -21,6 +21,19 @@
 - первый substantive ответ Codex по direct task должен явно показать self-handoff block до remediation.
 - если после manual UI apply или strict launch виден sticky last-used state, завершите текущую сессию, откройте новую и при необходимости выполните launcher еще раз, а затем сверьте model с `codex debug models`.
 
+## Model availability auto-check
+
+Repo-configured mapping живет в `codex-model-routing.yaml`: `task_class_routing` выбирает profile, `profile_routes` выбирает model/reasoning/plan-mode reasoning. Live Codex catalog не является тем же самым: его нужно проверять командой `python3 scripts/check-codex-model-catalog.py .`, которая вызывает `codex debug models`, когда CLI доступен.
+
+`--write-proposal` создает `reports/model-routing/model-routing-proposal.md` с current mapping, live catalog summary, proposed mapping, reasoning support evidence, risks and exact files to update. `--apply-safe` может обновить только catalog snapshot fields; promotion newly discovered models в profile mapping требует manual review.
+
+Troubleshooting:
+- new model in live catalog but not routing: write proposal first, then update `codex-model-routing.yaml` and `.codex/config.toml` named profiles intentionally;
+- configured model disappears: handoff must say selected_model is repo-configured and needs live validation; strict validator may fail;
+- unsupported reasoning: choose supported reasoning or different selected_model before release-facing handoff;
+- VS Code picker sticky model: open a new chat/window and verify picker manually;
+- pasted into already-open session: treat as non-canonical fallback, not executable route switching.
+
 ## Когда handoff допустим
 Переключение в рабочий Codex launch допустимо только после того, как:
 - собран минимальный evidence pack;

@@ -69,6 +69,9 @@ fi
 
 python3 "$ROOT/scripts/bootstrap-codex-task.py" "${BOOTSTRAP_ARGS[@]}"
 PROFILE="$(python3 "$ROOT/scripts/resolve-codex-task-route.py" "${RESOLVE_ARGS[@]}" --json | python3 -c 'import json,sys; print(json.load(sys.stdin)["launch"]["selected_profile"])')"
+MODEL="$(python3 "$ROOT/scripts/resolve-codex-task-route.py" "${RESOLVE_ARGS[@]}" --json | python3 -c 'import json,sys; print(json.load(sys.stdin)["launch"]["selected_model"])')"
+REASONING="$(python3 "$ROOT/scripts/resolve-codex-task-route.py" "${RESOLVE_ARGS[@]}" --json | python3 -c 'import json,sys; print(json.load(sys.stdin)["launch"]["selected_reasoning_effort"])')"
+PLAN_REASONING="$(python3 "$ROOT/scripts/resolve-codex-task-route.py" "${RESOLVE_ARGS[@]}" --json | python3 -c 'import json,sys; print(json.load(sys.stdin)["launch"]["selected_plan_mode_reasoning_effort"])')"
 APPLY_MODE="$(python3 "$ROOT/scripts/resolve-codex-task-route.py" "${RESOLVE_ARGS[@]}" --json | python3 -c 'import json,sys; print(json.load(sys.stdin)["launch"]["apply_mode"])')"
 STRICT_LAUNCH_MODE="$(python3 "$ROOT/scripts/resolve-codex-task-route.py" "${RESOLVE_ARGS[@]}" --json | python3 -c 'import json,sys; print(json.load(sys.stdin)["launch"]["strict_launch_mode"])')"
 LAUNCH_COMMAND="$(python3 "$ROOT/scripts/resolve-codex-task-route.py" "${RESOLVE_ARGS[@]}" --json | python3 -c 'import json,sys; print(json.load(sys.stdin)["launch"]["launch_command"])')"
@@ -76,6 +79,9 @@ CODEX_COMMAND="$(python3 "$ROOT/scripts/resolve-codex-task-route.py" "${RESOLVE_
 
 echo "launch_boundary=new-task-launch"
 echo "selected_profile=$PROFILE"
+echo "selected_model=$MODEL"
+echo "selected_reasoning_effort=$REASONING"
+echo "selected_plan_mode_reasoning_effort=$PLAN_REASONING"
 echo "apply_mode=$APPLY_MODE"
 echo "strict_launch_mode=$STRICT_LAUNCH_MODE"
 echo "launch_command=$LAUNCH_COMMAND"

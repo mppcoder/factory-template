@@ -7,7 +7,8 @@
 - новый чат + вставка handoff и новый task launch через executable launcher — не одно и то же.
 - Advisory handoff text сам по себе не переключает profile/model/reasoning в уже открытой или случайной Codex chat-сессии.
 - Уже открытая live session не является надежным механизмом автопереключения.
-- `selected_profile` — исполнимая граница; `selected_model` и `selected_reasoning_effort` — ожидаемая конфигурация profile, а не promise auto-switch.
+- `selected_profile` — исполнимая граница; `selected_model` и `selected_reasoning_effort` — repo-configured mapping profile, а не promise auto-switch или live availability guarantee.
+- `model_catalog_status: available`; `selected_model` требует live validation, если catalog недоступен или stale.
 - Если видите sticky last-used state, закройте текущую сессию, откройте новую и заново проверьте picker.
 
 ## Строгий launch mode (опционально)
@@ -34,6 +35,9 @@ Entry point: 00-master-router.md
 Выбранный профиль: build
 Выбранная модель: gpt-5.5
 Выбранное reasoning effort: medium
+Выбранное plan mode reasoning effort: medium
+Статус model catalog: available
+Live availability note: selected_model matched the latest stored repo catalog snapshot; rerun live catalog check before external promises
 Режим применения: manual-ui (default)
 Строгий режим запуска: optional
 Опциональная команда строгого запуска: ./scripts/launch-codex-task.sh --launch-source chatgpt-handoff --task-file .chatgpt/codex-input.md --execute
@@ -41,8 +45,8 @@ Entry point: 00-master-router.md
 Правило маршрутизации: advisory/handoff text не равен executable profile switch; надежная единица маршрутизации — только новый task launch.
 Правило ручного UI: для VS Code Codex extension откройте новый чат/окно, вручную выберите model/reasoning в picker, затем вставьте этот handoff.
 Правило live session: уже открытая live session = non-canonical fallback; не обещать auto-switch.
-Этап pipeline: remediation -> verify -> closeout
-Разрешение handoff: yes
+Этап pipeline: done
+Разрешение handoff: yes (forbidden)
 Scope: работать только в пределах этого repo и связанных project artifacts.
 Проверка: использовать актуальные validators, verification-report.md и done-report.md.
 ```

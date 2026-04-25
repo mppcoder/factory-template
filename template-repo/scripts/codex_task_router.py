@@ -7,6 +7,7 @@ from pathlib import Path
 import yaml
 
 from factory_automation_common import now_utc, read_text, read_yaml, write_yaml
+from codex_model_catalog import configured_profiles, configured_task_classes, load_model_routing
 
 
 def load_routing_spec(root: Path) -> dict:
@@ -16,7 +17,37 @@ def load_routing_spec(root: Path) -> dict:
         if fallback.exists():
             spec_path = fallback
     data = yaml.safe_load(spec_path.read_text(encoding="utf-8")) if spec_path.exists() else {}
-    return data if isinstance(data, dict) else {}
+    spec = data if isinstance(data, dict) else {}
+    model_routing, _path = load_model_routing(root)
+    if model_routing:
+        merged_profiles = spec.get("profiles", {}) if isinstance(spec.get("profiles", {}), dict) else {}
+        for name, profile in configured_profiles(model_routing, spec).items():
+            base = dict(merged_profiles.get(name, {}))
+            base["model"] = profile.get("model", base.get("model", ""))
+            base["reasoning_effort"] = profile.get("reasoning_effort", base.get("reasoning_effort", ""))
+            base["plan_mode_reasoning_effort"] = profile.get(
+                "plan_mode_reasoning_effort",
+                base.get("plan_mode_reasoning_effort", ""),
+            )
+            merged_profiles[name] = base
+        spec["profiles"] = merged_profiles
+
+        task_routes = configured_task_classes(model_routing, spec)
+        task_classes = spec.get("task_classes", {}) if isinstance(spec.get("task_classes", {}), dict) else {}
+        for task_class, profile_name in task_routes.items():
+            meta = dict(task_classes.get(task_class, {}))
+            meta["profile"] = profile_name
+            task_classes[task_class] = meta
+        spec["task_classes"] = task_classes
+        spec["model_catalog_status"] = (model_routing.get("model_catalog", {}) or {}).get(
+            "catalog_check_status",
+            "unknown",
+        )
+        spec["model_catalog_last_checked_utc"] = (model_routing.get("model_catalog", {}) or {}).get(
+            "last_checked_utc",
+            "",
+        )
+    return spec
 
 
 def read_task_text(task_file: Path | None, task_text: str | None) -> str:
@@ -368,6 +399,13 @@ def build_launch_record(
             "strict_launch_rule": spec.get("routing_contract", {}).get("strict_launch_rule", ""),
             "live_session_fallback_rule": spec.get("routing_contract", {}).get("live_session_fallback_rule", ""),
             "model_expectation_rule": spec.get("routing_contract", {}).get("model_expectation_rule", ""),
+            "model_catalog_status": spec.get("model_catalog_status", "unknown"),
+            "model_catalog_last_checked_utc": spec.get("model_catalog_last_checked_utc", ""),
+            "model_catalog_validation_note": (
+                "selected_model is repo-configured; live availability requires `codex debug models` validation"
+                if spec.get("model_catalog_status") != "available"
+                else "selected_model matched the latest stored repo catalog snapshot; rerun live catalog check before external promises"
+            ),
             "advisory_layers": spec.get("routing_contract", {}).get("advisory_layers", []),
             "executable_layers": spec.get("routing_contract", {}).get("executable_layers", []),
             "launch_artifact_path": handoff_artifact,
@@ -477,6 +515,15 @@ def render_normalized_handoff(record: dict, task_text: str, title: str) -> str:
 ## Правило ожиданий по модели
 {launch.get('model_expectation_rule', '')}
 
+## Статус catalog check
+{launch.get('model_catalog_status', '')}
+
+## Последняя catalog check UTC
+{launch.get('model_catalog_last_checked_utc', '')}
+
+## Примечание по live availability
+{launch.get('model_catalog_validation_note', '')}
+
 ## Путь launch artifact
 `{launch.get('launch_artifact_path', '')}`
 
@@ -576,6 +623,15 @@ direct-task
 
 ## Правило ожиданий по модели
 {launch.get('model_expectation_rule', '')}
+
+## Статус catalog check
+{launch.get('model_catalog_status', '')}
+
+## Последняя catalog check UTC
+{launch.get('model_catalog_last_checked_utc', '')}
+
+## Примечание по live availability
+{launch.get('model_catalog_validation_note', '')}
 
 ## Опциональная команда строгого запуска
 `{launch.get('launch_command', '')}`

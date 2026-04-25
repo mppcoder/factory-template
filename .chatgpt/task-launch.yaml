@@ -1,12 +1,11 @@
 launch:
-  timestamp_utc: '2026-04-25T18:14:24+00:00'
+  timestamp_utc: '2026-04-25T18:32:44+00:00'
   launch_unit: new-task-launch
-  launch_source: direct-task
+  launch_source: chatgpt-handoff
   router_layer: executable
   task_class: build
   task_class_reasons:
-  - 'keyword hit: remediation'
-  - 'keyword hit: исправ'
+  - 'keyword hit: feature'
   - 'explicit reasoning/model override matched default profile: build'
   selected_profile: build
   selected_model: gpt-5.5
@@ -23,15 +22,10 @@ launch:
   - .chatgpt/codex-task-pack.md
   - .chatgpt/verification-report.md
   - .chatgpt/done-report.md
-  - reports/bugs/
-  - reports/factory-feedback/
   handoff_allowed: yes (forbidden)
-  defect_capture_path: reproduce -> evidence -> bug report -> layer classification
-    -> factory feedback if reusable -> remediation
-  task_summary: 'Исправить два process defects в factory-template: не перекладывать
-    доступный GitHub PR merge на пользователя и обеспечить русский язык человекочитаемых
-    текстов, отчетов, инструкций, closeout и generated guidance; пройти defect-capture,
-    reme'
+  defect_capture_path: not-required-by-text-signal
+  task_summary: 'feature 16: automatic Codex model catalog checking and controlled
+    model routing update'
   launch_boundary_rule: Выбор модели и reasoning mode считается надежным только на
     новом запуске Codex для новой задачи.
   interactive_default_rule: 'Для интерактивной работы в VS Code Codex extension основной
@@ -44,22 +38,29 @@ launch:
   live_session_fallback_rule: Уже открытая live session не является надежным механизмом
     автопереключения profile/model/reasoning и допустима только как неканонический
     fallback.
-  model_expectation_rule: selected_model и selected_reasoning_effort фиксируют ожидаемую
-    конфигурацию выбранного executable profile; advisory handoff text сам по себе
-    ничего не переключает.
+  model_expectation_rule: selected_model и selected_reasoning_effort фиксируют repo-configured
+    mapping выбранного executable profile; live availability подтверждается отдельной
+    проверкой `codex debug models`, а advisory handoff text сам по себе ничего не
+    переключает.
+  model_catalog_status: available
+  model_catalog_last_checked_utc: '2026-04-25T18:26:17Z'
+  model_catalog_validation_note: selected_model matched the latest stored repo catalog
+    snapshot; rerun live catalog check before external promises
   advisory_layers:
   - AGENTS.md / AGENT.md
   - ChatGPT Project instructions
   - scenario-pack
   - .chatgpt docs и handoff guidance
   executable_layers:
+  - codex-model-routing.yaml
   - scripts/resolve-codex-task-route.py
   - scripts/bootstrap-codex-task.py
+  - scripts/check-codex-model-catalog.py
   - scripts/launch-codex-task.sh
   - .codex/config.toml с именованными profiles
-  launch_artifact_path: .chatgpt/direct-task-source.md
-  launch_command: ./scripts/launch-codex-task.sh --launch-source direct-task --task-file
-    .chatgpt/direct-task-source.md --execute
+  launch_artifact_path: .chatgpt/codex-input.md
+  launch_command: ./scripts/launch-codex-task.sh --launch-source chatgpt-handoff --task-file
+    .chatgpt/codex-input.md --execute
   codex_profile_command: codex --profile build
   strict_launch_use_cases:
   - автоматизация
@@ -81,8 +82,10 @@ launch:
     затем проверьте именованный profile в local Codex config.
   - Если selected_model отсутствует в live catalog, обновите codex-routing.yaml или
     local profile mapping, прежде чем обещать этот model ID пользователю.
-  direct_self_handoff_required: true
-  direct_self_handoff_completed: true
+  - Если новый model ID появился в live catalog, сначала создайте proposal через `scripts/check-codex-model-catalog.py
+    --write-proposal`; promotion profile mapping требует manual review.
+  direct_self_handoff_required: false
+  direct_self_handoff_completed: false
   requested_task_class: null
   requested_selected_profile: null
   requested_selected_model: null

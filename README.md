@@ -142,6 +142,16 @@ python3 template-repo/scripts/validate-codex-routing.py <working-project>
 Проверка routing должна делаться только на новой задаче.
 Нельзя считать старую уже открытую сессию Codex надежной единицей автоматической маршрутизации.
 
+Model availability auto-check добавляет отдельную live Codex catalog проверку поверх repo-configured mapping:
+
+```bash
+python3 template-repo/scripts/check-codex-model-catalog.py .
+python3 template-repo/scripts/check-codex-model-catalog.py . --json
+python3 template-repo/scripts/check-codex-model-catalog.py . --write-proposal
+```
+
+`template-repo/codex-model-routing.yaml` хранит task class -> selected_profile -> selected_model / selected_reasoning_effort / selected_plan_mode_reasoning_effort. Live catalog берется из `codex debug models`, когда CLI доступен; если catalog недоступен, validator предупреждает и не делает automatic mapping promotion. Новый model ID в live catalog сначала попадает в proposal, configured model disappearance и unsupported reasoning считаются routing risk, а VS Code sticky picker или handoff pasted into already-open session остаются manual boundary issues.
+
 ## Optional Skills Quality Loop
 
 Для развития самого `factory-template` доступен облегченный advanced-контур для skills и prompt-like artifacts:

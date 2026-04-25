@@ -1,11 +1,19 @@
 # Журнал изменений фабрики
 
 ## [Unreleased]
+### Добавлено
+- canonical `template-repo/codex-model-routing.yaml` для task class -> selected_profile -> selected_model/reasoning/plan-mode reasoning mapping
+- `check-codex-model-catalog.py` с live `codex debug models` check, JSON output, proposal generation and safe snapshot refresh
+- model-routing proposal artifact для controlled review of newly discovered Codex/OpenAI models
+
 ### Изменено
 - completion/handoff routing layer в template source теперь требует явный `Launch в Codex` boundary и launcher command для нового task launch
+- resolver, launcher, validators and handoff generation now preserve `selected_plan_mode_reasoning_effort` and live catalog status
+- docs distinguish repo-configured mapping, live Codex catalog, manual VS Code picker selection and optional strict launcher profile selection
 
 ### Исправлено
 - устранено ложное ожидание, что новый Codex chat сам переключает profile/model/reasoning без явного launcher path
+- validators now warn honestly when live catalog is unavailable and fail strict mode only when requested
 
 ## [2.4.4] - 2026-04-22
 ### Добавлено

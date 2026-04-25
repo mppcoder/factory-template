@@ -2,12 +2,18 @@
 from __future__ import annotations
 
 import json
-import shutil
-import subprocess
-import sys
+import argparse
 from pathlib import Path
 
 import yaml
+
+from codex_model_catalog import (
+    compare_catalog,
+    configured_profiles,
+    configured_task_classes,
+    load_live_catalog,
+    load_model_routing,
+)
 
 
 REQUIRED_FIELDS = [
@@ -16,6 +22,7 @@ REQUIRED_FIELDS = [
     "selected_profile",
     "selected_model",
     "selected_reasoning_effort",
+    "selected_plan_mode_reasoning_effort",
     "apply_mode",
     "strict_launch_mode",
     "project_profile",
@@ -53,6 +60,7 @@ DOC_CHECKS = [
         "snippets": [
             ["advisory", "advisory layer"],
             ["manual-ui (default)", "manual-ui"],
+            ["model availability auto-check", "codex-model-routing.yaml"],
             ["новый чат + вставка handoff"],
             ["./scripts/launch-codex-task.sh", "launcher-команда"],
         ],
@@ -71,6 +79,7 @@ DOC_CHECKS = [
         "snippets": [
             ["manual-ui (default)"],
             ["strict_launch_mode"],
+            ["live catalog"],
             ["sticky"],
         ],
     },
@@ -82,6 +91,7 @@ DOC_CHECKS = [
         ],
         "snippets": [
             ["manual-ui (default)"],
+            ["model availability auto-check", "codex-model-routing.yaml"],
             ["надежная единица маршрутизации: новый task launch"],
             ["./scripts/launch-codex-task.sh"],
             ["sticky last-used state"],
@@ -95,6 +105,7 @@ DOC_CHECKS = [
         ],
         "snippets": [
             ["advisory layer"],
+            ["live Codex catalog", "codex-model-routing.yaml"],
             ["manual-ui (default)"],
             ["новый task launch"],
             ["sticky last-used state"],
@@ -135,31 +146,17 @@ def load_routing_spec(root: Path) -> tuple[dict, Path | None]:
     return {}, None
 
 
-def load_live_model_catalog() -> tuple[dict[str, dict], str | None]:
-    if shutil.which("codex") is None:
-        return {}, "CLI `codex` не найден; live model catalog не проверен"
-    try:
-        result = subprocess.run(
-            ["codex", "debug", "models"],
-            check=True,
-            capture_output=True,
-            text=True,
-        )
-        payload = json.loads(result.stdout)
-    except Exception as exc:  # pragma: no cover - defensive
-        return {}, f"Не удалось прочитать live model catalog через `codex debug models`: {exc}"
-
-    models = {}
-    for model in payload.get("models", []):
-        slug = str(model.get("slug") or "").strip()
-        if not slug:
-            continue
-        models[slug] = model
-    return models, None
+def parse_args() -> argparse.Namespace:
+    parser = argparse.ArgumentParser(description="Validate Codex routing and model mapping.")
+    parser.add_argument("root", nargs="?", default=".", help="Repo root")
+    parser.add_argument("--strict", action="store_true", help="Fail if live catalog is unavailable or mapped models are missing")
+    parser.add_argument("--catalog-fixture", help="JSON/YAML fixture for live catalog validation")
+    return parser.parse_args()
 
 
 def main() -> int:
-    root = Path(sys.argv[1] if len(sys.argv) > 1 else ".").resolve()
+    args = parse_args()
+    root = Path(args.root).resolve()
     path = root / ".chatgpt" / "task-launch.yaml"
     if not path.exists():
         print("CODEX ROUTING НЕВАЛИДЕН")
@@ -175,21 +172,63 @@ def main() -> int:
             errors.append(f"Отсутствует обязательное поле launch.{field}")
 
     spec, spec_path = load_routing_spec(root)
+    model_routing, model_routing_path = load_model_routing(root)
     profiles = spec.get("profiles", {}) or {}
     task_classes = spec.get("task_classes", {}) or {}
     if not spec_path:
         errors.append("Не найден codex-routing.yaml")
     if not profiles:
         errors.append("codex-routing.yaml не содержит profiles")
+    if not model_routing_path.exists():
+        errors.append("Не найден codex-model-routing.yaml")
+
+    model_profiles = configured_profiles(model_routing, spec)
+    model_task_routes = configured_task_classes(model_routing, spec)
+    allowed_profiles = set((model_routing.get("model_policy", {}) or {}).get("allowed_profiles", []))
+    if allowed_profiles and set(model_profiles) - allowed_profiles:
+        errors.append("codex-model-routing.yaml содержит profile вне model_policy.allowed_profiles")
+    for task_class, profile_name in model_task_routes.items():
+        if profile_name not in model_profiles:
+            errors.append(
+                f"codex-model-routing.yaml task_class_routing.{task_class} ссылается на отсутствующий profile `{profile_name}`"
+            )
+    for profile_name, model_profile in model_profiles.items():
+        spec_profile = profiles.get(profile_name, {})
+        if not spec_profile:
+            errors.append(f"codex-model-routing.yaml profile `{profile_name}` отсутствует в codex-routing.yaml")
+            continue
+        if str(spec_profile.get("model", "")) != str(model_profile.get("model", "")):
+            errors.append(f"profiles.{profile_name}.model не совпадает с codex-model-routing.yaml")
+        if str(spec_profile.get("reasoning_effort", "")) != str(model_profile.get("reasoning_effort", "")):
+            errors.append(f"profiles.{profile_name}.reasoning_effort не совпадает с codex-model-routing.yaml")
+        if str(spec_profile.get("plan_mode_reasoning_effort", "")) != str(model_profile.get("plan_mode_reasoning_effort", "")):
+            errors.append(f"profiles.{profile_name}.plan_mode_reasoning_effort не совпадает с codex-model-routing.yaml")
     for task_class, meta in task_classes.items():
         profile_name = str((meta or {}).get("profile") or task_class)
         if profile_name not in profiles:
             errors.append(f"task_classes.{task_class} ссылается на отсутствующий profile `{profile_name}`")
 
-    live_models, live_models_error = load_live_model_catalog()
+    fixture = Path(args.catalog_fixture).resolve() if args.catalog_fixture else None
+    live_models, _source, live_models_error = load_live_catalog(fixture)
     if live_models_error:
         warnings.append(live_models_error)
-    for profile_name, profile in profiles.items():
+        if args.strict:
+            errors.append("strict mode: live model catalog unavailable")
+    catalog_findings = compare_catalog(model_routing, live_models, spec)
+    for item in catalog_findings["task_class_profile_errors"]:
+        errors.append(f"task class `{item['task_class']}` maps to missing profile `{item['selected_profile']}`")
+    for model in catalog_findings["missing_configured_models"]:
+        message = f"configured selected_model `{model}` отсутствует в live `codex debug models`"
+        if args.strict:
+            errors.append(message)
+        else:
+            warnings.append(message)
+    for item in catalog_findings["unsupported_reasoning"]:
+        errors.append(
+            f"profiles.{item['profile']} использует {item['field']} `{item['effort']}`, не поддерживаемый model `{item['model']}`"
+        )
+
+    for profile_name, profile in model_profiles.items():
         model = str(profile.get("model") or "").strip()
         reasoning = str(profile.get("reasoning_effort") or "").strip()
         plan_reasoning = str(profile.get("plan_mode_reasoning_effort") or "").strip()
@@ -201,7 +240,7 @@ def main() -> int:
             if live is None:
                 errors.append(f"profiles.{profile_name} использует model `{model}`, которого нет в live `codex debug models`")
                 continue
-            supported = {str(item.get('effort') or '').strip() for item in live.get("supported_reasoning_levels", [])}
+            supported = {str(item or '').strip() for item in live.get("supported_reasoning_efforts", [])}
             if reasoning and reasoning not in supported:
                 errors.append(
                     f"profiles.{profile_name} использует reasoning `{reasoning}`, не поддерживаемый model `{model}`"
@@ -242,6 +281,14 @@ def main() -> int:
             errors.append("selected_model в task-launch.yaml не совпадает с model выбранного profile")
         if str(expected.get("reasoning_effort", "")) != str(launch.get("selected_reasoning_effort", "")):
             errors.append("selected_reasoning_effort в task-launch.yaml не совпадает с reasoning выбранного profile")
+        if str(expected.get("plan_mode_reasoning_effort", "")) != str(launch.get("selected_plan_mode_reasoning_effort", "")):
+            errors.append("selected_plan_mode_reasoning_effort в task-launch.yaml не совпадает с plan reasoning выбранного profile")
+    if profile and profile in model_profiles:
+        expected_model = model_profiles[profile]
+        if str(expected_model.get("model", "")) != str(launch.get("selected_model", "")):
+            errors.append("selected_model в task-launch.yaml не совпадает с codex-model-routing.yaml")
+        if str(expected_model.get("reasoning_effort", "")) != str(launch.get("selected_reasoning_effort", "")):
+            errors.append("selected_reasoning_effort в task-launch.yaml не совпадает с codex-model-routing.yaml")
     if "launch-codex-task.sh" not in launch_command:
         errors.append("launch_command не фиксирует repo launcher")
     if launch.get("launch_source") and f"--launch-source {launch.get('launch_source')}" not in launch_command:

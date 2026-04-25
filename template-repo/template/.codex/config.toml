@@ -1,5 +1,6 @@
 # Static default нужен только как fallback, если launcher обойден вручную.
 # Канонический route для новой задачи идет через scripts/launch-codex-task.sh.
+# Model/profile source-of-truth: codex-model-routing.yaml плюс named profiles below.
 model = "gpt-5.5"
 model_reasoning_effort = "medium"
 plan_mode_reasoning_effort = "medium"
