@@ -1,4 +1,4 @@
-# Onboarding Smoke Fixtures
+# Onboarding smoke fixtures / fixture'ы onboarding smoke
 
 Этот каталог содержит novice-oriented E2E fixture для проверки beginner-first запуска.
 

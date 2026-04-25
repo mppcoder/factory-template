@@ -152,7 +152,7 @@ python3 template-repo/scripts/check-codex-model-catalog.py . --write-proposal
 
 `template-repo/codex-model-routing.yaml` хранит task class -> selected_profile -> selected_model / selected_reasoning_effort / selected_plan_mode_reasoning_effort. Live catalog берется из `codex debug models`, когда CLI доступен; если catalog недоступен, validator предупреждает и не делает automatic promotion mapping. Новый model ID в live catalog сначала попадает в proposal, исчезновение настроенной model и неподдерживаемый reasoning считаются routing risk, а sticky picker в VS Code или handoff, вставленный в уже открытую сессию, остаются manual boundary issues.
 
-## Optional skills quality loop
+## Optional skills quality loop для skills
 
 Для развития самого `factory-template` доступен облегченный advanced-контур для skills и prompt-like artifacts:
 
@@ -329,7 +329,7 @@ bash PHASE_DETECTION_TEST.sh
 
 ## Как читать release truth
 
-Start with `docs/releases/release-scorecard.yaml`. It is the machine-readable release state used by pre-release and CI gates. Roadmap/current-state/README/checklist explain that same state for humans; `TEST_REPORT.md` records verification evidence and must not be treated as a separate release-status source.
+Начинайте с `docs/releases/release-scorecard.yaml`. Это machine-readable release state, который используют pre-release и CI gates. Roadmap/current-state/README/checklist объясняют то же состояние для человека; `TEST_REPORT.md` фиксирует verification evidence и не должен считаться отдельным release-status source.
 
 ## Базовый функционал ветки 2.4.4
 - `factory-template` поддерживает greenfield, brownfield без repo и brownfield с repo в одном repo-first контуре;

@@ -1,10 +1,10 @@
-# Verify Summary
+# Сводка verify
 
-## Repo
+## Repo / репозиторий
 
 - `factory-template`
 
-## Current Verify Baseline
+## Текущий verify baseline
 
 - `VERSION_SYNC_CHECK.sh`: PASS
 - `VALIDATE_FACTORY_TEMPLATE_OPS.sh`: PASS
@@ -13,12 +13,12 @@
 - `MATRIX_TEST.sh`: PASS
 - `CLEAN_VERIFY_ARTIFACTS.sh && PRE_RELEASE_AUDIT.sh`: PASS
 
-## Verified Layers
+## Проверенные слои
 
-- release metadata and version sync
-- root release notes source and release-facing reference package
-- canonical preset naming and optional/reference contour separation
-- launcher and generated project scaffolding
+- release metadata и version sync
+- root release notes source и release-facing reference package
+- canonical preset naming и разделение optional/reference contour
+- launcher и generated project scaffolding
 - structural validators
 - defect-capture / alignment / handoff checks
 - verified sync prereqs, denylist/no-op path и fallback push strategy
@@ -29,19 +29,19 @@
 - repo-first ChatGPT Project instruction layer
 - automatic phase detection
 - automatic phase detection self-test
-- consistency between README, release docs, scenario-pack guidance and actual repo structure
+- согласованность README, release docs, scenario-pack guidance и фактической структуры repo
 
-## Known Residual Limits
+## Известные остаточные ограничения
 
 - `MATRIX_TEST.sh` остаётся representative runner, а не exhaustive coverage всех возможных комбинаций
 - phase detection валидируется rule-based по changed paths, а не через более глубокий semantic анализ repo intent
-- `release` phase now requires both changed-path signals and checked intent markers in `RELEASE_CHECKLIST.md`
-- `bugfix-drift` phase now requires both bug/validator path signals and bug-report intent markers in `reports/bugs/*.md`
+- `release` phase теперь требует и changed-path signals, и отмеченные intent markers в `RELEASE_CHECKLIST.md`
+- `bugfix-drift` phase теперь требует и bug/validator path signals, и bug-report intent markers в `reports/bugs/*.md`
 - release/no-release решение остаётся отдельным операторским решением
 - git-операции в этом окружении нужно выполнять последовательно; параллельный `commit/push/fetch/remote change` может давать ложные результаты
 - auto GitHub Release publication зависит от доступности `gh` и не должна считаться гарантированной без отдельной проверки auth/runtime
 
-## Operator Use
+## Использование оператором
 
 Этот файл служит короткой опорой перед:
 
@@ -51,7 +51,7 @@
 - обновлением repo-first инструкции в ChatGPT Project
 - repo-side подготовкой boundary-actions и reference/export artifacts
 
-## Git Sync Note
+## Git sync note / заметка по синхронизации
 
 - `VERIFIED_SYNC.sh` использовать как основной verified path для auto commit/push
 - `git commit`, `git push`, `git fetch`, `git remote set-url` выполнять только последовательно

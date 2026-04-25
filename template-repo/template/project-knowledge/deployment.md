@@ -1,4 +1,4 @@
-# Project Knowledge: Deployment
+# Project Knowledge: Deployment / развертывание
 
 ## 1. Где работает система
 

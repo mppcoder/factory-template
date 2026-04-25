@@ -1,4 +1,4 @@
-# Commit Message Guide
+# Guide по commit message
 
 ## Принцип
 
@@ -25,7 +25,7 @@
 
 ## Рекомендуемые шаблоны
 
-### Docs
+### Docs / документация
 
 ```text
 docs: align runbooks with current repo topology
@@ -33,7 +33,7 @@ docs: add release-facing operator checklist
 docs: refresh release note template
 ```
 
-### Fix
+### Fix / исправление
 
 ```text
 fix: align versioning layer with release metadata
@@ -41,7 +41,7 @@ fix: clean release audit flow after self-tests
 fix: remove legacy CURRENT_STATE references
 ```
 
-### Policy
+### Policy / политика
 
 ```text
 policy: add factory-template ops policy manifest
@@ -49,7 +49,7 @@ policy: validate curated sources pack composition
 policy: define boundary-actions settings for repo
 ```
 
-### Test
+### Test / проверка
 
 ```text
 test: add ops policy validation to matrix runner
@@ -57,7 +57,7 @@ test: extend prerelease audit with release-layer docs
 test: verify curated sources pack export flow
 ```
 
-### Release
+### Release / релиз
 
 ```text
 release: prepare factory-template release layer
@@ -65,14 +65,14 @@ release: sync release-facing docs and verify summary
 release: finalize notes for factory-template publish
 ```
 
-### Refactor
+### Refactor / рефакторинг
 
 ```text
 refactor: move sources-pack export to declarative policy
 refactor: extract boundary-actions generator template
 ```
 
-### Feature
+### Feature / возможность
 
 ```text
 feat: add curated sources pack exporter
@@ -99,7 +99,7 @@ feat: add release checklist and verify summary
 - если главное — подготовить publish/release, используйте `release`
 - если главное — синхронизировать документацию, используйте `docs`
 
-## Git Execution Note
+## Git execution note / заметка по git
 
 Для этого repo git-шаги нужно выполнять последовательно:
 

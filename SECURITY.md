@@ -1,6 +1,6 @@
-# Security Policy
+# Security policy / политика безопасности
 
-## Supported Versions
+## Поддерживаемые версии
 
 | Version line | Status |
 | --- | --- |
@@ -8,33 +8,33 @@
 | 2.4.x | Security fixes only |
 | < 2.4 | Not supported |
 
-## Reporting a Vulnerability
+## Как сообщить об уязвимости
 
-1. Use GitHub Private Vulnerability Reporting for this repository.
-2. Include reproducible steps, affected paths, and impact.
-3. Do not publish exploit details in public issues before triage.
+1. Используйте GitHub Private Vulnerability Reporting для этого repository.
+2. Укажите воспроизводимые steps, affected paths и impact.
+3. Не публикуйте exploit details в public issues до triage.
 
-If private reporting is unavailable, open a minimal public issue without sensitive details and request a secure follow-up channel.
+Если private reporting недоступен, откройте минимальный public issue без sensitive details и попросите secure follow-up channel.
 
-## Response Targets
+## Целевые сроки ответа
 
-- Initial triage: within 3 business days.
-- Status update after triage: within 7 business days.
-- Critical/high severity fixes: prioritized for nearest patch window.
+- Initial triage: в течение 3 business days.
+- Status update после triage: в течение 7 business days.
+- Critical/high severity fixes: приоритет для ближайшего patch window.
 
-## Secret Handling Baseline
+## Baseline обработки секретов
 
-- Never commit real credentials, tokens, keys, or session artifacts.
-- Keep local secrets in non-committed `.env` files; use `.env.example` as the only committed template.
-- Never paste secrets into `.chatgpt/*`, bug reports, release notes, or handoff artifacts.
-- For CI, store secrets only in GitHub Actions Secrets and avoid printing them in logs.
-- Rotate credentials immediately if accidental exposure is suspected.
+- Никогда не коммитьте real credentials, tokens, keys или session artifacts.
+- Держите local secrets в non-committed `.env` files; используйте `.env.example` как единственный committed template.
+- Никогда не вставляйте secrets в `.chatgpt/*`, bug reports, release notes или handoff artifacts.
+- Для CI храните secrets только в GitHub Actions Secrets и не печатайте их в logs.
+- Немедленно rotate credentials, если есть подозрение на accidental exposure.
 
-## Coordinated Disclosure
+## Coordinated disclosure / согласованное раскрытие
 
-Security fixes should include:
+Security fixes должны включать:
 
 - clear impact statement,
 - verification evidence,
-- release notes entry when applicable,
-- follow-up hardening tasks for reusable defects.
+- release notes entry, когда применимо,
+- follow-up hardening tasks для reusable defects.

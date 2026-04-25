@@ -16,7 +16,7 @@
 - validators честно предупреждают, когда live catalog unavailable, и падают в strict mode только по явному запросу
 - зафиксирован и исправлен `bug-031`: closeout больше не должен использовать англоязычные человекочитаемые headings или звучать как handoff обратно в ChatGPT, если внешний action не требуется
 - зафиксирован и исправлен `bug-032`: upstream ChatGPT-generated handoff теперь проверяется на русский человекочитаемый слой через repo validator
-- зафиксирован `bug-033`: repo-wide audit показал остаточный английский человекочитаемый слой за пределами свежего handoff/closeout контура; актуальный source-facing слой частично очищен
+- исправлен `bug-033`: active source-facing человекочитаемый слой очищен от английских headings, добавлены documented archival exceptions и validator в quick verify
 
 ## [2.4.4] - 2026-04-22
 ### Добавлено

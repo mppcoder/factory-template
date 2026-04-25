@@ -59,6 +59,7 @@
 - очередь обновлений GitHub Actions workflow сведена и закрыта: CI и Release используют согласованные `checkout@v6`, `setup-python@v6` и `upload-artifact@v7`, а устаревший Dependabot PR cluster закрывается через единый remediation path
 - closeout layer теперь требует проверять доступный GitHub write path перед передачей PR merge пользователю; если blockers нет, ready/merge/delete-branch/local sync выполняет Codex
 - русскоязычный человекочитаемый слой закреплен как правило: ответы, инструкции, отчеты, closeout и generated guidance пишутся на русском, а английский остается только для технических идентификаторов
+- repo-wide language cleanup закрыт для active source-facing слоя: `validate-human-language-layer.py` дает `active findings: 0`, а historical reports/work/release evidence закреплены как documented archival exceptions
 - user-facing output operator env validator русифицирован, чтобы quick verify не возвращал англоязычные описательные сообщения
 
 ## Программа 2.5 (release truth)
@@ -97,7 +98,7 @@
 ## Граница core
 Core включает фабрику, шаблон, versioning/documentation layer, `.chatgpt`, scenario-pack, examples и feedback loop.
 
-## Optional layers
+## Optional layers / дополнительные слои
 - workspace-packs
 - optional-domain-packs
 - advisory factory ops

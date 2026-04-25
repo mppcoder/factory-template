@@ -42,10 +42,19 @@ factory-template
 language layer / source docs / historical artifacts
 
 ## Связь с текущим scope
-partially-fixed-current-source-layer; archival cleanup remains separate
+fixed-active-source-layer-with-documented-archival-exceptions
 
 ## Self-handoff решение
 current-route-valid
 
 ## Решение / статус
-partial-remediation
+fixed
+
+## Remediation 2026-04-25
+- Добавлен canonical policy split для active source-facing русского слоя и documented archival exceptions: `template-repo/language-archive-exceptions.yaml`, `docs/language-layer-policy.md`.
+- Добавлен validator `template-repo/scripts/validate-human-language-layer.py` и подключен в `template-repo/scripts/verify-all.sh quick`.
+- Активные docs, release-facing artifacts, reusable skills, template handoff artifacts и routing/model docs нормализованы так, чтобы active findings были равны `0`.
+- Исторические reports, `work/completed`, legacy packs, bootstrap notes и fixture evidence оставлены как archival exceptions с явной причиной.
+
+## Verification 2026-04-25
+- `python3 template-repo/scripts/validate-human-language-layer.py .` -> active findings `0`, archival exception findings `171`.

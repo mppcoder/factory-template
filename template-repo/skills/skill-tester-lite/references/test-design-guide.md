@@ -1,74 +1,74 @@
-# Test Design Guide
+# Guide по test design
 
-Use this guide for the optional advanced QA loop:
+Используйте этот guide для optional advanced QA loop:
 
 ```text
 create -> test -> improve trigger/usefulness
 ```
 
-The loop is for improving factory-template itself. It is not a required step for beginners using the template.
+Loop нужен для улучшения самого factory-template. Это не обязательный шаг для новичков, использующих template.
 
-## Test Surface
+## Test surface / поверхность проверки
 
-Test only the surface that matters for reuse:
+Тестируйте только surface, важный для reuse:
 
 - trigger fit: when the skill or prompt should activate;
 - trigger rejection: when it should stay silent;
 - usefulness: what behavior becomes better after using it;
 - boundary safety: repo-first, routing, beginner-path, and defect-capture constraints.
 
-## Minimal Case Set
+## Минимальный набор cases
 
-Use 2-4 cases:
+Используйте 2-4 cases:
 
-1. Positive obvious case: should trigger.
-2. Positive edge case: should trigger but needs careful interpretation.
-3. Negative adjacent case: should not trigger even though words overlap.
-4. Regression case: checks a known repo boundary, if one exists.
+1. Очевидный positive case: должен trigger.
+2. Пограничный positive case: должен trigger, но требует аккуратной интерпретации.
+3. Соседний negative case: не должен trigger, хотя слова пересекаются.
+4. Regression case: проверяет известную repo boundary, если она есть.
 
-For prompt-like artifacts, replace "trigger" with "route/use": should this scenario, runbook, or handoff rule be applied?
+Для prompt-like artifacts замените "trigger" на "route/use": нужно ли применять этот scenario, runbook или handoff rule?
 
-## Scoring
+## Scoring / оценка
 
-Use a simple result per case:
+Используйте простой result для каждого case:
 
 ```text
 PASS | FAIL | UNCLEAR
 ```
 
-Judge three dimensions:
+Оценивайте три измерения:
 
 - selection: was the right artifact chosen;
 - execution: were the required steps concrete enough;
 - restraint: did it avoid adding mandatory work outside the requested scope.
 
-## Improvement Heuristics
+## Heuristics улучшения
 
-If positive cases fail:
+Если positive cases fail:
 
-- add concrete trigger phrases to the description or opening rule;
-- make the first workflow step more decisive;
-- name the artifact classes it covers.
+- добавьте concrete trigger phrases в description или opening rule;
+- сделайте первый workflow step более decisive;
+- назовите artifact classes, которые он покрывает.
 
-If negative cases fail:
+Если negative cases fail:
 
-- add exclusions to boundaries;
-- remove broad wording from the description;
-- split unrelated capabilities into another artifact.
+- добавьте exclusions в boundaries;
+- уберите broad wording из description;
+- вынесите unrelated capabilities в другой artifact.
 
-If usefulness fails:
+Если usefulness fails:
 
-- add expected output shape;
-- add a tiny checklist;
-- move long background text into a reference file.
+- добавьте expected output shape;
+- добавьте короткий checklist;
+- перенесите long background text в reference file.
 
-If beginner-path safety fails:
+Если beginner-path safety fails:
 
-- mark the workflow as optional advanced mode;
-- remove it from quick-start paths;
-- link it from maintenance or quality sections only.
+- пометьте workflow как optional advanced mode;
+- уберите его из quick-start paths;
+- ссылайтесь на него только из maintenance или quality sections.
 
-## Factory-Template Example
+## Пример factory-template
 
 Target: `template-repo/skills/skill-master-lite/SKILL.md`
 
@@ -78,7 +78,7 @@ Positive prompt:
 Create a new lightweight Codex skill for validating factory-template handoff blocks.
 ```
 
-Expected: `skill-master-lite` should trigger because the request is to create a repo skill.
+Ожидание: `skill-master-lite` должен trigger, потому что запрос просит создать repo skill.
 
 Negative prompt:
 
@@ -86,10 +86,10 @@ Negative prompt:
 I am starting my first project from the factory template. What command do I run?
 ```
 
-Expected: `skill-master-lite` should not trigger. The beginner path should stay with `docs/first-project.md` or `docs/guided-launcher.md`.
+Ожидание: `skill-master-lite` не должен trigger. Beginner path должен оставаться в `docs/first-project.md` или `docs/guided-launcher.md`.
 
-Usefulness check:
+Проверка usefulness:
 
 ```text
-After using the skill, the new artifact should have a clear trigger contract, boundaries, and a testable QA surface.
+После использования skill новый artifact должен иметь clear trigger contract, boundaries и testable QA surface.
 ```

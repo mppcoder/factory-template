@@ -15,19 +15,19 @@
 - задача не считается done, если найденный defect исправлен без bug report
 
 ## Что может различаться
-### Greenfield
+### Greenfield / новый проект
 - bootstrap
 - user spec
 - tech spec
 - decomposition
 
-### Brownfield
+### Brownfield / существующий проект
 - reverse engineering
 - system inventory
 - gap register
 - remediation planning
 
-### Factory improvement
+### Factory improvement / улучшение фабрики
 - feedback
 - drift
 - patch export

@@ -176,7 +176,7 @@ def infer_task_class(spec: dict, text: str, explicit_task_class: str | None = No
     if explicit_task_class:
         if explicit_task_class not in task_classes:
             raise ValueError(f"Неизвестный task class: {explicit_task_class}")
-        return explicit_task_class, [f"explicit task class override: {explicit_task_class}"]
+        return explicit_task_class, [f"явный override task_class: {explicit_task_class}"]
 
     normalized = _normalize(text)
     scores: dict[str, int] = {}
@@ -194,11 +194,11 @@ def infer_task_class(spec: dict, text: str, explicit_task_class: str | None = No
             reasons[task_class] = hits
 
     if not scores:
-        return default_task_class, [f"no keyword hit; fallback to default task class `{default_task_class}`"]
+        return default_task_class, [f"keyword-hit не найден; fallback на default task class `{default_task_class}`"]
 
     ordered = sorted(scores.items(), key=lambda item: (-item[1], item[0]))
     chosen, _score = ordered[0]
-    return chosen, [f"keyword hit: {hit}" for hit in reasons.get(chosen, [])]
+    return chosen, [f"keyword-hit: {hit}" for hit in reasons.get(chosen, [])]
 
 
 def selected_profile(spec: dict, task_class: str) -> tuple[str, dict]:
@@ -214,7 +214,7 @@ def choose_profile_from_overrides(spec: dict, task_class: str, overrides: dict) 
     profiles = spec.get("profiles", {}) or {}
     requested_profile = str(overrides.get("selected_profile") or "").strip()
     if requested_profile and requested_profile in profiles:
-        return requested_profile, profiles[requested_profile], [f"explicit selected_profile override: {requested_profile}"]
+        return requested_profile, profiles[requested_profile], [f"явный override selected_profile: {requested_profile}"]
 
     requested_model = normalize_model_name(str(overrides.get("selected_model") or "").strip())
     requested_reasoning = _normalize(str(overrides.get("selected_reasoning_effort") or "").strip())
@@ -240,7 +240,7 @@ def choose_profile_from_overrides(spec: dict, task_class: str, overrides: dict) 
     for name, profile in candidates:
         if name == default_profile_name:
             reasons = [
-                f"explicit reasoning/model override matched default profile: {name}",
+                f"явный reasoning/model override совпал с default profile: {name}",
             ]
             return name, profile, reasons
 
@@ -248,15 +248,15 @@ def choose_profile_from_overrides(spec: dict, task_class: str, overrides: dict) 
     for preferred in preferred_order:
         for name, profile in candidates:
             if name == preferred:
-                reasons = [f"explicit reasoning/model override selected compatible profile: {name}"]
+                reasons = [f"явный reasoning/model override выбрал совместимый profile: {name}"]
                 if requested_profile and requested_profile not in profiles:
-                    reasons.append(f"requested profile `{requested_profile}` is not executable in routing spec")
+                    reasons.append(f"requested profile `{requested_profile}` отсутствует как executable profile в routing spec")
                 return name, profile, reasons
 
     name, profile = candidates[0]
-    reasons = [f"explicit reasoning/model override selected compatible profile: {name}"]
+    reasons = [f"явный reasoning/model override выбрал совместимый profile: {name}"]
     if requested_profile and requested_profile not in profiles:
-        reasons.append(f"requested profile `{requested_profile}` is not executable in routing spec")
+        reasons.append(f"requested profile `{requested_profile}` отсутствует как executable profile в routing spec")
     return name, profile, reasons
 
 

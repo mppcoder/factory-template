@@ -28,9 +28,9 @@ model_catalog:
 model_policy:
   allowed_profiles: ["quick", "build", "deep", "review"]
   fallback_policy:
-    if_live_catalog_unavailable: "warn and keep repo-configured mapping; do not claim live availability"
-    if_configured_model_missing: "fail in strict mode; warn/error in normal validation depending on validator context"
-    if_reasoning_unsupported: "fail in strict mode; report remediation before handoff confidence"
+    if_live_catalog_unavailable: "warn и сохранить repo-configured mapping; не утверждать live availability"
+    if_configured_model_missing: "fail в strict mode; warn/error в normal validation в зависимости от validator context"
+    if_reasoning_unsupported: "fail в strict mode; до handoff confidence сообщить remediation"
   promotion_policy:
     default_action: "proposal-only"
     safe_apply_scope:
@@ -46,11 +46,11 @@ model_policy:
       - "gpt-5.3-codex-spark"
       - "gpt-5.2"
     manual_review_required_for:
-      - "changing selected_model for any existing selected_profile"
-      - "lowering reasoning effort"
-      - "using a model not present in model_policy.candidate_order"
-      - "switching to codex-auto-review outside review-only automation"
-      - "removing a configured model"
+      - "изменение selected_model для существующего selected_profile"
+      - "понижение reasoning effort"
+      - "использование модели вне model_policy.candidate_order"
+      - "переключение на codex-auto-review вне review-only automation"
+      - "удаление configured model"
   manual_review_marker: "manual_review_required"
 
 task_class_routing:

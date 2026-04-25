@@ -21,7 +21,7 @@
 ## Фактическое поведение
 <!-- Что произошло фактически -->
 
-## Evidence
+## Evidence / доказательства
 <!-- Ссылки на файлы, логи, конфиги, скриншоты, отчеты -->
 
 ## Слой дефекта
@@ -33,7 +33,7 @@
 ## Self-handoff решение
 <!-- current-route-valid / new-codex-task-recommended / fallback-continue-current-chat / chatgpt-deep-research -->
 
-## Route impact
+## Route impact / влияние на route
 <!-- same profile/model/reasoning или что именно изменилось -->
 
 ## Временный обход

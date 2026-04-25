@@ -1,6 +1,6 @@
-# Release Checklist
+# Release checklist / чеклист релиза
 
-## Scope
+## Scope / область
 
 - Repo: `factory-template`
 - Current release line: `2.4.4`
@@ -11,13 +11,13 @@
 - Status: `2.5 RC Closeout Candidate (not GA)`
 - GA-ready: `false`
 
-## Intent Signals
+## Intent signals / сигналы намерения
 
 - [x] release pass started
 - [x] release note drafted
 - [x] go/no-go review in progress
 
-## Before Release Decision
+## Перед release decision
 
 - [x] Проверить `CHANGELOG.md`
 - [x] Проверить `CURRENT_FUNCTIONAL_STATE.md`
@@ -33,7 +33,7 @@
 - [x] Убедиться, что release note отражает изменения в template/runtime/policy layer
 - [x] Убедиться, что `RELEASE_NOTES.md` является notes source в `.chatgpt/release-decision.yaml`
 
-## Required Commands
+## Обязательные команды
 
 - [x] `bash template-repo/scripts/verify-all.sh ci`
 - [x] `bash onboarding-smoke/run-novice-e2e.sh`
@@ -54,19 +54,19 @@
 - [x] `bash workspace-packs/factory-ops/rollback-template-patch.sh <downstream-root>/_factory-sync-export --rollback`
 - [x] `bash workspace-packs/factory-ops/rollback-template-patch.sh <downstream-root>/_factory-sync-export --rollback --restore-project-snapshot`
 
-## Required CI Checks (Branch Protection Contract)
+## Обязательные CI checks (branch protection contract)
 
 - [x] `CI / verify-baseline`
 - [x] `CI / release-bundle-dry-run`
 - [x] Верификация fix-пакета на GitHub Actions: run `24840192862` (2026-04-23), оба job в статусе `success`
 
-## Verify Entrypoint
+## Verify entrypoint / точка входа проверки
 
 - [x] Операторский единый запуск: `bash template-repo/scripts/verify-all.sh`
 - [x] Быстрый режим: `bash template-repo/scripts/verify-all.sh quick`
 - [x] CI-режим: `bash template-repo/scripts/verify-all.sh ci`
 
-## Release Layer Checks
+## Проверки release layer
 
 - [x] `VERSION.md`, `FACTORY_MANIFEST.yaml` и `template-repo/TEMPLATE_MANIFEST.yaml` согласованы
 - [x] `factory-template-ops-policy.yaml` валиден
@@ -75,18 +75,18 @@
 - [x] verified sync выполнен или детерминированно завершился как no-op
 - [x] временные verify artifacts очищены перед release build
 
-## External Boundary Readiness
+## Готовность external boundary
 
 - [x] есть готовые инструкции для `git` / GitHub
 - [x] есть готовые инструкции для repo-first ChatGPT Project
 - [x] нет шагов, требующих ручного угадывания
 
-## Go / No-Go
+## Go / no-go решение
 
 - [x] release bundle можно собирать
 - [ ] или явно зафиксирован `no-release` с причиной
 
-## 2.5 Program Framing Gate (Closed)
+## 2.5 program framing gate (closed)
 
 - [x] Зафиксирован dual-track контур: `2.5-A` (engineering hardening) и `2.5-B` (beginner-first productization)
 - [x] Канонический roadmap создан: `docs/releases/2.5-roadmap.md`
@@ -94,7 +94,7 @@
 - [x] `README.md`, `CURRENT_FUNCTIONAL_STATE.md` и `RELEASE_NOTES.md` синхронизированы с новой целью `2.5`
 - [x] Repo-first и scenario-pack принципы сохранены в release-facing описании
 
-## 2.5 RC Closeout Gate (Verify-Closeout)
+## 2.5 RC closeout gate (verify-closeout)
 
 - [x] Downstream dry-run/apply/rollback path человекочитаемо описан и проверен (`UPGRADE_SUMMARY.md`)
 - [x] `greenfield novice` E2E зеленый (`onboarding-smoke/ACCEPTANCE_REPORT.md`)
@@ -103,8 +103,8 @@
 - [x] инцидентные дефекты из verify-прохода зафиксированы через defect-capture path
 - [ ] GA-ready declared
 
-## 2.5 Scorecard Gates
+## 2.5 scorecard gates
 
-- [x] `G25-0` — program framing and scope normalization closed.
-- [x] `G25-RC` — RC closeout evidence passed for downstream trial.
-- [ ] `G25-GA` — full `2.5` GA readiness pending explicit KPI confirmation.
+- [x] `G25-0` — program framing и scope normalization закрыты.
+- [x] `G25-RC` — RC closeout evidence прошел для downstream trial.
+- [ ] `G25-GA` — full `2.5` GA readiness ждет explicit KPI confirmation.

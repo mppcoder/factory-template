@@ -116,7 +116,7 @@ def render_proposal(root: Path, summary: dict) -> str:
 ## Нужен ручной review
 {str(manual_review_required).lower()}
 
-## Findings JSON
+## Findings JSON / данные findings
 ```json
 {json.dumps(findings, ensure_ascii=False, indent=2)}
 ```

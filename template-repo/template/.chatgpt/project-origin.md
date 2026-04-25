@@ -3,7 +3,7 @@
 ## Название проекта
 {{PROJECT_NAME}}
 
-## Slug
+## Slug / slug проекта
 {{PROJECT_SLUG}}
 
 ## Тип проекта

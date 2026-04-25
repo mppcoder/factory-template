@@ -1,6 +1,6 @@
-# Entry Modes
+# Режимы входа
 
-## Canonical Entry Modes
+## Канонические режимы входа
 
 Шаблон `factory-template` поддерживает 3 канонических режима запуска и сопровождения.
 
@@ -24,7 +24,7 @@
 
 Это сделано специально, чтобы целевое состояние всех проектов на шаблоне сходилось к одному фабричному контуру и было проще обновлять шаблон в будущем.
 
-## Canonical VPS Layout
+## Каноническая VPS layout
 
 - `/projects` содержит только project roots;
 - у каждого проекта свой корень: `/projects/<project-root>/`;
@@ -65,13 +65,13 @@
 - Зачем нужен `brownfield/00-brownfield-entry.md`:
   это короткий brownfield gate, который фиксирует правило evidence-first даже если репозиторий уже существует
 
-## Quick Mapping
+## Быстрая mapping
 
 - новый проект с нуля -> `greenfield` -> `greenfield-product`
 - существующий проект без repo -> `brownfield` -> `brownfield-without-repo`
 - существующий проект с repo -> `brownfield` -> `brownfield-with-repo-modernization` / `brownfield-with-repo-integration` / `brownfield-with-repo-audit`
 
-## Legacy Aliases
+## Legacy aliases / старые alias
 
 - `product-dev` -> `greenfield-product`
 - `brownfield-dogfood-codex-assisted` -> `brownfield-without-repo`

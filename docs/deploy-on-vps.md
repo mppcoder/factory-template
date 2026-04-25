@@ -41,7 +41,7 @@ bash template-repo/scripts/deploy-local-vps.sh --yes
 python3 template-repo/scripts/operator-dashboard.py --verify-summary
 ```
 
-## Operator presets
+## Операторские presets
 
 Preset выбирается через `OPERATOR_PRESET` в `deploy/.env` или через флаг `--preset`.
 
@@ -64,7 +64,7 @@ bash template-repo/scripts/deploy-dry-run.sh --preset production
 bash template-repo/scripts/deploy-dry-run.sh --env-file /path/to/prod.env --preset production --strict-env
 ```
 
-Для реального deploy production presets используйте `deploy/.env`, а не только `.env.example`:
+Для реального deploy с production presets используйте `deploy/.env`, а не только `.env.example`:
 
 ```bash
 cp deploy/.env.example deploy/.env
@@ -126,7 +126,7 @@ bash template-repo/scripts/deploy-local-vps.sh --yes --preset production
 bash template-repo/scripts/deploy-dry-run.sh --preset production --strict-env
 ```
 
-## Backups
+## Backups / резервные копии
 
 `app-db` preset добавляет одноразовый backup hook `db-backup`. Он не запускается как daemon при обычном `up -d`; его нужно вызывать явно или из cron/systemd timer:
 
@@ -141,7 +141,7 @@ docker compose \
 
 Минимальная restore-проверка перед cutover: убедитесь, что свежий `.sql` файл создан в `BACKUP_PATH` и может быть прочитан оператором.
 
-## Health checks
+## Health checks / проверки здоровья
 
 - `app` проверяет `http://127.0.0.1${APP_HEALTHCHECK_PATH}` внутри контейнера.
 - `db` в `app-db` preset проверяет `pg_isready`.
@@ -160,7 +160,7 @@ docker compose \
 python3 template-repo/scripts/operator-dashboard.py --verify-summary
 ```
 
-## Human-readable отчёты
+## Человекочитаемые отчёты
 
 Скрипты пишут короткие отчёты:
 - `.factory-runtime/reports/deploy-dry-run-latest.txt`

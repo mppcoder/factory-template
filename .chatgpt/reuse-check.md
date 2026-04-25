@@ -1,4 +1,4 @@
-# Reuse Check
+# Проверка reuse
 
 ## Что уже есть в repo
 - В repo уже существуют canonical scripts для `verified sync` и `release executor`.

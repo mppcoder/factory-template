@@ -37,7 +37,7 @@
 11. verify
 12. sync reusable change back
 
-## UX-class defect note
+## UX-class defect note / заметка по UX-defect
 Если defect относится к user-facing handoff/completion UX, отдельно проверь:
 - проблема действительно в поведении шаблона, а не в "ошибке пользователя";
 - различены ли `manual-ui (default)` и `launcher-first strict mode (optional)`;

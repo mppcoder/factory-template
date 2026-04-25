@@ -1,4 +1,4 @@
-# TEST REPORT v2.5 RC (verify-closeout)
+# Отчет TEST REPORT v2.5 RC (verify-closeout)
 
 Status source of truth: `docs/releases/release-scorecard.yaml`.
 Current scorecard state: `2.5 RC Closeout Candidate (not GA)`.
@@ -83,10 +83,10 @@ Evidence / quality / DoD до смыслового наполнения арте
 - document intent signals сейчас реализованы для `release` и `bugfix-drift`, но ещё не покрывают возможные более тонкие подфазы внутри controlled fixes.
 - phase-aware export/reference packs остаются вспомогательным слоем и не заменяют чтение сценариев из GitHub repo.
 
-## Open Issues
+## Открытые вопросы
 - По bug set `bug-026/027/028` критичных открытых дефектов после remediation не осталось.
 - Follow-up для будущего улучшения (не blocker текущего RC): расширить novice long-flow с synthetic smoke до более предметных domain сценариев в downstream проектах.
 
-## CI baseline status
+## Статус CI baseline
 - Статус: `green` (GitHub Actions run `24840192862`, 2026-04-23: `verify-baseline` = success, `release-bundle-dry-run` = success; локально подтверждено через `verify-all.sh quick` и `verify-all.sh ci`).
 - Residual risk: шаг `release-executor` в release workflow остаётся manual/optional и по-прежнему зависит от валидного verified-sync контекста и GitHub auth.

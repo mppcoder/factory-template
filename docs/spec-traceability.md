@@ -1,4 +1,4 @@
-# Spec traceability
+# Spec traceability / трассировка спецификации
 
 Этот слой нужен, чтобы технические решения не отрывались от пользовательских требований.
 
@@ -25,7 +25,7 @@ DEV-001 | anchor=US-004 | decision=... | reason=... | validation=...
 
 `decision` говорит, что меняем. `reason` объясняет почему. `validation` показывает, как проверим, что отклонение не сломало пользовательскую ценность.
 
-## Validator
+## Validator / проверка
 
 Проверить factory templates и сгенерированные workspaces:
 

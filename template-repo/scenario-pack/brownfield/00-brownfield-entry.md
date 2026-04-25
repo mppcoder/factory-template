@@ -5,7 +5,7 @@
 ## Подсказка
 Сначала опишите то, что реально существует, а не то, как хотелось бы это видеть.
 
-## Canonical VPS layout
+## Canonical VPS layout / каноническая VPS layout
 Если brownfield-контур живёт на VPS, корень `/projects` должен содержать только project roots.
 
 Рабочее правило:

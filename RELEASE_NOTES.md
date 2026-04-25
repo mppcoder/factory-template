@@ -1,4 +1,4 @@
-# Release Notes
+# Release notes / заметки релиза
 
 ## 2.5 - RC Closeout Candidate (not GA) - 2026-04-23
 
@@ -23,7 +23,7 @@
 - novice acceptance теперь включает post-bootstrap long-flow (`fill_smoke_artifacts` + `validate-evidence/quality/handoff/check-dod`);
 - consolidated verify path (`template-repo/scripts/verify-all.sh ci`) теперь включает novice onboarding smoke перед `SMOKE/EXAMPLES/MATRIX`.
 
-### RC verification evidence
+### Evidence RC verification / подтверждение RC
 
 - `UPGRADE_SUMMARY.md` — dry-run/apply/rollback UX summary на реальном novice brownfield downstream;
 - `onboarding-smoke/ACCEPTANCE_REPORT.md` — greenfield novice + brownfield novice сценарии зеленые;

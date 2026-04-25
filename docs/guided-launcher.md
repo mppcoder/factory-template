@@ -1,4 +1,4 @@
-# Guided launcher
+# Guided launcher / управляемый launcher
 
 Единый beginner-first вход:
 
@@ -34,7 +34,7 @@ python3 template-repo/scripts/factory-launcher.py \
 python3 template-repo/scripts/factory-launcher.py --mode greenfield --project-name "My First Service" --project-slug my-first-service --route-only
 ```
 
-## Brownfield start
+## Brownfield start / старт brownfield
 
 ```bash
 python3 template-repo/scripts/factory-launcher.py \
@@ -70,7 +70,7 @@ python3 template-repo/scripts/factory-launcher.py --mode continue --feature-id f
 python3 template-repo/scripts/factory-launcher.py --mode continue --route-only
 ```
 
-## Fallback commands
+## Fallback commands / fallback-команды
 
 Launcher не заменяет старые scripts. Эти команды остаются прямыми fallback-путями:
 

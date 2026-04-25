@@ -10,10 +10,11 @@ bug-033-repo-wide-english-human-layer-residue
 Да.
 
 ## Предлагаемое правило
-- Добавить отдельный language audit validator с allowlist для technical literals и archival paths.
-- В quick verify проверять актуальный source-facing слой.
-- Для historical artifacts завести отдельный cleanup task или documented exception.
+- Добавлен отдельный language audit validator с allowlist для technical literals и archival paths.
+- В quick verify проверяется актуальный source-facing слой.
+- Historical artifacts переведены в documented archival exception, если они являются evidence/legacy records, а не active source-of-truth.
 
 ## Проверка
 - Repo-wide `rg` по английским headings/prose.
 - Focused validation для current `.chatgpt`, scenario-pack, template docs, generated guidance.
+- `python3 template-repo/scripts/validate-human-language-layer.py .` должен давать `active findings: 0`.

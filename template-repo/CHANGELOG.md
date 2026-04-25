@@ -16,7 +16,7 @@
 - live catalog unavailable mode теперь деградирует в warning без automatic mapping promotion; strict mode остается opt-in
 - зафиксирован и исправлен `bug-031`: closeout guidance и validators теперь запрещают типовые англоязычные человекочитаемые headings в финальном closeout
 - зафиксирован и исправлен `bug-032`: `.chatgpt/codex-input.md` и normalized handoff теперь проходят language-contract validation для upstream ChatGPT handoff
-- зафиксирован `bug-033`: repo-wide audit выявил остаточный английский human-readable слой; свежие template docs и generator note частично очищены, historical cleanup вынесен отдельно
+- исправлен `bug-033`: active source-facing человекочитаемый слой очищен от английских headings, documented archival exceptions закреплены отдельным policy artifact, language validator подключен к quick verify
 
 ## [2.4.4] - 2026-04-22
 ### Добавлено

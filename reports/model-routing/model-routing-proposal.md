@@ -46,7 +46,7 @@
 ## Нужен ручной review
 true
 
-## Findings JSON
+## Findings JSON / данные findings
 ```json
 {
   "missing_configured_models": [],

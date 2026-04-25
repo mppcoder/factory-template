@@ -1,10 +1,10 @@
-# Release Note Template
+# Шаблон release note
 
 Этот файл больше не является опубликованным release notes source.
 Канонические notes для текущего релиза находятся в `RELEASE_NOTES.md`.
 Используйте этот файл только как черновой шаблон для подготовки следующего релиза.
 
-## Draft Fields
+## Draft fields / поля черновика
 
 - Версия: `X.Y.Z`
 - Дата: `YYYY-MM-DD`

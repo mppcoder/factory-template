@@ -1,4 +1,4 @@
-# Project Knowledge: Project
+# Project Knowledge: Project / проект
 
 ## 1. Что это за проект
 

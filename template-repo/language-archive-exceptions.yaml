@@ -1,0 +1,48 @@
+language_policy:
+  primary_human_language: "ru"
+  technical_literals_allowed:
+    - file paths
+    - command names
+    - YAML/JSON keys
+    - model ids
+    - product names
+    - established repo terms such as repo-first, handoff, routing, validator, release, preview, apply
+  active_source_rule: "Актуальный source-facing человекочитаемый слой должен быть на русском; английский допустим только как technical literal."
+  archive_rule: "Исторические evidence/reports/work artifacts не переписываются задним числом, но должны быть явно перечислены как archival exception."
+
+archival_exceptions:
+  - path: "reports/bugs/"
+    reason: "исторический defect evidence; переводить только новые или активно редактируемые отчеты"
+  - path: "reports/factory-feedback/"
+    reason: "исторический feedback evidence; переводить только новые или активно редактируемые записи"
+  - path: "work/completed/"
+    reason: "закрытые change records; сохраняют исходный evidence text"
+  - path: "working-project-examples/"
+    reason: "fixture/evidence контур для generated projects"
+  - path: "meta-template-project/"
+    reason: "исторический meta/reference слой вне активного runtime source"
+  - path: "optional-domain-packs/"
+    reason: "optional/reference контур, не daily source-facing слой"
+  - path: "factory_template_only_pack/"
+    reason: "legacy incoming/export pack; source-of-truth теперь в repo files"
+  - path: "bootstrap/"
+    reason: "старые operator/bootstrap notes; активный путь описан в docs и scenario-pack"
+  - path: "CONTROLLED_FIXES_AUDIT_2026-04-19.md"
+    reason: "historical controlled-fixes audit evidence"
+  - path: "PATCH_NOTES_codex_dogfood_p1.md"
+    reason: "legacy patch note evidence"
+  - path: "onboarding-smoke/ACCEPTANCE_REPORT.md"
+    reason: "generated smoke evidence"
+
+generated_or_technical_exclusions:
+  - ".git/"
+  - "_artifacts/"
+  - "_sources-export/"
+  - ".factory-runtime/"
+  - ".smoke-test/"
+  - ".matrix-test/"
+  - ".dogfood-bootstrap/"
+  - "onboarding-smoke/.tmp-run/"
+  - "node_modules/"
+  - "__pycache__/"
+  - ".pytest_cache/"

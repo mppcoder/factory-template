@@ -21,7 +21,7 @@
 - первый substantive ответ Codex по direct task должен явно показать self-handoff block до remediation.
 - если после manual UI apply или strict launch виден sticky last-used state, завершите текущую сессию, откройте новую и при необходимости выполните launcher еще раз, а затем сверьте model с `codex debug models`.
 
-## Model availability auto-check
+## Model availability auto-check / авто-проверка доступности моделей
 
 Repo-configured mapping живет в `codex-model-routing.yaml`: `task_class_routing` выбирает profile, `profile_routes` выбирает model/reasoning/plan-mode reasoning. Live Codex catalog не является тем же самым: его нужно проверять командой `python3 scripts/check-codex-model-catalog.py .`, которая вызывает `codex debug models`, когда CLI доступен.
 
@@ -48,7 +48,7 @@ Repo-configured mapping живет в `codex-model-routing.yaml`: `task_class_ro
 - загрузка архивов в `/projects/<project-root>/_incoming/`;
 - ввод секретов и работа с внешними UI.
 
-## Canonical VPS layout
+## Canonical VPS layout / каноническая VPS layout
 - `/projects` содержит только project roots;
 - `_incoming` допускается только как подпапка проекта: `/projects/<project-root>/_incoming/`;
 - brownfield temporary, intermediate и reconstructed repos нельзя раскладывать плоско рядом в `/projects`.

@@ -1,8 +1,8 @@
-# Repo-first scenario rule for Codex
+# Repo-first правило сценариев для Codex
 
 Работай строго repo-first.
 
-## Scenario path setting
+## Настройка пути сценариев
 Используй единую настройку:
 
 `SCENARIO_PACK_PATH=template-repo/scenario-pack`
@@ -18,14 +18,14 @@
 4. Если router отправляет в другие repo-файлы, сначала прочитай их, затем продолжай работу.
 5. Не начинай реализацию до прохождения этого шага.
 
-## Что фиксировать в первом substantive ответе
-- selected project profile
-- selected scenario
-- current pipeline stage
-- artifacts to update
-- handoff allowed
+## Что фиксировать в первом содержательном ответе
+- выбранный профиль проекта;
+- выбранный сценарий;
+- текущий этап pipeline;
+- артефакты для обновления;
+- разрешен ли handoff.
 
-## Routing rule
+## Правило маршрутизации
 Всегда разделяй:
 - advisory/policy layer;
 - executable routing layer.
@@ -34,10 +34,10 @@
 
 Надёжная единица маршрутизации — только новый task launch.
 
-## Direct task rule
+## Правило прямой задачи
 Если задача пришла без внешнего handoff, сначала сделай self-handoff по repo rules, а уже потом переходи к remediation / implementation.
 
-## Handoff rule
+## Правило handoff
 Если handoff уже допустим и задача достаточно определена, выдавай один цельный inline handoff block для copy-paste.
 
 ## Запрещено

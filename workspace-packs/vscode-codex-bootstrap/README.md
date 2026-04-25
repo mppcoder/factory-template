@@ -1,4 +1,4 @@
-# Workspace pack: VS Code + Codex bootstrap
+# Workspace pack: VS Code + Codex bootstrap / рабочий bootstrap
 
 Этот пакет нужен для старта из одного окна VS Code по схеме:
 - сначала один bootstrap hub;
@@ -18,7 +18,7 @@
 5. После старта работ открывать отдельные окна для `factory-template` и для нужных project roots.
 6. Если появляется reconstructed repo, он должен жить внутри соответствующего project root, а не соседом верхнего уровня в `/projects`.
 
-## Canonical VPS layout
+## Canonical VPS layout / каноническая VPS layout
 - `/projects` содержит только project roots;
 - `_incoming` допускается только как `/projects/<project-root>/_incoming/`;
 - brownfield temporary, intermediate и reconstructed repo допускаются только внутри своего project root.

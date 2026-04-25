@@ -1,6 +1,6 @@
 # Task pack для Codex
 
-## Change ID
+## Change ID / идентификатор изменения
 <!-- Укажите change.id -->
 
 ## Заголовок
@@ -12,53 +12,53 @@
 ## Режим выполнения
 <!-- manual / hybrid / codex-led -->
 
-## Launch source
+## Launch source / источник запуска
 <!-- chatgpt-handoff / direct-task -->
 
-## Task class
+## Task class / класс задачи
 <!-- quick / build / deep / review -->
 
-## Selected profile
+## Selected profile / выбранный профиль
 <!-- quick / build / deep / review -->
 
-## Selected model
+## Selected model / выбранная модель
 <!-- например gpt-5.4 -->
 
-## Selected reasoning effort
+## Selected reasoning effort / выбранный reasoning effort
 <!-- low / medium / high -->
 
-## Selected plan mode reasoning effort
+## Selected plan mode reasoning effort / reasoning effort для plan mode
 <!-- low / medium / high / xhigh -->
 
-## Model catalog status
+## Model catalog status / статус model catalog
 <!-- repo-configured / available / unavailable; live validation comes from codex debug models -->
 
-## Apply mode
+## Apply mode / режим применения
 <!-- manual-ui -->
 
-## Strict launch mode
+## Strict launch mode / строгий режим запуска
 <!-- optional -->
 
-## Manual UI default
+## Manual UI default / ручной UI по умолчанию
 <!-- new chat/window, manual picker selection, then paste handoff -->
 
-## Optional strict launch command
+## Optional strict launch command / опциональная strict launch command
 <!-- launch command only when needed for strict routing -->
 
-## Project profile
+## Project profile / профиль проекта
 <!-- из .chatgpt/project-profile.yaml -->
 
-## Selected scenario
+## Selected scenario / выбранный сценарий
 <!-- активный сценарий -->
 
-## Pipeline stage
+## Pipeline stage / этап pipeline
 <!-- текущий этап -->
 
-## Handoff allowed
+## Handoff allowed / handoff разрешен
 <!-- yes/no + policy -->
 
-## Defect capture path
+## Defect capture path / путь фиксации дефекта
 <!-- defect path или not-required -->
 
-## Handoff input
+## Handoff input / входной handoff
 <!-- Сведите сюда ключевой handoff input. Человекочитаемый текст должен быть на русском; technical literal values можно не переводить. -->

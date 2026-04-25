@@ -21,6 +21,7 @@ run_quick() {
   run_step "validate-operator-env-production-example" python3 "$ROOT/template-repo/scripts/validate-operator-env.py" "$ROOT" --env-file "$ROOT/deploy/.env.example" --preset production --allow-example-placeholders
   run_step "validate-spec-traceability" python3 "$ROOT/template-repo/scripts/validate-spec-traceability.py" "$ROOT"
   run_step "validate-release-scorecard" python3 "$ROOT/template-repo/scripts/validate-release-scorecard.py" "$ROOT"
+  run_step "validate-human-language-layer" python3 "$ROOT/template-repo/scripts/validate-human-language-layer.py" "$ROOT"
   run_step "PHASE_DETECTION_TEST" bash "$ROOT/PHASE_DETECTION_TEST.sh"
   run_step "VALIDATE_RELEASE_DECISION" bash "$ROOT/VALIDATE_RELEASE_DECISION.sh"
   run_step "VALIDATE_RELEASE_NOTES_SOURCE" bash "$ROOT/VALIDATE_RELEASE_NOTES_SOURCE.sh"

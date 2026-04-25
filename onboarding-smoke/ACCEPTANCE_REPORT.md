@@ -1,6 +1,6 @@
 # Onboarding Smoke Acceptance
 
-- Run timestamp (UTC): `2026-04-25T18:35:55Z`
+- Run timestamp (UTC): `2026-04-25T19:07:28Z`
 - Runner: `onboarding-smoke/run-novice-e2e.sh`
 - Root: `/projects/factory-template`
 

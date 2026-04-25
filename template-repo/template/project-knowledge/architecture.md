@@ -1,4 +1,4 @@
-# Project Knowledge: Architecture
+# Project Knowledge: Architecture / архитектура
 
 ## 1. Системный контекст
 

@@ -1,4 +1,4 @@
-# Resumable feature planning
+# Resumable feature planning / возобновляемое планирование feature
 
 Этот поток помогает пройти путь от сырой идеи до понятного списка задач без потери контекста.
 
