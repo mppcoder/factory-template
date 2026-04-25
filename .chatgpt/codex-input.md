@@ -1,44 +1,41 @@
-task_class: deep
-selected_profile: deep
+task_class: build
+selected_profile: build
 project_profile: factory-template
-selected_scenario: 15-handoff-to-codex.md -> implementation/remediation
+selected_scenario: 15-handoff-to-codex.md -> 14-docs-normalization.md -> implementation/remediation
 pipeline_stage: implementation
 handoff_allowed: yes
-defect_capture_path: not-required-by-text-signal; use reports/bugs/YYYY-MM-DD-production-operator-preset.md only for incidental/regression evidence
+defect_capture_path: not-required-by-text-signal; use reports/bugs/YYYY-MM-DD-skill-meta-qa-loop.md only for incidental/regression evidence
 artifacts_to_update:
-  - deploy/compose.yaml
-  - deploy/compose.production.yaml
-  - deploy/.env.example
-  - deploy/presets/app-db.yaml
-  - deploy/presets/reverse-proxy.yaml
-  - template-repo/scripts/deploy-dry-run.sh
-  - template-repo/scripts/deploy-local-vps.sh
-  - template-repo/scripts/operator-dashboard.py
-  - template-repo/scripts/validate-operator-env.py
-  - docs/deploy-on-vps.md
-  - docs/operator-next-step.md
-  - template-repo/scripts/verify-all.sh
+  - template-repo/skills/skill-master-lite/SKILL.md
+  - template-repo/skills/skill-tester-lite/SKILL.md
+  - template-repo/skills/skill-tester-lite/references/test-design-guide.md
+  - template-repo/skills/skill-tester-lite/references/report-template.md
+  - docs/skills-quality-loop.md
+  - README.md
 
-HANDOFF: FT-2.5.4-production-operator-presets
+HANDOFF: FT-2.5.6-skill-meta-qa
 
 Objective:
-Усилить operator surface до production-ready baseline для типовых single-VPS проектов, не ломая минимальный starter profile.
+Добавить в factory-template облегчённый meta-QA цикл для skills и prompt-like artifacts:
+создал -> протестировал -> улучшил trigger/usefulness.
 
 Scope:
-- Добавить optional presets: app+db, reverse proxy/TLS, backup hooks, health checks.
-- Улучшить env validation и operator diagnostics.
-- Добавить безопасный remote-VPS readiness checklist.
-- Обновить dashboard так, чтобы он понимал preset profile и показывал targeted recommendations.
+- Адаптировать идеи skill-master/skill-tester под нужды factory-template.
+- Не переносить весь comparison repo; собрать только минимально полезный контур.
+- Сделать это опциональным advanced mode, не обязательным слоем для новичка.
 
 Acceptance criteria:
-- baseline starter profile остаётся рабочим
-- optional profiles документированы и валидируются dry-run path
-- dashboard различает starter profile и production preset
-- operator docs покрывают secrets, backups, health checks, rollback path
-- verify-all / matrix test включают минимум один preset-oriented сценарий
+- существует documented optional workflow для тестирования skills/prompt artifacts
+- workflow отделён от beginner default path
+- есть минимум один пример использования на артефакте factory-template
+- docs объясняют value простым языком: "это для улучшения шаблона, а не обязательный шаг новичка"
+
+Model / reasoning effort suggestion:
+GPT-5.2 Thinking
+Reasoning effort: medium-high
 
 Required roles / skills:
-- DevOps / Docker Compose
-- Bash/Python scripting
-- security review
+- prompt / skill design
 - documentation
+- evaluation design
+- unspecified: если нужен отдельный evaluator/benchmark owner

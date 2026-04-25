@@ -1,35 +1,38 @@
 # Отчет о завершении
 
 ## Что было запрошено
-- Убрать из completion-layer ложное ожидание, что `factory-template ChatGPT Project` нужно обновлять по умолчанию, хотя instruction contract в этом change не менялся.
+- Добавить в `factory-template` облегченный meta-QA цикл для skills и prompt-like artifacts:
+  `создал -> протестировал -> улучшил trigger/usefulness`.
+- Не переносить внешний comparison repo целиком.
+- Оставить workflow optional advanced mode, не частью beginner default path.
 
 ## Что реально сделано
-- Зафиксирован reusable defect `bug-021` и оформлен factory feedback.
-- Уточнены source-of-truth scenario rules для completion package и closeout.
-- Generator и validator обновлены так, чтобы для чистого repo-first режима contour `factory-template ChatGPT Project` по умолчанию трактовался как `нет`.
-- Current `.chatgpt` completion artifacts пересобраны под новую формулировку.
+- Добавлен `skill-master-lite` для создания и улучшения небольших skills/prompt-like artifacts.
+- Добавлен `skill-tester-lite` для lightweight trigger/usefulness QA.
+- Добавлены references для дизайна тест-кейсов и короткого QA report.
+- Добавлен `docs/skills-quality-loop.md` с простым объяснением ценности и примером на artifact из `factory-template`.
+- README получил короткий раздел `Optional Skills Quality Loop`.
+- Handoff/routing artifacts `.chatgpt/codex-input.md`, `.chatgpt/task-launch.yaml` и `.chatgpt/normalized-codex-handoff.md` нормализованы под `FT-2.5.6-skill-meta-qa`.
 
 ## Какие артефакты обновлены
-- `template-repo/scenario-pack/00-master-router.md`
-- `template-repo/scenario-pack/15-handoff-to-codex.md`
-- `template-repo/scenario-pack/16-done-closeout.md`
-- `template-repo/scripts/create-codex-task-pack.py`
-- `template-repo/scripts/validate-codex-task-pack.py`
-- `docs/template-architecture-and-event-workflows.md`
+- `template-repo/skills/skill-master-lite/SKILL.md`
+- `template-repo/skills/skill-tester-lite/SKILL.md`
+- `template-repo/skills/skill-tester-lite/references/test-design-guide.md`
+- `template-repo/skills/skill-tester-lite/references/report-template.md`
+- `docs/skills-quality-loop.md`
+- `README.md`
 - `.chatgpt/codex-input.md`
-- `.chatgpt/codex-context.md`
-- `.chatgpt/codex-task-pack.md`
-- `.chatgpt/boundary-actions.md`
-- `.chatgpt/done-checklist.md`
+- `.chatgpt/task-launch.yaml`
+- `.chatgpt/normalized-codex-handoff.md`
 - `.chatgpt/verification-report.md`
 - `.chatgpt/done-report.md`
 - `CURRENT_FUNCTIONAL_STATE.md`
-- `reports/bugs/bug-021-repo-first-completion-package-overstates-factory-chatgpt-update.md`
-- `reports/factory-feedback/feedback-021-repo-first-completion-package-overstates-factory-chatgpt-update.md`
-- `work/completed/chg-20260423-021.md`
+- `work/completed/chg-20260425-skill-meta-qa.md`
 
 ## Что осталось вне объема
-- Реальные future cases, где instruction contract проекта шаблона действительно будет меняться вместе с repo/path/entrypoint.
+- Полноценный evaluator/benchmark harness.
+- Обязательное включение quality loop в novice onboarding.
+- Перенос внешнего comparison repo.
 
 ## Итог закрытия
-- Completion package больше не подталкивает к обновлению `factory-template ChatGPT Project` там, где instruction contract остается прежним и source-of-truth уже стабильно живет в repo.
+- Optional skills/prompt-artifact quality loop добавлен и отделен от beginner default path.

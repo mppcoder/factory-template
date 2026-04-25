@@ -142,6 +142,23 @@ python3 template-repo/scripts/validate-codex-routing.py <working-project>
 Проверка routing должна делаться только на новой задаче.
 Нельзя считать старую уже открытую сессию Codex надежной единицей автоматической маршрутизации.
 
+## Optional Skills Quality Loop
+
+Для развития самого `factory-template` доступен облегченный advanced-контур для skills и prompt-like artifacts:
+
+```text
+создал -> протестировал -> улучшил trigger/usefulness
+```
+
+Он нужен, когда команда улучшает reusable template artifacts: `template-repo/skills/*`, scenario-pack, handoff/runbook/policy тексты или task templates.
+Это не beginner default path и не обязательный шаг для первого проекта.
+
+Основные артефакты:
+
+- `template-repo/skills/skill-master-lite/SKILL.md` — создать или улучшить компактный skill/prompt artifact;
+- `template-repo/skills/skill-tester-lite/SKILL.md` — проверить trigger, usefulness и границы применения;
+- `docs/skills-quality-loop.md` — короткий operator guide с примером на artifact из `factory-template`.
+
 `VALIDATE_FACTORY_TEMPLATE_OPS.sh` теперь проверяет не только структуру `sources-pack-*`, но и semantic profile repo-артефактов, если они используются как reference/export layer:
 
 - `sources-pack-core-20` обязан содержать сценарное ядро, runbook layer и policy presets;
