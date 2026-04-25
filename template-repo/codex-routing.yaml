@@ -1,21 +1,21 @@
 routing_contract:
   launch_unit: "new-task-launch"
   launch_boundary_rule: "Выбор модели и reasoning mode считается надежным только на новом запуске Codex для новой задачи."
-  interactive_default_rule: "Для интерактивной работы в VS Code Codex extension основной user-facing path: открыть новое окно/чат Codex, вручную выбрать model/reasoning в picker и затем вставить handoff."
-  executable_switch_rule: "Строго воспроизводимый executable switch в live Codex для этого repo: явный новый task launch через launcher и selected_profile."
-  strict_launch_rule: "Launcher-first path остается optional strict mode для automation, reproducibility, shell-first и scripted launch."
-  live_session_fallback_rule: "Уже открытая live session не является надежным механизмом автопереключения profile/model/reasoning и допустима только как non-canonical fallback."
+  interactive_default_rule: "Для интерактивной работы в VS Code Codex extension основной пользовательский путь: открыть новое окно/чат Codex, вручную выбрать model/reasoning в picker и затем вставить handoff."
+  executable_switch_rule: "Строго воспроизводимое executable-переключение в live Codex для этого repo: явный новый task launch через launcher и selected_profile."
+  strict_launch_rule: "Launcher-first path остается опциональным строгим режимом для автоматизации, воспроизводимости, запуска из shell и scripted launch."
+  live_session_fallback_rule: "Уже открытая live session не является надежным механизмом автопереключения profile/model/reasoning и допустима только как неканонический fallback."
   model_expectation_rule: "selected_model и selected_reasoning_effort фиксируют ожидаемую конфигурацию выбранного executable profile; advisory handoff text сам по себе ничего не переключает."
   advisory_layers:
     - "AGENTS.md / AGENT.md"
-    - "ChatGPT Project Instructions"
+    - "ChatGPT Project instructions"
     - "scenario-pack"
     - ".chatgpt docs и handoff guidance"
   executable_layers:
     - "scripts/resolve-codex-task-route.py"
     - "scripts/bootstrap-codex-task.py"
     - "scripts/launch-codex-task.sh"
-    - ".codex/config.toml named profiles"
+    - ".codex/config.toml с именованными profiles"
   launch_sources:
     - "chatgpt-handoff"
     - "direct-task"
@@ -37,20 +37,20 @@ routing_contract:
     - "codex_profile_command"
 
 validation:
-  live_catalog_check: "Проверять model IDs и reasoning support против `codex debug models`; если live catalog недоступен, не обещать, что mapping гарантированно исполним."
+  live_catalog_check: "Проверять model IDs и поддержку reasoning через `codex debug models`; если live catalog недоступен, не обещать, что mapping гарантированно исполним."
   apply_mode_default: "manual-ui"
   strict_launch_mode_default: "optional"
   strict_launch_use_cases:
-    - "automation"
-    - "reproducibility"
-    - "shell-first"
+    - "автоматизация"
+    - "воспроизводимость"
+    - "запуск из shell"
     - "scripted launch"
   troubleshooting:
     - "Если вы работаете через VS Code Codex extension интерактивно, используйте новый чат/окно, вручную выставьте selected_model и selected_reasoning_effort в picker, а затем вставьте handoff."
     - "Новый чат + вставка handoff и новый task launch через executable launcher — не одно и то же; не выдавайте manual UI apply за auto-switch."
-    - "Если handoff вставлен в уже открытую или случайную Codex chat-сессию без ручной проверки picker, это non-canonical path: route может остаться stale."
-    - "Если нужна строгая воспроизводимость, automation или shell-first запуск, используйте optional strict launch_command."
-    - "Если после launch или manual UI apply виден sticky last-used profile/model/reasoning, закройте текущую сессию, откройте новую и при необходимости выполните launch_command, затем проверьте named profile в local Codex config."
+    - "Если handoff вставлен в уже открытую или случайную Codex chat-сессию без ручной проверки picker, это неканонический путь: route может остаться устаревшим."
+    - "Если нужна строгая воспроизводимость, автоматизация или запуск из shell, используйте optional strict launch_command."
+    - "Если после launch или manual UI apply виден sticky last-used profile/model/reasoning, закройте текущую сессию, откройте новую и при необходимости выполните launch_command, затем проверьте именованный profile в local Codex config."
     - "Если selected_model отсутствует в live catalog, обновите codex-routing.yaml или local profile mapping, прежде чем обещать этот model ID пользователю."
 
 profiles:
@@ -58,7 +58,7 @@ profiles:
     model: "gpt-5.4-mini"
     reasoning_effort: "low"
     plan_mode_reasoning_effort: "medium"
-    purpose: "Быстрые docs/triage/search и другие low-risk short tasks."
+    purpose: "Быстрые docs/triage/search и другие малорисковые короткие задачи."
     expected_use_cases:
       - "docs"
       - "triage"
@@ -69,7 +69,7 @@ profiles:
     model: "gpt-5.5"
     reasoning_effort: "medium"
     plan_mode_reasoning_effort: "medium"
-    purpose: "Обычная реализация feature/fix/change через актуальную recommended Codex model."
+    purpose: "Обычная реализация feature/fix/change через актуальную рекомендуемую Codex model."
     expected_use_cases:
       - "feature"
       - "fix"

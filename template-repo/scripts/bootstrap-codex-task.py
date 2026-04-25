@@ -15,7 +15,7 @@ from codex_task_router import (
 
 
 def parse_args() -> argparse.Namespace:
-    parser = argparse.ArgumentParser(description="Bootstrap normalized Codex handoff and launch log.")
+    parser = argparse.ArgumentParser(description="Собрать нормализованный Codex handoff и launch log.")
     parser.add_argument("root", nargs="?", default=".", help="Repo root")
     parser.add_argument("--task-file", help="Path to task file")
     parser.add_argument("--task-text", help="Inline task text")
@@ -35,12 +35,12 @@ def main() -> int:
     launch_input_path = root / record["launch"]["launch_artifact_path"]
     write_markdown(launch_input_path, task_text.strip() or "-")
     handoff_path = root / ".chatgpt" / "normalized-codex-handoff.md"
-    write_markdown(handoff_path, render_normalized_handoff(record, task_text, "Normalized Codex Handoff"))
+    write_markdown(handoff_path, render_normalized_handoff(record, task_text, "Нормализованный handoff для Codex"))
 
     launch = record["launch"]
     if args.launch_source == "direct-task":
         self_handoff_path = root / ".chatgpt" / "direct-task-self-handoff.md"
-        write_markdown(self_handoff_path, render_normalized_handoff(record, task_text, "Direct Task Self-Handoff"))
+        write_markdown(self_handoff_path, render_normalized_handoff(record, task_text, "Self-handoff для прямой задачи"))
         direct_response_path = root / ".chatgpt" / "direct-task-response.md"
         write_markdown(direct_response_path, render_direct_task_response(record, task_text))
         record["launch"]["direct_self_handoff_completed"] = True

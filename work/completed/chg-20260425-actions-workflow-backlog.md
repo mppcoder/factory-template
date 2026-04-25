@@ -1,19 +1,20 @@
-# Completed change: GitHub Actions workflow dependency backlog
+# Завершенное изменение: очередь обновлений GitHub Actions workflow
 
-## Summary
-- Consolidated the stale Dependabot workflow action backlog into one human-owned remediation branch.
-- Updated `.github/workflows/ci.yml` and `.github/workflows/release.yml` coherently:
+## Кратко
+- Устаревшая очередь Dependabot PR по workflow actions сведена в один remediation branch, принадлежащий этой задаче.
+- `.github/workflows/ci.yml` и `.github/workflows/release.yml` обновлены согласованно:
   - `actions/checkout@v6`
   - `actions/setup-python@v6`
   - `actions/upload-artifact@v7`
-- Classified PR #1, PR #2, and PR #3 as stale PR backlog over an already-fixed verify baseline, not three independent merge tasks.
+- PR #1, PR #2 и PR #3 классифицированы как устаревшая очередь поверх уже исправленного verify baseline, а не как три независимые merge-задачи.
 
-## Verification
-- `bash template-repo/scripts/verify-all.sh ci` passed before remediation on current main.
-- `bash EXAMPLES_TEST.sh` passed, including `validate-versioning-layer.py`.
-- Release bundle dry-run path produced a non-empty zip artifact.
-- `bash template-repo/scripts/verify-all.sh ci` passed after remediation.
+## Проверка
+- `bash template-repo/scripts/verify-all.sh ci` прошел до remediation на текущем `main`.
+- `bash EXAMPLES_TEST.sh` прошел, включая `validate-versioning-layer.py`.
+- Dry-run путь release bundle создал непустой zip artifact.
+- `bash template-repo/scripts/verify-all.sh ci` прошел после remediation.
 
-## Follow-up
-- Publish one consolidated PR.
-- Close or supersede PR #1, PR #2, and PR #3 after the consolidated PR is available.
+## Последующее закрытие
+- Опубликован один consolidated PR.
+- PR #1, PR #2 и PR #3 закрыты как superseded.
+- Сводный PR #4 merged в `main`.

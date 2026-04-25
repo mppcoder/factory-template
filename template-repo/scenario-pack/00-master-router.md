@@ -9,7 +9,7 @@
 - какие артефакты нужно обновить;
 - разрешен ли handoff в Codex.
 
-## Routing contract
+## Контракт маршрутизации
 Всегда разделяй:
 - advisory/policy layer: `AGENTS`, ChatGPT Project instructions, scenario-pack, runbooks, `.chatgpt` guidance;
 - executable routing layer: named profiles в `.codex/config.toml` и task launcher/router scripts.
@@ -24,10 +24,10 @@
 Отдельно фиксируй, что "новый чат + вставка handoff" и "new task launch через executable launcher" — не одно и то же.
 Нельзя выдавать manual UI apply за авто-переключение profile/model/reasoning внутри уже открытой live session.
 
-## Inline handoff rule
+## Правило inline handoff
 Если handoff в Codex уже разрешен и задача достаточно определена, выдай готовый Codex handoff в том же ответе. Не останавливайся на одной аналитике.
 
-Такой handoff нужно выдавать только одним цельным блоком для copy-paste в Codex. Нельзя заменять его ссылкой на файл, несколькими разрозненными блоками или набором "прочитай `.chatgpt/codex-*` файлы и собери сам".
+Такой handoff нужно выдавать только одним цельным блоком для вставки в Codex. Нельзя заменять его ссылкой на файл, несколькими разрозненными блоками или набором "прочитай `.chatgpt/codex-*` файлы и собери сам".
 
 Если handoff для change-class = `required`, нельзя завершать ответ только анализом, summary или списком размышлений без готового handoff.
 
@@ -39,7 +39,7 @@
 - задача реально неоднозначна;
 - нужен выбор архитектурной развилки.
 
-## Internal vs External Follow-up Rule
+## Правило внутреннего и внешнего follow-up
 Если после remediation, verify, commit/push или closeout-stage остаются внутренние Codex-eligible задачи внутри repo, нельзя завершать ответ только инструкцией пользователю.
 
 Если verify green, `origin` настроен и canonical verified sync технически доступен, commit/push считаются внутренней работой Codex, а не отдельным ручным шагом пользователя.
@@ -55,12 +55,14 @@
 
 Если remaining work относится к такому internal follow-up, выдай inline Codex handoff в том же ответе.
 
-User-only closeout допустим только если remaining next step действительно внешний:
-- GitHub UI;
+User-only closeout допустим только если remaining next step действительно внешний и Codex не может выполнить его через доступные инструменты:
+- GitHub UI только при реальном блокере: нет авторизации, нет прав на действие, требуется обязательный человеческий review/approval, checks red/pending, конфликт, неясная merge strategy или действие является release/security approval;
 - ChatGPT Project UI;
 - ручная загрузка архива;
 - ввод секрета;
 - другой manual step вне IDE/SSH.
+
+Если GitHub PR создан текущей задачей или явно входит в ее closeout, `gh`/GitHub connector доступен, checks green, PR mergeable и нет required human approval, перевод PR из draft, merge, удаление branch и синхронизация local main являются внутренней работой Codex, а не пользовательским шагом.
 
 Если есть и внутренние, и внешние шаги, сначала выдай inline Codex handoff на внутреннюю часть, а затем отдельно заверши ответ блоком `## Инструкция пользователю` только для внешней границы.
 
@@ -105,7 +107,7 @@ User-only closeout допустим только если remaining next step д
 - продолжение в текущем live chat допустимо только как явно помеченная non-canonical fallback-опция с прямой оговоркой, что уже открытая сессия не является надежным механизмом автопереключения profile/model/reasoning;
 - если для бага нужен deep research, вместо слабой in-session remediation попытки выдай ChatGPT-ready research bug report / prompt.
 
-## Direct Task Rule
+## Правило прямой задачи
 Если Codex получает прямую задачу вне ChatGPT Project, сначала требуется self-handoff по тем же полям и gate'ам, что и у внешнего handoff:
 - classification;
 - selected project profile;

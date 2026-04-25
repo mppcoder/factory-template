@@ -411,88 +411,88 @@ def render_normalized_handoff(record: dict, task_text: str, title: str) -> str:
     troubleshooting_lines = "\n".join(f"- {item}" for item in troubleshooting) if troubleshooting else "- none"
     return f"""# {title}
 
-## Launch source
+## Источник запуска
 {launch.get('launch_source', '')}
 
-## Task class
+## Класс задачи
 {launch.get('task_class', '')}
 
-## Task class evidence
+## Evidence для класса задачи
 {reason_lines}
 
-## Selected profile
+## Выбранный профиль
 {launch.get('selected_profile', '')}
 
-## Selected model
+## Выбранная модель
 {launch.get('selected_model', '')}
 
-## Selected reasoning effort
+## Выбранное reasoning effort
 {launch.get('selected_reasoning_effort', '')}
 
-## Selected plan mode reasoning
+## Выбранное reasoning effort для plan mode
 {launch.get('selected_plan_mode_reasoning_effort', '')}
 
-## Apply mode
+## Режим применения
 {launch.get('apply_mode', '')}
 
-## Manual UI apply
+## Ручное применение через UI
 {manual_ui_lines}
 
-## Strict launch mode
+## Строгий режим запуска
 {launch.get('strict_launch_mode', '')}
 
-## Project profile
+## Профиль проекта
 {launch.get('project_profile', '')}
 
-## Selected scenario
+## Выбранный сценарий
 {launch.get('selected_scenario', '')}
 
-## Pipeline stage
+## Этап pipeline
 {launch.get('pipeline_stage', '')}
 
-## Artifacts to update
+## Артефакты для обновления
 {artifacts_lines}
 
-## Handoff allowed
+## Разрешение handoff
 {launch.get('handoff_allowed', '')}
 
-## Defect capture path
+## Маршрут defect-capture
 {launch.get('defect_capture_path', '')}
 
-## Launch boundary rule
+## Правило launch boundary
 {launch.get('launch_boundary_rule', '')}
 
-## Interactive default rule
+## Правило интерактивного режима по умолчанию
 {launch.get('interactive_default_rule', '')}
 
-## Executable switch rule
+## Правило executable switch
 {launch.get('executable_switch_rule', '')}
 
-## Strict launch rule
+## Правило строгого запуска
 {launch.get('strict_launch_rule', '')}
 
-## Live session fallback rule
+## Правило fallback для live session
 {launch.get('live_session_fallback_rule', '')}
 
-## Model expectation rule
+## Правило ожиданий по модели
 {launch.get('model_expectation_rule', '')}
 
-## Launch artifact path
+## Путь launch artifact
 `{launch.get('launch_artifact_path', '')}`
 
-## Optional strict launch command
+## Опциональная команда строгого запуска
 `{launch.get('launch_command', '')}`
 
-## Strict launch use cases
+## Сценарии для строгого запуска
 {strict_launch_lines}
 
-## Direct Codex command behind launcher
+## Прямая команда Codex за launcher
 `{launch.get('codex_profile_command', '')}`
 
-## Troubleshooting
+## Диагностика проблем
 {troubleshooting_lines}
 
-## Task payload
+## Текст задачи
 {task_text.strip() or '-'}"""
 
 
@@ -512,87 +512,87 @@ def render_direct_task_response(record: dict, task_text: str) -> str:
     strict_launch_lines = "\n".join(f"- {item}" for item in strict_launch_use_cases) if strict_launch_use_cases else "- none"
     troubleshooting = launch.get("troubleshooting", [])
     troubleshooting_lines = "\n".join(f"- {item}" for item in troubleshooting) if troubleshooting else "- none"
-    return f"""## Direct Task Self-Handoff
+    return f"""## Self-handoff для прямой задачи
 
-## Classification
+## Классификация
 direct-task
 
-## Selected project profile
+## Выбранный профиль проекта
 {launch.get('project_profile', '')}
 
-## Selected scenario
+## Выбранный сценарий
 {launch.get('selected_scenario', '')}
 
-## Current pipeline stage
+## Текущий этап pipeline
 {launch.get('pipeline_stage', '')}
 
-## Task class
+## Класс задачи
 {launch.get('task_class', '')}
 
-## Selected profile
+## Выбранный профиль
 {launch.get('selected_profile', '')}
 
-## Selected model
+## Выбранная модель
 {launch.get('selected_model', '')}
 
-## Selected reasoning effort
+## Выбранное reasoning effort
 {launch.get('selected_reasoning_effort', '')}
 
-## Apply mode
+## Режим применения
 {launch.get('apply_mode', '')}
 
-## Manual UI apply
+## Ручное применение через UI
 {manual_ui_lines}
 
-## Strict launch mode
+## Строгий режим запуска
 {launch.get('strict_launch_mode', '')}
 
-## Artifacts to update
+## Артефакты для обновления
 {artifacts_lines}
 
-## Handoff allowed
+## Разрешение handoff
 {launch.get('handoff_allowed', '')}
 
-## Defect capture path
+## Маршрут defect-capture
 {launch.get('defect_capture_path', '')}
 
-## Launch source
+## Источник запуска
 {launch.get('launch_source', '')}
 
-## Launch boundary rule
+## Правило launch boundary
 {launch.get('launch_boundary_rule', '')}
 
-## Interactive default rule
+## Правило интерактивного режима по умолчанию
 {launch.get('interactive_default_rule', '')}
 
-## Executable switch rule
+## Правило executable switch
 {launch.get('executable_switch_rule', '')}
 
-## Strict launch rule
+## Правило строгого запуска
 {launch.get('strict_launch_rule', '')}
 
-## Live session fallback rule
+## Правило fallback для live session
 {launch.get('live_session_fallback_rule', '')}
 
-## Model expectation rule
+## Правило ожиданий по модели
 {launch.get('model_expectation_rule', '')}
 
-## Optional strict launch command
+## Опциональная команда строгого запуска
 `{launch.get('launch_command', '')}`
 
-## Strict launch use cases
+## Сценарии для строгого запуска
 {strict_launch_lines}
 
-## Direct Codex command behind launcher
+## Прямая команда Codex за launcher
 `{launch.get('codex_profile_command', '')}`
 
-## Troubleshooting
+## Диагностика проблем
 {troubleshooting_lines}
 
-## Task payload
+## Текст задачи
 {task_text.strip() or '-'}
 
-## Next step
+## Следующий шаг
 Только после этого блока допустимы remediation / implementation / verification."""
 
 

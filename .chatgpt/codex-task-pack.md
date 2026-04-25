@@ -1,6 +1,6 @@
 # Task pack для Codex
 
-## Change ID
+## Идентификатор изменения
 chg-20260423-021
 
 ## Заголовок
@@ -12,112 +12,94 @@ small-fix
 ## Режим выполнения
 codex-led
 
-## Launch source
+## Источник запуска
 chatgpt-handoff
 
-## Task class
+## Класс задачи
 build
 
-## Selected profile
+## Выбранный профиль
 build
 
-## Selected model
-gpt-5.4
+## Выбранная модель
+gpt-5.5
 
-## Selected reasoning effort
+## Выбранное reasoning effort
 medium
 
-## Selected plan mode reasoning
+## Выбранное reasoning effort для plan mode
 medium
 
-## Apply mode
+## Режим применения
 manual-ui
 
-## Strict launch mode
+## Строгий режим запуска
 optional
 
-## Manual UI default
-Для интерактивной работы в VS Code Codex extension откройте новый чат/окно Codex, вручную выберите `selected_model=gpt-5.4` и `selected_reasoning_effort=medium` в picker, затем вставьте handoff.
+## Ручной UI по умолчанию
+Для интерактивной работы в VS Code Codex extension откройте новый чат/окно Codex, вручную выберите `selected_model=gpt-5.5` и `selected_reasoning_effort=medium` в picker, затем вставьте handoff.
 Новый чат + вставка handoff и executable launcher path — не одно и то же.
 Уже открытая live session не является надежным auto-switch механизмом.
 
-## Optional strict launch command
+## Опциональная команда строгого запуска
 ./scripts/launch-codex-task.sh --launch-source chatgpt-handoff --task-file .chatgpt/codex-input.md --execute
 
-## Direct Codex command behind launcher
+## Прямая команда Codex за launcher
 codex --profile build
 
-## Project profile
-factory-template
+## Профиль проекта
+factory-template self-improvement
 
-## Selected scenario
-00-master-router.md
+## Выбранный сценарий
+defect-capture -> remediation -> verify -> closeout
 
-## Pipeline stage
-defect-capture -> classification -> remediation -> verify
+## Этап pipeline
+remediation -> verify -> closeout
 
-## Handoff allowed
+## Разрешение handoff
 yes
 
-## Defect capture path
-reproduce -> evidence -> bug report -> layer classification -> remediation
+## Маршрут defect-capture
+reproduce -> evidence -> bug report -> layer classification -> factory feedback if reusable -> remediation
 
-## Repo Rules Priority
+## Приоритет правил repo
 При исполнении handoff приоритет у правил repo: `AGENTS`, runbook, scenario-pack, policy files и других канонических файлов этого репозитория.
 Общие рабочие инструкции применять только там, где они не конфликтуют с repo rules и старшими системными ограничениями среды.
 
-## Handoff input
-# Входной пакет для Codex
-
-launch_source: chatgpt-handoff
+## Входные данные handoff
 task_class: build
 selected_profile: build
-selected_model: gpt-5.4
-selected_reasoning_effort: medium
-apply_mode: manual-ui
-strict_launch_mode: optional
-project_profile: factory-template
-selected_scenario: 00-master-router.md
-pipeline_stage: defect-capture -> classification -> remediation -> verify
+project_profile: factory-template self-improvement
+selected_scenario: defect-capture -> remediation -> verify -> closeout
+pipeline_stage: remediation -> verify -> closeout
+handoff_allowed: yes
+defect_capture_path: reproduce -> evidence -> bug report -> layer classification -> factory feedback if reusable -> remediation
 artifacts_to_update:
   - template-repo/scenario-pack/00-master-router.md
+  - template-repo/scenario-pack/01-global-rules.md
+  - template-repo/scenario-pack/12-bug-analysis.md
   - template-repo/scenario-pack/15-handoff-to-codex.md
   - template-repo/scenario-pack/16-done-closeout.md
+  - template-repo/scenario-pack/17-direct-task-self-handoff.md
+  - template-repo/codex-routing.yaml
+  - template-repo/scripts/bootstrap-codex-task.py
+  - template-repo/scripts/codex_task_router.py
   - template-repo/scripts/create-codex-task-pack.py
+  - template-repo/scripts/validate-codex-routing.py
   - template-repo/scripts/validate-codex-task-pack.py
-  - docs/template-architecture-and-event-workflows.md
-  - .chatgpt/codex-input.md
-  - .chatgpt/codex-context.md
-  - .chatgpt/codex-task-pack.md
+  - template-repo/scripts/validate-handoff-response-format.py
+  - template-repo/scripts/validate-operator-env.py
   - .chatgpt/verification-report.md
   - .chatgpt/done-report.md
-  - reports/bugs/bug-021-repo-first-completion-package-overstates-factory-chatgpt-update.md
-  - reports/factory-feedback/feedback-021-repo-first-completion-package-overstates-factory-chatgpt-update.md
-handoff_allowed: yes
-defect_capture_path: reproduce -> evidence -> bug report -> layer classification -> remediation
+  - reports/bugs/
+  - reports/factory-feedback/
 
-## Контекст
-- Completion package все еще слишком широко трактует contour `factory-template ChatGPT Project`.
-- Для чистого repo-first режима этот contour тоже должен быть `нет` по умолчанию, если canonical repo/path/entrypoint/instruction text не менялись.
+Задача:
+Исправить два process defects в factory-template:
+1. Codex не должен перекладывать доступный GitHub PR merge на пользователя, если GitHub write path доступен, checks green, PR доступен для merge и нет обязательного человеческого approval или другого blocker.
+2. Человекочитаемые ответы, инструкции, отчеты, closeout и generated guidance должны быть на русском языке; английский допустим только для технических идентификаторов, команд, файлов, ключей конфигурации и literal values.
 
-## Что именно нужно сделать
-- Зафиксировать reusable process defect completion-layer.
-- Переписать source-of-truth rules и generator так, чтобы `Нужно ли обновлять repo-first инструкцию factory-template ChatGPT Project` по умолчанию означало `нет`, если instruction contract не менялся.
-- Оставить `да` только для случаев реального изменения repo/path/entrypoint/instruction text.
-- Пересобрать `.chatgpt` artifacts, проверить validators и довести change до verified sync.
-
-## Какие артефакты являются источником правды
-- `AGENTS.md`
-- `README.md`
-- `template-repo/scenario-pack/00-master-router.md`
-- `template-repo/scenario-pack/15-handoff-to-codex.md`
-- `template-repo/scenario-pack/16-done-closeout.md`
-- `template-repo/scripts/create-codex-task-pack.py`
-- `template-repo/scripts/validate-codex-task-pack.py`
-
-## Что запрещено делать
-- Нельзя трактовать factory-template ChatGPT Project instruction как default contour, если canonical repo/path/entrypoint/instruction text не менялись.
-- Нельзя советовать лишний manual update для Project instructions там, где contract уже остается прежним.
+Нужно пройти defect-capture, внести remediation в repo rules/generators/validators, проверить и закрыть задачу внутри repo.
 
 ## Обязательное правило фиксации дефектов
 Если в ходе анализа, реализации, тестирования, reverse engineering или verification обнаружен дефект, регрессия, расхождение, пропущенный шаг, шаблонный сбой или reusable process failure, его нельзя silently patch.

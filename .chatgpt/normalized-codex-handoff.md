@@ -1,123 +1,104 @@
-# Normalized Codex Handoff
+# Нормализованный handoff для Codex
 
-## Launch source
+## Источник запуска
 direct-task
 
-## Task class
+## Класс задачи
 build
 
-## Task class evidence
-- explicit task class override: build
-- explicit selected_profile override: build
+## Evidence для класса задачи
+- keyword hit: remediation
+- keyword hit: исправ
+- explicit reasoning/model override matched default profile: build
 
-## Selected profile
+## Выбранный профиль
 build
 
-## Selected model
+## Выбранная модель
 gpt-5.5
 
-## Selected reasoning effort
+## Выбранное reasoning effort
 medium
 
-## Selected plan mode reasoning
+## Выбранное reasoning effort для plan mode
 medium
 
-## Apply mode
+## Режим применения
 manual-ui
 
-## Manual UI apply
+## Ручное применение через UI
 - Откройте новый чат/окно Codex в VS Code extension.
 - Вручную выберите model `gpt-5.5` и reasoning `medium` в picker.
 - Только после этого вставьте handoff.
 - Уже открытая live session не считается надежным auto-switch boundary.
 
-## Strict launch mode
+## Строгий режим запуска
 optional
 
-## Project profile
-factory-template
+## Профиль проекта
+unknown-project-profile
 
-## Selected scenario
-17-direct-task-self-handoff.md -> 15-handoff-to-codex.md -> implementation/remediation
+## Выбранный сценарий
+00-master-router.md
 
-## Pipeline stage
-implementation
+## Этап pipeline
+done
 
-## Artifacts to update
-- template-repo/codex-routing.yaml
-- template-repo/scripts/codex_task_router.py
-- template-repo/template/.codex/config.toml
-- workspace-packs/vscode-codex-bootstrap/codex/global-codex-config.example.toml
-- factory_template_only_pack/03-mode-routing-factory-template.md
-- factory_template_only_pack/06-codex-config-factory-template.toml
-- .chatgpt/direct-task-self-handoff.md
-- .chatgpt/direct-task-response.md
-- .chatgpt/task-launch.yaml
+## Артефакты для обновления
+- .chatgpt/codex-input.md
+- .chatgpt/codex-context.md
+- .chatgpt/codex-task-pack.md
+- .chatgpt/verification-report.md
+- .chatgpt/done-report.md
+- reports/bugs/
+- reports/factory-feedback/
 
-## Handoff allowed
-yes
+## Разрешение handoff
+yes (forbidden)
 
-## Defect capture path
-not-required-by-text-signal
+## Маршрут defect-capture
+reproduce -> evidence -> bug report -> layer classification -> factory feedback if reusable -> remediation
 
-## Launch boundary rule
+## Правило launch boundary
 Выбор модели и reasoning mode считается надежным только на новом запуске Codex для новой задачи.
 
-## Interactive default rule
-Для интерактивной работы в VS Code Codex extension основной user-facing path: открыть новое окно/чат Codex, вручную выбрать model/reasoning в picker и затем вставить handoff.
+## Правило интерактивного режима по умолчанию
+Для интерактивной работы в VS Code Codex extension основной пользовательский путь: открыть новое окно/чат Codex, вручную выбрать model/reasoning в picker и затем вставить handoff.
 
-## Executable switch rule
-Строго воспроизводимый executable switch в live Codex для этого repo: явный новый task launch через launcher и selected_profile.
+## Правило executable switch
+Строго воспроизводимое executable-переключение в live Codex для этого repo: явный новый task launch через launcher и selected_profile.
 
-## Strict launch rule
-Launcher-first path остается optional strict mode для automation, reproducibility, shell-first и scripted launch.
+## Правило строгого запуска
+Launcher-first path остается опциональным строгим режимом для автоматизации, воспроизводимости, запуска из shell и scripted launch.
 
-## Live session fallback rule
-Уже открытая live session не является надежным механизмом автопереключения profile/model/reasoning и допустима только как non-canonical fallback.
+## Правило fallback для live session
+Уже открытая live session не является надежным механизмом автопереключения profile/model/reasoning и допустима только как неканонический fallback.
 
-## Model expectation rule
+## Правило ожиданий по модели
 selected_model и selected_reasoning_effort фиксируют ожидаемую конфигурацию выбранного executable profile; advisory handoff text сам по себе ничего не переключает.
 
-## Launch artifact path
+## Путь launch artifact
 `.chatgpt/direct-task-source.md`
 
-## Optional strict launch command
+## Опциональная команда строгого запуска
 `./scripts/launch-codex-task.sh --launch-source direct-task --task-file .chatgpt/direct-task-source.md --execute`
 
-## Strict launch use cases
-- automation
-- reproducibility
-- shell-first
+## Сценарии для строгого запуска
+- автоматизация
+- воспроизводимость
+- запуск из shell
 - scripted launch
 
-## Direct Codex command behind launcher
+## Прямая команда Codex за launcher
 `codex --profile build`
 
-## Troubleshooting
+## Диагностика проблем
 - Если вы работаете через VS Code Codex extension интерактивно, используйте новый чат/окно, вручную выставьте selected_model и selected_reasoning_effort в picker, а затем вставьте handoff.
 - Новый чат + вставка handoff и новый task launch через executable launcher — не одно и то же; не выдавайте manual UI apply за auto-switch.
-- Если handoff вставлен в уже открытую или случайную Codex chat-сессию без ручной проверки picker, это non-canonical path: route может остаться stale.
-- Если нужна строгая воспроизводимость, automation или shell-first запуск, используйте optional strict launch_command.
-- Если после launch или manual UI apply виден sticky last-used profile/model/reasoning, закройте текущую сессию, откройте новую и при необходимости выполните launch_command, затем проверьте named profile в local Codex config.
+- Если handoff вставлен в уже открытую или случайную Codex chat-сессию без ручной проверки picker, это неканонический путь: route может остаться устаревшим.
+- Если нужна строгая воспроизводимость, автоматизация или запуск из shell, используйте optional strict launch_command.
+- Если после launch или manual UI apply виден sticky last-used profile/model/reasoning, закройте текущую сессию, откройте новую и при необходимости выполните launch_command, затем проверьте именованный profile в local Codex config.
 - Если selected_model отсутствует в live catalog, обновите codex-routing.yaml или local profile mapping, прежде чем обещать этот model ID пользователю.
 
-## Task payload
-task_class: build
-selected_profile: build
-project_profile: factory-template
-selected_scenario: 17-direct-task-self-handoff.md -> 15-handoff-to-codex.md -> implementation/remediation
-pipeline_stage: implementation
-handoff_allowed: yes
-defect_capture_path: not-required-by-text-signal
-artifacts_to_update:
-  - template-repo/codex-routing.yaml
-  - template-repo/scripts/codex_task_router.py
-  - template-repo/template/.codex/config.toml
-  - workspace-packs/vscode-codex-bootstrap/codex/global-codex-config.example.toml
-  - factory_template_only_pack/03-mode-routing-factory-template.md
-  - factory_template_only_pack/06-codex-config-factory-template.toml
-  - .chatgpt/direct-task-self-handoff.md
-  - .chatgpt/direct-task-response.md
-  - .chatgpt/task-launch.yaml
-
-task: обновить список рекомендуемых моделей для выполнения handoff с учетом выхода GPT-5.5
+## Текст задачи
+Исправить два process defects в factory-template: не перекладывать доступный GitHub PR merge на пользователя и обеспечить русский язык человекочитаемых текстов, отчетов, инструкций, closeout и generated guidance; пройти defect-capture, remediation, verify и closeout.

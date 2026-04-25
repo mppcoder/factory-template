@@ -50,39 +50,39 @@ def main() -> int:
     ensure_contains(context, "# Контекст для Codex", errors, "codex-context.md")
     ensure_contains(context, "## Проект", errors, "codex-context.md")
     ensure_contains(context, "## Текущий этап", errors, "codex-context.md")
-    ensure_contains(context, "## Change ID", errors, "codex-context.md")
+    ensure_contains(context, "## Идентификатор изменения", errors, "codex-context.md")
     ensure_contains(context, "## Краткое резюме", errors, "codex-context.md")
     if "не указан" in context or "не заполнено" in context:
         errors.append("codex-context.md содержит незаполненные fallback-значения")
 
     ensure_contains(pack, "# Task pack для Codex", errors, "codex-task-pack.md")
-    ensure_contains(pack, "## Change ID", errors, "codex-task-pack.md")
+    ensure_contains(pack, "## Идентификатор изменения", errors, "codex-task-pack.md")
     ensure_contains(pack, "## Заголовок", errors, "codex-task-pack.md")
     ensure_contains(pack, "## Класс изменения", errors, "codex-task-pack.md")
     ensure_contains(pack, "## Режим выполнения", errors, "codex-task-pack.md")
-    ensure_contains(pack, "## Launch source", errors, "codex-task-pack.md")
-    ensure_contains(pack, "## Task class", errors, "codex-task-pack.md")
-    ensure_contains(pack, "## Selected profile", errors, "codex-task-pack.md")
-    ensure_contains(pack, "## Selected model", errors, "codex-task-pack.md")
-    ensure_contains(pack, "## Selected reasoning effort", errors, "codex-task-pack.md")
-    ensure_contains(pack, "## Apply mode", errors, "codex-task-pack.md")
-    ensure_contains(pack, "## Strict launch mode", errors, "codex-task-pack.md")
-    ensure_contains(pack, "## Manual UI default", errors, "codex-task-pack.md")
-    ensure_contains(pack, "## Optional strict launch command", errors, "codex-task-pack.md")
-    ensure_contains(pack, "## Direct Codex command behind launcher", errors, "codex-task-pack.md")
-    ensure_contains(pack, "## Selected scenario", errors, "codex-task-pack.md")
-    ensure_contains(pack, "## Pipeline stage", errors, "codex-task-pack.md")
-    ensure_contains(pack, "## Handoff allowed", errors, "codex-task-pack.md")
-    ensure_contains(pack, "## Defect capture path", errors, "codex-task-pack.md")
-    ensure_contains(pack, "## Handoff input", errors, "codex-task-pack.md")
+    ensure_contains(pack, "## Источник запуска", errors, "codex-task-pack.md")
+    ensure_contains(pack, "## Класс задачи", errors, "codex-task-pack.md")
+    ensure_contains(pack, "## Выбранный профиль", errors, "codex-task-pack.md")
+    ensure_contains(pack, "## Выбранная модель", errors, "codex-task-pack.md")
+    ensure_contains(pack, "## Выбранное reasoning effort", errors, "codex-task-pack.md")
+    ensure_contains(pack, "## Режим применения", errors, "codex-task-pack.md")
+    ensure_contains(pack, "## Строгий режим запуска", errors, "codex-task-pack.md")
+    ensure_contains(pack, "## Ручной UI по умолчанию", errors, "codex-task-pack.md")
+    ensure_contains(pack, "## Опциональная команда строгого запуска", errors, "codex-task-pack.md")
+    ensure_contains(pack, "## Прямая команда Codex за launcher", errors, "codex-task-pack.md")
+    ensure_contains(pack, "## Выбранный сценарий", errors, "codex-task-pack.md")
+    ensure_contains(pack, "## Этап pipeline", errors, "codex-task-pack.md")
+    ensure_contains(pack, "## Разрешение handoff", errors, "codex-task-pack.md")
+    ensure_contains(pack, "## Маршрут defect-capture", errors, "codex-task-pack.md")
+    ensure_contains(pack, "## Входные данные handoff", errors, "codex-task-pack.md")
     ensure_contains(pack, "приоритет у правил repo", errors, "codex-task-pack.md")
     if "codex-input.md еще не заполнен." in pack:
         errors.append("codex-task-pack.md ссылается на пустой codex-input.md")
 
-    ensure_contains(boundary, "# Boundary Actions", errors, "boundary-actions.md")
+    ensure_contains(boundary, "# Действия на границе", errors, "boundary-actions.md")
     ensure_contains(boundary, "## Для пользователя", errors, "boundary-actions.md")
-    ensure_contains(boundary, "## Impact Model", errors, "boundary-actions.md")
-    ensure_contains(boundary, "## Completion Package For Repo-First Instruction Changes", errors, "boundary-actions.md")
+    ensure_contains(boundary, "## Модель влияния", errors, "boundary-actions.md")
+    ensure_contains(boundary, "## Пакет завершения для изменений repo-first инструкций", errors, "boundary-actions.md")
     ensure_contains(boundary, "## Для handoff", errors, "boundary-actions.md")
     ensure_contains(boundary, "manual-ui (default)", errors, "boundary-actions.md")
     ensure_contains(boundary, "strict_launch_mode: optional", errors, "boundary-actions.md")
@@ -92,7 +92,7 @@ def main() -> int:
     ensure_contains(boundary, "`.chatgpt/task-launch.yaml`", errors, "boundary-actions.md")
     ensure_contains(boundary, "`selected_profile` — это исполнимая граница маршрутизации", errors, "boundary-actions.md")
     ensure_contains(boundary, "При исполнении handoff приоритет у правил repo", errors, "boundary-actions.md")
-    ensure_contains(boundary, "только один цельный блок для copy-paste в Codex", errors, "boundary-actions.md")
+    ensure_contains(boundary, "только один цельный блок для вставки в Codex", errors, "boundary-actions.md")
     ensure_contains(boundary, "Нельзя заменять handoff ссылкой на файл", errors, "boundary-actions.md")
     ensure_contains(boundary, "## Для внешних границ", errors, "boundary-actions.md")
     ensure_contains(boundary, "Инструкция пользователю", errors, "boundary-actions.md")
@@ -131,16 +131,16 @@ def main() -> int:
             errors.append(f"boundary-actions.md не содержит entrypoint `{entrypoint}`")
 
     ensure_contains(checklist, "# Чек-лист завершения", errors, "done-checklist.md")
-    ensure_contains(checklist, "## Impact classification", errors, "done-checklist.md")
+    ensure_contains(checklist, "## Классификация влияния", errors, "done-checklist.md")
     ensure_contains(checklist, "impact.factory_sources", errors, "done-checklist.md")
     ensure_contains(checklist, "impact.downstream_template_sync", errors, "done-checklist.md")
     ensure_contains(checklist, "impact.downstream_project_sources", errors, "done-checklist.md")
     ensure_contains(checklist, "impact.manual_archive_required", errors, "done-checklist.md")
     ensure_contains(checklist, "impact.delete_before_replace", errors, "done-checklist.md")
-    ensure_contains(checklist, "## Completion Package For Repo-First Instruction Changes", errors, "done-checklist.md")
+    ensure_contains(checklist, "## Пакет завершения для изменений repo-first инструкций", errors, "done-checklist.md")
     ensure_contains(checklist, "По умолчанию: нет, если canonical repo/path/entrypoint/instruction text не менялись", errors, "done-checklist.md")
     ensure_contains(checklist, "По умолчанию: нет для чистого repo-first режима", errors, "done-checklist.md")
-    ensure_contains(checklist, "Completion package выдан в том же финальном ответе", errors, "done-checklist.md")
+    ensure_contains(checklist, "Пакет завершения выдан в том же финальном ответе", errors, "done-checklist.md")
     ensure_contains(checklist, "bash VALIDATE_VERIFIED_SYNC_PREREQS.sh", errors, "done-checklist.md")
     ensure_contains(checklist, "bash VERIFIED_SYNC.sh", errors, "done-checklist.md")
     ensure_contains(checklist, "финальный ответ действительно заканчивается блоком `## Инструкция пользователю`", errors, "done-checklist.md")
@@ -185,25 +185,25 @@ def main() -> int:
     if launch.get("launch_artifact_path") and not (chat.parent / str(launch.get("launch_artifact_path"))).exists():
         errors.append("task-launch.yaml ссылается на отсутствующий launch_artifact_path")
 
-    ensure_contains(normalized_handoff, "# Normalized Codex Handoff", errors, "normalized-codex-handoff.md")
+    ensure_contains(normalized_handoff, "# Нормализованный handoff для Codex", errors, "normalized-codex-handoff.md")
     for section in [
-        "## Launch source",
-        "## Task class",
-        "## Selected profile",
-        "## Selected model",
-        "## Selected reasoning effort",
-        "## Apply mode",
-        "## Manual UI apply",
-        "## Strict launch mode",
-        "## Project profile",
-        "## Selected scenario",
-        "## Pipeline stage",
-        "## Artifacts to update",
-        "## Handoff allowed",
-        "## Defect capture path",
-        "## Optional strict launch command",
-        "## Direct Codex command behind launcher",
-        "## Troubleshooting",
+        "## Источник запуска",
+        "## Класс задачи",
+        "## Выбранный профиль",
+        "## Выбранная модель",
+        "## Выбранное reasoning effort",
+        "## Режим применения",
+        "## Ручное применение через UI",
+        "## Строгий режим запуска",
+        "## Профиль проекта",
+        "## Выбранный сценарий",
+        "## Этап pipeline",
+        "## Артефакты для обновления",
+        "## Разрешение handoff",
+        "## Маршрут defect-capture",
+        "## Опциональная команда строгого запуска",
+        "## Прямая команда Codex за launcher",
+        "## Диагностика проблем",
     ]:
         ensure_contains(normalized_handoff, section, errors, "normalized-codex-handoff.md")
 
@@ -213,8 +213,8 @@ def main() -> int:
     ensure_contains(handoff_response, "manual-ui", errors, "handoff-response.md")
     ensure_contains(handoff_response, "launch-codex-task.sh", errors, "handoff-response.md")
     ensure_contains(handoff_response, "новый чат + вставка handoff", errors, "handoff-response.md")
-    ensure_contains(handoff_response, "new task launch", errors, "handoff-response.md")
-    ensure_contains(handoff_response, "advisory/handoff text != executable profile switch", errors, "handoff-response.md")
+    ensure_contains(handoff_response, "новый task launch", errors, "handoff-response.md")
+    ensure_contains(handoff_response, "advisory/handoff text не равен executable profile switch", errors, "handoff-response.md")
     ensure_contains(handoff_response, "sticky last-used state", errors, "handoff-response.md")
 
     if errors:

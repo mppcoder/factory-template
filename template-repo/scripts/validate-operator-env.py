@@ -113,49 +113,49 @@ def validate(root: Path, env_path: Path, requested_preset: str | None, allow_pla
     findings: list[Finding] = []
 
     if preset not in VALID_PRESETS:
-        add(findings, "fail", "OPERATOR_PRESET", f"Unknown preset `{preset}`. Use one of: {', '.join(sorted(VALID_PRESETS))}.")
+        add(findings, "fail", "OPERATOR_PRESET", f"Неизвестный preset `{preset}`. Используйте один из: {', '.join(sorted(VALID_PRESETS))}.")
         return preset, findings
 
     for rel in ["deploy/compose.yaml", "deploy/compose.production.yaml", *PRESET_COMPOSE_FILES[preset]]:
         if not (root / rel).exists():
-            add(findings, "fail", rel, f"Missing required compose artifact `{rel}`.")
+            add(findings, "fail", rel, f"Отсутствует обязательный compose artifact `{rel}`.")
 
     if not env_path.exists():
-        add(findings, "fail", "env_file", f"Env file does not exist: {env_path}.")
+        add(findings, "fail", "env_file", f"Env file не найден: {env_path}.")
         return preset, findings
 
     app_image = env.get("APP_IMAGE", "nginx:1.27-alpine")
     if not app_image:
-        add(findings, "fail", "APP_IMAGE", "APP_IMAGE must not be empty.")
+        add(findings, "fail", "APP_IMAGE", "APP_IMAGE не должен быть пустым.")
     elif preset != "starter" and app_image in {"nginx:1.27-alpine", "public.ecr.aws/nginx/nginx:stable"}:
-        add(findings, "warn", "APP_IMAGE", "Production presets should use an explicit application image, not the demo nginx image.")
+        add(findings, "warn", "APP_IMAGE", "Production presets должны использовать явный application image, а не demo nginx image.")
 
     app_port = env.get("APP_PORT", "8080")
     if not valid_port(app_port):
-        add(findings, "fail", "APP_PORT", "APP_PORT must be a TCP port from 1 to 65535.")
+        add(findings, "fail", "APP_PORT", "APP_PORT должен быть TCP port от 1 до 65535.")
 
     bind_address = env.get("APP_BIND_ADDRESS", "0.0.0.0")
     if not validate_bind_address(bind_address):
-        add(findings, "fail", "APP_BIND_ADDRESS", "APP_BIND_ADDRESS must be an IP address or localhost.")
+        add(findings, "fail", "APP_BIND_ADDRESS", "APP_BIND_ADDRESS должен быть IP address или localhost.")
 
     if preset in {"app-db", "production"}:
         db_password = env.get("DB_PASSWORD", "")
         if len(db_password) < 16:
-            add(findings, "fail", "DB_PASSWORD", "DB_PASSWORD must be at least 16 characters for app-db/production presets.")
+            add(findings, "fail", "DB_PASSWORD", "DB_PASSWORD должен быть не короче 16 символов для app-db/production presets.")
         elif is_placeholder(db_password):
             level = "warn" if allow_placeholders else "fail"
-            add(findings, level, "DB_PASSWORD", "DB_PASSWORD still looks like an example placeholder.")
+            add(findings, level, "DB_PASSWORD", "DB_PASSWORD все еще похож на example placeholder.")
         for key in ["DB_NAME", "DB_USER"]:
             if not env.get(key):
-                add(findings, "fail", key, f"{key} is required for app-db/production presets.")
+                add(findings, "fail", key, f"{key} обязателен для app-db/production presets.")
         db_port = env.get("DB_PORT", "5432")
         if not valid_port(db_port):
-            add(findings, "fail", "DB_PORT", "DB_PORT must be a TCP port from 1 to 65535.")
+            add(findings, "fail", "DB_PORT", "DB_PORT должен быть TCP port от 1 до 65535.")
         retention = env.get("BACKUP_RETENTION_DAYS", "7")
         if not valid_positive_int(retention):
-            add(findings, "fail", "BACKUP_RETENTION_DAYS", "BACKUP_RETENTION_DAYS must be a positive integer.")
+            add(findings, "fail", "BACKUP_RETENTION_DAYS", "BACKUP_RETENTION_DAYS должен быть положительным целым числом.")
         if as_bool(env.get("BACKUP_ENABLED", "false")) and not env.get("BACKUP_PATH"):
-            add(findings, "fail", "BACKUP_PATH", "BACKUP_PATH is required when BACKUP_ENABLED=true.")
+            add(findings, "fail", "BACKUP_PATH", "BACKUP_PATH обязателен, если BACKUP_ENABLED=true.")
 
     if preset in {"reverse-proxy", "production"}:
         domain = env.get("DOMAIN", "")
@@ -163,26 +163,26 @@ def validate(root: Path, env_path: Path, requested_preset: str | None, allow_pla
         acme_agree = env.get("ACME_AGREE", "false")
         if not validate_domain(domain):
             level = "warn" if allow_placeholders and domain == "example.com" else "fail"
-            add(findings, level, "DOMAIN", "DOMAIN must be a real public hostname for reverse-proxy/production presets.")
+            add(findings, level, "DOMAIN", "DOMAIN должен быть реальным публичным hostname для reverse-proxy/production presets.")
         if "@" not in tls_email or is_placeholder(tls_email):
             level = "warn" if allow_placeholders else "fail"
-            add(findings, level, "TLS_EMAIL", "TLS_EMAIL must be a real operator email for ACME/TLS notices.")
+            add(findings, level, "TLS_EMAIL", "TLS_EMAIL должен быть реальным operator email для ACME/TLS уведомлений.")
         if not as_bool(acme_agree):
             level = "warn" if allow_placeholders else "fail"
-            add(findings, level, "ACME_AGREE", "Set ACME_AGREE=true after accepting CA subscriber terms.")
+            add(findings, level, "ACME_AGREE", "Установите ACME_AGREE=true после принятия условий CA subscriber terms.")
         if bind_address != "127.0.0.1":
-            add(findings, "warn", "APP_BIND_ADDRESS", "For reverse-proxy/production, set APP_BIND_ADDRESS=127.0.0.1 so the app is only exposed through TLS proxy.")
+            add(findings, "warn", "APP_BIND_ADDRESS", "Для reverse-proxy/production установите APP_BIND_ADDRESS=127.0.0.1, чтобы app был доступен только через TLS proxy.")
 
     if preset == "starter":
-        add(findings, "ok", "OPERATOR_PRESET", "Starter preset selected; DB/TLS secrets are optional and are not required.")
+        add(findings, "ok", "OPERATOR_PRESET", "Выбран starter preset; DB/TLS secrets опциональны и не обязательны.")
     else:
-        add(findings, "ok", "OPERATOR_PRESET", f"{preset} preset selected; optional production checks are active.")
+        add(findings, "ok", "OPERATOR_PRESET", f"Выбран {preset} preset; optional production checks активны.")
 
     return preset, findings
 
 
 def print_text(preset: str, findings: list[Finding]) -> None:
-    print("Operator env validation")
+    print("Проверка operator env")
     print("-" * 72)
     print(f"Preset: {preset}")
     for finding in findings:
@@ -201,11 +201,11 @@ def print_report(preset: str, findings: list[Finding]) -> None:
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description="Validate operator deploy env for starter and optional production presets.")
-    parser.add_argument("root", nargs="?", default=None, help="Repo root")
-    parser.add_argument("--env-file", help="Env file to validate. Defaults to deploy/.env or deploy/.env.example.")
-    parser.add_argument("--preset", choices=sorted(VALID_PRESETS), help="Override OPERATOR_PRESET from env.")
-    parser.add_argument("--allow-example-placeholders", action="store_true", help="Downgrade example secrets/domain failures to warnings.")
+    parser = argparse.ArgumentParser(description="Проверить operator deploy env для starter и optional production presets.")
+    parser.add_argument("root", nargs="?", default=None, help="Корень repo")
+    parser.add_argument("--env-file", help="Env file для проверки. По умолчанию deploy/.env или deploy/.env.example.")
+    parser.add_argument("--preset", choices=sorted(VALID_PRESETS), help="Переопределить OPERATOR_PRESET из env.")
+    parser.add_argument("--allow-example-placeholders", action="store_true", help="Понизить ошибки example secrets/domain до предупреждений.")
     parser.add_argument("--format", choices=["text", "report"], default="text")
     args = parser.parse_args()
 

@@ -218,10 +218,10 @@ SERVICES="$("${COMPOSE[@]}" "${COMPOSE_ARGS[@]}" --env-file "$ACTIVE_ENV" config
 SERVICES="${SERVICES:-none}"
 SERVICES_CSV="$(echo "$SERVICES" | tr ' ' ',' | sed 's/,$//')"
 
-echo "Dry-run PASS: compose config is valid."
-echo "Services: $SERVICES"
+echo "Dry-run ПРОЙДЕН: compose config валиден."
+echo "Сервисы: $SERVICES"
 echo
-echo "Next step:"
+echo "Следующий шаг:"
 DEPLOY_PRESET_ARG=""
 if [[ "$PRESET" != "starter" ]]; then
   DEPLOY_PRESET_ARG=" --preset $PRESET"

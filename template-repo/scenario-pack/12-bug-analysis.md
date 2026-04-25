@@ -14,13 +14,13 @@
 11. Провести verification.
 12. Если defect reusable — подготовить sync back в фабрику.
 
-## Incidental defect rule
+## Правило побочного дефекта
 Если defect найден по пути исполнения другой основной задачи:
 - нельзя считать его автоматически включенным в уже открытый live route;
 - bug report обязан явно отметить, что defect incidental, fixed-in-scope или unresolved;
 - self-handoff обязан определить, допустимо ли remediation продолжать в текущем scope, или нужен отдельный task launch;
 - если route совпадает с текущим, можно продолжать в том же chat только после явного self-handoff;
-- если route меняется по profile/model/reasoning, канонический путь — новый task launch / новая Codex chat-сессия через явный launch command и copy-paste handoff;
+- если route меняется по profile/model/reasoning, канонический путь — новый task launch / новая Codex chat-сессия через явный launch command и цельный handoff для вставки;
 - продолжение в текущем chat допускается только как fallback с явной пометкой, что auto-switch в уже открытой сессии ненадежен.
 
 ## Канонический маршрут defect-flow

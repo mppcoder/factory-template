@@ -1,30 +1,41 @@
 # Отчет о проверке результата
 
 ## Что проверяли
-- Consolidated remediation for the stale GitHub Actions dependency PR backlog.
-- Current mainline health for the previously failing `verify-baseline` / `EXAMPLES_TEST` / `validate-versioning-layer.py` path.
-- Coherent workflow pin updates in `.github/workflows/ci.yml` and `.github/workflows/release.yml`.
-- Release bundle dry-run artifact path shape used by GitHub Actions.
+- Сводное исправление устаревшей очереди PR с обновлениями GitHub Actions.
+- Текущее состояние `main` для ранее падавшего пути `verify-baseline` / `EXAMPLES_TEST` / `validate-versioning-layer.py`.
+- Согласованное обновление версий actions в `.github/workflows/ci.yml` и `.github/workflows/release.yml`.
+- Путь dry-run сборки release bundle и загрузки артефакта в GitHub Actions.
+- Исправление двух новых process defects: ошибочная передача доступного PR merge пользователю и нарушение русскоязычного человекочитаемого слоя.
+- Русификация user-facing вывода `validate-operator-env.py`.
 
-## Refreshed defect classification
-- Current `main` verification is green locally before remediation, so the old Dependabot PR failures are classified as stale PR backlog on an outdated merge base.
-- The documented `bug-024-github-actions-verify-baseline-regression` pattern does not reproduce on current main.
-- No new incidental defect was found, so no new `reports/bugs/*` or `reports/factory-feedback/*` artifact was created.
+## Обновленная классификация дефектов
+- Текущий `main` был зеленым локально до workflow remediation, поэтому старые падения Dependabot PR классифицированы как устаревшая очередь на старой базе.
+- Паттерн `bug-024-github-actions-verify-baseline-regression` на текущем `main` не воспроизводился.
+- `bug-029-github-pr-merge-misclassified-as-user-step` зафиксирован и исправлен в сценарном closeout слое.
+- `bug-030-human-readable-language-layer-leaked-english` зафиксирован и исправлен в global/handoff/closeout/generator слое.
 
 ## Что подтверждено
-- `actions/checkout@v6`, `actions/setup-python@v6`, and `actions/upload-artifact@v7` tags exist upstream.
-- Both CI jobs now use `actions/checkout@v6` and `actions/setup-python@v6`.
-- Both Release workflow jobs now use `actions/checkout@v6` and `actions/setup-python@v6`.
-- CI and Release artifact upload steps now use `actions/upload-artifact@v7`.
-- `EXAMPLES_TEST.sh` passes all 36 example checks, including `validate-versioning-layer.py`.
-- Release bundle dry-run produces a non-empty zip at a temp path compatible with the workflow artifact upload path.
+- Теги `actions/checkout@v6`, `actions/setup-python@v6` и `actions/upload-artifact@v7` существуют upstream.
+- Оба CI jobs используют `actions/checkout@v6` и `actions/setup-python@v6`.
+- Jobs release workflow используют `actions/checkout@v6` и `actions/setup-python@v6`.
+- Шаги загрузки артефактов в CI и Release используют `actions/upload-artifact@v7`.
+- `EXAMPLES_TEST.sh` проходит все 36 example checks, включая `validate-versioning-layer.py`.
+- Dry-run сборки release bundle создает непустой zip в temp path, совместимый с workflow artifact upload path.
+- Правила closeout теперь запрещают просить пользователя merge GitHub PR, если Codex может безопасно выполнить этот merge через доступный GitHub write path.
+- Правила global/handoff/closeout теперь требуют русский язык для человекочитаемых текстов и допускают английский только для технических идентификаторов.
+- `validate-operator-env.py` больше не печатает англоязычные описательные сообщения в text output.
 
-## Verification commands
-- `bash template-repo/scripts/verify-all.sh ci` before remediation: passed.
+## Команды проверки
+- `bash template-repo/scripts/verify-all.sh ci` до workflow remediation: passed.
 - `bash EXAMPLES_TEST.sh`: passed.
 - `bash CLEAN_VERIFY_ARTIFACTS.sh && OUT_ZIP="$(mktemp -u /tmp/factory-template-release.XXXXXX.zip)" && bash RELEASE_BUILD.sh "$OUT_ZIP" && test -s "$OUT_ZIP"`: passed.
-- `bash template-repo/scripts/verify-all.sh ci` after remediation: passed.
+- `bash template-repo/scripts/verify-all.sh ci` после workflow remediation: passed.
+- `python3 template-repo/scripts/validate-codex-task-pack.py .`: passed.
+- `python3 template-repo/scripts/validate-codex-routing.py .`: passed.
+- `bash template-repo/scripts/verify-all.sh quick`: passed.
+- `bash template-repo/scripts/verify-all.sh ci`: passed.
 
 ## Итоговый вывод
-- Workflow action pins are remediated coherently in one human-owned branch.
-- The stale Dependabot PR cluster should be superseded by the consolidated remediation PR instead of merged one-by-one.
+- Workflow actions обновлены согласованно в одном remediation path.
+- Устаревшая очередь Dependabot PR закрыта через единый PR, а не через три отдельных merge.
+- Оба новых process defects оформлены и исправлены в repo rules.

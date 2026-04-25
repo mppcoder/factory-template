@@ -32,7 +32,7 @@ def main() -> int:
     write_launch_record(root, routing_record)
     launch = routing_record["launch"]
     (chat / 'normalized-codex-handoff.md').write_text(
-        render_normalized_handoff(routing_record, codex_input, "Normalized Codex Handoff"),
+        render_normalized_handoff(routing_record, codex_input, "Нормализованный handoff для Codex"),
         encoding='utf-8',
     )
 
@@ -54,7 +54,7 @@ def main() -> int:
 ## Текущий этап
 {stage.get('stage', {}).get('current', 'не определен')}
 
-## Change ID
+## Идентификатор изменения
 {change.get('id', 'не указан')}
 
 ## Краткое резюме
@@ -63,7 +63,7 @@ def main() -> int:
 
     pack = f"""# Task pack для Codex
 
-## Change ID
+## Идентификатор изменения
 {change.get('id', 'не указан')}
 
 ## Заголовок
@@ -75,61 +75,61 @@ def main() -> int:
 ## Режим выполнения
 {change.get('execution_mode', 'не заполнен')}
 
-## Launch source
+## Источник запуска
 {launch.get('launch_source', 'не определен')}
 
-## Task class
+## Класс задачи
 {launch.get('task_class', 'не определен')}
 
-## Selected profile
+## Выбранный профиль
 {launch.get('selected_profile', 'не определен')}
 
-## Selected model
+## Выбранная модель
 {launch.get('selected_model', 'не определен')}
 
-## Selected reasoning effort
+## Выбранное reasoning effort
 {launch.get('selected_reasoning_effort', 'не определен')}
 
-## Selected plan mode reasoning
+## Выбранное reasoning effort для plan mode
 {launch.get('selected_plan_mode_reasoning_effort', 'не определен')}
 
-## Apply mode
+## Режим применения
 {launch.get('apply_mode', 'не определен')}
 
-## Strict launch mode
+## Строгий режим запуска
 {launch.get('strict_launch_mode', 'не определен')}
 
-## Manual UI default
+## Ручной UI по умолчанию
 Для интерактивной работы в VS Code Codex extension откройте новый чат/окно Codex, вручную выберите `selected_model={launch.get('selected_model', 'не определен')}` и `selected_reasoning_effort={launch.get('selected_reasoning_effort', 'не определен')}` в picker, затем вставьте handoff.
 Новый чат + вставка handoff и executable launcher path — не одно и то же.
 Уже открытая live session не является надежным auto-switch механизмом.
 
-## Optional strict launch command
+## Опциональная команда строгого запуска
 {launch.get('launch_command', 'не определен')}
 
-## Direct Codex command behind launcher
+## Прямая команда Codex за launcher
 {launch.get('codex_profile_command', 'не определен')}
 
-## Project profile
+## Профиль проекта
 {launch.get('project_profile', 'не определен')}
 
-## Selected scenario
+## Выбранный сценарий
 {launch.get('selected_scenario', 'не определен')}
 
-## Pipeline stage
+## Этап pipeline
 {launch.get('pipeline_stage', 'не определен')}
 
-## Handoff allowed
+## Разрешение handoff
 {launch.get('handoff_allowed', 'не определен')}
 
-## Defect capture path
+## Маршрут defect-capture
 {launch.get('defect_capture_path', 'не определен')}
 
-## Repo Rules Priority
+## Приоритет правил repo
 При исполнении handoff приоритет у правил repo: `AGENTS`, runbook, scenario-pack, policy files и других канонических файлов этого репозитория.
 Общие рабочие инструкции применять только там, где они не конфликтуют с repo rules и старшими системными ограничениями среды.
 
-## Handoff input
+## Входные данные handoff
 {codex_input}{bug_block}
 """
 
@@ -147,7 +147,7 @@ def main() -> int:
 - [ ] Если prereqs green и diff допустим, прогнать `bash VERIFIED_SYNC.sh` до финального closeout
 - [ ] Если verified sync не выполнен, явно зафиксировать реальный blocker и не помечать change как `done`
 
-## Impact classification
+## Классификация влияния
 
 - [ ] impact.factory_sources
 - [ ] impact.downstream_template_sync
@@ -155,7 +155,7 @@ def main() -> int:
 - [ ] impact.manual_archive_required
 - [ ] impact.delete_before_replace
 
-## Completion Package For Repo-First Instruction Changes
+## Пакет завершения для изменений repo-first инструкций
 
 - [ ] Что изменено
 - [ ] Какие файлы обновлены в repo
@@ -169,9 +169,9 @@ def main() -> int:
 - [ ] Удалить перед заменой
 - [ ] Пошаговая инструкция по окнам
 - [ ] Что прислать обратно после внешнего шага
-- [ ] Completion package выдан в том же финальном ответе, без дополнительного напоминания пользователя
-- [ ] Если есть pending external step, финальный ответ действительно заканчивается блоком `## Инструкция пользователю`
-- [ ] Если pending external step нет, финальный ответ явно говорит, что внешних действий не требуется
+- [ ] Пакет завершения выдан в том же финальном ответе, без дополнительного напоминания пользователя
+- [ ] Если есть ожидающий внешний шаг, финальный ответ действительно заканчивается блоком `## Инструкция пользователю`
+- [ ] Если ожидающего внешнего шага нет, финальный ответ явно говорит, что внешних действий не требуется
 """
 
     handoff_policy = policy.get('handoff_policy', 'forbidden')
@@ -211,7 +211,7 @@ def main() -> int:
         impact_lines.append(f"- `impact.{key}` — {impact_model.get(key, impact_defaults[key])}")
     impact_block = "\n".join(impact_lines)
 
-    boundary_actions = f"""# Boundary Actions
+    boundary_actions = f"""# Действия на границе
 
 ## Для пользователя
 
@@ -227,11 +227,11 @@ def main() -> int:
 - {route_line}
 - Проверить, что Codex получает актуальные `codex-input.md`, `codex-context.md`, `codex-task-pack.md` и `boundary-actions.md`.
 
-## Impact Model
+## Модель влияния
 
 {impact_block}
 
-## Completion Package For Repo-First Instruction Changes
+## Пакет завершения для изменений repo-first инструкций
 
 Если change затрагивает scenario-pack, launcher, validators, runbooks, codex-task-pack, `.chatgpt` artifacts или другой downstream-consumed template content, пользовательский boundary output должен включать:
 
@@ -261,9 +261,9 @@ def main() -> int:
 
 - {handoff_line}
 - `apply_mode: manual-ui (default)` — основной user-facing путь для интерактивной работы через VS Code Codex extension.
-- Для manual UI apply откройте новый чат/окно Codex, вручную выберите `selected_model={launch.get('selected_model', 'не определен')}` и `selected_reasoning_effort={launch.get('selected_reasoning_effort', 'не определен')}` в picker, затем вставьте handoff.
+- Для ручного применения через UI откройте новый чат/окно Codex, вручную выберите `selected_model={launch.get('selected_model', 'не определен')}` и `selected_reasoning_effort={launch.get('selected_reasoning_effort', 'не определен')}` в picker, затем вставьте handoff.
 - `strict_launch_mode: optional` — используйте launch command из `.chatgpt/task-launch.yaml`, если нужна automation, reproducibility, shell-first или scripted launch.
-- `новый чат + вставка handoff` и `new task launch через executable launcher` — не одно и то же.
+- `новый чат + вставка handoff` и `новый task launch через executable launcher` — не одно и то же.
 - Уже открытая live session является только non-canonical fallback и не должна подаваться как надежный auto-switch path.
 - `AGENTS`, ChatGPT Project instructions, scenario-pack и `.chatgpt` guidance являются advisory layer; profile/model выбирает executable launcher/router.
 - `selected_profile` — это исполнимая граница маршрутизации; `selected_model` и `selected_reasoning_effort` описывают ожидаемую конфигурацию этого profile, а не auto-switch от текста handoff.
@@ -273,19 +273,22 @@ def main() -> int:
 - Если выбран `hybrid` или `codex-led`, передать Codex актуальный `codex-task-pack.md`.
 - После возврата из Codex обновить verification-report.md, done-report.md и CURRENT_FUNCTIONAL_STATE.md.
 - Если handoff уже разрешен и задача достаточно определена, его нужно выдать inline в том же ответе, а не ограничиваться аналитикой.
-- Формат handoff для пользователя: только один цельный блок для copy-paste в Codex.
+- Формат handoff для пользователя: только один цельный блок для вставки в Codex.
 - Нельзя заменять handoff ссылкой на файл, несколькими разрозненными блоками или инструкцией собрать handoff из `codex-input.md`, `codex-context.md`, `codex-task-pack.md`.
 - Если remaining work еще остается внутренним repo follow-up, handoff не должен исчезать из-за будущего user footer.
 - Release-followup, source-pack refresh, export refresh, closeout-sync и release-facing consistency pass внутри repo считаются внутренней работой Codex.
+- Человекочитаемые заголовки, инструкции, отчеты и closeout-тексты должны быть на русском языке; английский допустим только для технических идентификаторов, команд, файлов, ключей конфигурации и literal values.
 - Troubleshooting sticky state:
   - если пользователь открыл случайную или уже существующую Codex chat-сессию и просто вставил handoff, profile/model/reasoning могли не переключиться;
-  - для interactive workflow сначала закройте stale-сессию, откройте новую и вручную проверьте picker;
+  - для интерактивного процесса сначала закройте устаревшую сессию, откройте новую и вручную проверьте picker;
   - если нужна строгая boundary-гарантия, выполните optional strict launch command через `./scripts/launch-codex-task.sh`;
-  - если после этого route все еще выглядит stale, проверить named profile в local Codex config и сверить `selected_model` с live `codex debug models`.
+  - если после этого route все еще выглядит устаревшим, проверить именованный profile в local Codex config и сверить `selected_model` с live `codex debug models`.
 
 ## Для внешних границ
 
-- GitHub / внешние UI / секреты не выполнять автоматически из Codex.
+- GitHub PR merge не считать внешним шагом автоматически. Если `gh` или GitHub connector доступен, PR относится к текущей задаче, checks green, PR mergeable и нет required human approval/conflict/неясной merge strategy, Codex должен сам выполнить ready/merge/delete-branch/local sync.
+- GitHub UI считать внешним шагом только при конкретном блокере: нет авторизации, нет прав, required human review/approval, red/pending checks, конфликт, release/security approval или другое действие, которое нельзя безопасно выполнить инструментами Codex.
+- Внешние UI / секреты не выполнять автоматически из Codex.
 - Все внешние действия фиксировать отдельной пошаговой инструкцией для пользователя с финальным блоком `Инструкция пользователю`.
 - `Инструкция пользователю` не должна подменять внутренний handoff, если internal repo follow-up еще не завершен.
 - Если внешнего шага нет, финальный ответ все равно должен явно сказать, что внешних действий не требуется.
@@ -293,7 +296,7 @@ def main() -> int:
 - Для downstream repo sync сначала используйте `workspace-packs/factory-ops/export-template-patch.sh` и `workspace-packs/factory-ops/apply-template-patch.sh`.
 - Для downstream repo instruction layer source-of-truth хранится в `template-repo/AGENTS.md`, а Codex в battle repo должен читать materialized root `AGENTS.md`.
 - Не перекладывайте на пользователя запуск внутренних repo-команд вроде `GENERATE_BOUNDARY_ACTIONS.sh`, если эти шаги может выполнить Codex.
-- Если replacement может создать stale duplicates, добавляйте точный раздел `Удалить перед заменой`.
+- Если замена может создать устаревшие дубликаты, добавляйте точный раздел `Удалить перед заменой`.
 
 Если closeout полностью внутренний и `Инструкция пользователю` не нужна, используйте явную формулировку вроде:
 - `Внешних действий не требуется.`
@@ -321,8 +324,8 @@ def main() -> int:
 {launch.get('launch_command', './scripts/launch-codex-task.sh --launch-source chatgpt-handoff --task-file .chatgpt/codex-input.md --execute')}
 ```
 
-- Это strict executable boundary для нового task launch.
-- Если manual UI apply выглядит stale или нужен строго воспроизводимый route, закройте текущую сессию и используйте эту команду.
+- Это строгая executable boundary для нового task launch.
+- Если ручное применение через UI выглядит устаревшим или нужен строго воспроизводимый route, закройте текущую сессию и используйте эту команду.
 
 ## Handoff в Codex
 
@@ -331,22 +334,22 @@ Repo: {root.name}
 Цель: выполнить текущий handoff по проекту {root.name}.
 Приоритет: сначала правила repo (`AGENTS`, runbook, scenario-pack, policy files), затем общие инструкции без конфликта с ними.
 Entry point: {entrypoint}
-Launch source: {launch.get('launch_source', 'chatgpt-handoff')}
-Task class: {launch.get('task_class', 'build')}
-Selected profile: {launch.get('selected_profile', 'build')}
-Selected model: {launch.get('selected_model', 'gpt-5.4')}
-Selected reasoning effort: {launch.get('selected_reasoning_effort', 'medium')}
-Apply mode: {launch.get('apply_mode', 'manual-ui')} (default)
-Strict launch mode: {launch.get('strict_launch_mode', 'optional')}
-Optional strict launch command: {launch.get('launch_command', './scripts/launch-codex-task.sh --launch-source chatgpt-handoff --task-file .chatgpt/codex-input.md --execute')}
-Direct Codex command behind launcher: {launch.get('codex_profile_command', 'codex --profile build')}
-Routing rule: advisory/handoff text != executable profile switch; reliable routing unit = new task launch only.
-Manual UI rule: для VS Code Codex extension откройте новый чат/окно, вручную выберите model/reasoning в picker, затем вставьте этот handoff.
-Live session rule: уже открытая live session = non-canonical fallback; не обещать auto-switch.
-Pipeline stage: {launch.get('pipeline_stage', 'unknown-stage')}
-Handoff allowed: {launch.get('handoff_allowed', 'unknown')}
+Источник запуска: {launch.get('launch_source', 'chatgpt-handoff')}
+Класс задачи: {launch.get('task_class', 'build')}
+Выбранный профиль: {launch.get('selected_profile', 'build')}
+Выбранная модель: {launch.get('selected_model', 'gpt-5.4')}
+Выбранное reasoning effort: {launch.get('selected_reasoning_effort', 'medium')}
+Режим применения: {launch.get('apply_mode', 'manual-ui')} (default)
+Строгий режим запуска: {launch.get('strict_launch_mode', 'optional')}
+Опциональная команда строгого запуска: {launch.get('launch_command', './scripts/launch-codex-task.sh --launch-source chatgpt-handoff --task-file .chatgpt/codex-input.md --execute')}
+Прямая команда Codex за launcher: {launch.get('codex_profile_command', 'codex --profile build')}
+Правило маршрутизации: advisory/handoff text не равен executable profile switch; надежная единица маршрутизации — только новый task launch.
+Правило ручного UI: для VS Code Codex extension откройте новый чат/окно, вручную выберите model/reasoning в picker, затем вставьте этот handoff.
+Правило live session: уже открытая live session = non-canonical fallback; не обещать auto-switch.
+Этап pipeline: {launch.get('pipeline_stage', 'unknown-stage')}
+Разрешение handoff: {launch.get('handoff_allowed', 'unknown')}
 Scope: работать только в пределах этого repo и связанных project artifacts.
-Verify: использовать актуальные validators, verification-report.md и done-report.md.
+Проверка: использовать актуальные validators, verification-report.md и done-report.md.
 ```
 
 ## Инструкция пользователю
@@ -357,7 +360,7 @@ Verify: использовать актуальные validators, verification-r
 3. Точные шаги
 По умолчанию используйте блок `Применение в Codex UI`: новый чат/окно, ручной выбор model/reasoning в picker, затем вставка handoff-блока без пересборки из файлов вручную. Если нужна строгая воспроизводимость, используйте блок `Строгий launch mode (опционально)`.
 4. Ожидаемый результат
-Codex получает один цельный copy-paste handoff по правилам repo, а пользователь выбирает между manual UI apply по умолчанию и optional strict launch path.
+Codex получает один цельный handoff для вставки по правилам repo, а пользователь выбирает между ручным применением через UI по умолчанию и опциональным строгим launch path.
 5. Что прислать обратно
 Итог выполнения или уточнение, если появится внешний блокирующий шаг.
 """

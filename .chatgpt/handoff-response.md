@@ -1,46 +1,60 @@
 ## Применение в Codex UI
 
-- Apply mode: `manual-ui` (default).
-- Откройте новый чат/окно Codex и вручную выберите model/reasoning в picker.
-- новый чат + вставка handoff и executable path через launcher — не одно и то же.
-- Надежная единица маршрутизации: `new task launch`.
-- advisory/handoff text != executable profile switch.
-- Advisory/handoff text не переключает profile/model/reasoning в уже открытой сессии.
-- Если после manual UI apply проявился sticky last-used state, закройте текущую сессию и запустите новый task launch.
+- `apply_mode: manual-ui (default)`
+- Для VS Code Codex extension откройте новый чат/окно Codex.
+- Вручную выберите model `gpt-5.5` и reasoning `medium` в picker.
+- Только после этого вставьте handoff-блок ниже.
+- новый чат + вставка handoff и новый task launch через executable launcher — не одно и то же.
+- Advisory handoff text сам по себе не переключает profile/model/reasoning в уже открытой или случайной Codex chat-сессии.
+- Уже открытая live session не является надежным механизмом автопереключения.
+- `selected_profile` — исполнимая граница; `selected_model` и `selected_reasoning_effort` — ожидаемая конфигурация profile, а не promise auto-switch.
+- Если видите sticky last-used state, закройте текущую сессию, откройте новую и заново проверьте picker.
 
 ## Строгий launch mode (опционально)
+
+- `strict_launch_mode: optional`
+- Используйте этот путь, если нужна automation, reproducibility, shell-first или scripted launch.
 
 ```bash
 ./scripts/launch-codex-task.sh --launch-source chatgpt-handoff --task-file .chatgpt/codex-input.md --execute
 ```
 
+- Это строгая executable boundary для нового task launch.
+- Если ручное применение через UI выглядит устаревшим или нужен строго воспроизводимый route, закройте текущую сессию и используйте эту команду.
+
 ## Handoff в Codex
 
 ```text
-CODEX HANDOFF
-
-launch_source: chatgpt-handoff
-task_class: feature-hardening
-selected_profile: release-hardening
-selected_model: gpt-5.2-codex
-selected_reasoning_effort: high
-project_profile: factory-template
-selected_scenario: release-2.5/track-a/foundation-hardening
-pipeline_stage: remediation
-artifacts_to_update:
-  - .github/workflows/ci.yml
-  - .github/workflows/release.yml
-  - .github/dependabot.yml
-  - SECURITY.md
-  - CODEOWNERS
-  - requirements.txt
-  - requirements.lock
-  - template-repo/scripts/verify-all.sh
-  - TEST_REPORT.md
-  - RELEASE_CHECKLIST.md
-handoff_allowed: true
-defect_capture_path: reproduce -> evidence -> bug report -> layer classification -> remediation
-
-Objective:
-Harden engineering baseline for 2.5 while preserving repo-first and routing/handoff validation semantics.
+Repo: factory-template
+Цель: выполнить текущий handoff по проекту factory-template.
+Приоритет: сначала правила repo (`AGENTS`, runbook, scenario-pack, policy files), затем общие инструкции без конфликта с ними.
+Entry point: 00-master-router.md
+Источник запуска: chatgpt-handoff
+Класс задачи: build
+Выбранный профиль: build
+Выбранная модель: gpt-5.5
+Выбранное reasoning effort: medium
+Режим применения: manual-ui (default)
+Строгий режим запуска: optional
+Опциональная команда строгого запуска: ./scripts/launch-codex-task.sh --launch-source chatgpt-handoff --task-file .chatgpt/codex-input.md --execute
+Прямая команда Codex за launcher: codex --profile build
+Правило маршрутизации: advisory/handoff text не равен executable profile switch; надежная единица маршрутизации — только новый task launch.
+Правило ручного UI: для VS Code Codex extension откройте новый чат/окно, вручную выберите model/reasoning в picker, затем вставьте этот handoff.
+Правило live session: уже открытая live session = non-canonical fallback; не обещать auto-switch.
+Этап pipeline: remediation -> verify -> closeout
+Разрешение handoff: yes
+Scope: работать только в пределах этого repo и связанных project artifacts.
+Проверка: использовать актуальные validators, verification-report.md и done-report.md.
 ```
+
+## Инструкция пользователю
+1. Цель
+Передать задачу в Codex уже по нормализованному handoff.
+2. Где сделать
+В VS Code Codex extension или, при необходимости strict routing, через терминал в текущем проекте.
+3. Точные шаги
+По умолчанию используйте блок `Применение в Codex UI`: новый чат/окно, ручной выбор model/reasoning в picker, затем вставка handoff-блока без пересборки из файлов вручную. Если нужна строгая воспроизводимость, используйте блок `Строгий launch mode (опционально)`.
+4. Ожидаемый результат
+Codex получает один цельный handoff для вставки по правилам repo, а пользователь выбирает между ручным применением через UI по умолчанию и опциональным строгим launch path.
+5. Что прислать обратно
+Итог выполнения или уточнение, если появится внешний блокирующий шаг.

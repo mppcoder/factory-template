@@ -30,21 +30,21 @@ REQUIRED_FIELDS = [
 ]
 
 DIRECT_TASK_RESPONSE_SECTIONS = [
-    "## Direct Task Self-Handoff",
-    "## Classification",
-    "## Selected project profile",
-    "## Selected scenario",
-    "## Current pipeline stage",
-    "## Apply mode",
-    "## Manual UI apply",
-    "## Strict launch mode",
-    "## Artifacts to update",
-    "## Handoff allowed",
-    "## Defect capture path",
-    "## Optional strict launch command",
-    "## Direct Codex command behind launcher",
-    "## Troubleshooting",
-    "## Next step",
+    "## Self-handoff для прямой задачи",
+    "## Классификация",
+    "## Выбранный профиль проекта",
+    "## Выбранный сценарий",
+    "## Текущий этап pipeline",
+    "## Режим применения",
+    "## Ручное применение через UI",
+    "## Строгий режим запуска",
+    "## Артефакты для обновления",
+    "## Разрешение handoff",
+    "## Маршрут defect-capture",
+    "## Опциональная команда строгого запуска",
+    "## Прямая команда Codex за launcher",
+    "## Диагностика проблем",
+    "## Следующий шаг",
 ]
 
 DOC_CHECKS = [

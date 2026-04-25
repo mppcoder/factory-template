@@ -1,41 +1,33 @@
 task_class: build
 selected_profile: build
-project_profile: factory-template
-selected_scenario: 15-handoff-to-codex.md -> 14-docs-normalization.md -> implementation/remediation
-pipeline_stage: implementation
+project_profile: factory-template self-improvement
+selected_scenario: defect-capture -> remediation -> verify -> closeout
+pipeline_stage: remediation -> verify -> closeout
 handoff_allowed: yes
-defect_capture_path: not-required-by-text-signal; use reports/bugs/YYYY-MM-DD-skill-meta-qa-loop.md only for incidental/regression evidence
+defect_capture_path: reproduce -> evidence -> bug report -> layer classification -> factory feedback if reusable -> remediation
 artifacts_to_update:
-  - template-repo/skills/skill-master-lite/SKILL.md
-  - template-repo/skills/skill-tester-lite/SKILL.md
-  - template-repo/skills/skill-tester-lite/references/test-design-guide.md
-  - template-repo/skills/skill-tester-lite/references/report-template.md
-  - docs/skills-quality-loop.md
-  - README.md
+  - template-repo/scenario-pack/00-master-router.md
+  - template-repo/scenario-pack/01-global-rules.md
+  - template-repo/scenario-pack/12-bug-analysis.md
+  - template-repo/scenario-pack/15-handoff-to-codex.md
+  - template-repo/scenario-pack/16-done-closeout.md
+  - template-repo/scenario-pack/17-direct-task-self-handoff.md
+  - template-repo/codex-routing.yaml
+  - template-repo/scripts/bootstrap-codex-task.py
+  - template-repo/scripts/codex_task_router.py
+  - template-repo/scripts/create-codex-task-pack.py
+  - template-repo/scripts/validate-codex-routing.py
+  - template-repo/scripts/validate-codex-task-pack.py
+  - template-repo/scripts/validate-handoff-response-format.py
+  - template-repo/scripts/validate-operator-env.py
+  - .chatgpt/verification-report.md
+  - .chatgpt/done-report.md
+  - reports/bugs/
+  - reports/factory-feedback/
 
-HANDOFF: FT-2.5.6-skill-meta-qa
+Задача:
+Исправить два process defects в factory-template:
+1. Codex не должен перекладывать доступный GitHub PR merge на пользователя, если GitHub write path доступен, checks green, PR доступен для merge и нет обязательного человеческого approval или другого blocker.
+2. Человекочитаемые ответы, инструкции, отчеты, closeout и generated guidance должны быть на русском языке; английский допустим только для технических идентификаторов, команд, файлов, ключей конфигурации и literal values.
 
-Objective:
-Добавить в factory-template облегчённый meta-QA цикл для skills и prompt-like artifacts:
-создал -> протестировал -> улучшил trigger/usefulness.
-
-Scope:
-- Адаптировать идеи skill-master/skill-tester под нужды factory-template.
-- Не переносить весь comparison repo; собрать только минимально полезный контур.
-- Сделать это опциональным advanced mode, не обязательным слоем для новичка.
-
-Acceptance criteria:
-- существует documented optional workflow для тестирования skills/prompt artifacts
-- workflow отделён от beginner default path
-- есть минимум один пример использования на артефакте factory-template
-- docs объясняют value простым языком: "это для улучшения шаблона, а не обязательный шаг новичка"
-
-Model / reasoning effort suggestion:
-GPT-5.2 Thinking
-Reasoning effort: medium-high
-
-Required roles / skills:
-- prompt / skill design
-- documentation
-- evaluation design
-- unspecified: если нужен отдельный evaluator/benchmark owner
+Нужно пройти defect-capture, внести remediation в repo rules/generators/validators, проверить и закрыть задачу внутри repo.

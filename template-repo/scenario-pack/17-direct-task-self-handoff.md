@@ -1,4 +1,4 @@
-# Direct Codex Self-Handoff
+# Self-handoff для прямой задачи в Codex
 
 Если задача пришла в Codex напрямую, без handoff из ChatGPT Project, direct task не должен сразу переходить к коду.
 

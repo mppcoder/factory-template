@@ -103,7 +103,7 @@ def main() -> int:
             errors.append("UI-блок должен требовать ручной выбор model/reasoning в picker")
         if "новый чат + вставка handoff" not in lowered:
             errors.append("UI-блок должен различать новый чат + вставка handoff и executable launch path")
-        if "new task launch" not in lowered:
+        if "новый task launch" not in lowered:
             errors.append("Ответ должен явно фиксировать, что надежная единица маршрутизации — новый task launch")
         if "advisory" not in lowered or "не переключает" not in lowered:
             errors.append("Ответ должен явно различать advisory layer и executable switch")
@@ -115,7 +115,7 @@ def main() -> int:
 
     if handoff_text:
         if "```" not in handoff_text:
-            errors.append("Внутри handoff-блока ожидается fenced code block для copy-paste")
+            errors.append("Внутри handoff-блока ожидается fenced code block для вставки")
         if re.search(r"(?mi)^##\s+Инструкция пользователю\s*$", handoff_text):
             errors.append("`## Инструкция пользователю` не должен попадать внутрь handoff-блока")
         if re.search(r"(?mi)^##\s+", handoff_text.replace(HANDOFF_HEADING, "", 1)):

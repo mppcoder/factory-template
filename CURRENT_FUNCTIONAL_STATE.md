@@ -40,7 +40,7 @@
 - beginner-friendly acceptance smoke (`onboarding-smoke/run-novice-e2e.sh`) регулярно воспроизводит greenfield и brownfield novice launch path через wizard
 - downstream apply-safe-zones теперь сохраняет rollback-state и backup, а `rollback-template-patch.sh` выполняет воспроизводимый откат; для mixed manual sessions доступен full-project snapshot restore
 - handoff source files и validator `validate-codex-task-pack.py` теперь явно требуют фиксировать приоритет repo rules при передаче задачи в Codex
-- handoff layer теперь явно запрещает выдачу handoff через файл или несколькими блоками: пользователю разрешён только один цельный copy-paste блок для Codex
+- handoff layer теперь явно запрещает выдачу handoff через файл или несколькими блоками: пользователю разрешён только один цельный блок для вставки в Codex
 - generated project tooling теперь включает validator `validate-handoff-response-format.py`, который проверяет сам markdown-ответ на single-block handoff и запрещает file-based handoff patterns
 - task-based profile/model selection для Codex теперь вынесен в executable launch layer: named profiles, router scripts и launch log на границе новой задачи
 - completion/handoff layer теперь выдает отдельный executable launch boundary и не подменяет новый task launch понятием "новый чат"
@@ -55,7 +55,10 @@
 - release-facing документация нормализована вокруг одного reference-doc и больше не зависит от разрозненных описаний в runbooks и release-note draft
 - canonical preset naming, workspace bootstrap naming и optional domain reference contour синхронизированы между docs, manifests и физической структурой repo
 - release-facing docs теперь фиксируют, что линия `2.5` не сводится к process hardening и требует отдельного beginner-first/UI-friendly контура
-- GitHub Actions workflow dependency backlog consolidated: CI и Release используют согласованные `checkout@v6`, `setup-python@v6` и `upload-artifact@v7`, а stale Dependabot PR cluster закрывается через единый human-owned remediation path
+- очередь обновлений GitHub Actions workflow сведена и закрыта: CI и Release используют согласованные `checkout@v6`, `setup-python@v6` и `upload-artifact@v7`, а устаревший Dependabot PR cluster закрывается через единый remediation path
+- closeout layer теперь требует проверять доступный GitHub write path перед передачей PR merge пользователю; если blockers нет, ready/merge/delete-branch/local sync выполняет Codex
+- русскоязычный человекочитаемый слой закреплен как правило: ответы, инструкции, отчеты, closeout и generated guidance пишутся на русском, а английский остается только для технических идентификаторов
+- user-facing output operator env validator русифицирован, чтобы quick verify не возвращал англоязычные описательные сообщения
 
 ## Программа 2.5 (release truth)
 - release truth source: `docs/releases/release-scorecard.yaml`

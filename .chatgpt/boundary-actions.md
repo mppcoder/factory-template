@@ -1,4 +1,4 @@
-# Boundary Actions
+# Действия на границе
 
 ## Для пользователя
 
@@ -14,7 +14,7 @@
 - Активные стартовые сценарии: еще не определены.
 - Проверить, что Codex получает актуальные `codex-input.md`, `codex-context.md`, `codex-task-pack.md` и `boundary-actions.md`.
 
-## Impact Model
+## Модель влияния
 
 - `impact.factory_sources` — Обновление repo-first инструкции проекта шаблона в ChatGPT только если изменились canonical repo/path/entrypoint или короткая instruction text; иначе по умолчанию не требуется
 - `impact.downstream_template_sync` — Обновление шаблона в боевых repo
@@ -22,7 +22,7 @@
 - `impact.manual_archive_required` — Нужен готовый архив или каталог для ручной загрузки
 - `impact.delete_before_replace` — Перед заменой нужно удалить старую repo-first инструкцию, если она конфликтует с новой
 
-## Completion Package For Repo-First Instruction Changes
+## Пакет завершения для изменений repo-first инструкций
 
 Если change затрагивает scenario-pack, launcher, validators, runbooks, codex-task-pack, `.chatgpt` artifacts или другой downstream-consumed template content, пользовательский boundary output должен включать:
 
@@ -52,9 +52,9 @@
 
 - Handoff в Codex сейчас не является обязательным для выбранного профиля.
 - `apply_mode: manual-ui (default)` — основной user-facing путь для интерактивной работы через VS Code Codex extension.
-- Для manual UI apply откройте новый чат/окно Codex, вручную выберите `selected_model=gpt-5.4` и `selected_reasoning_effort=medium` в picker, затем вставьте handoff.
+- Для ручного применения через UI откройте новый чат/окно Codex, вручную выберите `selected_model=gpt-5.5` и `selected_reasoning_effort=medium` в picker, затем вставьте handoff.
 - `strict_launch_mode: optional` — используйте launch command из `.chatgpt/task-launch.yaml`, если нужна automation, reproducibility, shell-first или scripted launch.
-- `новый чат + вставка handoff` и `new task launch через executable launcher` — не одно и то же.
+- `новый чат + вставка handoff` и `новый task launch через executable launcher` — не одно и то же.
 - Уже открытая live session является только non-canonical fallback и не должна подаваться как надежный auto-switch path.
 - `AGENTS`, ChatGPT Project instructions, scenario-pack и `.chatgpt` guidance являются advisory layer; profile/model выбирает executable launcher/router.
 - `selected_profile` — это исполнимая граница маршрутизации; `selected_model` и `selected_reasoning_effort` описывают ожидаемую конфигурацию этого profile, а не auto-switch от текста handoff.
@@ -64,19 +64,22 @@
 - Если выбран `hybrid` или `codex-led`, передать Codex актуальный `codex-task-pack.md`.
 - После возврата из Codex обновить verification-report.md, done-report.md и CURRENT_FUNCTIONAL_STATE.md.
 - Если handoff уже разрешен и задача достаточно определена, его нужно выдать inline в том же ответе, а не ограничиваться аналитикой.
-- Формат handoff для пользователя: только один цельный блок для copy-paste в Codex.
+- Формат handoff для пользователя: только один цельный блок для вставки в Codex.
 - Нельзя заменять handoff ссылкой на файл, несколькими разрозненными блоками или инструкцией собрать handoff из `codex-input.md`, `codex-context.md`, `codex-task-pack.md`.
 - Если remaining work еще остается внутренним repo follow-up, handoff не должен исчезать из-за будущего user footer.
 - Release-followup, source-pack refresh, export refresh, closeout-sync и release-facing consistency pass внутри repo считаются внутренней работой Codex.
+- Человекочитаемые заголовки, инструкции, отчеты и closeout-тексты должны быть на русском языке; английский допустим только для технических идентификаторов, команд, файлов, ключей конфигурации и literal values.
 - Troubleshooting sticky state:
   - если пользователь открыл случайную или уже существующую Codex chat-сессию и просто вставил handoff, profile/model/reasoning могли не переключиться;
-  - для interactive workflow сначала закройте stale-сессию, откройте новую и вручную проверьте picker;
+  - для интерактивного процесса сначала закройте устаревшую сессию, откройте новую и вручную проверьте picker;
   - если нужна строгая boundary-гарантия, выполните optional strict launch command через `./scripts/launch-codex-task.sh`;
-  - если после этого route все еще выглядит stale, проверить named profile в local Codex config и сверить `selected_model` с live `codex debug models`.
+  - если после этого route все еще выглядит устаревшим, проверить именованный profile в local Codex config и сверить `selected_model` с live `codex debug models`.
 
 ## Для внешних границ
 
-- GitHub / внешние UI / секреты не выполнять автоматически из Codex.
+- GitHub PR merge не считать внешним шагом автоматически. Если `gh` или GitHub connector доступен, PR относится к текущей задаче, checks green, PR mergeable и нет required human approval/conflict/неясной merge strategy, Codex должен сам выполнить ready/merge/delete-branch/local sync.
+- GitHub UI считать внешним шагом только при конкретном блокере: нет авторизации, нет прав, required human review/approval, red/pending checks, конфликт, release/security approval или другое действие, которое нельзя безопасно выполнить инструментами Codex.
+- Внешние UI / секреты не выполнять автоматически из Codex.
 - Все внешние действия фиксировать отдельной пошаговой инструкцией для пользователя с финальным блоком `Инструкция пользователю`.
 - `Инструкция пользователю` не должна подменять внутренний handoff, если internal repo follow-up еще не завершен.
 - Если внешнего шага нет, финальный ответ все равно должен явно сказать, что внешних действий не требуется.
@@ -84,7 +87,7 @@
 - Для downstream repo sync сначала используйте `workspace-packs/factory-ops/export-template-patch.sh` и `workspace-packs/factory-ops/apply-template-patch.sh`.
 - Для downstream repo instruction layer source-of-truth хранится в `template-repo/AGENTS.md`, а Codex в battle repo должен читать materialized root `AGENTS.md`.
 - Не перекладывайте на пользователя запуск внутренних repo-команд вроде `GENERATE_BOUNDARY_ACTIONS.sh`, если эти шаги может выполнить Codex.
-- Если replacement может создать stale duplicates, добавляйте точный раздел `Удалить перед заменой`.
+- Если замена может создать устаревшие дубликаты, добавляйте точный раздел `Удалить перед заменой`.
 
 Если closeout полностью внутренний и `Инструкция пользователю` не нужна, используйте явную формулировку вроде:
 - `Внешних действий не требуется.`

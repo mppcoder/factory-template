@@ -10,7 +10,7 @@
    - `[ASSUMPTION]` — предположение.
 4. Если есть конфликт между реальностью проекта и документацией, зафиксируй его отдельно.
 
-## Canonical VPS Layout Rule
+## Правило canonical VPS layout
 В `/projects` разрешены только корневые папки отдельных проектов.
 
 Каноническая структура:
@@ -26,7 +26,17 @@
 ## Правило фиксации дефектов
 Любой обнаруженный дефект, регрессия, расхождение, пропущенный шаг, шаблонный сбой или reusable process failure должен быть оформлен как структурированный bug report до исправления или одновременно с ним. Silent fixes запрещены.
 
-## Alignment Rule
+## Правило русскоязычного человекочитаемого слоя
+Для `factory-template` человекочитаемые ответы, инструкции, отчеты, описания, closeout, handoff-пояснения и generated guidance пишутся на русском языке.
+
+Допустимые исключения:
+- технические имена файлов, команд, ключей конфигурации и полей;
+- буквальные значения API, CLI, GitHub, YAML/JSON и переменных окружения;
+- названия моделей, профилей, actions, branch, commit и PR, если они являются идентификаторами.
+
+Англоязычные шаблонные заголовки и описательные фразы в человекочитаемом слое считаются дефектом, если их можно без потери смысла заменить русским текстом.
+
+## Правило выравнивания
 Фабрика, greenfield и brownfield могут различаться по предметным шагам, но не могут различаться по правилам фиксации дефектов, handoff и completion.
 
 Отсутствие inline Codex handoff в ответе, где handoff уже допустим и задача достаточно определена, считается reusable process defect.
@@ -44,3 +54,7 @@
 Если Codex перекладывает на пользователя внутренние repo-операции вроде export refresh, boundary-actions generation, manifest refresh или сборки patch/export artifacts, это считается reusable process defect boundary/completion layer.
 
 Если verify уже green, `origin` настроен и verified sync технически доступен, но ответ завершает change без canonical `VERIFIED_SYNC.sh` и без явного блокера, это считается reusable process defect closeout/sync layer.
+
+Если доступный GitHub PR merge ошибочно маркируется как внешний пользовательский шаг без проверки `gh`/GitHub connector, mergeability, checks и review blockers, это считается reusable process defect closeout/GitHub layer.
+
+Если человекочитаемые ответы, отчеты или generated guidance для `factory-template` используют английские описательные заголовки/фразы вместо русского текста без технической необходимости, это считается reusable process defect language layer.
