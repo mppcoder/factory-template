@@ -1,6 +1,22 @@
+mode_parity:
+  manifest: mode-parity.yaml
+  core_capabilities:
+  - repo_first_instructions
+  - scenario_pack_access
+  - agents_materialization
+  - chatgpt_task_artifacts
+  - codex_handoff_pack
+  - defect_capture_path
+  - versioning_documentation_layer
+  - project_knowledge_layer
+  - work_features_and_completed
+  - verify_done_checklist
+  - downstream_sync_metadata
+
 project_presets:
   greenfield-product:
     title: Развитие продукта
+    parity_mode: greenfield
     default_mode: greenfield
     recommended_change_class: feature
     recommended_execution_mode: codex-led
@@ -10,15 +26,53 @@ project_presets:
     - 05-clarify-scope.md
     - 06-user-spec-generation.md
     required_artifacts:
-    - .chatgpt/intake.yaml
-    - .chatgpt/user-spec.md
-    - .chatgpt/tech-spec.md
+    - AGENTS.md
+    - template-repo/scenario-pack/00-master-router.md
+    - template-repo/mode-parity.yaml
+    - .chatgpt/project-profile.yaml
     - .chatgpt/task-index.yaml
+    - .chatgpt/stage-state.yaml
+    - .chatgpt/active-scenarios.yaml
+    - .chatgpt/direct-task-self-handoff.md
+    - .chatgpt/codex-input.md
+    - .chatgpt/normalized-codex-handoff.md
+    - .chatgpt/bugflow-status.yaml
+    - .chatgpt/project-origin.md
+    - .chatgpt/done-checklist.md
+    - .chatgpt/verification-report.md
+    - .chatgpt/done-report.md
+    - tasks/codex/codex-task-mandatory-bug-capture.block.md
+    - reports/bugs
+    - meta-feedback/factory-bug-report.md
+    - VERSION.md
+    - CHANGELOG.md
+    - CURRENT_FUNCTIONAL_STATE.md
+    - docs/architecture.md
+    - docs/codex-workflow.md
+    - project-knowledge/README.md
+    - work/features
+    - work/completed
+    - project-presets.yaml
+    - policy-presets.yaml
+    - compatibility-aliases.yaml
+    - codex-routing.yaml
+    - codex-model-routing.yaml
+    - template-repo/tree-contract.yaml
+    - greenfield/vision.md
+    - greenfield/problem-statement.md
+    - greenfield/scope-v1.md
+    - greenfield/architecture-options.md
+    - greenfield/initial-task-list.md
+    - .chatgpt/discovery-summary.md
     notes:
     - Подходит для продуктовой разработки, где ожидается реализация и последующая
       верификация.
+    - Core parity layer совпадает с остальными generated modes; отличия ограничены
+      greenfield discovery artifacts.
+
   brownfield-with-repo-modernization:
     title: Модернизация старой системы
+    parity_mode: brownfield-with-repo-modernization
     default_mode: brownfield
     recommended_change_class: refactor
     recommended_execution_mode: hybrid
@@ -29,14 +83,55 @@ project_presets:
     - brownfield/02-repo-audit.md
     - 13-refactor-analysis.md
     required_artifacts:
+    - AGENTS.md
+    - template-repo/scenario-pack/00-master-router.md
+    - template-repo/mode-parity.yaml
+    - .chatgpt/project-profile.yaml
+    - .chatgpt/task-index.yaml
+    - .chatgpt/stage-state.yaml
+    - .chatgpt/active-scenarios.yaml
+    - .chatgpt/direct-task-self-handoff.md
+    - .chatgpt/codex-input.md
+    - .chatgpt/normalized-codex-handoff.md
+    - .chatgpt/bugflow-status.yaml
+    - .chatgpt/project-origin.md
+    - .chatgpt/done-checklist.md
+    - .chatgpt/verification-report.md
+    - .chatgpt/done-report.md
+    - tasks/codex/codex-task-mandatory-bug-capture.block.md
+    - reports/bugs
+    - meta-feedback/factory-bug-report.md
+    - VERSION.md
+    - CHANGELOG.md
+    - CURRENT_FUNCTIONAL_STATE.md
+    - docs/architecture.md
+    - docs/codex-workflow.md
+    - project-knowledge/README.md
+    - work/features
+    - work/completed
+    - project-presets.yaml
+    - policy-presets.yaml
+    - compatibility-aliases.yaml
+    - codex-routing.yaml
+    - codex-model-routing.yaml
+    - template-repo/tree-contract.yaml
     - brownfield/system-inventory.md
     - brownfield/repo-audit.md
     - brownfield/as-is-architecture.md
+    - brownfield/gap-register.md
+    - .chatgpt/evidence-register.md
+    - .chatgpt/reality-check.md
+    - brownfield/change-map.md
+    - brownfield/risks-and-constraints.md
     - .chatgpt/conflict-report.md
     notes:
     - Начинайте с фиксации реальности и ограничений.
+    - Core parity layer совпадает с остальными generated modes; отличия ограничены
+      evidence-first и modernization artifacts.
+
   brownfield-with-repo-integration:
     title: Интеграционный проект
+    parity_mode: brownfield-with-repo-integration
     default_mode: brownfield
     recommended_change_class: migration
     recommended_execution_mode: hybrid
@@ -47,14 +142,54 @@ project_presets:
     - 08-tech-spec-generation.md
     - 10-task-decomposition.md
     required_artifacts:
-    - docs/integrations.md
-    - .chatgpt/reality-check.md
-    - .chatgpt/tech-spec.md
+    - AGENTS.md
+    - template-repo/scenario-pack/00-master-router.md
+    - template-repo/mode-parity.yaml
+    - .chatgpt/project-profile.yaml
     - .chatgpt/task-index.yaml
+    - .chatgpt/stage-state.yaml
+    - .chatgpt/active-scenarios.yaml
+    - .chatgpt/direct-task-self-handoff.md
+    - .chatgpt/codex-input.md
+    - .chatgpt/normalized-codex-handoff.md
+    - .chatgpt/bugflow-status.yaml
+    - .chatgpt/project-origin.md
+    - .chatgpt/done-checklist.md
+    - .chatgpt/verification-report.md
+    - .chatgpt/done-report.md
+    - tasks/codex/codex-task-mandatory-bug-capture.block.md
+    - reports/bugs
+    - meta-feedback/factory-bug-report.md
+    - VERSION.md
+    - CHANGELOG.md
+    - CURRENT_FUNCTIONAL_STATE.md
+    - docs/architecture.md
+    - docs/codex-workflow.md
+    - project-knowledge/README.md
+    - work/features
+    - work/completed
+    - project-presets.yaml
+    - policy-presets.yaml
+    - compatibility-aliases.yaml
+    - codex-routing.yaml
+    - codex-model-routing.yaml
+    - template-repo/tree-contract.yaml
+    - brownfield/system-inventory.md
+    - brownfield/repo-audit.md
+    - brownfield/as-is-architecture.md
+    - brownfield/gap-register.md
+    - .chatgpt/evidence-register.md
+    - .chatgpt/reality-check.md
+    - docs/integrations.md
+    - .chatgpt/tech-spec.md
     notes:
     - Для интеграций обязательно фиксируйте зависимости, версии и внешние ограничения.
+    - Core parity layer совпадает с остальными generated modes; отличия ограничены
+      evidence-first и integration artifacts.
+
   brownfield-with-repo-audit:
     title: Аудит без обязательной реализации
+    parity_mode: brownfield-with-repo-audit
     default_mode: brownfield
     recommended_change_class: brownfield-audit
     recommended_execution_mode: manual
@@ -65,15 +200,54 @@ project_presets:
     - brownfield/02-repo-audit.md
     - brownfield/04-gap-register.md
     required_artifacts:
+    - AGENTS.md
+    - template-repo/scenario-pack/00-master-router.md
+    - template-repo/mode-parity.yaml
+    - .chatgpt/project-profile.yaml
+    - .chatgpt/task-index.yaml
+    - .chatgpt/stage-state.yaml
+    - .chatgpt/active-scenarios.yaml
+    - .chatgpt/direct-task-self-handoff.md
+    - .chatgpt/codex-input.md
+    - .chatgpt/normalized-codex-handoff.md
+    - .chatgpt/bugflow-status.yaml
+    - .chatgpt/project-origin.md
+    - .chatgpt/done-checklist.md
+    - .chatgpt/verification-report.md
+    - .chatgpt/done-report.md
+    - tasks/codex/codex-task-mandatory-bug-capture.block.md
+    - reports/bugs
+    - meta-feedback/factory-bug-report.md
+    - VERSION.md
+    - CHANGELOG.md
+    - CURRENT_FUNCTIONAL_STATE.md
+    - docs/architecture.md
+    - docs/codex-workflow.md
+    - project-knowledge/README.md
+    - work/features
+    - work/completed
+    - project-presets.yaml
+    - policy-presets.yaml
+    - compatibility-aliases.yaml
+    - codex-routing.yaml
+    - codex-model-routing.yaml
+    - template-repo/tree-contract.yaml
     - brownfield/system-inventory.md
     - brownfield/repo-audit.md
+    - brownfield/as-is-architecture.md
     - brownfield/gap-register.md
     - .chatgpt/evidence-register.md
+    - .chatgpt/reality-check.md
+    - .chatgpt/done-report.md
     notes:
     - Используйте, когда задача — описать и оценить систему без обязательного handoff
       в Codex.
+    - Core parity layer совпадает с остальными generated modes; отличия ограничены
+      evidence-first и audit artifacts.
+
   brownfield-without-repo:
     title: Brownfield без репозитория
+    parity_mode: brownfield-without-repo
     default_mode: brownfield
     recommended_change_class: brownfield-stabilization
     recommended_execution_mode: hybrid
@@ -87,14 +261,52 @@ project_presets:
     - brownfield/10-evidence-pack-completion.md
     - brownfield/11-codex-assisted-stabilization.md
     required_artifacts:
+    - AGENTS.md
+    - template-repo/scenario-pack/00-master-router.md
+    - template-repo/mode-parity.yaml
+    - .chatgpt/project-profile.yaml
+    - .chatgpt/task-index.yaml
+    - .chatgpt/stage-state.yaml
+    - .chatgpt/active-scenarios.yaml
+    - .chatgpt/direct-task-self-handoff.md
+    - .chatgpt/codex-input.md
+    - .chatgpt/normalized-codex-handoff.md
+    - .chatgpt/bugflow-status.yaml
+    - .chatgpt/project-origin.md
+    - .chatgpt/done-checklist.md
+    - .chatgpt/verification-report.md
+    - .chatgpt/done-report.md
+    - tasks/codex/codex-task-mandatory-bug-capture.block.md
+    - reports/bugs
+    - meta-feedback/factory-bug-report.md
+    - VERSION.md
+    - CHANGELOG.md
+    - CURRENT_FUNCTIONAL_STATE.md
+    - docs/architecture.md
+    - docs/codex-workflow.md
+    - project-knowledge/README.md
+    - work/features
+    - work/completed
+    - project-presets.yaml
+    - policy-presets.yaml
+    - compatibility-aliases.yaml
+    - codex-routing.yaml
+    - codex-model-routing.yaml
+    - template-repo/tree-contract.yaml
     - brownfield/system-inventory.md
     - brownfield/repo-audit.md
-    - brownfield/reverse-engineering-summary.md
+    - brownfield/as-is-architecture.md
+    - brownfield/gap-register.md
     - .chatgpt/evidence-register.md
-    - .chatgpt/codex-input.md
+    - .chatgpt/reality-check.md
+    - brownfield/reverse-engineering-plan.md
+    - brownfield/reverse-engineering-summary.md
+    - brownfield/decision-log.md
     notes:
     - Стартуйте как hybrid до завершения evidence pack и reality-check.
     - Переключение в codex-led допускается после brownfield-with-repo-audit цикла и фиксации safe
       zones.
     - Подходит для evidence-first запуска factory-template + brownfield shell + evidence
       workspace в одном VS Code bootstrap окне.
+    - Core parity layer совпадает с остальными generated modes; отличия ограничены
+      evidence-first и reconstruction artifacts.

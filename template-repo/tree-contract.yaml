@@ -78,6 +78,7 @@ common_generated_required_paths: &common_generated_required_paths
   - tasks/codex
   - tests
   - work/active
+  - work/features
   - work/completed
   - work-templates
   - change-classes.yaml
@@ -87,6 +88,7 @@ common_generated_required_paths: &common_generated_required_paths
   - codex-routing.yaml
   - codex-model-routing.yaml
   - template-repo/tree-contract.yaml
+  - template-repo/mode-parity.yaml
   - template-repo/scenario-pack/00-master-router.md
 
 contours:
@@ -106,8 +108,10 @@ contours:
       - docs/template-architecture-and-event-workflows.md
       - docs/tree-contract.md
       - template-repo/tree-contract.yaml
+      - template-repo/mode-parity.yaml
       - template-repo/compatibility-aliases.yaml
       - template-repo/scripts/validate-tree-contract.py
+      - template-repo/scripts/validate-mode-parity.py
       - template-repo/scripts/verify-all.sh
       - PRE_RELEASE_AUDIT.sh
       - MATRIX_TEST.sh
@@ -227,6 +231,7 @@ contours:
       - reports/factory-feedback/.gitkeep
       - tasks/codex/codex-task-mandatory-bug-capture.block.md
       - work/active/.gitkeep
+      - work/features/.gitkeep
       - work/completed/.gitkeep
     forbidden_paths:
       - AGENT.md

@@ -28,6 +28,7 @@ TEST_REPORT.md is verification evidence, not the canonical release-status source
 - repo-first ChatGPT Project instruction mode
 - release-facing reference package and canonical root release notes source
 - novice onboarding acceptance fixtures (`onboarding-smoke/run-novice-e2e.sh`)
+- mode parity manifest, matrix and validator (`template-repo/mode-parity.yaml`, `docs/mode-parity-matrix.md`, `validate-mode-parity.py`)
 - downstream upgrade dry-run/apply/rollback UX (`upgrade-report.py`, `rollback-template-patch.sh`)
 
 ## Ожидаемое поведение на fresh scaffold
@@ -36,11 +37,16 @@ Evidence / quality / DoD до смыслового наполнения арте
 
 ## Фактический результат
 - `python3 template-repo/scripts/validate-tree-contract.py .` проходит.
+- `python3 template-repo/scripts/validate-mode-parity.py .` проходит и подтверждает общий core layer для template base, greenfield, brownfield-without-repo и всех brownfield-with-repo presets.
 - `bash template-repo/scripts/verify-all.sh quick` проходит.
 - `bash template-repo/scripts/verify-all.sh ci` проходит.
 - `MATRIX_TEST.sh` подтверждает `validate-tree-contract.py` на generated greenfield, brownfield-without-repo и brownfield-with-repo контурах.
 - Compatibility aliases проверены через `apply-project-preset.py`: старый greenfield alias резолвится в `greenfield-product`, старый no-repo brownfield alias резолвится в `brownfield-without-repo`.
-- `bash onboarding-smoke/run-novice-e2e.sh` проходит: `greenfield-novice` и `brownfield-novice` в статусе `green`.
+- `bash onboarding-smoke/run-novice-e2e.sh` проходит: покрыты `greenfield-product`, `brownfield-without-repo`, `brownfield-with-repo-modernization`, `brownfield-with-repo-integration`, `brownfield-with-repo-audit`, плюс guided launcher для greenfield и brownfield audit.
+- `validate-mode-parity.py` подключен в `verify-all.sh quick`, поэтому входит и в `verify-all.sh ci`.
+- `template-repo/project-presets.yaml` теперь явно фиксирует `parity_mode` и общий required core artifact set для каждого canonical preset.
+- `template-repo/launcher.sh` materializes `template-repo/mode-parity.yaml` в generated projects.
+- Incidental parity defect `work/features` gap зафиксирован и исправлен in-scope: `reports/bugs/2026-04-25-mode-parity-gap.md`.
 - `bash RELEASE_BUILD.sh /tmp/factory-template-release.zip` проходит как packaging dry-run.
 - `validate-codex-routing.py` теперь корректно проверяет и template repo, и generated repos (без false-negative по `template/docs/*`).
 - `tools/fill_smoke_artifacts.py` теперь поддерживает target path и не перезаписывает root `.chatgpt/*` при `MATRIX_TEST.sh`.

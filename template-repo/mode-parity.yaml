@@ -1,0 +1,353 @@
+mode_parity_version: 1
+status: active
+owner: factory-template
+description: "Core parity contract for template and generated project modes."
+
+core_capability_ids: &core_capability_ids
+  - repo_first_instructions
+  - scenario_pack_access
+  - agents_materialization
+  - chatgpt_task_artifacts
+  - codex_handoff_pack
+  - defect_capture_path
+  - versioning_documentation_layer
+  - project_knowledge_layer
+  - work_features_and_completed
+  - verify_done_checklist
+  - downstream_sync_metadata
+
+all_presets_required_artifacts: &all_presets_required_artifacts
+  - AGENTS.md
+  - template-repo/scenario-pack/00-master-router.md
+  - template-repo/mode-parity.yaml
+  - .chatgpt/project-profile.yaml
+  - .chatgpt/task-index.yaml
+  - .chatgpt/stage-state.yaml
+  - .chatgpt/active-scenarios.yaml
+  - .chatgpt/direct-task-self-handoff.md
+  - .chatgpt/codex-input.md
+  - .chatgpt/normalized-codex-handoff.md
+  - .chatgpt/bugflow-status.yaml
+  - .chatgpt/project-origin.md
+  - .chatgpt/done-checklist.md
+  - .chatgpt/verification-report.md
+  - .chatgpt/done-report.md
+  - tasks/codex/codex-task-mandatory-bug-capture.block.md
+  - reports/bugs
+  - meta-feedback/factory-bug-report.md
+  - VERSION.md
+  - CHANGELOG.md
+  - CURRENT_FUNCTIONAL_STATE.md
+  - docs/architecture.md
+  - docs/codex-workflow.md
+  - project-knowledge/README.md
+  - work/features
+  - work/completed
+  - project-presets.yaml
+  - policy-presets.yaml
+  - compatibility-aliases.yaml
+  - codex-routing.yaml
+  - codex-model-routing.yaml
+  - template-repo/tree-contract.yaml
+
+core_capabilities:
+  repo_first_instructions:
+    title: Repo-first instructions
+    justification: "Every project must start from repository instructions and the master router."
+    generated_paths:
+      - AGENTS.md
+    source_paths:
+      - template-repo/AGENTS.md
+      - template-repo/scripts/sync-agents.py
+  scenario_pack_access:
+    title: Scenario-pack access
+    justification: "Every generated project carries the scenario router and scenario pack entrypoint."
+    generated_paths:
+      - template-repo/scenario-pack/00-master-router.md
+    source_paths:
+      - template-repo/scenario-pack/00-master-router.md
+      - template-repo/scripts/export-scenario-pack.sh
+  agents_materialization:
+    title: AGENTS materialization
+    justification: "Generated AGENTS.md must be materialized from template-repo/AGENTS.md, not handwritten per mode."
+    generated_paths:
+      - AGENTS.md
+    source_paths:
+      - template-repo/AGENTS.md
+      - template-repo/scripts/sync-agents.py
+  chatgpt_task_artifacts:
+    title: ChatGPT task artifacts
+    justification: "All modes need the same task, stage, routing, evidence and spec artifacts."
+    generated_paths:
+      - .chatgpt/project-profile.yaml
+      - .chatgpt/task-index.yaml
+      - .chatgpt/stage-state.yaml
+      - .chatgpt/active-scenarios.yaml
+      - .chatgpt/intake.yaml
+      - .chatgpt/user-spec.md
+      - .chatgpt/tech-spec.md
+      - .chatgpt/evidence-register.md
+      - .chatgpt/reality-check.md
+    source_paths:
+      - template-repo/template/.chatgpt/project-profile.yaml
+      - template-repo/template/.chatgpt/task-index.yaml
+      - template-repo/template/.chatgpt/stage-state.yaml
+      - template-repo/template/.chatgpt/active-scenarios.yaml
+      - template-repo/template/.chatgpt/intake.yaml
+      - template-repo/template/.chatgpt/user-spec.md
+      - template-repo/template/.chatgpt/tech-spec.md
+      - template-repo/template/.chatgpt/evidence-register.md
+      - template-repo/template/.chatgpt/reality-check.md
+  codex_handoff_pack:
+    title: Codex handoff pack
+    justification: "All modes need the same Codex-ready handoff surface."
+    generated_paths:
+      - .chatgpt/codex-input.md
+      - .chatgpt/codex-context.md
+      - .chatgpt/codex-task-pack.md
+      - .chatgpt/direct-task-self-handoff.md
+      - .chatgpt/normalized-codex-handoff.md
+      - .chatgpt/task-launch.yaml
+      - tasks/codex/codex-task-mandatory-bug-capture.block.md
+      - scripts/create-codex-task-pack.py
+      - scripts/validate-codex-task-pack.py
+    source_paths:
+      - template-repo/template/.chatgpt/codex-input.md
+      - template-repo/template/.chatgpt/codex-context.md
+      - template-repo/template/.chatgpt/codex-task-pack.md
+      - template-repo/template/.chatgpt/direct-task-self-handoff.md
+      - template-repo/template/.chatgpt/normalized-codex-handoff.md
+      - template-repo/template/.chatgpt/task-launch.yaml
+      - template-repo/template/tasks/codex/codex-task-mandatory-bug-capture.block.md
+      - template-repo/scripts/create-codex-task-pack.py
+      - template-repo/scripts/validate-codex-task-pack.py
+  defect_capture_path:
+    title: Defect-capture path
+    justification: "All modes must be able to capture project and factory defects before remediation."
+    generated_paths:
+      - .chatgpt/bugflow-status.yaml
+      - .chatgpt/classification.md
+      - reports/bugs
+      - reports/factory-feedback
+      - meta-feedback/factory-bug-report.md
+      - meta-feedback/factory-task.md
+      - scripts/validate-defect-capture.py
+    source_paths:
+      - template-repo/template/.chatgpt/bugflow-status.yaml
+      - template-repo/template/.chatgpt/classification.md
+      - template-repo/template/reports/bugs/.gitkeep
+      - template-repo/template/reports/factory-feedback/.gitkeep
+      - template-repo/template/meta-feedback/factory-bug-report.md
+      - template-repo/template/meta-feedback/factory-task.md
+      - template-repo/scripts/validate-defect-capture.py
+  versioning_documentation_layer:
+    title: Versioning and documentation layer
+    justification: "All modes must expose the same durable version, changelog, current-state and docs surface."
+    generated_paths:
+      - VERSION.md
+      - CHANGELOG.md
+      - CURRENT_FUNCTIONAL_STATE.md
+      - PROJECT_BRIEF.md
+      - README.md
+      - docs/architecture.md
+      - docs/codex-workflow.md
+      - docs/constraints.md
+      - docs/roadmap.md
+    source_paths:
+      - template-repo/template/VERSION.md
+      - template-repo/template/CHANGELOG.md
+      - template-repo/template/CURRENT_FUNCTIONAL_STATE.md
+      - template-repo/template/PROJECT_BRIEF.md
+      - template-repo/template/README.md
+      - template-repo/template/docs/architecture.md
+      - template-repo/template/docs/codex-workflow.md
+      - template-repo/template/docs/constraints.md
+      - template-repo/template/docs/roadmap.md
+  project_knowledge_layer:
+    title: Project-knowledge layer
+    justification: "All modes need the same long-lived knowledge base for architecture, constraints, known issues and glossary."
+    generated_paths:
+      - project-knowledge/README.md
+      - project-knowledge/project.md
+      - project-knowledge/architecture.md
+      - project-knowledge/constraints.md
+      - project-knowledge/known-issues.md
+      - project-knowledge/fixes-registry.md
+      - project-knowledge/patterns.md
+      - project-knowledge/glossary.md
+    source_paths:
+      - template-repo/template/project-knowledge/README.md
+      - template-repo/template/project-knowledge/project.md
+      - template-repo/template/project-knowledge/architecture.md
+      - template-repo/template/project-knowledge/constraints.md
+      - template-repo/template/project-knowledge/known-issues.md
+      - template-repo/template/project-knowledge/fixes-registry.md
+      - template-repo/template/project-knowledge/patterns.md
+      - template-repo/template/project-knowledge/glossary.md
+  work_features_and_completed:
+    title: Work features and completed
+    justification: "All modes must support feature workspaces and completed-work closeout."
+    generated_paths:
+      - work/features
+      - work/completed
+      - work/_task-template.md
+      - work-templates/user-spec.md.template
+      - work-templates/tech-spec.md.template
+      - work-templates/tasks/task.md.template
+      - scripts/init-feature-workspace.sh
+    source_paths:
+      - template-repo/template/work/features/.gitkeep
+      - template-repo/template/work/completed/.gitkeep
+      - template-repo/template/work/_task-template.md
+      - template-repo/template/work-templates/user-spec.md.template
+      - template-repo/template/work-templates/tech-spec.md.template
+      - template-repo/template/work-templates/tasks/task.md.template
+      - template-repo/scripts/init-feature-workspace.sh
+  verify_done_checklist:
+    title: Verify and done checklist
+    justification: "All modes share the same verification, done-report and closeout checklist path."
+    generated_paths:
+      - .chatgpt/verification-report.md
+      - .chatgpt/done-checklist.md
+      - .chatgpt/done-report.md
+      - scripts/validate-stage.py
+      - scripts/validate-evidence.py
+      - scripts/validate-quality.py
+      - scripts/check-dod.py
+    source_paths:
+      - template-repo/template/.chatgpt/verification-report.md
+      - template-repo/template/.chatgpt/done-checklist.md
+      - template-repo/template/.chatgpt/done-report.md
+      - template-repo/scripts/validate-stage.py
+      - template-repo/scripts/validate-evidence.py
+      - template-repo/scripts/validate-quality.py
+      - template-repo/scripts/check-dod.py
+  downstream_sync_metadata:
+    title: Downstream sync metadata
+    justification: "All generated projects must carry source version, preset and sync metadata where downstream sync applies."
+    generated_paths:
+      - .chatgpt/project-origin.md
+      - project-presets.yaml
+      - policy-presets.yaml
+      - compatibility-aliases.yaml
+      - codex-routing.yaml
+      - codex-model-routing.yaml
+      - template-repo/tree-contract.yaml
+      - template-repo/mode-parity.yaml
+    source_paths:
+      - template-repo/template/.chatgpt/project-origin.md
+      - template-repo/project-presets.yaml
+      - template-repo/policy-presets.yaml
+      - template-repo/compatibility-aliases.yaml
+      - template-repo/codex-routing.yaml
+      - template-repo/codex-model-routing.yaml
+      - template-repo/tree-contract.yaml
+      - template-repo/mode-parity.yaml
+
+mode_specific_capabilities:
+  greenfield_discovery:
+    title: Greenfield discovery artifacts
+    justification: "Only greenfield mode needs first-principles vision, problem and initial scope discovery."
+    required_paths:
+      - greenfield/vision.md
+      - greenfield/problem-statement.md
+      - greenfield/scope-v1.md
+      - greenfield/architecture-options.md
+      - greenfield/initial-task-list.md
+      - .chatgpt/discovery-summary.md
+  brownfield_evidence_first:
+    title: Brownfield evidence-first artifacts
+    justification: "All brownfield modes must capture observed system facts before implementation."
+    required_paths:
+      - brownfield/system-inventory.md
+      - brownfield/repo-audit.md
+      - brownfield/as-is-architecture.md
+      - brownfield/gap-register.md
+      - .chatgpt/evidence-register.md
+      - .chatgpt/reality-check.md
+  brownfield_without_repo_reconstruction:
+    title: Brownfield without repo reconstruction workspace
+    justification: "No-repo brownfield needs reconstruction and incoming-evidence flow before safe Codex work."
+    required_paths:
+      - brownfield/reverse-engineering-plan.md
+      - brownfield/reverse-engineering-summary.md
+      - brownfield/decision-log.md
+      - .chatgpt/codex-input.md
+  brownfield_with_repo_modernization:
+    title: Brownfield with repo modernization paths
+    justification: "Modernization needs audit, change-map and risk paths for a real existing repo."
+    required_paths:
+      - brownfield/change-map.md
+      - brownfield/risks-and-constraints.md
+      - .chatgpt/conflict-report.md
+  brownfield_with_repo_integration:
+    title: Brownfield with repo integration paths
+    justification: "Integration mode needs explicit dependency and integration documentation."
+    required_paths:
+      - docs/integrations.md
+      - .chatgpt/reality-check.md
+      - .chatgpt/tech-spec.md
+  brownfield_with_repo_audit:
+    title: Brownfield with repo audit paths
+    justification: "Audit mode needs gap and evidence outputs without requiring immediate implementation handoff."
+    required_paths:
+      - brownfield/gap-register.md
+      - .chatgpt/evidence-register.md
+      - .chatgpt/done-report.md
+
+modes:
+  template-base:
+    kind: template
+    presets: []
+    core_capabilities: *core_capability_ids
+    allowed_differences: []
+    required_paths:
+      - README.md
+      - .chatgpt/task-index.yaml
+      - .chatgpt/active-scenarios.yaml
+      - .chatgpt/codex-input.md
+      - .chatgpt/done-checklist.md
+      - brownfield/system-inventory.md
+      - greenfield/vision.md
+      - project-knowledge/README.md
+      - work/features
+      - work/completed
+  greenfield:
+    kind: generated
+    presets:
+      - greenfield-product
+    core_capabilities: *core_capability_ids
+    allowed_differences:
+      - greenfield_discovery
+  brownfield-without-repo:
+    kind: generated
+    presets:
+      - brownfield-without-repo
+    core_capabilities: *core_capability_ids
+    allowed_differences:
+      - brownfield_evidence_first
+      - brownfield_without_repo_reconstruction
+  brownfield-with-repo-modernization:
+    kind: generated
+    presets:
+      - brownfield-with-repo-modernization
+    core_capabilities: *core_capability_ids
+    allowed_differences:
+      - brownfield_evidence_first
+      - brownfield_with_repo_modernization
+  brownfield-with-repo-integration:
+    kind: generated
+    presets:
+      - brownfield-with-repo-integration
+    core_capabilities: *core_capability_ids
+    allowed_differences:
+      - brownfield_evidence_first
+      - brownfield_with_repo_integration
+  brownfield-with-repo-audit:
+    kind: generated
+    presets:
+      - brownfield-with-repo-audit
+    core_capabilities: *core_capability_ids
+    allowed_differences:
+      - brownfield_evidence_first
+      - brownfield_with_repo_audit

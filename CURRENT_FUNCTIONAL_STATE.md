@@ -4,6 +4,7 @@
 - 3 canonical entry modes: новый проект с нуля, brownfield без репо, brownfield с репо
 - нейтральная canonical иерархия core vs optional/reference layers без product-specific naming в core
 - strict machine-readable tree contract для factory root, template base и generated project contours
+- strict machine-readable mode parity contract для template base и всех generated presets
 - генерация greenfield и brownfield проектов
 - scenario-pack, `.chatgpt` и launcher
 - project presets, policy presets и change classes
@@ -39,6 +40,7 @@
 - repo-first instruction layer для ChatGPT Projects: сценарии читаются прямо из GitHub repo, а не из локально загруженных project artifacts
 - launcher и template docs больше не требуют отдельную project-local staging-конфигурацию
 - beginner-friendly acceptance smoke (`onboarding-smoke/run-novice-e2e.sh`) регулярно воспроизводит greenfield и brownfield novice launch path через wizard
+- beginner-friendly acceptance smoke теперь покрывает все canonical presets: `greenfield-product`, `brownfield-without-repo`, `brownfield-with-repo-modernization`, `brownfield-with-repo-integration`, `brownfield-with-repo-audit`
 - downstream apply-safe-zones теперь сохраняет rollback-state и backup, а `rollback-template-patch.sh` выполняет воспроизводимый откат; для mixed manual sessions доступен full-project snapshot restore
 - handoff source files и validator `validate-codex-task-pack.py` теперь явно требуют фиксировать приоритет repo rules при передаче задачи в Codex
 - handoff layer теперь явно запрещает выдачу handoff через файл или несколькими блоками: пользователю разрешён только один цельный блок для вставки в Codex
@@ -63,6 +65,7 @@
 - repo-wide language cleanup закрыт для active source-facing слоя: `validate-human-language-layer.py` дает `active findings: 0`, а historical reports/work/release evidence закреплены как documented archival exceptions
 - user-facing output operator env validator русифицирован, чтобы quick verify не возвращал англоязычные описательные сообщения
 - tree contract validator подключен к quick/audit/matrix контуру и фиксирует compatibility-only слой для старых preset aliases
+- mode parity validator подключен к quick/ci контуру и фиксирует одинаковый core layer: repo-first instructions, scenario-pack, AGENTS materialization, `.chatgpt`, Codex handoff pack, defect capture, versioning/docs, project-knowledge, `work/features`, `work/completed`, verify/done checklist и downstream sync metadata
 
 ## Программа 2.5 (release truth)
 - release truth source: `docs/releases/release-scorecard.yaml`
@@ -74,7 +77,7 @@
 - `TEST_REPORT.md` является evidence/reporting layer, а не отдельным источником статуса релиза
 - dependency order зафиксирован: framing -> RC closeout evidence -> explicit GA/no-go по KPI
 - scorecard gates нормализованы в `docs/releases/release-scorecard.yaml`
-- novice E2E acceptance (greenfield + brownfield) зафиксирован в `onboarding-smoke/ACCEPTANCE_REPORT.md`
+- novice E2E acceptance (все canonical presets + guided launcher smoke) зафиксирован в `onboarding-smoke/ACCEPTANCE_REPORT.md`
 - downstream upgrade UX closeout зафиксирован в `UPGRADE_SUMMARY.md`
 
 ## Что работает частично
@@ -95,7 +98,7 @@
 - дальнейшее production hardening runtime-нестабильности git sync beyond current fallback strategy
 - explicit GA/no-go decision для `2.5`
 - подтверждение beginner-first KPI и downstream safety KPI из `docs/releases/2.5-success-metrics.md`
-- дальнейшее расширение novice acceptance от текущего long-flow smoke к предметным domain-сценариям реальных downstream систем
+- дальнейшее расширение novice acceptance от parity-level long-flow smoke к предметным domain-сценариям реальных downstream систем
 
 ## Граница core
 Core включает фабрику, шаблон, versioning/documentation layer, `.chatgpt`, scenario-pack, examples и feedback loop.

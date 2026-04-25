@@ -79,6 +79,7 @@ cp "$SCRIPT_DIR/codex-model-routing.yaml" "$DEST_DIR/codex-model-routing.yaml"
 mkdir -p "$DEST_DIR/template-repo"
 cp -R "$SCRIPT_DIR/scenario-pack" "$DEST_DIR/template-repo/scenario-pack"
 cp "$SCRIPT_DIR/tree-contract.yaml" "$DEST_DIR/template-repo/tree-contract.yaml"
+cp "$SCRIPT_DIR/mode-parity.yaml" "$DEST_DIR/template-repo/mode-parity.yaml"
 mkdir -p "$DEST_DIR/reports/bugs" "$DEST_DIR/reports/factory-feedback" "$DEST_DIR/tasks/chatgpt" "$DEST_DIR/tasks/codex"
 
 CHANGE_ID="$($DEST_DIR/scripts/new-change-id.sh "$DEST_DIR")"

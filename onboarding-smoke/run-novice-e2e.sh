@@ -40,7 +40,8 @@ PYCODE
     validate-stage.py \
     validate-versioning-layer.py \
     validate-defect-capture.py \
-    validate-alignment.py
+    validate-alignment.py \
+    validate-mode-parity.py
   do
     python3 "$ROOT/template-repo/scripts/$validator" "$project_root" >>"$log_file" 2>&1
   done
@@ -94,7 +95,9 @@ run_launcher_scenario() {
   local scenario_key="$1"
   local project_name="$2"
   local project_slug="$3"
-  local expected_preset="$4"
+  local launcher_mode="$4"
+  local brownfield_kind="$5"
+  local expected_preset="$6"
 
   local scenario_root="$RUN_ROOT/$scenario_key"
   local log_file="$RUN_ROOT/${scenario_key}.txt"
@@ -102,14 +105,19 @@ run_launcher_scenario() {
 
   (
     cd "$scenario_root"
-    FACTORY_REGISTRY_MODE=skip python3 "$ROOT/template-repo/scripts/factory-launcher.py" \
+    local command=(
+      python3 "$ROOT/template-repo/scripts/factory-launcher.py"
       --template-repo-root "$ROOT/template-repo" \
-      --mode greenfield \
+      --mode "$launcher_mode" \
       --project-name "$project_name" \
       --project-slug "$project_slug" \
       --skip-preflight \
-      --yes \
-      >"$log_file" 2>&1
+      --yes
+    )
+    if [ "$launcher_mode" = "brownfield" ]; then
+      command+=(--brownfield-kind "$brownfield_kind")
+    fi
+    FACTORY_REGISTRY_MODE=skip "${command[@]}" >"$log_file" 2>&1
   )
 
   local project_root="$scenario_root/$project_slug"
@@ -123,7 +131,8 @@ run_launcher_scenario() {
   printf '%s|%s|%s|%s\n' "$scenario_key" "$project_root" "$expected_preset" "$log_file"
 }
 
-GREENFIELD_RESULT="$(
+RESULTS=()
+RESULTS+=("$(
   run_wizard_scenario \
     "greenfield-novice" \
     "Novice Greenfield Smoke" \
@@ -131,32 +140,65 @@ GREENFIELD_RESULT="$(
     "1" \
     "1" \
     "greenfield-product"
-)"
-
-BROWNFIELD_RESULT="$(
+)")
+RESULTS+=("$(
   run_wizard_scenario \
-    "brownfield-novice" \
-    "Novice Brownfield Smoke" \
-    "novice-brownfield-smoke" \
+    "brownfield-without-repo-novice" \
+    "Novice Brownfield No Repo Smoke" \
+    "novice-brownfield-no-repo-smoke" \
+    "3" \
+    "1" \
+    "brownfield-without-repo"
+)")
+RESULTS+=("$(
+  run_wizard_scenario \
+    "brownfield-modernization-novice" \
+    "Novice Brownfield Modernization Smoke" \
+    "novice-brownfield-modernization-smoke" \
     "2" \
     "1" \
     "brownfield-with-repo-modernization"
-)"
-
-LAUNCHER_RESULT="$(
+)")
+RESULTS+=("$(
+  run_wizard_scenario \
+    "brownfield-integration-novice" \
+    "Novice Brownfield Integration Smoke" \
+    "novice-brownfield-integration-smoke" \
+    "2" \
+    "2" \
+    "brownfield-with-repo-integration"
+)")
+RESULTS+=("$(
+  run_wizard_scenario \
+    "brownfield-audit-novice" \
+    "Novice Brownfield Audit Smoke" \
+    "novice-brownfield-audit-smoke" \
+    "2" \
+    "3" \
+    "brownfield-with-repo-audit"
+)")
+RESULTS+=("$(
   run_launcher_scenario \
     "guided-launcher-greenfield" \
-    "Guided Launcher Smoke" \
-    "guided-launcher-smoke" \
+    "Guided Launcher Greenfield Smoke" \
+    "guided-launcher-greenfield-smoke" \
+    "greenfield" \
+    "" \
     "greenfield-product"
-)"
-
-IFS='|' read -r GF_KEY GF_PROJECT GF_PRESET GF_LOG <<<"$GREENFIELD_RESULT"
-IFS='|' read -r BF_KEY BF_PROJECT BF_PRESET BF_LOG <<<"$BROWNFIELD_RESULT"
-IFS='|' read -r GL_KEY GL_PROJECT GL_PRESET GL_LOG <<<"$LAUNCHER_RESULT"
+)")
+RESULTS+=("$(
+  run_launcher_scenario \
+    "guided-launcher-brownfield-audit" \
+    "Guided Launcher Brownfield Audit Smoke" \
+    "guided-launcher-brownfield-audit-smoke" \
+    "brownfield" \
+    "audit" \
+    "brownfield-with-repo-audit"
+)")
 RUN_TS="$(date -u +"%Y-%m-%dT%H:%M:%SZ")"
 
-cat >"$REPORT_PATH" <<EOF
+{
+cat <<EOF
 # Onboarding Smoke Acceptance
 
 - Run timestamp (UTC): \`$RUN_TS\`
@@ -165,29 +207,36 @@ cat >"$REPORT_PATH" <<EOF
 
 ## Scenario Results
 
-1. \`$GF_KEY\`
-- status: \`green\`
-- expected preset: \`$GF_PRESET\`
-- generated project: \`$GF_PROJECT\`
-- log: \`$GF_LOG\`
+EOF
 
-2. \`$BF_KEY\`
+index=1
+for result in "${RESULTS[@]}"; do
+  IFS='|' read -r SCENARIO_KEY PROJECT_ROOT EXPECTED_PRESET LOG_FILE <<<"$result"
+  cat <<EOF
+$index. \`$SCENARIO_KEY\`
 - status: \`green\`
-- expected preset: \`$BF_PRESET\`
-- generated project: \`$BF_PROJECT\`
-- log: \`$BF_LOG\`
+- expected preset: \`$EXPECTED_PRESET\`
+- generated project: \`$PROJECT_ROOT\`
+- log: \`$LOG_FILE\`
 
-3. \`$GL_KEY\`
-- status: \`green\`
-- expected preset: \`$GL_PRESET\`
-- generated project: \`$GL_PROJECT\`
-- log: \`$GL_LOG\`
+EOF
+  index=$((index + 1))
+done
+
+cat <<EOF
 
 ## What Was Verified
 
-- Beginner wizard route selection without manual preset terminology.
-- Guided launcher route selection and project creation through the unified entrypoint.
+- Beginner wizard route selection without manual preset terminology for all canonical presets.
+- Guided launcher route selection and project creation through the unified entrypoint for greenfield and brownfield.
 - Generated project preset alignment in \`.chatgpt/active-scenarios.yaml\`.
+- Mode parity validation through \`validate-mode-parity.py\`.
+- Canonical modes covered:
+  - \`greenfield-product\`
+  - \`brownfield-without-repo\`
+  - \`brownfield-with-repo-modernization\`
+  - \`brownfield-with-repo-integration\`
+  - \`brownfield-with-repo-audit\`
 - Baseline validators (bootstrap path):
   - \`validate-project-preset.py\`
   - \`validate-policy-preset.py\`
@@ -197,6 +246,7 @@ cat >"$REPORT_PATH" <<EOF
   - \`validate-versioning-layer.py\`
   - \`validate-defect-capture.py\`
   - \`validate-alignment.py\`
+  - \`validate-mode-parity.py\`
   - \`create-codex-task-pack.py\`
   - \`validate-codex-task-pack.py\`
   - \`validate-codex-routing.py\`
@@ -208,5 +258,6 @@ cat >"$REPORT_PATH" <<EOF
   - \`validate-handoff.py\`
   - \`check-dod.py\`
 EOF
+} >"$REPORT_PATH"
 
 echo "Novice onboarding smoke passed. Report: $REPORT_PATH"
