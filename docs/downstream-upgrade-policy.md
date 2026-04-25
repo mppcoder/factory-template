@@ -1,14 +1,14 @@
-# Downstream Upgrade Policy
+# Политика downstream upgrade
 
 This policy defines how downstream/battle repos consume updates from `factory-template`.
 
-## Source Of Truth
+## Source of truth
 
 - `factory-template` remains the canonical template source.
 - Downstream root `AGENTS.md` is a materialized clone of `template-repo/AGENTS.md`.
 - Downstream operators should use `workspace-packs/factory-ops/export-template-patch.sh` to create a preview bundle before any apply step.
 
-## Sync Tiers
+## Sync tiers
 
 The sync contract is declared in `workspace-packs/factory-ops/factory-sync-manifest.yaml`.
 
@@ -18,7 +18,7 @@ The sync contract is declared in `workspace-packs/factory-ops/factory-sync-manif
 | `advisory` | Template references that may be useful but can conflict with local workflow choices. | Preview and patch only; apply manually after review. |
 | `manual-only` | Project-specific lifecycle content. | Impact signal only; never generated for automatic apply. |
 
-## Bundle Metadata
+## Bundle metadata
 
 Each export writes:
 
@@ -29,7 +29,7 @@ Each export writes:
 
 The static bundle schema source lives in `workspace-packs/factory-ops/sync-bundle-version.json`.
 
-## Operator Flow
+## Operator flow
 
 ```bash
 bash workspace-packs/factory-ops/export-template-patch.sh <factory-root> <downstream-root> --dry-run
@@ -40,7 +40,7 @@ python3 workspace-packs/factory-ops/upgrade-report.py <factory-root> <downstream
 
 Use `--with-project-snapshot` whenever a human has edited files during the same upgrade session.
 
-## Rollback Flow
+## Rollback flow
 
 ```bash
 bash workspace-packs/factory-ops/rollback-template-patch.sh <downstream-root>/_factory-sync-export --check
@@ -50,7 +50,7 @@ bash workspace-packs/factory-ops/rollback-template-patch.sh <downstream-root>/_f
 
 `--rollback` restores only tracked safe-tier generated files. `--rollback --restore-project-snapshot` restores the full snapshot created during apply and is the safer path for mixed manual sessions.
 
-## Safety Rules
+## Safety rules
 
 - Advisory and manual-only changes must not be copied by `apply-template-patch.sh`.
 - Missing optional safe zones are reported as `optional-missing-project`, not as a hard failure.

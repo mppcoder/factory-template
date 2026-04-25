@@ -1,31 +1,28 @@
 # Отчет о проверке результата
 
 ## Что проверяли
-- Defect `bug-032`: upstream ChatGPT-generated handoff может прийти с англоязычными человекочитаемыми разделами.
-- Defect-capture artifacts.
-- Language-contract validator для `.chatgpt/codex-input.md`.
-- Интеграцию validator в `validate-codex-task-pack.py`.
-- Negative fixture для англоязычных `Goal` / `Hard constraints`.
+- Repo-wide audit на остаточный английский человекочитаемый слой.
+- Отличие technical literal values от prose-нарушений.
+- Свежий source-facing слой после частичной очистки.
 
 ## Статус defect-capture
-- Bug report создан: `reports/bugs/bug-032-chatgpt-handoff-language-contract-gap.md`.
-- Factory feedback создан: `reports/factory-feedback/feedback-032-chatgpt-handoff-language-contract-gap.md`.
-- Статус remediation: fixed-in-current-scope.
+- Bug report создан: `reports/bugs/bug-033-repo-wide-english-human-layer-residue.md`.
+- Factory feedback создан: `reports/factory-feedback/feedback-033-repo-wide-english-human-layer-residue.md`.
+- Статус remediation: partial-remediation; full repo cleanup остается отдельным scope.
 
 ## Что подтверждено
-- `validate-handoff-language.py` пропускает текущий русскоязычный `.chatgpt/codex-input.md`.
-- `validate-handoff-language.py` отклоняет англоязычный fixture с `Goal`, `Hard constraints`, `Do not hardcode`.
-- `validate-codex-task-pack.py` успешно проходит с подключенным language validator.
-- `validate-handoff-response-format.py` успешно проходит после расширения forbidden handoff headings.
+- Широкий heading scan нашел реальные остатки английского в source docs, skill docs и historical reports.
+- Исправлены свежие source-facing документы и generator note, которые были ближе всего к текущему handoff/closeout issue.
+- Остались historical artifacts и часть skill docs с английскими headings/prose; это не закрыто текущей частичной правкой.
 
 ## Команды проверки
-- `python3 template-repo/scripts/validate-handoff-language.py .chatgpt/codex-input.md`: прошла.
-- `printf 'Goal:\nImplement feature\n\nHard constraints:\nDo not hardcode latest model\n' | python3 template-repo/scripts/validate-handoff-language.py -`: упала ожидаемо.
+- `rg -n "^#{1,6} [A-Za-z][A-Za-z0-9 ,:;/'()_.&+-]*$" ...`: нашла остатки.
+- `rg -n "Troubleshooting:|Goal:|Target outcomes:|..." ...`: нашла остатки.
 - `python3 template-repo/scripts/validate-codex-task-pack.py .`: прошла.
+- `python3 template-repo/scripts/validate-defect-capture.py .`: прошла.
 - `python3 template-repo/scripts/validate-handoff-response-format.py .chatgpt/handoff-response.md`: прошла.
 - `python3 template-repo/scripts/validate-codex-routing.py .`: прошла.
-- `bash template-repo/scripts/verify-all.sh quick`: прошла.
 
 ## Итоговый вывод
-- `bug-032` воспроизведен по пользовательскому сигналу и исправлен.
-- Англоязычный upstream handoff теперь должен падать в repo validation до нормального closeout.
+- В repo не выполнено состояние “английского человекочитаемого слоя больше нигде нет”.
+- Нужна отдельная full cleanup задача или documented archival exception policy.

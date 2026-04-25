@@ -13,7 +13,7 @@ Current 2.5 stage: `verify-closeout (RC prep)`.
 Status: `2.5 RC Closeout Candidate (not GA)`.
 GA-ready: `false`.
 
-## Canonical Entry Modes
+## Канонические entry modes
 
 Шаблон сейчас поддерживает 3 канонических режима запуска и сопровождения:
 
@@ -35,7 +35,7 @@ GA-ready: `false`.
 
 Различается не набор загружаемых файлов, а стартовый маршрут по сценариям и выбранный preset.
 
-## Beginner-First Entry (Guided Launcher)
+## Beginner-first entry через guided launcher
 
 Для первого запуска больше не нужно вручную помнить preset-термины.
 Используйте единый guided launcher:
@@ -56,7 +56,7 @@ Launcher ведет по трем маршрутам:
 - `docs/guided-launcher.md`
 - `docs/first-project.md`
 
-## Canonical VPS Layout
+## Канонический VPS layout
 
 Для VPS действует безусловное правило верхнего уровня:
 
@@ -152,7 +152,7 @@ python3 template-repo/scripts/check-codex-model-catalog.py . --write-proposal
 
 `template-repo/codex-model-routing.yaml` хранит task class -> selected_profile -> selected_model / selected_reasoning_effort / selected_plan_mode_reasoning_effort. Live catalog берется из `codex debug models`, когда CLI доступен; если catalog недоступен, validator предупреждает и не делает automatic promotion mapping. Новый model ID в live catalog сначала попадает в proposal, исчезновение настроенной model и неподдерживаемый reasoning считаются routing risk, а sticky picker в VS Code или handoff, вставленный в уже открытую сессию, остаются manual boundary issues.
 
-## Optional Skills Quality Loop
+## Optional skills quality loop
 
 Для развития самого `factory-template` доступен облегченный advanced-контур для skills и prompt-like artifacts:
 
@@ -178,7 +178,7 @@ python3 template-repo/scripts/check-codex-model-catalog.py . --write-proposal
 - `sources-pack-release-20` обязан содержать release-facing docs и release scripts;
 - `sources-pack-bugfix-20` обязан содержать launcher, validator layer и feedback/handoff validators.
 
-## Repo-First ChatGPT Project Rule
+## Repo-first правило для ChatGPT Project
 
 Для проектов ChatGPT теперь каноничен repo-first режим:
 
@@ -200,7 +200,7 @@ python3 template-repo/scripts/check-codex-model-catalog.py . --write-proposal
 - если repo-first инструкция не обновлена после смены repo/path, модель может читать не тот репозиторий;
 - нельзя заменять чтение `00-master-router.md` пересказом по памяти.
 
-## AGENTS Canonical Sync Scheme
+## Каноническая sync-схема AGENTS
 
 - root [AGENTS.md](/projects/factory-template/AGENTS.md) — persistent instruction для работы внутри самого `factory-template`;
 - [template-repo/AGENTS.md](/projects/factory-template/template-repo/AGENTS.md) — canonical template source для downstream/battle repos;
@@ -327,7 +327,7 @@ bash PHASE_DETECTION_TEST.sh
 - трек `2.5-B` закрепляет beginner-first productization (UI-friendly entry path, понятный onboarding, снижение порога входа);
 - выпуск `2.5` считается полным только при совместном закрытии `2.5-A` и `2.5-B`, чтобы релиз не остался "только process-hardening".
 
-## How To Read Release Truth
+## Как читать release truth
 
 Start with `docs/releases/release-scorecard.yaml`. It is the machine-readable release state used by pre-release and CI gates. Roadmap/current-state/README/checklist explain that same state for humans; `TEST_REPORT.md` records verification evidence and must not be treated as a separate release-status source.
 

@@ -16,25 +16,25 @@ codex-led
 chatgpt-handoff
 
 ## Класс задачи
-build
+deep
 
 ## Выбранный профиль
-build
+deep
 
 ## Выбранная модель
 gpt-5.5
 
 ## Выбранное reasoning effort
-medium
+high
 
 ## Выбранное reasoning effort для plan mode
-medium
+high
 
 ## Статус model catalog
 available
 
 ## Примечание по live availability
-selected_model matched the latest stored repo catalog snapshot; rerun live catalog check before external promises
+selected_model совпадает с последним сохраненным snapshot repo catalog; перед внешними обещаниями повторите live catalog check
 
 ## Режим применения
 manual-ui
@@ -43,7 +43,7 @@ manual-ui
 optional
 
 ## Ручной UI по умолчанию
-Для интерактивной работы в VS Code Codex extension откройте новый чат/окно Codex, вручную выберите `selected_model=gpt-5.5` и `selected_reasoning_effort=medium` в picker, затем вставьте handoff.
+Для интерактивной работы в VS Code Codex extension откройте новый чат/окно Codex, вручную выберите `selected_model=gpt-5.5` и `selected_reasoning_effort=high` в picker, затем вставьте handoff.
 Новый чат + вставка handoff и executable launcher path — не одно и то же.
 Уже открытая live session не является надежным auto-switch механизмом.
 
@@ -51,7 +51,7 @@ optional
 ./scripts/launch-codex-task.sh --launch-source chatgpt-handoff --task-file .chatgpt/codex-input.md --execute
 
 ## Прямая команда Codex за launcher
-codex --profile build
+codex --profile deep
 
 ## Профиль проекта
 unknown-project-profile
@@ -73,7 +73,7 @@ not-required-by-text-signal
 Общие рабочие инструкции применять только там, где они не конфликтуют с repo rules и старшими системными ограничениями среды.
 
 ## Входные данные handoff
-bugfix: исправить language contract для upstream ChatGPT handoff
+audit: проверить repo на остаточный английский человекочитаемый слой
 
 ## Обязательное правило фиксации дефектов
 Если в ходе анализа, реализации, тестирования, reverse engineering или verification обнаружен дефект, регрессия, расхождение, пропущенный шаг, шаблонный сбой или reusable process failure, его нельзя silently patch.

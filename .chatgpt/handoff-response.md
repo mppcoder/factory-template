@@ -2,7 +2,7 @@
 
 - `apply_mode: manual-ui (default)`
 - Для VS Code Codex extension откройте новый чат/окно Codex.
-- Вручную выберите model `gpt-5.5` и reasoning `medium` в picker.
+- Вручную выберите model `gpt-5.5` и reasoning `high` в picker.
 - Только после этого вставьте handoff-блок ниже.
 - новый чат + вставка handoff и новый task launch через executable launcher — не одно и то же.
 - Advisory handoff text сам по себе не переключает profile/model/reasoning в уже открытой или случайной Codex chat-сессии.
@@ -31,17 +31,17 @@ Repo: factory-template
 Приоритет: сначала правила repo (`AGENTS`, runbook, scenario-pack, policy files), затем общие инструкции без конфликта с ними.
 Entry point: 00-master-router.md
 Источник запуска: chatgpt-handoff
-Класс задачи: build
-Выбранный профиль: build
+Класс задачи: deep
+Выбранный профиль: deep
 Выбранная модель: gpt-5.5
-Выбранное reasoning effort: medium
-Выбранное plan mode reasoning effort: medium
+Выбранное reasoning effort: high
+Выбранное plan mode reasoning effort: high
 Статус model catalog: available
-Live availability note: selected_model matched the latest stored repo catalog snapshot; rerun live catalog check before external promises
+Примечание по live availability: selected_model совпадает с последним сохраненным snapshot repo catalog; перед внешними обещаниями повторите live catalog check
 Режим применения: manual-ui (default)
 Строгий режим запуска: optional
 Опциональная команда строгого запуска: ./scripts/launch-codex-task.sh --launch-source chatgpt-handoff --task-file .chatgpt/codex-input.md --execute
-Прямая команда Codex за launcher: codex --profile build
+Прямая команда Codex за launcher: codex --profile deep
 Правило маршрутизации: advisory/handoff text не равен executable profile switch; надежная единица маршрутизации — только новый task launch.
 Правило ручного UI: для VS Code Codex extension откройте новый чат/окно, вручную выберите model/reasoning в picker, затем вставьте этот handoff.
 Правило live session: уже открытая live session = non-canonical fallback; не обещать auto-switch.

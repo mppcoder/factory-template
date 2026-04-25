@@ -2,20 +2,21 @@
 
 ## [Unreleased]
 ### Добавлено
-- canonical `template-repo/codex-model-routing.yaml` для task class -> selected_profile -> selected_model/reasoning/plan-mode reasoning mapping
-- `check-codex-model-catalog.py` с live `codex debug models` check, JSON output, proposal generation and safe snapshot refresh
-- model-routing proposal artifact для controlled review of newly discovered Codex/OpenAI models
+- canonical `template-repo/codex-model-routing.yaml` для mapping task class -> selected_profile -> selected_model/reasoning/plan-mode reasoning
+- `check-codex-model-catalog.py` с live check через `codex debug models`, JSON output, proposal generation и safe snapshot refresh
+- model-routing proposal artifact для controlled review новых Codex/OpenAI models
 
 ### Изменено
 - completion/handoff routing layer в template source теперь требует явный `Launch в Codex` boundary и launcher command для нового task launch
-- resolver, launcher, validators and handoff generation now preserve `selected_plan_mode_reasoning_effort` and live catalog status
-- docs distinguish repo-configured mapping, live Codex catalog, manual VS Code picker selection and optional strict launcher profile selection
+- resolver, launcher, validators и handoff generation теперь сохраняют `selected_plan_mode_reasoning_effort` и live catalog status
+- docs теперь различают repo-configured mapping, live Codex catalog, ручной выбор в VS Code picker и optional strict launcher profile selection
 
 ### Исправлено
 - устранено ложное ожидание, что новый Codex chat сам переключает profile/model/reasoning без явного launcher path
-- validators now warn honestly when live catalog is unavailable and fail strict mode only when requested
+- validators честно предупреждают, когда live catalog unavailable, и падают в strict mode только по явному запросу
 - зафиксирован и исправлен `bug-031`: closeout больше не должен использовать англоязычные человекочитаемые headings или звучать как handoff обратно в ChatGPT, если внешний action не требуется
 - зафиксирован и исправлен `bug-032`: upstream ChatGPT-generated handoff теперь проверяется на русский человекочитаемый слой через repo validator
+- зафиксирован `bug-033`: repo-wide audit показал остаточный английский человекочитаемый слой за пределами свежего handoff/closeout контура; актуальный source-facing слой частично очищен
 
 ## [2.4.4] - 2026-04-22
 ### Добавлено

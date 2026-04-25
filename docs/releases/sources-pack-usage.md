@@ -1,6 +1,6 @@
-# Repo-First Strategy For ChatGPT Projects
+# Repo-first стратегия для ChatGPT Projects
 
-## Canonical Rule
+## Каноническое правило
 
 Для `factory-template` ChatGPT Project больше не должен хранить сценарии как основной источник правды.
 
@@ -13,7 +13,7 @@
 5. Если router направляет в другие сценарии, читать уже их.
 6. Только после этого формировать ответ.
 
-## Canonical Instruction Text
+## Канонический instruction text
 
 ```text
 Работаем по проекту factory-template.
@@ -41,7 +41,7 @@
 и только потом ответ.
 ```
 
-## What Stays In Repo
+## Что остается в repo
 
 Source of truth остаётся в GitHub repo:
 

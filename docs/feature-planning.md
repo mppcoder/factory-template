@@ -1,4 +1,4 @@
-# Resumable Feature Planning (beginner-first)
+# Resumable feature planning
 
 Этот поток помогает пройти путь от сырой идеи до понятного списка задач без потери контекста.
 

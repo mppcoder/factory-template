@@ -4,32 +4,30 @@
 chatgpt-handoff
 
 ## Класс задачи
-build
+deep
 
 ## Evidence для класса задачи
-- keyword hit: fix
-- keyword hit: bugfix
-- keyword hit: исправ
-- explicit reasoning/model override matched default profile: build
+- keyword hit: audit
+- explicit reasoning/model override matched default profile: deep
 
 ## Выбранный профиль
-build
+deep
 
 ## Выбранная модель
 gpt-5.5
 
 ## Выбранное reasoning effort
-medium
+high
 
 ## Выбранное reasoning effort для plan mode
-medium
+high
 
 ## Режим применения
 manual-ui
 
 ## Ручное применение через UI
 - Откройте новый чат/окно Codex в VS Code extension.
-- Вручную выберите model `gpt-5.5` и reasoning `medium` в picker.
+- Вручную выберите model `gpt-5.5` и reasoning `high` в picker.
 - Только после этого вставьте handoff.
 - Уже открытая live session не считается надежным auto-switch boundary.
 
@@ -83,7 +81,7 @@ available
 2026-04-25T18:26:17Z
 
 ## Примечание по live availability
-selected_model matched the latest stored repo catalog snapshot; rerun live catalog check before external promises
+selected_model совпадает с последним сохраненным snapshot repo catalog; перед внешними обещаниями повторите live catalog check
 
 ## Путь launch artifact
 `.chatgpt/codex-input.md`
@@ -98,7 +96,7 @@ selected_model matched the latest stored repo catalog snapshot; rerun live catal
 - scripted launch
 
 ## Прямая команда Codex за launcher
-`codex --profile build`
+`codex --profile deep`
 
 ## Диагностика проблем
 - Если вы работаете через VS Code Codex extension интерактивно, используйте новый чат/окно, вручную выставьте selected_model и selected_reasoning_effort в picker, а затем вставьте handoff.
@@ -110,4 +108,4 @@ selected_model matched the latest stored repo catalog snapshot; rerun live catal
 - Если новый model ID появился в live catalog, сначала создайте proposal через `scripts/check-codex-model-catalog.py --write-proposal`; promotion profile mapping требует ручного review.
 
 ## Текст задачи
-bugfix: исправить language contract для upstream ChatGPT handoff
+audit: проверить repo на остаточный английский человекочитаемый слой

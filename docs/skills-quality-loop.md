@@ -1,4 +1,4 @@
-# Skills Quality Loop
+# Skills quality loop
 
 Этот контур нужен для развития самого `factory-template`: когда мы добавляем skill, scenario, handoff rule или другой prompt-like артефакт, можно быстро проверить, срабатывает ли он в нужный момент и правда ли помогает.
 

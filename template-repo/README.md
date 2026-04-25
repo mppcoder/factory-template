@@ -2,7 +2,7 @@
 
 Универсальный русскоязычный шаблон рабочего проекта.
 
-## Canonical Entry Modes
+## Канонические entry modes
 
 Этот шаблон рассчитан на 3 канонических режима:
 
@@ -20,7 +20,7 @@
 
 Legacy aliases старых preset names допускаются только как compatibility input в launcher/scripts и не считаются canonical release-facing naming.
 
-## Repo-First Principle For Generated Projects
+## Repo-first принцип для generated projects
 
 Во всех режимах generated project использует один и тот же repo-first принцип:
 
@@ -50,14 +50,14 @@ python3 scripts/check-codex-model-catalog.py . --write-proposal
 
 Если `codex debug models` недоступен, checker и validator должны честно предупредить и не продвигать mapping автоматически. `--apply-safe` разрешает только безопасное обновление snapshot metadata catalog; смена model для существующего profile остается proposal-only и требует ручного review.
 
-Troubleshooting:
-- new model appears in live Codex catalog but not in routing file: run `scripts/check-codex-model-catalog.py --write-proposal`, review `reports/model-routing/model-routing-proposal.md`, then update `codex-model-routing.yaml` and named profiles intentionally;
-- configured model disappears: treat selected_model as repo-configured only until live validation passes; in strict automation run validator with `--strict`;
-- reasoning level unsupported: update profile reasoning or model choice before producing a confident handoff;
-- VS Code picker keeps a sticky model: open a new chat/window and manually verify picker state;
-- user pasted handoff into already-open session: mark it non-canonical fallback, because advisory text does not switch model/profile/reasoning.
+Диагностика:
+- новый model появился в live Codex catalog, но отсутствует в routing file: запустите `scripts/check-codex-model-catalog.py --write-proposal`, проверьте `reports/model-routing/model-routing-proposal.md`, затем осознанно обновите `codex-model-routing.yaml` и named profiles;
+- configured model исчез: считайте `selected_model` repo-configured только до успешной live validation; в strict automation запускайте validator с `--strict`;
+- reasoning level не поддерживается: обновите reasoning profile или model choice до уверенного handoff;
+- VS Code picker держит sticky model: откройте новый chat/window и вручную проверьте picker state;
+- пользователь вставил handoff в уже открытую session: пометьте это как non-canonical fallback, потому что advisory text не переключает model/profile/reasoning.
 
-## AGENTS For Downstream Repos
+## AGENTS для downstream repos
 
 - [template-repo/AGENTS.md](/projects/factory-template/template-repo/AGENTS.md) является source-of-truth для downstream/battle repos;
 - launcher materializes root `AGENTS.md` в созданном проекте через `scripts/sync-agents.py`;

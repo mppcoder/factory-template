@@ -1,35 +1,35 @@
-# Lite QA Report Template
+# Шаблон lite QA report
 
-Use this template when a persistent QA note is useful. Keep reports short; the loop is intentionally lightweight.
+Используйте этот template, когда нужен persistent QA note. Держите reports короткими: loop намеренно lightweight.
 
 ```markdown
-# Lite QA Report: <artifact>
+# Lite QA report: <artifact>
 
-Date: YYYY-MM-DD
-Target: <path>
-Artifact type: skill | prompt-like
-Tester: Codex
+Дата: YYYY-MM-DD
+Цель проверки: <path>
+Тип artifact: skill | prompt-like
+Проверяющий: Codex
 
-## Goal
-What behavior should improve?
+## Цель
+Какое поведение должно улучшиться?
 
-## Cases
+## Кейсы
 
-| Case | Prompt / situation | Expected | Result | Notes |
+| Кейс | Prompt / situation | Ожидание | Результат | Notes |
 | --- | --- | --- | --- | --- |
 | positive-obvious | ... | trigger/use | PASS | ... |
 | positive-edge | ... | trigger/use | PASS/FAIL/UNCLEAR | ... |
 | negative-adjacent | ... | do not trigger/use | PASS/FAIL/UNCLEAR | ... |
 | regression-boundary | ... | preserve boundary | PASS/FAIL/UNCLEAR | ... |
 
-## Findings
+## Находки
 - ...
 
-## Improvements Applied
+## Примененные улучшения
 - ...
 
-## Remaining Risk
+## Остаточный риск
 - ...
 ```
 
-If the QA reveals a defect in repo process, create the bug report at the defect-capture path required by the task or router before remediation.
+Если QA выявляет defect в repo process, до remediation создайте bug report по defect-capture path, который требует task или router.

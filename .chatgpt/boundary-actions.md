@@ -52,7 +52,7 @@
 
 - Handoff в Codex сейчас не является обязательным для выбранного профиля.
 - `apply_mode: manual-ui (default)` — основной user-facing путь для интерактивной работы через VS Code Codex extension.
-- Для ручного применения через UI откройте новый чат/окно Codex, вручную выберите `selected_model=gpt-5.5` и `selected_reasoning_effort=medium` в picker, затем вставьте handoff.
+- Для ручного применения через UI откройте новый чат/окно Codex, вручную выберите `selected_model=gpt-5.5` и `selected_reasoning_effort=high` в picker, затем вставьте handoff.
 - `strict_launch_mode: optional` — используйте launch command из `.chatgpt/task-launch.yaml`, если нужна automation, reproducibility, shell-first или scripted launch.
 - `новый чат + вставка handoff` и `новый task launch через executable launcher` — не одно и то же.
 - Уже открытая live session является только non-canonical fallback и не должна подаваться как надежный auto-switch path.

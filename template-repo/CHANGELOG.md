@@ -3,7 +3,7 @@
 ## [Unreleased]
 ### Добавлено
 - canonical `codex-model-routing.yaml` для model availability policy and selected profile/model/reasoning mapping
-- `scripts/check-codex-model-catalog.py` и reusable catalog helper для live `codex debug models` checks, proposal generation and fixture-based validation
+- `scripts/check-codex-model-catalog.py` и reusable catalog helper для live checks через `codex debug models`, proposal generation и fixture-based validation
 
 ### Изменено
 - completion/handoff routing layer теперь выдает явный `Launch в Codex` boundary с launcher command вместо неявного ожидания, что новый чат сам переключит route
@@ -16,6 +16,7 @@
 - live catalog unavailable mode теперь деградирует в warning без automatic mapping promotion; strict mode остается opt-in
 - зафиксирован и исправлен `bug-031`: closeout guidance и validators теперь запрещают типовые англоязычные человекочитаемые headings в финальном closeout
 - зафиксирован и исправлен `bug-032`: `.chatgpt/codex-input.md` и normalized handoff теперь проходят language-contract validation для upstream ChatGPT handoff
+- зафиксирован `bug-033`: repo-wide audit выявил остаточный английский human-readable слой; свежие template docs и generator note частично очищены, historical cleanup вынесен отдельно
 
 ## [2.4.4] - 2026-04-22
 ### Добавлено

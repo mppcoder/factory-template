@@ -351,7 +351,7 @@ Entry point: {entrypoint}
 Выбранное reasoning effort: {launch.get('selected_reasoning_effort', 'medium')}
 Выбранное plan mode reasoning effort: {launch.get('selected_plan_mode_reasoning_effort', 'medium')}
 Статус model catalog: {launch.get('model_catalog_status', 'unknown')}
-Live availability note: {launch.get('model_catalog_validation_note', 'selected_model repo-configured; requires live validation')}
+Примечание по live availability: {launch.get('model_catalog_validation_note', 'selected_model repo-configured; требует live validation')}
 Режим применения: {launch.get('apply_mode', 'manual-ui')} (default)
 Строгий режим запуска: {launch.get('strict_launch_mode', 'optional')}
 Опциональная команда строгого запуска: {launch.get('launch_command', './scripts/launch-codex-task.sh --launch-source chatgpt-handoff --task-file .chatgpt/codex-input.md --execute')}

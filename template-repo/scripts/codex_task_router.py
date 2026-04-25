@@ -402,9 +402,9 @@ def build_launch_record(
             "model_catalog_status": spec.get("model_catalog_status", "unknown"),
             "model_catalog_last_checked_utc": spec.get("model_catalog_last_checked_utc", ""),
             "model_catalog_validation_note": (
-                "selected_model is repo-configured; live availability requires `codex debug models` validation"
+                "selected_model взят из repo-configured mapping; live availability требует проверки через `codex debug models`"
                 if spec.get("model_catalog_status") != "available"
-                else "selected_model matched the latest stored repo catalog snapshot; rerun live catalog check before external promises"
+                else "selected_model совпадает с последним сохраненным snapshot repo catalog; перед внешними обещаниями повторите live catalog check"
             ),
             "advisory_layers": spec.get("routing_contract", {}).get("advisory_layers", []),
             "executable_layers": spec.get("routing_contract", {}).get("executable_layers", []),

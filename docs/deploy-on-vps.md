@@ -1,4 +1,4 @@
-# Deploy On VPS
+# Deploy на VPS
 
 ## Цель
 
@@ -109,7 +109,7 @@ bash template-repo/scripts/deploy-local-vps.sh --yes --preset production
 
 Скрипты сами добавляют нужные preset overlays в зависимости от `OPERATOR_PRESET` или `--preset`.
 
-## Remote VPS readiness checklist
+## Checklist готовности remote VPS
 
 Перед production deploy на удалённый VPS проверьте:
 

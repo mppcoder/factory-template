@@ -2,7 +2,7 @@
 
 Перечислите внешние сервисы, API и обмены данными.
 
-## ChatGPT Project Repo Instruction
+## Repo-first инструкция для ChatGPT Project
 
 Для проекта задайте repo-first правило:
 
@@ -26,14 +26,14 @@
 
 `codex-model-routing.yaml` фиксирует repo-configured mapping: task class -> selected_profile -> selected_model / selected_reasoning_effort / selected_plan_mode_reasoning_effort. Live Codex catalog проверяется отдельно через `scripts/check-codex-model-catalog.py`, который использует `codex debug models`, если CLI доступен.
 
-Manual UI picker selection и strict launcher profile selection не одно и то же:
-- manual-ui: пользователь открывает новый VS Code Codex chat/window, вручную выбирает model/reasoning и вставляет handoff;
+Ручной выбор в UI picker и strict launcher profile selection не одно и то же:
+- `manual-ui`: пользователь открывает новый VS Code Codex chat/window, вручную выбирает model/reasoning и вставляет handoff;
 - strict launcher: repo launcher передает `--profile` в новый executable launch;
-- already-open session: только fallback, без обещания auto-switch.
+- уже открытая session: только fallback, без обещания auto-switch.
 
-Troubleshooting:
-- new model appears in live catalog: create proposal with `--write-proposal`; do not promote profile mapping without review;
-- configured model disappears: validate live catalog before promising availability;
-- unsupported reasoning level: adjust mapping or choose another model;
-- VS Code picker sticky model: open a new chat/window and reselect manually;
-- pasted handoff into already-open chat: rerun through manual-ui or strict launcher boundary.
+Диагностика:
+- новый model появился в live catalog: сначала создайте proposal через `--write-proposal`; не продвигайте profile mapping без review;
+- configured model исчез: проверьте live catalog до обещания availability;
+- unsupported reasoning level: выберите supported reasoning или другую model;
+- sticky model в VS Code picker: откройте новый chat/window и выберите model заново;
+- handoff вставлен в уже открытый chat: повторите через `manual-ui` или strict launcher boundary.

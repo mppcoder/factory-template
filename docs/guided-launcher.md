@@ -1,4 +1,4 @@
-# Guided Launcher
+# Guided launcher
 
 Единый beginner-first вход:
 
@@ -50,7 +50,7 @@ python3 template-repo/scripts/factory-launcher.py \
 - `audit` -> `brownfield-with-repo-audit`;
 - `no-repo` -> `brownfield-without-repo`.
 
-## Continue existing flow
+## Продолжить существующий flow
 
 Показать operator recommendation:
 

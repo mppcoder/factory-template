@@ -1,11 +1,11 @@
 # Codex workflow для этого проекта
 
-## Routing contract
+## Контракт routing
 - advisory layer: `AGENTS`, scenario-pack, runbooks, ChatGPT Project instructions;
 - executable layer: `codex-routing.yaml`, `.codex/config.toml` named profiles и `./scripts/launch-codex-task.sh`;
 - надежная единица маршрутизации: новый task launch.
 
-## Named profiles
+## Именованные profiles
 - `quick`: docs / triage / search
 - `build`: feature / fix / implementation
 - `deep`: root-cause / audit / architecture
@@ -27,12 +27,12 @@ Repo-configured mapping живет в `codex-model-routing.yaml`: `task_class_ro
 
 `--write-proposal` создает `reports/model-routing/model-routing-proposal.md` с текущим mapping, сводкой live catalog, предложенным mapping, evidence поддержки reasoning, рисками и точными файлами для обновления. `--apply-safe` может обновить только snapshot-поля catalog; promotion новых моделей в profile mapping требует ручного review.
 
-Troubleshooting:
-- new model in live catalog but not routing: write proposal first, then update `codex-model-routing.yaml` and `.codex/config.toml` named profiles intentionally;
-- configured model disappears: handoff must say selected_model is repo-configured and needs live validation; strict validator may fail;
-- unsupported reasoning: choose supported reasoning or different selected_model before release-facing handoff;
-- VS Code picker sticky model: open a new chat/window and verify picker manually;
-- pasted into already-open session: treat as non-canonical fallback, not executable route switching.
+Диагностика:
+- новый model есть в live catalog, но отсутствует в routing: сначала создайте proposal, затем осознанно обновите `codex-model-routing.yaml` и named profiles в `.codex/config.toml`;
+- configured model исчез: handoff должен сказать, что `selected_model` repo-configured и требует live validation; strict validator может упасть;
+- unsupported reasoning: выберите supported reasoning или другой `selected_model` до release-facing handoff;
+- sticky model в VS Code picker: откройте новый chat/window и вручную проверьте picker;
+- handoff вставлен в уже открытую session: считайте это non-canonical fallback, а не executable route switching.
 
 ## Когда handoff допустим
 Переключение в рабочий Codex launch допустимо только после того, как:

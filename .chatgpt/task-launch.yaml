@@ -1,18 +1,16 @@
 launch:
-  timestamp_utc: '2026-04-25T18:48:01+00:00'
+  timestamp_utc: '2026-04-25T18:52:54+00:00'
   launch_unit: new-task-launch
   launch_source: chatgpt-handoff
   router_layer: executable
-  task_class: build
+  task_class: deep
   task_class_reasons:
-  - 'keyword hit: fix'
-  - 'keyword hit: bugfix'
-  - 'keyword hit: исправ'
-  - 'explicit reasoning/model override matched default profile: build'
-  selected_profile: build
+  - 'keyword hit: audit'
+  - 'explicit reasoning/model override matched default profile: deep'
+  selected_profile: deep
   selected_model: gpt-5.5
-  selected_reasoning_effort: medium
-  selected_plan_mode_reasoning_effort: medium
+  selected_reasoning_effort: high
+  selected_plan_mode_reasoning_effort: high
   apply_mode: manual-ui
   strict_launch_mode: optional
   project_profile: unknown-project-profile
@@ -26,7 +24,7 @@ launch:
   - .chatgpt/done-report.md
   handoff_allowed: yes (forbidden)
   defect_capture_path: not-required-by-text-signal
-  task_summary: 'bugfix: исправить language contract для upstream ChatGPT handoff'
+  task_summary: 'audit: проверить repo на остаточный английский человекочитаемый слой'
   launch_boundary_rule: Выбор модели и reasoning mode считается надежным только на
     новом запуске Codex для новой задачи.
   interactive_default_rule: 'Для интерактивной работы в VS Code Codex extension основной
@@ -45,8 +43,8 @@ launch:
     переключает.
   model_catalog_status: available
   model_catalog_last_checked_utc: '2026-04-25T18:26:17Z'
-  model_catalog_validation_note: selected_model matched the latest stored repo catalog
-    snapshot; rerun live catalog check before external promises
+  model_catalog_validation_note: selected_model совпадает с последним сохраненным
+    snapshot repo catalog; перед внешними обещаниями повторите live catalog check
   advisory_layers:
   - AGENTS.md / AGENT.md
   - ChatGPT Project instructions
@@ -62,7 +60,7 @@ launch:
   launch_artifact_path: .chatgpt/codex-input.md
   launch_command: ./scripts/launch-codex-task.sh --launch-source chatgpt-handoff --task-file
     .chatgpt/codex-input.md --execute
-  codex_profile_command: codex --profile build
+  codex_profile_command: codex --profile deep
   strict_launch_use_cases:
   - автоматизация
   - воспроизводимость

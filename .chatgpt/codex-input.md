@@ -1,1 +1,1 @@
-bugfix: исправить language contract для upstream ChatGPT handoff
+audit: проверить repo на остаточный английский человекочитаемый слой
