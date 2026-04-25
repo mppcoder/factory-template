@@ -1,10 +1,10 @@
 # Onboarding Smoke Acceptance
 
-- Run timestamp (UTC): `2026-04-25T19:57:52Z`
+- Run timestamp (UTC): `2026-04-25T21:05:24Z`
 - Runner: `onboarding-smoke/run-novice-e2e.sh`
 - Root: `/projects/factory-template`
 
-## Scenario Results
+## Результаты сценариев
 
 1. `greenfield-novice`
 - status: `green`
@@ -42,26 +42,38 @@
 - generated project: `/projects/factory-template/onboarding-smoke/.tmp-run/guided-launcher-greenfield/guided-launcher-greenfield-smoke`
 - log: `/projects/factory-template/onboarding-smoke/.tmp-run/guided-launcher-greenfield.txt`
 
-7. `guided-launcher-brownfield-audit`
+7. `guided-launcher-brownfield-no-repo`
 - status: `green`
-- expected preset: `brownfield-with-repo-audit`
-- generated project: `/projects/factory-template/onboarding-smoke/.tmp-run/guided-launcher-brownfield-audit/guided-launcher-brownfield-audit-smoke`
-- log: `/projects/factory-template/onboarding-smoke/.tmp-run/guided-launcher-brownfield-audit.txt`
+- expected preset: `brownfield-without-repo`
+- generated project: `/projects/factory-template/onboarding-smoke/.tmp-run/guided-launcher-brownfield-no-repo/guided-launcher-brownfield-no-repo-smoke`
+- log: `/projects/factory-template/onboarding-smoke/.tmp-run/guided-launcher-brownfield-no-repo.txt`
+
+8. `guided-launcher-brownfield-with-repo`
+- status: `green`
+- expected preset: `brownfield-with-repo-modernization`
+- generated project: `/projects/factory-template/onboarding-smoke/.tmp-run/guided-launcher-brownfield-with-repo/guided-launcher-brownfield-with-repo-smoke`
+- log: `/projects/factory-template/onboarding-smoke/.tmp-run/guided-launcher-brownfield-with-repo.txt`
+
+9. `guided-launcher-continue-flow`
+- status: `green`
+- expected preset: `greenfield-product`
+- generated project: `/projects/factory-template/onboarding-smoke/.tmp-run/guided-launcher-continue-flow/guided-launcher-continue-flow-smoke`
+- log: `/projects/factory-template/onboarding-smoke/.tmp-run/guided-launcher-continue-flow.txt`
 
 
-## What Was Verified
+## Что проверено
 
-- Beginner wizard route selection without manual preset terminology for all canonical presets.
-- Guided launcher route selection and project creation through the unified entrypoint for greenfield and brownfield.
-- Generated project preset alignment in `.chatgpt/active-scenarios.yaml`.
-- Mode parity validation through `validate-mode-parity.py`.
-- Canonical modes covered:
+- Wizard fallback выбирает маршруты без ручного знания внутренних preset-имен.
+- Guided launcher проходит полный путь через единый entrypoint: greenfield, brownfield без repo, brownfield с repo и continue-flow.
+- В generated project проверен preset в `.chatgpt/active-scenarios.yaml`.
+- Проверен mode parity через `validate-mode-parity.py`.
+- Покрыты canonical modes:
   - `greenfield-product`
   - `brownfield-without-repo`
   - `brownfield-with-repo-modernization`
   - `brownfield-with-repo-integration`
   - `brownfield-with-repo-audit`
-- Baseline validators (bootstrap path):
+- Базовые validators (bootstrap path):
   - `validate-project-preset.py`
   - `validate-policy-preset.py`
   - `validate-change-profile.py`
@@ -74,10 +86,13 @@
   - `create-codex-task-pack.py`
   - `validate-codex-task-pack.py`
   - `validate-codex-routing.py`
-- Long-flow novice acceptance (post-bootstrap):
+- Длинный novice-flow после bootstrap:
   - `tools/fill_smoke_artifacts.py`
   - `validate-stage.py`
   - `validate-evidence.py`
   - `validate-quality.py`
   - `validate-handoff.py`
   - `check-dod.py`
+- Шаги guided path:
+  - `--guided` создает проект и workspace первой задачи.
+  - `--continue` создает следующий feature workspace и печатает operator next step.

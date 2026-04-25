@@ -19,6 +19,7 @@ class RoutePlan:
     mode: str
     next_step: str
     fallback_commands: list[str]
+    guided_steps: list[str]
 
 
 BROWNFIELD_PRESETS = {
@@ -59,7 +60,7 @@ def _ask_text(prompt: str, default: str | None = None, pattern: str | None = Non
             print("  Нужен ответ, чтобы продолжить.")
             continue
         if pattern and not re.fullmatch(pattern, value):
-            print("  Формат не подходит. Используйте lowercase letters/numbers/hyphen.")
+            print("  Формат не подходит. Используйте маленькие латинские буквы, цифры и дефис.")
             continue
         return value
 
@@ -92,6 +93,27 @@ def _run(command: list[str], cwd: Path, input_text: str | None = None) -> int:
     return subprocess.run(command, cwd=cwd, input=input_text, text=True, check=False).returncode
 
 
+def _dashboard_command(project_root: Path, args: argparse.Namespace) -> list[str]:
+    dashboard = project_root / "scripts" / "operator-dashboard.py"
+    command = [sys.executable, str(dashboard)]
+    if args.run_dry_run:
+        command.append("--run-dry-run")
+    if args.verify_summary:
+        command.append("--verify-summary")
+    return command
+
+
+def _show_project_knowledge(project_root: Path) -> None:
+    knowledge_dir = project_root / "project-knowledge"
+    print("\nШаг: знания проекта")
+    if knowledge_dir.is_dir():
+        print(f"- Готово: создана папка {knowledge_dir}.")
+        print("- Это место для устойчивых решений: что за проект, архитектура, деплой и правила команды.")
+        return
+    print(f"- Внимание: папка {knowledge_dir} не найдена.")
+    print("- Продолжить можно, но позже стоит восстановить project-knowledge из шаблона.")
+
+
 def _project_plan(template_root: Path, route: str, preset: str, project_slug: str) -> RoutePlan:
     preflight = _factory_hint(template_root, "preflight-vps-check.py")
     wizard = _factory_hint(template_root, "first-project-wizard.py")
@@ -99,32 +121,48 @@ def _project_plan(template_root: Path, route: str, preset: str, project_slug: st
     if route == "greenfield":
         return RoutePlan(
             route=route,
-            title="Greenfield start",
+            title="Новый проект с нуля",
             preset=preset,
             mode="create-project",
             next_step=(
-                "После создания проекта откройте его и начните planning workspace: "
-                f"`bash scripts/init-feature-workspace.sh --feature-id first-feature`."
+                "Launcher может сразу создать проект, подготовить знания проекта, открыть workspace первой задачи "
+                "и показать следующий операторский шаг."
             ),
             fallback_commands=[
                 f"python3 {preflight} --project-slug {project_slug}",
                 f"python3 {wizard}",
                 f"bash {feature} --feature-id first-feature",
             ],
+            guided_steps=[
+                "выбрать режим: новый проект с нуля",
+                "проверить окружение перед созданием проекта",
+                "создать проект через прежний launcher",
+                "проверить слой project-knowledge",
+                "создать workspace первой задачи",
+                "показать понятный следующий шаг оператора",
+            ],
         )
     return RoutePlan(
         route=route,
-        title="Brownfield start",
+        title="Старт с существующей системой",
         preset=preset,
         mode="create-project",
         next_step=(
-            "После создания проекта начните с reality/evidence артефактов выбранного brownfield preset, "
-            "затем запускайте planning workspace только для безопасной первой задачи."
+            "Launcher подготовит brownfield-проект: сначала факты и риски, затем workspace первой безопасной задачи "
+            "и следующий операторский шаг."
         ),
         fallback_commands=[
             f"python3 {preflight} --project-slug {project_slug}",
             f"python3 {wizard}",
             f"python3 {_factory_hint(template_root, 'operator-dashboard.py')}",
+        ],
+        guided_steps=[
+            "выбрать режим: существующая система",
+            "проверить окружение перед созданием проекта",
+            "создать проект с нужным brownfield preset",
+            "проверить слой project-knowledge",
+            "создать workspace первой безопасной задачи",
+            "показать понятный следующий шаг оператора",
         ],
     )
 
@@ -137,30 +175,39 @@ def _continue_plan(template_root: Path, feature_id: str | None) -> RoutePlan:
         fallback.insert(0, f"bash {feature} --feature-id {feature_id}")
     return RoutePlan(
         route="continue",
-        title="Continue existing flow",
+        title="Продолжить текущий проект",
         preset=None,
         mode="continue",
         next_step=(
-            f"Init feature workspace `{feature_id}` and then read operator recommendation."
+            f"Создать workspace `{feature_id}`, затем показать рекомендацию оператора."
             if feature_id
-            else "Read the operator recommendation and run only the next command it prints."
+            else "Показать состояние проекта и одну следующую команду."
         ),
         fallback_commands=fallback,
+        guided_steps=[
+            "прочитать состояние проекта",
+            "при необходимости создать workspace задачи",
+            "показать одну следующую команду",
+            "по желанию запустить безопасный deploy dry-run",
+        ],
     )
 
 
 def _print_plan(plan: RoutePlan, presets: dict) -> None:
-    print("\nFactory Guided Launcher")
+    print("\nУправляемый launcher фабрики")
     print("-" * 72)
-    print(f"Route: {plan.title}")
+    print(f"Маршрут: {plan.title}")
     if plan.preset:
         preset = presets.get(plan.preset, {})
-        print(f"Preset: {plan.preset}")
-        print(f"Project mode: {preset.get('default_mode', 'unknown')}")
-        print(f"First change class: {preset.get('recommended_change_class', 'unknown')}")
-        print(f"Execution mode: {preset.get('recommended_execution_mode', 'unknown')}")
-    print(f"Next-step recommendation: {plan.next_step}")
-    print("\nFallback commands stay available:")
+        print(f"Профиль проекта: {plan.preset}")
+        print(f"Режим проекта: {preset.get('default_mode', 'unknown')}")
+        print(f"Первая задача: {preset.get('recommended_change_class', 'unknown')}")
+        print(f"Как выполнять: {preset.get('recommended_execution_mode', 'unknown')}")
+    print(f"Что будет дальше: {plan.next_step}")
+    print("\nПолный путь:")
+    for index, step in enumerate(plan.guided_steps, start=1):
+        print(f"{index}. {step}")
+    print("\nПрямые команды остаются запасным путем:")
     for command in plan.fallback_commands:
         print(f"- {command}")
 
@@ -209,17 +256,31 @@ def _run_project_route(
         return code
 
     project_root = Path.cwd().resolve() / project_slug
-    if args.init_feature_workspace or args.feature_id:
+    _show_project_knowledge(project_root)
+
+    should_init_feature = args.guided or args.init_feature_workspace or bool(args.feature_id)
+    if should_init_feature:
         feature_id = args.feature_id or "first-feature"
         feature_script = project_root / "scripts" / "init-feature-workspace.sh"
         if feature_script.exists():
-            return _run(["bash", str(feature_script), "--feature-id", feature_id], cwd=project_root)
-        print(f"Feature workspace script не найден в созданном проекте: {feature_script}")
-        return 2
+            code = _run(["bash", str(feature_script), "--feature-id", feature_id], cwd=project_root)
+            if code != 0:
+                return code
+        else:
+            print(f"Feature workspace script не найден в созданном проекте: {feature_script}")
+            return 2
 
-    print("\nGuided launcher complete.")
-    print(f"Project root: {project_root}")
-    print(f"Recommended next: cd {project_slug} && bash scripts/init-feature-workspace.sh --feature-id first-feature")
+    if args.guided or args.status or args.run_dry_run or args.verify_summary:
+        dashboard = project_root / "scripts" / "operator-dashboard.py"
+        if not dashboard.exists():
+            print(f"\nOperator dashboard не найден: {dashboard}")
+            return 2
+        print("\nШаг: следующий шаг оператора")
+        return _run(_dashboard_command(project_root, args), cwd=project_root)
+
+    print("\nГотово: проект создан.")
+    print(f"Папка проекта: {project_root}")
+    print(f"Следующий шаг: cd {project_slug} && python3 scripts/factory-launcher.py --continue")
     return 0
 
 
@@ -270,7 +331,23 @@ def main() -> int:
     parser.add_argument(
         "--mode",
         choices=["greenfield", "brownfield", "continue"],
-        help="Маршрут запуска. Без параметра launcher задаст conversational вопросы.",
+        help="Маршрут запуска. Без параметра launcher задаст простые вопросы.",
+    )
+    parser.add_argument(
+        "--guided",
+        action="store_true",
+        help="Пройти полный путь новичка: preflight, создание проекта, project-knowledge, workspace первой задачи и operator next step.",
+    )
+    parser.add_argument(
+        "--continue",
+        dest="continue_mode",
+        action="store_true",
+        help="Короткий alias для --mode continue.",
+    )
+    parser.add_argument(
+        "--status",
+        action="store_true",
+        help="Показать статус и следующий шаг. Для созданного проекта это alias continue-flow.",
     )
     parser.add_argument("--project-name", help="Название проекта для greenfield/brownfield route.")
     parser.add_argument("--project-slug", help="Slug проекта для greenfield/brownfield route.")
@@ -297,6 +374,13 @@ def main() -> int:
         sys.stdout.reconfigure(line_buffering=True)
 
     template_root, scripts_dir = _script_paths(args.template_repo_root)
+    if args.continue_mode:
+        if args.mode and args.mode != "continue":
+            parser.error("--continue нельзя совмещать с --mode greenfield/brownfield")
+        args.mode = "continue"
+    if args.status and not args.mode:
+        args.mode = "continue"
+
     mode = args.mode or _interactive_mode()
 
     if mode == "greenfield":

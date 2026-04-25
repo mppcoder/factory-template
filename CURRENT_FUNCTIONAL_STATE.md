@@ -41,6 +41,8 @@
 - launcher и template docs больше не требуют отдельную project-local staging-конфигурацию
 - beginner-friendly acceptance smoke (`onboarding-smoke/run-novice-e2e.sh`) регулярно воспроизводит greenfield и brownfield novice launch path через wizard
 - beginner-friendly acceptance smoke теперь покрывает все canonical presets: `greenfield-product`, `brownfield-without-repo`, `brownfield-with-repo-modernization`, `brownfield-with-repo-integration`, `brownfield-with-repo-audit`
+- guided launcher теперь поддерживает полный beginner path через `--guided`: preflight, создание проекта, проверка `project-knowledge`, workspace первой задачи и следующий шаг оператора
+- novice E2E теперь отдельно подтверждает `--guided` для greenfield, brownfield без repo, brownfield с repo и `--continue` flow
 - downstream apply-safe-zones теперь сохраняет rollback-state и backup, а `rollback-template-patch.sh` выполняет воспроизводимый откат; для mixed manual sessions доступен full-project snapshot restore
 - handoff source files и validator `validate-codex-task-pack.py` теперь явно требуют фиксировать приоритет repo rules при передаче задачи в Codex
 - handoff layer теперь явно запрещает выдачу handoff через файл или несколькими блоками: пользователю разрешён только один цельный блок для вставки в Codex

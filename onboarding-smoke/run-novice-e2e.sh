@@ -98,6 +98,7 @@ run_launcher_scenario() {
   local launcher_mode="$4"
   local brownfield_kind="$5"
   local expected_preset="$6"
+  local guided_mode="${7:-false}"
 
   local scenario_root="$RUN_ROOT/$scenario_key"
   local log_file="$RUN_ROOT/${scenario_key}.txt"
@@ -117,12 +118,51 @@ run_launcher_scenario() {
     if [ "$launcher_mode" = "brownfield" ]; then
       command+=(--brownfield-kind "$brownfield_kind")
     fi
+    if [ "$guided_mode" = "guided" ]; then
+      command+=(--guided)
+    fi
     FACTORY_REGISTRY_MODE=skip "${command[@]}" >"$log_file" 2>&1
   )
 
   local project_root="$scenario_root/$project_slug"
   if [ ! -d "$project_root" ]; then
     echo "ОШИБКА: проект не создан через guided launcher для сценария $scenario_key" >&2
+    return 1
+  fi
+
+  validate_generated_project "$project_root" "$expected_preset" "$log_file"
+
+  printf '%s|%s|%s|%s\n' "$scenario_key" "$project_root" "$expected_preset" "$log_file"
+}
+
+run_continue_scenario() {
+  local scenario_key="$1"
+  local project_name="$2"
+  local project_slug="$3"
+  local expected_preset="$4"
+
+  local scenario_root="$RUN_ROOT/$scenario_key"
+  local log_file="$RUN_ROOT/${scenario_key}.txt"
+  mkdir -p "$scenario_root"
+
+  (
+    cd "$scenario_root"
+    FACTORY_REGISTRY_MODE=skip python3 "$ROOT/template-repo/scripts/factory-launcher.py" \
+      --template-repo-root "$ROOT/template-repo" \
+      --mode greenfield \
+      --project-name "$project_name" \
+      --project-slug "$project_slug" \
+      --skip-preflight \
+      --yes \
+      --guided >"$log_file" 2>&1
+
+    cd "$project_slug"
+    python3 scripts/factory-launcher.py --continue --feature-id feat-continue-smoke >>"$log_file" 2>&1
+  )
+
+  local project_root="$scenario_root/$project_slug"
+  if [ ! -d "$project_root/work/features/feat-continue-smoke" ]; then
+    echo "ОШИБКА: continue flow не создал feature workspace для сценария $scenario_key" >&2
     return 1
   fi
 
@@ -184,16 +224,35 @@ RESULTS+=("$(
     "guided-launcher-greenfield-smoke" \
     "greenfield" \
     "" \
-    "greenfield-product"
+    "greenfield-product" \
+    "guided"
 )")
 RESULTS+=("$(
   run_launcher_scenario \
-    "guided-launcher-brownfield-audit" \
-    "Guided Launcher Brownfield Audit Smoke" \
-    "guided-launcher-brownfield-audit-smoke" \
+    "guided-launcher-brownfield-no-repo" \
+    "Guided Launcher Brownfield No Repo Smoke" \
+    "guided-launcher-brownfield-no-repo-smoke" \
     "brownfield" \
-    "audit" \
-    "brownfield-with-repo-audit"
+    "no-repo" \
+    "brownfield-without-repo" \
+    "guided"
+)")
+RESULTS+=("$(
+  run_launcher_scenario \
+    "guided-launcher-brownfield-with-repo" \
+    "Guided Launcher Brownfield With Repo Smoke" \
+    "guided-launcher-brownfield-with-repo-smoke" \
+    "brownfield" \
+    "modernize" \
+    "brownfield-with-repo-modernization" \
+    "guided"
+)")
+RESULTS+=("$(
+  run_continue_scenario \
+    "guided-launcher-continue-flow" \
+    "Guided Launcher Continue Flow Smoke" \
+    "guided-launcher-continue-flow-smoke" \
+    "greenfield-product"
 )")
 RUN_TS="$(date -u +"%Y-%m-%dT%H:%M:%SZ")"
 
@@ -205,7 +264,7 @@ cat <<EOF
 - Runner: \`onboarding-smoke/run-novice-e2e.sh\`
 - Root: \`$ROOT\`
 
-## Scenario Results
+## Результаты сценариев
 
 EOF
 
@@ -225,19 +284,19 @@ done
 
 cat <<EOF
 
-## What Was Verified
+## Что проверено
 
-- Beginner wizard route selection without manual preset terminology for all canonical presets.
-- Guided launcher route selection and project creation through the unified entrypoint for greenfield and brownfield.
-- Generated project preset alignment in \`.chatgpt/active-scenarios.yaml\`.
-- Mode parity validation through \`validate-mode-parity.py\`.
-- Canonical modes covered:
+- Wizard fallback выбирает маршруты без ручного знания внутренних preset-имен.
+- Guided launcher проходит полный путь через единый entrypoint: greenfield, brownfield без repo, brownfield с repo и continue-flow.
+- В generated project проверен preset в \`.chatgpt/active-scenarios.yaml\`.
+- Проверен mode parity через \`validate-mode-parity.py\`.
+- Покрыты canonical modes:
   - \`greenfield-product\`
   - \`brownfield-without-repo\`
   - \`brownfield-with-repo-modernization\`
   - \`brownfield-with-repo-integration\`
   - \`brownfield-with-repo-audit\`
-- Baseline validators (bootstrap path):
+- Базовые validators (bootstrap path):
   - \`validate-project-preset.py\`
   - \`validate-policy-preset.py\`
   - \`validate-change-profile.py\`
@@ -250,13 +309,16 @@ cat <<EOF
   - \`create-codex-task-pack.py\`
   - \`validate-codex-task-pack.py\`
   - \`validate-codex-routing.py\`
-- Long-flow novice acceptance (post-bootstrap):
+- Длинный novice-flow после bootstrap:
   - \`tools/fill_smoke_artifacts.py\`
   - \`validate-stage.py\`
   - \`validate-evidence.py\`
   - \`validate-quality.py\`
   - \`validate-handoff.py\`
   - \`check-dod.py\`
+- Шаги guided path:
+  - \`--guided\` создает проект и workspace первой задачи.
+  - \`--continue\` создает следующий feature workspace и печатает operator next step.
 EOF
 } >"$REPORT_PATH"
 

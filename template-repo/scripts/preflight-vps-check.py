@@ -293,7 +293,7 @@ def _print_report(checks: list[CheckResult], project_root: Path, project_slug: s
     print(f"- Критичные блокеры: {fail_count}")
 
     if fail_count:
-        print("\nЕсть блокирующие проблемы. Сначала исправьте их, затем запускайте wizard/launcher.")
+        print("\nЕсть блокирующие проблемы. Сначала исправьте их, затем снова запустите мастер.")
     else:
         print("\nКритичных блокеров нет. Можно продолжать запуск первого проекта.")
         script_root = Path(__file__).resolve().parent.parent
@@ -302,7 +302,7 @@ def _print_report(checks: list[CheckResult], project_root: Path, project_slug: s
             if script_root.name == "template-repo"
             else "scripts/factory-launcher.py"
         )
-        print(f"Guided next: python3 {launcher_hint} --mode greenfield")
+        print(f"Следующий шаг: python3 {launcher_hint} --guided")
 
 
 def main() -> int:

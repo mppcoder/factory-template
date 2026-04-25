@@ -199,7 +199,7 @@ def _render_plan(
     print("1. Создаст папку проекта и скопирует туда рабочий шаблон.")
     print("2. Подставит безопасные стартовые настройки под выбранный маршрут.")
     print("3. Включит сценарный контур и .chatgpt-артефакты для первого цикла.")
-    print("4. Сгенерирует долгоживущий слой project-knowledge для накопления знаний.")
+    print("4. Подготовит project-knowledge: папку для устойчивых знаний о проекте.")
 
 
 def _run_preflight(preflight_file: Path, project_slug: str, launch_cwd: Path) -> int:
@@ -268,7 +268,7 @@ def main() -> int:
 
     parser = argparse.ArgumentParser(
         description=(
-            "Beginner-friendly wizard: подбирает правильный вход и запускает проект без знания preset-терминов. "
+            "Мастер первого проекта: подбирает правильный вход и запускает проект без знания внутренних preset-имен. "
             "Для единого greenfield/brownfield/continue входа используйте factory-launcher.py."
         ),
     )
@@ -293,7 +293,7 @@ def main() -> int:
     launch_cwd = Path.cwd().resolve()
 
     print("Первый проект: мастер запуска")
-    print("Отвечайте простыми словами: wizard сам сопоставит ответы с нужным маршрутом.")
+    print("Отвечайте простыми словами: мастер сам выберет подходящий маршрут.")
 
     project_name = _ask_text("\nКак назвать проект")
     default_slug = _slugify(project_name)
@@ -349,12 +349,12 @@ def main() -> int:
         print("\nLauncher завершился с ошибкой.")
         return code
 
-    print("\nГотово: проект создан через beginner-friendly wizard.")
+    print("\nГотово: проект создан через мастер первого проекта.")
     print(f"Папка проекта: {destination}")
     print("Что делать дальше:")
     print("1. Откройте созданную папку проекта.")
     print("2. Для planning workspace запустите: bash scripts/init-feature-workspace.sh --feature-id first-feature")
-    print("3. Для operator next step запустите: python3 scripts/factory-launcher.py --mode continue")
+    print("3. Для следующего шага оператора запустите: python3 scripts/factory-launcher.py --continue")
     return 0
 
 

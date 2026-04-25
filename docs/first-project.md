@@ -5,13 +5,14 @@
 Вместо ручного выбора внутренних preset-терминов используйте guided launcher:
 
 ```bash
-python3 template-repo/scripts/factory-launcher.py
+python3 template-repo/scripts/factory-launcher.py --guided
 ```
 
 Он покрывает:
 - новый проект с нуля;
 - старт с существующим проектом или системой;
-- продолжение уже созданного flow до planning/deploy next step.
+- продолжение уже созданного flow до workspace первой задачи и deploy next step.
+- показ одной понятной следующей команды.
 
 Прямой wizard остается fallback-командой:
 
@@ -29,6 +30,14 @@ Wizard задаст 3 понятных вопроса:
 - показывает короткое объяснение выбора;
 - запускает VPS preflight в человекочитаемом виде;
 - создает проект через существующий launcher без ломки текущей архитектуры.
+
+Полный путь новичка лучше запускать через:
+
+```bash
+python3 template-repo/scripts/factory-launcher.py --guided
+```
+
+Эта команда после создания проекта сама подготовит `project-knowledge`, создаст workspace первой задачи и покажет следующий шаг оператора.
 
 ## Отдельный запуск preflight
 

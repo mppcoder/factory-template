@@ -7,7 +7,19 @@
 Рекомендуемый unified entrypoint:
 
 ```bash
-python3 template-repo/scripts/factory-launcher.py --mode continue
+python3 template-repo/scripts/factory-launcher.py --continue
+```
+
+Короткий статус без выбора режима:
+
+```bash
+python3 template-repo/scripts/factory-launcher.py --status
+```
+
+Статус с безопасным deploy dry-run:
+
+```bash
+python3 template-repo/scripts/factory-launcher.py --continue --run-dry-run
 ```
 
 Прямой fallback:

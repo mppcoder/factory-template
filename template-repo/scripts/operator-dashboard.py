@@ -214,7 +214,7 @@ def build_status_rows(root: Path, preset_override: str | None = None) -> list[St
             StatusRow(
                 title="Operator preset",
                 status="ok",
-                details="`starter`: минимальный single-app baseline без обязательных DB/TLS секретов.",
+                details="`starter`: минимальный запуск одного приложения без обязательных DB/TLS секретов.",
             )
         )
     else:
@@ -243,7 +243,7 @@ def build_status_rows(root: Path, preset_override: str | None = None) -> list[St
             StatusRow(
                 title="Operator env validation",
                 status="fail",
-                details=f"Env validation failed; failures={env_validation.get('failures', 'unknown')}, warnings={env_validation.get('warnings', 'unknown')}.",
+                details=f"Проверка env не прошла; ошибок={env_validation.get('failures', 'unknown')}, предупреждений={env_validation.get('warnings', 'unknown')}.",
             )
         )
 
@@ -344,13 +344,13 @@ def recommend_next_step(root: Path, rows: list[StatusRow], preset: str) -> str:
     env_cmd = "cp deploy/.env.example deploy/.env"
 
     if by_title["Deploy baseline"].status == "fail":
-        return "Сначала восстановите deploy baseline (`deploy/compose*.yaml`)."
+        return "Сначала восстановите deploy-файлы (`deploy/compose*.yaml`)."
     if by_title["Environment файл"].status == "fail":
         return f"Создайте env-файл: `{env_cmd}`."
     if by_title["Operator preset"].status == "fail":
-        return "Исправьте `OPERATOR_PRESET` или восстановите preset overlay-файлы."
+        return "Исправьте `OPERATOR_PRESET` или восстановите дополнительные deploy-файлы выбранного preset."
     if by_title["Operator env validation"].status == "fail":
-        return f"Исправьте deploy env: `python3 {script_hint(root, 'validate-operator-env.py')} --preset {preset}`."
+        return f"Исправьте deploy env (файл с настройками окружения): `python3 {script_hint(root, 'validate-operator-env.py')} --preset {preset}`."
     if by_title["Последний dry-run"].status != "ok":
         return f"Запустите безопасную проверку перед деплоем: `{dry_run_cmd}`."
     if by_title["Последний deploy"].status != "ok":
@@ -431,20 +431,20 @@ def main() -> int:
             print("Dry-run скрипт не найден.")
 
     rows = build_status_rows(root, args.preset)
-    print("Operator Dashboard")
+    print("Панель оператора")
     print("-" * 72)
-    print(f"Repo root: {root}")
-    print(f"Operator preset: {preset}")
-    print(f"Updated: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+    print(f"Папка проекта: {root}")
+    print(f"Deploy preset (набор настроек деплоя): {preset}")
+    print(f"Обновлено: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
     print()
     for row in rows:
         label = STATUS_LABEL.get(row.status, row.status.upper())
         print(f"[{label}] {row.title}")
         print(f"  {row.details}")
     print()
-    print("Recommended next step:")
+    print("Следующий шаг:")
     print(f"- {recommend_next_step(root, rows, preset)}")
-    print(f"- Guided launcher: python3 {script_hint(root, 'factory-launcher.py')} --mode continue")
+    print(f"- Вернуться в launcher: python3 {script_hint(root, 'factory-launcher.py')} --continue")
 
     if args.verify_summary or args.full:
         print_verify_summary(root)
