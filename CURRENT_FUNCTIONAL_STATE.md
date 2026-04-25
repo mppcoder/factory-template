@@ -54,12 +54,16 @@
 - canonical preset naming, workspace bootstrap naming и optional domain reference contour синхронизированы между docs, manifests и физической структурой repo
 - release-facing docs теперь фиксируют, что линия `2.5` не сводится к process hardening и требует отдельного beginner-first/UI-friendly контура
 
-## Программа 2.5 (статус на 2026-04-23)
+## Программа 2.5 (release truth)
+- release truth source: `docs/releases/release-scorecard.yaml`
 - текущая стадия: `verify-closeout (RC prep)`
+- статус: `2.5 RC Closeout Candidate (not GA)`
+- GA-ready: `false`
 - канонический roadmap: `docs/releases/2.5-roadmap.md`
 - канонические метрики: `docs/releases/2.5-success-metrics.md`
-- dependency order зафиксирован: foundation hardening (`2.5-A`) -> beginner UX contracts (`2.5-B`) -> интеграция и downstream safety -> release closeout
-- gate-лист для следующих 5 handoff нормализован в release-facing документах
+- `TEST_REPORT.md` является evidence/reporting layer, а не отдельным источником статуса релиза
+- dependency order зафиксирован: framing -> RC closeout evidence -> explicit GA/no-go по KPI
+- scorecard gates нормализованы в `docs/releases/release-scorecard.yaml`
 - novice E2E acceptance (greenfield + brownfield) зафиксирован в `onboarding-smoke/ACCEPTANCE_REPORT.md`
 - downstream upgrade UX closeout зафиксирован в `UPGRADE_SUMMARY.md`
 
@@ -72,14 +76,14 @@
 - phase-aware export/reference packs остаются вспомогательным слоем, а не каноническим хранилищем сценариев
 - эвристика классификации `task_class` пока keyword-based, а не semantic classifier
 - release-facing описание дерева проекта и workflow требует дальнейшего поддержания в sync при каждой новой process-доработке шаблона
-- roadmap `2.5` сформирован, но implementation-треки `2.5-A` и `2.5-B` ещё не закрыты фактическими engineering/product изменениями
+- `2.5` ещё не объявлен GA: KPI подтверждение должно читаться из `docs/releases/release-scorecard.yaml` и `docs/releases/2.5-success-metrics.md`
 
 ## Что еще не закрыто
 - финальная проверка на реальных greenfield и brownfield проектах
 - окончательная polish-фаза для runner layer и operational reports
 - отдельный release-facing validator/report для curated pack quality beyond structural checks
 - дальнейшее production hardening runtime-нестабильности git sync beyond current fallback strategy
-- выполнение следующих 5 handoff по roadmap `2.5` и закрытие gate'ов MVP/full
+- explicit GA/no-go decision для `2.5`
 - подтверждение beginner-first KPI и downstream safety KPI из `docs/releases/2.5-success-metrics.md`
 - дальнейшее расширение novice acceptance от текущего long-flow smoke к предметным domain-сценариям реальных downstream систем
 

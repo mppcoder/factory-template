@@ -1,5 +1,9 @@
 # TEST REPORT v2.5 RC (verify-closeout)
 
+Status source of truth: `docs/releases/release-scorecard.yaml`.
+Current scorecard state: `2.5 RC Closeout Candidate (not GA)`.
+TEST_REPORT.md is verification evidence, not the canonical release-status source.
+
 ## Что проверено
 - consolidated verify entrypoint (`template-repo/scripts/verify-all.sh`)
 - CI baseline checks (`CI / verify-baseline`, `CI / release-bundle-dry-run`)

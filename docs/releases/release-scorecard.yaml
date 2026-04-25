@@ -1,0 +1,80 @@
+schema_version: 1
+release_truth:
+  canonical_file: docs/releases/release-scorecard.yaml
+  release_line: "2.5"
+  release_label: "2.5 RC Closeout Candidate (not GA)"
+  current_stage: "verify-closeout (RC prep)"
+  status: rc-closeout-candidate
+  rc_ready: true
+  ga_ready: false
+  last_updated: "2026-04-25"
+  status_source_policy: "Markdown release docs must describe this scorecard state; TEST_REPORT.md is verification evidence, not an independent release-status source."
+  next_decision: "GA/no-go requires explicit KPI confirmation against docs/releases/2.5-success-metrics.md."
+  canonical_references:
+    roadmap: docs/releases/2.5-roadmap.md
+    metrics: docs/releases/2.5-success-metrics.md
+    checklist: RELEASE_CHECKLIST.md
+    current_state: CURRENT_FUNCTIONAL_STATE.md
+    readme: README.md
+    test_report: TEST_REPORT.md
+  gates:
+    - id: G25-0
+      name: Program framing and scope normalization
+      status: closed
+      evidence:
+        - docs/releases/2.5-roadmap.md
+        - docs/releases/2.5-success-metrics.md
+    - id: G25-RC
+      name: RC closeout evidence for downstream trial
+      status: passed
+      evidence:
+        - TEST_REPORT.md
+        - UPGRADE_SUMMARY.md
+        - onboarding-smoke/ACCEPTANCE_REPORT.md
+    - id: G25-GA
+      name: Full 2.5 GA readiness
+      status: pending
+      evidence:
+        - docs/releases/2.5-success-metrics.md
+        - RELEASE_CHECKLIST.md
+  metrics_summary:
+    mvp_thresholds: defined
+    full_thresholds: defined
+    current_result: "RC evidence is green; GA KPI confirmation is still pending."
+  doc_assertions:
+    - path: docs/releases/2.5-roadmap.md
+      must_contain:
+        - "Release truth source: `docs/releases/release-scorecard.yaml`"
+        - "Current pipeline stage: `verify-closeout (RC prep)`"
+        - "Status: `2.5 RC Closeout Candidate (not GA)`"
+        - "GA-ready: `false`"
+    - path: docs/releases/2.5-success-metrics.md
+      must_contain:
+        - "Release truth source: `docs/releases/release-scorecard.yaml`"
+        - "Current scorecard result: RC evidence is green; GA KPI confirmation is still pending."
+    - path: CURRENT_FUNCTIONAL_STATE.md
+      must_contain:
+        - "release truth source: `docs/releases/release-scorecard.yaml`"
+        - "текущая стадия: `verify-closeout (RC prep)`"
+        - "статус: `2.5 RC Closeout Candidate (not GA)`"
+        - "GA-ready: `false`"
+    - path: README.md
+      must_contain:
+        - "Release truth source: `docs/releases/release-scorecard.yaml`"
+        - "Current 2.5 stage: `verify-closeout (RC prep)`"
+        - "Status: `2.5 RC Closeout Candidate (not GA)`"
+        - "GA-ready: `false`"
+    - path: RELEASE_CHECKLIST.md
+      must_contain:
+        - "Release truth source: `docs/releases/release-scorecard.yaml`"
+        - "Current 2.5 stage: `verify-closeout (RC prep)`"
+        - "Status: `2.5 RC Closeout Candidate (not GA)`"
+        - "- [ ] GA-ready declared"
+    - path: TEST_REPORT.md
+      must_contain:
+        - "Status source of truth: `docs/releases/release-scorecard.yaml`"
+        - "Current scorecard state: `2.5 RC Closeout Candidate (not GA)`"
+        - "TEST_REPORT.md is verification evidence, not the canonical release-status source."
+  forbidden_doc_markers:
+    - path: docs/releases/2.5-roadmap.md
+      marker: "Current pipeline stage: `remediation-prep`"

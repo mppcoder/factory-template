@@ -6,6 +6,10 @@
 - Current release line: `2.4.4`
 - Current working section in changelog: `2.4.4`
 - Next planned release program line: `2.5`
+- Release truth source: `docs/releases/release-scorecard.yaml`
+- Current 2.5 stage: `verify-closeout (RC prep)`
+- Status: `2.5 RC Closeout Candidate (not GA)`
+- GA-ready: `false`
 
 ## Intent Signals
 
@@ -38,6 +42,7 @@
 - [x] `bash VALIDATE_VERIFIED_SYNC_PREREQS.sh`
 - [x] `bash VALIDATE_RELEASE_DECISION.sh`
 - [x] `bash VALIDATE_RELEASE_NOTES_SOURCE.sh`
+- [x] `python3 template-repo/scripts/validate-release-scorecard.py .`
 - [x] `bash SMOKE_TEST.sh`
 - [x] `bash EXAMPLES_TEST.sh`
 - [x] `bash MATRIX_TEST.sh`
@@ -81,7 +86,7 @@
 - [x] release bundle можно собирать
 - [ ] или явно зафиксирован `no-release` с причиной
 
-## 2.5 Program Framing Gate (Remediation-Prep)
+## 2.5 Program Framing Gate (Closed)
 
 - [x] Зафиксирован dual-track контур: `2.5-A` (engineering hardening) и `2.5-B` (beginner-first productization)
 - [x] Канонический roadmap создан: `docs/releases/2.5-roadmap.md`
@@ -96,12 +101,10 @@
 - [x] `brownfield novice` E2E зеленый (`onboarding-smoke/ACCEPTANCE_REPORT.md`)
 - [x] `TEST_REPORT.md` и release-facing docs обновлены как beginner-first + hardening, а не docs-only polish
 - [x] инцидентные дефекты из verify-прохода зафиксированы через defect-capture path
-- [ ] GA-ready объявлен
+- [ ] GA-ready declared
 
-## 2.5 Next 5 Handoff Gates
+## 2.5 Scorecard Gates
 
-1. `H25-01 / Gate G25-1a` — hardening backlog normalization и risk register готовы; артефакты: `docs/releases/2.5-roadmap.md`, `RELEASE_NOTES.md`.
-2. `H25-02 / Gate G25-2a` — beginner-first onboarding flow и UI-contract baseline зафиксированы; артефакты: `README.md`, `docs/releases/2.5-roadmap.md`.
-3. `H25-03 / Gate G25-1` — safe-defaults и compatibility contracts формализованы для downstream evolution; артефакты: `CURRENT_FUNCTIONAL_STATE.md`, `docs/releases/2.5-success-metrics.md`.
-4. `H25-04 / Gate G25-3` — MVP-срез `2.5-A + 2.5-B` подтвержден по MVP-порогам; артефакты: `RELEASE_CHECKLIST.md`, `docs/releases/2.5-success-metrics.md`.
-5. `H25-05 / Gate G25-4` — full `2.5` release readiness подтверждён по full-порогам и release closeout; артефакты: `RELEASE_NOTES.md`, `RELEASE_CHECKLIST.md`, `docs/releases/2.5-roadmap.md`.
+- [x] `G25-0` — program framing and scope normalization closed.
+- [x] `G25-RC` — RC closeout evidence passed for downstream trial.
+- [ ] `G25-GA` — full `2.5` GA readiness pending explicit KPI confirmation.

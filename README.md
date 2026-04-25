@@ -8,6 +8,11 @@
 
 Следующая линия `2.5` уже оформлена как отдельная release-программа: не только hardening процесса, но и beginner-first productization с UI-friendly контуром и безопасной эволюцией downstream-репозиториев.
 
+Release truth source: `docs/releases/release-scorecard.yaml`.
+Current 2.5 stage: `verify-closeout (RC prep)`.
+Status: `2.5 RC Closeout Candidate (not GA)`.
+GA-ready: `false`.
+
 ## Canonical Entry Modes
 
 Шаблон сейчас поддерживает 3 канонических режима запуска и сопровождения:
@@ -278,12 +283,20 @@ bash PHASE_DETECTION_TEST.sh
 - launcher и preset application теперь принимают legacy preset names только как compatibility aliases;
 - release docs, manifests, template metadata и examples синхронизированы под `factory-v2.4.4`.
 
-## Программа релиза 2.5 (в работе)
+## Программа релиза 2.5 (release truth)
+- Release truth source: `docs/releases/release-scorecard.yaml`;
+- Current 2.5 stage: `verify-closeout (RC prep)`;
+- Status: `2.5 RC Closeout Candidate (not GA)`;
+- GA-ready: `false`;
 - канонический план зафиксирован в `docs/releases/2.5-roadmap.md`;
 - success metrics и пороги MVP/full 2.5 зафиксированы в `docs/releases/2.5-success-metrics.md`;
 - трек `2.5-A` закрепляет engineering hardening (валидаторы, устойчивость, безопасные default paths);
 - трек `2.5-B` закрепляет beginner-first productization (UI-friendly entry path, понятный onboarding, снижение порога входа);
 - выпуск `2.5` считается полным только при совместном закрытии `2.5-A` и `2.5-B`, чтобы релиз не остался "только process-hardening".
+
+## How To Read Release Truth
+
+Start with `docs/releases/release-scorecard.yaml`. It is the machine-readable release state used by pre-release and CI gates. Roadmap/current-state/README/checklist explain that same state for humans; `TEST_REPORT.md` records verification evidence and must not be treated as a separate release-status source.
 
 ## Базовый функционал ветки 2.4.4
 - `factory-template` поддерживает greenfield, brownfield без repo и brownfield с repo в одном repo-first контуре;
