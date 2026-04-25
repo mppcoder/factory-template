@@ -30,6 +30,12 @@ FORBIDDEN_PATTERNS = [
     r"^##\s+next steps?\s*$",
     r"known limitation:",
     r"manual steps only",
+    r"^##\s+goal\s*$",
+    r"^##\s+hard constraints\s*$",
+    r"^##\s+required implementation\s*$",
+    r"^##\s+expected artifacts\s*$",
+    r"^##\s+verification commands\s*$",
+    r"^##\s+completion requirements\s*$",
 ]
 
 

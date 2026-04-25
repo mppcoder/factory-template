@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import sys
 from pathlib import Path
+import subprocess
 
 import yaml
 
@@ -14,6 +15,25 @@ def read_text(path: Path) -> str:
 def ensure_contains(text: str, needle: str, errors: list[str], label: str) -> None:
     if needle not in text:
         errors.append(f"{label}: отсутствует обязательный фрагмент `{needle}`")
+
+
+def run_handoff_language_validator(root: Path, path: Path, errors: list[str]) -> None:
+    validator = root / "scripts" / "validate-handoff-language.py"
+    if not validator.exists():
+        fallback = root / "template-repo" / "scripts" / "validate-handoff-language.py"
+        validator = fallback if fallback.exists() else validator
+    if not validator.exists() or not path.exists():
+        return
+    result = subprocess.run(
+        [sys.executable, str(validator), str(path)],
+        cwd=root,
+        text=True,
+        capture_output=True,
+        check=False,
+    )
+    if result.returncode != 0:
+        details = (result.stdout or result.stderr).strip()
+        errors.append(f"{path.name}: нарушен language contract входящего handoff\n{details}")
 
 
 def main() -> int:
@@ -28,6 +48,7 @@ def main() -> int:
     launch_path = chat / "task-launch.yaml"
     normalized_handoff_path = chat / "normalized-codex-handoff.md"
     handoff_response_path = chat / "handoff-response.md"
+    codex_input_path = chat / "codex-input.md"
 
     for path in [context_path, pack_path, boundary_path, checklist_path, launch_path, normalized_handoff_path, handoff_response_path]:
         if not path.exists():
@@ -46,6 +67,8 @@ def main() -> int:
     launch_yaml = yaml.safe_load(read_text(launch_path)) or {}
     normalized_handoff = read_text(normalized_handoff_path)
     handoff_response = read_text(handoff_response_path)
+    run_handoff_language_validator(root, codex_input_path, errors)
+    run_handoff_language_validator(root, normalized_handoff_path, errors)
 
     ensure_contains(context, "# Контекст для Codex", errors, "codex-context.md")
     ensure_contains(context, "## Проект", errors, "codex-context.md")

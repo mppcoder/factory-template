@@ -15,6 +15,7 @@
 - добавлены troubleshooting и validators против sticky last-used profile/reasoning state и неподтвержденных model mappings
 - live catalog unavailable mode теперь деградирует в warning без automatic mapping promotion; strict mode остается opt-in
 - зафиксирован и исправлен `bug-031`: closeout guidance и validators теперь запрещают типовые англоязычные человекочитаемые headings в финальном closeout
+- зафиксирован и исправлен `bug-032`: `.chatgpt/codex-input.md` и normalized handoff теперь проходят language-contract validation для upstream ChatGPT handoff
 
 ## [2.4.4] - 2026-04-22
 ### Добавлено

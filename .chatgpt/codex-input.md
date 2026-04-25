@@ -1,1 +1,1 @@
-bugfix: исправить англоязычный closeout и ложное ощущение handoff обратно в ChatGPT
+bugfix: исправить language contract для upstream ChatGPT handoff

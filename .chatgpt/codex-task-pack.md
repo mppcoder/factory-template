@@ -73,7 +73,7 @@ not-required-by-text-signal
 Общие рабочие инструкции применять только там, где они не конфликтуют с repo rules и старшими системными ограничениями среды.
 
 ## Входные данные handoff
-bugfix: исправить англоязычный closeout и ложное ощущение handoff обратно в ChatGPT
+bugfix: исправить language contract для upstream ChatGPT handoff
 
 ## Обязательное правило фиксации дефектов
 Если в ходе анализа, реализации, тестирования, reverse engineering или verification обнаружен дефект, регрессия, расхождение, пропущенный шаг, шаблонный сбой или reusable process failure, его нельзя silently patch.

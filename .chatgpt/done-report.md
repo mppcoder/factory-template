@@ -1,16 +1,17 @@
 # Отчет о завершении
 
 ## Что было запрошено
-- Исправить повторный сбой closeout: англоязычный человекочитаемый слой и формулировки, похожие на handoff обратно в ChatGPT.
+- Исправить upstream handoff language gap: ChatGPT-generated handoff не должен приходить с англоязычными человекочитаемыми разделами.
 - Сначала пройти defect-capture path, затем remediation.
 
 ## Что реально сделано
-- Создан `reports/bugs/bug-031-closeout-language-and-chatgpt-handoff-drift.md`.
-- Создан `reports/factory-feedback/feedback-031-closeout-language-and-chatgpt-handoff-drift.md`.
-- `scenario-pack/16-done-closeout.md` усилен запретом англоязычных closeout-заголовков и неясных формулировок про `ChatGPT Project`.
-- `validate-handoff-response-format.py` теперь ловит типовые англоязычные closeout headings вроде `What Changed`, `Completion Package`, `Known limitation`.
-- `check-codex-model-catalog.py` теперь генерирует proposal с русскими человекочитаемыми заголовками.
-- Текущие `.chatgpt` отчеты и model-routing proposal очищены от англоязычных описательных блоков, оставлены только технические literal values.
+- Создан `reports/bugs/bug-032-chatgpt-handoff-language-contract-gap.md`.
+- Создан `reports/factory-feedback/feedback-032-chatgpt-handoff-language-contract-gap.md`.
+- `scenario-pack/15-handoff-to-codex.md` теперь явно распространяет русский language contract на upstream ChatGPT-generated handoff в `.chatgpt/codex-input.md`.
+- Добавлен validator `template-repo/scripts/validate-handoff-language.py`.
+- `validate-codex-task-pack.py` теперь запускает language validator для `.chatgpt/codex-input.md` и `.chatgpt/normalized-codex-handoff.md`.
+- `validate-handoff-response-format.py` дополнительно ловит англоязычные handoff sections вроде `Goal`, `Hard constraints`, `Required implementation`, `Verification commands`, `Completion requirements`.
+- `create-codex-task-pack.py` и template task-pack guidance обновлены правилом: upstream handoff prose должен быть русским.
 
 ## Какие артефакты обновлены
 - `.chatgpt/boundary-actions.md`
@@ -23,20 +24,20 @@
 - `README.md`
 - `template-repo/README.md`
 - `template-repo/codex-routing.yaml`
-- `template-repo/scenario-pack/16-done-closeout.md`
-- `template-repo/scripts/check-codex-model-catalog.py`
+- `template-repo/scenario-pack/15-handoff-to-codex.md`
 - `template-repo/scripts/create-codex-task-pack.py`
+- `template-repo/scripts/validate-codex-task-pack.py`
+- `template-repo/scripts/validate-handoff-language.py`
 - `template-repo/scripts/validate-handoff-response-format.py`
-- `template-repo/template/README.md`
-- `template-repo/template/docs/codex-workflow.md`
+- `template-repo/template/.chatgpt/codex-task-pack.md`
 - `reports/model-routing/model-routing-proposal.md`
-- `reports/bugs/bug-031-closeout-language-and-chatgpt-handoff-drift.md`
-- `reports/factory-feedback/feedback-031-closeout-language-and-chatgpt-handoff-drift.md`
+- `reports/bugs/bug-032-chatgpt-handoff-language-contract-gap.md`
+- `reports/factory-feedback/feedback-032-chatgpt-handoff-language-contract-gap.md`
 
 ## Что не потребовалось
 - Новый handoff обратно в ChatGPT не требуется.
 - Обновление repo-first инструкции `factory-template ChatGPT Project` не требуется: repo/path/entrypoint/instruction contract не менялись.
 
 ## Итог закрытия
-- `bug-031` исправлен в текущем scope.
-- Человекочитаемый closeout должен оставаться русским; технические identifiers допускаются как literal values.
+- `bug-032` исправлен в текущем scope.
+- Upstream ChatGPT-generated handoff теперь имеет executable language-contract check в repo validators.

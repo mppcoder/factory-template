@@ -1,5 +1,5 @@
 launch:
-  timestamp_utc: '2026-04-25T18:41:52+00:00'
+  timestamp_utc: '2026-04-25T18:48:01+00:00'
   launch_unit: new-task-launch
   launch_source: chatgpt-handoff
   router_layer: executable
@@ -26,8 +26,7 @@ launch:
   - .chatgpt/done-report.md
   handoff_allowed: yes (forbidden)
   defect_capture_path: not-required-by-text-signal
-  task_summary: 'bugfix: исправить англоязычный closeout и ложное ощущение handoff
-    обратно в ChatGPT'
+  task_summary: 'bugfix: исправить language contract для upstream ChatGPT handoff'
   launch_boundary_rule: Выбор модели и reasoning mode считается надежным только на
     новом запуске Codex для новой задачи.
   interactive_default_rule: 'Для интерактивной работы в VS Code Codex extension основной

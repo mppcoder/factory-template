@@ -71,6 +71,7 @@
 - Если remaining work еще остается внутренним repo follow-up, handoff не должен исчезать из-за будущего user footer.
 - Release-followup, source-pack refresh, export refresh, closeout-sync и release-facing consistency pass внутри repo считаются внутренней работой Codex.
 - Человекочитаемые заголовки, инструкции, отчеты и closeout-тексты должны быть на русском языке; английский допустим только для технических идентификаторов, команд, файлов, ключей конфигурации и literal values.
+- Upstream ChatGPT-generated handoff в `.chatgpt/codex-input.md` тоже должен быть на русском в человекочитаемом слое; англоязычные разделы `Goal`, `Hard constraints`, `Required implementation`, `Verification commands`, `Completion requirements` считаются language-contract defect.
 - Troubleshooting sticky state:
   - если пользователь открыл случайную или уже существующую Codex chat-сессию и просто вставил handoff, profile/model/reasoning могли не переключиться;
   - для интерактивного процесса сначала закройте устаревшую сессию, откройте новую и вручную проверьте picker;

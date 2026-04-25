@@ -61,4 +61,4 @@
 <!-- defect path или not-required -->
 
 ## Handoff input
-<!-- Сведите сюда ключевой handoff input -->
+<!-- Сведите сюда ключевой handoff input. Человекочитаемый текст должен быть на русском; technical literal values можно не переводить. -->

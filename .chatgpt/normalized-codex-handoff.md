@@ -110,4 +110,4 @@ selected_model matched the latest stored repo catalog snapshot; rerun live catal
 - Если новый model ID появился в live catalog, сначала создайте proposal через `scripts/check-codex-model-catalog.py --write-proposal`; promotion profile mapping требует ручного review.
 
 ## Текст задачи
-bugfix: исправить англоязычный closeout и ложное ощущение handoff обратно в ChatGPT
+bugfix: исправить language contract для upstream ChatGPT handoff
