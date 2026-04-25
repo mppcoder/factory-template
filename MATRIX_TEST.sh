@@ -23,22 +23,26 @@ POSITIVE_COMMON=(validate-project-preset.py validate-policy-preset.py validate-c
 make_project "$SBASE/green-small-fix" 'Матрица greenfield small-fix' 'green-small-fix' greenfield-product greenfield small-fix manual
 P="$SBASE/green-small-fix/green-small-fix"
 for c in "${POSITIVE_COMMON[@]}"; do assert_pass 'greenfield+small-fix+manual' "$c" "$P/scripts/$c" "$P"; done
+assert_pass 'greenfield+small-fix+manual' validate-tree-contract.py "$ROOT/template-repo/scripts/validate-tree-contract.py" "$P"
 for c in validate-evidence.py validate-quality.py check-dod.py; do assert_fail 'greenfield+small-fix+manual' "$c" "$P/scripts/$c" "$P"; done
 assert_pass 'greenfield+small-fix+manual' validate-handoff.py "$P/scripts/validate-handoff.py" "$P"
 
 make_project "$SBASE/green-feature" 'Матрица greenfield feature' 'green-feature' greenfield-product greenfield feature hybrid
 P="$SBASE/green-feature/green-feature"
 for c in "${POSITIVE_COMMON[@]}"; do assert_pass 'greenfield+feature+hybrid' "$c" "$P/scripts/$c" "$P"; done
+assert_pass 'greenfield+feature+hybrid' validate-tree-contract.py "$ROOT/template-repo/scripts/validate-tree-contract.py" "$P"
 for c in validate-evidence.py validate-quality.py check-dod.py validate-handoff.py; do assert_fail 'greenfield+feature+hybrid' "$c" "$P/scripts/$c" "$P"; done
 
 make_project "$SBASE/brown-feature" 'Матрица brownfield feature' 'brown-feature' brownfield-with-repo-modernization brownfield feature hybrid
 P="$SBASE/brown-feature/brown-feature"
 for c in "${POSITIVE_COMMON[@]}"; do assert_pass 'brownfield+feature+hybrid' "$c" "$P/scripts/$c" "$P"; done
+assert_pass 'brownfield+feature+hybrid' validate-tree-contract.py "$ROOT/template-repo/scripts/validate-tree-contract.py" "$P"
 for c in validate-evidence.py validate-quality.py check-dod.py validate-handoff.py; do assert_fail 'brownfield+feature+hybrid' "$c" "$P/scripts/$c" "$P"; done
 
 make_project "$SBASE/brown-audit" 'Матрица brownfield audit' 'brown-audit' brownfield-with-repo-audit brownfield brownfield-audit manual
 P="$SBASE/brown-audit/brown-audit"
 for c in "${POSITIVE_COMMON[@]}"; do assert_pass 'brownfield+audit+manual' "$c" "$P/scripts/$c" "$P"; done
+assert_pass 'brownfield+audit+manual' validate-tree-contract.py "$ROOT/template-repo/scripts/validate-tree-contract.py" "$P"
 for c in validate-evidence.py validate-quality.py check-dod.py; do assert_fail 'brownfield+audit+manual' "$c" "$P/scripts/$c" "$P"; done
 assert_pass 'brownfield+audit+manual' validate-handoff.py "$P/scripts/validate-handoff.py" "$P"
 
@@ -74,6 +78,7 @@ assert_pass 'factory-bugflow' check-template-drift.py python3 "$ROOT/workspace-p
 assert_pass 'factory-bugflow' create-codex-task-pack.py "$ROOT/template-repo/scripts/create-codex-task-pack.py" "$P"
 assert_pass 'factory-bugflow' validate-codex-task-pack.py "$ROOT/template-repo/scripts/validate-codex-task-pack.py" "$P"
 assert_pass 'factory-bugflow' validate-codex-routing.py "$ROOT/template-repo/scripts/validate-codex-routing.py" "$P"
+assert_pass 'factory-bugflow' validate-tree-contract.py "$ROOT/template-repo/scripts/validate-tree-contract.py" "$P"
 assert_pass 'factory-bugflow' validate-handoff-response-format.py "$ROOT/template-repo/scripts/validate-handoff-response-format.py" "$P/.chatgpt/handoff-response.md"
 assert_pass 'factory-bugflow' boundary-actions.md test -f "$P/.chatgpt/boundary-actions.md"
 assert_pass 'factory-bugflow' validate-defect-capture.py "$ROOT/template-repo/scripts/validate-defect-capture.py" "$P"

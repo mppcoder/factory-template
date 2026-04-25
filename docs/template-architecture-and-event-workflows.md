@@ -74,6 +74,14 @@ executable routing layer
 
 ## 3. Дерево проекта и source-of-truth
 
+Machine-readable контракт дерева находится в:
+
+- `template-repo/tree-contract.yaml`
+- `template-repo/scripts/validate-tree-contract.py`
+- `docs/tree-contract.md`
+
+Этот контракт разделяет `factory_root`, `template_base`, `generated_greenfield`, `generated_brownfield_without_repo` и `generated_brownfield_with_repo`.
+
 ### 3.1. Схема дерева
 
 ```text
@@ -138,6 +146,7 @@ factory-template/
 - для downstream `AGENTS`: `template-repo/AGENTS.md`;
 - для сценарной маршрутизации: `template-repo/scenario-pack/`;
 - для routing execution: `template-repo/codex-routing.yaml` и launcher/router scripts;
+- для tree contract: `template-repo/tree-contract.yaml`;
 - для release state: `VERSION.md`, `CHANGELOG.md`, `RELEASE_NOTES.md`, `CURRENT_FUNCTIONAL_STATE.md`;
 - для verify/closeout: `.chatgpt/verification-report.md`, `.chatgpt/done-report.md`, `.chatgpt/task-index.yaml`, `.chatgpt/task-launch.yaml`.
 

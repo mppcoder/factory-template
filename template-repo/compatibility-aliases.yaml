@@ -1,0 +1,34 @@
+compatibility_aliases_version: 1
+compatibility_only: true
+description: "Legacy aliases accepted only as backward-compatible input. Do not expose them as primary UX names."
+
+preset_aliases:
+  product-dev:
+    target: greenfield-product
+    reason: "legacy preset name before canonical greenfield naming"
+  legacy-modernization:
+    target: brownfield-with-repo-modernization
+    reason: "legacy preset name before explicit brownfield-with-repo contour split"
+  integration-project:
+    target: brownfield-with-repo-integration
+    reason: "legacy preset name before explicit brownfield-with-repo contour split"
+  audit-only:
+    target: brownfield-with-repo-audit
+    reason: "legacy preset name before explicit brownfield-with-repo contour split"
+  brownfield-dogfood-codex-assisted:
+    target: brownfield-without-repo
+    reason: "historical internal dogfood route kept only for compatibility"
+
+policy:
+  primary_ux_must_use:
+    - greenfield-product
+    - brownfield-without-repo
+    - brownfield-with-repo-modernization
+    - brownfield-with-repo-integration
+    - brownfield-with-repo-audit
+  forbidden_primary_ux:
+    - product-dev
+    - legacy-modernization
+    - integration-project
+    - audit-only
+    - brownfield-dogfood-codex-assisted

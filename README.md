@@ -280,6 +280,7 @@ bash PHASE_DETECTION_TEST.sh
 Короткая карта поддерживаемых режимов:
 
 - `ENTRY_MODES.md`
+- `docs/tree-contract.md`
 - `docs/template-architecture-and-event-workflows.md`
 
 Примечание по git sync в этом окружении:
@@ -312,8 +313,8 @@ bash PHASE_DETECTION_TEST.sh
 ## Что нового в релизе 2.4.4
 - canonical core-иерархия очищена от продуктовых/исторических имен в release-facing слоях;
 - presets, workspace packs и example/reference contours переведены на универсальные factory names;
-- `openclaw` вынесен из core-дерева в `optional-domain-packs/openclaw-reference`;
-- launcher и preset application теперь принимают legacy preset names только как compatibility aliases;
+- предметные reference cases вынесены из core-дерева в optional domain layer;
+- launcher и preset application принимают старые preset names только через explicit compatibility layer;
 - release docs, manifests, template metadata и examples синхронизированы под `factory-v2.4.4`.
 
 ## Программа релиза 2.5 (release truth)

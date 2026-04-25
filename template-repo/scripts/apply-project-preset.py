@@ -12,8 +12,29 @@ presets_file = pathlib.Path(sys.argv[2] if len(sys.argv) > 2 else "project-prese
 out_file = pathlib.Path(sys.argv[3] if len(sys.argv) > 3 else ".chatgpt/project-profile.yaml")
 active_file = pathlib.Path(sys.argv[4] if len(sys.argv) > 4 else ".chatgpt/active-scenarios.yaml")
 
+
+def alias_target(value):
+    if isinstance(value, str):
+        return value
+    if isinstance(value, dict):
+        return value.get("target")
+    return None
+
+
+def load_compatibility_aliases(presets_path: pathlib.Path, data: dict) -> dict:
+    aliases_file = presets_path.parent / "compatibility-aliases.yaml"
+    if aliases_file.exists():
+        aliases_data = yaml.safe_load(aliases_file.read_text(encoding="utf-8")) or {}
+        aliases = aliases_data.get("preset_aliases", {}) or {}
+        return {alias: alias_target(value) for alias, value in aliases.items()}
+
+    # Backward compatibility for old generated repos that still keep aliases in project-presets.yaml.
+    legacy_aliases = data.get("preset_aliases", {}) or {}
+    return {alias: alias_target(value) for alias, value in legacy_aliases.items()}
+
+
 data = yaml.safe_load(presets_file.read_text(encoding="utf-8")) or {}
-aliases = data.get("preset_aliases", {})
+aliases = load_compatibility_aliases(presets_file, data)
 presets = data.get("project_presets", {})
 resolved_preset_name = aliases.get(preset_name, preset_name)
 if resolved_preset_name not in presets:

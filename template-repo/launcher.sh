@@ -9,13 +9,21 @@ read -rp "Профиль проекта (greenfield-product/brownfield-with-repo
 PROJECT_PRESET="${PROJECT_PRESET:-greenfield-product}"
 
 PROJECT_PRESET_FILE="$SCRIPT_DIR/project-presets.yaml"
-readarray -t PRESET_VALUES < <(PROJECT_PRESET="$PROJECT_PRESET" PROJECT_PRESET_FILE="$PROJECT_PRESET_FILE" python3 - <<'PY'
+COMPATIBILITY_ALIASES_FILE="$SCRIPT_DIR/compatibility-aliases.yaml"
+readarray -t PRESET_VALUES < <(PROJECT_PRESET="$PROJECT_PRESET" PROJECT_PRESET_FILE="$PROJECT_PRESET_FILE" COMPATIBILITY_ALIASES_FILE="$COMPATIBILITY_ALIASES_FILE" python3 - <<'PY'
 import os, yaml
 from pathlib import Path
 preset_file = Path(os.environ['PROJECT_PRESET_FILE'])
 data = yaml.safe_load(preset_file.read_text(encoding='utf-8')) or {}
 presets = data.get('project_presets', {})
-aliases = data.get('preset_aliases', {})
+aliases = {}
+aliases_file = Path(os.environ['COMPATIBILITY_ALIASES_FILE'])
+if aliases_file.exists():
+    aliases_data = yaml.safe_load(aliases_file.read_text(encoding='utf-8')) or {}
+    for alias, value in (aliases_data.get('preset_aliases', {}) or {}).items():
+        aliases[alias] = value.get('target') if isinstance(value, dict) else value
+else:
+    aliases = data.get('preset_aliases', {})
 resolved = aliases.get(os.environ['PROJECT_PRESET'], os.environ['PROJECT_PRESET'])
 preset = presets.get(resolved, {})
 print(resolved)
@@ -61,13 +69,16 @@ rm -f "$DEST_DIR/AGENT.md"
 python3 "$SCRIPT_DIR/scripts/sync-agents.py" "$SCRIPT_DIR/AGENTS.md" "$DEST_DIR/AGENTS.md"
 mkdir -p "$DEST_DIR/scripts"
 cp -R "$SCRIPT_DIR/scripts/." "$DEST_DIR/scripts/"
+rm -f "$DEST_DIR/scripts/install-codex-dogfood-pack.sh"
 cp "$SCRIPT_DIR/change-classes.yaml" "$DEST_DIR/change-classes.yaml"
 cp "$SCRIPT_DIR/policy-presets.yaml" "$DEST_DIR/policy-presets.yaml"
 cp "$SCRIPT_DIR/project-presets.yaml" "$DEST_DIR/project-presets.yaml"
+cp "$SCRIPT_DIR/compatibility-aliases.yaml" "$DEST_DIR/compatibility-aliases.yaml"
 cp "$SCRIPT_DIR/codex-routing.yaml" "$DEST_DIR/codex-routing.yaml"
 cp "$SCRIPT_DIR/codex-model-routing.yaml" "$DEST_DIR/codex-model-routing.yaml"
 mkdir -p "$DEST_DIR/template-repo"
 cp -R "$SCRIPT_DIR/scenario-pack" "$DEST_DIR/template-repo/scenario-pack"
+cp "$SCRIPT_DIR/tree-contract.yaml" "$DEST_DIR/template-repo/tree-contract.yaml"
 mkdir -p "$DEST_DIR/reports/bugs" "$DEST_DIR/reports/factory-feedback" "$DEST_DIR/tasks/chatgpt" "$DEST_DIR/tasks/codex"
 
 CHANGE_ID="$($DEST_DIR/scripts/new-change-id.sh "$DEST_DIR")"

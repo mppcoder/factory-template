@@ -3,6 +3,7 @@
 ## Что уже реализовано
 - 3 canonical entry modes: новый проект с нуля, brownfield без репо, brownfield с репо
 - нейтральная canonical иерархия core vs optional/reference layers без product-specific naming в core
+- strict machine-readable tree contract для factory root, template base и generated project contours
 - генерация greenfield и brownfield проектов
 - scenario-pack, `.chatgpt` и launcher
 - project presets, policy presets и change classes
@@ -61,6 +62,7 @@
 - русскоязычный человекочитаемый слой закреплен как правило: ответы, инструкции, отчеты, closeout и generated guidance пишутся на русском, а английский остается только для технических идентификаторов
 - repo-wide language cleanup закрыт для active source-facing слоя: `validate-human-language-layer.py` дает `active findings: 0`, а historical reports/work/release evidence закреплены как documented archival exceptions
 - user-facing output operator env validator русифицирован, чтобы quick verify не возвращал англоязычные описательные сообщения
+- tree contract validator подключен к quick/audit/matrix контуру и фиксирует compatibility-only слой для старых preset aliases
 
 ## Программа 2.5 (release truth)
 - release truth source: `docs/releases/release-scorecard.yaml`

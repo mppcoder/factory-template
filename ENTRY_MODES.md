@@ -71,10 +71,11 @@
 - существующий проект без repo -> `brownfield` -> `brownfield-without-repo`
 - существующий проект с repo -> `brownfield` -> `brownfield-with-repo-modernization` / `brownfield-with-repo-integration` / `brownfield-with-repo-audit`
 
-## Legacy aliases / старые alias
+## Compatibility aliases / слой совместимости
 
-- `product-dev` -> `greenfield-product`
-- `brownfield-dogfood-codex-assisted` -> `brownfield-without-repo`
-- `legacy-modernization` -> `brownfield-with-repo-modernization`
-- `integration-project` -> `brownfield-with-repo-integration`
-- `audit-only` -> `brownfield-with-repo-audit`
+Старые preset names не являются beginner UX и не перечисляются как нормальные варианты выбора.
+Они принимаются только как compatibility input для существующих запусков через:
+
+- `template-repo/compatibility-aliases.yaml`
+
+Новые инструкции, handoff и onboarding должны использовать только canonical modes и presets из разделов выше.

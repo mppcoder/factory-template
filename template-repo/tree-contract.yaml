@@ -1,0 +1,279 @@
+tree_contract_version: 1
+status: active
+owner: factory-template
+description: "Strict machine-readable tree contract for factory root, template base and generated project contours."
+
+compatibility_layer:
+  aliases_file: template-repo/compatibility-aliases.yaml
+  legacy_wrapper_paths:
+    - template-repo/scripts/install-codex-dogfood-pack.sh
+  historical_archive_paths:
+    - .dogfood-bootstrap
+    - PATCH_NOTES_codex_dogfood_p1.md
+    - CONTROLLED_FIXES_AUDIT_2026-04-19.md
+
+naming_policy:
+  canonical_project_presets:
+    - greenfield-product
+    - brownfield-without-repo
+    - brownfield-with-repo-modernization
+    - brownfield-with-repo-integration
+    - brownfield-with-repo-audit
+  compatibility_aliases_forbidden_in_primary_ux:
+    - product-dev
+    - legacy-modernization
+    - integration-project
+    - audit-only
+    - brownfield-dogfood-codex-assisted
+  forbidden_path_terms:
+    dogfood:
+      allowed_paths:
+        - .dogfood-bootstrap
+        - PATCH_NOTES_codex_dogfood_p1.md
+        - CONTROLLED_FIXES_AUDIT_2026-04-19.md
+        - template-repo/compatibility-aliases.yaml
+        - template-repo/scripts/install-codex-dogfood-pack.sh
+        - template-repo/language-archive-exceptions.yaml
+        - reports/bugs/2026-04-25-tree-contract-and-naming-drift.md
+    openclaw:
+      allowed_paths:
+        - optional-domain-packs/openclaw-reference
+        - FACTORY_MANIFEST.yaml
+        - template-repo/language-archive-exceptions.yaml
+        - reports/bugs/2026-04-25-tree-contract-and-naming-drift.md
+  active_ux_scan_paths:
+    - README.md
+    - ENTRY_MODES.md
+    - docs/template-architecture-and-event-workflows.md
+    - template-repo/README.md
+    - template-repo/project-presets.yaml
+
+common_generated_required_paths: &common_generated_required_paths
+  - AGENTS.md
+  - README.md
+  - VERSION.md
+  - CHANGELOG.md
+  - CURRENT_FUNCTIONAL_STATE.md
+  - PROJECT_BRIEF.md
+  - .chatgpt
+  - .chatgpt/project-profile.yaml
+  - .chatgpt/task-index.yaml
+  - .chatgpt/stage-state.yaml
+  - .chatgpt/active-scenarios.yaml
+  - .chatgpt/evidence-register.md
+  - .chatgpt/codex-input.md
+  - .chatgpt/direct-task-self-handoff.md
+  - .codex
+  - brownfield
+  - deploy
+  - docs
+  - greenfield
+  - meta-feedback
+  - project-knowledge
+  - reports/bugs
+  - reports/factory-feedback
+  - scripts
+  - src
+  - tasks/chatgpt
+  - tasks/codex
+  - tests
+  - work/active
+  - work/completed
+  - work-templates
+  - change-classes.yaml
+  - policy-presets.yaml
+  - project-presets.yaml
+  - compatibility-aliases.yaml
+  - codex-routing.yaml
+  - codex-model-routing.yaml
+  - template-repo/tree-contract.yaml
+  - template-repo/scenario-pack/00-master-router.md
+
+contours:
+  factory_root:
+    description: "Root of mppcoder/factory-template."
+    root_markers:
+      - FACTORY_MANIFEST.yaml
+      - template-repo/TEMPLATE_MANIFEST.yaml
+      - template-repo/scenario-pack/00-master-router.md
+    required_paths:
+      - AGENTS.md
+      - README.md
+      - ENTRY_MODES.md
+      - CURRENT_FUNCTIONAL_STATE.md
+      - TEST_REPORT.md
+      - FACTORY_MANIFEST.yaml
+      - docs/template-architecture-and-event-workflows.md
+      - docs/tree-contract.md
+      - template-repo/tree-contract.yaml
+      - template-repo/compatibility-aliases.yaml
+      - template-repo/scripts/validate-tree-contract.py
+      - template-repo/scripts/verify-all.sh
+      - PRE_RELEASE_AUDIT.sh
+      - MATRIX_TEST.sh
+    allowed_top_level:
+      - .chatgpt
+      - .dogfood-bootstrap
+      - .env.example
+      - .github
+      - .gitignore
+      - .releaseignore
+      - AGENTS.md
+      - CHANGELOG.md
+      - CLEAN_VERIFY_ARTIFACTS.sh
+      - CODEOWNERS
+      - COMMIT_MESSAGE_GUIDE.md
+      - CONTROLLED_FIXES_AUDIT_2026-04-19.md
+      - CURRENT_FUNCTIONAL_STATE.md
+      - DETECT_FACTORY_TEMPLATE_PHASE.sh
+      - ENTRY_MODES.md
+      - EXAMPLES_TEST.sh
+      - EXECUTE_RELEASE_DECISION.sh
+      - EXPORT_FACTORY_TEMPLATE_SOURCES.sh
+      - FACTORY_MANIFEST.yaml
+      - GENERATE_BOUNDARY_ACTIONS.sh
+      - INGEST_FACTORY_FEEDBACK.sh
+      - MATRIX_TEST.sh
+      - PATCH_NOTES_codex_dogfood_p1.md
+      - PHASE_DETECTION_TEST.sh
+      - POST_UNZIP_SETUP.sh
+      - PRE_RELEASE_AUDIT.sh
+      - README.md
+      - RELEASE_BUILD.sh
+      - RELEASE_CHECKLIST.md
+      - RELEASE_NOTES.md
+      - RELEASE_NOTE_TEMPLATE.md
+      - SECURITY.md
+      - SMOKE_TEST.sh
+      - TEST_REPORT.md
+      - TRIAGE_INCOMING_LEARNINGS.sh
+      - UPGRADE_SUMMARY.md
+      - VALIDATE_FACTORY_FEEDBACK.sh
+      - VALIDATE_FACTORY_TEMPLATE_OPS.sh
+      - VALIDATE_RELEASE_DECISION.sh
+      - VALIDATE_RELEASE_NOTES_SOURCE.sh
+      - VALIDATE_RELEASE_REPORT.sh
+      - VALIDATE_VERIFIED_SYNC_PREREQS.sh
+      - VERIFIED_SYNC.sh
+      - VERIFY_SUMMARY.md
+      - VERSION.md
+      - VERSION_SYNC_CHECK.sh
+      - bootstrap
+      - deploy
+      - docs
+      - factory-config.yaml
+      - factory-template-ops-policy.yaml
+      - factory-template.code-workspace
+      - factory_template_only_pack
+      - launcher.sh
+      - meta-template-project
+      - onboarding-smoke
+      - optional-domain-packs
+      - packaging
+      - registry
+      - reports
+      - requirements.lock
+      - requirements.txt
+      - template-repo
+      - tools
+      - work
+      - working-project-examples
+      - workspace-packs
+    ignored_transient_top_level:
+      - .git
+      - .release-stage
+      - .factory-runtime
+      - .matrix-test
+      - .smoke-test
+      - .bugflow-test
+      - .pytest_cache
+      - __pycache__
+      - _artifacts
+      - _boundary-actions
+      - _factory-sync-export
+      - _sources-export
+      - audit-smoke-project
+    validate_nested_contours:
+      - template_base
+
+  template_base:
+    description: "Base skeleton materialized into generated projects from template-repo/template."
+    relative_root: template-repo/template
+    root_markers:
+      - README.md
+      - .chatgpt/task-index.yaml
+      - .codex/config.toml
+    required_paths:
+      - README.md
+      - VERSION.md
+      - CHANGELOG.md
+      - CURRENT_FUNCTIONAL_STATE.md
+      - PROJECT_BRIEF.md
+      - .chatgpt/project-profile.yaml
+      - .chatgpt/task-index.yaml
+      - .chatgpt/stage-state.yaml
+      - .chatgpt/active-scenarios.yaml
+      - .chatgpt/direct-task-self-handoff.md
+      - .chatgpt/normalized-codex-handoff.md
+      - .codex/config.toml
+      - brownfield/system-inventory.md
+      - brownfield/repo-audit.md
+      - docs/architecture.md
+      - docs/codex-workflow.md
+      - greenfield/vision.md
+      - meta-feedback/factory-bug-report.md
+      - project-knowledge/README.md
+      - reports/bugs/.gitkeep
+      - reports/factory-feedback/.gitkeep
+      - tasks/codex/codex-task-mandatory-bug-capture.block.md
+      - work/active/.gitkeep
+      - work/completed/.gitkeep
+    forbidden_paths:
+      - AGENT.md
+
+  generated_greenfield:
+    description: "Generated project for a new product/service from scratch."
+    presets:
+      - greenfield-product
+    required_paths: *common_generated_required_paths
+    contour_required_paths:
+      - greenfield/vision.md
+      - greenfield/problem-statement.md
+      - greenfield/scope-v1.md
+      - greenfield/architecture-options.md
+      - greenfield/initial-task-list.md
+    forbidden_paths:
+      - AGENT.md
+
+  generated_brownfield_without_repo:
+    description: "Generated evidence-first project for an existing system without a normalized repo."
+    presets:
+      - brownfield-without-repo
+    required_paths: *common_generated_required_paths
+    contour_required_paths:
+      - brownfield/system-inventory.md
+      - brownfield/repo-audit.md
+      - brownfield/as-is-architecture.md
+      - brownfield/gap-register.md
+      - brownfield/reverse-engineering-summary.md
+      - meta-feedback/factory-bug-report.md
+      - meta-feedback/factory-task.md
+    forbidden_paths:
+      - AGENT.md
+
+  generated_brownfield_with_repo:
+    description: "Generated project for an existing repo: modernization, integration or audit."
+    presets:
+      - brownfield-with-repo-modernization
+      - brownfield-with-repo-integration
+      - brownfield-with-repo-audit
+    required_paths: *common_generated_required_paths
+    contour_required_paths:
+      - brownfield/system-inventory.md
+      - brownfield/repo-audit.md
+      - brownfield/as-is-architecture.md
+      - brownfield/gap-register.md
+      - brownfield/change-map.md
+      - brownfield/risks-and-constraints.md
+    forbidden_paths:
+      - AGENT.md

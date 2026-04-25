@@ -18,7 +18,7 @@
 Краткая сводка по этим режимам вынесена в root-level `ENTRY_MODES.md`.
 Единая визуальная архитектура шаблона и подробные event workflows описаны в root-level `docs/template-architecture-and-event-workflows.md`.
 
-Legacy aliases старых preset names допускаются только как compatibility input в launcher/scripts и не считаются canonical release-facing naming.
+Старые preset names допускаются только как compatibility input через `compatibility-aliases.yaml` и не считаются canonical release-facing naming.
 
 ## Repo-first принцип для generated projects
 

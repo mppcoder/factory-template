@@ -1,9 +1,3 @@
-preset_aliases:
-  product-dev: greenfield-product
-  legacy-modernization: brownfield-with-repo-modernization
-  integration-project: brownfield-with-repo-integration
-  audit-only: brownfield-with-repo-audit
-  brownfield-dogfood-codex-assisted: brownfield-without-repo
 project_presets:
   greenfield-product:
     title: Развитие продукта

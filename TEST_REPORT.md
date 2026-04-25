@@ -5,6 +5,7 @@ Current scorecard state: `2.5 RC Closeout Candidate (not GA)`.
 TEST_REPORT.md is verification evidence, not the canonical release-status source.
 
 ## Что проверено
+- strict tree contract для factory root, template base и generated project contours
 - consolidated verify entrypoint (`template-repo/scripts/verify-all.sh`)
 - CI baseline checks (`CI / verify-baseline`, `CI / release-bundle-dry-run`)
 - release workflow preflight + bundle baseline (`.github/workflows/release.yml`)
@@ -34,8 +35,11 @@ TEST_REPORT.md is verification evidence, not the canonical release-status source
 Evidence / quality / DoD до смыслового наполнения артефактов не проходят.
 
 ## Фактический результат
+- `python3 template-repo/scripts/validate-tree-contract.py .` проходит.
 - `bash template-repo/scripts/verify-all.sh quick` проходит.
 - `bash template-repo/scripts/verify-all.sh ci` проходит.
+- `MATRIX_TEST.sh` подтверждает `validate-tree-contract.py` на generated greenfield, brownfield-without-repo и brownfield-with-repo контурах.
+- Compatibility aliases проверены через `apply-project-preset.py`: старый greenfield alias резолвится в `greenfield-product`, старый no-repo brownfield alias резолвится в `brownfield-without-repo`.
 - `bash onboarding-smoke/run-novice-e2e.sh` проходит: `greenfield-novice` и `brownfield-novice` в статусе `green`.
 - `bash RELEASE_BUILD.sh /tmp/factory-template-release.zip` проходит как packaging dry-run.
 - `validate-codex-routing.py` теперь корректно проверяет и template repo, и generated repos (без false-negative по `template/docs/*`).
@@ -68,9 +72,9 @@ Evidence / quality / DoD до смыслового наполнения арте
 - incidental defect `utcnow()` warning зафиксирован и исправлен in-scope: `reports/bugs/2026-04-23-factory-ops-utcnow-warning.md`.
 
 ## Что вошло в релиз 2.4.4
-- canonical factory hierarchy очищена от dogfood/openclaw naming в core/release-facing слоях;
+- canonical factory hierarchy очищена от historical/product-specific naming в core/release-facing слоях;
 - presets, manifests и docs tree синхронизированы под нейтральные universal names;
-- `optional-domain-packs/openclaw-reference` и `workspace-packs/vscode-codex-bootstrap` проходят через release-facing verify как optional/reference слои;
+- optional domain reference и workspace bootstrap layers проходят через release-facing verify как optional/reference слои;
 - launcher compatibility aliases подтверждают безопасный переход со старых preset names;
 - template/meta/root versioning и release metadata синхронизированы под `2.4.4`.
 

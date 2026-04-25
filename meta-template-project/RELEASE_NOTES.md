@@ -4,7 +4,7 @@
 
 ## 2.4.4
 - canonical preset naming переведён на нейтральные factory names с compatibility aliases для legacy preset names
-- `openclaw` вынесен из core/release-facing слоя в `optional-domain-packs/openclaw-reference`
+- предметный reference-case вынесен из core/release-facing слоя в optional domain pack
 - release docs, manifests, examples и closeout artifacts синхронизированы под `factory-v2.4.4`
 
 ## 2.4.3
