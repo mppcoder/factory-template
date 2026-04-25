@@ -1,14 +1,19 @@
-# Normalized Codex Handoff
+## Direct Task Self-Handoff
 
-## Launch source
+## Classification
 direct-task
+
+## Selected project profile
+factory-template
+
+## Selected scenario
+16-done-closeout.md + 17-direct-task-self-handoff.md
+
+## Current pipeline stage
+closeout sync
 
 ## Task class
 review
-
-## Task class evidence
-- explicit task class override: review
-- explicit reasoning/model override matched default profile: review
 
 ## Selected profile
 review
@@ -19,29 +24,17 @@ gpt-5.4
 ## Selected reasoning effort
 high
 
-## Selected plan mode reasoning
-high
-
 ## Apply mode
 manual-ui
 
 ## Manual UI apply
-- Откройте новый чат/окно Codex в VS Code extension.
+- Откройте новый чат/окно Codex.
 - Вручную выберите model `gpt-5.4` и reasoning `high` в picker.
-- Только после этого вставьте handoff.
-- Уже открытая live session не считается надежным auto-switch boundary.
+- Только после этого продолжайте работу по self-handoff.
+- Уже открытая live session не является надежным auto-switch boundary.
 
 ## Strict launch mode
 optional
-
-## Project profile
-factory-template
-
-## Selected scenario
-16-done-closeout.md + 17-direct-task-self-handoff.md
-
-## Pipeline stage
-closeout sync
 
 ## Artifacts to update
 - .chatgpt/task-launch.yaml
@@ -55,6 +48,9 @@ yes
 
 ## Defect capture path
 not-required-by-text-signal
+
+## Launch source
+direct-task
 
 ## Launch boundary rule
 Выбор модели и reasoning mode считается надежным только на новом запуске Codex для новой задачи.
@@ -73,9 +69,6 @@ Launcher-first path остается optional strict mode для automation, rep
 
 ## Model expectation rule
 selected_model и selected_reasoning_effort фиксируют ожидаемую конфигурацию выбранного executable profile; advisory handoff text сам по себе ничего не переключает.
-
-## Launch artifact path
-`.chatgpt/direct-task-source.md`
 
 ## Optional strict launch command
 `./scripts/launch-codex-task.sh --launch-source direct-task --task-file .chatgpt/direct-task-source.md --execute`
@@ -111,3 +104,6 @@ artifacts_to_update:
 handoff_allowed: yes
 defect_capture_path: not-required-by-text-signal
 task: закрывай, комить и пуш
+
+## Next step
+Только после этого блока допустимы remediation / implementation / verification.

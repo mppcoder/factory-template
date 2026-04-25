@@ -28,5 +28,11 @@
 ## Критерии приемки
 {{ACCEPTANCE}}
 
+## User Intent Anchors
+{{USER_INTENT_ANCHORS}}
+
+## User-Spec Deviations
+{{USER_SPEC_DEVIATIONS}}
+
 ## Открытые вопросы
 {{OPEN_QUESTIONS}}

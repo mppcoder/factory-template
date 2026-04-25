@@ -6,6 +6,8 @@ import copy
 from datetime import datetime
 from pathlib import Path
 import re
+import subprocess
+import sys
 
 import yaml
 
@@ -17,6 +19,12 @@ FALLBACK_TECH_TEMPLATE = """# Tech Spec: {{FEATURE_TITLE}}
 
 ## Что меняем
 {{CHANGES}}
+
+## User Intent Binding
+{{USER_INTENT_BINDING}}
+
+## User-Spec Deviations
+{{USER_SPEC_DEVIATIONS}}
 
 ## Какие артефакты затрагиваем
 {{TOUCHED_COMPONENTS}}
@@ -36,6 +44,12 @@ FALLBACK_TASK_TEMPLATE = """# {{TASK_ID}} — {{TASK_TITLE}}
 
 ## Входной контекст
 {{TASK_INPUT_CONTEXT}}
+
+## User Intent Binding
+{{USER_INTENT_BINDING}}
+
+## User-Spec Deviations
+{{USER_SPEC_DEVIATIONS}}
 
 ## Действия
 {{TASK_ACTIONS}}
@@ -188,6 +202,64 @@ def markdown_list(values: list[str], fallback: str) -> str:
     return "\n".join(f"- {item}" for item in values)
 
 
+def extract_user_intents(sections: dict[str, list[str]]) -> list[tuple[str, str]]:
+    for header, lines in sections.items():
+        lowered = header.lower()
+        if "user intent anchors" not in lowered and "user intent" not in lowered:
+            continue
+        anchors: list[tuple[str, str]] = []
+        for line in lines:
+            match = re.match(r"^\s*[-*]\s+(US-\d{3})\s*:\s*(.+?)\s*$", line)
+            if match:
+                anchors.append((match.group(1), match.group(2).strip()))
+        if anchors:
+            return anchors
+    return []
+
+
+def build_fallback_intents(goals: list[str], in_scope: list[str], acceptance: list[str]) -> list[tuple[str, str]]:
+    values = [
+        ("US-001", goals[0] if goals else "Пользовательская проблема не указана"),
+        ("US-002", in_scope[0] if in_scope else "Граница первого релиза не указана"),
+        ("US-003", acceptance[0] if acceptance else "Критерий приемки не указан"),
+    ]
+    return values
+
+
+def format_user_intent_binding(intents: list[tuple[str, str]], source: str, limit: int | None = None) -> str:
+    selected = intents[:limit] if limit else intents
+    lines = [f"- source: {source}"]
+    for anchor_id, text in selected:
+        lines.append(f"- {anchor_id}: {text}")
+    return "\n".join(lines)
+
+
+def format_task_user_intent_binding(
+    intents: list[tuple[str, str]],
+    source: str,
+    task_index: int,
+    task_text: str,
+) -> str:
+    primary = intents[min(task_index - 1, len(intents) - 1)] if intents else ("US-001", task_text)
+    lines = [
+        f"- source: {source}",
+        f"- primary: {primary[0]} — {primary[1]}",
+    ]
+    acceptance_anchor = next((item for item in intents if item[0] == "US-005"), None)
+    if acceptance_anchor and acceptance_anchor[0] != primary[0]:
+        lines.append(f"- acceptance: {acceptance_anchor[0]} — {acceptance_anchor[1]}")
+    return "\n".join(lines)
+
+
+def default_deviations() -> str:
+    return "\n".join(
+        [
+            "- None.",
+            "- Если решение расходится с user-spec, добавьте запись: DEV-001 | anchor=US-xxx | decision=... | reason=... | validation=...",
+        ]
+    )
+
+
 def clean_title(value: str, fallback: str) -> str:
     title = re.sub(r"\s+", " ", value).strip(" .:-")
     return title[:90] if title else fallback
@@ -216,6 +288,17 @@ def relpath_for_human(path: Path, workspace: Path) -> str:
         return str(path)
 
 
+def run_traceability_audit(workspace: Path) -> None:
+    validator = Path(__file__).resolve().parent / "validate-spec-traceability.py"
+    if not validator.exists():
+        print("traceability_audit=skipped (validator not found)")
+        return
+    subprocess.run(
+        [sys.executable, str(validator), "--workspace", str(workspace), "--skip-template-check"],
+        check=True,
+    )
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description="Сгенерировать tech-spec и разбить фичу на задачи.")
     parser.add_argument("--workspace", required=True, help="Папка feature workspace")
@@ -229,6 +312,7 @@ def main() -> int:
     parser.add_argument("--skip-tech-spec", action="store_true")
     parser.add_argument("--skip-tasks", action="store_true")
     parser.add_argument("--force", action="store_true")
+    parser.add_argument("--skip-traceability-audit", action="store_true", help="Не запускать post-generation traceability audit")
     args = parser.parse_args()
 
     workspace = Path(args.workspace).expanduser().resolve()
@@ -256,6 +340,8 @@ def main() -> int:
     if not acceptance:
         acceptance = ["Результат понятен непрограммисту и может быть проверен по шагам"]
 
+    user_intents = extract_user_intents(sections) or build_fallback_intents(goals, in_scope, acceptance)
+    user_spec_rel = relpath_for_human(user_spec_path, workspace)
     tech_template, tech_template_source = locate_template(project_root, args.tech_template, "tech-spec.md.template")
     task_template, task_template_source = locate_template(project_root, args.task_template, "tasks/task.md.template")
 
@@ -270,9 +356,11 @@ def main() -> int:
             "Подход пока не заполнен",
         ),
         "CHANGES": markdown_list(in_scope, "Список изменений пока не определен"),
+        "USER_INTENT_BINDING": format_user_intent_binding(user_intents, user_spec_rel),
+        "USER_SPEC_DEVIATIONS": default_deviations(),
         "TOUCHED_COMPONENTS": markdown_list(
             [
-                relpath_for_human(user_spec_path, workspace),
+                user_spec_rel,
                 relpath_for_human(tech_output, workspace),
                 relpath_for_human(tasks_dir, workspace),
                 relpath_for_human(state_file, workspace),
@@ -325,11 +413,13 @@ def main() -> int:
                 "TASK_GOAL": markdown_list([item], "Цель пока не указана"),
                 "TASK_INPUT_CONTEXT": markdown_list(
                     [
-                        f"user-spec: {relpath_for_human(user_spec_path, workspace)}",
+                        f"user-spec: {user_spec_rel}",
                         f"tech-spec: {relpath_for_human(tech_output, workspace)}",
                     ],
                     "Контекст пока не указан",
                 ),
+                "USER_INTENT_BINDING": format_task_user_intent_binding(user_intents, user_spec_rel, index, item),
+                "USER_SPEC_DEVIATIONS": default_deviations(),
                 "TASK_ACTIONS": markdown_list(
                     [
                         "Прочитать связанный фрагмент user-spec.",
@@ -381,6 +471,9 @@ def main() -> int:
     print(f"tech_template_source={tech_template_source}")
     print(f"task_template_source={task_template_source}")
     print(f"state_file={state_file}")
+    if not args.skip_traceability_audit:
+        sys.stdout.flush()
+        run_traceability_audit(workspace)
     return 0
 
 

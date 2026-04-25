@@ -6,6 +6,8 @@ import copy
 from datetime import datetime
 from pathlib import Path
 import re
+import subprocess
+import sys
 
 import yaml
 
@@ -35,6 +37,12 @@ FALLBACK_TEMPLATE = """# User Spec: {{FEATURE_TITLE}}
 
 ## Критерии приемки
 {{ACCEPTANCE}}
+
+## User Intent Anchors
+{{USER_INTENT_ANCHORS}}
+
+## User-Spec Deviations
+{{USER_SPEC_DEVIATIONS}}
 
 ## Открытые вопросы
 {{OPEN_QUESTIONS}}
@@ -139,6 +147,31 @@ def to_bullets(value: str, fallback: str) -> str:
     return "\n".join(lines)
 
 
+def intent_line(anchor_id: str, label: str, value: str, fallback: str) -> str:
+    normalized = normalize_answer(value) or fallback
+    return f"- {anchor_id}: {label} — {normalized}"
+
+
+def build_user_intent_anchors(answers: dict, idea: str) -> str:
+    rows = [
+        intent_line("US-001", "problem", str(answers.get("problem", "")), "Проблема пока не заполнена"),
+        intent_line("US-002", "users", str(answers.get("users", "")), "Пользователь пока не указан"),
+        intent_line("US-003", "value", str(answers.get("value", "")), "Ценность пока не описана"),
+        intent_line("US-004", "scope", str(answers.get("in_scope", "") or idea), "Границы первого релиза пока не указаны"),
+        intent_line("US-005", "acceptance", str(answers.get("acceptance", "")), "Критерии приемки пока не заполнены"),
+    ]
+    return "\n".join(rows)
+
+
+def default_deviations() -> str:
+    return "\n".join(
+        [
+            "- None.",
+            "- Если решение расходится с user-spec, добавьте запись: DEV-001 | anchor=US-xxx | decision=... | reason=... | validation=...",
+        ]
+    )
+
+
 def merge_defaults(state: dict) -> dict:
     merged = copy.deepcopy(state if isinstance(state, dict) else {})
     merged.setdefault("feature", {})
@@ -168,6 +201,17 @@ def render(template: str, mapping: dict[str, str]) -> str:
     return result
 
 
+def run_traceability_audit(workspace: Path) -> None:
+    validator = Path(__file__).resolve().parent / "validate-spec-traceability.py"
+    if not validator.exists():
+        print("traceability_audit=skipped (validator not found)")
+        return
+    subprocess.run(
+        [sys.executable, str(validator), "--workspace", str(workspace), "--skip-template-check"],
+        check=True,
+    )
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description="Сгенерировать user-spec.md из interview-state.")
     parser.add_argument("--workspace", required=True, help="Папка feature workspace")
@@ -177,6 +221,7 @@ def main() -> int:
     parser.add_argument("--idea", help="Черновая идея одной строкой")
     parser.add_argument("--idea-file", help="Файл с rough idea")
     parser.add_argument("--force", action="store_true", help="Перезаписать output, если файл уже существует")
+    parser.add_argument("--skip-traceability-audit", action="store_true", help="Не запускать post-generation traceability audit")
     args = parser.parse_args()
 
     workspace = Path(args.workspace).expanduser().resolve()
@@ -213,6 +258,8 @@ def main() -> int:
         "OUT_OF_SCOPE": to_bullets(str(answers.get("out_of_scope", "")), "Границы out-of-scope пока не указаны"),
         "CONSTRAINTS": to_bullets(str(answers.get("constraints", "")), "Явные ограничения пока не зафиксированы"),
         "ACCEPTANCE": to_bullets(str(answers.get("acceptance", "")), "Критерии приемки пока не заполнены"),
+        "USER_INTENT_ANCHORS": build_user_intent_anchors(answers, idea),
+        "USER_SPEC_DEVIATIONS": default_deviations(),
         "OPEN_QUESTIONS": "- Нужна ли дополнительная детализация до перехода к tech-spec?",
         "GENERATED_AT": now_iso(),
     }
@@ -239,6 +286,9 @@ def main() -> int:
     print(f"user_spec={output}")
     print(f"template_source={template_source}")
     print(f"state_file={state_file}")
+    if not args.skip_traceability_audit:
+        sys.stdout.flush()
+        run_traceability_audit(workspace)
     if (project_root / "scripts" / "decompose-feature.py").exists():
         decompose_command = "scripts/decompose-feature.py"
     elif (project_root / "template-repo" / "scripts" / "decompose-feature.py").exists():

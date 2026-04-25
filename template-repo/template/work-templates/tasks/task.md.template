@@ -9,6 +9,12 @@
 ## Входной контекст
 {{TASK_INPUT_CONTEXT}}
 
+## User Intent Binding
+{{USER_INTENT_BINDING}}
+
+## User-Spec Deviations
+{{USER_SPEC_DEVIATIONS}}
+
 ## Действия
 {{TASK_ACTIONS}}
 

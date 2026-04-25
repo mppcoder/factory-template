@@ -1,4 +1,4 @@
-# Normalized Codex Handoff
+# Direct Task Self-Handoff
 
 ## Launch source
 direct-task
