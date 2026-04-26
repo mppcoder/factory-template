@@ -9,8 +9,8 @@
 Следующая линия `2.5` уже оформлена как отдельная release-программа: не только hardening процесса, но и beginner-first productization с UI-friendly контуром и безопасной эволюцией downstream-репозиториев.
 
 Release truth source: `docs/releases/release-scorecard.yaml`.
-Current 2.5 stage: `verify-closeout (RC prep)`.
-Status: `2.5 RC Closeout Candidate (not GA)`.
+Current 2.5 stage: `release-decision (GA no-go)`.
+Status: `2.5 GA No-Go (KPI evidence gap)`.
 GA-ready: `false`.
 
 ## Канонические entry modes
@@ -319,14 +319,15 @@ bash PHASE_DETECTION_TEST.sh
 
 ## Программа релиза 2.5 (release truth)
 - Release truth source: `docs/releases/release-scorecard.yaml`;
-- Current 2.5 stage: `verify-closeout (RC prep)`;
-- Status: `2.5 RC Closeout Candidate (not GA)`;
+- Current 2.5 stage: `release-decision (GA no-go)`;
+- Status: `2.5 GA No-Go (KPI evidence gap)`;
 - GA-ready: `false`;
 - канонический план зафиксирован в `docs/releases/2.5-roadmap.md`;
 - success metrics и пороги MVP/full 2.5 зафиксированы в `docs/releases/2.5-success-metrics.md`;
 - трек `2.5-A` закрепляет engineering hardening (валидаторы, устойчивость, безопасные default paths);
 - трек `2.5-B` закрепляет beginner-first productization (UI-friendly entry path, понятный onboarding, снижение порога входа);
 - выпуск `2.5` считается полным только при совместном закрытии `2.5-A` и `2.5-B`, чтобы релиз не остался "только process-hardening".
+- `G25-GA` получил no-go на `2026-04-26`, потому что full-KPI evidence отсутствует для части метрик.
 
 ## Как читать release truth
 

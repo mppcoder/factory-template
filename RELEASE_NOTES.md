@@ -1,5 +1,28 @@
 # Release notes / заметки релиза
 
+## 2.5 - GA No-Go (KPI evidence gap) - 2026-04-26
+
+### Решение
+
+`2.5` не объявляется GA. `G25-GA` заблокирован, потому что RC evidence зеленый, но full-KPI evidence не хватает для честного подтверждения порогов `docs/releases/2.5-success-metrics.md`.
+
+### Что подтверждено
+
+- RC closeout остается пригодным для downstream trial.
+- Novice onboarding smoke и downstream upgrade UX evidence остаются полезными RC-артефактами.
+- Открытых critical defects по текущим verification docs не выявлено.
+- Repo-first routing для этого closeout соблюден: master router прочитан до implementation.
+
+### Что блокирует GA
+
+- нет timed first-success measurement для `M25-01`;
+- нет controlled pilot completion rate для `M25-02`;
+- нет manual intervention count для `M25-03`;
+- нет downstream safe-sync success-rate population для `M25-04`;
+- нет aggregate handoff rework-loop register для `M25-06`.
+
+Blocker report: `reports/bugs/2026-04-26-25-ga-readiness-gap.md`.
+
 ## 2.5 - RC Closeout Candidate (not GA) - 2026-04-23
 
 ### О чём этот контур

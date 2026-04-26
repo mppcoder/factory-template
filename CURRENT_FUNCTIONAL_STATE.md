@@ -71,8 +71,8 @@
 
 ## Программа 2.5 (release truth)
 - release truth source: `docs/releases/release-scorecard.yaml`
-- текущая стадия: `verify-closeout (RC prep)`
-- статус: `2.5 RC Closeout Candidate (not GA)`
+- текущая стадия: `release-decision (GA no-go)`
+- статус: `2.5 GA No-Go (KPI evidence gap)`
 - GA-ready: `false`
 - канонический roadmap: `docs/releases/2.5-roadmap.md`
 - канонические метрики: `docs/releases/2.5-success-metrics.md`
@@ -81,6 +81,8 @@
 - scorecard gates нормализованы в `docs/releases/release-scorecard.yaml`
 - novice E2E acceptance (все canonical presets + guided launcher smoke) зафиксирован в `onboarding-smoke/ACCEPTANCE_REPORT.md`
 - downstream upgrade UX closeout зафиксирован в `UPGRADE_SUMMARY.md`
+- `G25-GA` получил no-go на `2026-04-26`: full-KPI evidence отсутствует для `M25-01`, `M25-02`, `M25-03`, `M25-04` и `M25-06`
+- blocker report: `reports/bugs/2026-04-26-25-ga-readiness-gap.md`
 
 ## Что работает частично
 - matrix runner как единый источник истины
@@ -91,14 +93,14 @@
 - phase-aware export/reference packs остаются вспомогательным слоем, а не каноническим хранилищем сценариев
 - эвристика классификации `task_class` пока keyword-based, а не semantic classifier
 - release-facing описание дерева проекта и workflow требует дальнейшего поддержания в sync при каждой новой process-доработке шаблона
-- `2.5` ещё не объявлен GA: KPI подтверждение должно читаться из `docs/releases/release-scorecard.yaml` и `docs/releases/2.5-success-metrics.md`
+- `2.5` не объявлен GA: текущая попытка закрытия `G25-GA` завершилась no-go из-за missing full-KPI evidence
 
 ## Что еще не закрыто
 - финальная проверка на реальных greenfield и brownfield проектах
 - окончательная polish-фаза для runner layer и operational reports
 - отдельный release-facing validator/report для curated pack quality beyond structural checks
 - дальнейшее production hardening runtime-нестабильности git sync beyond current fallback strategy
-- explicit GA/no-go decision для `2.5`
+- KPI remediation перед повторной GA-попыткой для `2.5`
 - подтверждение beginner-first KPI и downstream safety KPI из `docs/releases/2.5-success-metrics.md`
 - дальнейшее расширение novice acceptance от parity-level long-flow smoke к предметным domain-сценариям реальных downstream систем
 

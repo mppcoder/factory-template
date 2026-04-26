@@ -1,6 +1,7 @@
 version: 2.4.4
 template_name: template-repo
 language: ru
+release_line_2_5_status: ga-no-go
 supports_modes:
 - greenfield
 - brownfield

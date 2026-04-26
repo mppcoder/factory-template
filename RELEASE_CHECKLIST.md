@@ -7,8 +7,8 @@
 - Current working section in changelog: `2.4.4`
 - Next planned release program line: `2.5`
 - Release truth source: `docs/releases/release-scorecard.yaml`
-- Current 2.5 stage: `verify-closeout (RC prep)`
-- Status: `2.5 RC Closeout Candidate (not GA)`
+- Current 2.5 stage: `release-decision (GA no-go)`
+- Status: `2.5 GA No-Go (KPI evidence gap)`
 - GA-ready: `false`
 
 ## Intent signals / сигналы намерения
@@ -84,7 +84,7 @@
 ## Go / no-go решение
 
 - [x] release bundle можно собирать
-- [ ] или явно зафиксирован `no-release` с причиной
+- [x] явно зафиксирован `no-release` с причиной
 
 ## 2.5 program framing gate (closed)
 
@@ -102,9 +102,10 @@
 - [x] `TEST_REPORT.md` и release-facing docs обновлены как beginner-first + hardening, а не docs-only polish
 - [x] инцидентные дефекты из verify-прохода зафиксированы через defect-capture path
 - [ ] GA-ready declared
+- [x] GA no-go зафиксирован: `reports/bugs/2026-04-26-25-ga-readiness-gap.md`
 
 ## 2.5 scorecard gates
 
 - [x] `G25-0` — program framing и scope normalization закрыты.
 - [x] `G25-RC` — RC closeout evidence прошел для downstream trial.
-- [ ] `G25-GA` — full `2.5` GA readiness ждет explicit KPI confirmation.
+- [x] `G25-GA` — no-go: full KPI evidence gap зафиксирован.

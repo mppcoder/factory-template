@@ -3,6 +3,7 @@ name: factory-v2.4.4
 description: 'Универсальная русскоязычная фабрика проектов: greenfield + brownfield,
   scenario-pack, defect-capture, release-alignment/versioning layer'
 core: true
+release_line_2_5_status: ga-no-go
 supports_greenfield: true
 supports_brownfield: true
 optional_domain_references:

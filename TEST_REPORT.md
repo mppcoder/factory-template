@@ -1,8 +1,26 @@
-# Отчет TEST REPORT v2.5 RC (verify-closeout)
+# Отчет TEST REPORT v2.5 GA no-go
 
 Status source of truth: `docs/releases/release-scorecard.yaml`.
-Current scorecard state: `2.5 RC Closeout Candidate (not GA)`.
+Current scorecard state: `2.5 GA No-Go (KPI evidence gap)`.
 TEST_REPORT.md is verification evidence, not the canonical release-status source.
+
+## GA decision evidence / доказательства решения
+
+`G25-GA` получает no-go на `2026-04-26`: RC evidence остается зеленым, но full-KPI evidence для GA неполный.
+
+Missing full-KPI evidence:
+- `M25-01`: нет timed first-success measurement против порога `<= 25` минут.
+- `M25-02`: нет controlled pilot checklist с sample size и completion percentage.
+- `M25-03`: нет manual intervention count и support prompts register.
+- `M25-04`: нет downstream safe-sync success-rate evidence против порога `>= 99%`.
+- `M25-06`: нет aggregate handoff rework-loop register против порога `<= 1`.
+
+Confirmed closeout facts:
+- `M25-05`: текущие verification docs не фиксируют открытый critical defect; blocker относится к evidence gap.
+- `M25-07`: release-facing docs синхронизированы на состояние no-go / not GA.
+- `M25-08`: текущий closeout начат с чтения `template-repo/scenario-pack/00-master-router.md`.
+
+Blocker report: `reports/bugs/2026-04-26-25-ga-readiness-gap.md`.
 
 ## Что проверено
 - strict tree contract для factory root, template base и generated project contours
@@ -38,6 +56,10 @@ TEST_REPORT.md is verification evidence, not the canonical release-status source
 Evidence / quality / DoD до смыслового наполнения артефактов не проходят.
 
 ## Фактический результат
+- `bash template-repo/scripts/verify-all.sh ci` проходит на `2026-04-26` и подтверждает текущий no-go scorecard.
+- `bash CLEAN_VERIFY_ARTIFACTS.sh` проходит на `2026-04-26`.
+- `bash PRE_RELEASE_AUDIT.sh` проходит на `2026-04-26`.
+- `bash RELEASE_BUILD.sh /tmp/factory-template-2.5.zip` проходит на `2026-04-26`; собран архив `/tmp/factory-template-2.5.zip`.
 - `python3 template-repo/scripts/validate-tree-contract.py .` проходит.
 - `python3 template-repo/scripts/validate-mode-parity.py .` проходит и подтверждает общий core layer для template base, greenfield, brownfield-without-repo и всех brownfield-with-repo presets.
 - `bash template-repo/scripts/verify-all.sh quick` проходит.
@@ -111,6 +133,7 @@ Evidence / quality / DoD до смыслового наполнения арте
 ## Открытые вопросы
 - По bug set `bug-026/027/028` критичных открытых дефектов после remediation не осталось.
 - Follow-up для будущего улучшения (не blocker текущего RC): расширить novice long-flow с synthetic smoke до более предметных domain сценариев в downstream проектах.
+- GA blocker: full-KPI evidence отсутствует для `M25-01`, `M25-02`, `M25-03`, `M25-04` и `M25-06`; `G25-GA` не закрыт.
 
 ## Статус CI baseline
 - Статус: `green` (GitHub Actions run `24840192862`, 2026-04-23: `verify-baseline` = success, `release-bundle-dry-run` = success; локально подтверждено 2026-04-26 через `verify-all.sh ci`).

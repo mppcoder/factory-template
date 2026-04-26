@@ -2,14 +2,14 @@ schema_version: 1
 release_truth:
   canonical_file: docs/releases/release-scorecard.yaml
   release_line: "2.5"
-  release_label: "2.5 RC Closeout Candidate (not GA)"
-  current_stage: "verify-closeout (RC prep)"
-  status: rc-closeout-candidate
+  release_label: "2.5 GA No-Go (KPI evidence gap)"
+  current_stage: "release-decision (GA no-go)"
+  status: ga-no-go
   rc_ready: true
   ga_ready: false
-  last_updated: "2026-04-25"
+  last_updated: "2026-04-26"
   status_source_policy: "Markdown release docs must describe this scorecard state; TEST_REPORT.md is verification evidence, not an independent release-status source."
-  next_decision: "GA/no-go requires explicit KPI confirmation against docs/releases/2.5-success-metrics.md."
+  next_decision: "Resolve missing full-KPI evidence in reports/bugs/2026-04-26-25-ga-readiness-gap.md before any GA retry."
   canonical_references:
     roadmap: docs/releases/2.5-roadmap.md
     metrics: docs/releases/2.5-success-metrics.md
@@ -33,47 +33,49 @@ release_truth:
         - onboarding-smoke/ACCEPTANCE_REPORT.md
     - id: G25-GA
       name: Full 2.5 GA readiness
-      status: pending
+      status: blocked
       evidence:
         - docs/releases/2.5-success-metrics.md
         - RELEASE_CHECKLIST.md
+        - reports/bugs/2026-04-26-25-ga-readiness-gap.md
   metrics_summary:
     mvp_thresholds: defined
     full_thresholds: defined
-    current_result: "RC evidence is green; GA KPI confirmation is still pending."
+    current_result: "GA no-go: RC evidence is green, but full-KPI measurements are missing for M25-01, M25-02, M25-03, M25-04 and M25-06."
   doc_assertions:
     - path: docs/releases/2.5-roadmap.md
       must_contain:
         - "Release truth source: `docs/releases/release-scorecard.yaml`"
-        - "Current pipeline stage: `verify-closeout (RC prep)`"
-        - "Status: `2.5 RC Closeout Candidate (not GA)`"
+        - "Current pipeline stage: `release-decision (GA no-go)`"
+        - "Status: `2.5 GA No-Go (KPI evidence gap)`"
         - "GA-ready: `false`"
     - path: docs/releases/2.5-success-metrics.md
       must_contain:
         - "Release truth source: `docs/releases/release-scorecard.yaml`"
-        - "Current scorecard result: RC evidence is green; GA KPI confirmation is still pending."
+        - "Current scorecard result: GA no-go: RC evidence is green, but full-KPI measurements are missing for M25-01, M25-02, M25-03, M25-04 and M25-06."
     - path: CURRENT_FUNCTIONAL_STATE.md
       must_contain:
         - "release truth source: `docs/releases/release-scorecard.yaml`"
-        - "текущая стадия: `verify-closeout (RC prep)`"
-        - "статус: `2.5 RC Closeout Candidate (not GA)`"
+        - "текущая стадия: `release-decision (GA no-go)`"
+        - "статус: `2.5 GA No-Go (KPI evidence gap)`"
         - "GA-ready: `false`"
     - path: README.md
       must_contain:
         - "Release truth source: `docs/releases/release-scorecard.yaml`"
-        - "Current 2.5 stage: `verify-closeout (RC prep)`"
-        - "Status: `2.5 RC Closeout Candidate (not GA)`"
+        - "Current 2.5 stage: `release-decision (GA no-go)`"
+        - "Status: `2.5 GA No-Go (KPI evidence gap)`"
         - "GA-ready: `false`"
     - path: RELEASE_CHECKLIST.md
       must_contain:
         - "Release truth source: `docs/releases/release-scorecard.yaml`"
-        - "Current 2.5 stage: `verify-closeout (RC prep)`"
-        - "Status: `2.5 RC Closeout Candidate (not GA)`"
+        - "Current 2.5 stage: `release-decision (GA no-go)`"
+        - "Status: `2.5 GA No-Go (KPI evidence gap)`"
         - "- [ ] GA-ready declared"
+        - "- [x] явно зафиксирован `no-release` с причиной"
     - path: TEST_REPORT.md
       must_contain:
         - "Status source of truth: `docs/releases/release-scorecard.yaml`"
-        - "Current scorecard state: `2.5 RC Closeout Candidate (not GA)`"
+        - "Current scorecard state: `2.5 GA No-Go (KPI evidence gap)`"
         - "TEST_REPORT.md is verification evidence, not the canonical release-status source."
   forbidden_doc_markers:
     - path: docs/releases/2.5-roadmap.md

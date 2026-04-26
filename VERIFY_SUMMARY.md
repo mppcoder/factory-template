@@ -6,12 +6,23 @@
 
 ## Текущий verify baseline
 
+- `bash template-repo/scripts/verify-all.sh ci`: PASS (`2026-04-26`)
+- `bash CLEAN_VERIFY_ARTIFACTS.sh`: PASS (`2026-04-26`)
+- `bash PRE_RELEASE_AUDIT.sh`: PASS (`2026-04-26`)
+- `bash RELEASE_BUILD.sh /tmp/factory-template-2.5.zip`: PASS (`2026-04-26`)
 - `VERSION_SYNC_CHECK.sh`: PASS
 - `VALIDATE_FACTORY_TEMPLATE_OPS.sh`: PASS
 - `SMOKE_TEST.sh`: PASS
 - `EXAMPLES_TEST.sh`: PASS
 - `MATRIX_TEST.sh`: PASS
 - `CLEAN_VERIFY_ARTIFACTS.sh && PRE_RELEASE_AUDIT.sh`: PASS
+
+## Решение G25-GA
+
+- Статус: no-go.
+- Причина: full-KPI evidence отсутствует для `M25-01`, `M25-02`, `M25-03`, `M25-04` и `M25-06`.
+- Blocker report: `reports/bugs/2026-04-26-25-ga-readiness-gap.md`.
+- `ga_ready` остается `false`; release-facing docs не должны объявлять GA.
 
 ## Проверенные слои
 
@@ -37,7 +48,7 @@
 - phase detection валидируется rule-based по changed paths, а не через более глубокий semantic анализ repo intent
 - `release` phase теперь требует и changed-path signals, и отмеченные intent markers в `RELEASE_CHECKLIST.md`
 - `bugfix-drift` phase теперь требует и bug/validator path signals, и bug-report intent markers в `reports/bugs/*.md`
-- release/no-release решение остаётся отдельным операторским решением
+- release/no-release решение для `G25-GA` зафиксировано как no-go; следующий GA retry требует новых KPI-артефактов
 - git-операции в этом окружении нужно выполнять последовательно; параллельный `commit/push/fetch/remote change` может давать ложные результаты
 - auto GitHub Release publication зависит от доступности `gh` и не должна считаться гарантированной без отдельной проверки auth/runtime
 
