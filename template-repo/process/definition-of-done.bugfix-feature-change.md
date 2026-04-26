@@ -6,6 +6,7 @@
 - verification не подтверждает результат;
 - в done-отчете не отражено, что было найдено и что было исправлено.
 - при настроенном `origin` отсутствует успешный `verified-sync-report`;
+- финальный closeout выдан при dirty worktree или branch ahead относительно `origin/*` без конкретного blocker;
 - при наличии pending external/user step финальный ответ не содержит блока `Инструкция пользователю`.
 - внешних шагов не осталось, но финальный ответ не говорит это явно и оставляет пользователю неясность, нужен ли следующий manual step.
 - остаются internal repo follow-up задачи, но финальный ответ оформлен как user-only closeout без inline handoff.
@@ -16,6 +17,7 @@
 - verification-report.md заполнен;
 - done-report.md заполнен;
 - если `origin` настроен и verified sync был доступен, существует `.factory-runtime/reports/verified-sync-report.yaml` со статусом `pushed` или `no-op`;
+- перед финальным ответом выполнен `git status --short --branch`, а commit hash / sync status отражен в closeout или blocker явно назван;
 - если в ходе работы выявлен defect, существует bug report в `reports/bugs/`;
 - если найден unresolved incidental defect, существует bug report с route decision и self-handoff outcome;
 - если defect reusable, существует запись в `reports/factory-feedback/` или meta-feedback;

@@ -152,6 +152,9 @@ def main() -> int:
 - [ ] Если `origin` настроен и verify green, прогнать `bash VALIDATE_VERIFIED_SYNC_PREREQS.sh`
 - [ ] Если prereqs green и diff допустим, прогнать `bash VERIFIED_SYNC.sh` до финального closeout
 - [ ] Если verified sync не выполнен, явно зафиксировать реальный blocker и не помечать change как `done`
+- [ ] Перед финальным ответом выполнить `git status --short --branch`
+- [ ] Если branch ahead или рабочее дерево dirty, выполнить sync/push или явно назвать blocker
+- [ ] В финальном ответе указать commit hash / sync status или `no-op`
 
 ## Классификация влияния
 
@@ -285,6 +288,9 @@ def main() -> int:
 - Нельзя заменять handoff ссылкой на файл, несколькими разрозненными блоками или инструкцией собрать handoff из `codex-input.md`, `codex-context.md`, `codex-task-pack.md`.
 - Если remaining work еще остается внутренним repo follow-up, handoff не должен исчезать из-за будущего user footer.
 - Release-followup, source-pack refresh, export refresh, closeout-sync и release-facing consistency pass внутри repo считаются внутренней работой Codex.
+- Перед финальным ответом Codex обязан выполнить `git status --short --branch`; dirty worktree или branch ahead без конкретного blocker означает, что closeout еще не завершен.
+- Если `origin` настроен, verify green и sync технически доступен, Codex выполняет `VALIDATE_VERIFIED_SYNC_PREREQS.sh` и `VERIFIED_SYNC.sh` сам; commit/push нельзя оставлять пользователю.
+- Финальный ответ по внутренне закрытому repo change должен назвать commit hash / sync status или `no-op`.
 - Человекочитаемые заголовки, инструкции, отчеты и closeout-тексты должны быть на русском языке; английский допустим только для технических идентификаторов, команд, файлов, ключей конфигурации и literal values.
 - Upstream ChatGPT-generated handoff в `.chatgpt/codex-input.md` тоже должен быть на русском в человекочитаемом слое; англоязычные разделы `Goal`, `Hard constraints`, `Required implementation`, `Verification commands`, `Completion requirements` считаются language-contract defect.
 - Troubleshooting sticky state:

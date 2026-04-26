@@ -11,6 +11,9 @@
 - [ ] Если `origin` настроен и verify green, прогнать `bash VALIDATE_VERIFIED_SYNC_PREREQS.sh`
 - [ ] Если prereqs green и diff допустим, прогнать `bash VERIFIED_SYNC.sh` до финального closeout
 - [ ] Если verified sync не выполнен, явно зафиксировать реальный blocker и не помечать change как `done`
+- [ ] Перед финальным ответом выполнить `git status --short --branch`
+- [ ] Если branch ahead или рабочее дерево dirty, выполнить sync/push или явно назвать blocker
+- [ ] В финальном ответе указать commit hash / sync status или `no-op`
 
 ## Классификация влияния
 

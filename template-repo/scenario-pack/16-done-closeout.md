@@ -34,6 +34,15 @@
 При этих prereqs commit/push не считаются отдельной ручной Git-операцией пользователя.
 Ожидаемое поведение: Codex сам доводит change до canonical auto commit + auto push через `VERIFIED_SYNC.sh` или через lightweight follow-up path, если он допустим.
 
+Перед финальным ответом Codex обязан выполнить финальный git sanity-check:
+- `git status --short --branch`;
+- если branch ahead относительно `origin/*`, выполнить push или назвать конкретный blocker;
+- если рабочее дерево содержит незакоммиченные изменения, выполнить canonical sync или назвать конкретный blocker;
+- если sync уже был выполнен, проверить, что финальный status чистый и branch не ahead.
+
+Финальный ответ по внутренне закрытому repo change должен назвать commit hash / sync status или прямо сказать, что sync был `no-op`.
+Нельзя выдавать финальный done/summary, пока локальный repo остается dirty или ahead без blocker.
+
 Ответ, который при доступном sync заканчивается только summary/done-report без verified sync или без явного blocker, считается неполным closeout.
 
 Closeout без handoff допустим только при реальном отсутствии внутренней работы внутри repo.

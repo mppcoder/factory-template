@@ -44,6 +44,8 @@
 
 Если verify green, `origin` настроен и canonical verified sync технически доступен, commit/push считаются внутренней работой Codex, а не отдельным ручным шагом пользователя.
 В таком случае нужно выполнить канонический sync path внутри repo, а не откладывать commit/push до дополнительного запроса.
+Перед финальным ответом обязательно выполнить `git status --short --branch`: если repo dirty или branch ahead без конкретного blocker, closeout считается незавершенным.
+Финальный ответ должен назвать commit hash / sync status либо явно зафиксировать blocker; простой summary без sync-state недостаточен.
 
 К внутреннему follow-up по умолчанию относятся:
 - release note и release-facing changelog/update внутри repo;

@@ -55,6 +55,8 @@
 
 Если verify уже green, `origin` настроен и verified sync технически доступен, но ответ завершает change без canonical `VERIFIED_SYNC.sh` и без явного блокера, это считается reusable process defect closeout/sync layer.
 
+Если финальный ответ дан при dirty worktree или branch ahead относительно `origin/*` без конкретного blocker, это считается reusable process defect closeout/autosync layer.
+
 Если доступный GitHub PR merge ошибочно маркируется как внешний пользовательский шаг без проверки `gh`/GitHub connector, mergeability, checks и review blockers, это считается reusable process defect closeout/GitHub layer.
 
 Если человекочитаемые ответы, отчеты или generated guidance для `factory-template` используют английские описательные заголовки/фразы вместо русского текста без технической необходимости, это считается reusable process defect language layer.
