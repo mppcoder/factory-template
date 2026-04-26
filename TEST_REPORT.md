@@ -4,6 +4,33 @@ Status source of truth: `docs/releases/release-scorecard.yaml`.
 Current scorecard state: `2.5.0 GA Ready`.
 TEST_REPORT.md is verification evidence, not the canonical release-status source.
 
+## Проверка feature-execution-lite
+
+Дата: `2026-04-27`.
+
+Добавлен optional advanced path для выполнения больших фич волнами. Beginner path не меняется: advanced artifacts создаются только при `--advanced-execution`, а quick verify проверяет структуру шаблонов без требования иметь advanced workspace в каждом проекте.
+
+- `docs/feature-execution-lite.md` описывает Codex-friendly lightweight процесс: dispatcher-not-doer, waves, checkpoint/resume, decisions journal, audit/final wave, max review/fix rounds и final done archival.
+- `template-repo/template/work-templates/execution-plan.md.template` добавлен как readable план волн и closeout guardrails.
+- `template-repo/template/work-templates/checkpoint.yaml.template` добавлен как resume/checkpoint source.
+- `template-repo/template/work-templates/tasks/task.md.template` расширен полями `wave`, `reviewers`, `reviewer_hints`.
+- `template-repo/template/work-templates/decisions.md.template` расширен полями execution wave, review rounds и boundary classification.
+- `template-repo/scripts/init-feature-workspace.sh --advanced-execution` создаёт `logs/execution-plan.md` и `logs/checkpoint.yaml`; без флага beginner workspace остаётся прежним.
+- `template-repo/scripts/validate-feature-execution-lite.py` подключен в `verify-all.sh quick` и generated-project quick contour.
+
+Проверки:
+
+- `python3 template-repo/scripts/validate-feature-execution-lite.py .` — pass.
+- `bash template-repo/scripts/init-feature-workspace.sh --feature-id feat-lite-smoke --title "Lite smoke" --advanced-execution --base-dir /tmp/factory-template-feature-lite-work --force` — pass.
+- `python3 template-repo/scripts/validate-feature-execution-lite.py --workspace /tmp/factory-template-feature-lite-work/feat-lite-smoke --require-advanced` — pass.
+- Positive advanced workspace fixture with done task and `final_verification.status: passed` — pass.
+- Negative fixture без checkpoint — validator ловит `missing checkpoint`.
+- Negative fixture с пустым `Verify-smoke` и `feature_status: done` без final verification — validator ловит `missing verify-smoke` и `done without final verification`.
+- Negative fixture с dependency на более позднюю wave — validator ловит `invalid wave dependency`.
+- `python3 template-repo/scripts/validate-human-language-layer.py .` — pass, active findings `0`.
+- `bash template-repo/scripts/verify-all.sh quick` — pass.
+- `bash template-repo/scripts/verify-all.sh ci` — pass.
+
 ## Проверка brownfield transition architecture
 
 Дата: `2026-04-26`.

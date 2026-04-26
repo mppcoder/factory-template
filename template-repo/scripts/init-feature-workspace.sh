@@ -7,11 +7,12 @@ ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
 usage() {
   cat <<USAGE
 Usage:
-  $0 --feature-id <feature-id> [--title <feature title>] [--idea <rough idea>] [--base-dir <path>] [--force]
+  $0 --feature-id <feature-id> [--title <feature title>] [--idea <rough idea>] [--base-dir <path>] [--advanced-execution] [--force]
 
 Examples:
   $0 --feature-id feat-login
   $0 --feature-id feat-billing --title "Простой биллинг" --idea "Сократить ошибки оплаты"
+  $0 --feature-id feat-risky --advanced-execution
 USAGE
 }
 
@@ -20,6 +21,7 @@ FEATURE_TITLE=""
 FEATURE_IDEA=""
 BASE_DIR="work/features"
 FORCE="false"
+ADVANCED_EXECUTION="false"
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
@@ -41,6 +43,10 @@ while [[ $# -gt 0 ]]; do
       ;;
     --force)
       FORCE="true"
+      shift
+      ;;
+    --advanced-execution)
+      ADVANCED_EXECUTION="true"
       shift
       ;;
     -h|--help)
@@ -74,6 +80,9 @@ if [[ -d "$WORKSPACE" && "$FORCE" != "true" ]]; then
 fi
 
 mkdir -p "$WORKSPACE/specs" "$WORKSPACE/tasks" "$WORKSPACE/notes"
+if [[ "$ADVANCED_EXECUTION" == "true" ]]; then
+  mkdir -p "$WORKSPACE/logs"
+fi
 
 resolve_template() {
   local rel="$1"
@@ -103,13 +112,22 @@ copy_template_if_needed() {
 USER_TEMPLATE="$(resolve_template "user-spec.md.template")"
 TECH_TEMPLATE="$(resolve_template "tech-spec.md.template")"
 TASK_TEMPLATE="$(resolve_template "tasks/task.md.template")"
+DECISIONS_TEMPLATE="$(resolve_template "decisions.md.template")"
 
 copy_template_if_needed "$USER_TEMPLATE" "$WORKSPACE/specs/user-spec.md"
 copy_template_if_needed "$TECH_TEMPLATE" "$WORKSPACE/specs/tech-spec.md"
 copy_template_if_needed "$TASK_TEMPLATE" "$WORKSPACE/tasks/task.template.md"
+copy_template_if_needed "$DECISIONS_TEMPLATE" "$WORKSPACE/decisions.md"
+
+if [[ "$ADVANCED_EXECUTION" == "true" ]]; then
+  EXECUTION_PLAN_TEMPLATE="$(resolve_template "execution-plan.md.template")"
+  CHECKPOINT_TEMPLATE="$(resolve_template "checkpoint.yaml.template")"
+  copy_template_if_needed "$EXECUTION_PLAN_TEMPLATE" "$WORKSPACE/logs/execution-plan.md"
+  copy_template_if_needed "$CHECKPOINT_TEMPLATE" "$WORKSPACE/logs/checkpoint.yaml"
+fi
 
 DECISIONS_TITLE="${FEATURE_TITLE:-$FEATURE_ID}"
-if [[ ! -f "$WORKSPACE/decisions.md" || "$FORCE" == "true" ]]; then
+if [[ ! -f "$WORKSPACE/decisions.md" || "$FORCE" == "true" || "$(grep -c '{{' "$WORKSPACE/decisions.md" 2>/dev/null || true)" != "0" ]]; then
   cat > "$WORKSPACE/decisions.md" <<DECISIONS
 # Decisions Log: $DECISIONS_TITLE
 
@@ -122,11 +140,26 @@ if [[ ! -f "$WORKSPACE/decisions.md" || "$FORCE" == "true" ]]; then
 - Записывайте только решения, которые помогут будущему участнику понять, почему работа сделана именно так.
 - Если задача отклонилась от user-spec, укажите связанный \`DEV-*\` и \`US-*\`.
 - Если решение стало устойчивым правилом проекта, перенесите вывод в \`project-knowledge/\`.
+- Для feature-execution-lite фиксируйте wave, review rounds и boundary: internal work, external user action или runtime backlog.
 
 ## Записи
 
 - Пока записей нет.
 DECISIONS
+fi
+
+if [[ "$ADVANCED_EXECUTION" == "true" ]]; then
+  escape_sed_replacement() {
+    printf '%s' "$1" | sed -e 's/[\/&]/\\&/g'
+  }
+  ADVANCED_TITLE="$(escape_sed_replacement "${FEATURE_TITLE:-$FEATURE_ID}")"
+  ADVANCED_ID="$(escape_sed_replacement "$FEATURE_ID")"
+  ADVANCED_TIME="$(escape_sed_replacement "$(date -Iseconds)")"
+  sed -i \
+    -e "s/{{FEATURE_ID}}/$ADVANCED_ID/g" \
+    -e "s/{{FEATURE_TITLE}}/$ADVANCED_TITLE/g" \
+    -e "s/{{GENERATED_AT}}/$ADVANCED_TIME/g" \
+    "$WORKSPACE/logs/execution-plan.md" "$WORKSPACE/logs/checkpoint.yaml"
 fi
 
 RESUME_SCRIPT="$SCRIPT_DIR/resume-setup.py"
@@ -154,6 +187,7 @@ cat > "$WORKSPACE/README.md" <<README
    python3 "$DECOMPOSE_SCRIPT" --workspace "$WORKSPACE"
 
 Можно остановиться в любой момент и вернуться позже: состояние хранится в interview-state.yaml.
+Если нужен advanced feature execution, создайте workspace с --advanced-execution и ведите logs/checkpoint.yaml после каждой wave.
 README
 
 RESUME_ARGS=("$RESUME_SCRIPT" "--workspace" "$WORKSPACE" "--feature-id" "$FEATURE_ID")
@@ -173,6 +207,10 @@ echo "- $WORKSPACE/specs/user-spec.md"
 echo "- $WORKSPACE/specs/tech-spec.md"
 echo "- $WORKSPACE/tasks/task.template.md"
 echo "- $WORKSPACE/decisions.md"
+if [[ "$ADVANCED_EXECUTION" == "true" ]]; then
+  echo "- $WORKSPACE/logs/execution-plan.md"
+  echo "- $WORKSPACE/logs/checkpoint.yaml"
+fi
 echo "Следующий шаг:"
 echo "python3 $RESUME_SCRIPT --workspace \"$WORKSPACE\""
 echo "Или вернитесь в guided launcher:"

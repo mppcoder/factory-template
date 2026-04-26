@@ -69,8 +69,11 @@ FALLBACK_TECH_TEMPLATE = """# Tech Spec: {{FEATURE_TITLE}}
 FALLBACK_TASK_TEMPLATE = """---
 task_id: {{TASK_ID}}
 status: planned
+wave: {{TASK_WAVE}}
 depends_on: {{TASK_DEPENDS_ON_INLINE}}
 verify: {{TASK_VERIFY_TYPES}}
+reviewers: {{TASK_REVIEWERS_INLINE}}
+reviewer_hints: {{TASK_REVIEWER_HINTS_INLINE}}
 ---
 
 # {{TASK_ID}} — {{TASK_TITLE}}
@@ -123,9 +126,17 @@ verify: {{TASK_VERIFY_TYPES}}
 {{TASK_RISKS}}
 
 ## Reviewer / audit hints
-Необязательное поле для продвинутого режима. Укажите reviewer или audit-подсказки только если задача рискованная.
+Необязательное поле для продвинутого режима `feature-execution-lite`. Укажите reviewer или audit-подсказки только если задача рискованная.
 
 {{REVIEWER_AUDIT_HINTS}}
+
+## Заметки execution-lite
+Заполняется только для advanced path. Для beginner path оставьте значения из frontmatter как есть.
+
+- wave: {{TASK_WAVE}}
+- status flow: planned -> in_progress -> done или blocked
+- depends_on: {{TASK_DEPENDS_ON_INLINE}}
+- max_review_rounds: 3
 """
 
 
@@ -515,8 +526,11 @@ def main() -> int:
             task_mapping = {
                 "TASK_ID": task_id,
                 "TASK_TITLE": clean_title(item, f"Шаг {index}"),
+                "TASK_WAVE": str(index),
                 "TASK_DEPENDS_ON_INLINE": depends_on_inline,
                 "TASK_VERIFY_TYPES": inline_yaml_list(["smoke"]),
+                "TASK_REVIEWERS_INLINE": "[]",
+                "TASK_REVIEWER_HINTS_INLINE": "[]",
                 "TASK_GOAL": markdown_list([item], "Цель пока не указана"),
                 "TASK_INPUT_CONTEXT": markdown_list(
                     [

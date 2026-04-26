@@ -1,0 +1,39 @@
+schema: feature-execution-lite/v1
+feature_id: "{{FEATURE_ID}}"
+feature_title: "{{FEATURE_TITLE}}"
+feature_dir: "work/features/{{FEATURE_ID}}"
+execution_plan: "work/features/{{FEATURE_ID}}/logs/execution-plan.md"
+decisions: "work/features/{{FEATURE_ID}}/decisions.md"
+
+feature_status: planned
+current_wave: 1
+last_completed_wave: 0
+next_wave: 1
+total_waves: 0
+max_review_rounds: 3
+
+tasks:
+  T-001:
+    wave: 1
+    status: planned
+    depends_on: []
+    verify_smoke: pending
+    verify_user: not_required
+    decisions_entry: pending
+
+decisions_updated: false
+
+final_verification:
+  status: pending
+  smoke: pending
+  user: not_required
+  evidence: []
+
+boundaries:
+  internal_work_remaining: []
+  external_user_action_required: []
+  runtime_backlog: []
+
+resume_notes:
+  last_safe_resume_point: "Перед началом Wave 1"
+  blockers: []

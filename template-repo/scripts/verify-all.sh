@@ -93,6 +93,7 @@ run_generated_project_quick() {
   run_step "validate-change-profile" python3 "$ROOT/scripts/validate-change-profile.py" "$ROOT"
   run_step "validate-task-graph" python3 "$ROOT/scripts/validate-task-graph.py" "$ROOT"
   run_step "validate-stage" python3 "$ROOT/scripts/validate-stage.py" "$ROOT"
+  run_step "validate-feature-execution-lite" python3 "$ROOT/scripts/validate-feature-execution-lite.py" "$ROOT"
   run_step "validate-versioning-layer" python3 "$ROOT/scripts/validate-versioning-layer.py" "$ROOT"
   run_step "validate-defect-capture" python3 "$ROOT/scripts/validate-defect-capture.py" "$ROOT"
   run_step "validate-alignment" python3 "$ROOT/scripts/validate-alignment.py" "$ROOT"
@@ -129,6 +130,7 @@ run_quick() {
   run_step "validate-operator-env-production-example" python3 "$ROOT/template-repo/scripts/validate-operator-env.py" "$ROOT" --env-file "$ROOT/deploy/.env.example" --preset production --allow-example-placeholders
   run_step "deploy-dry-run-smoke-starter-app-db" run_deploy_dry_run_smoke
   run_step "validate-spec-traceability" python3 "$ROOT/template-repo/scripts/validate-spec-traceability.py" "$ROOT"
+  run_step "validate-feature-execution-lite" python3 "$ROOT/template-repo/scripts/validate-feature-execution-lite.py" "$ROOT"
   run_step "validate-release-scorecard" python3 "$ROOT/template-repo/scripts/validate-release-scorecard.py" "$ROOT"
   run_step "validate-25-ga-kpi-evidence" python3 "$ROOT/template-repo/scripts/validate-25-ga-kpi-evidence.py" "$ROOT"
   run_step "validate-human-language-layer" python3 "$ROOT/template-repo/scripts/validate-human-language-layer.py" "$ROOT"

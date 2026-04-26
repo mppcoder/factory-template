@@ -83,6 +83,10 @@
 - brownfield transition validator и greenfield conversion validator подключены к quick verify и matrix; brownfield adoption считается done только после conversion в `greenfield-product` или documented blocker
 - `factory-template` зафиксирован как обычный `greenfield-product` с дополнительным factory producer layer, а не как отдельный workflow
 - downstream sync contract защищает brownfield history/project-owned zones и исключает factory-producer-owned paths из battle project sync
+- optional advanced path `feature-execution-lite` добавлен для больших фич: execution plan, task waves, checkpoint/resume, decisions journal, reviewer/audit hints, max review/fix rounds и final verification перед архивом
+- `init-feature-workspace.sh --advanced-execution` создаёт advanced execution artifacts только по явному флагу, поэтому beginner path не усложнён
+- `validate-feature-execution-lite.py` подключен к quick verify и проверяет checkpoint, wave dependencies, decisions, verify-smoke/verify-user и запрет закрытия `done` без final verification
+- feature execution docs явно разделяют internal repo work, external user action и runtime backlog, чтобы не повторять field-pilot классы сбоев premature closeout, wrong boundary и evidence overclaim
 
 ## Программа 2.5 (release truth)
 - release truth source: `docs/releases/release-scorecard.yaml`

@@ -233,8 +233,11 @@ core_capabilities:
       - work-templates/user-spec.md.template
       - work-templates/tech-spec.md.template
       - work-templates/decisions.md.template
+      - work-templates/execution-plan.md.template
+      - work-templates/checkpoint.yaml.template
       - work-templates/tasks/task.md.template
       - scripts/init-feature-workspace.sh
+      - scripts/validate-feature-execution-lite.py
     source_paths:
       - template-repo/template/work/features/.gitkeep
       - template-repo/template/work/completed/.gitkeep
@@ -242,8 +245,11 @@ core_capabilities:
       - template-repo/template/work-templates/user-spec.md.template
       - template-repo/template/work-templates/tech-spec.md.template
       - template-repo/template/work-templates/decisions.md.template
+      - template-repo/template/work-templates/execution-plan.md.template
+      - template-repo/template/work-templates/checkpoint.yaml.template
       - template-repo/template/work-templates/tasks/task.md.template
       - template-repo/scripts/init-feature-workspace.sh
+      - template-repo/scripts/validate-feature-execution-lite.py
   verify_done_checklist:
     title: Verify and done checklist
     justification: "All modes share the same verification, done-report and closeout checklist path."

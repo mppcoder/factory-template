@@ -1,0 +1,52 @@
+# План выполнения Lite: {{FEATURE_TITLE}}
+
+> generated_at: {{GENERATED_AT}}
+> feature_id: {{FEATURE_ID}}
+> mode: optional-advanced
+> max_review_rounds: 3
+
+Этот план нужен только для advanced feature execution. Для beginner path достаточно `tech-spec.md`, task files и обычной проверки traceability.
+
+## Граница роли dispatcher
+
+- dispatcher ведёт план, checkpoint, decisions и handoff;
+- implementation work выполняется внутри task scope;
+- dispatcher не закрывает feature без final verification;
+- internal work, external user action и runtime backlog фиксируются отдельно.
+
+## Волны
+
+<!--
+### Wave 1 — независимые задачи
+
+- tasks: [T-001, T-002]
+- depends_on: []
+- goal: что должна дать волна
+- verify_smoke: команды или validator checks
+- verify_user: что показать пользователю или `Не требуется`
+- reviewer_hints: code/security/test/docs или `Не требуется`
+-->
+
+{{WAVES}}
+
+## Проверки пользователя
+
+{{USER_CHECKS}}
+
+## Audit и final wave
+
+{{AUDIT_FINAL_WAVE}}
+
+## Правило эскалации
+
+- max_review_rounds: 3
+- after_max_rounds: остановить закрытие задачи, записать escalation в `decisions.md`, обновить `logs/checkpoint.yaml`, запросить решение пользователя.
+- blocker_policy: не смешивать internal work, external user action и runtime backlog.
+
+## Чеклист закрытия
+
+- [ ] Все wave dependencies выполнены в правильном порядке.
+- [ ] `decisions.md` содержит записи по важным решениям, deviations и verification.
+- [ ] `logs/checkpoint.yaml` обновлён после последней волны.
+- [ ] `final_verification.status` равен `passed`.
+- [ ] Runtime backlog, если есть, явно отделён от выполненной repo-local работы.
