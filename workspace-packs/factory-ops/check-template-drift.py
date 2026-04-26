@@ -17,7 +17,12 @@ Manual edits in this clone will be overwritten by the canonical template sync fl
 -->
 """
 
-TIER_ORDER = ("safe", "advisory", "manual-only")
+TIER_ORDER = ("safe-generated", "safe-clone", "advisory-review", "manual-project-owned")
+LEGACY_TIER_ALIASES = {
+    "safe": "safe-generated",
+    "advisory": "advisory-review",
+    "manual-only": "manual-project-owned",
+}
 
 
 def render_materialized_clone(text: str) -> str:
@@ -41,6 +46,32 @@ def _normalize_zone_entry(entry: object) -> tuple[str, dict]:
     return "", {}
 
 
+def tier_name(raw: str) -> str:
+    return LEGACY_TIER_ALIASES.get(raw, raw)
+
+
+def tier_config(manifest: dict, tier: str) -> dict:
+    tiers = manifest.get("tiers")
+    if not isinstance(tiers, dict):
+        return {}
+    return tiers.get(tier, {}) or {}
+
+
+def tier_apply_eligible(manifest: dict, tier: str) -> bool:
+    config = tier_config(manifest, tier)
+    if "apply_eligible" in config:
+        return bool(config.get("apply_eligible"))
+    return tier in {"safe-generated", "safe-clone"}
+
+
+def tier_operator_action(manifest: dict, tier: str) -> str:
+    return str(tier_config(manifest, tier).get("operator_action") or "")
+
+
+def tier_safety_reason(manifest: dict, tier: str) -> str:
+    return str(tier_config(manifest, tier).get("safety_reason") or "")
+
+
 def iter_tier_zones(manifest: dict) -> Iterable[tuple[str, str, dict]]:
     tiers = manifest.get("tiers")
     if isinstance(tiers, dict):
@@ -50,16 +81,24 @@ def iter_tier_zones(manifest: dict) -> Iterable[tuple[str, str, dict]]:
                 path, meta = _normalize_zone_entry(entry)
                 if path:
                     yield tier, path, meta
+        for raw_tier, tier_data in tiers.items():
+            tier = tier_name(raw_tier)
+            if tier in TIER_ORDER:
+                continue
+            for entry in (tier_data or {}).get("zones", []) or []:
+                path, meta = _normalize_zone_entry(entry)
+                if path:
+                    yield tier, path, meta
         return
 
     for entry in manifest.get("sync_zones", []) or []:
         path, meta = _normalize_zone_entry(entry)
         if path:
-            yield "safe", path, meta
+            yield "safe-generated", path, meta
     for entry in manifest.get("advisory_only_zones", []) or []:
         path, meta = _normalize_zone_entry(entry)
         if path:
-            yield "advisory", path, meta
+            yield "advisory-review", path, meta
 
 
 def iter_materialized_files(manifest: dict) -> Iterable[tuple[str, dict]]:
@@ -70,11 +109,18 @@ def iter_materialized_files(manifest: dict) -> Iterable[tuple[str, dict]]:
             for mapping in tier_data.get("materialized_files", []) or []:
                 if isinstance(mapping, dict):
                     yield tier, mapping
+        for raw_tier, tier_data in tiers.items():
+            tier = tier_name(raw_tier)
+            if tier in TIER_ORDER:
+                continue
+            for mapping in (tier_data or {}).get("materialized_files", []) or []:
+                if isinstance(mapping, dict):
+                    yield tier, mapping
         return
 
     for mapping in manifest.get("materialized_files", []) or []:
         if isinstance(mapping, dict):
-            yield "safe", mapping
+            yield "safe-clone", mapping
 
 
 def project_zone(project: Path, zone: str) -> Path:
@@ -125,7 +171,9 @@ def compare_materialized_files(factory: Path, project: Path) -> list[dict]:
             "target": target_rel,
             "mode": mapping.get("mode", "copy"),
             "note": mapping.get("note"),
-            "apply_eligible": tier == "safe",
+            "apply_eligible": tier_apply_eligible(manifest, tier),
+            "operator_action": tier_operator_action(manifest, tier),
+            "safety_reason": tier_safety_reason(manifest, tier),
             "item_type": "materialized-file",
         }
         if not source.exists():
@@ -160,9 +208,11 @@ def compare_dirs(factory: Path, project: Path) -> list[dict]:
             "tier": tier,
             "path": rel,
             "target_path": str(target.relative_to(project)) if target.is_relative_to(project) else str(target),
-            "apply_eligible": tier == "safe",
+            "apply_eligible": tier_apply_eligible(manifest, tier),
             "optional_in_project": optional_in_project,
             "note": zone_meta.get("note"),
+            "operator_action": tier_operator_action(manifest, tier),
+            "safety_reason": tier_safety_reason(manifest, tier),
             "item_type": "zone",
         }
         if not source.exists() or not target.exists():
@@ -208,15 +258,22 @@ def summarize_by_tier(items: Iterable[dict]) -> dict:
             "drift": 0,
             "missing": 0,
             "optional_missing": 0,
-            "apply_eligible": tier == "safe",
+            "apply_eligible": tier in {"safe-generated", "safe-clone"},
         }
         for tier in TIER_ORDER
     }
     for item in items:
-        tier = item.get("tier", "safe")
+        tier = item.get("tier", "safe-generated")
         bucket = summary.setdefault(
             tier,
-            {"total": 0, "ok": 0, "drift": 0, "missing": 0, "optional_missing": 0, "apply_eligible": tier == "safe"},
+            {
+                "total": 0,
+                "ok": 0,
+                "drift": 0,
+                "missing": 0,
+                "optional_missing": 0,
+                "apply_eligible": tier in {"safe-generated", "safe-clone"},
+            },
         )
         status = item.get("status")
         bucket["total"] += 1
@@ -284,7 +341,7 @@ def format_human(payload: dict) -> str:
         lines.append(
             f"- {tier}: ok={tier_summary.get('ok', 0)}, drift={tier_summary.get('drift', 0)}, "
             f"missing={tier_summary.get('missing', 0)}, total={tier_summary.get('total', 0)}, "
-            f"apply_eligible={tier_summary.get('apply_eligible', tier == 'safe')}"
+            f"apply_eligible={tier_summary.get('apply_eligible', tier in {'safe-generated', 'safe-clone'})}"
         )
 
     lines.extend(["", "Детали zones:"])

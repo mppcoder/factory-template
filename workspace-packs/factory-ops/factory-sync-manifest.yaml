@@ -1,44 +1,65 @@
 # Манифест зон синхронизации фабрики.
-# safe: можно materialize через controlled apply + rollback metadata.
-# advisory: можно сравнивать и показывать в preview, но применять только вручную.
-# manual-only: сравнение допускается как impact signal; автоматический patch не генерируется.
-sync_contract_version: 2
+# safe-generated: сгенерированные файлы, принадлежащие шаблону; controlled apply + rollback metadata.
+# safe-clone: materialized clones из template source; controlled apply + rollback metadata.
+# advisory-review: только diff/merge guidance; без automatic overwrite.
+# manual-project-owned: project lifecycle work; только сигнал влияния.
+sync_contract_version: 3
 
 tiers:
-  safe:
-    description: Controlled generated updates with rollback support.
+  safe-generated:
+    description: Generated files, принадлежащие шаблону, с controlled apply и rollback support.
+    generate_patch_files: true
+    apply_eligible: true
+    operator_action: применить через --apply-safe-zones после просмотра preview.
+    safety_reason: Переиспользуемые файлы, принадлежащие шаблону, можно безопасно регенерировать при наличии rollback metadata.
     zones:
       - path: bootstrap
         optional_in_project: true
-        note: generated downstream project usually does not include bootstrap at project root
+        note: сгенерированный downstream project обычно не содержит bootstrap в project root
       - path: template-repo/scenario-pack
-        note: repo-first routing pack; safe only when downstream keeps template-repo layout
+        note: repo-first routing pack; safe только если downstream сохраняет template-repo layout
       - path: template-repo/template/.chatgpt/examples
-        note: example artifacts are template-owned reference files
+        note: example artifacts являются reference files, принадлежащими шаблону
       - path: template-repo/template/meta-feedback
-        note: feedback templates are template-owned starters; rollback is required before manual edits are discarded
+        note: feedback templates являются starters, принадлежащими шаблону; rollback обязателен перед discard ручных правок
       - path: template-repo/template/tasks/codex
-        note: codex reusable task blocks are template-owned
+        note: reusable task blocks для Codex принадлежат шаблону
       - path: template-repo/template/work-templates
-        note: task/spec templates are template-owned
+        note: task/spec templates принадлежат шаблону; project work в work/ остается защищенным
+
+  safe-clone:
+    description: Materialized clone files, полученные из template source.
+    generate_patch_files: true
+    apply_eligible: true
+    operator_action: применить через --apply-safe-zones после просмотра preview.
+    safety_reason: Корневой clone объявлен принадлежащим шаблону и должен оставаться materialized copy.
     materialized_files:
       - source: template-repo/AGENTS.md
         target: AGENTS.md
         mode: materialized-clone
-        note: downstream root instruction clone from template source
+        note: downstream root instruction clone из template source
 
-  advisory:
-    description: Diff and preview only; operator decides whether to copy manually.
+  advisory-review:
+    description: Только diff и merge guidance; оператор решает, что переносить вручную.
+    generate_patch_files: true
+    apply_eligible: false
+    operator_action: проверить patch-summary.md и вручную смержить только то, что совпадает с project intent.
+    safety_reason: Эти файлы могут содержать downstream choices или project knowledge; автоматическая перезапись для них небезопасна.
     zones:
       - template-repo/template/.codex
       - template-repo/template/docs
+      - path: template-repo/template/project-knowledge
+        note: default advisory; используйте diff/merge guidance, а не automatic overwrite
 
-  manual-only:
-    description: Project-specific lifecycle content; never apply automatically from bundle.
+  manual-project-owned:
+    description: Project-specific lifecycle content; никогда не применять автоматически из bundle.
+    generate_patch_files: false
+    apply_eligible: false
+    operator_action: использовать только как сигнал влияния; project-owned work обновлять вручную.
+    safety_reason: Эти зоны представляют живую проектную работу, а не сгенерированное содержимое, принадлежащее шаблону.
     zones:
       - template-repo/template/brownfield
       - template-repo/template/greenfield
-      - template-repo/template/project-knowledge
       - template-repo/template/work
 
 exclude_zones:

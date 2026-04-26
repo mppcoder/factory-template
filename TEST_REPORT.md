@@ -29,7 +29,7 @@ TEST_REPORT.md is verification evidence, not the canonical release-status source
 - release-facing reference package and canonical root release notes source
 - novice onboarding acceptance fixtures (`onboarding-smoke/run-novice-e2e.sh`)
 - mode parity manifest, matrix and validator (`template-repo/mode-parity.yaml`, `docs/mode-parity-matrix.md`, `validate-mode-parity.py`)
-- downstream upgrade dry-run/apply/rollback UX (`upgrade-report.py`, `rollback-template-patch.sh`)
+- downstream upgrade v3 dry-run/apply/rollback UX (`upgrade-report.py`, `rollback-template-patch.sh`)
 - lightweight spec-governance traceability: `decisions.md.template`, expanded tech/task templates, approval-aware deviations, task verification anchors
 - опциональные production VPS presets: `starter`, `app-db`, `reverse-proxy-tls`, `backup`, `healthcheck`
 
@@ -69,13 +69,15 @@ Evidence / quality / DoD до смыслового наполнения арте
 - `MATRIX_TEST.sh` проходит на чисто распакованном финальном архиве.
 - `MATRIX_TEST.sh` подтверждает, что сырой `meta-feedback` блокируется validator, а после заполнения dry-run ingest проходит.
 - `MATRIX_TEST.sh` подтверждает, что generated `codex task pack` проходит отдельный semantic validator и подхватывает active scenario routing.
-- `MATRIX_TEST.sh` подтверждает upgrade closeout path: `upgrade-report.py`, `apply-template-patch.sh --apply-safe-zones`, `rollback-template-patch.sh --check|--rollback`.
+- `MATRIX_TEST.sh` подтверждает upgrade closeout path v3: `upgrade-report.py`, `apply-template-patch.sh --apply-safe-zones`, `rollback-template-patch.sh --check|--rollback`.
+- `MATRIX_TEST.sh` подтверждает multi-zone downstream preview: `safe-generated` materializes больше двух template-owned файлов, `advisory-review` показывает `project-knowledge` только как diff/merge guidance, `manual-project-owned` показывает live `work/` только как impact signal.
+- `MATRIX_TEST.sh` подтверждает, что `upgrade-report.py` не возвращает известные англоязычные человекочитаемые фразы в markdown summary.
 - `VALIDATE_FACTORY_TEMPLATE_OPS.sh` подтверждает semantic profile для `sources-pack-core-20`, `sources-pack-release-20` и `sources-pack-bugfix-20`.
 - `EXPORT_FACTORY_TEMPLATE_SOURCES.sh` и `GENERATE_BOUNDARY_ACTIONS.sh` публикуют phase-aware рекомендацию для `controlled-fixes`, `release` и `bugfix-drift`.
 - `DETECT_FACTORY_TEMPLATE_PHASE.sh` корректно различает `release` и `bugfix-drift` на rule-based changed path signals.
 - `PHASE_DETECTION_TEST.sh` автоматически проверяет synthetic `controlled-fixes`, `release` и `bugfix-drift` сценарии.
 - launcher smoke на временном scaffold подтверждает, что создание проекта больше не зависит от внешнего staging URL и сразу переводит проект в repo-first режим.
-- `UPGRADE_SUMMARY.md` подтверждает человекочитаемый downstream upgrade UX и рабочий rollback path с tracked files.
+- `UPGRADE_SUMMARY.md` подтверждает человекочитаемый downstream upgrade UX v3: safe/advisory/manual-only distinction, what will change, why each tier is safe/advisory/manual, rollback path и обязательный review list.
 - `POST_UNZIP_SETUP.sh` остаётся безопасным для non-interactive verify path и не блокирует test runs prompt'ом.
 - validator `validate-codex-task-pack.py` теперь требует, чтобы handoff pack явно фиксировал приоритет правил repo.
 - validator `validate-codex-task-pack.py` теперь также требует правило: handoff пользователю выдаётся только одним цельным copy-paste блоком, а не ссылкой на файл и не несколькими блоками.
@@ -86,6 +88,7 @@ Evidence / quality / DoD до смыслового наполнения арте
 - curated `sources-pack-core-20`, `sources-pack-release-20`, `sources-pack-bugfix-20` собираются из декларативного policy manifest.
 - boundary-actions guide генерируется из markdown template и проверяется вместе с ops-policy слоем.
 - incidental defect `utcnow()` warning зафиксирован и исправлен in-scope: `reports/bugs/2026-04-23-factory-ops-utcnow-warning.md`.
+- Defect-capture по утечке английского текста в downstream sync v3 зафиксирован и исправлен in-scope: `reports/bugs/2026-04-26-downstream-sync-v3-language-leak.md`.
 
 ## Что вошло в релиз 2.4.4
 - canonical factory hierarchy очищена от historical/product-specific naming в core/release-facing слоях;
@@ -96,7 +99,7 @@ Evidence / quality / DoD до смыслового наполнения арте
 
 ## Известные ограничения
 - `MATRIX_TEST.sh` остаётся representative prerelease runner, а не exhaustive full-matrix coverage для всех 22 допустимых комбинаций;
-- back-sync по-прежнему controlled safe-apply flow, а не full auto-sync.
+- back-sync по-прежнему controlled safe/advisory/manual flow, а не full auto-sync.
 - semantic/relevance оценка curated packs пока остается rule-based, а не phase-aware recommendation engine.
 - phase detection пока rule-based по changed paths и может не уловить более сложный operator intent без явных файловых сигналов.
 - документальные intent signals сейчас реализованы только для `release`, а не для всех фаз.
@@ -108,5 +111,5 @@ Evidence / quality / DoD до смыслового наполнения арте
 - Follow-up для будущего улучшения (не blocker текущего RC): расширить novice long-flow с synthetic smoke до более предметных domain сценариев в downstream проектах.
 
 ## Статус CI baseline
-- Статус: `green` (GitHub Actions run `24840192862`, 2026-04-23: `verify-baseline` = success, `release-bundle-dry-run` = success; локально подтверждено 2026-04-25 через `verify-all.sh quick` и `verify-all.sh ci`).
+- Статус: `green` (GitHub Actions run `24840192862`, 2026-04-23: `verify-baseline` = success, `release-bundle-dry-run` = success; локально подтверждено 2026-04-26 через `verify-all.sh ci`).
 - Residual risk: шаг `release-executor` в release workflow остаётся manual/optional и по-прежнему зависит от валидного verified-sync контекста и GitHub auth.

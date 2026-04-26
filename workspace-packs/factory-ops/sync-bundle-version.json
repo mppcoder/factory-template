@@ -1,15 +1,16 @@
 {
   "sync_bundle_schema_version": 1,
-  "sync_contract_version": 2,
+  "sync_contract_version": 3,
   "bundle_format": "factory-template-sync-bundle",
   "template_version_source": "VERSION.md",
   "template_version": "2.4.4",
-  "supported_tiers": ["safe", "advisory", "manual-only"],
+  "supported_tiers": ["safe-generated", "safe-clone", "advisory-review", "manual-project-owned"],
   "safe_apply_modes": ["--apply-safe-zones"],
   "rollback_modes": ["--rollback", "--rollback --restore-project-snapshot"],
   "scope_summary": {
-    "safe": "Generated updates that may be copied by apply-template-patch.sh with rollback metadata.",
-    "advisory": "Preview-only updates for operator review and manual application.",
-    "manual-only": "Project-specific areas that are reported for impact awareness but never generated for automatic apply."
+    "safe-generated": "Сгенерированные файлы, принадлежащие шаблону; apply разрешен только через apply-template-patch.sh с rollback metadata.",
+    "safe-clone": "Materialized clone files из template source; безопасно обновляются через controlled apply.",
+    "advisory-review": "Diff/merge guidance для operator review; автоматическая перезапись запрещена.",
+    "manual-project-owned": "Project-owned lifecycle work отображается только как сигнал влияния; automatic apply не генерируется."
   }
 }

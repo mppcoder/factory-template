@@ -41,6 +41,7 @@ print(f"Rollback state: {state_path}")
 print(f"project_root: {state.get('project_root')}")
 print(f"patch_bundle: {state.get('patch_bundle')}")
 print(f"applied_at: {state.get('applied_at')}")
+print(f"status: {state.get('status', 'unknown')}")
 metadata = state.get("bundle_metadata") or {}
 print(f"template_version: {metadata.get('template_version', 'unknown')}")
 print(f"sync_contract_version: {metadata.get('sync_contract_version', 'unknown')}")
@@ -53,7 +54,7 @@ for item in files:
     backup = item.get("backup_path_relative_to_apply_dir")
     print(f"- {rel}: existed_before={existed}, backup={backup}")
 print("")
-print("Guidance: --rollback restores tracked safe-tier generated files only.")
+print("Guidance: --rollback restores tracked safe-generated/safe-clone files only.")
 print("Guidance: --rollback --restore-project-snapshot also restores the full project snapshot when available.")
 PYCODE
     ;;
@@ -94,6 +95,8 @@ missing_backup = 0
 snapshot_restored = False
 
 for item in reversed(state.get("files", [])):
+    if item.get("applied") is False:
+        continue
     target = Path(item.get("target", "")).resolve()
     rel = item.get("relative_path", "")
     existed_before = bool(item.get("existed_before", False))

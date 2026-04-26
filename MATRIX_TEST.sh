@@ -116,25 +116,68 @@ assert_pass 'factory-bugflow' validate-factory-feedback.py bash "$ROOT/VALIDATE_
 assert_pass 'factory-bugflow' ingest-factory-feedback.sh bash "$ROOT/INGEST_FACTORY_FEEDBACK.sh" "$P" --dry-run
 printf '\nMATRIX_SAFE_ZONE_EXAMPLE_DRIFT\n' >> "$P/.chatgpt/examples/done-report.example.md"
 printf '\nMATRIX_SAFE_ZONE_TASK_BLOCK_DRIFT\n' >> "$P/tasks/codex/codex-task-mandatory-bug-capture.block.md"
+printf '\nMATRIX_SAFE_WORK_TEMPLATE_DRIFT\n' >> "$P/work-templates/user-spec.md.template"
+printf '\nMATRIX_ADVISORY_PROJECT_KNOWLEDGE_DRIFT\n' >> "$P/project-knowledge/project.md"
+printf '\nMATRIX_MANUAL_PROJECT_WORK_DRIFT\n' >> "$P/work/_task-template.md"
 assert_pass 'factory-bugflow' export-template-patch.sh "$ROOT/workspace-packs/factory-ops/export-template-patch.sh" "$ROOT" "$P" --dry-run
-assert_pass 'factory-bugflow' 'tiered-preview-generated>1' python3 - <<PYCODE
+assert_pass 'factory-bugflow' 'tiered-preview-v3-multizone' python3 - <<PYCODE
 import json
 from pathlib import Path
 bundle = Path(r"$P/_factory-sync-export")
 metadata = json.loads((bundle / "bundle-metadata.json").read_text(encoding="utf-8"))
 preview = json.loads((bundle / "preview-changes.json").read_text(encoding="utf-8"))
-assert set(metadata["tiers"]) >= {"safe", "advisory", "manual-only"}
-assert metadata["tiers"]["safe"]["generated"] > 1
-assert any(item["tier"] == "safe" and item["will_generate"] for item in preview)
-assert all(not item.get("will_generate") for item in preview if item["tier"] != "safe")
+generated = sorted(
+    path.relative_to(bundle / "generated-files").as_posix()
+    for path in (bundle / "generated-files").rglob("*")
+    if path.is_file()
+)
+assert metadata["sync_contract_version"] == 3
+assert set(metadata["tiers"]) >= {"safe-generated", "safe-clone", "advisory-review", "manual-project-owned"}
+assert metadata["tiers"]["safe-generated"]["generated"] >= 3
+assert metadata["tiers"]["advisory-review"]["total"] >= 1
+assert metadata["tiers"]["manual-project-owned"]["total"] >= 1
+assert len(generated) >= 3
+assert any(item["tier"] == "safe-generated" and item["will_generate"] for item in preview)
+assert all(not item.get("will_generate") for item in preview if item["tier"] not in {"safe-generated", "safe-clone"})
+assert not any(path.startswith("project-knowledge/") for path in generated)
+assert not any(path.startswith("work/") for path in generated)
 PYCODE
 assert_pass 'factory-bugflow' 'apply-template-patch.sh --check' "$ROOT/workspace-packs/factory-ops/apply-template-patch.sh" "$P/_factory-sync-export" --check
 assert_pass 'factory-bugflow' 'apply-template-patch.sh --apply-safe-zones --with-project-snapshot' "$ROOT/workspace-packs/factory-ops/apply-template-patch.sh" "$P/_factory-sync-export" --apply-safe-zones --with-project-snapshot
 printf '\nMATRIX_MANUAL_CHANGE_MARKER\n' >> "$P/README.md"
 assert_pass 'factory-bugflow' upgrade-report.py python3 "$ROOT/workspace-packs/factory-ops/upgrade-report.py" "$ROOT" "$P" --format text
+assert_pass 'factory-bugflow' 'upgrade-report.py russian-markdown' python3 "$ROOT/workspace-packs/factory-ops/upgrade-report.py" "$ROOT" "$P" --format markdown --output "$P/_factory-sync-export/matrix-upgrade-summary.md"
+assert_pass 'factory-bugflow' 'upgrade-report-russian-body' python3 - "$P/_factory-sync-export/matrix-upgrade-summary.md" <<'PYCODE'
+import sys
+from pathlib import Path
+text = Path(sys.argv[1]).read_text(encoding="utf-8")
+for forbidden in [
+    "Generated (UTC)",
+    "Factory root",
+    "Downstream project root",
+    "Template version",
+    "Sync contract version",
+    "Verdict",
+    "Safe apply materializes",
+    " from `",
+    "status=`",
+    "reason:",
+    "operator action:",
+    "Rollback metadata is mandatory",
+    "Prepare/refresh bundle",
+    "Review bundle before apply",
+    "Apply safe zones",
+    "Inspect rollback state",
+    "Roll back safe-zone",
+    "`--dry-run` and `--check` are read-only",
+    "ChatGPT Project Sources refresh is not part",
+]:
+    assert forbidden not in text, forbidden
+PYCODE
 assert_pass 'factory-bugflow' 'rollback-template-patch.sh --check' "$ROOT/workspace-packs/factory-ops/rollback-template-patch.sh" "$P/_factory-sync-export" --check
 assert_pass 'factory-bugflow' 'rollback-template-patch.sh --rollback --restore-project-snapshot' "$ROOT/workspace-packs/factory-ops/rollback-template-patch.sh" "$P/_factory-sync-export" --rollback --restore-project-snapshot
 assert_fail 'factory-bugflow' 'manual-marker-after-rollback' grep -q 'MATRIX_MANUAL_CHANGE_MARKER' "$P/README.md"
+assert_pass 'factory-bugflow' 'project-work-restored-after-rollback' grep -q 'MATRIX_MANUAL_PROJECT_WORK_DRIFT' "$P/work/_task-template.md"
 assert_pass 'routing-quick' resolve-codex-task-route.py bash -lc "python3 '$ROOT/template-repo/scripts/resolve-codex-task-route.py' '$P' --launch-source chatgpt-handoff --task-text 'docs triage search in repo' | grep -q 'selected_profile=quick'"
 assert_pass 'routing-build' resolve-codex-task-route.py bash -lc "python3 '$ROOT/template-repo/scripts/resolve-codex-task-route.py' '$P' --launch-source chatgpt-handoff --task-text 'fix feature remediation in launcher' | grep -q 'selected_profile=build'"
 assert_pass 'routing-deep' resolve-codex-task-route.py bash -lc "python3 '$ROOT/template-repo/scripts/resolve-codex-task-route.py' '$P' --launch-source chatgpt-handoff --task-text 'root cause audit architecture inconsistency' | grep -q 'selected_profile=deep'"

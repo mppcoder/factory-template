@@ -41,7 +41,12 @@ This root AGENTS.md is a materialized clone for the downstream repo.
 Manual edits in this clone will be overwritten by the canonical template sync flow.
 -->
 """
-TIER_ORDER = ("safe", "advisory", "manual-only")
+TIER_ORDER = ("safe-generated", "safe-clone", "advisory-review", "manual-project-owned")
+LEGACY_TIER_ALIASES = {
+    "safe": "safe-generated",
+    "advisory": "advisory-review",
+    "manual-only": "manual-project-owned",
+}
 
 
 def render_materialized_clone(text: str) -> str:
@@ -74,6 +79,47 @@ def normalize_zone_entry(entry):
     return "", {}
 
 
+def tier_name(raw: str) -> str:
+    return LEGACY_TIER_ALIASES.get(raw, raw)
+
+
+def tier_config(manifest: dict, tier: str) -> dict:
+    tiers = manifest.get("tiers")
+    if not isinstance(tiers, dict):
+        return {}
+    return tiers.get(tier, {}) or {}
+
+
+def tier_apply_eligible(manifest: dict, tier: str) -> bool:
+    config = tier_config(manifest, tier)
+    if "apply_eligible" in config:
+        return bool(config.get("apply_eligible"))
+    return tier in {"safe-generated", "safe-clone"}
+
+
+def tier_generates_patch_files(manifest: dict, tier: str) -> bool:
+    config = tier_config(manifest, tier)
+    if "generate_patch_files" in config:
+        return bool(config.get("generate_patch_files"))
+    return tier != "manual-project-owned"
+
+
+def tier_operator_action(manifest: dict, tier: str) -> str:
+    config = tier_config(manifest, tier)
+    return str(config.get("operator_action") or "")
+
+
+def tier_safety_reason(manifest: dict, tier: str) -> str:
+    config = tier_config(manifest, tier)
+    return str(config.get("safety_reason") or "")
+
+
+def should_materialize(manifest: dict, tier: str, mode: str) -> bool:
+    if mode == "--advisory":
+        return False
+    return tier_apply_eligible(manifest, tier)
+
+
 def iter_tier_zones(manifest: dict):
     tiers = manifest.get("tiers")
     if isinstance(tiers, dict):
@@ -83,15 +129,23 @@ def iter_tier_zones(manifest: dict):
                 zone, meta = normalize_zone_entry(entry)
                 if zone:
                     yield tier, zone, meta
+        for raw_tier, tier_data in tiers.items():
+            tier = tier_name(raw_tier)
+            if tier in TIER_ORDER:
+                continue
+            for entry in (tier_data or {}).get("zones", []) or []:
+                zone, meta = normalize_zone_entry(entry)
+                if zone:
+                    yield tier, zone, meta
         return
     for entry in manifest.get("sync_zones", []) or []:
         zone, meta = normalize_zone_entry(entry)
         if zone:
-            yield "safe", zone, meta
+            yield "safe-generated", zone, meta
     for entry in manifest.get("advisory_only_zones", []) or []:
         zone, meta = normalize_zone_entry(entry)
         if zone:
-            yield "advisory", zone, meta
+            yield "advisory-review", zone, meta
 
 
 def iter_materialized_files(manifest: dict):
@@ -102,10 +156,17 @@ def iter_materialized_files(manifest: dict):
             for mapping in tier_data.get("materialized_files", []) or []:
                 if isinstance(mapping, dict):
                     yield tier, mapping
+        for raw_tier, tier_data in tiers.items():
+            tier = tier_name(raw_tier)
+            if tier in TIER_ORDER:
+                continue
+            for mapping in (tier_data or {}).get("materialized_files", []) or []:
+                if isinstance(mapping, dict):
+                    yield tier, mapping
         return
     for mapping in manifest.get("materialized_files", []) or []:
         if isinstance(mapping, dict):
-            yield "safe", mapping
+            yield "safe-clone", mapping
 
 
 def clean_output(out: Path) -> None:
@@ -148,9 +209,21 @@ def copy_generated(rel_target: Path, source: Path) -> None:
 def add_preview(entry: dict) -> None:
     preview.append(entry)
     tier = entry["tier"]
+    tier_counts.setdefault(
+        tier,
+        {
+            "total": 0,
+            "generated": 0,
+            "missing": 0,
+            "apply_eligible": tier_apply_eligible(manifest, tier),
+            "patch_files": 0,
+        },
+    )
     tier_counts[tier]["total"] += 1
     if entry.get("will_generate"):
         tier_counts[tier]["generated"] += 1
+    if entry.get("patch"):
+        tier_counts[tier]["patch_files"] += 1
     if entry.get("status", "").startswith("missing"):
         tier_counts[tier]["missing"] += 1
 
@@ -170,7 +243,13 @@ changed: list[str] = []
 safe_changed: list[str] = []
 preview: list[dict] = []
 tier_counts = {
-    tier: {"total": 0, "generated": 0, "missing": 0, "apply_eligible": tier == "safe"}
+    tier: {
+        "total": 0,
+        "generated": 0,
+        "missing": 0,
+        "apply_eligible": tier_apply_eligible(manifest, tier),
+        "patch_files": 0,
+    }
     for tier in TIER_ORDER
 }
 
@@ -191,10 +270,19 @@ for tier, zone, meta in iter_tier_zones(manifest):
                 "status": status,
                 "will_generate": False,
                 "apply_eligible": False,
+                "preview_mode": mode,
+                "operator_action": tier_operator_action(manifest, tier),
+                "safety_reason": tier_safety_reason(manifest, tier),
                 "note": meta.get("note"),
             }
         )
-        summary.append(f"- [{tier}] зона: {zone}\\n  статус: {status}\\n  generated: no")
+        summary.append(
+            f"- [{tier}] зона: {zone}\\n"
+            f"  статус: {status}\\n"
+            f"  generated: no\\n"
+            f"  why: {tier_safety_reason(manifest, tier)}\\n"
+            f"  action: {tier_operator_action(manifest, tier)}"
+        )
         continue
 
     for t_file in sorted(t_zone.rglob("*")):
@@ -211,8 +299,10 @@ for tier, zone, meta in iter_tier_zones(manifest):
             continue
         rel_target = target_zone_rel / rel
         patch_name = f"{tier}__{zone.replace('/', '__')}__{str(rel).replace('/', '__')}.patch"
-        write_patch(patch_name, before, after, str(p_file), str(p_file))
-        will_generate = tier == "safe"
+        patch_file = patch_name if tier_generates_patch_files(manifest, tier) else None
+        if patch_file:
+            write_patch(patch_file, before, after, str(p_file), str(p_file))
+        will_generate = should_materialize(manifest, tier, mode)
         if will_generate:
             copy_generated(rel_target, t_file)
             changed.append(f"{zone}/{rel}")
@@ -224,9 +314,12 @@ for tier, zone, meta in iter_tier_zones(manifest):
                 "source": f"{zone}/{rel.as_posix()}",
                 "target": rel_target.as_posix(),
                 "status": status,
-                "patch": patch_name,
+                "patch": patch_file,
                 "will_generate": will_generate,
-                "apply_eligible": will_generate,
+                "apply_eligible": tier_apply_eligible(manifest, tier),
+                "preview_mode": mode,
+                "operator_action": tier_operator_action(manifest, tier),
+                "safety_reason": tier_safety_reason(manifest, tier),
                 "note": meta.get("note"),
             }
         )
@@ -234,7 +327,9 @@ for tier, zone, meta in iter_tier_zones(manifest):
             f"- [{tier}] зона: {zone}\\n"
             f"  файл: {rel.as_posix()}\\n"
             f"  статус: {status}\\n"
-            f"  generated: {'yes' if will_generate else 'no'}"
+            f"  generated: {'yes' if will_generate else 'no'}\\n"
+            f"  why: {tier_safety_reason(manifest, tier)}\\n"
+            f"  action: {tier_operator_action(manifest, tier)}"
         )
 
 for tier, mapping in iter_materialized_files(manifest):
@@ -252,6 +347,9 @@ for tier, mapping in iter_materialized_files(manifest):
                 "status": "missing-source",
                 "will_generate": False,
                 "apply_eligible": False,
+                "preview_mode": mode,
+                "operator_action": tier_operator_action(manifest, tier),
+                "safety_reason": tier_safety_reason(manifest, tier),
             }
         )
         continue
@@ -261,13 +359,17 @@ for tier, mapping in iter_materialized_files(manifest):
     current = read_text(target)
     if current == rendered:
         continue
-    generated_target = generated_dir / target_rel
-    generated_target.parent.mkdir(parents=True, exist_ok=True)
-    generated_target.write_text(rendered, encoding="utf-8")
     patch_name = target_rel.replace("/", "__") + ".patch"
-    write_patch(patch_name, current, rendered, str(target), str(target))
-    changed.append(f"{source_rel} => {target_rel}")
-    safe_changed.append(target_rel)
+    patch_file = patch_name if tier_generates_patch_files(manifest, tier) else None
+    if patch_file:
+        write_patch(patch_file, current, rendered, str(target), str(target))
+    will_generate = should_materialize(manifest, tier, mode)
+    if will_generate:
+        generated_target = generated_dir / target_rel
+        generated_target.parent.mkdir(parents=True, exist_ok=True)
+        generated_target.write_text(rendered, encoding="utf-8")
+        changed.append(f"{source_rel} => {target_rel}")
+        safe_changed.append(target_rel)
     add_preview(
         {
             "tier": tier,
@@ -275,9 +377,12 @@ for tier, mapping in iter_materialized_files(manifest):
             "source": source_rel,
             "target": target_rel,
             "status": "missing-target" if not target.exists() else "drift",
-            "patch": patch_name,
-            "will_generate": tier == "safe",
-            "apply_eligible": tier == "safe",
+            "patch": patch_file,
+            "will_generate": will_generate,
+            "apply_eligible": tier_apply_eligible(manifest, tier),
+            "preview_mode": mode,
+            "operator_action": tier_operator_action(manifest, tier),
+            "safety_reason": tier_safety_reason(manifest, tier),
             "mode": mapping.get("mode", "copy"),
             "note": mapping.get("note"),
         }
@@ -285,7 +390,9 @@ for tier, mapping in iter_materialized_files(manifest):
     summary.append(
         f"- [{tier}] materialized: {source_rel}\\n"
         f"  target: {target_rel}\\n"
-        f"  режим: generated-sync"
+        f"  режим: {'generated-sync' if will_generate else 'preview-only'}\\n"
+        f"  why: {tier_safety_reason(manifest, tier)}\\n"
+        f"  action: {tier_operator_action(manifest, tier)}"
     )
 
 metadata = {
@@ -297,6 +404,7 @@ metadata = {
     "sync_contract_version": manifest.get("sync_contract_version", version_meta.get("sync_contract_version")),
     "mode": mode,
     "tiers": tier_counts,
+    "tier_order": TIER_ORDER,
     "safe_generated_files": len(safe_changed),
     "preview_items": len(preview),
 }
@@ -317,7 +425,8 @@ metadata = {
     "## Tiered preview\\n\\n"
     + "\\n".join(
         f"- {tier}: preview={tier_counts[tier]['total']}, "
-        f"generated={tier_counts[tier]['generated']}, missing={tier_counts[tier]['missing']}, "
+        f"generated={tier_counts[tier]['generated']}, patches={tier_counts[tier]['patch_files']}, "
+        f"missing={tier_counts[tier]['missing']}, "
         f"apply_eligible={tier_counts[tier]['apply_eligible']}"
         for tier in TIER_ORDER
     )

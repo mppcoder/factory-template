@@ -8,6 +8,8 @@ import sys
 from datetime import datetime, timezone
 from pathlib import Path
 
+DEFAULT_TIER_ORDER = ("safe-generated", "safe-clone", "advisory-review", "manual-project-owned")
+
 
 def run_drift(factory_root: Path, project_root: Path, script_dir: Path) -> dict:
     drift_script = script_dir / "check-template-drift.py"
@@ -61,6 +63,7 @@ def load_bundle(bundle: Path) -> dict:
         "safe_changed_files": safe_changed_files,
         "generated_files": generated_files,
         "metadata": metadata,
+        "tier_order": metadata.get("tier_order") or list(DEFAULT_TIER_ORDER),
         "preview_changes": preview_changes,
         "tier_preview": metadata.get("tiers", {}),
         "patch_summary_md": read_text(bundle / "patch-summary.md"),
@@ -69,6 +72,18 @@ def load_bundle(bundle: Path) -> dict:
         "rollback_files_count": len(rollback_state.get("files", [])) if isinstance(rollback_state, dict) else 0,
         "applied_at": rollback_state.get("applied_at") if isinstance(rollback_state, dict) else None,
     }
+
+
+def tier_order(patch: dict) -> list[str]:
+    return list(patch.get("tier_order") or DEFAULT_TIER_ORDER)
+
+
+def tier_group(tier: str) -> str:
+    if tier in {"safe-generated", "safe-clone", "safe"}:
+        return "safe"
+    if tier in {"advisory-review", "advisory"}:
+        return "advisory"
+    return "manual-only"
 
 
 def build_report(factory_root: Path, project_root: Path, patch_bundle: Path, script_dir: Path) -> dict:
@@ -117,14 +132,14 @@ def render_text(report: dict) -> str:
     summary = report["drift"]["summary"]
     tier_preview = patch.get("tier_preview") or {}
     lines = [
-        "Safe Upgrade UX Summary",
-        f"generated_at_utc: {report['generated_at_utc']}",
+        "Сводка безопасного downstream upgrade",
+        f"сгенерировано_utc: {report['generated_at_utc']}",
         f"factory_root: {report['factory_root']}",
-        f"project_root: {report['project_root']}",
+        f"downstream_project_root: {report['project_root']}",
         "",
-        "Drift summary:",
+        "Сводка drift:",
         (
-            f"- zones: ok={summary.get('zones_ok', 0)}, "
+            f"- зоны: ok={summary.get('zones_ok', 0)}, "
             f"drift={summary.get('zones_with_drift', 0)}, missing={summary.get('zones_missing', 0)}"
         ),
         (
@@ -133,21 +148,21 @@ def render_text(report: dict) -> str:
         ),
         f"- has_drift: {summary.get('has_drift', False)}",
         "",
-        "Tiered impact preview:",
+        "Предпросмотр по уровням:",
     ]
-    for tier in ("safe", "advisory", "manual-only"):
+    for tier in tier_order(patch):
         bucket = tier_preview.get(tier, {})
         drift_bucket = (summary.get("tiers") or {}).get(tier, {})
         lines.append(
             f"- {tier}: manifest_total={drift_bucket.get('total', 0)}, "
             f"preview={bucket.get('total', 0)}, generated={bucket.get('generated', 0)}, "
-            f"apply_eligible={bucket.get('apply_eligible', tier == 'safe')}"
+            f"apply_eligible={bucket.get('apply_eligible', tier in {'safe-generated', 'safe-clone'})}"
         )
     lines.extend(
         [
         "",
         "Patch bundle:",
-        f"- path: {patch['path']}",
+        f"- путь: {patch['path']}",
         f"- template_version: {patch.get('metadata', {}).get('template_version', 'unknown')}",
         f"- changed_files: {len(patch['changed_files'])}",
         f"- safe_changed_files: {len(patch['safe_changed_files'])}",
@@ -155,14 +170,14 @@ def render_text(report: dict) -> str:
         f"- rollback_state_exists: {patch['rollback_state_exists']}",
         f"- rollback_files_count: {patch['rollback_files_count']}",
         "",
-        "Commands:",
+        "Команды:",
         f"- export dry-run: {report['commands']['export_dry_run']}",
         f"- apply check: {report['commands']['apply_check']}",
-        f"- apply safe-zones: {report['commands']['apply_safe_zones']}",
-        f"- apply safe-zones (+snapshot): {report['commands']['apply_safe_zones_with_snapshot']}",
-        f"- rollback check: {report['commands']['rollback_check']}",
-        f"- rollback apply: {report['commands']['rollback_apply']}",
-        f"- rollback apply (+snapshot restore): {report['commands']['rollback_apply_with_snapshot_restore']}",
+        f"- применить safe zones: {report['commands']['apply_safe_zones']}",
+        f"- применить safe zones со snapshot: {report['commands']['apply_safe_zones_with_snapshot']}",
+        f"- проверить rollback: {report['commands']['rollback_check']}",
+        f"- выполнить rollback: {report['commands']['rollback_apply']}",
+        f"- выполнить rollback с восстановлением snapshot: {report['commands']['rollback_apply_with_snapshot_restore']}",
         "",
         f"safe_upgrade_verdict: {report['safe_upgrade_verdict']}",
         f"rollback_ready: {report['rollback_ready']}",
@@ -176,111 +191,169 @@ def render_markdown(report: dict) -> str:
     summary = report["drift"]["summary"]
     cmd = report["commands"]
     tier_preview = patch.get("tier_preview") or {}
+    preview_changes = patch.get("preview_changes") or []
+    safe_items = [item for item in preview_changes if tier_group(str(item.get("tier"))) == "safe"]
+    advisory_items = [item for item in preview_changes if tier_group(str(item.get("tier"))) == "advisory"]
+    manual_items = [item for item in preview_changes if tier_group(str(item.get("tier"))) == "manual-only"]
+    review_items = advisory_items + manual_items
     lines = [
-        "# Safe Upgrade UX Summary",
+        "# Сводка безопасного downstream upgrade",
         "",
-        f"- Generated (UTC): `{report['generated_at_utc']}`",
-        f"- Factory root: `{report['factory_root']}`",
-        f"- Downstream project root: `{report['project_root']}`",
-        f"- Template version: `{patch.get('metadata', {}).get('template_version', 'unknown')}`",
-        f"- Sync contract version: `{patch.get('metadata', {}).get('sync_contract_version', 'unknown')}`",
-        f"- Verdict: `{report['safe_upgrade_verdict']}`",
+        f"- Сгенерировано (UTC): `{report['generated_at_utc']}`",
+        f"- Корень factory: `{report['factory_root']}`",
+        f"- Корень downstream project: `{report['project_root']}`",
+        f"- Версия template: `{patch.get('metadata', {}).get('template_version', 'unknown')}`",
+        f"- Версия sync contract: `{patch.get('metadata', {}).get('sync_contract_version', 'unknown')}`",
+        f"- Вердикт: `{report['safe_upgrade_verdict']}`",
         "",
-        "## Drift Snapshot",
+        "## Снимок drift",
         "",
         (
-            "- Sync zones: "
+            "- Sync zones / зоны синхронизации: "
             f"`ok={summary.get('zones_ok', 0)}` / "
             f"`drift={summary.get('zones_with_drift', 0)}` / "
             f"`missing={summary.get('zones_missing', 0)}` / "
             f"`total={summary.get('zones_total', 0)}`"
         ),
         (
-            "- Materialized files: "
+            "- Materialized files / materialized-файлы: "
             f"`ok={summary.get('materialized_ok', 0)}` / "
             f"`issues={summary.get('materialized_with_issues', 0)}` / "
             f"`total={summary.get('materialized_total', 0)}`"
         ),
         "",
-        "## Tiered Impact Preview",
+        "## Предпросмотр по уровням",
         "",
-        "| Tier | Manifest Items | Preview Items | Generated For Apply | Apply Eligible |",
+        "| Уровень | Пункты manifest | Пункты preview | Сгенерировано для apply | Можно применять |",
         "| --- | ---: | ---: | ---: | --- |",
     ]
-    for tier in ("safe", "advisory", "manual-only"):
+    for tier in tier_order(patch):
         bucket = tier_preview.get(tier, {})
         drift_bucket = (summary.get("tiers") or {}).get(tier, {})
         lines.append(
             f"| `{tier}` | `{drift_bucket.get('total', 0)}` | `{bucket.get('total', 0)}` | "
-            f"`{bucket.get('generated', 0)}` | `{bucket.get('apply_eligible', tier == 'safe')}` |"
+            f"`{bucket.get('generated', 0)}` | `{bucket.get('apply_eligible', tier in {'safe-generated', 'safe-clone'})}` |"
         )
 
-    preview_changes = patch.get("preview_changes") or []
+    lines.extend(["", "## Что изменится", ""])
+    if safe_items:
+        lines.append("Безопасное применение переносит только сгенерированные файлы из уровней `safe-generated` и `safe-clone`:")
+        lines.extend(
+            f"- `{item.get('target')}` из `{item.get('source')}`"
+            for item in safe_items
+            if item.get("will_generate")
+        )
+    else:
+        lines.append("Безопасные сгенерированные файлы для apply отсутствуют.")
+    if advisory_items:
+        lines.append("")
+        lines.append("Файлы `advisory-review` содержат только подсказки для patch/diff и требуют ручного merge:")
+        lines.extend(f"- `{item.get('target')}` статус=`{item.get('status')}`" for item in advisory_items[:20])
+    if manual_items:
+        lines.append("")
+        lines.append("Файлы `manual-project-owned` являются только сигналом влияния и никогда не генерируются для apply:")
+        lines.extend(f"- `{item.get('target')}` статус=`{item.get('status')}`" for item in manual_items[:20])
+
+    lines.extend(["", "## Почему уровни безопасные или ручные", ""])
+    for tier in tier_order(patch):
+        tier_items = [item for item in preview_changes if item.get("tier") == tier]
+        if not tier_items:
+            continue
+        sample = next((item for item in tier_items if item.get("operator_action") or item.get("safety_reason")), tier_items[0])
+        tier_bucket = tier_preview.get(tier, {})
+        lines.append(
+            f"- `{tier}`: apply_eligible=`{tier_bucket.get('apply_eligible', sample.get('apply_eligible'))}`; "
+            f"причина: {sample.get('safety_reason') or 'см. manifest'}; "
+            f"действие оператора: {sample.get('operator_action') or 'см. manifest'}"
+        )
+
     if preview_changes:
-        lines.extend(["", "### Preview Items", ""])
+        lines.extend(["", "### Элементы preview", ""])
         for item in preview_changes[:40]:
             lines.append(
                 f"- `[{item.get('tier')}]` `{item.get('target')}` "
-                f"status=`{item.get('status')}` generated=`{item.get('will_generate')}`"
+                f"статус=`{item.get('status')}` generated=`{item.get('will_generate')}` "
+                f"mode=`{item.get('preview_mode', patch.get('metadata', {}).get('mode', 'unknown'))}`"
             )
         if len(preview_changes) > 40:
-            lines.append(f"- ...plus `{len(preview_changes) - 40}` more preview items")
+            lines.append(f"- ...и еще `{len(preview_changes) - 40}` preview items")
 
     lines.extend(
         [
         "",
-        "## Upgrade Bundle Snapshot",
+        "## Снимок upgrade bundle",
         "",
-        f"- Bundle path: `{patch['path']}`",
-        f"- Changed files in bundle: `{len(patch['changed_files'])}`",
-        f"- Safe generated targets: `{len(patch['safe_changed_files'])}`",
-        f"- Generated files to materialize: `{len(patch['generated_files'])}`",
-        f"- Rollback state present: `{patch['rollback_state_exists']}`",
-        f"- Rollback tracked files: `{patch['rollback_files_count']}`",
+        f"- Путь bundle: `{patch['path']}`",
+        f"- Измененных файлов в bundle: `{len(patch['changed_files'])}`",
+        f"- Безопасных generated targets: `{len(patch['safe_changed_files'])}`",
+        f"- Сгенерированных файлов для materialize: `{len(patch['generated_files'])}`",
+        f"- Rollback state присутствует: `{patch['rollback_state_exists']}`",
+        f"- Файлов под rollback tracking: `{patch['rollback_files_count']}`",
         ]
     )
 
     if patch["changed_files"]:
-        lines.extend(["", "### Changed Files", ""])
+        lines.extend(["", "### Измененные файлы", ""])
         lines.extend([f"- `{item}`" for item in patch["changed_files"]])
 
     if patch["generated_files"]:
-        lines.extend(["", "### Generated Files (safe materialization)", ""])
+        lines.extend(["", "### Сгенерированные файлы для безопасного применения", ""])
         lines.extend([f"- `{item}`" for item in patch["generated_files"]])
 
     lines.extend(
         [
             "",
-            "## Canonical Operator Commands",
+            "## Как откатить",
             "",
-            "1. Prepare/refresh bundle (dry-run):",
+            "- Rollback metadata обязательна и записывается до копирования безопасных сгенерированных файлов.",
+            "- `--rollback` восстанавливает отслеживаемые сгенерированные файлы или удаляет файлы, которых не было до apply.",
+            "- `--rollback --restore-project-snapshot` восстанавливает полный project snapshot, если apply запускался с `--with-project-snapshot`.",
+            "",
+            "## Что пользователь должен проверить",
+            "",
+        ]
+    )
+    if review_items:
+        lines.extend(
+            f"- `{item.get('target')}` (`{item.get('tier')}`): {item.get('operator_action') or 'manual review'}"
+            for item in review_items[:40]
+        )
+    else:
+        lines.append("- В этом bundle нет advisory/manual пунктов для review.")
+    lines.extend(
+        [
+            "",
+            "## Канонические команды оператора",
+            "",
+            "1. Подготовить или обновить bundle (dry-run):",
             f"```bash\n{cmd['export_dry_run']}\n```",
-            "2. Review bundle before apply:",
+            "2. Проверить bundle перед apply:",
             f"```bash\n{cmd['apply_check']}\n```",
-            "3. Apply safe zones:",
+            "3. Применить safe zones:",
             f"```bash\n{cmd['apply_safe_zones']}\n```",
-            "4. Apply safe zones with full-project snapshot (optional but safer for mixed manual sessions):",
+            "4. Применить safe zones с full-project snapshot (optional, но безопаснее для смешанных ручных сессий):",
             f"```bash\n{cmd['apply_safe_zones_with_snapshot']}\n```",
-            "5. Inspect rollback state:",
+            "5. Проверить rollback state:",
             f"```bash\n{cmd['rollback_check']}\n```",
-            "6. Roll back safe-zone materialization if needed:",
+            "6. Откатить safe-zone materialization при необходимости:",
             f"```bash\n{cmd['rollback_apply']}\n```",
-            "7. Roll back and restore full project snapshot (if snapshot mode was used):",
+            "7. Откатить и восстановить полный project snapshot, если использовался snapshot mode:",
             f"```bash\n{cmd['rollback_apply_with_snapshot_restore']}\n```",
             "",
-            "## UX Safety Notes",
+            "## Заметки по безопасности UX",
             "",
-            "- `--dry-run` and `--check` are read-only.",
-            "- `--apply-safe-zones` now creates rollback metadata before overwriting generated targets.",
-            "- `rollback-template-patch.sh --rollback` restores previous content (or removes file if it did not exist).",
-            "- Optional snapshot mode adds full-project restore path for manual changes outside generated safe-zones.",
+            "- `--dry-run` и `--check` работают только на чтение.",
+            "- `--apply-safe-zones` создает rollback metadata до overwrite generated targets.",
+            "- `rollback-template-patch.sh --rollback` восстанавливает прежнее содержимое или удаляет файл, если до apply его не было.",
+            "- Optional snapshot mode добавляет путь полного восстановления project для ручных изменений вне generated safe-zones.",
+            "- Refresh ChatGPT Project Sources не входит в default downstream sync path, кроме legacy/hybrid проектов, где repo-first instructions все еще дублируются вне repo.",
         ]
     )
     return "\n".join(lines) + "\n"
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description="Генерирует human-readable отчёт по downstream upgrade UX.")
+    parser = argparse.ArgumentParser(description="Генерирует человекочитаемый отчёт по downstream upgrade UX.")
     parser.add_argument("factory_root", help="Корень factory-template.")
     parser.add_argument("project_root", help="Корень downstream проекта.")
     parser.add_argument(

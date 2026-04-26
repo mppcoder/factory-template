@@ -14,16 +14,17 @@
 
 | Уровень | Значение | Поведение apply |
 | --- | --- | --- |
-| `safe` | Template-owned файлы, которые можно сгенерировать в patch bundle. | `apply-template-patch.sh --apply-safe-zones` может копировать generated files и записывает rollback metadata. |
-| `advisory` | Template references, полезные как справка, но потенциально конфликтующие с локальным workflow. | Только preview и patch; apply вручную после review. |
-| `manual-only` | Project-specific lifecycle content. | Только impact signal; никогда не генерируется для automatic apply. |
+| `safe-generated` | Сгенерированные файлы, принадлежащие шаблону: scenario pack, task blocks, examples, feedback starters, work templates. | `apply-template-patch.sh --apply-safe-zones` может копировать generated files и записывает rollback metadata до overwrite. |
+| `safe-clone` | Materialized clone files, например downstream root `AGENTS.md` из `template-repo/AGENTS.md`. | Controlled apply разрешен, потому что clone объявлен template-owned. |
+| `advisory-review` | Справочные docs, `.codex` guidance и `project-knowledge`. | Только preview/diff/merge guidance; автоматическая перезапись запрещена. |
+| `manual-project-owned` | Проектная lifecycle work: `greenfield`, `brownfield`, `work`. | Только сигнал влияния; patch/generation для automatic apply не создается. |
 
 ## Metadata bundle / metadata пакета
 
 Каждый export пишет:
 
-- `bundle-metadata.json`: bundle schema, template version, contract version, tier counts и количество generated safe-files.
-- `preview-changes.json`: tier, target, status и флаг генерации для apply по каждому файлу.
+- `bundle-metadata.json`: bundle schema, template version, contract version, tier counts с учетом режима и количество generated safe-files.
+- `preview-changes.json`: tier, target, status, preview mode, safety reason, operator action и флаг генерации для apply по каждому файлу.
 - `safe-changed-files.txt`: точные generated targets, которые safe apply может копировать.
 - `patch-summary.md`: человекочитаемое operator summary.
 
@@ -40,6 +41,9 @@ python3 workspace-packs/factory-ops/upgrade-report.py <factory-root> <downstream
 
 Используйте `--with-project-snapshot`, если человек редактировал файлы в той же upgrade-сессии.
 
+`--dry-run` собирает обычный preview bundle и materializes только safe-generated/safe-clone candidates в `generated-files/`.
+`--advisory` собирает review-only bundle: diff/preview сохраняются, но generated files для apply не создаются.
+
 ## Rollback flow / поток отката
 
 ```bash
@@ -52,7 +56,9 @@ bash workspace-packs/factory-ops/rollback-template-patch.sh <downstream-root>/_f
 
 ## Правила безопасности
 
-- Изменения `advisory` и `manual-only` не должны копироваться через `apply-template-patch.sh`.
+- Изменения `advisory-review` и `manual-project-owned` не должны копироваться через `apply-template-patch.sh`.
+- `project-knowledge` по умолчанию является `advisory-review`: используйте diff/merge guidance и переносите только то, что соответствует локальному project intent.
+- `work-templates` являются `safe-generated`, но live project work под `work/` является `manual-project-owned` и защищен от автоматической перезаписи.
 - Отсутствующие optional safe zones сообщаются как `optional-missing-project`, а не как hard failure.
-- Перед ручным копированием из advisory/manual-only patches проверьте локальный project intent и текущее состояние работы.
+- Перед ручным копированием из advisory-review patches проверьте локальный project intent и текущее состояние работы.
 - Если safe apply неожиданно перезаписал локальные edits, сначала зафиксируйте bug report и только потом делайте remediation.
