@@ -1,7 +1,7 @@
-version: 2.4.4
+version: 2.5.0
 template_name: template-repo
 language: ru
-release_line_2_5_status: ga-no-go
+release_line_2_5_status: ga-ready
 supports_modes:
 - greenfield
 - brownfield
@@ -11,4 +11,4 @@ supports_project_presets:
 - brownfield-with-repo-integration
 - brownfield-with-repo-audit
 - brownfield-without-repo
-factory_version: 2.4.4
+factory_version: 2.5.0

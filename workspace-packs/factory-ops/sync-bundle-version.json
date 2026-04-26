@@ -3,7 +3,7 @@
   "sync_contract_version": 3,
   "bundle_format": "factory-template-sync-bundle",
   "template_version_source": "VERSION.md",
-  "template_version": "2.4.4",
+  "template_version": "2.5.0",
   "supported_tiers": ["safe-generated", "safe-clone", "advisory-review", "manual-project-owned"],
   "safe_apply_modes": ["--apply-safe-zones"],
   "rollback_modes": ["--rollback", "--rollback --restore-project-snapshot"],

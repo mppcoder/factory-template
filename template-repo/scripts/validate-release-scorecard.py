@@ -25,7 +25,7 @@ def require_scalar(data: dict, key: str) -> str:
     return str(value)
 
 
-def validate_required_fields(truth: dict) -> None:
+def validate_required_fields(root: Path, truth: dict) -> None:
     for key in [
         "canonical_file",
         "release_line",
@@ -39,10 +39,17 @@ def validate_required_fields(truth: dict) -> None:
         require_scalar(truth, key)
     if truth.get("canonical_file") != str(SCORECARD_PATH):
         raise AutomationError("canonical_file должен указывать на docs/releases/release-scorecard.yaml")
-    if truth.get("ga_ready") is not False:
-        raise AutomationError("ga_ready должен быть false, пока 2.5 не объявлен GA")
+    ga_ready = truth.get("ga_ready")
+    if ga_ready not in {True, False}:
+        raise AutomationError("ga_ready должен быть boolean")
     if truth.get("rc_ready") is not True:
         raise AutomationError("rc_ready должен быть true для текущего RC closeout candidate")
+    if ga_ready is True:
+        if str(truth.get("status", "")).strip() not in {"ga-ready", "ga-released"}:
+            raise AutomationError("ga_ready=true требует status `ga-ready` или `ga-released`")
+        evidence_path = Path("docs/releases/2.5-ga-kpi-evidence.md")
+        if not (root / evidence_path).exists():
+            raise AutomationError("ga_ready=true требует docs/releases/2.5-ga-kpi-evidence.md")
 
 
 def validate_gates(truth: dict) -> None:
@@ -111,7 +118,7 @@ def main() -> int:
             raise AutomationError(f"отсутствует {SCORECARD_PATH}")
         data = require_mapping(read_yaml(scorecard_path), str(SCORECARD_PATH))
         truth = require_mapping(data.get("release_truth"), "release_truth")
-        validate_required_fields(truth)
+        validate_required_fields(root, truth)
         validate_gates(truth)
         validate_doc_assertions(root, truth)
         validate_forbidden_markers(root, truth)

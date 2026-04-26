@@ -1,14 +1,18 @@
 # Журнал изменений шаблона
 
 ## [Unreleased]
+
+## [2.5.0] - 2026-04-26
 ### Добавлено
 - canonical `codex-model-routing.yaml` для model availability policy and selected profile/model/reasoning mapping
 - `scripts/check-codex-model-catalog.py` и reusable catalog helper для live checks через `codex debug models`, proposal generation и fixture-based validation
+- `scripts/validate-25-ga-kpi-evidence.py` для проверки GA KPI evidence перед `ga_ready: true`
 
 ### Изменено
 - completion/handoff routing layer теперь выдает явный `Launch в Codex` boundary с launcher command вместо неявного ожидания, что новый чат сам переключит route
 - source-facing routing docs и generated `.chatgpt` guidance теперь везде различают advisory handoff text и executable profile switch
 - resolver/bootstrap/launcher/validators теперь читают canonical model routing, сохраняют plan-mode reasoning и фиксируют catalog status в normalized handoffs
+- template docs, launcher metadata и generated versioning strings синхронизированы с релизом `2.5.0`
 
 ### Исправлено
 - устранен defect completion/handoff layer: handoff package больше не подменяет новый task launch понятием "новый чат"
@@ -17,6 +21,7 @@
 - зафиксирован и исправлен `bug-031`: closeout guidance и validators теперь запрещают типовые англоязычные человекочитаемые headings в финальном closeout
 - зафиксирован и исправлен `bug-032`: `.chatgpt/codex-input.md` и normalized handoff теперь проходят language-contract validation для upstream ChatGPT handoff
 - исправлен `bug-033`: active source-facing человекочитаемый слой очищен от английских headings, documented archival exceptions закреплены отдельным policy artifact, language validator подключен к quick verify
+- закрыт GA evidence gap для `G25-GA`: novice timing, controlled pilot, safe-sync report и handoff loop register стали проверяемыми артефактами
 
 ## [2.4.4] - 2026-04-22
 ### Добавлено

@@ -1,24 +1,21 @@
-# Отчет TEST REPORT v2.5 GA no-go
+# Отчет TEST REPORT v2.5.0 GA
 
 Status source of truth: `docs/releases/release-scorecard.yaml`.
-Current scorecard state: `2.5 GA No-Go (KPI evidence gap)`.
+Current scorecard state: `2.5.0 GA Ready`.
 TEST_REPORT.md is verification evidence, not the canonical release-status source.
 
-## GA decision evidence / доказательства решения
+## Доказательства решения GA
 
-`G25-GA` получает no-go на `2026-04-26`: RC evidence остается зеленым, но full-KPI evidence для GA неполный.
+`G25-GA` получает pass на `2026-04-26`: RC evidence остается зеленым, а full-KPI evidence для GA теперь измерим и валиден.
 
-Missing full-KPI evidence:
-- `M25-01`: нет timed first-success measurement против порога `<= 25` минут.
-- `M25-02`: нет controlled pilot checklist с sample size и completion percentage.
-- `M25-03`: нет manual intervention count и support prompts register.
-- `M25-04`: нет downstream safe-sync success-rate evidence против порога `>= 99%`.
-- `M25-06`: нет aggregate handoff rework-loop register против порога `<= 1`.
-
-Confirmed closeout facts:
-- `M25-05`: текущие verification docs не фиксируют открытый critical defect; blocker относится к evidence gap.
-- `M25-07`: release-facing docs синхронизированы на состояние no-go / not GA.
-- `M25-08`: текущий closeout начат с чтения `template-repo/scenario-pack/00-master-router.md`.
+- `M25-01`: timed first-success measurement ниже `25` минут.
+- `M25-02`: controlled pilot checklist фиксирует `9/9`, `100%`.
+- `M25-03`: manual intervention count равен `0`.
+- `M25-04`: downstream safe-sync report фиксирует `6/6`, `100%`.
+- `M25-05`: открытых critical defects в текущем verification scope нет.
+- `M25-06`: aggregate handoff rework-loop register фиксирует max `1`.
+- `M25-07`: release-facing docs синхронизированы на состояние GA.
+- `M25-08`: текущий remediation начат с чтения `template-repo/scenario-pack/00-master-router.md`.
 
 Blocker report: `reports/bugs/2026-04-26-25-ga-readiness-gap.md`.
 
@@ -56,7 +53,7 @@ Blocker report: `reports/bugs/2026-04-26-25-ga-readiness-gap.md`.
 Evidence / quality / DoD до смыслового наполнения артефактов не проходят.
 
 ## Фактический результат
-- `bash template-repo/scripts/verify-all.sh ci` проходит на `2026-04-26` и подтверждает текущий no-go scorecard.
+- `bash template-repo/scripts/verify-all.sh ci` проходит на `2026-04-26` и подтверждает текущий GA scorecard.
 - `bash CLEAN_VERIFY_ARTIFACTS.sh` проходит на `2026-04-26`.
 - `bash PRE_RELEASE_AUDIT.sh` проходит на `2026-04-26`.
 - `bash RELEASE_BUILD.sh /tmp/factory-template-2.5.zip` проходит на `2026-04-26`; собран архив `/tmp/factory-template-2.5.zip`.
@@ -114,12 +111,13 @@ Evidence / quality / DoD до смыслового наполнения арте
 - Defect-capture по утечке английского текста в downstream sync v3 зафиксирован и исправлен in-scope: `reports/bugs/2026-04-26-downstream-sync-v3-language-leak.md`.
 - Defect-capture по пропуску автозавершения closeout sync зафиксирован и исправлен in-scope: `reports/bugs/2026-04-26-autocloseout-sync-skip.md`.
 
-## Что вошло в релиз 2.4.4
-- canonical factory hierarchy очищена от historical/product-specific naming в core/release-facing слоях;
-- presets, manifests и docs tree синхронизированы под нейтральные universal names;
-- optional domain reference и workspace bootstrap layers проходят через release-facing verify как optional/reference слои;
-- launcher compatibility aliases подтверждают безопасный переход со старых preset names;
-- template/meta/root versioning и release metadata синхронизированы под `2.4.4`.
+## Что вошло в релиз 2.5.0
+- full-KPI evidence layer для `G25-GA`;
+- timed novice onboarding measurements и manual intervention counters;
+- controlled pilot checklist для beginner-first path;
+- downstream safe-sync success-rate report;
+- validator `validate-25-ga-kpi-evidence.py`;
+- template/meta/root versioning и release metadata синхронизированы под `2.5.0`.
 
 ## Известные ограничения
 - `MATRIX_TEST.sh` остаётся representative prerelease runner, а не exhaustive full-matrix coverage для всех 22 допустимых комбинаций;
@@ -133,7 +131,7 @@ Evidence / quality / DoD до смыслового наполнения арте
 ## Открытые вопросы
 - По bug set `bug-026/027/028` критичных открытых дефектов после remediation не осталось.
 - Follow-up для будущего улучшения (не blocker текущего RC): расширить novice long-flow с synthetic smoke до более предметных domain сценариев в downstream проектах.
-- GA blocker: full-KPI evidence отсутствует для `M25-01`, `M25-02`, `M25-03`, `M25-04` и `M25-06`; `G25-GA` не закрыт.
+- GA blocker `reports/bugs/2026-04-26-25-ga-readiness-gap.md` закрыт после добавления KPI evidence.
 
 ## Статус CI baseline
 - Статус: `green` (GitHub Actions run `24840192862`, 2026-04-23: `verify-baseline` = success, `release-bundle-dry-run` = success; локально подтверждено 2026-04-26 через `verify-all.sh ci`).

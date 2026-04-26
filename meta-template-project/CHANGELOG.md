@@ -1,5 +1,10 @@
 # Журнал изменений мета-проекта
 
+## [2.5.0] - 2026-04-26
+### Изменено
+- meta-template notes и version layer синхронизированы с GA-релизом `2.5.0`
+- release-facing описание фабрики теперь отражает full-KPI evidence для `G25-GA`
+
 ## [2.4.4] - 2026-04-22
 ### Изменено
 - meta-template notes и version layer синхронизированы с patch-релизом `2.4.4`

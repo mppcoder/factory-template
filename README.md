@@ -1,4 +1,4 @@
-# Русское ядро фабрики проектов v2.4.4
+# Русское ядро фабрики проектов v2.5.0
 
 Это стабилизационный релиз фабрики проектов для связки:
 
@@ -9,9 +9,9 @@
 Следующая линия `2.5` уже оформлена как отдельная release-программа: не только hardening процесса, но и beginner-first productization с UI-friendly контуром и безопасной эволюцией downstream-репозиториев.
 
 Release truth source: `docs/releases/release-scorecard.yaml`.
-Current 2.5 stage: `release-decision (GA no-go)`.
-Status: `2.5 GA No-Go (KPI evidence gap)`.
-GA-ready: `false`.
+Current 2.5 stage: `release-decision (GA passed)`.
+Status: `2.5.0 GA Ready`.
+GA-ready: `true`.
 
 ## Канонические entry modes
 
@@ -77,7 +77,7 @@ Launcher ведет по трем маршрутам:
 ## Подготовка после распаковки
 
 ```bash
-cd factory-v2.4.4
+cd factory-v2.5.0
 bash POST_UNZIP_SETUP.sh
 bash onboarding-smoke/run-novice-e2e.sh
 bash MATRIX_TEST.sh
@@ -310,30 +310,30 @@ bash PHASE_DETECTION_TEST.sh
 - временные каталоги smoke/matrix прогонов;
 - логи и служебные следы локальной сборки.
 
-## Что нового в релизе 2.4.4
-- canonical core-иерархия очищена от продуктовых/исторических имен в release-facing слоях;
-- presets, workspace packs и example/reference contours переведены на универсальные factory names;
-- предметные reference cases вынесены из core-дерева в optional domain layer;
-- launcher и preset application принимают старые preset names только через explicit compatibility layer;
-- release docs, manifests, template metadata и examples синхронизированы под `factory-v2.4.4`.
+## Что нового в релизе 2.5.0
+- `G25-GA` закрыт как passed на основании измеримых `M25-*` evidence;
+- novice onboarding smoke теперь фиксирует duration и manual intervention count по каждому сценарию;
+- добавлен consolidated KPI evidence: `docs/releases/2.5-ga-kpi-evidence.md`;
+- добавлен validator `validate-25-ga-kpi-evidence.py`, который не дает включить `ga_ready: true` без измеримых артефактов;
+- release docs, manifests, template metadata и examples синхронизированы под `factory-v2.5.0`.
 
 ## Программа релиза 2.5 (release truth)
 - Release truth source: `docs/releases/release-scorecard.yaml`;
-- Current 2.5 stage: `release-decision (GA no-go)`;
-- Status: `2.5 GA No-Go (KPI evidence gap)`;
-- GA-ready: `false`;
+- Current 2.5 stage: `release-decision (GA passed)`;
+- Status: `2.5.0 GA Ready`;
+- GA-ready: `true`;
 - канонический план зафиксирован в `docs/releases/2.5-roadmap.md`;
 - success metrics и пороги MVP/full 2.5 зафиксированы в `docs/releases/2.5-success-metrics.md`;
 - трек `2.5-A` закрепляет engineering hardening (валидаторы, устойчивость, безопасные default paths);
 - трек `2.5-B` закрепляет beginner-first productization (UI-friendly entry path, понятный onboarding, снижение порога входа);
-- выпуск `2.5` считается полным только при совместном закрытии `2.5-A` и `2.5-B`, чтобы релиз не остался "только process-hardening".
-- `G25-GA` получил no-go на `2026-04-26`, потому что full-KPI evidence отсутствует для части метрик.
+- выпуск `2.5` закрыт как полный только после совместного подтверждения `2.5-A` и `2.5-B`.
+- `G25-GA` прошел на `2026-04-26`, потому что full-KPI evidence добавлен и валидируется.
 
 ## Как читать release truth
 
 Начинайте с `docs/releases/release-scorecard.yaml`. Это machine-readable release state, который используют pre-release и CI gates. Roadmap/current-state/README/checklist объясняют то же состояние для человека; `TEST_REPORT.md` фиксирует verification evidence и не должен считаться отдельным release-status source.
 
-## Базовый функционал ветки 2.4.4
+## Базовый функционал ветки 2.5.0
 - `factory-template` поддерживает greenfield, brownfield без repo и brownfield с repo в одном repo-first контуре;
 - advisory/policy layer и executable routing layer остаются явным образом разделены;
 - defect-capture, handoff, self-handoff, verification, release-followup и completion package описаны как обязательные контуры;

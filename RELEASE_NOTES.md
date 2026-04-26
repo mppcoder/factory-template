@@ -1,27 +1,31 @@
 # Release notes / заметки релиза
 
-## 2.5 - GA No-Go (KPI evidence gap) - 2026-04-26
+## 2.5.0 - 2026-04-26
 
-### Решение
+### Решение release
 
-`2.5` не объявляется GA. `G25-GA` заблокирован, потому что RC evidence зеленый, но full-KPI evidence не хватает для честного подтверждения порогов `docs/releases/2.5-success-metrics.md`.
+`2.5` объявляется GA-ready. `G25-GA` закрыт после добавления измеримых full-KPI evidence для всех `M25-*` метрик.
 
-### Что подтверждено
+### Что подтверждено для GA
 
-- RC closeout остается пригодным для downstream trial.
-- Novice onboarding smoke и downstream upgrade UX evidence остаются полезными RC-артефактами.
-- Открытых critical defects по текущим verification docs не выявлено.
-- Repo-first routing для этого closeout соблюден: master router прочитан до implementation.
+- `M25-01`: novice path фиксирует time-to-first-success ниже `25` минут.
+- `M25-02`: controlled pilot checklist фиксирует `9/9`, `100%`.
+- `M25-03`: manual intervention count равен `0`.
+- `M25-04`: downstream safe-sync report фиксирует `6/6`, `100%`.
+- `M25-05`: открытых critical defects в текущем verification scope нет.
+- `M25-06`: handoff rework loops не превышают `1`.
+- `M25-07`: release-facing docs синхронизированы с scorecard.
+- `M25-08`: repo-first routing соблюден.
 
-### Что блокирует GA
+### Что добавлено
 
-- нет timed first-success measurement для `M25-01`;
-- нет controlled pilot completion rate для `M25-02`;
-- нет manual intervention count для `M25-03`;
-- нет downstream safe-sync success-rate population для `M25-04`;
-- нет aggregate handoff rework-loop register для `M25-06`.
+- `docs/releases/2.5-ga-kpi-evidence.md`;
+- `reports/release/2.5-controlled-pilot-checklist.md`;
+- `reports/release/2.5-downstream-safe-sync-report.md`;
+- `.chatgpt/handoff-rework-register.yaml`;
+- `template-repo/scripts/validate-25-ga-kpi-evidence.py`.
 
-Blocker report: `reports/bugs/2026-04-26-25-ga-readiness-gap.md`.
+Blocker report `reports/bugs/2026-04-26-25-ga-readiness-gap.md` закрыт как remediated.
 
 ## 2.5 - RC Closeout Candidate (not GA) - 2026-04-23
 

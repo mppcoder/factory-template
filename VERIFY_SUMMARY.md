@@ -19,10 +19,10 @@
 
 ## Решение G25-GA
 
-- Статус: no-go.
-- Причина: full-KPI evidence отсутствует для `M25-01`, `M25-02`, `M25-03`, `M25-04` и `M25-06`.
-- Blocker report: `reports/bugs/2026-04-26-25-ga-readiness-gap.md`.
-- `ga_ready` остается `false`; release-facing docs не должны объявлять GA.
+- Статус: pass.
+- Причина: full-KPI evidence зафиксирован для всех `M25-*`.
+- Evidence: `docs/releases/2.5-ga-kpi-evidence.md`.
+- `ga_ready` установлен в `true`; release-facing docs синхронизированы с scorecard.
 
 ## Проверенные слои
 
@@ -48,7 +48,7 @@
 - phase detection валидируется rule-based по changed paths, а не через более глубокий semantic анализ repo intent
 - `release` phase теперь требует и changed-path signals, и отмеченные intent markers в `RELEASE_CHECKLIST.md`
 - `bugfix-drift` phase теперь требует и bug/validator path signals, и bug-report intent markers в `reports/bugs/*.md`
-- release/no-release решение для `G25-GA` зафиксировано как no-go; следующий GA retry требует новых KPI-артефактов
+- release decision для `G25-GA` зафиксирован как GA pass; дальнейшие KPI расширения не блокируют текущий release
 - git-операции в этом окружении нужно выполнять последовательно; параллельный `commit/push/fetch/remote change` может давать ложные результаты
 - auto GitHub Release publication зависит от доступности `gh` и не должна считаться гарантированной без отдельной проверки auth/runtime
 

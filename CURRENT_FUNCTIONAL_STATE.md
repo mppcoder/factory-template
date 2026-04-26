@@ -44,6 +44,7 @@
 - guided launcher теперь поддерживает полный beginner path через `--guided`: preflight, создание проекта, проверка `project-knowledge`, workspace первой задачи и следующий шаг оператора
 - novice E2E теперь отдельно подтверждает `--guided` для greenfield, brownfield без repo, brownfield с repo и `--continue` flow
 - downstream apply-safe-zones теперь сохраняет rollback-state и backup, а `rollback-template-patch.sh` выполняет воспроизводимый откат; для mixed manual sessions доступен full-project snapshot restore
+- novice E2E теперь фиксирует duration и manual intervention count, а `validate-25-ga-kpi-evidence.py` валидирует full-KPI evidence перед `ga_ready: true`
 - handoff source files и validator `validate-codex-task-pack.py` теперь явно требуют фиксировать приоритет repo rules при передаче задачи в Codex
 - handoff layer теперь явно запрещает выдачу handoff через файл или несколькими блоками: пользователю разрешён только один цельный блок для вставки в Codex
 - generated project tooling теперь включает validator `validate-handoff-response-format.py`, который проверяет сам markdown-ответ на single-block handoff и запрещает file-based handoff patterns
@@ -71,9 +72,9 @@
 
 ## Программа 2.5 (release truth)
 - release truth source: `docs/releases/release-scorecard.yaml`
-- текущая стадия: `release-decision (GA no-go)`
-- статус: `2.5 GA No-Go (KPI evidence gap)`
-- GA-ready: `false`
+- текущая стадия: `release-decision (GA passed)`
+- статус: `2.5.0 GA Ready`
+- GA-ready: `true`
 - канонический roadmap: `docs/releases/2.5-roadmap.md`
 - канонические метрики: `docs/releases/2.5-success-metrics.md`
 - `TEST_REPORT.md` является evidence/reporting layer, а не отдельным источником статуса релиза
@@ -81,8 +82,8 @@
 - scorecard gates нормализованы в `docs/releases/release-scorecard.yaml`
 - novice E2E acceptance (все canonical presets + guided launcher smoke) зафиксирован в `onboarding-smoke/ACCEPTANCE_REPORT.md`
 - downstream upgrade UX closeout зафиксирован в `UPGRADE_SUMMARY.md`
-- `G25-GA` получил no-go на `2026-04-26`: full-KPI evidence отсутствует для `M25-01`, `M25-02`, `M25-03`, `M25-04` и `M25-06`
-- blocker report: `reports/bugs/2026-04-26-25-ga-readiness-gap.md`
+- `G25-GA` прошел на `2026-04-26`: full-KPI evidence зафиксирован для всех `M25-*`
+- consolidated evidence: `docs/releases/2.5-ga-kpi-evidence.md`
 
 ## Что работает частично
 - matrix runner как единый источник истины
@@ -93,15 +94,14 @@
 - phase-aware export/reference packs остаются вспомогательным слоем, а не каноническим хранилищем сценариев
 - эвристика классификации `task_class` пока keyword-based, а не semantic classifier
 - release-facing описание дерева проекта и workflow требует дальнейшего поддержания в sync при каждой новой process-доработке шаблона
-- `2.5` не объявлен GA: текущая попытка закрытия `G25-GA` завершилась no-go из-за missing full-KPI evidence
+- `2.5` объявлен GA-ready после добавления измеримого KPI evidence
 
 ## Что еще не закрыто
 - финальная проверка на реальных greenfield и brownfield проектах
 - окончательная polish-фаза для runner layer и operational reports
 - отдельный release-facing validator/report для curated pack quality beyond structural checks
 - дальнейшее production hardening runtime-нестабильности git sync beyond current fallback strategy
-- KPI remediation перед повторной GA-попыткой для `2.5`
-- подтверждение beginner-first KPI и downstream safety KPI из `docs/releases/2.5-success-metrics.md`
+- дальнейшее расширение KPI evidence за пределы repo-controlled pilot к внешним downstream программам
 - дальнейшее расширение novice acceptance от parity-level long-flow smoke к предметным domain-сценариям реальных downstream систем
 
 ## Граница core

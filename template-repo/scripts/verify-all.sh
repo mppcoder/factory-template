@@ -76,6 +76,7 @@ run_quick() {
   run_step "deploy-dry-run-smoke-starter-app-db" run_deploy_dry_run_smoke
   run_step "validate-spec-traceability" python3 "$ROOT/template-repo/scripts/validate-spec-traceability.py" "$ROOT"
   run_step "validate-release-scorecard" python3 "$ROOT/template-repo/scripts/validate-release-scorecard.py" "$ROOT"
+  run_step "validate-25-ga-kpi-evidence" python3 "$ROOT/template-repo/scripts/validate-25-ga-kpi-evidence.py" "$ROOT"
   run_step "validate-human-language-layer" python3 "$ROOT/template-repo/scripts/validate-human-language-layer.py" "$ROOT"
   run_step "PHASE_DETECTION_TEST" bash "$ROOT/PHASE_DETECTION_TEST.sh"
   run_step "VALIDATE_RELEASE_DECISION" bash "$ROOT/VALIDATE_RELEASE_DECISION.sh"
@@ -89,6 +90,7 @@ run_full() {
   run_step "SMOKE_TEST" bash "$ROOT/SMOKE_TEST.sh"
   run_step "EXAMPLES_TEST" bash "$ROOT/EXAMPLES_TEST.sh"
   run_step "MATRIX_TEST" bash "$ROOT/MATRIX_TEST.sh"
+  run_step "validate-25-ga-kpi-evidence (after full evidence)" python3 "$ROOT/template-repo/scripts/validate-25-ga-kpi-evidence.py" "$ROOT"
   run_step "CLEAN_VERIFY_ARTIFACTS (before audit)" bash "$ROOT/CLEAN_VERIFY_ARTIFACTS.sh"
   run_step "PRE_RELEASE_AUDIT" bash "$ROOT/PRE_RELEASE_AUDIT.sh"
 }

@@ -1,5 +1,11 @@
 # Общая история изменений фабрики
 
+## 2.5.0
+- `G25-GA` закрыт как passed после добавления измеримых evidence для всех `M25-*`
+- novice onboarding smoke фиксирует duration и manual intervention count
+- downstream safe-sync report и handoff rework register добавлены в release evidence
+- release bundle, manifests и generated project metadata синхронизированы под `factory-v2.5.0`
+
 ## 2.4.4
 - canonical preset naming переведён на нейтральные factory names с compatibility aliases для legacy names
 - `optional-domain-packs/openclaw-reference` и `workspace-packs/vscode-codex-bootstrap` закреплены как некорневые optional/reference layers

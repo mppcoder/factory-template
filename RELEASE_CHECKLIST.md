@@ -3,13 +3,13 @@
 ## Scope / область
 
 - Repo: `factory-template`
-- Current release line: `2.4.4`
-- Current working section in changelog: `2.4.4`
-- Next planned release program line: `2.5`
+- Current release line: `2.5.0`
+- Current working section in changelog: `2.5.0`
+- Next planned release program line: `none`
 - Release truth source: `docs/releases/release-scorecard.yaml`
-- Current 2.5 stage: `release-decision (GA no-go)`
-- Status: `2.5 GA No-Go (KPI evidence gap)`
-- GA-ready: `false`
+- Current 2.5 stage: `release-decision (GA passed)`
+- Status: `2.5.0 GA Ready`
+- GA-ready: `true`
 
 ## Intent signals / сигналы намерения
 
@@ -84,7 +84,7 @@
 ## Go / no-go решение
 
 - [x] release bundle можно собирать
-- [x] явно зафиксирован `no-release` с причиной
+- [x] явно зафиксирован `release` для `2.5.0`
 
 ## 2.5 program framing gate (closed)
 
@@ -101,11 +101,11 @@
 - [x] `brownfield novice` E2E зеленый (`onboarding-smoke/ACCEPTANCE_REPORT.md`)
 - [x] `TEST_REPORT.md` и release-facing docs обновлены как beginner-first + hardening, а не docs-only polish
 - [x] инцидентные дефекты из verify-прохода зафиксированы через defect-capture path
-- [ ] GA-ready declared
-- [x] GA no-go зафиксирован: `reports/bugs/2026-04-26-25-ga-readiness-gap.md`
+- [x] GA-ready declared
+- [x] GA KPI evidence зафиксирован: `docs/releases/2.5-ga-kpi-evidence.md`
 
 ## 2.5 scorecard gates
 
 - [x] `G25-0` — program framing и scope normalization закрыты.
 - [x] `G25-RC` — RC closeout evidence прошел для downstream trial.
-- [x] `G25-GA` — no-go: full KPI evidence gap зафиксирован.
+- [x] `G25-GA` — passed: full KPI evidence подтвержден.

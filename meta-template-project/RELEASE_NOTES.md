@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+## 2.5.0
+- `G25-GA` закрыт как passed на основании full-KPI evidence.
+- release docs, manifests, launcher metadata и closeout artifacts синхронизированы под `factory-v2.5.0`.
+- добавлен validator для GA KPI evidence перед `ga_ready: true`.
+
 ## 2.4.4
 - canonical preset naming переведён на нейтральные factory names с compatibility aliases для legacy preset names
 - предметный reference-case вынесен из core/release-facing слоя в optional domain pack

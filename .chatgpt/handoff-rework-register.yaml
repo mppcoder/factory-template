@@ -1,0 +1,17 @@
+schema_version: 1
+scope: "release-2.5-ga"
+metric: "M25-06"
+threshold:
+  max_rework_loops_per_task: 1
+entries:
+  - task_id: "stage-7-ga-closeout"
+    source: "chatgpt-handoff"
+    rework_loops: 0
+    evidence: "Initial no-go was evidence-correct and did not require handoff rewrite."
+  - task_id: "stage-8-ga-kpi-remediation"
+    source: "direct-codex-request"
+    rework_loops: 1
+    evidence: "User requested remediation after no-go; repo-first self-handoff was completed before implementation."
+result:
+  max_rework_loops: 1
+  status: "pass"

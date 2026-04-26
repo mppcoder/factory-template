@@ -70,8 +70,10 @@ run_wizard_scenario() {
 
   local scenario_root="$RUN_ROOT/$scenario_key"
   local log_file="$RUN_ROOT/${scenario_key}.txt"
+  local start_ts end_ts duration_seconds
   mkdir -p "$scenario_root"
 
+  start_ts="$(date +%s)"
   (
     cd "$scenario_root"
     printf '%s\n%s\n%s\n%s\ny\ny\n' \
@@ -87,8 +89,10 @@ run_wizard_scenario() {
   fi
 
   validate_generated_project "$project_root" "$expected_preset" "$log_file"
+  end_ts="$(date +%s)"
+  duration_seconds=$((end_ts - start_ts))
 
-  printf '%s|%s|%s|%s\n' "$scenario_key" "$project_root" "$expected_preset" "$log_file"
+  printf '%s|%s|%s|%s|%s|0\n' "$scenario_key" "$project_root" "$expected_preset" "$log_file" "$duration_seconds"
 }
 
 run_launcher_scenario() {
@@ -102,8 +106,10 @@ run_launcher_scenario() {
 
   local scenario_root="$RUN_ROOT/$scenario_key"
   local log_file="$RUN_ROOT/${scenario_key}.txt"
+  local start_ts end_ts duration_seconds
   mkdir -p "$scenario_root"
 
+  start_ts="$(date +%s)"
   (
     cd "$scenario_root"
     local command=(
@@ -131,8 +137,10 @@ run_launcher_scenario() {
   fi
 
   validate_generated_project "$project_root" "$expected_preset" "$log_file"
+  end_ts="$(date +%s)"
+  duration_seconds=$((end_ts - start_ts))
 
-  printf '%s|%s|%s|%s\n' "$scenario_key" "$project_root" "$expected_preset" "$log_file"
+  printf '%s|%s|%s|%s|%s|0\n' "$scenario_key" "$project_root" "$expected_preset" "$log_file" "$duration_seconds"
 }
 
 run_continue_scenario() {
@@ -143,8 +151,10 @@ run_continue_scenario() {
 
   local scenario_root="$RUN_ROOT/$scenario_key"
   local log_file="$RUN_ROOT/${scenario_key}.txt"
+  local start_ts end_ts duration_seconds
   mkdir -p "$scenario_root"
 
+  start_ts="$(date +%s)"
   (
     cd "$scenario_root"
     FACTORY_REGISTRY_MODE=skip python3 "$ROOT/template-repo/scripts/factory-launcher.py" \
@@ -167,8 +177,10 @@ run_continue_scenario() {
   fi
 
   validate_generated_project "$project_root" "$expected_preset" "$log_file"
+  end_ts="$(date +%s)"
+  duration_seconds=$((end_ts - start_ts))
 
-  printf '%s|%s|%s|%s\n' "$scenario_key" "$project_root" "$expected_preset" "$log_file"
+  printf '%s|%s|%s|%s|%s|0\n' "$scenario_key" "$project_root" "$expected_preset" "$log_file" "$duration_seconds"
 }
 
 RESULTS=()
@@ -269,20 +281,42 @@ cat <<EOF
 EOF
 
 index=1
+passed_count=0
+total_count="${#RESULTS[@]}"
+max_duration_seconds=0
+total_interventions=0
 for result in "${RESULTS[@]}"; do
-  IFS='|' read -r SCENARIO_KEY PROJECT_ROOT EXPECTED_PRESET LOG_FILE <<<"$result"
+  IFS='|' read -r SCENARIO_KEY PROJECT_ROOT EXPECTED_PRESET LOG_FILE DURATION_SECONDS MANUAL_INTERVENTIONS <<<"$result"
+  passed_count=$((passed_count + 1))
+  total_interventions=$((total_interventions + MANUAL_INTERVENTIONS))
+  if [ "$DURATION_SECONDS" -gt "$max_duration_seconds" ]; then
+    max_duration_seconds="$DURATION_SECONDS"
+  fi
   cat <<EOF
 $index. \`$SCENARIO_KEY\`
 - status: \`green\`
 - expected preset: \`$EXPECTED_PRESET\`
 - generated project: \`$PROJECT_ROOT\`
 - log: \`$LOG_FILE\`
+- duration_seconds: \`$DURATION_SECONDS\`
+- manual_interventions: \`$MANUAL_INTERVENTIONS\`
 
 EOF
   index=$((index + 1))
 done
+completion_rate=$((passed_count * 100 / total_count))
 
 cat <<EOF
+
+## KPI-сводка novice path
+
+- total scenarios: \`$total_count\`
+- passed scenarios: \`$passed_count\`
+- completion_rate_percent: \`$completion_rate\`
+- max_time_to_first_success_seconds: \`$max_duration_seconds\`
+- max_time_to_first_success_minutes_ceiling: \`$(((max_duration_seconds + 59) / 60))\`
+- total_manual_interventions: \`$total_interventions\`
+- planned wizard answers are controlled scenario inputs, not support interventions.
 
 ## Что проверено
 

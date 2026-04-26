@@ -2,14 +2,14 @@ schema_version: 1
 release_truth:
   canonical_file: docs/releases/release-scorecard.yaml
   release_line: "2.5"
-  release_label: "2.5 GA No-Go (KPI evidence gap)"
-  current_stage: "release-decision (GA no-go)"
-  status: ga-no-go
+  release_label: "2.5.0 GA Ready"
+  current_stage: "release-decision (GA passed)"
+  status: ga-ready
   rc_ready: true
-  ga_ready: false
+  ga_ready: true
   last_updated: "2026-04-26"
   status_source_policy: "Markdown release docs must describe this scorecard state; TEST_REPORT.md is verification evidence, not an independent release-status source."
-  next_decision: "Resolve missing full-KPI evidence in reports/bugs/2026-04-26-25-ga-readiness-gap.md before any GA retry."
+  next_decision: "Release 2.5.0 can proceed after verified sync and release executor."
   canonical_references:
     roadmap: docs/releases/2.5-roadmap.md
     metrics: docs/releases/2.5-success-metrics.md
@@ -33,50 +33,56 @@ release_truth:
         - onboarding-smoke/ACCEPTANCE_REPORT.md
     - id: G25-GA
       name: Full 2.5 GA readiness
-      status: blocked
+      status: passed
       evidence:
         - docs/releases/2.5-success-metrics.md
+        - docs/releases/2.5-ga-kpi-evidence.md
         - RELEASE_CHECKLIST.md
+        - onboarding-smoke/ACCEPTANCE_REPORT.md
+        - reports/release/2.5-controlled-pilot-checklist.md
+        - reports/release/2.5-downstream-safe-sync-report.md
+        - .chatgpt/handoff-rework-register.yaml
         - reports/bugs/2026-04-26-25-ga-readiness-gap.md
   metrics_summary:
     mvp_thresholds: defined
     full_thresholds: defined
-    current_result: "GA no-go: RC evidence is green, but full-KPI measurements are missing for M25-01, M25-02, M25-03, M25-04 and M25-06."
+    current_result: "GA passed: all M25 metrics meet full 2.5 thresholds with repository evidence."
   doc_assertions:
     - path: docs/releases/2.5-roadmap.md
       must_contain:
         - "Release truth source: `docs/releases/release-scorecard.yaml`"
-        - "Current pipeline stage: `release-decision (GA no-go)`"
-        - "Status: `2.5 GA No-Go (KPI evidence gap)`"
-        - "GA-ready: `false`"
+        - "Current pipeline stage: `release-decision (GA passed)`"
+        - "Status: `2.5.0 GA Ready`"
+        - "GA-ready: `true`"
     - path: docs/releases/2.5-success-metrics.md
       must_contain:
         - "Release truth source: `docs/releases/release-scorecard.yaml`"
-        - "Current scorecard result: GA no-go: RC evidence is green, but full-KPI measurements are missing for M25-01, M25-02, M25-03, M25-04 and M25-06."
+        - "Current scorecard result: GA passed: all M25 metrics meet full 2.5 thresholds with repository evidence."
     - path: CURRENT_FUNCTIONAL_STATE.md
       must_contain:
         - "release truth source: `docs/releases/release-scorecard.yaml`"
-        - "текущая стадия: `release-decision (GA no-go)`"
-        - "статус: `2.5 GA No-Go (KPI evidence gap)`"
-        - "GA-ready: `false`"
+        - "текущая стадия: `release-decision (GA passed)`"
+        - "статус: `2.5.0 GA Ready`"
+        - "GA-ready: `true`"
     - path: README.md
       must_contain:
         - "Release truth source: `docs/releases/release-scorecard.yaml`"
-        - "Current 2.5 stage: `release-decision (GA no-go)`"
-        - "Status: `2.5 GA No-Go (KPI evidence gap)`"
-        - "GA-ready: `false`"
+        - "Current 2.5 stage: `release-decision (GA passed)`"
+        - "Status: `2.5.0 GA Ready`"
+        - "GA-ready: `true`"
     - path: RELEASE_CHECKLIST.md
       must_contain:
         - "Release truth source: `docs/releases/release-scorecard.yaml`"
-        - "Current 2.5 stage: `release-decision (GA no-go)`"
-        - "Status: `2.5 GA No-Go (KPI evidence gap)`"
-        - "- [ ] GA-ready declared"
-        - "- [x] явно зафиксирован `no-release` с причиной"
+        - "Current 2.5 stage: `release-decision (GA passed)`"
+        - "Status: `2.5.0 GA Ready`"
+        - "- [x] GA-ready declared"
     - path: TEST_REPORT.md
       must_contain:
         - "Status source of truth: `docs/releases/release-scorecard.yaml`"
-        - "Current scorecard state: `2.5 GA No-Go (KPI evidence gap)`"
+        - "Current scorecard state: `2.5.0 GA Ready`"
         - "TEST_REPORT.md is verification evidence, not the canonical release-status source."
   forbidden_doc_markers:
     - path: docs/releases/2.5-roadmap.md
       marker: "Current pipeline stage: `remediation-prep`"
+    - path: docs/releases/2.5-roadmap.md
+      marker: "Status: `2.5 GA No-Go (KPI evidence gap)`"

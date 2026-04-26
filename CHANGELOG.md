@@ -1,16 +1,21 @@
 # Журнал изменений фабрики
 
 ## [Unreleased]
+
+## [2.5.0] - 2026-04-26
 ### Добавлено
 - canonical `template-repo/codex-model-routing.yaml` для mapping task class -> selected_profile -> selected_model/reasoning/plan-mode reasoning
 - `check-codex-model-catalog.py` с live check через `codex debug models`, JSON output, proposal generation и safe snapshot refresh
 - model-routing proposal artifact для controlled review новых Codex/OpenAI models
+- full-KPI evidence layer для `G25-GA`: `docs/releases/2.5-ga-kpi-evidence.md`, controlled pilot checklist, downstream safe-sync report и handoff rework register
+- `validate-25-ga-kpi-evidence.py`, подключенный к verify/audit контуру
 
 ### Изменено
 - completion/handoff routing layer в template source теперь требует явный `Launch в Codex` boundary и launcher command для нового task launch
 - resolver, launcher, validators и handoff generation теперь сохраняют `selected_plan_mode_reasoning_effort` и live catalog status
 - docs теперь различают repo-configured mapping, live Codex catalog, ручной выбор в VS Code picker и optional strict launcher profile selection
-- release-facing docs переведены из `2.5 RC closeout candidate` в явный `2.5 GA no-go` из-за missing full-KPI evidence
+- release-facing docs переведены в `2.5.0 GA Ready` после добавления измеримых KPI evidence
+- versioning layer, manifests, launcher metadata и generated project factory-version strings синхронизированы под `2.5.0`
 
 ### Исправлено
 - устранено ложное ожидание, что новый Codex chat сам переключает profile/model/reasoning без явного launcher path
@@ -18,7 +23,7 @@
 - зафиксирован и исправлен `bug-031`: closeout больше не должен использовать англоязычные человекочитаемые headings или звучать как handoff обратно в ChatGPT, если внешний action не требуется
 - зафиксирован и исправлен `bug-032`: upstream ChatGPT-generated handoff теперь проверяется на русский человекочитаемый слой через repo validator
 - исправлен `bug-033`: active source-facing человекочитаемый слой очищен от английских headings, добавлены documented archival exceptions и validator в quick verify
-- зафиксирован GA blocker `reports/bugs/2026-04-26-25-ga-readiness-gap.md`: `G25-GA` нельзя закрыть без измеримых KPI для `M25-01`, `M25-02`, `M25-03`, `M25-04` и `M25-06`
+- закрыт GA blocker `reports/bugs/2026-04-26-25-ga-readiness-gap.md`: `G25-GA` теперь валидируется измеримыми KPI для `M25-01`..`M25-08`
 
 ## [2.4.4] - 2026-04-22
 ### Добавлено

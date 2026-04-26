@@ -3,7 +3,7 @@
 - Сгенерировано (UTC): `2026-04-26T06:09:05+00:00`
 - Корень factory: `/projects/factory-template`
 - Корень downstream project: `/tmp/tmp.ZxXwae37z9/work/russian-summary-fixture`
-- Версия template: `2.4.4`
+- Версия template: `2.5.0`
 - Версия sync contract: `3`
 - Вердикт: `patch-ready`
 
