@@ -6,12 +6,12 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
-INCOMING = ROOT / "meta-template-project" / "incoming-learnings"
+INCOMING = ROOT / "reports" / "factory-feedback" / "incoming-learnings"
 PROCESSED = INCOMING / "processed"
-BACKLOG = ROOT / "meta-template-project" / "FACTORY_BACKLOG.md"
-GAPS = ROOT / "meta-template-project" / "TEMPLATE_GAPS.md"
-ACCEPTED = ROOT / "meta-template-project" / "accepted-patterns"
-REJECTED = ROOT / "meta-template-project" / "rejected-patterns"
+BACKLOG = ROOT / "project-knowledge/factory/template-evolution" / "FACTORY_BACKLOG.md"
+GAPS = ROOT / "project-knowledge/factory/template-evolution" / "TEMPLATE_GAPS.md"
+ACCEPTED = ROOT / "project-knowledge/factory/template-evolution" / "accepted-patterns"
+REJECTED = ROOT / "project-knowledge/factory/template-evolution" / "rejected-patterns"
 
 
 def parse_args() -> argparse.Namespace:
@@ -127,7 +127,7 @@ def main() -> int:
                 append_if_missing(
                     GAPS,
                     entry_id,
-                    f"- {entry_id}: {title}\n  source: `meta-template-project/incoming-learnings/{path.name}`\n",
+                    f"- {entry_id}: {title}\n  source: `reports/factory-feedback/incoming-learnings/{path.name}`\n",
                 )
                 archive = PROCESSED / "template-gap" / path.name
                 archive.parent.mkdir(parents=True, exist_ok=True)

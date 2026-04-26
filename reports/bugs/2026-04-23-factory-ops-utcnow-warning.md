@@ -2,22 +2,22 @@
 
 - Date: `2026-04-23`
 - Type: incidental regression found during `release-2.5/verify-closeout`
-- Layer: `factory-template / workspace-packs/factory-ops`
+- Layer: `factory-template / factory/producer/extensions/workspace-packs/factory-ops`
 - Scope decision: `fixed-in-scope`
 
 ## Reproduce
 
 1. Run:
-   - `bash workspace-packs/factory-ops/apply-template-patch.sh <bundle> --apply-safe-zones`
-   - `bash workspace-packs/factory-ops/rollback-template-patch.sh <bundle> --rollback`
+   - `bash factory/producer/extensions/workspace-packs/factory-ops/apply-template-patch.sh <bundle> --apply-safe-zones`
+   - `bash factory/producer/extensions/workspace-packs/factory-ops/rollback-template-patch.sh <bundle> --rollback`
 2. Observe stderr warning from embedded Python snippets.
 
 ## Evidence
 
 - Warning text: `DeprecationWarning: datetime.datetime.utcnow() is deprecated ...`
 - Affected files:
-  - `workspace-packs/factory-ops/apply-template-patch.sh`
-  - `workspace-packs/factory-ops/rollback-template-patch.sh`
+  - `factory/producer/extensions/workspace-packs/factory-ops/apply-template-patch.sh`
+  - `factory/producer/extensions/workspace-packs/factory-ops/rollback-template-patch.sh`
 
 ## Expected
 

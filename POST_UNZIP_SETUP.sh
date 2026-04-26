@@ -6,8 +6,8 @@ chmod +x "$ROOT/template-repo/scripts/validate-codex-task-pack.py" 2>/dev/null |
 chmod +x "$ROOT/template-repo/launcher.sh" 2>/dev/null || true
 chmod +x "$ROOT/template-repo/scripts"/*.sh 2>/dev/null || true
 chmod +x "$ROOT/template-repo/scripts"/*.py 2>/dev/null || true
-chmod +x "$ROOT/workspace-packs/factory-ops"/*.sh 2>/dev/null || true
-chmod +x "$ROOT/workspace-packs/factory-ops"/*.py 2>/dev/null || true
+chmod +x "$ROOT/factory/producer/extensions/workspace-packs/factory-ops"/*.sh 2>/dev/null || true
+chmod +x "$ROOT/factory/producer/extensions/workspace-packs/factory-ops"/*.py 2>/dev/null || true
 chmod +x "$ROOT/tools"/*.py 2>/dev/null || true
 
 echo 'Права на запуск обновлены.'

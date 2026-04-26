@@ -90,7 +90,7 @@ compatibility_layer:
   legacy_wrapper_paths:
     - template-repo/scripts/install-codex-dogfood-pack.sh
   historical_archive_paths:
-    - .dogfood-bootstrap
+    - factory/producer/archive/legacy-bootstrap
     - PATCH_NOTES_codex_dogfood_p1.md
     - CONTROLLED_FIXES_AUDIT_2026-04-19.md
 
@@ -110,7 +110,7 @@ naming_policy:
   forbidden_path_terms:
     dogfood:
       allowed_paths:
-        - .dogfood-bootstrap
+        - factory/producer/archive/legacy-bootstrap
         - PATCH_NOTES_codex_dogfood_p1.md
         - CONTROLLED_FIXES_AUDIT_2026-04-19.md
         - template-repo/compatibility-aliases.yaml
@@ -119,7 +119,7 @@ naming_policy:
         - reports/bugs/2026-04-25-tree-contract-and-naming-drift.md
     openclaw:
       allowed_paths:
-        - optional-domain-packs/openclaw-reference
+        - factory/producer/reference/domain-packs/openclaw-reference
         - FACTORY_MANIFEST.yaml
         - template-repo/language-archive-exceptions.yaml
         - reports/bugs/2026-04-25-tree-contract-and-naming-drift.md
@@ -255,9 +255,41 @@ contours:
       - template-repo/scripts/verify-all.sh
       - PRE_RELEASE_AUDIT.sh
       - MATRIX_TEST.sh
+      - factory/producer
+      - factory/producer/ops
+      - factory/producer/release
+      - factory/producer/packaging
+      - factory/producer/registry
+      - factory/producer/sync
+      - factory/producer/reference
+      - factory/producer/extensions
+      - factory/producer/archive
+      - docs/operator/factory-template
+      - docs/releases/factory-template-release-notes.md
+      - project-knowledge/factory/template-evolution
+      - tests/onboarding-smoke
+      - work-templates/factory-feedback
+    forbidden_paths:
+      - .dogfood-bootstrap
+      - factory_template_only_pack
+      - meta-template-project
+      - onboarding-smoke
+      - optional-domain-packs
+      - packaging
+      - registry
+      - working-project-examples
+      - workspace-packs
+    factory_producer_allowed_paths:
+      - factory/producer/ops
+      - factory/producer/release
+      - factory/producer/packaging
+      - factory/producer/registry
+      - factory/producer/sync
+      - factory/producer/reference
+      - factory/producer/extensions
+      - factory/producer/archive
     allowed_top_level:
       - .chatgpt
-      - .dogfood-bootstrap
       - .env.example
       - .github
       - .gitignore
@@ -303,26 +335,27 @@ contours:
       - VERSION.md
       - VERSION_SYNC_CHECK.sh
       - bootstrap
+      - brownfield
       - deploy
       - docs
+      - factory
       - factory-config.yaml
       - factory-template-ops-policy.yaml
       - factory-template.code-workspace
-      - factory_template_only_pack
+      - greenfield
       - launcher.sh
-      - meta-template-project
-      - onboarding-smoke
-      - optional-domain-packs
-      - packaging
-      - registry
+      - project-knowledge
       - reports
       - requirements.lock
       - requirements.txt
+      - scripts
+      - src
+      - tasks
       - template-repo
+      - tests
       - tools
       - work
-      - working-project-examples
-      - workspace-packs
+      - work-templates
     ignored_transient_top_level:
       - .git
       - .release-stage
@@ -396,6 +429,7 @@ contours:
       - greenfield/initial-task-list.md
     forbidden_paths:
       - AGENT.md
+      - factory/producer
 
   generated_brownfield_without_repo:
     description: "Compatibility label for transitional intake/reconstruction of an existing system without a normalized repo; required exit state is greenfield-product."
@@ -423,6 +457,7 @@ contours:
       - meta-feedback/factory-task.md
     forbidden_paths:
       - AGENT.md
+      - factory/producer
 
   generated_brownfield_with_repo:
     description: "Compatibility label for transitional adoption/modernization/audit of an existing repo; required exit state is greenfield-product."
@@ -451,3 +486,4 @@ contours:
       - brownfield/risks-and-constraints.md
     forbidden_paths:
       - AGENT.md
+      - factory/producer

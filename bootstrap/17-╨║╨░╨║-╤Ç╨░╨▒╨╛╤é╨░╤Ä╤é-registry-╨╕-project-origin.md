@@ -19,4 +19,4 @@ Registry фиксирует:
 ## Как использовать
 1. Создайте проект через launcher.
 2. Проверьте `.chatgpt/project-origin.md`.
-3. При необходимости зафиксируйте запись в `registry/projects-created.md`.
+3. При необходимости зафиксируйте запись в `factory/producer/registry/projects-created.md`.

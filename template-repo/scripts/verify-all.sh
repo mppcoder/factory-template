@@ -88,7 +88,7 @@ run_quick() {
 run_full() {
   run_step "CLEAN_VERIFY_ARTIFACTS (start)" bash "$ROOT/CLEAN_VERIFY_ARTIFACTS.sh"
   run_quick
-  run_step "NOVICE_ONBOARDING_SMOKE" bash "$ROOT/onboarding-smoke/run-novice-e2e.sh"
+  run_step "NOVICE_ONBOARDING_SMOKE" bash "$ROOT/tests/onboarding-smoke/run-novice-e2e.sh"
   run_step "SMOKE_TEST" bash "$ROOT/SMOKE_TEST.sh"
   run_step "EXAMPLES_TEST" bash "$ROOT/EXAMPLES_TEST.sh"
   run_step "MATRIX_TEST" bash "$ROOT/MATRIX_TEST.sh"

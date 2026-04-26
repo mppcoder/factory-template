@@ -32,18 +32,36 @@ python3 template-repo/scripts/validate-tree-contract.py .
 
 ```text
 factory-template/
+├── AGENTS.md
 ├── README.md
-├── ENTRY_MODES.md
-├── FACTORY_MANIFEST.yaml
+├── VERSION.md
+├── CHANGELOG.md
 ├── CURRENT_FUNCTIONAL_STATE.md
-├── TEST_REPORT.md
+├── .chatgpt/
+├── .codex/
 ├── docs/
+├── project-knowledge/
 ├── reports/
+├── scripts/
+├── src/
+├── tasks/
+├── tests/
+├── work/
+├── work-templates/
+├── brownfield/
+├── greenfield/
 ├── template-repo/
-├── workspace-packs/
-├── optional-domain-packs/
-├── working-project-examples/
-└── factory_template_only_pack/
+├── deploy/
+└── factory/
+    └── producer/
+        ├── ops/
+        ├── release/
+        ├── packaging/
+        ├── registry/
+        ├── sync/
+        ├── reference/
+        ├── extensions/
+        └── archive/
 ```
 
 `/projects` на VPS содержит только project roots. Временные входящие материалы должны жить внутри конкретного project root, например `/projects/<project-root>/_incoming/`.
@@ -169,10 +187,11 @@ Machine-readable taxonomy живет в `template-repo/tree-contract.yaml`.
 
 Optional/reference layers допустимы только как явно помеченные дополнительные контуры:
 
-- `optional-domain-packs/` — предметные reference cases, не core;
-- `workspace-packs/` — operational tooling для downstream sync, patch export и rollback;
-- `working-project-examples/` — examples и fixtures;
-- `factory_template_only_pack/` — operator/runbook слой для самой фабрики.
+- `factory/producer/reference/domain-packs/` — предметные reference cases, не core;
+- `factory/producer/extensions/workspace-packs/` — operational tooling для downstream sync, patch export и rollback;
+- `factory/producer/reference/examples/` — examples и fixtures;
+- `docs/operator/factory-template/` — operator/runbook слой для самой фабрики.
+- `factory/producer/archive/` — исторические архивы и legacy bootstrap evidence.
 
 Эти слои не должны становиться canonical generated project root structure без отдельного решения и обновления `tree-contract.yaml`.
 
@@ -213,5 +232,8 @@ Launcher и `apply-project-preset.py` читают compatibility aliases как 
 - наличие explicit compatibility aliases layer;
 - отсутствие legacy aliases в primary UX files;
 - отсутствие новых forbidden path terms вне allowlist.
+- отсутствие legacy/factory-only folders как active root paths;
+- размещение factory-producer-owned content только под `factory/producer/*`;
+- отсутствие `factory/producer/*` в generated/battle projects.
 
 Validator не запрещает project-owned code внутри `src/` и других рабочих каталогов generated project. Контракт фиксирует factory-owned scaffold и границы core/optional/compatibility layers.

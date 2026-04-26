@@ -2,7 +2,7 @@
 
 - Date: `2026-04-23`
 - Type: defect
-- Layer: `factory-template / workspace-packs/factory-ops`
+- Layer: `factory-template / factory/producer/extensions/workspace-packs/factory-ops`
 - Status: `fixed-in-scope`
 
 ## Reproduce
@@ -10,8 +10,8 @@
 1. Prepare downstream project and patch bundle.
 2. Make manual edit in non-safe-zone file (for example `README.md` in downstream project).
 3. Run:
-   - `bash workspace-packs/factory-ops/apply-template-patch.sh <bundle> --apply-safe-zones`
-   - `bash workspace-packs/factory-ops/rollback-template-patch.sh <bundle> --rollback`
+   - `bash factory/producer/extensions/workspace-packs/factory-ops/apply-template-patch.sh <bundle> --apply-safe-zones`
+   - `bash factory/producer/extensions/workspace-packs/factory-ops/rollback-template-patch.sh <bundle> --rollback`
 4. Re-check manual edit.
 
 ## Evidence

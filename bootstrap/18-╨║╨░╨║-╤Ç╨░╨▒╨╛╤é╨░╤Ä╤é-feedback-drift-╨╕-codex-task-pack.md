@@ -4,10 +4,10 @@
 Если проблема относится не к проекту, а к фабрике:
 1. используйте `meta-feedback/factory-bug-report.md` или `meta-feedback/factory-task.md`;
 2. заполните шаблон;
-3. перенесите результат в `meta-template-project`.
+3. перенесите результат в `project-knowledge/factory/template-evolution`.
 
 ## Drift detection
-Optional layer `workspace-packs/factory-ops/` позволяет:
+Optional layer `factory/producer/extensions/workspace-packs/factory-ops/` позволяет:
 - сравнивать фабрику и рабочий проект;
 - выявлять drift;
 - принимать решение о selective sync.

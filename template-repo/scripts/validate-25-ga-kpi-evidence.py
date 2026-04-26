@@ -38,7 +38,7 @@ def main() -> int:
         print("GA KPI EVIDENCE ПРОПУЩЕН: ga_ready=false")
         return 0
 
-    acceptance = read_text(root / "onboarding-smoke/ACCEPTANCE_REPORT.md")
+    acceptance = read_text(root / "tests/onboarding-smoke/ACCEPTANCE_REPORT.md")
     total = metric_int(acceptance, "total scenarios")
     passed = metric_int(acceptance, "passed scenarios")
     completion = metric_int(acceptance, "completion_rate_percent")

@@ -68,7 +68,7 @@ assert_phase(
     [
         "RELEASE_CHECKLIST.md",
         "VERIFY_SUMMARY.md",
-        "meta-template-project/RELEASE_NOTES.md",
+        "docs/releases/factory-template-release-notes.md",
     ],
     {
         "RELEASE_CHECKLIST.md": release_checklist,

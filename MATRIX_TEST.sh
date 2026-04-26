@@ -92,7 +92,7 @@ for c in validate-evidence.py validate-quality.py check-dod.py; do assert_fail '
 assert_pass 'brownfield+audit+manual' validate-handoff.py "$P/scripts/validate-handoff.py" "$P"
 
 for ex in example-change-small-fix example-change-brownfield-audit example-change-end-to-end; do
-  P="$ROOT/working-project-examples/$ex"
+  P="$ROOT/factory/producer/reference/examples/$ex"
   for c in validate-project-preset.py validate-policy-preset.py validate-change-profile.py validate-task-graph.py validate-stage.py validate-evidence.py validate-quality.py validate-handoff.py check-dod.py validate-versioning-layer.py validate-defect-capture.py validate-alignment.py; do
     assert_pass "$ex" "$c" "$ROOT/template-repo/scripts/$c" "$P"
   done
@@ -118,8 +118,8 @@ for a,b in {
     t=t.replace(a,b)
 p.write_text(t, encoding='utf-8')
 PYCODE
-assert_pass 'factory-bugflow' detect-factory-issues.py python3 "$ROOT/workspace-packs/factory-ops/detect-factory-issues.py" "$P"
-assert_pass 'factory-bugflow' check-template-drift.py python3 "$ROOT/workspace-packs/factory-ops/check-template-drift.py" "$ROOT" "$P"
+assert_pass 'factory-bugflow' detect-factory-issues.py python3 "$ROOT/factory/producer/extensions/workspace-packs/factory-ops/detect-factory-issues.py" "$P"
+assert_pass 'factory-bugflow' check-template-drift.py python3 "$ROOT/factory/producer/extensions/workspace-packs/factory-ops/check-template-drift.py" "$ROOT" "$P"
 assert_pass 'factory-bugflow' create-codex-task-pack.py "$ROOT/template-repo/scripts/create-codex-task-pack.py" "$P"
 assert_pass 'factory-bugflow' validate-codex-task-pack.py "$ROOT/template-repo/scripts/validate-codex-task-pack.py" "$P"
 assert_pass 'factory-bugflow' validate-codex-routing.py "$ROOT/template-repo/scripts/validate-codex-routing.py" "$P"
@@ -166,7 +166,7 @@ printf '\nMATRIX_SAFE_ZONE_TASK_BLOCK_DRIFT\n' >> "$P/tasks/codex/codex-task-man
 printf '\nMATRIX_SAFE_WORK_TEMPLATE_DRIFT\n' >> "$P/work-templates/user-spec.md.template"
 printf '\nMATRIX_ADVISORY_PROJECT_KNOWLEDGE_DRIFT\n' >> "$P/project-knowledge/project.md"
 printf '\nMATRIX_MANUAL_PROJECT_WORK_DRIFT\n' >> "$P/work/_task-template.md"
-assert_pass 'factory-bugflow' export-template-patch.sh "$ROOT/workspace-packs/factory-ops/export-template-patch.sh" "$ROOT" "$P" --dry-run
+assert_pass 'factory-bugflow' export-template-patch.sh "$ROOT/factory/producer/extensions/workspace-packs/factory-ops/export-template-patch.sh" "$ROOT" "$P" --dry-run
 assert_pass 'factory-bugflow' 'tiered-preview-v3-multizone' python3 - <<PYCODE
 import json
 from pathlib import Path
@@ -189,11 +189,11 @@ assert all(not item.get("will_generate") for item in preview if item["tier"] not
 assert not any(path.startswith("project-knowledge/") for path in generated)
 assert not any(path.startswith("work/") for path in generated)
 PYCODE
-assert_pass 'factory-bugflow' 'apply-template-patch.sh --check' "$ROOT/workspace-packs/factory-ops/apply-template-patch.sh" "$P/_factory-sync-export" --check
-assert_pass 'factory-bugflow' 'apply-template-patch.sh --apply-safe-zones --with-project-snapshot' "$ROOT/workspace-packs/factory-ops/apply-template-patch.sh" "$P/_factory-sync-export" --apply-safe-zones --with-project-snapshot
+assert_pass 'factory-bugflow' 'apply-template-patch.sh --check' "$ROOT/factory/producer/extensions/workspace-packs/factory-ops/apply-template-patch.sh" "$P/_factory-sync-export" --check
+assert_pass 'factory-bugflow' 'apply-template-patch.sh --apply-safe-zones --with-project-snapshot' "$ROOT/factory/producer/extensions/workspace-packs/factory-ops/apply-template-patch.sh" "$P/_factory-sync-export" --apply-safe-zones --with-project-snapshot
 printf '\nMATRIX_MANUAL_CHANGE_MARKER\n' >> "$P/README.md"
-assert_pass 'factory-bugflow' upgrade-report.py python3 "$ROOT/workspace-packs/factory-ops/upgrade-report.py" "$ROOT" "$P" --format text
-assert_pass 'factory-bugflow' 'upgrade-report.py russian-markdown' python3 "$ROOT/workspace-packs/factory-ops/upgrade-report.py" "$ROOT" "$P" --format markdown --output "$P/_factory-sync-export/matrix-upgrade-summary.md"
+assert_pass 'factory-bugflow' upgrade-report.py python3 "$ROOT/factory/producer/extensions/workspace-packs/factory-ops/upgrade-report.py" "$ROOT" "$P" --format text
+assert_pass 'factory-bugflow' 'upgrade-report.py russian-markdown' python3 "$ROOT/factory/producer/extensions/workspace-packs/factory-ops/upgrade-report.py" "$ROOT" "$P" --format markdown --output "$P/_factory-sync-export/matrix-upgrade-summary.md"
 assert_pass 'factory-bugflow' 'upgrade-report-russian-body' python3 - "$P/_factory-sync-export/matrix-upgrade-summary.md" <<'PYCODE'
 import sys
 from pathlib import Path
@@ -221,8 +221,8 @@ for forbidden in [
 ]:
     assert forbidden not in text, forbidden
 PYCODE
-assert_pass 'factory-bugflow' 'rollback-template-patch.sh --check' "$ROOT/workspace-packs/factory-ops/rollback-template-patch.sh" "$P/_factory-sync-export" --check
-assert_pass 'factory-bugflow' 'rollback-template-patch.sh --rollback --restore-project-snapshot' "$ROOT/workspace-packs/factory-ops/rollback-template-patch.sh" "$P/_factory-sync-export" --rollback --restore-project-snapshot
+assert_pass 'factory-bugflow' 'rollback-template-patch.sh --check' "$ROOT/factory/producer/extensions/workspace-packs/factory-ops/rollback-template-patch.sh" "$P/_factory-sync-export" --check
+assert_pass 'factory-bugflow' 'rollback-template-patch.sh --rollback --restore-project-snapshot' "$ROOT/factory/producer/extensions/workspace-packs/factory-ops/rollback-template-patch.sh" "$P/_factory-sync-export" --rollback --restore-project-snapshot
 assert_fail 'factory-bugflow' 'manual-marker-after-rollback' grep -q 'MATRIX_MANUAL_CHANGE_MARKER' "$P/README.md"
 assert_pass 'factory-bugflow' 'project-work-restored-after-rollback' grep -q 'MATRIX_MANUAL_PROJECT_WORK_DRIFT' "$P/work/_task-template.md"
 assert_pass 'routing-quick' resolve-codex-task-route.py bash -lc "python3 '$ROOT/template-repo/scripts/resolve-codex-task-route.py' '$P' --launch-source chatgpt-handoff --task-text 'docs triage search in repo' | grep -q 'selected_profile=quick'"

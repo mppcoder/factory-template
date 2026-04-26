@@ -25,7 +25,7 @@ Repo: `factory-template`, reusable process / automation layer:
 
 ## Evidence
 - [PROJECT] В repo отсутствовали dedicated verified sync и release executor scripts.
-- [PROJECT] `factory_template_only_pack/*` и `VERIFY_SUMMARY.md` фиксировали только manual последовательность git-команд и fallback push workaround.
+- [PROJECT] `docs/operator/factory-template/*` и `VERIFY_SUMMARY.md` фиксировали только manual последовательность git-команд и fallback push workaround.
 - [PROJECT] `RELEASE_NOTE_TEMPLATE.md` и release-facing docs описывали operator steps, но не reusable automation contour.
 
 ## Затронутый слой

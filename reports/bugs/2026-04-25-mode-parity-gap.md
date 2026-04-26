@@ -9,7 +9,7 @@
 ## Обнаружено в
 - `template-repo/template/work`
 - `template-repo/project-presets.yaml`
-- `onboarding-smoke/run-novice-e2e.sh`
+- `tests/onboarding-smoke/run-novice-e2e.sh`
 
 ## Симптом
 Контракт задачи требовал доказать, что template, greenfield, brownfield-without-repo и brownfield-with-repo имеют одинаковый core layer, включая `work/features` и `work/completed`.
@@ -45,9 +45,9 @@ Template skeleton материализовал:
 - `template-repo/mode-parity.yaml` закрепил `work_features_and_completed` как обязательный core capability;
 - `template-repo/project-presets.yaml` теперь перечисляет общий parity core в каждом canonical preset;
 - `template-repo/scripts/validate-mode-parity.py` проверяет этот контракт;
-- `onboarding-smoke/run-novice-e2e.sh` покрывает все canonical presets.
+- `tests/onboarding-smoke/run-novice-e2e.sh` покрывает все canonical presets.
 
 ## Проверка
 - `python3 template-repo/scripts/validate-mode-parity.py .`
 - `python3 template-repo/scripts/validate-tree-contract.py .`
-- `bash onboarding-smoke/run-novice-e2e.sh`
+- `bash tests/onboarding-smoke/run-novice-e2e.sh`

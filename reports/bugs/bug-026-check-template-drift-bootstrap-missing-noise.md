@@ -2,13 +2,13 @@
 
 - Date: `2026-04-23`
 - Type: defect
-- Layer: `factory-template / workspace-packs/factory-ops`
+- Layer: `factory-template / factory/producer/extensions/workspace-packs/factory-ops`
 - Status: `fixed-in-scope`
 
 ## Reproduce
 
 1. Run:
-   `python3 workspace-packs/factory-ops/check-template-drift.py /projects/factory-template /projects/factory-template/onboarding-smoke/.tmp-run/brownfield-novice/novice-brownfield-smoke --format json`
+   `python3 factory/producer/extensions/workspace-packs/factory-ops/check-template-drift.py /projects/factory-template /projects/factory-template/tests/onboarding-smoke/.tmp-run/brownfield-novice/novice-brownfield-smoke --format json`
 2. Inspect `drift` and `summary`.
 
 ## Evidence
@@ -45,7 +45,7 @@ Expected missing `bootstrap` is counted as drift-like issue/noise.
 
 ## Verification
 
-- `python3 workspace-packs/factory-ops/check-template-drift.py <factory> <downstream> --format json`:
+- `python3 factory/producer/extensions/workspace-packs/factory-ops/check-template-drift.py <factory> <downstream> --format json`:
   - `bootstrap` -> `optional-missing-project`
   - `summary.has_drift` -> `false` (при отсутствии других проблем).
 - `bash template-repo/scripts/verify-all.sh ci` -> green.

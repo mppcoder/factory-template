@@ -290,7 +290,7 @@ current_state_md = '''# Текущее функциональное состоя
 (root / 'CURRENT_FUNCTIONAL_STATE.md').write_text(current_state_md, encoding='utf-8')
 PY
 
-REGISTRY_FILE="$(cd "$SCRIPT_DIR/.." && pwd)/registry/projects-created.md"
+REGISTRY_FILE="$(cd "$SCRIPT_DIR/.." && pwd)/factory/producer/registry/projects-created.md"
 REGISTRY_MODE="${FACTORY_REGISTRY_MODE:-production}"
 if [ "$REGISTRY_MODE" != "skip" ] && [ -f "$REGISTRY_FILE" ] && [ -w "$REGISTRY_FILE" ]; then
   {

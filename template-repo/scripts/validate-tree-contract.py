@@ -87,6 +87,34 @@ def validate_top_level(root: Path, contour: dict[str, Any], label: str, errors: 
         errors.append(f"{label}: top-level путь не описан контрактом: {name}")
 
 
+def validate_factory_producer_namespace(
+    root: Path, contour: dict[str, Any], label: str, errors: list[str]
+) -> None:
+    allowed = contour.get("factory_producer_allowed_paths", []) or []
+    if not allowed:
+        return
+
+    producer_root = root / "factory" / "producer"
+    if not producer_root.exists():
+        errors.append(f"{label}: отсутствует bounded factory producer namespace: factory/producer")
+        return
+
+    allowed_prefixes = [item.rstrip("/") for item in allowed]
+    for item in (root / "factory").rglob("*"):
+        path = rel(item, root)
+        if path in {"factory", "factory/producer"}:
+            continue
+        if any(is_under_or_same(path, prefix) for prefix in allowed_prefixes):
+            continue
+        errors.append(f"{label}: factory-producer path вне approved namespace: {path}")
+
+
+def validate_no_factory_producer_in_generated(root: Path, label: str, errors: list[str]) -> None:
+    producer = root / "factory" / "producer"
+    if producer.exists():
+        errors.append(f"{label}: generated/battle project не должен содержать factory/producer")
+
+
 def validate_path_terms(root: Path, contract: dict[str, Any], errors: list[str]) -> None:
     policy = contract.get("naming_policy", {}) or {}
     terms = policy.get("forbidden_path_terms", {}) or {}
@@ -238,6 +266,7 @@ def validate_factory_root(root: Path, contract: dict[str, Any], errors: list[str
         errors.append("contours.factory_root отсутствует или не является mapping")
         return
     validate_contour(root, factory, "factory_root", errors)
+    validate_factory_producer_namespace(root, factory, "factory_root", errors)
     for nested_name in factory.get("validate_nested_contours", []) or []:
         nested = contours.get(nested_name, {}) or {}
         nested_root = root / str(nested.get("relative_root", ""))
@@ -268,6 +297,8 @@ def main() -> int:
         else:
             target_root = root / str(contour.get("relative_root", ""))
             validate_contour(target_root, contour, args.contour, errors)
+            if args.contour.startswith("generated_"):
+                validate_no_factory_producer_in_generated(target_root, args.contour, errors)
     elif (root / "FACTORY_MANIFEST.yaml").exists() and (root / "template-repo").exists():
         validate_factory_root(root, contract, errors)
     else:
@@ -276,6 +307,7 @@ def main() -> int:
             errors.append("Не удалось определить contour: это не factory root и не generated project")
         else:
             validate_contour(root, contours[contour_name], contour_name, errors)
+            validate_no_factory_producer_in_generated(root, contour_name, errors)
             project_aliases = root / "project-presets.yaml"
             if project_aliases.exists() and "preset_aliases" in load_yaml(project_aliases):
                 errors.append("generated: project-presets.yaml не должен содержать preset_aliases")

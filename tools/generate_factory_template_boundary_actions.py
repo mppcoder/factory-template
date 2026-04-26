@@ -9,7 +9,7 @@ from sources_profiles import get_profiles, find_profile_by_export_name
 ROOT = Path(__file__).resolve().parents[1]
 OUT_DIR = ROOT / "_boundary-actions"
 POLICY_PATH = ROOT / "factory-template-ops-policy.yaml"
-TEMPLATE_PATH = ROOT / "factory_template_only_pack" / "templates" / "factory-template-boundary-actions.template.md"
+TEMPLATE_PATH = ROOT / "factory" / "producer" / "ops" / "templates" / "factory-template-boundary-actions.template.md"
 
 
 def render(template: str, mapping: dict[str, str]) -> str:
@@ -77,8 +77,8 @@ def main() -> int:
             "impact_downstream_project_sources": impact_cfg.get("downstream_project_sources", "Обновление repo-first инструкции боевых ChatGPT Projects"),
             "impact_manual_archive_required": impact_cfg.get("manual_archive_required", "Нужен готовый архив или каталог для ручной загрузки"),
             "impact_delete_before_replace": impact_cfg.get("delete_before_replace", "Перед заменой нужно удалить старую conflicting instruction"),
-            "repo_patch_export_script": str(ROOT / "workspace-packs" / "factory-ops" / "export-template-patch.sh"),
-            "repo_patch_apply_script": str(ROOT / "workspace-packs" / "factory-ops" / "apply-template-patch.sh"),
+            "repo_patch_export_script": str(ROOT / "factory/producer/extensions/workspace-packs" / "factory-ops" / "export-template-patch.sh"),
+            "repo_patch_apply_script": str(ROOT / "factory/producer/extensions/workspace-packs" / "factory-ops" / "apply-template-patch.sh"),
         },
     )
     doc.write_text(text, encoding="utf-8")

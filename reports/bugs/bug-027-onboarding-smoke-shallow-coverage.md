@@ -2,14 +2,14 @@
 
 - Date: `2026-04-23`
 - Type: defect
-- Layer: `factory-template / onboarding-smoke`
+- Layer: `factory-template / tests/onboarding-smoke`
 - Status: `fixed-in-scope`
 
 ## Reproduce
 
 1. Run:
-   `bash onboarding-smoke/run-novice-e2e.sh`
-2. Open `onboarding-smoke/ACCEPTANCE_REPORT.md`.
+   `bash tests/onboarding-smoke/run-novice-e2e.sh`
+2. Open `tests/onboarding-smoke/ACCEPTANCE_REPORT.md`.
 
 ## Evidence
 
@@ -32,7 +32,7 @@ Current acceptance remains shallow and mostly structural.
 
 ## Fix Applied
 
-- `onboarding-smoke/run-novice-e2e.sh` расширен:
+- `tests/onboarding-smoke/run-novice-e2e.sh` расширен:
   - после bootstrap validators запускается `tools/fill_smoke_artifacts.py`;
   - добавлен post-bootstrap long-flow validation:
     - `validate-stage.py`
@@ -40,10 +40,10 @@ Current acceptance remains shallow and mostly structural.
     - `validate-quality.py`
     - `validate-handoff.py`
     - `check-dod.py`
-- `onboarding-smoke/ACCEPTANCE_REPORT.md` теперь явно фиксирует long-flow acceptance section.
+- `tests/onboarding-smoke/ACCEPTANCE_REPORT.md` теперь явно фиксирует long-flow acceptance section.
 
 ## Verification
 
-- `bash onboarding-smoke/run-novice-e2e.sh` -> green.
-- `onboarding-smoke/ACCEPTANCE_REPORT.md` содержит блок `Long-flow novice acceptance (post-bootstrap)`.
+- `bash tests/onboarding-smoke/run-novice-e2e.sh` -> green.
+- `tests/onboarding-smoke/ACCEPTANCE_REPORT.md` содержит блок `Long-flow novice acceptance (post-bootstrap)`.
 - `bash template-repo/scripts/verify-all.sh ci` -> green (включает novice onboarding smoke).

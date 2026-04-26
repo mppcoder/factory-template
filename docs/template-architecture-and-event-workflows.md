@@ -120,16 +120,16 @@ factory-template/
 ├── docs/
 │   ├── template-architecture-and-event-workflows.md
 │   └── releases/
-├── factory_template_only_pack/
-├── meta-template-project/
-├── packaging/sources/
-├── registry/
+├── docs/operator/factory-template/
+├── project-knowledge/factory/template-evolution/
+├── factory/producer/packaging/sources/
+├── factory/producer/registry/
 ├── reports/
 ├── tools/
 ├── work/
-├── optional-domain-packs/
-├── working-project-examples/
-└── workspace-packs/
+├── factory/producer/reference/domain-packs/
+├── factory/producer/reference/examples/
+└── factory/producer/extensions/workspace-packs/
 ```
 
 ### 3.2. Назначение ключевых каталогов
@@ -141,15 +141,15 @@ factory-template/
 - `template-repo/scripts/`: launcher, validators, sync/release automation.
 - `template-repo/template/`: scaffold, который materialize-ится в downstream project.
 - `docs/`: канонические обзорные reference-docs без дублирования сценарного слоя.
-- `factory_template_only_pack/`: operator/codex runbooks и boundary/completion guidance.
-- `meta-template-project/`: контур развития самой фабрики и release-facing meta notes.
-- `packaging/sources/`: declarative source/export profiles.
-- `registry/`: release history, versions, projects created.
+- `docs/operator/factory-template/`: operator/codex runbooks и boundary/completion guidance.
+- `project-knowledge/factory/template-evolution/`: историческая knowledge-зона развития фабрики и release-facing meta notes; это не отдельный root workflow.
+- `factory/producer/packaging/sources/`: declarative source/export profiles.
+- `factory/producer/registry/`: release history, versions, projects created.
 - `reports/`: bug reports и factory feedback.
 - `work/completed/`: закрытые work items.
-- `optional-domain-packs/`: optional reference-cases, не входящие в canonical core tree.
-- `working-project-examples/`: golden fixtures и compatibility examples.
-- `workspace-packs/`: optional downstream operational tooling.
+- `factory/producer/reference/domain-packs/`: optional reference-cases, не входящие в canonical core tree.
+- `factory/producer/reference/examples/`: golden fixtures и compatibility examples.
+- `factory/producer/extensions/workspace-packs/`: optional downstream operational tooling.
 
 ### 3.3. Что считать source-of-truth
 
@@ -722,5 +722,5 @@ flowchart TD
 - `docs/template-architecture-and-event-workflows.md`: архитектура, дерево проекта и workflows;
 - `RELEASE_NOTES.md`: текущий релиз;
 - `VERSION.md`, `CHANGELOG.md`, `CURRENT_FUNCTIONAL_STATE.md`: versioning and current-state layer;
-- `factory_template_only_pack/*.md`: практические runbooks и completion guidance;
+- `docs/operator/factory-template/*.md`: практические runbooks и completion guidance;
 - `template-repo/scenario-pack/`: исполнимый сценарный source-of-truth.

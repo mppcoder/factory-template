@@ -83,7 +83,7 @@ Launcher ведет по трем маршрутам:
 ```bash
 cd factory-v2.5.0
 bash POST_UNZIP_SETUP.sh
-bash onboarding-smoke/run-novice-e2e.sh
+bash tests/onboarding-smoke/run-novice-e2e.sh
 bash MATRIX_TEST.sh
 bash CLEAN_VERIFY_ARTIFACTS.sh
 ```
@@ -215,21 +215,21 @@ python3 template-repo/scripts/check-codex-model-catalog.py . --write-proposal
 Канонический sync path для этого контура:
 
 1. launcher создаёт initial root `AGENTS.md` через `template-repo/scripts/sync-agents.py`;
-2. downstream refresh использует `workspace-packs/factory-ops/export-template-patch.sh`;
-3. `workspace-packs/factory-ops/factory-sync-manifest.yaml` разделяет impact на `template-owned-safe`, `template-owned-clone`, `template-owned-advisory`, `project-owned`, brownfield history и excluded `factory-producer-owned`;
-4. `workspace-packs/factory-ops/apply-template-patch.sh --apply-safe-zones` materializes только generated safe-tier files в боевом repo;
-5. `workspace-packs/factory-ops/check-template-drift.py` ловит отсутствие root clone и tiered drift относительно template source.
+2. downstream refresh использует `factory/producer/extensions/workspace-packs/factory-ops/export-template-patch.sh`;
+3. `factory/producer/extensions/workspace-packs/factory-ops/factory-sync-manifest.yaml` разделяет impact на `template-owned-safe`, `template-owned-clone`, `template-owned-advisory`, `project-owned`, brownfield history и excluded `factory-producer-owned`;
+4. `factory/producer/extensions/workspace-packs/factory-ops/apply-template-patch.sh --apply-safe-zones` materializes только generated safe-tier files в боевом repo;
+5. `factory/producer/extensions/workspace-packs/factory-ops/check-template-drift.py` ловит отсутствие root clone и tiered drift относительно template source.
 
 Human-readable upgrade/rollback операторский маршрут:
 
 ```bash
-bash workspace-packs/factory-ops/export-template-patch.sh <factory-root> <downstream-root> --dry-run
-python3 workspace-packs/factory-ops/upgrade-report.py <factory-root> <downstream-root> --format markdown --output UPGRADE_SUMMARY.md
-bash workspace-packs/factory-ops/apply-template-patch.sh <downstream-root>/_factory-sync-export --apply-safe-zones
-bash workspace-packs/factory-ops/apply-template-patch.sh <downstream-root>/_factory-sync-export --apply-safe-zones --with-project-snapshot
-bash workspace-packs/factory-ops/rollback-template-patch.sh <downstream-root>/_factory-sync-export --check
-bash workspace-packs/factory-ops/rollback-template-patch.sh <downstream-root>/_factory-sync-export --rollback
-bash workspace-packs/factory-ops/rollback-template-patch.sh <downstream-root>/_factory-sync-export --rollback --restore-project-snapshot
+bash factory/producer/extensions/workspace-packs/factory-ops/export-template-patch.sh <factory-root> <downstream-root> --dry-run
+python3 factory/producer/extensions/workspace-packs/factory-ops/upgrade-report.py <factory-root> <downstream-root> --format markdown --output UPGRADE_SUMMARY.md
+bash factory/producer/extensions/workspace-packs/factory-ops/apply-template-patch.sh <downstream-root>/_factory-sync-export --apply-safe-zones
+bash factory/producer/extensions/workspace-packs/factory-ops/apply-template-patch.sh <downstream-root>/_factory-sync-export --apply-safe-zones --with-project-snapshot
+bash factory/producer/extensions/workspace-packs/factory-ops/rollback-template-patch.sh <downstream-root>/_factory-sync-export --check
+bash factory/producer/extensions/workspace-packs/factory-ops/rollback-template-patch.sh <downstream-root>/_factory-sync-export --rollback
+bash factory/producer/extensions/workspace-packs/factory-ops/rollback-template-patch.sh <downstream-root>/_factory-sync-export --rollback --restore-project-snapshot
 ```
 
 Это не "магическое" обновление GitHub само по себе: sync происходит только как часть канонического template-sync/update flow внутри repo/tooling.
@@ -238,7 +238,7 @@ Policy detail: `docs/downstream-upgrade-policy.md`.
 
 Состав archive pack и direct profile теперь берётся из единого declarative manifest:
 
-- `packaging/sources/sources-profiles.yaml`
+- `factory/producer/packaging/sources/sources-profiles.yaml`
 
 Phase recommendation теперь тоже декларативна:
 
@@ -271,7 +271,7 @@ bash PHASE_DETECTION_TEST.sh
 Состав curated packs и параметры boundary-инструкций задаются декларативно в:
 
 - `factory-template-ops-policy.yaml`
-- `factory_template_only_pack/templates/factory-template-boundary-actions.template.md`
+- `factory/producer/ops/templates/factory-template-boundary-actions.template.md`
 
 Короткие release-facing operator docs:
 
@@ -304,10 +304,10 @@ bash PHASE_DETECTION_TEST.sh
 
 ## Что входит в релиз
 - `template-repo/` — шаблон нового рабочего проекта.
-- `meta-template-project/` — контур развития самой фабрики.
-- `working-project-examples/` — примеры greenfield и brownfield проектов.
-- `workspace-packs/factory-ops/` — optional operational-слой для drift, patch export и hooks.
-- `registry/` — журнал версий фабрики и происхождения проектов.
+- `project-knowledge/factory/template-evolution/` — историческая knowledge-зона развития фабрики, не отдельный root workflow.
+- `factory/producer/reference/examples/` — примеры greenfield и brownfield проектов.
+- `factory/producer/extensions/workspace-packs/factory-ops/` — optional operational-слой для drift, patch export и hooks.
+- `factory/producer/registry/` — журнал версий фабрики и происхождения проектов.
 
 ## Что не должно попадать в релиз
 - тестовые рабочие проекты;

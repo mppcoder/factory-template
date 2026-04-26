@@ -7,12 +7,12 @@ import yaml
 
 
 ROOT = Path(__file__).resolve().parents[1]
-DEFAULT_PROFILES_PATH = ROOT / "packaging" / "sources" / "sources-profiles.yaml"
+DEFAULT_PROFILES_PATH = ROOT / "factory" / "producer" / "packaging" / "sources" / "sources-profiles.yaml"
 
 
 def profiles_path_from_policy(policy: dict | None = None) -> Path:
     policy = policy or {}
-    rel = policy.get("sources_profiles_manifest", "packaging/sources/sources-profiles.yaml")
+    rel = policy.get("sources_profiles_manifest", "factory/producer/packaging/sources/sources-profiles.yaml")
     return ROOT / rel
 
 

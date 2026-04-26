@@ -12,8 +12,8 @@ Repo: `factory-template`
 Затронутые зоны:
 - `template-repo/scenario-pack/00-master-router.md`
 - `template-repo/scenario-pack/17-direct-task-self-handoff.md`
-- `factory_template_only_pack/02-runbook-dlya-codex-factory-template.md`
-- `factory_template_only_pack/07-AGENTS-factory-template.md`
+- `docs/operator/factory-template/02-runbook-dlya-codex-factory-template.md`
+- `docs/operator/factory-template/07-AGENTS-factory-template.md`
 - `template-repo/scripts/validate-handoff-response-format.py`
 
 ## Шаги воспроизведения
@@ -41,7 +41,7 @@ Repo: `factory-template`
 
 ## Evidence
 - `template-repo/scenario-pack/17-direct-task-self-handoff.md` требует self-handoff sequence, но не фиксирует достаточно жёстко, что он должен быть явно показан пользователю в стартовом ответе.
-- `factory_template_only_pack/02-runbook-dlya-codex-factory-template.md` закрепляет общий handoff/footer behavior, но не делает visible direct-task self-handoff обязательным first response artifact.
+- `docs/operator/factory-template/02-runbook-dlya-codex-factory-template.md` закрепляет общий handoff/footer behavior, но не делает visible direct-task self-handoff обязательным first response artifact.
 - `template-repo/scripts/validate-handoff-response-format.py` проверяет single-block handoff format, но не покрывает direct-task self-handoff response contract.
 
 ## Слой дефекта

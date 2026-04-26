@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 ### Добавлено
+- defect report `reports/bugs/2026-04-26-root-still-has-nonstandard-top-level-folders.md` и ADR `docs/decisions/2026-04-26-root-physical-normalization.md` для physical root normalization.
+- bounded namespace `factory/producer/` для factory-producer-owned ops, packaging, registry, sync, reference, extensions и archive content.
 - bug report `reports/bugs/2026-04-26-handoff-codex-language-leak.md` для повторной утечки английского handoff/ответов Codex.
 - mandatory language contract in generated Codex handoff: `Язык ответа Codex: русский`.
 - ADR `docs/decisions/2026-04-26-project-core-producer-layer-and-brownfield-transition.md` фиксирует единый lifecycle core, factory producer layer и обязательный brownfield -> greenfield conversion.
@@ -9,6 +11,9 @@
 - `docs/brownfield-to-greenfield-transition.md` описывает without-repo и with-repo transition paths, conversion gates и done rule.
 
 ### Изменено
+- legacy/factory-only root folders физически перенесены или растворены: `.dogfood-bootstrap`, `factory_template_only_pack`, `meta-template-project`, `onboarding-smoke`, `optional-domain-packs`, `packaging`, `registry`, `working-project-examples`, `workspace-packs`.
+- `template-repo/tree-contract.yaml` и `validate-tree-contract.py` теперь запрещают старые active root paths, проверяют `factory/producer/*` namespace и блокируют factory-producer-owned paths в generated/battle projects.
+- downstream sync tooling, source profiles, release scripts, docs и smoke/matrix paths обновлены на новые producer/test/reference locations.
 - `tree-contract.yaml`, `mode-parity.yaml`, presets и sync manifest теперь разделяют project preset, recommended mode, lifecycle state и ownership class.
 - Brownfield presets помечены как transitional adoption labels с target `greenfield-product` / `greenfield-converted`.
 - Launcher, first-project wizard и VPS preflight теперь объясняют brownfield как intake/reconstruction или audit/adoption path, а greenfield как steady-state product development.
@@ -44,9 +49,9 @@
 
 ## [2.4.4] - 2026-04-22
 ### Добавлено
-- отдельный optional/reference contour `optional-domain-packs/` для domain-specific reference-cases вне canonical core tree
+- отдельный optional/reference contour `factory/producer/reference/domain-packs/` для domain-specific reference-cases вне canonical core tree
 - compatibility alias map для legacy preset names в `template-repo/project-presets.yaml` и runtime preset application
-- универсальный workspace pack `workspace-packs/vscode-codex-bootstrap` вместо release-facing dogfood naming
+- универсальный workspace pack `factory/producer/extensions/workspace-packs/vscode-codex-bootstrap` вместо release-facing dogfood naming
 
 ### Изменено
 - canonical entry naming приведён к нейтральным factory names: `greenfield-product`, `brownfield-without-repo`, `brownfield-with-repo-*`
@@ -127,7 +132,7 @@
 
 ## [2.4.1] - 2026-04-20
 ### Добавлено
-- declarative manifest `packaging/sources/sources-profiles.yaml` для archive/direct reference profiles
+- declarative manifest `factory/producer/packaging/sources/sources-profiles.yaml` для archive/direct reference profiles
 - direct reference profile `core-hot-15` для ежедневной работы в ChatGPT Project
 - usage doc `docs/releases/sources-pack-usage.md` для hybrid-схемы `direct hot-set + canonical archive`
 

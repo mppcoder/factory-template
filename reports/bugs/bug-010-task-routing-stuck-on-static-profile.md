@@ -10,9 +10,9 @@ bug-010-task-routing-stuck-on-static-profile
 Repo: `factory-template`
 
 Затронутые зоны:
-- `factory_template_only_pack/03-mode-routing-factory-template.md`
-- `factory_template_only_pack/06-codex-config-factory-template.toml`
-- `factory_template_only_pack/07-AGENTS-factory-template.md`
+- `docs/operator/factory-template/03-mode-routing-factory-template.md`
+- `factory/producer/ops/codex-config-factory-template.toml`
+- `docs/operator/factory-template/07-AGENTS-factory-template.md`
 - `template-repo/template/.codex/config.toml`
 - `template-repo/template/docs/codex-workflow.md`
 - `template-repo/scripts/create-codex-task-pack.py`
@@ -35,8 +35,8 @@ Repo: `factory-template`
 - Direct task outside ChatGPT Project не обязан создавать полный self-handoff и поэтому выпадает из общего scenario discipline.
 
 ## Evidence
-- `factory_template_only_pack/03-mode-routing-factory-template.md` описывает "Практический протокол внутри живой сессии" и ручное переключение между `default-dev` / `fast-routine` / `heavy-analysis` / `release-verify`.
-- `factory_template_only_pack/06-codex-config-factory-template.toml` задает `profile = "default-dev"` и не содержит launch router.
+- `docs/operator/factory-template/03-mode-routing-factory-template.md` описывает "Практический протокол внутри живой сессии" и ручное переключение между `default-dev` / `fast-routine` / `heavy-analysis` / `release-verify`.
+- `factory/producer/ops/codex-config-factory-template.toml` задает `profile = "default-dev"` и не содержит launch router.
 - `template-repo/template/.codex/config.toml` вообще содержит только один базовый runtime (`gpt-5.4`, `medium`) без named task profiles.
 - `template-repo/template/docs/codex-workflow.md` описывает один дефолтный режим и subagents, но не task-launch routing.
 - `template-repo/scripts/create-codex-task-pack.py` генерирует advisory handoff artifacts, но не executable launch decision и не direct self-handoff bootstrap.

@@ -328,7 +328,7 @@ def main() -> int:
 - `Инструкция пользователю` не должна подменять внутренний handoff, если internal repo follow-up еще не завершен.
 - Если внешнего шага нет, финальный ответ все равно должен явно сказать, что внешних действий не требуется.
 - Для обновления factory ChatGPT Project сначала сам подготовьте точный repo-first instruction text; этот шаг выполняет Codex внутри repo до пользовательского блока.
-- Для downstream repo sync сначала используйте `workspace-packs/factory-ops/export-template-patch.sh` и `workspace-packs/factory-ops/apply-template-patch.sh`.
+- Для downstream repo sync сначала используйте `factory/producer/extensions/workspace-packs/factory-ops/export-template-patch.sh` и `factory/producer/extensions/workspace-packs/factory-ops/apply-template-patch.sh`.
 - Для downstream repo instruction layer source-of-truth хранится в `template-repo/AGENTS.md`, а Codex в battle repo должен читать materialized root `AGENTS.md`.
 - Не перекладывайте на пользователя запуск внутренних repo-команд вроде `GENERATE_BOUNDARY_ACTIONS.sh`, если эти шаги может выполнить Codex.
 - Если замена может создать устаревшие дубликаты, добавляйте точный раздел `Удалить перед заменой`.

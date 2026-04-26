@@ -13,7 +13,7 @@
 - `template-repo/tree-contract.yaml`
 - `template-repo/mode-parity.yaml`
 - `template-repo/project-presets.yaml`
-- `workspace-packs/factory-ops/factory-sync-manifest.yaml`
+- `factory/producer/extensions/workspace-packs/factory-ops/factory-sync-manifest.yaml`
 - `docs/tree-contract.md`
 - `docs/template-architecture-and-event-workflows.md`
 
@@ -64,16 +64,16 @@ This is a template architecture defect. It belongs to the reusable factory layer
 - `template-repo/scripts/factory-launcher.py`
 - `template-repo/scripts/first-project-wizard.py`
 - `template-repo/scripts/preflight-vps-check.py`
-- `workspace-packs/factory-ops/factory-sync-manifest.yaml`
-- `workspace-packs/factory-ops/check-template-drift.py`
-- `workspace-packs/factory-ops/export-template-patch.sh`
-- `workspace-packs/factory-ops/apply-template-patch.sh`
+- `factory/producer/extensions/workspace-packs/factory-ops/factory-sync-manifest.yaml`
+- `factory/producer/extensions/workspace-packs/factory-ops/check-template-drift.py`
+- `factory/producer/extensions/workspace-packs/factory-ops/export-template-patch.sh`
+- `factory/producer/extensions/workspace-packs/factory-ops/apply-template-patch.sh`
 - `docs/tree-contract.md`
 - `docs/template-architecture-and-event-workflows.md`
 - `docs/brownfield-to-greenfield-transition.md`
 - `README.md`
 - `factory-template-ops-policy.yaml`
-- `packaging/sources/sources-profiles.yaml`
+- `factory/producer/packaging/sources/sources-profiles.yaml`
 - release closeout artifacts
 
 ## Done rule

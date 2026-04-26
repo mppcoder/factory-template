@@ -42,7 +42,7 @@
 - completion/handoff layer теперь требует `Рекомендация по внешним действиям` с явным статусом для factory ChatGPT Project, downstream repo sync, downstream ChatGPT Project и Sources fallback
 - repo-first instruction layer для ChatGPT Projects: сценарии читаются прямо из GitHub repo, а не из локально загруженных project artifacts
 - launcher и template docs больше не требуют отдельную project-local staging-конфигурацию
-- beginner-friendly acceptance smoke (`onboarding-smoke/run-novice-e2e.sh`) регулярно воспроизводит greenfield и brownfield novice launch path через wizard
+- beginner-friendly acceptance smoke (`tests/onboarding-smoke/run-novice-e2e.sh`) регулярно воспроизводит greenfield и brownfield novice launch path через wizard
 - beginner-friendly acceptance smoke теперь покрывает все canonical presets: `greenfield-product`, `brownfield-without-repo`, `brownfield-with-repo-modernization`, `brownfield-with-repo-integration`, `brownfield-with-repo-audit`
 - guided launcher теперь поддерживает полный beginner path через `--guided`: preflight, создание проекта, проверка `project-knowledge`, workspace первой задачи и следующий шаг оператора
 - novice E2E теперь отдельно подтверждает `--guided` для greenfield, brownfield без repo, brownfield с repo и `--continue` flow
@@ -72,6 +72,8 @@
 - repo-wide language cleanup закрыт для active source-facing слоя: `validate-human-language-layer.py` дает `active findings: 0`, а historical reports/work/release evidence закреплены как documented archival exceptions
 - user-facing output operator env validator русифицирован, чтобы quick verify не возвращал англоязычные описательные сообщения
 - tree contract validator подключен к quick/audit/matrix контуру и фиксирует compatibility-only слой для старых preset aliases
+- physical root tree нормализован под project lifecycle core + bounded `factory/producer/` layer; старые factory-only и historical top-level folders запрещены контрактом
+- factory-producer-owned content живет под `factory/producer/*`, а generated/battle project validation блокирует попадание `factory/producer/*` в downstream root
 - mode parity validator подключен к quick/ci контуру и фиксирует одинаковый core layer: repo-first instructions, scenario-pack, AGENTS materialization, `.chatgpt`, Codex handoff pack, defect capture, versioning/docs, project-knowledge, `work/features`, `work/completed`, verify/done checklist и downstream sync metadata
 - brownfield transition validator и greenfield conversion validator подключены к quick verify и matrix; brownfield adoption считается done только после conversion в `greenfield-product` или documented blocker
 - `factory-template` зафиксирован как обычный `greenfield-product` с дополнительным factory producer layer, а не как отдельный workflow
@@ -87,7 +89,7 @@
 - `TEST_REPORT.md` является evidence/reporting layer, а не отдельным источником статуса релиза
 - dependency order зафиксирован: framing -> RC closeout evidence -> explicit GA/no-go по KPI
 - scorecard gates нормализованы в `docs/releases/release-scorecard.yaml`
-- novice E2E acceptance (все canonical presets + guided launcher smoke) зафиксирован в `onboarding-smoke/ACCEPTANCE_REPORT.md`
+- novice E2E acceptance (все canonical presets + guided launcher smoke) зафиксирован в `tests/onboarding-smoke/ACCEPTANCE_REPORT.md`
 - downstream upgrade UX closeout зафиксирован в `UPGRADE_SUMMARY.md`
 - `G25-GA` прошел на `2026-04-26`: full-KPI evidence зафиксирован для всех `M25-*`
 - consolidated evidence: `docs/releases/2.5-ga-kpi-evidence.md`
@@ -116,6 +118,10 @@
 Core включает фабрику, шаблон, versioning/documentation layer, `.chatgpt`, scenario-pack, examples и feedback loop.
 
 ## Optional layers / дополнительные слои
-- workspace-packs
-- optional-domain-packs
+- factory/producer/extensions/workspace-packs
+- factory/producer/reference/domain-packs
+- factory/producer/reference/examples
+- factory/producer/packaging
+- factory/producer/registry
+- factory/producer/archive
 - advisory factory ops

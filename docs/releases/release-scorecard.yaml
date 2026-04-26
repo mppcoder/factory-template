@@ -30,7 +30,7 @@ release_truth:
       evidence:
         - TEST_REPORT.md
         - UPGRADE_SUMMARY.md
-        - onboarding-smoke/ACCEPTANCE_REPORT.md
+        - tests/onboarding-smoke/ACCEPTANCE_REPORT.md
     - id: G25-GA
       name: Full 2.5 GA readiness
       status: passed
@@ -38,7 +38,7 @@ release_truth:
         - docs/releases/2.5-success-metrics.md
         - docs/releases/2.5-ga-kpi-evidence.md
         - RELEASE_CHECKLIST.md
-        - onboarding-smoke/ACCEPTANCE_REPORT.md
+        - tests/onboarding-smoke/ACCEPTANCE_REPORT.md
         - reports/release/2.5-controlled-pilot-checklist.md
         - reports/release/2.5-downstream-safe-sync-report.md
         - .chatgpt/handoff-rework-register.yaml

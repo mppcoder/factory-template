@@ -10,12 +10,12 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
-INCOMING = ROOT / "meta-template-project" / "incoming-learnings"
+INCOMING = ROOT / "reports" / "factory-feedback" / "incoming-learnings"
 INDEX = INCOMING / "INDEX.md"
 
 
 def parse_args() -> argparse.Namespace:
-    parser = argparse.ArgumentParser(description="Ingest factory feedback from a working project into meta-template-project/incoming-learnings.")
+    parser = argparse.ArgumentParser(description="Ingest factory feedback from a working project into reports/factory-feedback/incoming-learnings.")
     parser.add_argument("source_project", help="Path to working project root that contains meta-feedback/")
     parser.add_argument("--dry-run", action="store_true", help="Show planned actions without writing files")
     parser.add_argument("--allow-incomplete", action="store_true", help="Allow ingest even if factory feedback validator fails")

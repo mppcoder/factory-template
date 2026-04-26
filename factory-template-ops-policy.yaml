@@ -1,4 +1,4 @@
-sources_profiles_manifest: packaging/sources/sources-profiles.yaml
+sources_profiles_manifest: factory/producer/packaging/sources/sources-profiles.yaml
 
 boundary_actions:
   repo_name: factory-template
@@ -42,7 +42,7 @@ boundary_actions:
         - RELEASE_NOTE_TEMPLATE.md
         - RELEASE_BUILD.sh
         - FACTORY_MANIFEST.yaml
-        - meta-template-project/RELEASE_NOTES.md
+        - docs/releases/factory-template-release-notes.md
       path_prefixes:
         - /projects/factory-template/_release/
       document_signals:

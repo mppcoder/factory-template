@@ -30,11 +30,11 @@ LIGHTWEIGHT_EXACT_PATHS = {
     "COMMIT_MESSAGE_GUIDE.md",
     "template-repo/CHANGELOG.md",
     "template-repo/CURRENT_FUNCTIONAL_STATE.md",
-    "meta-template-project/RELEASE_NOTES.md",
+    "docs/releases/factory-template-release-notes.md",
 }
 
 LIGHTWEIGHT_PREFIX_RULES = (
-    ("factory_template_only_pack/", (".md",)),
+    ("docs/operator/factory-template/", (".md",)),
     ("reports/bugs/", (".md",)),
     ("work/completed/", (".md",)),
     ("docs/", (".md",)),
@@ -145,7 +145,9 @@ def iter_status_paths(root: Path) -> list[str]:
         if status[0] in {"R", "C"} or status[1] in {"R", "C"}:
             if i + 1 >= len(raw_items):
                 raise AutomationError("git status вернул некорректную rename/copy запись")
-            rel = raw_items[i + 1]
+            # In porcelain -z rename/copy records the first item carries the new path,
+            # followed by the old path. Stage by the live path; staging the old side as
+            # a pathspec can fail for rename-heavy physical tree normalizations.
             i += 2
         else:
             i += 1

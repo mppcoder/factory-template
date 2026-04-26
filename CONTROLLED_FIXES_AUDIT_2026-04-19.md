@@ -3,32 +3,32 @@
 ## Scope
 
 - Repo under audit: `/projects/factory-template`
-- Source pack unpacked from: `/projects/factory-template/_incoming/factory_template_only_pack.zip`  (historical path normalized to current canonical VPS layout)
+- Source pack unpacked from: `/projects/factory-template/_incoming/docs/operator/factory-template.zip`  (historical path normalized to current canonical VPS layout)
 - Boundary mode: repo-only, no external actions
 - Git status: not available, because `/projects/factory-template` is currently not initialized as a git repository
 
 ## Repo Structure Snapshot
 
 - `template-repo/`: canonical project template, launcher, validators, scenario-pack
-- `working-project-examples/`: golden and scaffold examples
-- `meta-template-project/`: meta layer for factory evolution and release notes
-- `workspace-packs/`: optional operational packs
+- `factory/producer/reference/examples/`: golden and scaffold examples
+- `project-knowledge/factory/template-evolution/`: meta layer for factory evolution and release notes
+- `factory/producer/extensions/workspace-packs/`: optional operational packs
 - `domain-packs/`: optional domain overlays
 - `bootstrap/`: operator guides and workflow notes
-- `registry/`: release and project registry
-- `factory_template_only_pack/`: unpacked runbooks and operator materials from incoming zip
+- `factory/producer/registry/`: release and project registry
+- `docs/operator/factory-template/`: unpacked runbooks and operator materials from incoming zip
 
 ### Directory Counts
 
 - `template-repo/scripts`: 21 files
 - `template-repo/scenario-pack`: 31 files, 2 directories
-- `working-project-examples`: 228 files, 69 directories
+- `factory/producer/reference/examples`: 228 files, 69 directories
 - `bootstrap`: 22 files
-- `meta-template-project`: 26 files, 10 directories
-- `workspace-packs`: 19 files, 7 directories
+- `project-knowledge/factory/template-evolution`: 26 files, 10 directories
+- `factory/producer/extensions/workspace-packs`: 19 files, 7 directories
 - `domain-packs`: 4 files, 4 directories
 - `registry`: 5 files
-- `factory_template_only_pack`: 8 files
+- `docs/operator/factory-template`: 8 files
 
 ## Self-Tests And Audits
 
@@ -91,9 +91,9 @@ b81e6f68560695c9  template-repo/CHANGELOG.md
 e1e2211a7ac9f7f0  template-repo/scripts/create-codex-task-pack.py
 8572c0fd6b7029c4  template-repo/scenario-pack/16-done-closeout.md
 5376f2cf730353b3  template-repo/scenario-pack/brownfield/09-brownfield-closeout.md
-774787a8d0969088  factory_template_only_pack/01-runbook-dlya-polzovatelya-factory-template.md
-85936eefca4368eb  factory_template_only_pack/02-runbook-dlya-codex-factory-template.md
-1aa98e3685cf9357  factory_template_only_pack/04-chatgpt-project-sources-factory-template-20-cap.md
+774787a8d0969088  docs/operator/factory-template/01-runbook-dlya-polzovatelya-factory-template.md
+85936eefca4368eb  docs/operator/factory-template/02-runbook-dlya-codex-factory-template.md
+1aa98e3685cf9357  docs/operator/factory-template/04-chatgpt-project-sources-factory-template-20-cap.md
 ```
 
 ## Inconsistency Map
@@ -122,8 +122,8 @@ Legacy references still active:
 - `template-repo/scenario-pack/16-done-closeout.md` refers to `CURRENT_STATE.md`
 - `template-repo/scenario-pack/brownfield/09-brownfield-closeout.md` refers to `CURRENT_STATE.md`
 - `template-repo/template/README.md` lists `CURRENT_STATE.md`
-- `factory_template_only_pack/04-chatgpt-project-sources-factory-template-20-cap.md` lists `CURRENT_STATE.md`
-- `workspace-packs/factory-ops/detect-factory-issues.py` looks for `CURRENT_STATE.md`
+- `docs/operator/factory-template/04-chatgpt-project-sources-factory-template-20-cap.md` lists `CURRENT_STATE.md`
+- `factory/producer/extensions/workspace-packs/factory-ops/detect-factory-issues.py` looks for `CURRENT_STATE.md`
 
 Impact:
 
@@ -132,7 +132,7 @@ Impact:
 
 ### C. Runbook-To-Repo Topology Drift
 
-`factory_template_only_pack/02-runbook-dlya-codex-factory-template.md` tells Codex to inventory:
+`docs/operator/factory-template/02-runbook-dlya-codex-factory-template.md` tells Codex to inventory:
 
 - `scripts/`
 - `scenario-pack/`
@@ -144,7 +144,7 @@ Actual repo topology is:
 - `template-repo/scripts/`
 - `template-repo/scenario-pack/`
 - no root `.chatgpt/`
-- `working-project-examples/`
+- `factory/producer/reference/examples/`
 
 Impact:
 
@@ -153,7 +153,7 @@ Impact:
 
 ### D. Repo-First / Reference Pack Policy Drift
 
-`factory_template_only_pack/04-chatgpt-project-sources-factory-template-20-cap.md` recommends permanent Sources files that are absent from repo:
+`docs/operator/factory-template/04-chatgpt-project-sources-factory-template-20-cap.md` recommends permanent Sources files that are absent from repo:
 
 - `factory-template-overview.md`
 - `factory-release-policy.md`
@@ -214,8 +214,8 @@ Impact:
    - `template-repo/scenario-pack/16-done-closeout.md`
    - `template-repo/scenario-pack/brownfield/09-brownfield-closeout.md`
    - `template-repo/template/README.md`
-   - `workspace-packs/factory-ops/detect-factory-issues.py`
-   - operator docs in `factory_template_only_pack/`
+   - `factory/producer/extensions/workspace-packs/factory-ops/detect-factory-issues.py`
+   - operator docs in `docs/operator/factory-template/`
 3. Re-run smoke, examples, matrix, and targeted validators.
 
 ### Priority 2: Fix Runbook Topology Language
@@ -223,7 +223,7 @@ Impact:
 1. Update Codex and user runbooks to name actual repo paths:
    - `template-repo/scripts`
    - `template-repo/scenario-pack`
-   - `working-project-examples`
+   - `factory/producer/reference/examples`
    - clarify that project `.chatgpt/` lives inside generated/example projects, not repo root
 2. Add one concise repo map section to reduce path ambiguity.
 

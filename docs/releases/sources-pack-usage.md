@@ -46,7 +46,7 @@
 Source of truth остаётся в GitHub repo:
 
 - `template-repo/scenario-pack/`
-- `factory_template_only_pack/`
+- `docs/operator/factory-template/`
 - `AGENTS` / runbook / policy files
 - остальные канонические repo-артефакты
 

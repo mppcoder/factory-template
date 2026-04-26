@@ -7,7 +7,7 @@
 Фабрика использует nested working-project examples как reference fixtures, но validator `check-dod.py` всё ещё определяет наличие `origin` по текущему cwd без проверки git top-level boundary. В результате fixture validation начинает зависеть от remote родительского repo и даёт ложные DoD failures.
 
 ## Где проявилось
-`factory-template`, example fixtures внутри `working-project-examples/`.
+`factory-template`, example fixtures внутри `factory/producer/reference/examples/`.
 
 ## Повторяемый паттерн
 - example/project fixture лежит внутри внешнего git repo;
@@ -26,7 +26,7 @@
 - automation trust boundary
 
 ## Как проверить исправление
-1. Запустить `check-dod.py` на nested example fixture внутри `working-project-examples/`.
+1. Запустить `check-dod.py` на nested example fixture внутри `factory/producer/reference/examples/`.
 2. Убедиться, что validator больше не требует verified-sync report только из-за `origin` родительского repo.
 3. Повторно прогнать `EXAMPLES_TEST.sh` и убедиться, что прежние fixture false positives исчезли.
 

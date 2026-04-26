@@ -85,31 +85,31 @@
 
 1. Подготовить или обновить bundle (dry-run):
 ```bash
-/projects/factory-template/workspace-packs/factory-ops/export-template-patch.sh /projects/factory-template /tmp/tmp.ZxXwae37z9/work/russian-summary-fixture --dry-run
+/projects/factory-template/factory/producer/extensions/workspace-packs/factory-ops/export-template-patch.sh /projects/factory-template /tmp/tmp.ZxXwae37z9/work/russian-summary-fixture --dry-run
 ```
 2. Проверить bundle перед apply:
 ```bash
-/projects/factory-template/workspace-packs/factory-ops/apply-template-patch.sh /tmp/tmp.ZxXwae37z9/work/russian-summary-fixture/_factory-sync-export --check
+/projects/factory-template/factory/producer/extensions/workspace-packs/factory-ops/apply-template-patch.sh /tmp/tmp.ZxXwae37z9/work/russian-summary-fixture/_factory-sync-export --check
 ```
 3. Применить safe zones:
 ```bash
-/projects/factory-template/workspace-packs/factory-ops/apply-template-patch.sh /tmp/tmp.ZxXwae37z9/work/russian-summary-fixture/_factory-sync-export --apply-safe-zones
+/projects/factory-template/factory/producer/extensions/workspace-packs/factory-ops/apply-template-patch.sh /tmp/tmp.ZxXwae37z9/work/russian-summary-fixture/_factory-sync-export --apply-safe-zones
 ```
 4. Применить safe zones с full-project snapshot (optional, но безопаснее для смешанных ручных сессий):
 ```bash
-/projects/factory-template/workspace-packs/factory-ops/apply-template-patch.sh /tmp/tmp.ZxXwae37z9/work/russian-summary-fixture/_factory-sync-export --apply-safe-zones --with-project-snapshot
+/projects/factory-template/factory/producer/extensions/workspace-packs/factory-ops/apply-template-patch.sh /tmp/tmp.ZxXwae37z9/work/russian-summary-fixture/_factory-sync-export --apply-safe-zones --with-project-snapshot
 ```
 5. Проверить rollback state:
 ```bash
-/projects/factory-template/workspace-packs/factory-ops/rollback-template-patch.sh /tmp/tmp.ZxXwae37z9/work/russian-summary-fixture/_factory-sync-export --check
+/projects/factory-template/factory/producer/extensions/workspace-packs/factory-ops/rollback-template-patch.sh /tmp/tmp.ZxXwae37z9/work/russian-summary-fixture/_factory-sync-export --check
 ```
 6. Откатить safe-zone materialization при необходимости:
 ```bash
-/projects/factory-template/workspace-packs/factory-ops/rollback-template-patch.sh /tmp/tmp.ZxXwae37z9/work/russian-summary-fixture/_factory-sync-export --rollback
+/projects/factory-template/factory/producer/extensions/workspace-packs/factory-ops/rollback-template-patch.sh /tmp/tmp.ZxXwae37z9/work/russian-summary-fixture/_factory-sync-export --rollback
 ```
 7. Откатить и восстановить полный project snapshot, если использовался snapshot mode:
 ```bash
-/projects/factory-template/workspace-packs/factory-ops/rollback-template-patch.sh /tmp/tmp.ZxXwae37z9/work/russian-summary-fixture/_factory-sync-export --rollback --restore-project-snapshot
+/projects/factory-template/factory/producer/extensions/workspace-packs/factory-ops/rollback-template-patch.sh /tmp/tmp.ZxXwae37z9/work/russian-summary-fixture/_factory-sync-export --rollback --restore-project-snapshot
 ```
 
 ## Заметки по безопасности UX

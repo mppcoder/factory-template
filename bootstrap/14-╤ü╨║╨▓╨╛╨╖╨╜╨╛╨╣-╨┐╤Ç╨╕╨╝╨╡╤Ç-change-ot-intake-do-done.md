@@ -2,7 +2,7 @@
 
 Этот файл объясняет, как читать готовый демонстрационный пример в папке:
 
-`working-project-examples/example-change-end-to-end/`
+`factory/producer/reference/examples/example-change-end-to-end/`
 
 ## Что показывает пример
 Пример показывает полный жизненный цикл одного изменения внутри фабрики:

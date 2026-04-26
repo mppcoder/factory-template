@@ -10,7 +10,7 @@ from sources_profiles import get_profiles, profiles_path_from_policy
 
 ROOT = Path(__file__).resolve().parents[1]
 POLICY_PATH = ROOT / "factory-template-ops-policy.yaml"
-TEMPLATE_PATH = ROOT / "factory_template_only_pack" / "templates" / "factory-template-boundary-actions.template.md"
+TEMPLATE_PATH = ROOT / "factory" / "producer" / "ops" / "templates" / "factory-template-boundary-actions.template.md"
 EXPORT_ROOT = ROOT / "_sources-export" / "factory-template"
 
 
@@ -40,8 +40,8 @@ def validate_pack_semantics(name: str, files: list[str], errors: list[str]) -> N
                 "template-repo/scenario-pack/00-master-router.md",
                 "template-repo/scenario-pack/01-global-rules.md",
                 "template-repo/scenario-pack/15-handoff-to-codex.md",
-                "factory_template_only_pack/01-runbook-dlya-polzovatelya-factory-template.md",
-                "factory_template_only_pack/02-runbook-dlya-codex-factory-template.md",
+                "docs/operator/factory-template/01-runbook-dlya-polzovatelya-factory-template.md",
+                "docs/operator/factory-template/02-runbook-dlya-codex-factory-template.md",
                 "README.md",
                 "CHANGELOG.md",
                 "CURRENT_FUNCTIONAL_STATE.md",
@@ -53,7 +53,7 @@ def validate_pack_semantics(name: str, files: list[str], errors: list[str]) -> N
             errors,
         )
         require_prefix_count(name, files, "template-repo/scenario-pack/", 6, errors)
-        require_prefix_count(name, files, "factory_template_only_pack/", 4, errors)
+        require_prefix_count(name, files, "docs/operator/factory-template/", 4, errors)
 
     elif name == "sources-pack-release-20":
         require_paths(
@@ -68,12 +68,12 @@ def validate_pack_semantics(name: str, files: list[str], errors: list[str]) -> N
                 "RELEASE_CHECKLIST.md",
                 "VERIFY_SUMMARY.md",
                 "RELEASE_NOTE_TEMPLATE.md",
-                "meta-template-project/RELEASE_NOTES.md",
+                "docs/releases/factory-template-release-notes.md",
                 "template-repo/TEMPLATE_MANIFEST.yaml",
             ],
             errors,
         )
-        if "factory_template_only_pack/05-backlog-dorabotok-factory-template.md" in file_set:
+        if "docs/operator/factory-template/05-backlog-dorabotok-factory-template.md" in file_set:
             fail(f"{name}: backlog-файл не должен занимать место в release-oriented pack", errors)
         if "CONTROLLED_FIXES_AUDIT_2026-04-19.md" in file_set:
             fail(f"{name}: audit snapshot не должен заменять release-facing docs", errors)
@@ -166,10 +166,10 @@ def validate_profiles_manifest(policy: dict, errors: list[str]) -> tuple[dict[st
         "template-repo/scenario-pack/03-stage-gates.md",
         "template-repo/scenario-pack/15-handoff-to-codex.md",
         "template-repo/scenario-pack/16-done-closeout.md",
-        "factory_template_only_pack/01-runbook-dlya-polzovatelya-factory-template.md",
-        "factory_template_only_pack/02-runbook-dlya-codex-factory-template.md",
-        "factory_template_only_pack/03-mode-routing-factory-template.md",
-        "factory_template_only_pack/07-AGENTS-factory-template.md",
+        "docs/operator/factory-template/01-runbook-dlya-polzovatelya-factory-template.md",
+        "docs/operator/factory-template/02-runbook-dlya-codex-factory-template.md",
+        "docs/operator/factory-template/03-mode-routing-factory-template.md",
+        "docs/operator/factory-template/07-AGENTS-factory-template.md",
         "CURRENT_FUNCTIONAL_STATE.md",
         "VERSION.md",
         "template-repo/change-classes.yaml",
@@ -181,7 +181,7 @@ def validate_profiles_manifest(policy: dict, errors: list[str]) -> tuple[dict[st
         "CHANGELOG.md",
         "TEST_REPORT.md",
         "CONTROLLED_FIXES_AUDIT_2026-04-19.md",
-        "meta-template-project/RELEASE_NOTES.md",
+        "docs/releases/factory-template-release-notes.md",
     ]
     core_archive = profiles.get("core_archive", {})
     core_hot = profiles.get("core_hot_direct", {})

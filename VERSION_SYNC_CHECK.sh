@@ -12,8 +12,8 @@ MANIFEST_NAME="$(awk -F': ' '/^name:/{print $2; exit}' "$ROOT/FACTORY_MANIFEST.y
 TEMPLATE_VERSION="$(awk 'f{gsub(/^[[:space:]]+|[[:space:]]+$/, ""); print; exit} /^## Текущая версия шаблона$/{f=1}' "$ROOT/template-repo/VERSION.md")"
 TEMPLATE_FACTORY_VERSION="$(awk 'f{gsub(/^[[:space:]]+|[[:space:]]+$/, ""); print; exit} /^## Версия фабрики-источника$/{f=1}' "$ROOT/template-repo/VERSION.md")"
 TEMPLATE_MANIFEST_FACTORY_VERSION="$(awk -F': ' '/^factory_version:/{print $2; exit}' "$ROOT/template-repo/TEMPLATE_MANIFEST.yaml")"
-META_VERSION="$(awk 'f{gsub(/^[[:space:]]+|[[:space:]]+$/, ""); print; exit} /^## Текущая версия$/{f=1}' "$ROOT/meta-template-project/VERSION.md")"
-META_FACTORY_VERSION="$(awk 'f{gsub(/^[[:space:]]+|[[:space:]]+$/, ""); print; exit} /^## Связанная версия фабрики$/{f=1}' "$ROOT/meta-template-project/VERSION.md")"
+META_VERSION="$(awk 'f{gsub(/^[[:space:]]+|[[:space:]]+$/, ""); print; exit} /^## Текущая версия$/{f=1}' "$ROOT/project-knowledge/factory/template-evolution/VERSION.md")"
+META_FACTORY_VERSION="$(awk 'f{gsub(/^[[:space:]]+|[[:space:]]+$/, ""); print; exit} /^## Связанная версия фабрики$/{f=1}' "$ROOT/project-knowledge/factory/template-evolution/VERSION.md")"
 
 [ -n "$ROOT_VERSION" ] || die 'ОШИБКА: не удалось определить root version из VERSION.md'
 [ "$MANIFEST_VERSION" = "$ROOT_VERSION" ] || die "ОШИБКА: FACTORY_MANIFEST.yaml version=$MANIFEST_VERSION, ожидалось $ROOT_VERSION"
@@ -21,28 +21,28 @@ META_FACTORY_VERSION="$(awk 'f{gsub(/^[[:space:]]+|[[:space:]]+$/, ""); print; e
 [ "$TEMPLATE_VERSION" = "$ROOT_VERSION" ] || die "ОШИБКА: template-repo/VERSION.md=$TEMPLATE_VERSION, ожидалось $ROOT_VERSION"
 [ "$TEMPLATE_FACTORY_VERSION" = "$ROOT_VERSION" ] || die "ОШИБКА: template-repo/VERSION.md factory=$TEMPLATE_FACTORY_VERSION, ожидалось $ROOT_VERSION"
 [ "$TEMPLATE_MANIFEST_FACTORY_VERSION" = "$ROOT_VERSION" ] || die "ОШИБКА: TEMPLATE_MANIFEST.yaml factory_version=$TEMPLATE_MANIFEST_FACTORY_VERSION, ожидалось $ROOT_VERSION"
-[ "$META_VERSION" = "$ROOT_VERSION" ] || die "ОШИБКА: meta-template-project/VERSION.md=$META_VERSION, ожидалось $ROOT_VERSION"
-[ "$META_FACTORY_VERSION" = "$ROOT_VERSION" ] || die "ОШИБКА: meta-template-project/VERSION.md factory=$META_FACTORY_VERSION, ожидалось $ROOT_VERSION"
+[ "$META_VERSION" = "$ROOT_VERSION" ] || die "ОШИБКА: project-knowledge/factory/template-evolution/VERSION.md=$META_VERSION, ожидалось $ROOT_VERSION"
+[ "$META_FACTORY_VERSION" = "$ROOT_VERSION" ] || die "ОШИБКА: project-knowledge/factory/template-evolution/VERSION.md factory=$META_FACTORY_VERSION, ожидалось $ROOT_VERSION"
 
-grep -q "## ${ROOT_VERSION}" "$ROOT/meta-template-project/RELEASE_NOTES.md" || die "ОШИБКА: meta-template-project/RELEASE_NOTES.md не содержит секцию ${ROOT_VERSION}"
+grep -q "## ${ROOT_VERSION}" "$ROOT/docs/releases/factory-template-release-notes.md" || die "ОШИБКА: docs/releases/factory-template-release-notes.md не содержит секцию ${ROOT_VERSION}"
 
 if rg -n 'factory-v2\.3\.9-alignment-layer|2\.4\.0-versioning-layer|factory-2\.4\.0-versioning-layer' \
   "$ROOT" \
-  -g '!registry/release-history.md' \
-  -g '!registry/factory-versions.md' \
-  -g '!registry/projects-created.md' \
+  -g '!factory/producer/registry/release-history.md' \
+  -g '!factory/producer/registry/factory-versions.md' \
+  -g '!factory/producer/registry/projects-created.md' \
   -g '!CHANGELOG.md' \
   -g '!VERSION.md' \
-  -g '!meta-template-project/RELEASE_NOTES.md' >/dev/null; then
+  -g '!docs/releases/factory-template-release-notes.md' >/dev/null; then
   echo 'ОШИБКА: найдены неожиданные legacy/versioning-layer ссылки вне разрешенной истории:'
   rg -n 'factory-v2\.3\.9-alignment-layer|2\.4\.0-versioning-layer|factory-2\.4\.0-versioning-layer' \
     "$ROOT" \
-    -g '!registry/release-history.md' \
-    -g '!registry/factory-versions.md' \
-    -g '!registry/projects-created.md' \
+    -g '!factory/producer/registry/release-history.md' \
+    -g '!factory/producer/registry/factory-versions.md' \
+    -g '!factory/producer/registry/projects-created.md' \
     -g '!CHANGELOG.md' \
     -g '!VERSION.md' \
-    -g '!meta-template-project/RELEASE_NOTES.md' || true
+    -g '!docs/releases/factory-template-release-notes.md' || true
   FAILS=$((FAILS+1))
 fi
 

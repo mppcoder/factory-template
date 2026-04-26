@@ -9,10 +9,10 @@
 - `template-repo/codex-routing.yaml`
 - `template-repo/scripts/codex_task_router.py`
 - `template-repo/template/.codex/config.toml`
-- `workspace-packs/vscode-codex-bootstrap/codex/global-codex-config.example.toml`
-- `factory_template_only_pack/03-mode-routing-factory-template.md`
-- `factory_template_only_pack/06-codex-config-factory-template.toml`
-- `.dogfood-bootstrap/dogfood-brownfield-shell-p1/.codex/config.toml`
+- `factory/producer/extensions/workspace-packs/vscode-codex-bootstrap/codex/global-codex-config.example.toml`
+- `docs/operator/factory-template/03-mode-routing-factory-template.md`
+- `factory/producer/ops/codex-config-factory-template.toml`
+- `factory/producer/archive/legacy-bootstrap/dogfood-brownfield-shell-p1/.codex/config.toml`
 - `.chatgpt/direct-task-source.md`
 - `.chatgpt/direct-task-self-handoff.md`
 - `.chatgpt/direct-task-response.md`

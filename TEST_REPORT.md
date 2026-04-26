@@ -20,6 +20,19 @@ TEST_REPORT.md is verification evidence, not the canonical release-status source
 - `bash template-repo/scripts/verify-all.sh ci` — pass.
 - `bash PRE_RELEASE_AUDIT.sh` — pass.
 
+## Проверка physical root normalization
+
+Дата: `2026-04-26`.
+
+- `find . -maxdepth 1 -type d` больше не показывает `.dogfood-bootstrap`, `factory_template_only_pack`, `meta-template-project`, `onboarding-smoke`, `optional-domain-packs`, `packaging`, `registry`, `working-project-examples`, `workspace-packs`.
+- `python3 template-repo/scripts/validate-tree-contract.py .` — pass; contract запрещает old active root folders и проверяет approved `factory/producer/*` namespace.
+- `python3 template-repo/scripts/validate-mode-parity.py .` — pass.
+- `python3 template-repo/scripts/validate-brownfield-transition.py .` — pass.
+- `python3 template-repo/scripts/validate-greenfield-conversion.py .` — pass.
+- `bash template-repo/scripts/verify-all.sh quick` — pass.
+- `bash MATRIX_TEST.sh` — pass.
+- `bash template-repo/scripts/verify-all.sh ci` — pass.
+
 ## Проверка language-contract для handoff
 
 Дата: `2026-04-26`.
@@ -80,7 +93,7 @@ Blocker report: `reports/bugs/2026-04-26-25-ga-readiness-gap.md`.
 - synthetic phase detection self-test
 - repo-first ChatGPT Project instruction mode
 - release-facing reference package and canonical root release notes source
-- novice onboarding acceptance fixtures (`onboarding-smoke/run-novice-e2e.sh`)
+- novice onboarding acceptance fixtures (`tests/onboarding-smoke/run-novice-e2e.sh`)
 - mode parity manifest, matrix and validator (`template-repo/mode-parity.yaml`, `docs/mode-parity-matrix.md`, `validate-mode-parity.py`)
 - downstream upgrade v3 dry-run/apply/rollback UX (`upgrade-report.py`, `rollback-template-patch.sh`)
 - lightweight spec-governance traceability: `decisions.md.template`, expanded tech/task templates, approval-aware deviations, task verification anchors
@@ -103,7 +116,7 @@ Evidence / quality / DoD до смыслового наполнения арте
 - Production VPS preset gap зафиксирован и исправлен in-scope: `reports/bugs/2026-04-26-production-vps-preset-gap.md`.
 - `MATRIX_TEST.sh` подтверждает `validate-tree-contract.py` на generated greenfield, brownfield-without-repo и brownfield-with-repo контурах.
 - Compatibility aliases проверены через `apply-project-preset.py`: старый greenfield alias резолвится в `greenfield-product`, старый no-repo brownfield alias резолвится в `brownfield-without-repo`.
-- `bash onboarding-smoke/run-novice-e2e.sh` проходит: покрыты wizard fallback-сценарии для всех canonical presets, `--guided` greenfield, `--guided` brownfield без repo, `--guided` brownfield с repo и `--continue` flow.
+- `bash tests/onboarding-smoke/run-novice-e2e.sh` проходит: покрыты wizard fallback-сценарии для всех canonical presets, `--guided` greenfield, `--guided` brownfield без repo, `--guided` brownfield с repo и `--continue` flow.
 - `python3 template-repo/scripts/factory-launcher.py --guided` ведет новичка через preflight, создание проекта, проверку `project-knowledge`, создание workspace первой задачи и operator next step; старые прямые scripts остаются fallback-путями.
 - Defect-capture по guided launcher UX gap зафиксирован и исправлен in-scope: `reports/bugs/2026-04-25-guided-launcher-ux-gap.md`.
 - `validate-mode-parity.py` подключен в `verify-all.sh quick`, поэтому входит и в `verify-all.sh ci`.

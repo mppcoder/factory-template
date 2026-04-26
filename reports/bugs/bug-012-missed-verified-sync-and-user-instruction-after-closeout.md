@@ -41,8 +41,8 @@ Repo: `factory-template`, reusable closeout / verified-sync / boundary-output la
   - `template-repo/scenario-pack/00-master-router.md`
   - `template-repo/scenario-pack/01-global-rules.md`
   - `template-repo/scenario-pack/16-done-closeout.md`
-  - `factory_template_only_pack/02-runbook-dlya-codex-factory-template.md`
-  - `factory_template_only_pack/07-AGENTS-factory-template.md`
+  - `docs/operator/factory-template/02-runbook-dlya-codex-factory-template.md`
+  - `docs/operator/factory-template/07-AGENTS-factory-template.md`
 
 ## Затронутый слой
 factory-template

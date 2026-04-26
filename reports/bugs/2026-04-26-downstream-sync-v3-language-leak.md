@@ -6,7 +6,7 @@
 
 ## Как воспроизвести
 
-1. Сгенерировать downstream upgrade summary через `workspace-packs/factory-ops/upgrade-report.py`.
+1. Сгенерировать downstream upgrade summary через `factory/producer/extensions/workspace-packs/factory-ops/upgrade-report.py`.
 2. Открыть `UPGRADE_SUMMARY.md`.
 3. Проверить человекочитаемые подписи, пункты списка и шаги оператора.
 
