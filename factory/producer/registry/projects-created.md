@@ -116,3 +116,13 @@
   change_class: brownfield-stabilization
   execution_mode: hybrid
   примечание: создан через launcher; локальный git repo зафиксирован commit `4a58c8d`
+- дата: 2026-04-26
+  проект: Greenfield Test
+  slug: greenfield-test
+  версия_фабрики: 2.5.0
+  режим: greenfield
+  статус_записи: production
+  project_preset: greenfield-product
+  change_class: feature
+  execution_mode: codex-led
+  примечание: создан через launcher; GitHub repo `mppcoder/greenfield-test`, latest commit `cca68d5`

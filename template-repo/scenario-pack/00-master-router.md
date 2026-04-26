@@ -68,6 +68,8 @@ User-only closeout допустим только если remaining next step д
 
 Если GitHub PR создан текущей задачей или явно входит в ее closeout, `gh`/GitHub connector доступен, checks green, PR mergeable и нет required human approval, перевод PR из draft, merge, удаление branch и синхронизация local main являются внутренней работой Codex, а не пользовательским шагом.
 
+Если GitHub repo/remote creation является частью текущей задачи и `gh`/GitHub connector доступен с write permissions, создание repo, добавление `origin` и первый push тоже являются внутренней работой Codex. Завершать ответ просьбой пользователю создать repo и вставить путь запрещено, пока не назван конкретный blocker.
+
 Если есть и внутренние, и внешние шаги, сначала выдай inline Codex handoff на внутреннюю часть, а затем отдельно заверши ответ блоком `## Инструкция пользователю` только для внешней границы.
 
 ## Обязательный финальный блок

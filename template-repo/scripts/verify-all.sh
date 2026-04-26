@@ -1,7 +1,12 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+if [[ -d "$SCRIPT_DIR/../template-repo" ]]; then
+  ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
+else
+  ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
+fi
 MODE="${1:-full}"
 export PYTHONDONTWRITEBYTECODE=1
 
@@ -64,7 +69,54 @@ FAKE_DOCKER
   rm -rf "$tmp_dir"
 }
 
+project_preset() {
+  python3 - "$ROOT/.chatgpt/project-profile.yaml" <<'PY'
+from pathlib import Path
+import sys
+try:
+    import yaml
+except Exception:
+    print("")
+    raise SystemExit(0)
+path = Path(sys.argv[1])
+if not path.exists():
+    print("")
+    raise SystemExit(0)
+data = yaml.safe_load(path.read_text(encoding="utf-8")) or {}
+print(data.get("project_preset", ""))
+PY
+}
+
+run_generated_project_quick() {
+  run_step "validate-project-preset" python3 "$ROOT/scripts/validate-project-preset.py" "$ROOT"
+  run_step "validate-policy-preset" python3 "$ROOT/scripts/validate-policy-preset.py" "$ROOT"
+  run_step "validate-change-profile" python3 "$ROOT/scripts/validate-change-profile.py" "$ROOT"
+  run_step "validate-task-graph" python3 "$ROOT/scripts/validate-task-graph.py" "$ROOT"
+  run_step "validate-stage" python3 "$ROOT/scripts/validate-stage.py" "$ROOT"
+  run_step "validate-versioning-layer" python3 "$ROOT/scripts/validate-versioning-layer.py" "$ROOT"
+  run_step "validate-defect-capture" python3 "$ROOT/scripts/validate-defect-capture.py" "$ROOT"
+  run_step "validate-alignment" python3 "$ROOT/scripts/validate-alignment.py" "$ROOT"
+  run_step "validate-tree-contract" python3 "$ROOT/scripts/validate-tree-contract.py" "$ROOT"
+  run_step "validate-mode-parity" python3 "$ROOT/scripts/validate-mode-parity.py" "$ROOT"
+  case "$(project_preset)" in
+    brownfield-*)
+      run_step "validate-brownfield-transition" python3 "$ROOT/scripts/validate-brownfield-transition.py" "$ROOT"
+      ;;
+    greenfield-product|"")
+      run_step "validate-greenfield-conversion" python3 "$ROOT/scripts/validate-greenfield-conversion.py" "$ROOT"
+      ;;
+  esac
+  run_step "validate-codex-task-pack" python3 "$ROOT/scripts/validate-codex-task-pack.py" "$ROOT"
+  run_step "validate-codex-routing" python3 "$ROOT/scripts/validate-codex-routing.py" "$ROOT"
+  run_step "validate-evidence" python3 "$ROOT/scripts/validate-evidence.py" "$ROOT"
+  run_step "validate-quality" python3 "$ROOT/scripts/validate-quality.py" "$ROOT"
+}
+
 run_quick() {
+  if [[ ! -f "$ROOT/POST_UNZIP_SETUP.sh" ]]; then
+    run_generated_project_quick
+    return
+  fi
   run_step "POST_UNZIP_SETUP" bash "$ROOT/POST_UNZIP_SETUP.sh"
   run_step "VALIDATE_FACTORY_TEMPLATE_OPS" bash "$ROOT/VALIDATE_FACTORY_TEMPLATE_OPS.sh"
   run_step "validate-codex-task-pack" python3 "$ROOT/template-repo/scripts/validate-codex-task-pack.py" "$ROOT"
@@ -86,6 +138,10 @@ run_quick() {
 }
 
 run_full() {
+  if [[ ! -f "$ROOT/CLEAN_VERIFY_ARTIFACTS.sh" ]]; then
+    run_generated_project_quick
+    return
+  fi
   run_step "CLEAN_VERIFY_ARTIFACTS (start)" bash "$ROOT/CLEAN_VERIFY_ARTIFACTS.sh"
   run_quick
   run_step "NOVICE_ONBOARDING_SMOKE" bash "$ROOT/tests/onboarding-smoke/run-novice-e2e.sh"

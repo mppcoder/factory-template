@@ -175,3 +175,49 @@ Fix evidence:
 - created repo: `/projects/openclaw-brownfield`
 - commit: `4a58c8d Initial sanitized OpenClaw brownfield repo`
 - factory-side report: `brownfield/reconstruction-repo-report.md`
+
+## GAP-010: GitHub remote creation ошибочно оставлен пользователю
+
+Severity: high
+
+Evidence:
+- `gh auth status` подтвердил авторизацию `mppcoder`;
+- `mppcoder/openclaw-brownfield` до remediation не существовал;
+- GitHub repo creation была доступна через `gh repo create`.
+
+Impact:
+- closeout снова перекладывал выполнимую Codex работу на пользователя;
+- external action instruction не называла exact owner/repo, visibility и verification command;
+- FP-02 не имел remote-backed repo evidence.
+
+Decision:
+- оформить `reports/bugs/bug-037-github-repo-creation-misclassified-as-user-step.md`;
+- создать GitHub repo и push выполнить Codex;
+- закрепить правило в router/closeout/boundary-action generator.
+
+Status: fixed-in-current-scope
+
+Fix evidence:
+- remote: `https://github.com/mppcoder/openclaw-brownfield`
+- latest pushed commit: `7b3d1a4`
+
+## GAP-011: generated root `scripts/verify-all.sh` ломался в downstream repo
+
+Severity: medium
+
+Evidence:
+- `bash scripts/verify-all.sh` в `/projects/openclaw-brownfield` искал `/projects/CLEAN_VERIFY_ARTIFACTS.sh`;
+- script root detection предполагал только layout `template-repo/scripts`.
+
+Impact:
+- generated project не мог запустить root-level verify entrypoint;
+- это могло превращать внутреннюю проверку в ручной recovery step.
+
+Decision:
+- оформить `reports/bugs/bug-038-generated-project-root-script-verify-all-wrong-root.md`;
+- исправить root detection и добавить generated-project quick verify contour.
+
+Status: fixed-in-current-scope
+
+Fix evidence:
+- `bash scripts/verify-all.sh` в `/projects/openclaw-brownfield`: passed

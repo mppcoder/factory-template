@@ -6,6 +6,10 @@
 - Исправить баг отсутствия инструкции пользователю по дальнейшим действиям.
 - Продвинуть roadmap полевого теста шаблона дальше.
 - Ответить на дефектное замечание: brownfield без repo должен создать repo проекта, если blocker отсутствует.
+- Исправить остановку на просьбе пользователю создать GitHub repo и прислать URL.
+- Исправить нечеткие инструкции по внешним действиям.
+- Продолжить roadmap после закрытия FP-02 defects.
+- Выполнить следующий roadmap step FP-01.
 
 ## Что реально сделано
 - Выполнен defect-capture для reusable closeout/direct-task defect.
@@ -15,7 +19,12 @@
 - Исправлен premature pass FP-02: создан локальный project repo `/projects/openclaw-brownfield`.
 - В project repo перенесен sanitized source layer в `src/openclaw-plus`.
 - Project repo зафиксирован commit `4a58c8d`.
-- Общий field pilot register обновлен до `partial-field-evidence`, `1/5`.
+- Создан GitHub repo `https://github.com/mppcoder/openclaw-brownfield`.
+- Project repo запушен до commit `7b3d1a4`.
+- Исправлен generated `scripts/verify-all.sh` для downstream root-level launch.
+- Создан и запушен FP-01 greenfield repo `https://github.com/mppcoder/greenfield-test`, latest commit `cca68d5`.
+- В FP-01 project создан first feature workspace `work/features/first-feature`.
+- Общий field pilot register обновлен до `partial-field-evidence`, `2/5`.
 - Созданы reconstruction allowlist, denylist и change-map.
 - Исправлен генератор `render_direct_task_response`.
 - Усилен `validate-codex-routing.py`.
@@ -40,6 +49,7 @@
 - `brownfield/reconstruction-repo-report.md`
 - `brownfield/change-map.md`
 - `reports/release/field-pilot-scenarios/02-brownfield-without-repo.md`
+- `reports/release/field-pilot-scenarios/01-greenfield-battle-project.md`
 - `reports/release/2.5-field-pilot-evidence.md`
 - `docs/releases/2.5.1-field-pilot-roadmap.md`
 - `docs/releases/2.5-success-metrics.md`
@@ -52,6 +62,10 @@
 - `reports/factory-feedback/feedback-035-closeout-stopped-before-internal-followup-and-user-instruction.md`
 - `reports/bugs/bug-036-fp02-marked-passed-before-repo-creation.md`
 - `reports/factory-feedback/feedback-036-fp02-marked-passed-before-repo-creation.md`
+- `reports/bugs/bug-037-github-repo-creation-misclassified-as-user-step.md`
+- `reports/factory-feedback/feedback-037-github-repo-creation-misclassified-as-user-step.md`
+- `reports/bugs/bug-038-generated-project-root-script-verify-all-wrong-root.md`
+- `reports/factory-feedback/feedback-038-generated-project-root-script-verify-all-wrong-root.md`
 - `template-repo/scenario-pack/00-master-router.md`
 - `template-repo/scenario-pack/02-decision-policy.md`
 - `template-repo/scenario-pack/16-done-closeout.md`
@@ -64,11 +78,12 @@
 - Runtime remediation OpenClaw не выполнялась.
 - Git repo в `/root/.openclaw` или `/root/openclaw-plus` не создавался.
 - Значения секретов не переносились в repo.
-- Remote Git hosting для `/projects/openclaw-brownfield` не настраивался, потому что URL/remote не задан.
+- GitHub Actions setup для `/projects/openclaw-brownfield` и `/projects/greenfield-test` не настраивался.
 
 ## Итог закрытия
 - Баг остановки перед внутренним follow-up исправлен.
 - Баг отсутствия пользовательской инструкции исправлен.
 - FP-02 roadmap шаг выполнен и сохранен как field evidence с фактическим repo creation.
-- Локальный repo проекта: `/projects/openclaw-brownfield`, commit `4a58c8d`.
-- Следующий roadmap шаг требует real battle/downstream repo для FP-01 или FP-03/FP-04/FP-05; без него нельзя честно продолжать field proof.
+- GitHub-backed repo проекта: `https://github.com/mppcoder/openclaw-brownfield`, latest commit `7b3d1a4`.
+- Greenfield roadmap repo: `https://github.com/mppcoder/greenfield-test`, latest commit `cca68d5`.
+- Следующий roadmap шаг требует real brownfield-with-repo/downstream lineage для FP-03/FP-04/FP-05; без него нельзя честно продолжать field proof дальше.

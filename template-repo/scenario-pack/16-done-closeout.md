@@ -26,6 +26,13 @@
 
 Если хотя бы одно условие не выполнено, в closeout нужно назвать конкретный blocker, а не писать общий внешний шаг.
 
+Если текущая задача создала локальный project repo и следующий естественный шаг — GitHub repo/remote creation:
+- сначала проверить `gh auth status` или доступный GitHub connector;
+- если owner/name однозначны из project slug или task context, `gh` авторизован и repo не существует, Codex создает GitHub repo, добавляет `origin` и выполняет push сам;
+- если repo уже существует и доступен, Codex добавляет `origin` и выполняет push сам;
+- просьба пользователю "создай repo на GitHub и пришли URL" допустима только при конкретном blocker: нет авторизации, нет прав, неоднозначный owner/name, repo name conflict без безопасного решения или требуется человеческое security/release approval;
+- если blocker есть, `## Инструкция пользователю` должна назвать owner/repo, точный URL/команду, ожидаемый результат и что прислать обратно.
+
 Если `origin` настроен, verify green и canonical verified sync технически доступен, closeout без `VERIFIED_SYNC.sh` недопустим.
 Вместо этого нужно:
 - либо выполнить `VALIDATE_VERIFIED_SYNC_PREREQS.sh` и `VERIFIED_SYNC.sh`;

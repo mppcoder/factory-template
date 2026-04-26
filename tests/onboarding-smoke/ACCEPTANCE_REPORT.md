@@ -1,6 +1,6 @@
 # Onboarding Smoke Acceptance
 
-- Run timestamp (UTC): `2026-04-26T18:47:57Z`
+- Run timestamp (UTC): `2026-04-26T19:04:50Z`
 - Runner: `tests/onboarding-smoke/run-novice-e2e.sh`
 - Root: `/projects/factory-template`
 
@@ -19,7 +19,7 @@
 - expected preset: `brownfield-without-repo`
 - generated project: `/projects/factory-template/tests/onboarding-smoke/.tmp-run/brownfield-without-repo-novice/novice-brownfield-no-repo-smoke`
 - log: `/projects/factory-template/tests/onboarding-smoke/.tmp-run/brownfield-without-repo-novice.txt`
-- duration_seconds: `3`
+- duration_seconds: `2`
 - manual_interventions: `0`
 
 3. `brownfield-modernization-novice`
@@ -27,7 +27,7 @@
 - expected preset: `brownfield-with-repo-modernization`
 - generated project: `/projects/factory-template/tests/onboarding-smoke/.tmp-run/brownfield-modernization-novice/novice-brownfield-modernization-smoke`
 - log: `/projects/factory-template/tests/onboarding-smoke/.tmp-run/brownfield-modernization-novice.txt`
-- duration_seconds: `2`
+- duration_seconds: `3`
 - manual_interventions: `0`
 
 4. `brownfield-integration-novice`
@@ -59,7 +59,7 @@
 - expected preset: `brownfield-without-repo`
 - generated project: `/projects/factory-template/tests/onboarding-smoke/.tmp-run/guided-launcher-brownfield-no-repo/guided-launcher-brownfield-no-repo-smoke`
 - log: `/projects/factory-template/tests/onboarding-smoke/.tmp-run/guided-launcher-brownfield-no-repo.txt`
-- duration_seconds: `3`
+- duration_seconds: `2`
 - manual_interventions: `0`
 
 8. `guided-launcher-brownfield-with-repo`
@@ -67,7 +67,7 @@
 - expected preset: `brownfield-with-repo-modernization`
 - generated project: `/projects/factory-template/tests/onboarding-smoke/.tmp-run/guided-launcher-brownfield-with-repo/guided-launcher-brownfield-with-repo-smoke`
 - log: `/projects/factory-template/tests/onboarding-smoke/.tmp-run/guided-launcher-brownfield-with-repo.txt`
-- duration_seconds: `2`
+- duration_seconds: `3`
 - manual_interventions: `0`
 
 9. `guided-launcher-continue-flow`

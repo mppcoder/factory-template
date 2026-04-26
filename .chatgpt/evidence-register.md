@@ -20,3 +20,8 @@
 - [BUG] Пользовательский follow-up подтвердил, что FP-02 был преждевременно помечен `passed` до фактического создания repo проекта.
 - [REAL] Создан локальный project repo `/projects/openclaw-brownfield`; sanitized source reconstruction находится в `src/openclaw-plus`, raw `/root/.openclaw` не копировался.
 - [VERIFY] `/projects/openclaw-brownfield` зафиксирован commit `4a58c8d`; targeted validators `validate-brownfield-transition.py`, `validate-evidence.py`, `validate-codex-task-pack.py` прошли.
+- [BUG] Пользовательский follow-up подтвердил, что GitHub repo creation нельзя оставлять пользователю при доступном `gh` write path.
+- [REAL] `gh repo create mppcoder/openclaw-brownfield --private --source=. --remote=origin --push` создал remote `https://github.com/mppcoder/openclaw-brownfield`.
+- [VERIFY] `/projects/openclaw-brownfield` запушен до commit `7b3d1a4`; `bash scripts/verify-all.sh` в project repo прошел после исправления generated root script.
+- [REAL] FP-01 greenfield project создан в `/projects/greenfield-test`, опубликован в `https://github.com/mppcoder/greenfield-test`, latest commit `cca68d5`.
+- [VERIFY] `bash scripts/verify-all.sh` в `/projects/greenfield-test` прошел; first feature workspace создан в `work/features/first-feature`.

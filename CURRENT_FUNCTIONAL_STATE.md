@@ -59,7 +59,9 @@
 - direct task теперь дополнительно требует visible self-handoff block в первом substantive ответе, а не только artifact-level фиксацию
 - direct-task response теперь является publishable handoff package и содержит continuation guardrail: совместимый internal follow-up выполняется без ручного "продолжай", а финальный closeout обязан дать `## Инструкция пользователю` или явно сказать `Внешних действий не требуется.`
 - brownfield source-candidate map, reconstruction allowlist/denylist и change-map закреплены как internal Codex-eligible follow-up, а не пользовательский ручной шаг
-- field pilot roadmap продвинут до partial evidence: FP-02 brownfield without repo выполнен на sanitized OpenClaw+ кейсе с созданным локальным project repo `/projects/openclaw-brownfield` commit `4a58c8d`, остальные FP-волны остаются pending до доступности real downstream/battle repo
+- field pilot roadmap продвинут до partial evidence: FP-01 greenfield выполнен на `https://github.com/mppcoder/greenfield-test` latest commit `cca68d5`, FP-02 brownfield without repo выполнен на `https://github.com/mppcoder/openclaw-brownfield` latest commit `7b3d1a4`; FP-03/FP-04/FP-05 остаются pending до доступности real downstream/battle repo
+- closeout layer теперь запрещает оставлять GitHub repo/remote creation пользователю, если `gh`/connector write path доступен и owner/name однозначны
+- generated `scripts/verify-all.sh` теперь поддерживает materialized root-level scripts contour в downstream projects
 - recommended Codex handoff model routing обновлен под GPT-5.5: `build`, `deep` и `review` используют `gpt-5.5`, а `quick` сохраняет `gpt-5.4-mini` для lightweight задач
 - model availability auto-check добавлен в executable routing layer: `codex-model-routing.yaml`, `check-codex-model-catalog.py`, live validation через `codex debug models`, proposal-only promotion policy и strict/unavailable validator modes
 - optional skills/prompt-artifact quality loop добавлен как advanced maintenance contour: `skill-master-lite`, `skill-tester-lite`, test design guide и report template помогают улучшать trigger/usefulness без утяжеления beginner default path
@@ -99,7 +101,7 @@
 - граница evidence: `2.5.0 GA Ready` означает repo-controlled GA evidence; field-proven статус для real battle projects пока не заявлен
 - post-GA field pilot roadmap: `docs/releases/2.5.1-field-pilot-roadmap.md`
 - field pilot evidence register: `reports/release/2.5-field-pilot-evidence.md`
-- текущий field evidence status: `partial-field-evidence` (`FP-02` passed, `1/5`)
+- текущий field evidence status: `partial-field-evidence` (`FP-01` и `FP-02` passed, `2/5`)
 
 ## Что работает частично
 - matrix runner как единый источник истины
@@ -115,7 +117,7 @@
 ## Что еще не закрыто
 - финальная проверка на реальных greenfield и brownfield проектах
 - production feedback от реальных converted brownfield проектов после нескольких template sync циклов
-- field pilot scenarios FP-01/FP-03/FP-04/FP-05: battle greenfield, battle brownfield with repo, downstream sync cycle 1, downstream sync cycle 2
+- field pilot scenarios FP-03/FP-04/FP-05: battle brownfield with repo, downstream sync cycle 1, downstream sync cycle 2
 - окончательная polish-фаза для runner layer и operational reports
 - отдельный release-facing validator/report для curated pack quality beyond structural checks
 - дальнейшее production hardening runtime-нестабильности git sync beyond current fallback strategy

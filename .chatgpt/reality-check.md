@@ -95,3 +95,24 @@ Remediation пока не разрешена.
 ### Вывод
 
 FP-02 теперь подтвержден repo creation evidence, а не только планом создания repo.
+
+## GitHub remote и generated verify
+
+Дата: 2026-04-26
+
+### Что подтверждено
+
+- `gh` авторизован как `mppcoder` и имеет repo write permissions.
+- GitHub repo `mppcoder/openclaw-brownfield` не существовал до remediation.
+- Codex создал remote `https://github.com/mppcoder/openclaw-brownfield`.
+- `/projects/openclaw-brownfield` запушен до commit `7b3d1a4`.
+- `bash scripts/verify-all.sh` в generated project repo теперь проходит.
+
+### Расхождения и риски
+
+- Предыдущий closeout ошибочно назвал remote creation optional external boundary.
+- Generated root `scripts/verify-all.sh` был не готов к materialized root-level layout.
+
+### Вывод
+
+GitHub remote creation и first push являются internal Codex work, если `gh`/connector доступен, owner/name однозначны и нет permission blocker.
