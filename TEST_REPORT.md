@@ -79,7 +79,8 @@ Blocker report: `reports/bugs/2026-04-26-25-ga-readiness-gap.md`.
 Что добавлено как field evidence:
 
 - FP-02 `Battle brownfield without repo` выполнен на реальном sanitized OpenClaw+ кейсе с корнями `/root/.openclaw` и `/root/openclaw-plus`.
-- Retained artifacts: `brownfield/system-inventory.md`, `brownfield/repo-audit.md`, `brownfield/as-is-architecture.md`, `brownfield/source-candidate-map.md`, `brownfield/reconstruction-allowlist.md`, `brownfield/reconstruction-denylist.md`, `brownfield/change-map.md`, `reports/release/field-pilot-scenarios/02-brownfield-without-repo.md`.
+- Created project repo: `/projects/openclaw-brownfield`, commit `4a58c8d`.
+- Retained artifacts: `brownfield/system-inventory.md`, `brownfield/repo-audit.md`, `brownfield/as-is-architecture.md`, `brownfield/source-candidate-map.md`, `brownfield/reconstruction-allowlist.md`, `brownfield/reconstruction-denylist.md`, `brownfield/reconstruction-repo-report.md`, `brownfield/change-map.md`, `reports/release/field-pilot-scenarios/02-brownfield-without-repo.md`.
 - Runtime remediation не выполнялась; evidence sanitized, secret values не переносились.
 
 Что остается pending и не считается GA evidence:
@@ -201,7 +202,7 @@ Evidence / quality / DoD до смыслового наполнения арте
 - документальные intent signals сейчас реализованы только для `release`, а не для всех фаз.
 - document intent signals сейчас реализованы для `release` и `bugfix-drift`, но ещё не покрывают возможные более тонкие подфазы внутри controlled fixes.
 - phase-aware export/reference packs остаются вспомогательным слоем и не заменяют чтение сценариев из GitHub repo.
-- field evidence для real battle greenfield, brownfield without repo, brownfield with repo и двух downstream sync cycles пока pending; synthetic smoke и controlled pilot не смешиваются с field proof.
+- field evidence для real battle greenfield, brownfield with repo и двух downstream sync cycles пока pending; synthetic smoke и controlled pilot не смешиваются с field proof.
 
 ## Открытые вопросы
 - По bug set `bug-026/027/028` критичных открытых дефектов после remediation не осталось.

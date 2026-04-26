@@ -5,12 +5,16 @@
 - Исправить баг остановки, требующей ручного "продолжай".
 - Исправить баг отсутствия инструкции пользователю по дальнейшим действиям.
 - Продвинуть roadmap полевого теста шаблона дальше.
+- Ответить на дефектное замечание: brownfield без repo должен создать repo проекта, если blocker отсутствует.
 
 ## Что реально сделано
 - Выполнен defect-capture для reusable closeout/direct-task defect.
 - Созданы bug report и factory feedback `035`.
 - Продолжен brownfield flow до `source-candidate-map`.
 - FP-02 field pilot scenario закрыт как `passed` на sanitized OpenClaw+ brownfield-without-repo case.
+- Исправлен premature pass FP-02: создан локальный project repo `/projects/openclaw-brownfield`.
+- В project repo перенесен sanitized source layer в `src/openclaw-plus`.
+- Project repo зафиксирован commit `4a58c8d`.
 - Общий field pilot register обновлен до `partial-field-evidence`, `1/5`.
 - Созданы reconstruction allowlist, denylist и change-map.
 - Исправлен генератор `render_direct_task_response`.
@@ -33,6 +37,7 @@
 - `brownfield/source-candidate-map.md`
 - `brownfield/reconstruction-allowlist.md`
 - `brownfield/reconstruction-denylist.md`
+- `brownfield/reconstruction-repo-report.md`
 - `brownfield/change-map.md`
 - `reports/release/field-pilot-scenarios/02-brownfield-without-repo.md`
 - `reports/release/2.5-field-pilot-evidence.md`
@@ -40,10 +45,13 @@
 - `docs/releases/2.5-success-metrics.md`
 - `TEST_REPORT.md`
 - `RELEASE_CHECKLIST.md`
+- `tests/onboarding-smoke/ACCEPTANCE_REPORT.md`
 - `brownfield/reverse-engineering-plan.md`
 - `brownfield/gap-register.md`
 - `reports/bugs/bug-035-closeout-stopped-before-internal-followup-and-user-instruction.md`
 - `reports/factory-feedback/feedback-035-closeout-stopped-before-internal-followup-and-user-instruction.md`
+- `reports/bugs/bug-036-fp02-marked-passed-before-repo-creation.md`
+- `reports/factory-feedback/feedback-036-fp02-marked-passed-before-repo-creation.md`
 - `template-repo/scenario-pack/00-master-router.md`
 - `template-repo/scenario-pack/02-decision-policy.md`
 - `template-repo/scenario-pack/16-done-closeout.md`
@@ -56,9 +64,11 @@
 - Runtime remediation OpenClaw не выполнялась.
 - Git repo в `/root/.openclaw` или `/root/openclaw-plus` не создавался.
 - Значения секретов не переносились в repo.
+- Remote Git hosting для `/projects/openclaw-brownfield` не настраивался, потому что URL/remote не задан.
 
 ## Итог закрытия
 - Баг остановки перед внутренним follow-up исправлен.
 - Баг отсутствия пользовательской инструкции исправлен.
-- FP-02 roadmap шаг выполнен и сохранен как field evidence.
+- FP-02 roadmap шаг выполнен и сохранен как field evidence с фактическим repo creation.
+- Локальный repo проекта: `/projects/openclaw-brownfield`, commit `4a58c8d`.
 - Следующий roadmap шаг требует real battle/downstream repo для FP-01 или FP-03/FP-04/FP-05; без него нельзя честно продолжать field proof.

@@ -106,3 +106,13 @@
   change_class: brownfield-audit
   execution_mode: manual
   примечание: создан через launcher
+- дата: 2026-04-26
+  проект: OpenClaw Brownfield
+  slug: openclaw-brownfield
+  версия_фабрики: 2.5.0
+  режим: brownfield
+  статус_записи: production
+  project_preset: brownfield-without-repo
+  change_class: brownfield-stabilization
+  execution_mode: hybrid
+  примечание: создан через launcher; локальный git repo зафиксирован commit `4a58c8d`

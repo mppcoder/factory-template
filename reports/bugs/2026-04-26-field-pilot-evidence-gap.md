@@ -10,7 +10,7 @@
 
 Release 2.5.0 has repository-controlled GA evidence, but the release-facing documentation initially did not give field pilot evidence its own explicit status, roadmap and pass/fail criteria. This could let readers confuse synthetic smoke, controlled novice scenarios and downstream safe-sync checks with real battle-project proof.
 
-Update on 2026-04-26: FP-02 now has sanitized field evidence for a real brownfield without repo OpenClaw+ case. The overall field pilot is still partial because FP-01, FP-03, FP-04 and FP-05 remain pending.
+Update on 2026-04-26: FP-02 now has sanitized field evidence for a real brownfield without repo OpenClaw+ case, including creation of local project repo `/projects/openclaw-brownfield` at commit `4a58c8d`. The overall field pilot is still partial because FP-01, FP-03, FP-04 and FP-05 remain pending.
 
 ## Reproduction
 
@@ -27,7 +27,7 @@ Update on 2026-04-26: FP-02 now has sanitized field evidence for a real brownfie
 ## Evidence
 
 - Repo-controlled evidence exists for novice smoke, controlled pilot checklist, validators and downstream safe-sync dry-run/apply/rollback checks.
-- FP-02 now records a completed real sanitized brownfield without repo run.
+- FP-02 now records a completed real sanitized brownfield without repo run and created project repo.
 - No repository artifact currently records completed FP-01, FP-03, FP-04 or FP-05 field pilot runs.
 - `CURRENT_FUNCTIONAL_STATE.md` already lists real greenfield/brownfield checks and production feedback as not closed, but the release evidence package lacks a dedicated field pilot roadmap and scenario checklist.
 

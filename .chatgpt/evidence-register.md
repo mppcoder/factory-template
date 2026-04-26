@@ -17,3 +17,6 @@
 - [REAL] Source-candidate scan подтвердил generated/dependency denylist zones: `/root/openclaw-plus/.venvs`, `node_modules`, `__pycache__`, `/root/openclaw-plus/var`.
 - [REAL] FP-02 field pilot evidence retained: `reports/release/field-pilot-scenarios/02-brownfield-without-repo.md` переведен в `passed` для sanitized OpenClaw+ brownfield-without-repo case.
 - [PROJECT] `/projects` scan нашел только `/projects/factory-template` как git repo; FP-03/FP-04/FP-05 требуют отдельного real downstream/battle repo и остаются pending external boundary.
+- [BUG] Пользовательский follow-up подтвердил, что FP-02 был преждевременно помечен `passed` до фактического создания repo проекта.
+- [REAL] Создан локальный project repo `/projects/openclaw-brownfield`; sanitized source reconstruction находится в `src/openclaw-plus`, raw `/root/.openclaw` не копировался.
+- [VERIFY] `/projects/openclaw-brownfield` зафиксирован commit `4a58c8d`; targeted validators `validate-brownfield-transition.py`, `validate-evidence.py`, `validate-codex-task-pack.py` прошли.

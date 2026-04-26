@@ -36,12 +36,12 @@
 - Сервисы `openclaw-gateway`, `openclaw-retrieval`, `openclaw-vectorizer`, `gpt2giga`, `postgresql`, `nginx` active и enabled.
 - Live acceptance package validator проходит.
 
-### Что не подтверждено
+### Что не было подтверждено на intake-этапе
 
 - Не подтверждена safe source-of-truth boundary для будущего repo.
 - Не выполнена классификация всех файлов на source/generated/runtime-state/secret-bearing.
 - Не выполнен backup triage.
-- Не создан reconstruction repo.
+- Не был создан reconstruction/project repo.
 
 ### Расхождения и риски
 
@@ -71,3 +71,27 @@ Remediation пока не разрешена.
 - Предыдущий closeout остановился перед внутренним follow-up и не дал `## Инструкция пользователю`.
 - Это reusable process defect, а не ошибка пользователя.
 - Исправление должно жить в generator/validator/scenario layer, а не только в текущем ответе.
+
+## Создание project repo OpenClaw Brownfield
+
+Дата: 2026-04-26
+
+### Что подтверждено
+
+- FP-02 нельзя было честно считать полностью закрытым только после audit/source-candidate stage.
+- Создан локальный project repo `/projects/openclaw-brownfield`.
+- Repo зафиксирован commit `4a58c8d Initial sanitized OpenClaw brownfield repo`.
+- Sanitized source layer перенесен из `/root/openclaw-plus` в `/projects/openclaw-brownfield/src/openclaw-plus`.
+- Raw `/root/.openclaw` и raw `/etc/openclaw-plus.env` не переносились.
+- Redacted env inventory создан в `/projects/openclaw-brownfield/runtime-evidence/openclaw-plus-env.inventory.md`.
+
+### Проверка
+
+- `python scripts/validate-brownfield-transition.py .` в `/projects/openclaw-brownfield`: passed.
+- `python scripts/validate-evidence.py .` в `/projects/openclaw-brownfield`: passed.
+- `python scripts/validate-codex-task-pack.py .` в `/projects/openclaw-brownfield`: passed.
+- `bash scripts/verify-all.sh` в generated downstream repo выявил missing `/projects/CLEAN_VERIFY_ARTIFACTS.sh`; это сохранено как downstream verify-shell limitation, не как blocker repo creation.
+
+### Вывод
+
+FP-02 теперь подтвержден repo creation evidence, а не только планом создания repo.

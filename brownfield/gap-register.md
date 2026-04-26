@@ -148,3 +148,30 @@ Decision:
 - source-candidate map выполнен в текущем scope.
 
 Status: fixed-in-current-scope
+
+## GAP-009: FP-02 был закрыт до создания project repo
+
+Severity: high
+
+Evidence:
+- пользователь указал, что brownfield без repo подразумевает аудит и создание repo проекта;
+- FP-02 был отмечен `passed`, пока evidence содержал только plan/path к reconstruction workspace;
+- локальный repo `/projects/openclaw-brownfield` был создан только последующей remediation.
+
+Impact:
+- field evidence мог считать audit completion полноценным scenario pass;
+- оператор получил бы ручной следующий шаг вместо готовой repo boundary;
+- roadmap терял проверяемость KPI `Path to repo or blocker`.
+
+Decision:
+- оформить `reports/bugs/bug-036-fp02-marked-passed-before-repo-creation.md`;
+- оформить `reports/factory-feedback/feedback-036-fp02-marked-passed-before-repo-creation.md`;
+- создать project repo вне `/root`;
+- обновить FP-02 evidence actual repo path и commit.
+
+Status: fixed-in-current-scope
+
+Fix evidence:
+- created repo: `/projects/openclaw-brownfield`
+- commit: `4a58c8d Initial sanitized OpenClaw brownfield repo`
+- factory-side report: `brownfield/reconstruction-repo-report.md`

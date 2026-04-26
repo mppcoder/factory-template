@@ -42,10 +42,10 @@ optional
 brownfield-without-repo
 
 ## Выбранный сценарий
-brownfield/10-evidence-pack-completion.md
+brownfield/11-codex-assisted-stabilization.md
 
 ## Этап pipeline
-field-pilot-fp-02-evidence-pack-completion
+fp-02-create-reconstructed-repo
 
 ## Артефакты для обновления
 - .chatgpt/task-launch.yaml
@@ -53,10 +53,11 @@ field-pilot-fp-02-evidence-pack-completion
 - .chatgpt/direct-task-self-handoff.md
 - .chatgpt/normalized-codex-handoff.md
 - .chatgpt/direct-task-response.md
-- reports/release/2.5-field-pilot-evidence.md
+- reports/bugs/bug-036-fp02-marked-passed-before-repo-creation.md
+- reports/factory-feedback/feedback-036-fp02-marked-passed-before-repo-creation.md
 - reports/release/field-pilot-scenarios/02-brownfield-without-repo.md
-- docs/releases/2.5.1-field-pilot-roadmap.md
-- brownfield/reverse-engineering-summary.md
+- reports/release/2.5-field-pilot-evidence.md
+- brownfield/reconstruction-repo-report.md
 - brownfield/gap-register.md
 - .chatgpt/evidence-register.md
 - .chatgpt/reality-check.md
@@ -67,7 +68,7 @@ field-pilot-fp-02-evidence-pack-completion
 no
 
 ## Маршрут defect-capture
-brownfield gap -> structured defect/gap report before remediation planning
+reproduce -> evidence -> bug report -> layer classification -> factory feedback if reusable -> remediation
 
 ## Правило launch boundary
 Выбор модели и reasoning mode считается надежным только на новом запуске Codex для новой задачи.
@@ -124,8 +125,8 @@ selected_model совпадает с последним сохраненным s
 task_class: deep
 selected_profile: deep
 project_profile: brownfield-without-repo
-selected_scenario: brownfield/10-evidence-pack-completion.md
-pipeline_stage: field-pilot-fp-02-evidence-pack-completion
+selected_scenario: brownfield/11-codex-assisted-stabilization.md
+pipeline_stage: fp-02-create-reconstructed-repo
 handoff_allowed: no
 artifacts_to_update:
   - .chatgpt/task-launch.yaml
@@ -133,15 +134,16 @@ artifacts_to_update:
   - .chatgpt/direct-task-self-handoff.md
   - .chatgpt/normalized-codex-handoff.md
   - .chatgpt/direct-task-response.md
-  - reports/release/2.5-field-pilot-evidence.md
+  - reports/bugs/bug-036-fp02-marked-passed-before-repo-creation.md
+  - reports/factory-feedback/feedback-036-fp02-marked-passed-before-repo-creation.md
   - reports/release/field-pilot-scenarios/02-brownfield-without-repo.md
-  - docs/releases/2.5.1-field-pilot-roadmap.md
-  - brownfield/reverse-engineering-summary.md
+  - reports/release/2.5-field-pilot-evidence.md
+  - brownfield/reconstruction-repo-report.md
   - brownfield/gap-register.md
   - .chatgpt/evidence-register.md
   - .chatgpt/reality-check.md
   - .chatgpt/verification-report.md
   - .chatgpt/done-report.md
-defect_capture_path: brownfield gap -> structured defect/gap report before remediation planning
+defect_capture_path: reproduce -> evidence -> bug report -> layer classification -> factory feedback if reusable -> remediation
 
-Продолжить roadmap полевого теста шаблона: закрыть FP-02 Battle brownfield without repo как sanitized field evidence по фактическому OpenClaw+ кейсу (/root/.openclaw + /root/openclaw-plus), обновить release field-pilot evidence и scenario file. Не выдавать synthetic checks за недостающие FP-01/FP-03/FP-04/FP-05; если следующий roadmap шаг требует недоступный real project, зафиксировать blocker/next external boundary в инструкции пользователю.
+Исправить FP-02 defect: brownfield without repo подразумевает аудит и создание безопасного project repo boundary, а предыдущий closeout ошибочно пометил FP-02 passed только по audit/allowlist. Создан sanitized project repo /projects/openclaw-brownfield, source layer лежит в src/openclaw-plus, raw /root/.openclaw и значения /etc/openclaw-plus.env не перенесены. Зафиксировать отчет, bug/feedback и обновить field evidence.
