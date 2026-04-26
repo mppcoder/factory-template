@@ -85,6 +85,7 @@ Blocker report: `reports/bugs/2026-04-26-25-ga-readiness-gap.md`.
 - Retained artifacts: `/projects/openclaw-brownfield/brownfield/repo-audit.md`, `system-inventory.md`, `as-is-architecture.md`, `change-map.md`, `risks-and-constraints.md`.
 - FP-04 `Downstream sync cycle 1` выполнен на той же lineage `mppcoder/openclaw-brownfield`, evidence commit `1826f07`.
 - FP-05 `Downstream sync cycle 2` выполнен на той же lineage `mppcoder/openclaw-brownfield`, evidence commit `2dc6515`.
+- Post-field conversion: `mppcoder/openclaw-brownfield` converted to `greenfield-product` / `greenfield-converted`, latest pushed commit `1f8fb6d`; live runtime was not mutated.
 - Retained sync artifacts: `/projects/openclaw-brownfield/downstream-sync/cycle-1.md`, `/projects/openclaw-brownfield/downstream-sync/cycle-2.md`.
 - Retained artifacts: `brownfield/system-inventory.md`, `brownfield/repo-audit.md`, `brownfield/as-is-architecture.md`, `brownfield/source-candidate-map.md`, `brownfield/reconstruction-allowlist.md`, `brownfield/reconstruction-denylist.md`, `brownfield/reconstruction-repo-report.md`, `brownfield/change-map.md`, `reports/release/field-pilot-scenarios/02-brownfield-without-repo.md`, `reports/bugs/bug-037-github-repo-creation-misclassified-as-user-step.md`, `reports/bugs/bug-038-generated-project-root-script-verify-all-wrong-root.md`.
 - Runtime remediation не выполнялась; evidence sanitized, secret values не переносились.

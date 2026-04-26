@@ -63,6 +63,7 @@
 - `git -C /projects/openclaw-brownfield rev-parse --short HEAD` после FP-03 audit update: `3c026fd`.
 - FP-04 export/apply/rollback cycle: прошел; rollback restored `2`, missing backups `0`, snapshot restored `true`; evidence commit `1826f07`.
 - FP-05 export/apply/rollback cycle: прошел; cycle-1 evidence preserved; rollback restored `2`, missing backups `0`, snapshot restored `true`; evidence commit `2dc6515`.
+- OpenClaw+ greenfield lifecycle conversion: passed in `/projects/openclaw-brownfield`; latest pushed commit `1f8fb6d`.
 - `bash template-repo/scripts/verify-all.sh` в `/projects/factory-template`: прошла, `VERIFY-ALL ПРОЙДЕН (full)`.
 
 ## Итоговый вывод
@@ -73,3 +74,4 @@
 - Roadmap продвинут до FP-03: `https://github.com/mppcoder/openclaw-brownfield`, latest audit commit `3c026fd`.
 - Roadmap завершен до FP-05: `https://github.com/mppcoder/openclaw-brownfield`, latest downstream sync evidence commit `2dc6515`.
 - Runtime OpenClaw не изменялся.
+- Live runtime OpenClaw не изменялся during conversion; conversion was repo-lifecycle only.

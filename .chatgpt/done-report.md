@@ -29,6 +29,7 @@
 - FP-03 brownfield-with-repo audit выполнен на `https://github.com/mppcoder/openclaw-brownfield`, latest audit commit `3c026fd`.
 - FP-04 downstream sync cycle 1 выполнен на той же lineage, evidence commit `1826f07`.
 - FP-05 downstream sync cycle 2 выполнен на той же lineage, evidence commit `2dc6515`.
+- OpenClaw+ repo-local greenfield conversion выполнен, latest pushed commit `1f8fb6d`.
 - Созданы reconstruction allowlist, denylist и change-map.
 - Исправлен генератор `render_direct_task_response`.
 - Усилен `validate-codex-routing.py`.

@@ -44,7 +44,7 @@ Observed input:
 - As-is architecture map updated in `/projects/openclaw-brownfield/brownfield/as-is-architecture.md`.
 - Change map updated in `/projects/openclaw-brownfield/brownfield/change-map.md`.
 - Risk register updated in `/projects/openclaw-brownfield/brownfield/risks-and-constraints.md`.
-- Conversion blocker documented: no `greenfield-product` conversion claimed until deployment, secrets, runtime data and context-bloat remediation plan exists.
+- Conversion blocker was documented during FP-03; later repo-local readiness remediation converted the project lifecycle to `greenfield-product` / `greenfield-converted` without live runtime mutation.
 - Runtime OpenClaw roots were not modified.
 
 ## Измеряемые KPI
@@ -83,7 +83,8 @@ Command results:
 - `bash scripts/verify-all.sh` in `/projects/openclaw-brownfield`: `VERIFY-ALL ПРОЙДЕН (full)`.
 - `git status --short --branch`: clean on `main...origin/main`.
 - GitHub repo: private, non-empty, default branch `main`.
-- Latest pushed commit: `3c026fd Add FP-03 brownfield repo audit evidence`.
+- Latest pushed audit commit: `3c026fd Add FP-03 brownfield repo audit evidence`.
+- Later conversion closeout commit: `1f8fb6d chore: sync post-done follow-up`.
 
 ## Pass criteria / критерии прохождения
 
@@ -111,8 +112,11 @@ Status: no fail criteria observed.
 Retained in:
 
 - `https://github.com/mppcoder/openclaw-brownfield` commit `3c026fd`.
+- Greenfield conversion closeout retained in `https://github.com/mppcoder/openclaw-brownfield` commit `1f8fb6d`.
 - `/projects/openclaw-brownfield/brownfield/repo-audit.md`.
 - `/projects/openclaw-brownfield/brownfield/change-map.md`.
 - `/projects/openclaw-brownfield/brownfield/risks-and-constraints.md`.
 - `/projects/openclaw-brownfield/brownfield/as-is-architecture.md`.
 - `/projects/openclaw-brownfield/brownfield/system-inventory.md`.
+- `/projects/openclaw-brownfield/greenfield/conversion-readiness.md`.
+- `/projects/openclaw-brownfield/.chatgpt/project-owned-zones.yaml`.
