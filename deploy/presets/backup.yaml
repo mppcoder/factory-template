@@ -1,0 +1,29 @@
+services:
+  db-backup:
+    image: ${DB_IMAGE:-postgres:16-alpine}
+    profiles:
+      - backup
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      PGPASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME:-app}
+      POSTGRES_USER: ${DB_USER:-app}
+      BACKUP_RETENTION_DAYS: ${BACKUP_RETENTION_DAYS:-7}
+    volumes:
+      - ${BACKUP_PATH:-./backups}:/backups
+    networks:
+      - app_net
+    entrypoint: ["/bin/sh", "-lc"]
+    command: >
+      mkdir -p /backups &&
+      pg_dump -h db -U "$${POSTGRES_USER}" "$${POSTGRES_DB}" > "/backups/$${POSTGRES_DB}-latest.sql" &&
+      find /backups -type f -name '*.sql' -mtime +"$${BACKUP_RETENTION_DAYS}" -delete
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+    security_opt:
+      - no-new-privileges:true

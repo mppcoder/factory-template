@@ -3,12 +3,14 @@ set -euo pipefail
 
 usage() {
   cat <<'USAGE'
-Usage: bash template-repo/scripts/deploy-dry-run.sh [--init-env] [--env-file path] [--preset starter|app-db|reverse-proxy|production] [--strict-env]
+Usage: bash template-repo/scripts/deploy-dry-run.sh [--init-env] [--env-file path] [--preset preset-list] [--strict-env]
 
 Options:
   --init-env    If deploy/.env is missing, create it from deploy/.env.example.
   --env-file    Validate and render compose with a specific env file.
   --preset      Override OPERATOR_PRESET from env for this run.
+                Values: starter, app-db, reverse-proxy-tls, backup, healthcheck, production.
+                Multiple overlays may be comma-separated, for example app-db,backup.
   --strict-env  Treat example placeholders as failures.
   -h, --help    Show help.
 USAGE
@@ -118,24 +120,57 @@ env_value() {
 compose_files_for_preset() {
   local preset="$1"
   COMPOSE_ARGS=(-f "$BASE_COMPOSE" -f "$PROD_COMPOSE")
-  case "$preset" in
-    starter)
-      ;;
-    app-db)
-      COMPOSE_ARGS+=(-f "$REPO_ROOT/deploy/presets/app-db.yaml")
-      ;;
-    reverse-proxy)
-      COMPOSE_ARGS+=(-f "$REPO_ROOT/deploy/presets/reverse-proxy.yaml")
-      ;;
-    production)
-      COMPOSE_ARGS+=(-f "$REPO_ROOT/deploy/presets/app-db.yaml" -f "$REPO_ROOT/deploy/presets/reverse-proxy.yaml")
-      ;;
-    *)
-      echo "Unknown operator preset: $preset" >&2
-      echo "Use one of: starter, app-db, reverse-proxy, production." >&2
-      exit 2
-      ;;
-  esac
+  local normalized="${preset//+/,}"
+  local token
+  local seen=","
+  IFS=',' read -r -a PRESET_TOKENS <<<"$normalized"
+
+  add_preset_file() {
+    local file="$1"
+    if [[ "$seen" != *",$file,"* ]]; then
+      COMPOSE_ARGS+=(-f "$file")
+      seen+="$file,"
+    fi
+  }
+
+  add_token() {
+    case "$1" in
+      starter|"")
+        add_preset_file "$REPO_ROOT/deploy/presets/starter.yaml"
+        ;;
+      app-db)
+        add_preset_file "$REPO_ROOT/deploy/presets/app-db.yaml"
+        ;;
+      reverse-proxy-tls)
+        add_preset_file "$REPO_ROOT/deploy/presets/reverse-proxy-tls.yaml"
+        ;;
+      reverse-proxy)
+        add_preset_file "$REPO_ROOT/deploy/presets/reverse-proxy-tls.yaml"
+        ;;
+      backup)
+        add_preset_file "$REPO_ROOT/deploy/presets/backup.yaml"
+        ;;
+      healthcheck)
+        add_preset_file "$REPO_ROOT/deploy/presets/healthcheck.yaml"
+        ;;
+      production)
+        add_token app-db
+        add_token reverse-proxy-tls
+        add_token backup
+        add_token healthcheck
+        ;;
+      *)
+        echo "Unknown operator preset: $1" >&2
+        echo "Use starter, app-db, reverse-proxy-tls, backup, healthcheck, production, or a comma-separated list." >&2
+        exit 2
+        ;;
+    esac
+  }
+
+  for token in "${PRESET_TOKENS[@]}"; do
+    token="${token//[[:space:]]/}"
+    add_token "$token"
+  done
 }
 
 if command -v docker >/dev/null 2>&1 && docker compose version >/dev/null 2>&1; then
@@ -157,6 +192,11 @@ trap 'rm -f "$TMP_CONFIG" "$TMP_ERR"' EXIT
 PRESET="${PRESET_OVERRIDE:-$(env_value OPERATOR_PRESET "$ACTIVE_ENV")}"
 PRESET="${PRESET:-starter}"
 compose_files_for_preset "$PRESET"
+COMPOSE_ENV=()
+PRESET_MARKERS=",${PRESET//+/,},"
+if [[ "$PRESET" == "production" || "$PRESET_MARKERS" == *",backup,"* ]]; then
+  COMPOSE_ENV=(env COMPOSE_PROFILES="${COMPOSE_PROFILES:-backup}")
+fi
 
 VALIDATE_ARGS=("$REPO_ROOT" "--env-file" "$ACTIVE_ENV" "--preset" "$PRESET")
 if [[ "$ENV_MODE" == "example" && "$STRICT_ENV" -ne 1 ]]; then
@@ -196,7 +236,7 @@ if [[ "$VALIDATE_RC" -ne 0 ]]; then
 fi
 
 set +e
-"${COMPOSE[@]}" "${COMPOSE_ARGS[@]}" --env-file "$ACTIVE_ENV" config >"$TMP_CONFIG" 2>"$TMP_ERR"
+"${COMPOSE_ENV[@]}" "${COMPOSE[@]}" "${COMPOSE_ARGS[@]}" --env-file "$ACTIVE_ENV" config >"$TMP_CONFIG" 2>"$TMP_ERR"
 CONFIG_RC=$?
 set -e
 
@@ -214,7 +254,7 @@ if [[ "$CONFIG_RC" -ne 0 ]]; then
   exit 1
 fi
 
-SERVICES="$("${COMPOSE[@]}" "${COMPOSE_ARGS[@]}" --env-file "$ACTIVE_ENV" config --services | tr '\n' ' ' | sed 's/[[:space:]]\+$//')"
+SERVICES="$("${COMPOSE_ENV[@]}" "${COMPOSE[@]}" "${COMPOSE_ARGS[@]}" --env-file "$ACTIVE_ENV" config --services | tr '\n' ' ' | sed 's/[[:space:]]\+$//')"
 SERVICES="${SERVICES:-none}"
 SERVICES_CSV="$(echo "$SERVICES" | tr ' ' ',' | sed 's/,$//')"
 

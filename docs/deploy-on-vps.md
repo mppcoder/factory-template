@@ -7,7 +7,7 @@
 - потом один deploy-скрипт;
 - затем читаемый статус.
 
-По умолчанию используется минимальный `starter` profile. Production-функции подключаются только через opt-in presets.
+По умолчанию используется минимальный `starter` profile. Production-функции подключаются только через opt-in presets, чтобы первый deploy не превращался в тяжёлый production checklist.
 
 ## Быстрый старт
 
@@ -44,17 +44,23 @@ python3 template-repo/scripts/operator-dashboard.py --verify-summary
 ## Операторские presets
 
 Preset выбирается через `OPERATOR_PRESET` в `deploy/.env` или через флаг `--preset`.
+Можно указать один preset или список через запятую: `app-db,backup`, `reverse-proxy-tls,healthcheck`.
 
 - `starter`: один app-контейнер, порт `APP_PORT`, без обязательных DB/TLS секретов.
-- `app-db`: добавляет Postgres, health check, `DATABASE_URL` и backup hook.
-- `reverse-proxy`: добавляет Caddy reverse proxy с HTTP/HTTPS портами.
-- `production`: включает `app-db` и `reverse-proxy` вместе.
+- `app-db`: добавляет Postgres, health check и `DATABASE_URL`.
+- `reverse-proxy-tls`: добавляет Caddy reverse proxy с HTTP/HTTPS портами.
+- `backup`: добавляет одноразовый `db-backup` hook; требует `app-db`.
+- `healthcheck`: явно включает настраиваемый healthcheck endpoint.
+- `production`: короткий alias для `app-db,reverse-proxy-tls,backup,healthcheck`.
+
+Старый alias `reverse-proxy` сохранён для совместимости и раскрывается как `reverse-proxy-tls`.
 
 Примеры:
 
 ```bash
 bash template-repo/scripts/deploy-dry-run.sh --preset app-db
-bash template-repo/scripts/deploy-dry-run.sh --preset reverse-proxy
+bash template-repo/scripts/deploy-dry-run.sh --preset app-db,backup
+bash template-repo/scripts/deploy-dry-run.sh --preset reverse-proxy-tls
 bash template-repo/scripts/deploy-dry-run.sh --preset production
 ```
 
@@ -77,24 +83,35 @@ bash template-repo/scripts/deploy-local-vps.sh --yes --preset production
 
 Файл: `deploy/.env`
 
-- `OPERATOR_PRESET` — `starter`, `app-db`, `reverse-proxy` или `production`.
+- `OPERATOR_PRESET` — `starter`, `app-db`, `reverse-proxy-tls`, `backup`, `healthcheck`, `production` или список через запятую.
 - `APP_IMAGE` — Docker image приложения.
 - `APP_CONTAINER_NAME` — имя контейнера.
 - `APP_BIND_ADDRESS` — bind address для app-порта. Для reverse proxy обычно `127.0.0.1`.
 - `APP_PORT` — внешний порт на VPS.
-- `APP_HEALTHCHECK_PATH` — HTTP path для app health check.
+- `APP_DATA_VOLUME` — имя Docker volume для app data.
+- `APP_HEALTHCHECK_ENDPOINT` — HTTP path для базового app health check.
 
-Для `app-db` / `production`:
+Для `app-db`, `backup` и `production`:
 
 - `DB_IMAGE`, `DB_CONTAINER_NAME`, `DB_NAME`, `DB_USER`, `DB_PASSWORD`.
-- `BACKUP_ENABLED`, `BACKUP_PATH`, `BACKUP_RETENTION_DAYS`.
+- `DB_PORT`, `DB_DATA_VOLUME`.
 
-Для `reverse-proxy` / `production`:
+Для `backup` и `production`:
+
+- `BACKUP_ENABLED=true`, `BACKUP_PATH`, `BACKUP_RETENTION_DAYS`.
+
+Для `reverse-proxy-tls` / `production`:
 
 - `REVERSE_PROXY_IMAGE`, `REVERSE_PROXY_CONTAINER_NAME`.
 - `DOMAIN` — реальный публичный hostname.
 - `TLS_EMAIL` — email для ACME/TLS уведомлений.
 - `ACME_AGREE=true` — подтверждение принятия условий CA.
+- `HTTP_PORT`, `HTTPS_PORT`, `CADDY_DATA_VOLUME`, `CADDY_CONFIG_VOLUME`.
+
+Для `healthcheck` / `production`:
+
+- `HEALTHCHECK_ENDPOINT` — HTTP path внутри app-контейнера, например `/health`.
+- `APP_HEALTHCHECK_INTERVAL`, `APP_HEALTHCHECK_TIMEOUT`, `APP_HEALTHCHECK_RETRIES`, `APP_HEALTHCHECK_START_PERIOD`.
 
 По умолчанию используется демонстрационный безопасный baseline:
 - image: `nginx:1.27-alpine`
@@ -104,8 +121,12 @@ bash template-repo/scripts/deploy-local-vps.sh --yes --preset production
 
 - `deploy/compose.yaml`: базовый single-service контур (app, network, volume).
 - `deploy/compose.production.yaml`: production override (pull_policy, лог-ротация, security flags).
-- `deploy/presets/app-db.yaml`: optional Postgres + backup hook.
-- `deploy/presets/reverse-proxy.yaml`: optional Caddy reverse proxy / TLS.
+- `deploy/presets/starter.yaml`: no-op overlay для явного starter artifact.
+- `deploy/presets/app-db.yaml`: optional Postgres.
+- `deploy/presets/reverse-proxy-tls.yaml`: optional Caddy reverse proxy / TLS.
+- `deploy/presets/backup.yaml`: optional database backup hook.
+- `deploy/presets/healthcheck.yaml`: optional explicit healthcheck overlay.
+- `deploy/presets/reverse-proxy.yaml`: compatibility alias content для старого имени.
 
 Скрипты сами добавляют нужные preset overlays в зависимости от `OPERATOR_PRESET` или `--preset`.
 
@@ -118,8 +139,10 @@ bash template-repo/scripts/deploy-local-vps.sh --yes --preset production
 - `docker compose version` проходит под операторским пользователем.
 - `deploy/.env` существует, права ограничены, секреты не коммитятся.
 - `APP_IMAGE` указывает на настоящий production image/tag.
-- Для `reverse-proxy`/`production`: `APP_BIND_ADDRESS=127.0.0.1`, `DOMAIN` не `example.com`, `TLS_EMAIL` реальный, `ACME_AGREE=true`.
-- Для `app-db`/`production`: `DB_PASSWORD` длинный и случайный, `BACKUP_PATH` существует или будет создан, известен restore path.
+- Для `reverse-proxy-tls`/`production`: `APP_BIND_ADDRESS=127.0.0.1`, `DOMAIN` не `example.com`, `TLS_EMAIL` реальный, `ACME_AGREE=true`.
+- Для `app-db`/`production`: `DB_PASSWORD` длинный и случайный, `DB_DATA_VOLUME` задан осознанно.
+- Для `backup`/`production`: `BACKUP_ENABLED=true`, `BACKUP_PATH` существует или будет создан, известен restore path.
+- Для `healthcheck`/`production`: `HEALTHCHECK_ENDPOINT` отвечает внутри app container.
 - Dry-run прошёл на том же VPS и с тем же preset:
 
 ```bash
@@ -128,13 +151,14 @@ bash template-repo/scripts/deploy-dry-run.sh --preset production --strict-env
 
 ## Backups / резервные копии
 
-`app-db` preset добавляет одноразовый backup hook `db-backup`. Он не запускается как daemon при обычном `up -d`; его нужно вызывать явно или из cron/systemd timer:
+`backup` preset добавляет одноразовый backup hook `db-backup`. Он требует `app-db` и не запускается как daemon при обычном `up -d`; его нужно вызывать явно или из cron/systemd timer:
 
 ```bash
 docker compose \
   -f deploy/compose.yaml \
   -f deploy/compose.production.yaml \
   -f deploy/presets/app-db.yaml \
+  -f deploy/presets/backup.yaml \
   --env-file deploy/.env \
   run --rm db-backup
 ```
@@ -143,9 +167,10 @@ docker compose \
 
 ## Health checks / проверки здоровья
 
-- `app` проверяет `http://127.0.0.1${APP_HEALTHCHECK_PATH}` внутри контейнера.
+- `app` проверяет `http://127.0.0.1${APP_HEALTHCHECK_ENDPOINT}` внутри контейнера.
 - `db` в `app-db` preset проверяет `pg_isready`.
-- `reverse-proxy` проверяет доступность Caddy binary и зависит от healthy `app`.
+- `reverse-proxy-tls` проверяет доступность Caddy binary и зависит от healthy `app`.
+- `healthcheck` preset позволяет явно переопределить endpoint через `HEALTHCHECK_ENDPOINT`.
 
 Проверка после deploy:
 
@@ -154,7 +179,9 @@ docker compose \
   -f deploy/compose.yaml \
   -f deploy/compose.production.yaml \
   -f deploy/presets/app-db.yaml \
-  -f deploy/presets/reverse-proxy.yaml \
+  -f deploy/presets/reverse-proxy-tls.yaml \
+  -f deploy/presets/backup.yaml \
+  -f deploy/presets/healthcheck.yaml \
   --env-file deploy/.env \
   ps
 python3 template-repo/scripts/operator-dashboard.py --verify-summary
@@ -181,6 +208,18 @@ bash template-repo/scripts/deploy-local-vps.sh --yes
 ```
 
 Если откатываете DB schema, сначала сохраните fresh backup через `db-backup`, затем применяйте проверенный restore/migration rollback из приложения.
+
+## Когда добавлять production presets
+
+Начинайте с `starter`, если нужно проверить VPS, Docker Compose, image pull и базовый HTTP endpoint.
+
+Добавляйте `app-db`, когда приложению нужен stateful database на том же VPS и вы готовы управлять `DB_PASSWORD`, volume и migration/restore процедурой.
+
+Добавляйте `reverse-proxy-tls`, когда есть публичный домен, DNS уже указывает на VPS, а порты `80/443` открыты. После этого держите `APP_BIND_ADDRESS=127.0.0.1`, чтобы приложение не торчало наружу мимо TLS proxy.
+
+Добавляйте `backup` после `app-db`, когда есть понятный host path, retention policy и хотя бы одна restore-проверка.
+
+Добавляйте `healthcheck`, когда приложение имеет отдельный endpoint вроде `/health` и оператор хочет сделать его частью deploy gate.
 
 ## Зафиксированные риски и ограничения
 

@@ -31,6 +31,7 @@ TEST_REPORT.md is verification evidence, not the canonical release-status source
 - mode parity manifest, matrix and validator (`template-repo/mode-parity.yaml`, `docs/mode-parity-matrix.md`, `validate-mode-parity.py`)
 - downstream upgrade dry-run/apply/rollback UX (`upgrade-report.py`, `rollback-template-patch.sh`)
 - lightweight spec-governance traceability: `decisions.md.template`, expanded tech/task templates, approval-aware deviations, task verification anchors
+- опциональные production VPS presets: `starter`, `app-db`, `reverse-proxy-tls`, `backup`, `healthcheck`
 
 ## Ожидаемое поведение на fresh scaffold
 Проходят structural / versioning / defect / alignment проверки.
@@ -41,6 +42,8 @@ Evidence / quality / DoD до смыслового наполнения арте
 - `python3 template-repo/scripts/validate-mode-parity.py .` проходит и подтверждает общий core layer для template base, greenfield, brownfield-without-repo и всех brownfield-with-repo presets.
 - `bash template-repo/scripts/verify-all.sh quick` проходит.
 - `bash template-repo/scripts/verify-all.sh ci` проходит.
+- `deploy-dry-run-smoke-starter-app-db` входит в `verify-all.sh quick/ci` и проверяет dry-run для `starter` и `app-db` через локальный fake `docker compose`, без зависимости от Docker daemon.
+- Production VPS preset gap зафиксирован и исправлен in-scope: `reports/bugs/2026-04-26-production-vps-preset-gap.md`.
 - `MATRIX_TEST.sh` подтверждает `validate-tree-contract.py` на generated greenfield, brownfield-without-repo и brownfield-with-repo контурах.
 - Compatibility aliases проверены через `apply-project-preset.py`: старый greenfield alias резолвится в `greenfield-product`, старый no-repo brownfield alias резолвится в `brownfield-without-repo`.
 - `bash onboarding-smoke/run-novice-e2e.sh` проходит: покрыты wizard fallback-сценарии для всех canonical presets, `--guided` greenfield, `--guided` brownfield без repo, `--guided` brownfield с repo и `--continue` flow.

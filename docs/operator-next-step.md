@@ -31,7 +31,7 @@ python3 template-repo/scripts/operator-dashboard.py
 Панель показывает:
 - готовность deploy baseline;
 - выбранный `OPERATOR_PRESET`;
-- env validation для starter/production presets;
+- env validation для `starter`, отдельных production presets и списков presets;
 - доступность Docker Compose;
 - статус последнего dry-run;
 - статус последнего deploy;
@@ -48,7 +48,9 @@ bash template-repo/scripts/deploy-dry-run.sh
 
 ```bash
 bash template-repo/scripts/deploy-dry-run.sh --preset app-db
-bash template-repo/scripts/deploy-dry-run.sh --preset reverse-proxy
+bash template-repo/scripts/deploy-dry-run.sh --preset app-db,backup
+bash template-repo/scripts/deploy-dry-run.sh --preset reverse-proxy-tls
+bash template-repo/scripts/deploy-dry-run.sh --preset healthcheck
 bash template-repo/scripts/deploy-dry-run.sh --preset production
 ```
 
@@ -62,7 +64,7 @@ bash template-repo/scripts/deploy-dry-run.sh --env-file /path/to/prod.env --pres
 - проверяет `deploy/compose.yaml` и `deploy/compose.production.yaml`;
 - подключает `deploy/presets/*.yaml` для выбранного preset;
 - выбирает `deploy/.env` (или безопасный fallback `deploy/.env.example`);
-- запускает `template-repo/scripts/validate-operator-env.py`;
+- запускает `template-repo/scripts/validate-operator-env.py` для секретов, домена, портов, volumes, backup и healthcheck endpoint;
 - валидирует итоговый compose config без запуска контейнеров;
 - сохраняет короткий отчёт в `.factory-runtime/reports/deploy-dry-run-latest.txt`.
 
@@ -71,9 +73,11 @@ bash template-repo/scripts/deploy-dry-run.sh --env-file /path/to/prod.env --pres
 Перед реальным удалённым VPS deploy:
 
 - создайте `deploy/.env` из примера и замените все secrets/placeholders;
-- для `production` задайте `APP_BIND_ADDRESS=127.0.0.1`, `DOMAIN`, `TLS_EMAIL`, `ACME_AGREE=true`;
+- для `reverse-proxy-tls`/`production` задайте `APP_BIND_ADDRESS=127.0.0.1`, `DOMAIN`, `TLS_EMAIL`, `ACME_AGREE=true`;
 - убедитесь, что DNS указывает на VPS, а порты `80/443` открыты;
-- проверьте backup path и restore drill для `app-db`/`production`;
+- для `app-db` задайте длинный `DB_PASSWORD` и осознанное имя `DB_DATA_VOLUME`;
+- для `backup`/`production` задайте `BACKUP_ENABLED=true`, проверьте `BACKUP_PATH` и restore drill;
+- для `healthcheck`/`production` проверьте `HEALTHCHECK_ENDPOINT`;
 - выполните strict dry-run:
 
 ```bash
@@ -98,6 +102,16 @@ bash template-repo/scripts/deploy-local-vps.sh --yes
 bash template-repo/scripts/deploy-local-vps.sh --yes --preset production
 ```
 
+Безопасная последовательность расширения:
+
+```bash
+bash template-repo/scripts/deploy-dry-run.sh --preset starter
+bash template-repo/scripts/deploy-dry-run.sh --preset app-db
+bash template-repo/scripts/deploy-dry-run.sh --preset app-db,backup
+bash template-repo/scripts/deploy-dry-run.sh --preset reverse-proxy-tls
+bash template-repo/scripts/deploy-dry-run.sh --preset production --strict-env
+```
+
 ## 5) Backup hook
 
 ```bash
@@ -105,11 +119,27 @@ docker compose \
   -f deploy/compose.yaml \
   -f deploy/compose.production.yaml \
   -f deploy/presets/app-db.yaml \
+  -f deploy/presets/backup.yaml \
   --env-file deploy/.env \
   run --rm db-backup
 ```
 
-## 6) Короткая проверка после deploy
+## 6) Rollback
+
+Минимальный rollback:
+
+1. Верните предыдущий `APP_IMAGE` tag в `deploy/.env`.
+2. Запустите dry-run с тем же preset, который был в production.
+3. Запустите deploy.
+
+```bash
+bash template-repo/scripts/deploy-dry-run.sh --preset production --strict-env
+bash template-repo/scripts/deploy-local-vps.sh --yes --preset production
+```
+
+Если менялась DB schema, сначала сделайте свежий backup через `db-backup`, затем используйте rollback/restore процедуру приложения.
+
+## 7) Короткая проверка после deploy
 
 ```bash
 python3 template-repo/scripts/operator-dashboard.py --verify-summary

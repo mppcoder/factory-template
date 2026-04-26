@@ -1,0 +1,10 @@
+services:
+  app:
+    environment:
+      HEALTHCHECK_ENDPOINT: ${HEALTHCHECK_ENDPOINT:-/}
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://127.0.0.1${HEALTHCHECK_ENDPOINT:-/} >/dev/null || exit 1"]
+      interval: ${APP_HEALTHCHECK_INTERVAL:-30s}
+      timeout: ${APP_HEALTHCHECK_TIMEOUT:-5s}
+      retries: ${APP_HEALTHCHECK_RETRIES:-3}
+      start_period: ${APP_HEALTHCHECK_START_PERIOD:-20s}

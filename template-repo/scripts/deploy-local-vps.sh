@@ -3,13 +3,15 @@ set -euo pipefail
 
 usage() {
   cat <<'USAGE'
-Usage: bash template-repo/scripts/deploy-local-vps.sh [--yes] [--skip-pull] [--init-env] [--preset starter|app-db|reverse-proxy|production]
+Usage: bash template-repo/scripts/deploy-local-vps.sh [--yes] [--skip-pull] [--init-env] [--preset preset-list]
 
 Options:
   --yes        Run non-interactively (skip confirmation).
   --skip-pull  Skip `docker compose pull`.
   --init-env   If deploy/.env is missing, create it from deploy/.env.example.
   --preset     Override OPERATOR_PRESET from env for this deploy.
+               Values: starter, app-db, reverse-proxy-tls, backup, healthcheck, production.
+               Multiple overlays may be comma-separated, for example app-db,backup.
   -h, --help   Show help.
 USAGE
 }
@@ -125,23 +127,63 @@ env_value() {
 PRESET="${PRESET_OVERRIDE:-$(env_value OPERATOR_PRESET "$ACTIVE_ENV")}"
 PRESET="${PRESET:-starter}"
 COMPOSE_ARGS=(-f "$BASE_COMPOSE" -f "$PROD_COMPOSE")
-case "$PRESET" in
-  starter)
-    ;;
-  app-db)
-    COMPOSE_ARGS+=(-f "$REPO_ROOT/deploy/presets/app-db.yaml")
-    ;;
-  reverse-proxy)
-    COMPOSE_ARGS+=(-f "$REPO_ROOT/deploy/presets/reverse-proxy.yaml")
-    ;;
-  production)
-    COMPOSE_ARGS+=(-f "$REPO_ROOT/deploy/presets/app-db.yaml" -f "$REPO_ROOT/deploy/presets/reverse-proxy.yaml")
-    ;;
-  *)
-    echo "Unknown operator preset: $PRESET" >&2
-    exit 2
-    ;;
-esac
+
+compose_files_for_preset() {
+  local preset="$1"
+  local normalized="${preset//+/,}"
+  local token
+  local seen=","
+  IFS=',' read -r -a PRESET_TOKENS <<<"$normalized"
+
+  add_preset_file() {
+    local file="$1"
+    if [[ "$seen" != *",$file,"* ]]; then
+      COMPOSE_ARGS+=(-f "$file")
+      seen+="$file,"
+    fi
+  }
+
+  add_token() {
+    case "$1" in
+      starter|"")
+        add_preset_file "$REPO_ROOT/deploy/presets/starter.yaml"
+        ;;
+      app-db)
+        add_preset_file "$REPO_ROOT/deploy/presets/app-db.yaml"
+        ;;
+      reverse-proxy-tls)
+        add_preset_file "$REPO_ROOT/deploy/presets/reverse-proxy-tls.yaml"
+        ;;
+      reverse-proxy)
+        add_preset_file "$REPO_ROOT/deploy/presets/reverse-proxy-tls.yaml"
+        ;;
+      backup)
+        add_preset_file "$REPO_ROOT/deploy/presets/backup.yaml"
+        ;;
+      healthcheck)
+        add_preset_file "$REPO_ROOT/deploy/presets/healthcheck.yaml"
+        ;;
+      production)
+        add_token app-db
+        add_token reverse-proxy-tls
+        add_token backup
+        add_token healthcheck
+        ;;
+      *)
+        echo "Unknown operator preset: $1" >&2
+        echo "Use starter, app-db, reverse-proxy-tls, backup, healthcheck, production, or a comma-separated list." >&2
+        exit 2
+        ;;
+    esac
+  }
+
+  for token in "${PRESET_TOKENS[@]}"; do
+    token="${token//[[:space:]]/}"
+    add_token "$token"
+  done
+}
+
+compose_files_for_preset "$PRESET"
 COMPOSE_ARGS+=(--env-file "$ACTIVE_ENV")
 
 echo

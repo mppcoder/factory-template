@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import argparse
+import re
 import shutil
 import subprocess
 import sys
@@ -24,10 +25,16 @@ STATUS_LABEL = {
 }
 
 PRESET_COMPOSE_FILES = {
-    "starter": [],
+    "starter": ["deploy/presets/starter.yaml"],
     "app-db": ["deploy/presets/app-db.yaml"],
-    "reverse-proxy": ["deploy/presets/reverse-proxy.yaml"],
-    "production": ["deploy/presets/app-db.yaml", "deploy/presets/reverse-proxy.yaml"],
+    "reverse-proxy-tls": ["deploy/presets/reverse-proxy-tls.yaml"],
+    "backup": ["deploy/presets/backup.yaml"],
+    "healthcheck": ["deploy/presets/healthcheck.yaml"],
+}
+PRESET_ORDER = ["app-db", "reverse-proxy-tls", "backup", "healthcheck"]
+PRESET_ALIASES = {
+    "reverse-proxy": ["reverse-proxy-tls"],
+    "production": ["app-db", "reverse-proxy-tls", "backup", "healthcheck"],
 }
 
 
@@ -98,6 +105,31 @@ def selected_preset(root: Path, preset_override: str | None = None) -> str:
     return env.get("OPERATOR_PRESET") or "starter"
 
 
+def parse_preset_expression(value: str) -> tuple[list[str], list[str]]:
+    raw_parts = [part.strip() for part in re.split(r"[,+]", value or "starter") if part.strip()]
+    if not raw_parts:
+        raw_parts = ["starter"]
+    tokens: list[str] = []
+    unknown: list[str] = []
+    valid = {"starter", "app-db", "reverse-proxy-tls", "reverse-proxy", "backup", "healthcheck", "production"}
+    for part in raw_parts:
+        if part in PRESET_ALIASES:
+            expanded = PRESET_ALIASES[part]
+        elif part in valid:
+            expanded = [part]
+        else:
+            unknown.append(part)
+            continue
+        for token in expanded:
+            if token != "starter" and token not in tokens:
+                tokens.append(token)
+    if not tokens:
+        tokens = ["starter"]
+    else:
+        tokens = [token for token in PRESET_ORDER if token in tokens]
+    return tokens, unknown
+
+
 def validate_operator_env(root: Path, env_path: Path | None, env_mode: str, preset: str) -> dict[str, str]:
     if env_path is None:
         return {"status": "fail", "failures": "1", "warnings": "0"}
@@ -154,6 +186,7 @@ def build_status_rows(root: Path, preset_override: str | None = None) -> list[St
     dry_run_report = root / ".factory-runtime" / "reports" / "deploy-dry-run-latest.txt"
     deploy_report = root / ".factory-runtime" / "reports" / "deploy-last-run.txt"
     preset = selected_preset(root, preset_override)
+    preset_tokens, unknown_presets = parse_preset_expression(preset)
 
     rows: list[StatusRow] = []
 
@@ -200,28 +233,33 @@ def build_status_rows(root: Path, preset_override: str | None = None) -> list[St
             )
         )
 
-    preset_files = PRESET_COMPOSE_FILES.get(preset)
-    if preset_files is None:
+    if unknown_presets:
         rows.append(
             StatusRow(
                 title="Operator preset",
                 status="fail",
-                details=f"Неизвестный preset `{preset}`. Допустимо: starter, app-db, reverse-proxy, production.",
+                details=f"Неизвестный preset: {', '.join(unknown_presets)}. Допустимо: starter, app-db, reverse-proxy-tls, backup, healthcheck, production.",
             )
         )
-    elif preset == "starter":
+    elif preset_tokens == ["starter"]:
+        preset_files = PRESET_COMPOSE_FILES["starter"]
+        missing_preset_files = [rel for rel in preset_files if not (root / rel).exists()]
+        status = "fail" if missing_preset_files else "ok"
         rows.append(
             StatusRow(
                 title="Operator preset",
-                status="ok",
+                status=status,
                 details="`starter`: минимальный запуск одного приложения без обязательных DB/TLS секретов.",
             )
         )
     else:
+        preset_files: list[str] = []
+        for token in preset_tokens:
+            preset_files.extend(PRESET_COMPOSE_FILES[token])
         missing_preset_files = [rel for rel in preset_files if not (root / rel).exists()]
         status = "fail" if missing_preset_files else "ok"
         detail = (
-            f"`{preset}` активен; подключаются overlays: {', '.join(preset_files)}."
+            f"`{preset}` активен; overlays: {', '.join(preset_tokens)}; файлы: {', '.join(preset_files)}."
             if not missing_preset_files
             else f"`{preset}` активен, но не хватает overlays: {', '.join(missing_preset_files)}."
         )
@@ -337,6 +375,7 @@ def build_status_rows(root: Path, preset_override: str | None = None) -> list[St
 
 def recommend_next_step(root: Path, rows: list[StatusRow], preset: str) -> str:
     by_title = {row.title: row for row in rows}
+    preset_tokens, _unknown = parse_preset_expression(preset)
     preset_arg = "" if preset == "starter" else f" --preset {preset}"
     dry_run_cmd = f"bash {script_hint(root, 'deploy-dry-run.sh')}{preset_arg}"
     deploy_cmd = f"bash {script_hint(root, 'deploy-local-vps.sh')} --yes{preset_arg}"
@@ -357,9 +396,17 @@ def recommend_next_step(root: Path, rows: list[StatusRow], preset: str) -> str:
         return f"Запустите one-button-ish deploy (с автоматическим dry-run): `{deploy_cmd}`."
     if by_title["Verify summary"].status != "ok":
         return f"Обновите верификацию: `{verify_cmd}`."
-    if preset == "starter":
-        return "Starter baseline в рабочем состоянии. Повторите dry-run перед каждым новым деплоем."
-    return f"`{preset}` в рабочем состоянии. Проверьте backup restore drill и rollback перед production cutover."
+    if preset_tokens == ["starter"]:
+        return "Starter baseline в рабочем состоянии. Когда понадобится stateful сервис, следующий безопасный шаг: dry-run `--preset app-db`."
+    if preset_tokens == ["app-db"]:
+        return "`app-db` в рабочем состоянии. Перед production cutover добавьте backup через `--preset app-db,backup` и проверьте restore drill."
+    if "reverse-proxy-tls" in preset_tokens and "app-db" not in preset_tokens:
+        return "`reverse-proxy-tls` в рабочем состоянии. Проверьте DNS, firewall 80/443 и держите app bind на `127.0.0.1`."
+    if "backup" in preset_tokens:
+        return f"`{preset}` в рабочем состоянии. Проверьте свежий backup-файл, restore drill и rollback перед production cutover."
+    if "healthcheck" in preset_tokens:
+        return f"`{preset}` в рабочем состоянии. Проверьте endpoint healthcheck после deploy и перед rollback."
+    return f"`{preset}` в рабочем состоянии. Повторите dry-run перед расширением production preset."
 
 
 def print_verify_summary(root: Path, max_lines: int = 12) -> None:
@@ -411,7 +458,6 @@ def main() -> int:
     )
     parser.add_argument(
         "--preset",
-        choices=sorted(PRESET_COMPOSE_FILES),
         help="Override OPERATOR_PRESET from env for dashboard and optional dry-run.",
     )
     args = parser.parse_args()

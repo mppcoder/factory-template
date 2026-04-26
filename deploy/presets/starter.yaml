@@ -1,0 +1,3 @@
+x-factory-preset:
+  name: starter
+  description: "Пустой overlay для начального single-service VPS пути."
