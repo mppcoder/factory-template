@@ -41,11 +41,19 @@ if resolved_preset_name not in presets:
     raise SystemExit(f"Неизвестный профиль проекта: {preset_name}")
 
 preset = presets[resolved_preset_name]
+conversion_required = bool(preset.get("conversion_required", False))
 out = {
     "project_preset": resolved_preset_name,
     "requested_project_preset": preset_name,
     "project_title": preset.get("title", ""),
     "recommended_mode": preset.get("default_mode", ""),
+    "lifecycle_state": preset.get("lifecycle_state", ""),
+    "target_project_preset": preset.get("target_project_preset", resolved_preset_name),
+    "target_lifecycle_state": preset.get(
+        "target_lifecycle_state",
+        "greenfield-converted" if conversion_required else preset.get("lifecycle_state", ""),
+    ),
+    "conversion_required": conversion_required,
     "recommended_change_class": preset.get("recommended_change_class", ""),
     "recommended_execution_mode": preset.get("recommended_execution_mode", ""),
     "active_default_scenarios": preset.get("default_scenarios", []),

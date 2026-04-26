@@ -1,10 +1,10 @@
 # Политика выравнивания контуров
 
 ## Зачем нужен этот документ
-Этот документ выравнивает три режима работы:
-- доработка самой фабрики
-- greenfield-проект
-- brownfield-проект
+Этот документ выравнивает один lifecycle core для трех ownership/transition контуров:
+- доработка самой фабрики как `greenfield-product` проекта с factory producer layer
+- greenfield-продукт
+- brownfield transition существующего проекта к `greenfield-product`
 
 ## Общее обязательное правило
 Во всех контурах:
@@ -26,12 +26,14 @@
 - system inventory
 - gap register
 - remediation planning
+- mandatory conversion to `greenfield-product` or documented blocker
 
 ### Factory improvement / улучшение фабрики
 - feedback
 - drift
 - patch export
 - controlled back-sync
+- factory-producer-owned layer excluded from battle project sync
 
 ## Правило handoff
 Независимо от типа контура defect-flow должен одинаково отражаться в:

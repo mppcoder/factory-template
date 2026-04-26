@@ -4,6 +4,34 @@ Status source of truth: `docs/releases/release-scorecard.yaml`.
 Current scorecard state: `2.5.0 GA Ready`.
 TEST_REPORT.md is verification evidence, not the canonical release-status source.
 
+## Проверка brownfield transition architecture
+
+Дата: `2026-04-26`.
+
+Проверены новые lifecycle/ownership/conversion контуры:
+
+- `python3 template-repo/scripts/validate-tree-contract.py .` — pass.
+- `python3 template-repo/scripts/validate-mode-parity.py .` — pass.
+- `python3 template-repo/scripts/validate-brownfield-transition.py .` — pass.
+- `python3 template-repo/scripts/validate-greenfield-conversion.py .` — pass.
+- generated brownfield-without-repo smoke: launcher -> `validate-brownfield-transition.py --without-repo` -> tree/mode parity — pass.
+- `bash template-repo/scripts/verify-all.sh quick` — pass.
+- `bash MATRIX_TEST.sh` — pass; matrix covers factory-template producer layer, new greenfield, brownfield-without-repo transitional/conversion-ready/converted, brownfield-with-repo transitional/converted, and downstream sync preservation.
+- `bash template-repo/scripts/verify-all.sh ci` — pass.
+- `bash PRE_RELEASE_AUDIT.sh` — pass.
+
+Conversion gates enforced:
+
+- repo-first core and master router present;
+- scenario-pack accessible;
+- active project profile updated to `greenfield-product`;
+- lifecycle state `greenfield-converted`;
+- greenfield required artifacts present;
+- brownfield evidence retained as history/reference;
+- project-owned and template-owned zones marked;
+- sync manifest safe for downstream;
+- validators green.
+
 ## Доказательства решения GA
 
 `G25-GA` получает pass на `2026-04-26`: RC evidence остается зеленым, а full-KPI evidence для GA теперь измерим и валиден.

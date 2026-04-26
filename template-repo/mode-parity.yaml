@@ -3,6 +3,45 @@ status: active
 owner: factory-template
 description: "Core parity contract for template and generated project modes."
 
+lifecycle_state_model:
+  distinction: "project_preset and recommended_mode are launch/profile choices; lifecycle_state records the current transition state."
+  states:
+    greenfield-active:
+      rule: "Normal active product development."
+      final_state: true
+    brownfield-without-repo-intake:
+      rule: "Evidence collection only; no normalized repo exists yet."
+      transitional: true
+    brownfield-without-repo-reconstruction:
+      rule: "Create or identify a canonical repo root."
+      transitional: true
+    brownfield-with-repo-audit:
+      rule: "Map existing code, risks, constraints and safe zones."
+      transitional: true
+    brownfield-with-repo-adoption:
+      rule: "Apply factory core and safe structure fixes without overwriting product code."
+      transitional: true
+    brownfield-to-greenfield-conversion:
+      rule: "Update active profile to greenfield-product."
+      transitional: true
+    greenfield-converted:
+      rule: "Final steady state after successful brownfield adoption."
+      final_state: true
+  conversion_done_rule: "Brownfield adoption is done only after conversion to greenfield-product or a documented blocker."
+
+conversion_gates:
+  - repo_first_core_present
+  - master_router_present
+  - scenario_pack_accessible
+  - active_project_profile_updated_to_greenfield_product
+  - lifecycle_state_greenfield_converted
+  - greenfield_required_artifacts_present
+  - brownfield_evidence_archived_or_referenced
+  - project_owned_zones_protected
+  - template_owned_zones_marked
+  - sync_manifest_safe_for_downstream
+  - validators_green
+
 core_capability_ids: &core_capability_ids
   - repo_first_instructions
   - scenario_pack_access
@@ -257,6 +296,17 @@ mode_specific_capabilities:
       - greenfield/architecture-options.md
       - greenfield/initial-task-list.md
       - .chatgpt/discovery-summary.md
+  greenfield_conversion_readiness:
+    title: Greenfield conversion artifacts
+    justification: "Converted brownfield projects must expose the same greenfield product discovery surface and preserve brownfield history."
+    required_paths:
+      - greenfield/vision.md
+      - greenfield/problem-statement.md
+      - greenfield/scope-v1.md
+      - greenfield/architecture-options.md
+      - greenfield/initial-task-list.md
+      - brownfield/system-inventory.md
+      - brownfield/gap-register.md
   brownfield_evidence_first:
     title: Brownfield evidence-first artifacts
     justification: "All brownfield modes must capture observed system facts before implementation."
@@ -318,37 +368,73 @@ modes:
     kind: generated
     presets:
       - greenfield-product
+    lifecycle_states:
+      - greenfield-active
+      - greenfield-converted
+    target_lifecycle_state: greenfield-active
     core_capabilities: *core_capability_ids
     allowed_differences:
       - greenfield_discovery
   brownfield-without-repo:
     kind: generated
+    transitional: true
     presets:
       - brownfield-without-repo
+    lifecycle_states:
+      - brownfield-without-repo-intake
+      - brownfield-without-repo-reconstruction
+      - brownfield-to-greenfield-conversion
+    target_project_preset: greenfield-product
+    target_lifecycle_state: greenfield-converted
+    conversion_required: true
     core_capabilities: *core_capability_ids
     allowed_differences:
       - brownfield_evidence_first
       - brownfield_without_repo_reconstruction
   brownfield-with-repo-modernization:
     kind: generated
+    transitional: true
     presets:
       - brownfield-with-repo-modernization
+    lifecycle_states:
+      - brownfield-with-repo-audit
+      - brownfield-with-repo-adoption
+      - brownfield-to-greenfield-conversion
+    target_project_preset: greenfield-product
+    target_lifecycle_state: greenfield-converted
+    conversion_required: true
     core_capabilities: *core_capability_ids
     allowed_differences:
       - brownfield_evidence_first
       - brownfield_with_repo_modernization
   brownfield-with-repo-integration:
     kind: generated
+    transitional: true
     presets:
       - brownfield-with-repo-integration
+    lifecycle_states:
+      - brownfield-with-repo-audit
+      - brownfield-with-repo-adoption
+      - brownfield-to-greenfield-conversion
+    target_project_preset: greenfield-product
+    target_lifecycle_state: greenfield-converted
+    conversion_required: true
     core_capabilities: *core_capability_ids
     allowed_differences:
       - brownfield_evidence_first
       - brownfield_with_repo_integration
   brownfield-with-repo-audit:
     kind: generated
+    transitional: true
     presets:
       - brownfield-with-repo-audit
+    lifecycle_states:
+      - brownfield-with-repo-audit
+      - brownfield-with-repo-adoption
+      - brownfield-to-greenfield-conversion
+    target_project_preset: greenfield-product
+    target_lifecycle_state: greenfield-converted
+    conversion_required: true
     core_capabilities: *core_capability_ids
     allowed_differences:
       - brownfield_evidence_first

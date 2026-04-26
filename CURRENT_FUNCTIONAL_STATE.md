@@ -5,6 +5,8 @@
 - нейтральная canonical иерархия core vs optional/reference layers без product-specific naming в core
 - strict machine-readable tree contract для factory root, template base и generated project contours
 - strict machine-readable mode parity contract для template base и всех generated presets
+- lifecycle state model отделен от project preset: greenfield-active, brownfield transitional states, brownfield-to-greenfield-conversion и greenfield-converted
+- ownership taxonomy отделяет project-core, template-owned zones, project-owned zones, brownfield evidence/audit/reconstruction, factory-producer-owned, archives и transient-generated
 - генерация greenfield и brownfield проектов
 - scenario-pack, `.chatgpt` и launcher
 - project presets, policy presets и change classes
@@ -70,6 +72,9 @@
 - user-facing output operator env validator русифицирован, чтобы quick verify не возвращал англоязычные описательные сообщения
 - tree contract validator подключен к quick/audit/matrix контуру и фиксирует compatibility-only слой для старых preset aliases
 - mode parity validator подключен к quick/ci контуру и фиксирует одинаковый core layer: repo-first instructions, scenario-pack, AGENTS materialization, `.chatgpt`, Codex handoff pack, defect capture, versioning/docs, project-knowledge, `work/features`, `work/completed`, verify/done checklist и downstream sync metadata
+- brownfield transition validator и greenfield conversion validator подключены к quick verify и matrix; brownfield adoption считается done только после conversion в `greenfield-product` или documented blocker
+- `factory-template` зафиксирован как обычный `greenfield-product` с дополнительным factory producer layer, а не как отдельный workflow
+- downstream sync contract защищает brownfield history/project-owned zones и исключает factory-producer-owned paths из battle project sync
 
 ## Программа 2.5 (release truth)
 - release truth source: `docs/releases/release-scorecard.yaml`
@@ -99,6 +104,7 @@
 
 ## Что еще не закрыто
 - финальная проверка на реальных greenfield и brownfield проектах
+- production feedback от реальных converted brownfield проектов после нескольких template sync циклов
 - окончательная polish-фаза для runner layer и operational reports
 - отдельный release-facing validator/report для curated pack quality beyond structural checks
 - дальнейшее production hardening runtime-нестабильности git sync beyond current fallback strategy

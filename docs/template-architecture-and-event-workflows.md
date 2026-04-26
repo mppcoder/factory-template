@@ -19,6 +19,16 @@
 - внутренних доработок самой фабрики;
 - release-facing сопровождения шаблона и downstream sync.
 
+`factory-template` не использует отдельный workflow для собственного развития. Это обычный `greenfield-product`, чей продукт — фабрика проектов. Его дополнительный слой — `factory-producer-owned`: template generation, release, packaging, registry, downstream sync, reference packs и archives.
+
+Brownfield routes являются transition states:
+
+- brownfield без repo: intake/reconstruction path, затем canonical repo и adoption;
+- brownfield с repo: audit/adoption/modernization path;
+- успешный финал обоих путей: active profile `greenfield-product`, recommended mode `greenfield`, lifecycle state `greenfield-converted`.
+
+Brownfield evidence остается историей и audit trail после conversion, но не является active mode driver.
+
 Практически проект решает пять задач:
 
 1. даёт шаблон нового рабочего repo через `template-repo/`;
@@ -49,6 +59,7 @@ flowchart TD
 - `artifact layer`: `.chatgpt`, reports, changelog/version/release notes, bundle manifests.
 - `verification layer`: smoke/examples/matrix/audit/release validators.
 - `release-followup layer`: release docs, exports, manifests, boundary actions, verified sync, release executor.
+- `ownership layer`: project core, template-owned safe/clone/advisory zones, project-owned product zones, brownfield transition/history zones and factory-producer-owned zones.
 
 ### 2.3. Advisory vs executable
 
@@ -80,7 +91,7 @@ Machine-readable контракт дерева находится в:
 - `template-repo/scripts/validate-tree-contract.py`
 - `docs/tree-contract.md`
 
-Этот контракт разделяет `factory_root`, `template_base`, `generated_greenfield`, `generated_brownfield_without_repo` и `generated_brownfield_with_repo`.
+Этот контракт разделяет `factory_root`, `template_base`, `generated_greenfield`, transitional brownfield compatibility contours и `converted_greenfield`. Инвариант: all projects = project lifecycle core + type-specific owned layer.
 
 ### 3.1. Схема дерева
 

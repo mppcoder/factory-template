@@ -17,7 +17,13 @@ Manual edits in this clone will be overwritten by the canonical template sync fl
 -->
 """
 
-TIER_ORDER = ("safe-generated", "safe-clone", "advisory-review", "manual-project-owned")
+TIER_ORDER = (
+    "safe-generated",
+    "safe-clone",
+    "advisory-review",
+    "manual-project-owned",
+    "brownfield-historical-evidence",
+)
 LEGACY_TIER_ALIASES = {
     "safe": "safe-generated",
     "advisory": "advisory-review",
@@ -311,6 +317,35 @@ def summarize(drift: Iterable[dict], materialized_files: Iterable[dict]) -> dict
     }
 
 
+def load_yaml_if_exists(path: Path) -> dict:
+    if not path.exists():
+        return {}
+    data = yaml.safe_load(path.read_text(encoding="utf-8")) or {}
+    return data if isinstance(data, dict) else {}
+
+
+def project_lifecycle_status(project: Path) -> str:
+    profile = load_yaml_if_exists(project / ".chatgpt" / "project-profile.yaml")
+    stage = load_yaml_if_exists(project / ".chatgpt" / "stage-state.yaml")
+    lifecycle = stage.get("lifecycle") if isinstance(stage.get("lifecycle"), dict) else {}
+    preset = str(profile.get("project_preset", "")).strip()
+    state = str(lifecycle.get("lifecycle_state") or profile.get("lifecycle_state") or "").strip()
+    target = str(lifecycle.get("target_lifecycle_state") or profile.get("target_lifecycle_state") or "").strip()
+    brownfield_presets = {
+        "brownfield-without-repo",
+        "brownfield-with-repo-modernization",
+        "brownfield-with-repo-integration",
+        "brownfield-with-repo-audit",
+    }
+    if preset == "greenfield-product" and state == "greenfield-converted":
+        return "converted_greenfield"
+    if preset in brownfield_presets and target == "greenfield-converted":
+        return "conversion_ready"
+    if preset in brownfield_presets or state.startswith("brownfield-"):
+        return "transitional_brownfield"
+    return "greenfield_active"
+
+
 def format_human(payload: dict) -> str:
     summary = payload.get("summary", {})
     lines = [
@@ -336,6 +371,7 @@ def format_human(payload: dict) -> str:
         "",
         "Tiered impact:",
     ]
+    lines.insert(4, f"- lifecycle_status: {payload.get('lifecycle_status', 'unknown')}")
     for tier in TIER_ORDER:
         tier_summary = (summary.get("tiers") or {}).get(tier, {})
         lines.append(
@@ -374,6 +410,7 @@ def build_payload(factory: Path, project: Path) -> dict:
     return {
         "factory": str(factory),
         "project": str(project),
+        "lifecycle_status": project_lifecycle_status(project),
         "drift": drift,
         "materialized_files": materialized,
         "summary": summarize(drift, materialized),

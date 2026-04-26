@@ -17,13 +17,46 @@ make_project(){
   rm -rf "$workdir"; mkdir -p "$workdir"
   (cd "$workdir" && printf '%s\n%s\n%s\n%s\n%s\n%s\n' "$pname" "$slug" "$preset" "$mode" "$cls" "$execm" | FACTORY_REGISTRY_MODE="$reg" timeout 60s bash "$ROOT/launcher.sh" >/dev/null)
 }
+convert_project_to_greenfield(){
+  local project_root="$1"
+  python3 - "$project_root" <<'PYCODE'
+from pathlib import Path
+import sys
+import yaml
+
+root = Path(sys.argv[1])
+profile_path = root / ".chatgpt/project-profile.yaml"
+stage_path = root / ".chatgpt/stage-state.yaml"
+profile = yaml.safe_load(profile_path.read_text(encoding="utf-8")) or {}
+profile["project_preset"] = "greenfield-product"
+profile["recommended_mode"] = "greenfield"
+profile["lifecycle_state"] = "greenfield-converted"
+profile["target_project_preset"] = "greenfield-product"
+profile["target_lifecycle_state"] = "greenfield-converted"
+profile["conversion_required"] = False
+profile_path.write_text(yaml.safe_dump(profile, allow_unicode=True, sort_keys=False), encoding="utf-8")
+stage = yaml.safe_load(stage_path.read_text(encoding="utf-8")) or {}
+stage.setdefault("project", {})["mode"] = "greenfield"
+stage.setdefault("lifecycle", {})
+stage["lifecycle"]["previous_lifecycle_state"] = stage["lifecycle"].get("lifecycle_state") or "brownfield-with-repo-adoption"
+stage["lifecycle"]["lifecycle_state"] = "greenfield-converted"
+stage["lifecycle"]["target_lifecycle_state"] = "greenfield-converted"
+stage["lifecycle"]["conversion_required"] = False
+stage["lifecycle"]["conversion_gate_status"] = "passed"
+stage_path.write_text(yaml.safe_dump(stage, allow_unicode=True, sort_keys=False), encoding="utf-8")
+PYCODE
+}
 SBASE="$ROOT/.matrix-test"; rm -rf "$SBASE"; mkdir -p "$SBASE"
 POSITIVE_COMMON=(validate-project-preset.py validate-policy-preset.py validate-change-profile.py validate-task-graph.py validate-stage.py validate-versioning-layer.py validate-defect-capture.py validate-alignment.py)
+
+assert_pass 'factory-template' 'project-core+producer-layer' python3 "$ROOT/template-repo/scripts/validate-tree-contract.py" "$ROOT"
+assert_pass 'factory-template' 'greenfield-conversion-contract' python3 "$ROOT/template-repo/scripts/validate-greenfield-conversion.py" "$ROOT"
 
 make_project "$SBASE/green-small-fix" 'Матрица greenfield small-fix' 'green-small-fix' greenfield-product greenfield small-fix manual
 P="$SBASE/green-small-fix/green-small-fix"
 for c in "${POSITIVE_COMMON[@]}"; do assert_pass 'greenfield+small-fix+manual' "$c" "$P/scripts/$c" "$P"; done
 assert_pass 'greenfield+small-fix+manual' validate-tree-contract.py "$ROOT/template-repo/scripts/validate-tree-contract.py" "$P"
+assert_pass 'greenfield+small-fix+manual' validate-greenfield-conversion.py python3 "$ROOT/template-repo/scripts/validate-greenfield-conversion.py" "$P"
 for c in validate-evidence.py validate-quality.py check-dod.py; do assert_fail 'greenfield+small-fix+manual' "$c" "$P/scripts/$c" "$P"; done
 assert_pass 'greenfield+small-fix+manual' validate-handoff.py "$P/scripts/validate-handoff.py" "$P"
 
@@ -37,7 +70,19 @@ make_project "$SBASE/brown-feature" 'Матрица brownfield feature' 'brown-f
 P="$SBASE/brown-feature/brown-feature"
 for c in "${POSITIVE_COMMON[@]}"; do assert_pass 'brownfield+feature+hybrid' "$c" "$P/scripts/$c" "$P"; done
 assert_pass 'brownfield+feature+hybrid' validate-tree-contract.py "$ROOT/template-repo/scripts/validate-tree-contract.py" "$P"
+assert_pass 'brownfield+feature+hybrid' validate-brownfield-transition.py python3 "$ROOT/template-repo/scripts/validate-brownfield-transition.py" "$P" --with-repo
 for c in validate-evidence.py validate-quality.py check-dod.py validate-handoff.py; do assert_fail 'brownfield+feature+hybrid' "$c" "$P/scripts/$c" "$P"; done
+convert_project_to_greenfield "$P"
+assert_pass 'brownfield+feature+converted' validate-greenfield-conversion.py python3 "$ROOT/template-repo/scripts/validate-greenfield-conversion.py" "$P" --require-converted
+
+make_project "$SBASE/brown-no-repo" 'Матрица brownfield no repo' 'brown-no-repo' brownfield-without-repo brownfield brownfield-stabilization hybrid
+P="$SBASE/brown-no-repo/brown-no-repo"
+for c in "${POSITIVE_COMMON[@]}"; do assert_pass 'brownfield+without-repo+hybrid' "$c" "$P/scripts/$c" "$P"; done
+assert_pass 'brownfield+without-repo+hybrid' validate-tree-contract.py "$ROOT/template-repo/scripts/validate-tree-contract.py" "$P"
+assert_pass 'brownfield+without-repo+hybrid' validate-brownfield-transition.py python3 "$ROOT/template-repo/scripts/validate-brownfield-transition.py" "$P" --without-repo
+assert_pass 'brownfield+without-repo+conversion-ready' conversion-target python3 "$ROOT/template-repo/scripts/validate-brownfield-transition.py" "$P" --without-repo
+convert_project_to_greenfield "$P"
+assert_pass 'brownfield+without-repo+converted' validate-greenfield-conversion.py python3 "$ROOT/template-repo/scripts/validate-greenfield-conversion.py" "$P" --require-converted
 
 make_project "$SBASE/brown-audit" 'Матрица brownfield audit' 'brown-audit' brownfield-with-repo-audit brownfield brownfield-audit manual
 P="$SBASE/brown-audit/brown-audit"

@@ -18,6 +18,9 @@ project_presets:
     title: Развитие продукта
     parity_mode: greenfield
     default_mode: greenfield
+    lifecycle_state: greenfield-active
+    converted_lifecycle_state: greenfield-converted
+    conversion_required: false
     recommended_change_class: feature
     recommended_execution_mode: codex-led
     default_scenarios:
@@ -69,11 +72,17 @@ project_presets:
       верификация.
     - Core parity layer совпадает с остальными generated modes; отличия ограничены
       greenfield discovery artifacts.
+    - Это steady-state preset для новых проектов и для проектов, успешно принятых
+      из brownfield transition.
 
   brownfield-with-repo-modernization:
     title: Модернизация старой системы
     parity_mode: brownfield-with-repo-modernization
     default_mode: brownfield
+    lifecycle_state: brownfield-with-repo-adoption
+    target_project_preset: greenfield-product
+    target_lifecycle_state: greenfield-converted
+    conversion_required: true
     recommended_change_class: refactor
     recommended_execution_mode: hybrid
     default_scenarios:
@@ -128,11 +137,19 @@ project_presets:
     - Начинайте с фиксации реальности и ограничений.
     - Core parity layer совпадает с остальными generated modes; отличия ограничены
       evidence-first и modernization artifacts.
+    - Это transitional adoption preset; после успешной модернизации active profile
+      должен переключиться на `greenfield-product`.
+    - Brownfield документы остаются историей/evidence и не управляют active mode после
+      conversion.
 
   brownfield-with-repo-integration:
     title: Интеграционный проект
     parity_mode: brownfield-with-repo-integration
     default_mode: brownfield
+    lifecycle_state: brownfield-with-repo-adoption
+    target_project_preset: greenfield-product
+    target_lifecycle_state: greenfield-converted
+    conversion_required: true
     recommended_change_class: migration
     recommended_execution_mode: hybrid
     default_scenarios:
@@ -186,11 +203,19 @@ project_presets:
     - Для интеграций обязательно фиксируйте зависимости, версии и внешние ограничения.
     - Core parity layer совпадает с остальными generated modes; отличия ограничены
       evidence-first и integration artifacts.
+    - Это transitional adoption preset; успешная интеграция завершается conversion
+      в `greenfield-product`.
+    - Product code и brownfield history являются project-owned и не перезаписываются
+      template sync.
 
   brownfield-with-repo-audit:
     title: Аудит без обязательной реализации
     parity_mode: brownfield-with-repo-audit
     default_mode: brownfield
+    lifecycle_state: brownfield-with-repo-audit
+    target_project_preset: greenfield-product
+    target_lifecycle_state: greenfield-converted
+    conversion_required: true
     recommended_change_class: brownfield-audit
     recommended_execution_mode: manual
     default_scenarios:
@@ -244,11 +269,17 @@ project_presets:
       в Codex.
     - Core parity layer совпадает с остальными generated modes; отличия ограничены
       evidence-first и audit artifacts.
+    - Audit сам по себе не является финальным project class; после принятия решения
+      проект должен перейти к adoption/conversion или зафиксировать blocker.
 
   brownfield-without-repo:
     title: Brownfield без репозитория
     parity_mode: brownfield-without-repo
     default_mode: brownfield
+    lifecycle_state: brownfield-without-repo-intake
+    target_project_preset: greenfield-product
+    target_lifecycle_state: greenfield-converted
+    conversion_required: true
     recommended_change_class: brownfield-stabilization
     recommended_execution_mode: hybrid
     default_scenarios:
@@ -310,3 +341,4 @@ project_presets:
       workspace в одном VS Code bootstrap окне.
     - Core parity layer совпадает с остальными generated modes; отличия ограничены
       evidence-first и reconstruction artifacts.
+    - "Это intake/reconstruction path, а не финальный тип проекта: нужно создать или определить canonical repo root, пройти with-repo audit/adoption и завершить conversion в `greenfield-product`."

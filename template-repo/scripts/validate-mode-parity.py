@@ -53,6 +53,19 @@ def validate_manifest_shape(manifest: dict[str, Any], errors: list[str]) -> None
     core = manifest.get("core_capabilities", {}) or {}
     modes = manifest.get("modes", {}) or {}
     differences = manifest.get("mode_specific_capabilities", {}) or {}
+    states = ((manifest.get("lifecycle_state_model", {}) or {}).get("states", {}) or {})
+    required_states = {
+        "greenfield-active",
+        "brownfield-without-repo-intake",
+        "brownfield-without-repo-reconstruction",
+        "brownfield-with-repo-audit",
+        "brownfield-with-repo-adoption",
+        "brownfield-to-greenfield-conversion",
+        "greenfield-converted",
+    }
+    missing_states = sorted(required_states - set(states))
+    if missing_states:
+        errors.append(f"lifecycle_state_model.states отсутствуют: {', '.join(missing_states)}")
 
     if not core_ids:
         errors.append("core_capability_ids пуст")
@@ -92,6 +105,16 @@ def validate_manifest_shape(manifest: dict[str, Any], errors: list[str]) -> None
         for diff_id in mode.get("allowed_differences", []) or []:
             if diff_id not in differences:
                 errors.append(f"modes.{mode_name}: неизвестная allowed difference `{diff_id}`")
+        for state in mode.get("lifecycle_states", []) or []:
+            if state not in states:
+                errors.append(f"modes.{mode_name}: неизвестный lifecycle state `{state}`")
+        if mode.get("transitional"):
+            if mode.get("target_project_preset") != "greenfield-product":
+                errors.append(f"modes.{mode_name}: transitional mode должен иметь target_project_preset greenfield-product")
+            if mode.get("target_lifecycle_state") != "greenfield-converted":
+                errors.append(f"modes.{mode_name}: transitional mode должен иметь target_lifecycle_state greenfield-converted")
+            if mode.get("conversion_required") is not True:
+                errors.append(f"modes.{mode_name}: transitional mode должен иметь conversion_required: true")
 
 
 def validate_factory_sources(root: Path, manifest: dict[str, Any], errors: list[str]) -> None:

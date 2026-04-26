@@ -60,7 +60,8 @@ if blocked:
     raise SystemExit("ОШИБКА: non-safe item marked will_generate=true")
 print("")
 print("Guidance: --apply-safe-zones copies only generated safe-generated/safe-clone files and records rollback metadata.")
-print("Guidance: advisory-review/manual-project-owned entries are preview-only; review patch-summary.md before any manual copy.")
+print("Guidance: factory-producer-owned, project-owned and brownfield history are never auto-applied to battle projects.")
+print("Guidance: advisory-review/manual-project-owned/brownfield-historical-evidence entries are preview-only; review patch-summary.md before any manual copy.")
 PYCODE
     ;;
   --dry-run)
@@ -199,7 +200,8 @@ if create_project_snapshot:
     print(f"Project snapshot сохранен: {snapshot_path}")
 PYCODE
     echo "Safe-generated/safe-clone files синхронизированы в downstream repo root через controlled sync path."
-    echo "Advisory-review/manual-project-owned preview остался в patch-summary.md и preview-changes.json без автоматического применения."
+echo "Advisory-review/manual-project-owned/brownfield history preview остался в patch-summary.md и preview-changes.json без автоматического применения."
+echo "Factory-producer-owned paths не применяются к battle projects."
     echo "Для отката используйте: $SCRIPT_DIR/rollback-template-patch.sh $PATCH_BUNDLE --rollback"
     echo "Для полного отката с project snapshot (если создавался): $SCRIPT_DIR/rollback-template-patch.sh $PATCH_BUNDLE --rollback --restore-project-snapshot"
     echo "Каталог результата: $APPLY_DIR"

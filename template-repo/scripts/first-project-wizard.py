@@ -22,17 +22,17 @@ ASSET_OPTIONS = [
     Option(
         key="idea",
         title="Есть только идея (или ТЗ), кода пока нет",
-        description="Создадим новый проект с нуля.",
+        description="Создадим greenfield steady-state project с нуля.",
     ),
     Option(
         key="has-repo",
         title="Есть действующий проект и репозиторий",
-        description="Подберем brownfield-путь для проекта с repo.",
+        description="Подберем transitional brownfield с repo: audit/adoption, затем conversion в greenfield.",
     ),
     Option(
         key="no-repo",
         title="Есть система/файлы, но нормального репозитория нет",
-        description="Запустим evidence-first путь без требования сразу иметь repo.",
+        description="Запустим intake/reconstruction path, затем conversion в greenfield.",
     ),
 ]
 
@@ -48,24 +48,24 @@ GOAL_OPTIONS_BY_ASSET = {
         Option(
             key="modernize",
             title="Упростить и модернизировать существующую систему",
-            description="Когда есть legacy-проект и нужно безопасное улучшение.",
+            description="Когда есть repo: audit/adoption path с обязательным выходом в greenfield.",
         ),
         Option(
             key="integrate",
             title="Сделать интеграционный контур между системами",
-            description="Когда основной риск в зависимостях и стыках.",
+            description="Когда основной риск в зависимостях; после adoption проект становится greenfield-product.",
         ),
         Option(
             key="audit",
             title="Сначала провести аудит без обязательной реализации",
-            description="Когда нужен диагностический шаг и карта рисков.",
+            description="Когда нужен diagnostic step; audit не является финальным типом проекта.",
         ),
     ],
     "no-repo": [
         Option(
             key="stabilize",
             title="Собрать факты и стабилизировать систему по шагам",
-            description="Рекомендуемый путь, если нужно начать без готового repo.",
+            description="Рекомендуемый intake/reconstruction path, если нужно начать без готового repo.",
         )
     ],
 }
@@ -80,10 +80,10 @@ PRESET_BY_ROUTE = {
 
 WHY_BY_PRESET = {
     "greenfield-product": "Вы начинаете с нуля, поэтому выбран greenfield-путь для нового продукта.",
-    "brownfield-with-repo-modernization": "У вас уже есть repo, а цель - модернизация действующей системы.",
-    "brownfield-with-repo-integration": "У вас есть repo, а фокус - интеграции и внешние связи.",
-    "brownfield-with-repo-audit": "Сначала нужен аудит и карта рисков без обязательного внедрения.",
-    "brownfield-without-repo": "Есть существующая система, но нет нормализованного repo, поэтому нужен evidence-first запуск.",
+    "brownfield-with-repo-modernization": "У вас уже есть repo, поэтому выбран adoption/modernization transition с выходом в greenfield-product.",
+    "brownfield-with-repo-integration": "У вас есть repo, а фокус - интеграции; после adoption активный профиль должен стать greenfield-product.",
+    "brownfield-with-repo-audit": "Сначала нужен аудит и карта рисков; audit должен перейти к adoption/conversion или blocker.",
+    "brownfield-without-repo": "Есть существующая система, но нет нормализованного repo, поэтому нужен intake/reconstruction path с выходом в greenfield-product.",
 }
 
 
@@ -190,6 +190,8 @@ def _render_plan(
     print(f"Что вы запускаете: {goal.title}")
     print(f"Рекомендованный маршрут: {preset_name}")
     print(f"Режим проекта: {mode}")
+    lifecycle_target = preset.get("target_lifecycle_state") if preset.get("conversion_required") else preset.get("lifecycle_state", "greenfield-active")
+    print(f"Целевое lifecycle-состояние: {lifecycle_target}")
     print(f"Тип первой задачи: {change_class}")
     print(f"Режим выполнения: {exec_mode}")
     print(f"Куда будет создан проект: {destination}")
@@ -200,6 +202,8 @@ def _render_plan(
     print("2. Подставит безопасные стартовые настройки под выбранный маршрут.")
     print("3. Включит сценарный контур и .chatgpt-артефакты для первого цикла.")
     print("4. Подготовит project-knowledge: папку для устойчивых знаний о проекте.")
+    if preset.get("conversion_required"):
+        print("5. Зафиксирует, что brownfield является transition и должен завершиться greenfield-product.")
 
 
 def _run_preflight(preflight_file: Path, project_slug: str, launch_cwd: Path) -> int:

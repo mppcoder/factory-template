@@ -71,6 +71,8 @@ run_quick() {
   run_step "validate-codex-routing" python3 "$ROOT/template-repo/scripts/validate-codex-routing.py" "$ROOT"
   run_step "validate-tree-contract" python3 "$ROOT/template-repo/scripts/validate-tree-contract.py" "$ROOT"
   run_step "validate-mode-parity" python3 "$ROOT/template-repo/scripts/validate-mode-parity.py" "$ROOT"
+  run_step "validate-brownfield-transition" python3 "$ROOT/template-repo/scripts/validate-brownfield-transition.py" "$ROOT"
+  run_step "validate-greenfield-conversion" python3 "$ROOT/template-repo/scripts/validate-greenfield-conversion.py" "$ROOT"
   run_step "validate-operator-env-starter" python3 "$ROOT/template-repo/scripts/validate-operator-env.py" "$ROOT" --env-file "$ROOT/deploy/.env.example" --preset starter
   run_step "validate-operator-env-production-example" python3 "$ROOT/template-repo/scripts/validate-operator-env.py" "$ROOT" --env-file "$ROOT/deploy/.env.example" --preset production --allow-example-placeholders
   run_step "deploy-dry-run-smoke-starter-app-db" run_deploy_dry_run_smoke

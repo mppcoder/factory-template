@@ -118,6 +118,7 @@ policy_presets:
       codex-led: forbidden
     notes:
     - Аудит может завершаться без handoff в Codex, если цель — инвентаризация и нормализация.
+    - "Аудит не закрывает brownfield adoption: после него нужен переход к adoption/conversion или явный blocker."
     - Если handoff все же уже разрешен и задача достаточно определена, по умолчанию выдать inline handoff в том же ответе.
     - Если есть pending user action или external step, финальная секция `Инструкция пользователю` обязательна.
     - Internal repo follow-up не должен подменяться user-only closeout; для mixed follow-up сначала нужен inline handoff, затем user footer только для внешней границы.
@@ -147,6 +148,9 @@ policy_presets:
     notes:
     - До завершения evidence pack handoff должен оставаться optional.
     - После фиксации safe zones и rollback плана можно переходить в codex-led.
+    - Brownfield без repo является transitional intake/reconstruction path; done
+      допустим только после normalized repo плюс with-repo adoption или явного blocker.
+    - "Successful adoption завершается `project_preset: greenfield-product` и `lifecycle_state: greenfield-converted`."
     - Для codex-led отсутствие inline handoff в том же ответе запрещено.
     - Если есть pending user action или external step, финальная секция `Инструкция пользователю` обязательна.
     - Internal repo follow-up не должен подменяться user-only closeout; для mixed follow-up сначала нужен inline handoff, затем user footer только для внешней границы.

@@ -1,7 +1,19 @@
 # Журнал изменений фабрики
 
 ## [Unreleased]
+### Добавлено
+- ADR `docs/decisions/2026-04-26-project-core-producer-layer-and-brownfield-transition.md` фиксирует единый lifecycle core, factory producer layer и обязательный brownfield -> greenfield conversion.
+- `validate-brownfield-transition.py` и `validate-greenfield-conversion.py` добавлены в template validators и `verify-all.sh quick`.
+- `docs/brownfield-to-greenfield-transition.md` описывает without-repo и with-repo transition paths, conversion gates и done rule.
+
+### Изменено
+- `tree-contract.yaml`, `mode-parity.yaml`, presets и sync manifest теперь разделяют project preset, recommended mode, lifecycle state и ownership class.
+- Brownfield presets помечены как transitional adoption labels с target `greenfield-product` / `greenfield-converted`.
+- Launcher, first-project wizard и VPS preflight теперь объясняют brownfield как intake/reconstruction или audit/adoption path, а greenfield как steady-state product development.
+- Downstream sync model теперь явно исключает `factory-producer-owned` paths и защищает brownfield historical evidence.
+
 ### Исправлено
+- зафиксирован и исправлен reusable architecture defect: brownfield adoption больше не может считаться финальным project class без conversion или blocker.
 - зафиксирован и исправлен `bug-034`: финальный closeout теперь должен содержать `Рекомендация по внешним действиям` с явным статусом для factory ChatGPT Project, downstream sync, downstream ChatGPT Project и Sources fallback.
 
 ## [2.5.0] - 2026-04-26

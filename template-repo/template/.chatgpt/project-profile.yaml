@@ -1,8 +1,12 @@
 # Профиль проекта.
 # Подсказка: этот файл заполняется автоматически при выборе project preset.
-project_preset: "" # Идентификатор профиля проекта, например: product-dev
+project_preset: "" # Идентификатор профиля проекта, например: greenfield-product
 project_title: "" # Русское название профиля проекта
 recommended_mode: "" # Рекомендуемый режим старта: greenfield или brownfield
+lifecycle_state: "" # Текущее lifecycle-состояние, например: greenfield-active
+target_project_preset: "" # Для brownfield transition: greenfield-product
+target_lifecycle_state: "" # Для brownfield transition: greenfield-converted
+conversion_required: false # Требуется ли conversion из brownfield в greenfield-product
 recommended_change_class: "" # Рекомендуемый класс изменения
 recommended_execution_mode: "" # Рекомендуемый режим выполнения
 active_default_scenarios: [] # Сценарии, которые нужно активировать по умолчанию

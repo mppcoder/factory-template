@@ -3,6 +3,88 @@ status: active
 owner: factory-template
 description: "Strict machine-readable tree contract for factory root, template base and generated project contours."
 
+lifecycle_states:
+  greenfield-active:
+    description: "Normal active product development on the factory template."
+    final_state: true
+  brownfield-without-repo-intake:
+    description: "Evidence collection for an existing system when no normalized repo exists yet."
+    transitional: true
+    next_states:
+      - brownfield-without-repo-reconstruction
+  brownfield-without-repo-reconstruction:
+    description: "Create or identify a canonical repo root from incoming evidence."
+    transitional: true
+    next_states:
+      - brownfield-with-repo-audit
+      - brownfield-to-greenfield-conversion
+  brownfield-with-repo-audit:
+    description: "Map existing code, risks, constraints and safe zones."
+    transitional: true
+    next_states:
+      - brownfield-with-repo-adoption
+  brownfield-with-repo-adoption:
+    description: "Install/apply the factory core and fix safe structure drift without overwriting product code."
+    transitional: true
+    next_states:
+      - brownfield-to-greenfield-conversion
+  brownfield-to-greenfield-conversion:
+    description: "Update the active project profile/mode to greenfield-product."
+    transitional: true
+    next_states:
+      - greenfield-converted
+  greenfield-converted:
+    description: "Final steady state after successful brownfield adoption."
+    final_state: true
+
+ownership_classes:
+  project-core:
+    sync_policy: template-owned-safe
+    description: "Shared lifecycle core required in every project."
+  template-owned-safe:
+    sync_policy: controlled-apply
+    description: "Template-owned reusable files eligible for previewed safe apply with rollback metadata."
+  template-owned-clone:
+    sync_policy: materialized-clone
+    description: "Files materialized from template source and expected to remain clone-equivalent."
+  template-owned-advisory:
+    sync_policy: diff-only
+    description: "Template guidance that may influence projects but is not automatically overwritten."
+  project-owned:
+    sync_policy: never-overwrite
+    description: "Product code, specs, history and project decisions protected from template sync."
+  brownfield-evidence-owned:
+    sync_policy: never-overwrite
+    description: "Transition evidence required during adoption; historical evidence after conversion."
+  brownfield-reconstruction-owned:
+    sync_policy: temporary-project-owned
+    description: "Temporary reconstruction workspace that must resolve into canonical project code/repo."
+  brownfield-audit-owned:
+    sync_policy: never-overwrite
+    description: "Audit/adoption records required during transition; retained as history after conversion."
+  factory-producer-owned:
+    sync_policy: factory-only
+    description: "Template generation, release, packaging, registry, downstream sync and archives; excluded from battle project sync."
+  historical-archive:
+    sync_policy: never-overwrite
+    description: "Historical evidence and release/archive records."
+  transient-generated:
+    sync_policy: ignored
+    description: "Generated runtime/build/test output that should not become product source of truth."
+
+conversion_gates: &conversion_gates
+  - repo_first_core_present
+  - master_router_present
+  - scenario_pack_accessible
+  - active_project_profile_updated_to_greenfield_product
+  - lifecycle_state_greenfield_converted
+  - greenfield_required_artifacts_present
+  - brownfield_evidence_archived_or_referenced
+  - project_owned_zones_protected
+  - template_owned_zones_marked
+  - sync_manifest_safe_for_downstream
+  - validators_green
+
 compatibility_layer:
   aliases_file: template-repo/compatibility-aliases.yaml
   legacy_wrapper_paths:
@@ -91,6 +173,62 @@ common_generated_required_paths: &common_generated_required_paths
   - template-repo/mode-parity.yaml
   - template-repo/scenario-pack/00-master-router.md
 
+project_structures:
+  common_project_core:
+    ownership_class: project-core
+    required_paths: *common_generated_required_paths
+    invariant: "All projects are project lifecycle core plus a type-specific owned layer."
+  factory_template_project:
+    lifecycle_state: greenfield-active
+    active_project_preset: greenfield-product
+    layers:
+      - project-core
+      - factory-producer-owned
+      - project-owned
+    note: "factory-template is a greenfield product project whose product is the project factory."
+  generated_greenfield:
+    lifecycle_state: greenfield-active
+    active_project_preset: greenfield-product
+    layers:
+      - project-core
+      - project-owned
+  transitional_brownfield_without_repo:
+    lifecycle_states:
+      - brownfield-without-repo-intake
+      - brownfield-without-repo-reconstruction
+      - brownfield-to-greenfield-conversion
+    compatibility_presets:
+      - brownfield-without-repo
+    layers:
+      - project-core
+      - brownfield-evidence-owned
+      - brownfield-reconstruction-owned
+    conversion_target: generated_greenfield
+    exit_gates: *conversion_gates
+  transitional_brownfield_with_repo:
+    lifecycle_states:
+      - brownfield-with-repo-audit
+      - brownfield-with-repo-adoption
+      - brownfield-to-greenfield-conversion
+    compatibility_presets:
+      - brownfield-with-repo-modernization
+      - brownfield-with-repo-integration
+      - brownfield-with-repo-audit
+    layers:
+      - project-core
+      - brownfield-audit-owned
+      - project-owned
+    conversion_target: generated_greenfield
+    exit_gates: *conversion_gates
+  converted_greenfield:
+    lifecycle_state: greenfield-converted
+    active_project_preset: greenfield-product
+    layers:
+      - project-core
+      - project-owned
+      - historical-archive
+    future_sync_mode: greenfield-product
+
 contours:
   factory_root:
     description: "Root of mppcoder/factory-template."
@@ -112,6 +250,8 @@ contours:
       - template-repo/compatibility-aliases.yaml
       - template-repo/scripts/validate-tree-contract.py
       - template-repo/scripts/validate-mode-parity.py
+      - template-repo/scripts/validate-brownfield-transition.py
+      - template-repo/scripts/validate-greenfield-conversion.py
       - template-repo/scripts/verify-all.sh
       - PRE_RELEASE_AUDIT.sh
       - MATRIX_TEST.sh
@@ -190,6 +330,7 @@ contours:
       - .matrix-test
       - .smoke-test
       - .bugflow-test
+      - .tmp-run
       - .pytest_cache
       - __pycache__
       - _artifacts
@@ -237,7 +378,13 @@ contours:
       - AGENT.md
 
   generated_greenfield:
-    description: "Generated project for a new product/service from scratch."
+    description: "Generated project for active product development on the factory template."
+    lifecycle_states:
+      - greenfield-active
+      - greenfield-converted
+    ownership_layers:
+      - project-core
+      - project-owned
     presets:
       - greenfield-product
     required_paths: *common_generated_required_paths
@@ -251,7 +398,18 @@ contours:
       - AGENT.md
 
   generated_brownfield_without_repo:
-    description: "Generated evidence-first project for an existing system without a normalized repo."
+    description: "Compatibility label for transitional intake/reconstruction of an existing system without a normalized repo; required exit state is greenfield-product."
+    transitional: true
+    lifecycle_states:
+      - brownfield-without-repo-intake
+      - brownfield-without-repo-reconstruction
+      - brownfield-to-greenfield-conversion
+    conversion_target: generated_greenfield
+    exit_gates: *conversion_gates
+    ownership_layers:
+      - project-core
+      - brownfield-evidence-owned
+      - brownfield-reconstruction-owned
     presets:
       - brownfield-without-repo
     required_paths: *common_generated_required_paths
@@ -267,7 +425,18 @@ contours:
       - AGENT.md
 
   generated_brownfield_with_repo:
-    description: "Generated project for an existing repo: modernization, integration or audit."
+    description: "Compatibility label for transitional adoption/modernization/audit of an existing repo; required exit state is greenfield-product."
+    transitional: true
+    lifecycle_states:
+      - brownfield-with-repo-audit
+      - brownfield-with-repo-adoption
+      - brownfield-to-greenfield-conversion
+    conversion_target: generated_greenfield
+    exit_gates: *conversion_gates
+    ownership_layers:
+      - project-core
+      - brownfield-audit-owned
+      - project-owned
     presets:
       - brownfield-with-repo-modernization
       - brownfield-with-repo-integration

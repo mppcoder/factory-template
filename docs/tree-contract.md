@@ -5,13 +5,18 @@
 
 ## Контуры
 
-Контракт описывает пять контуров:
+Контракт описывает общий lifecycle core и несколько контуров:
 
 - `factory_root` — корень `mppcoder/factory-template`;
 - `template_base` — базовый skeleton в `template-repo/template`;
 - `generated_greenfield` — проект, созданный с preset `greenfield-product`;
-- `generated_brownfield_without_repo` — evidence-first проект с preset `brownfield-without-repo`;
-- `generated_brownfield_with_repo` — проект с существующим repo и presets `brownfield-with-repo-modernization`, `brownfield-with-repo-integration`, `brownfield-with-repo-audit`.
+- `generated_brownfield_without_repo` — compatibility label для transitional intake/reconstruction с preset `brownfield-without-repo`;
+- `generated_brownfield_with_repo` — compatibility label для transitional audit/adoption с presets `brownfield-with-repo-modernization`, `brownfield-with-repo-integration`, `brownfield-with-repo-audit`;
+- `converted_greenfield` — steady-state после успешного brownfield adoption.
+
+Инвариант: all projects = project lifecycle core + type-specific owned layer.
+
+`factory-template` — обычный `greenfield-product`, чей продукт — фабрика проектов. Отличие от боевого greenfield проекта только в дополнительном `factory-producer-owned` layer: template generation, release, packaging, registry, downstream sync, reference packs и archives.
 
 Проверка:
 
@@ -107,7 +112,7 @@ template-repo/template/
 └── template-repo/tree-contract.yaml
 ```
 
-Различие между greenfield и brownfield не в другом наборе сценариев, а в selected preset, active route и обязательных смысловых артефактах.
+Различие между greenfield и brownfield не в другом lifecycle core, а в selected preset, active route, lifecycle state и ownership layer.
 
 Greenfield обязательно опирается на:
 
@@ -117,7 +122,7 @@ Greenfield обязательно опирается на:
 - `greenfield/architecture-options.md`
 - `greenfield/initial-task-list.md`
 
-Brownfield без repo обязательно опирается на:
+Brownfield без repo — transitional intake/reconstruction path. Он обязательно опирается на:
 
 - `brownfield/system-inventory.md`
 - `brownfield/repo-audit.md`
@@ -127,7 +132,9 @@ Brownfield без repo обязательно опирается на:
 - `meta-feedback/factory-bug-report.md`
 - `meta-feedback/factory-task.md`
 
-Brownfield с repo обязательно опирается на:
+Exit gate: создать или определить canonical repo root, пройти with-repo audit/adoption cycle, затем переключить active profile на `greenfield-product`, либо зафиксировать blocker.
+
+Brownfield с repo — transitional audit/adoption path. Он обязательно опирается на:
 
 - `brownfield/system-inventory.md`
 - `brownfield/repo-audit.md`
@@ -135,6 +142,28 @@ Brownfield с repo обязательно опирается на:
 - `brownfield/gap-register.md`
 - `brownfield/change-map.md`
 - `brownfield/risks-and-constraints.md`
+
+Exit gate: repo-first core установлен, scenario-pack работает, defect-capture/handoff работают, project tests/smoke checks проходят, protected project-owned zones записаны, risks/constraints resolved or accepted, затем active profile переключается на `greenfield-product`.
+
+После conversion:
+
+- `.chatgpt/project-profile.yaml` содержит `project_preset: greenfield-product` и `recommended_mode: greenfield`;
+- `.chatgpt/stage-state.yaml` содержит `lifecycle_state: greenfield-converted`;
+- `greenfield/vision.md`, `problem-statement.md`, `scope-v1.md`, `architecture-options.md`, `initial-task-list.md` отражают уже нормализованный продукт;
+- `brownfield/` остается historical evidence/archive и не управляет active mode.
+
+## Ownership-классы
+
+Machine-readable taxonomy живет в `template-repo/tree-contract.yaml`.
+
+- `project-core` — общий lifecycle core;
+- `template-owned-safe` и `template-owned-clone` — controlled sync zones;
+- `template-owned-advisory` — diff/review only;
+- `project-owned` — продуктовый код, specs, history и decisions, never overwrite;
+- `brownfield-evidence-owned`, `brownfield-reconstruction-owned`, `brownfield-audit-owned` — protected transition/history zones;
+- `factory-producer-owned` — factory-only producer layer, excluded from battle sync;
+- `historical-archive` — retained evidence/release history;
+- `transient-generated` — ignored runtime/test/build output.
 
 ## Optional и reference layers
 

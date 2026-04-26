@@ -121,7 +121,7 @@ def _project_plan(template_root: Path, route: str, preset: str, project_slug: st
     if route == "greenfield":
         return RoutePlan(
             route=route,
-            title="Новый проект с нуля",
+            title="Greenfield: steady-state product development",
             preset=preset,
             mode="create-project",
             next_step=(
@@ -142,28 +142,42 @@ def _project_plan(template_root: Path, route: str, preset: str, project_slug: st
                 "показать понятный следующий шаг оператора",
             ],
         )
+    if preset == "brownfield-without-repo":
+        brownfield_next = (
+            "Launcher подготовит intake/reconstruction path: входящие материалы кладутся внутри project root, "
+            "затем создается или определяется canonical repo и проект converted в greenfield-product."
+        )
+        brownfield_steps = [
+            "выбрать brownfield без repo: intake/reconstruction path",
+            "проверить окружение перед созданием проекта",
+            "создать transitional brownfield preset",
+            "зафиксировать evidence и reconstruction plan",
+            "показать следующий шаг toward canonical repo and greenfield conversion",
+        ]
+    else:
+        brownfield_next = (
+            "Launcher подготовит with-repo adoption/modernization path: сначала audit/safe zones, "
+            "затем conversion в greenfield-product."
+        )
+        brownfield_steps = [
+            "выбрать brownfield с repo: adoption/modernization path",
+            "проверить окружение перед созданием проекта",
+            "создать transitional brownfield preset",
+            "зафиксировать audit, risks и safe zones",
+            "показать следующий шаг toward greenfield conversion",
+        ]
     return RoutePlan(
         route=route,
-        title="Старт с существующей системой",
+        title="Brownfield transition: adoption path to greenfield",
         preset=preset,
         mode="create-project",
-        next_step=(
-            "Launcher подготовит brownfield-проект: сначала факты и риски, затем workspace первой безопасной задачи "
-            "и следующий операторский шаг."
-        ),
+        next_step=brownfield_next,
         fallback_commands=[
             f"python3 {preflight} --project-slug {project_slug}",
             f"python3 {wizard}",
             f"python3 {_factory_hint(template_root, 'operator-dashboard.py')}",
         ],
-        guided_steps=[
-            "выбрать режим: существующая система",
-            "проверить окружение перед созданием проекта",
-            "создать проект с нужным brownfield preset",
-            "проверить слой project-knowledge",
-            "создать workspace первой безопасной задачи",
-            "показать понятный следующий шаг оператора",
-        ],
+        guided_steps=brownfield_steps,
     )
 
 
@@ -317,7 +331,7 @@ def _interactive_mode() -> str:
         "Что вы хотите сделать?",
         [
             ("greenfield", "Начать новый проект с нуля"),
-            ("brownfield", "Начать с существующего проекта или системы"),
+            ("brownfield", "Начать transition существующей системы к greenfield"),
             ("continue", "Продолжить уже созданный flow"),
         ],
     )

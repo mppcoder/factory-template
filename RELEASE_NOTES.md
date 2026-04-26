@@ -1,5 +1,13 @@
 # Release notes / заметки релиза
 
+## Не выпущено - архитектура brownfield transition
+
+- `factory-template` теперь описан как обычный `greenfield-product`, чей продукт — project factory, с дополнительным factory producer layer.
+- Brownfield без repo и brownfield с repo закреплены как transitional adoption paths, а не финальные project classes.
+- Успешный brownfield adoption должен завершаться active profile `greenfield-product`, recommended mode `greenfield` и lifecycle state `greenfield-converted`.
+- Добавлены validators для brownfield transition и greenfield conversion; они подключены к quick verify и matrix.
+- Sync manifest защищает brownfield history/project-owned zones и исключает factory-producer-owned paths из battle project sync.
+
 ## 2.5.0 - 2026-04-26
 
 ### Решение release

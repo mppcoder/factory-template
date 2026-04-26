@@ -18,22 +18,26 @@ GA-ready: `true`.
 Шаблон сейчас поддерживает 3 канонических режима запуска и сопровождения:
 
 1. Новый проект с нуля
-   Основа: `greenfield` путь для нового продукта или сервиса.
+   Основа: `greenfield` steady-state путь для нового продукта или сервиса.
    Типовой вход: `greenfield-product`.
 
 2. Перевод на шаблон имеющегося проекта без репо
-   Основа: `brownfield` путь для live-системы, где нет нормализованного исходного repo и сначала нужен evidence-first контур.
+   Основа: transitional `brownfield` intake/reconstruction path для live-системы, где нет нормализованного исходного repo.
    Типовой вход: `brownfield-without-repo`.
+   Обязательный выход: canonical repo плюс conversion в `greenfield-product` или documented blocker.
 
 3. Перевод на шаблон имеющегося проекта с репо
-   Основа: `brownfield` путь для уже существующего репозитория или инженерного контура.
+   Основа: transitional `brownfield` audit/adoption path для уже существующего репозитория или инженерного контура.
    Типовые входы: `brownfield-with-repo-modernization`, `brownfield-with-repo-integration`, `brownfield-with-repo-audit`.
+   Обязательный выход: active profile `greenfield-product` или documented blocker.
 
 Во всех трех случаях для generated project используется один и тот же базовый repo-first контур:
 
 - прямое чтение `scenario-pack` из GitHub repo
 
-Различается не набор загружаемых файлов, а стартовый маршрут по сценариям и выбранный preset.
+Различается не workflow core, а стартовый маршрут, lifecycle state и ownership layer. Brownfield не является финальным типом проекта: успешное принятие существующего проекта заканчивается `project_preset: greenfield-product`, `recommended_mode: greenfield`, `lifecycle_state: greenfield-converted`.
+
+`factory-template` следует тем же lifecycle rules, что и боевые проекты. Его продукт — сама фабрика проектов; дополнительное отличие только в `factory-producer-owned` layer: template generation, release, packaging, registry, downstream sync, reference packs и archives.
 
 ## Beginner-first entry через guided launcher
 
@@ -45,8 +49,8 @@ python3 template-repo/scripts/factory-launcher.py
 ```
 
 Launcher ведет по трем маршрутам:
-- `greenfield` - новый проект с нуля;
-- `brownfield` - существующий проект или система;
+- `greenfield` - steady-state product development с нуля;
+- `brownfield` - transitional adoption существующего проекта или системы с выходом в greenfield;
 - `continue` - уже созданный flow, planning workspace или operator next step.
 
 По ответам launcher автоматически сопоставляет корректный `project preset`, показывает next-step recommendation и вызывает существующие fallback scripts: `first-project-wizard.py`, `preflight-vps-check.py`, `init-feature-workspace.sh`, `operator-dashboard.py`.
@@ -212,7 +216,7 @@ python3 template-repo/scripts/check-codex-model-catalog.py . --write-proposal
 
 1. launcher создаёт initial root `AGENTS.md` через `template-repo/scripts/sync-agents.py`;
 2. downstream refresh использует `workspace-packs/factory-ops/export-template-patch.sh`;
-3. `workspace-packs/factory-ops/factory-sync-manifest.yaml` разделяет impact на `safe`, `advisory`, `manual-only`;
+3. `workspace-packs/factory-ops/factory-sync-manifest.yaml` разделяет impact на `template-owned-safe`, `template-owned-clone`, `template-owned-advisory`, `project-owned`, brownfield history и excluded `factory-producer-owned`;
 4. `workspace-packs/factory-ops/apply-template-patch.sh --apply-safe-zones` materializes только generated safe-tier files в боевом repo;
 5. `workspace-packs/factory-ops/check-template-drift.py` ловит отсутствие root clone и tiered drift относительно template source.
 
@@ -355,4 +359,4 @@ bash PHASE_DETECTION_TEST.sh
 - `CURRENT_FUNCTIONAL_STATE.md`
 - `.chatgpt/project-origin.md`
 
-Это правило действует для фабрики, шаблона, greenfield-проектов и brownfield-проектов.
+Это правило действует для фабрики, шаблона, greenfield-проектов и brownfield transition-проектов. После успешного transition бывший brownfield проект обслуживается как `greenfield-product`.

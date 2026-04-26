@@ -30,12 +30,19 @@ print(resolved)
 print(preset.get('default_mode', 'greenfield'))
 print(preset.get('recommended_change_class', 'feature'))
 print(preset.get('recommended_execution_mode', 'codex-led'))
+print(preset.get('lifecycle_state', 'greenfield-active'))
+conversion_required = bool(preset.get('conversion_required', False))
+print(preset.get('target_lifecycle_state', 'greenfield-converted' if conversion_required else preset.get('lifecycle_state', 'greenfield-active')))
+print(str(conversion_required).lower())
 PY
 )
 PROJECT_PRESET="${PRESET_VALUES[0]:-greenfield-product}"
 DEFAULT_MODE="${PRESET_VALUES[1]:-greenfield}"
 DEFAULT_CLASS="${PRESET_VALUES[2]:-feature}"
 DEFAULT_EXEC="${PRESET_VALUES[3]:-codex-led}"
+LIFECYCLE_STATE="${PRESET_VALUES[4]:-greenfield-active}"
+TARGET_LIFECYCLE_STATE="${PRESET_VALUES[5]:-greenfield-active}"
+CONVERSION_REQUIRED="${PRESET_VALUES[6]:-false}"
 
 read -rp "Режим старта (greenfield/brownfield) [${DEFAULT_MODE}]: " PROJECT_MODE
 PROJECT_MODE="${PROJECT_MODE:-$DEFAULT_MODE}"
@@ -46,13 +53,15 @@ EXEC_MODE="${EXEC_MODE:-$DEFAULT_EXEC}"
 
 DEST_DIR="./${PROJECT_SLUG}"
 cp -R "$TEMPLATE_DIR" "$DEST_DIR"
-PROJECT_NAME="$PROJECT_NAME" PROJECT_SLUG="$PROJECT_SLUG" PROJECT_MODE="$PROJECT_MODE" DEST_DIR="$DEST_DIR" python3 - <<'PY'
+PROJECT_NAME="$PROJECT_NAME" PROJECT_SLUG="$PROJECT_SLUG" PROJECT_MODE="$PROJECT_MODE" LIFECYCLE_STATE="$LIFECYCLE_STATE" TARGET_LIFECYCLE_STATE="$TARGET_LIFECYCLE_STATE" DEST_DIR="$DEST_DIR" python3 - <<'PY'
 import os
 from pathlib import Path
 repl = {
     "{{PROJECT_NAME}}": os.environ['PROJECT_NAME'],
     "{{PROJECT_SLUG}}": os.environ['PROJECT_SLUG'],
     "{{PROJECT_MODE}}": os.environ['PROJECT_MODE'],
+    "{{LIFECYCLE_STATE}}": os.environ['LIFECYCLE_STATE'],
+    "{{TARGET_LIFECYCLE_STATE}}": os.environ['TARGET_LIFECYCLE_STATE'],
     "{{CURRENT_DATE}}": __import__("datetime").date.today().isoformat(),
 }
 for p in Path(os.environ['DEST_DIR']).rglob("*"):
@@ -83,7 +92,7 @@ cp "$SCRIPT_DIR/mode-parity.yaml" "$DEST_DIR/template-repo/mode-parity.yaml"
 mkdir -p "$DEST_DIR/reports/bugs" "$DEST_DIR/reports/factory-feedback" "$DEST_DIR/tasks/chatgpt" "$DEST_DIR/tasks/codex"
 
 CHANGE_ID="$($DEST_DIR/scripts/new-change-id.sh "$DEST_DIR")"
-PROJECT_NAME="$PROJECT_NAME" CHANGE_CLASS="$CHANGE_CLASS" EXEC_MODE="$EXEC_MODE" CHANGE_ID="$CHANGE_ID" DEST_DIR="$DEST_DIR" PROJECT_MODE="$PROJECT_MODE" PROJECT_PRESET="$PROJECT_PRESET" python3 - <<'PY'
+PROJECT_NAME="$PROJECT_NAME" CHANGE_CLASS="$CHANGE_CLASS" EXEC_MODE="$EXEC_MODE" CHANGE_ID="$CHANGE_ID" DEST_DIR="$DEST_DIR" PROJECT_MODE="$PROJECT_MODE" PROJECT_PRESET="$PROJECT_PRESET" LIFECYCLE_STATE="$LIFECYCLE_STATE" TARGET_LIFECYCLE_STATE="$TARGET_LIFECYCLE_STATE" CONVERSION_REQUIRED="$CONVERSION_REQUIRED" python3 - <<'PY'
 import os, yaml
 from pathlib import Path
 root = Path(os.environ['DEST_DIR'])
@@ -95,6 +104,11 @@ task_index['change']['title'] = f"{os.environ['PROJECT_NAME']}: {os.environ['CHA
 (root/'.chatgpt/task-index.yaml').write_text(yaml.safe_dump(task_index, allow_unicode=True, sort_keys=False), encoding='utf-8')
 stage = yaml.safe_load((root/'.chatgpt/stage-state.yaml').read_text(encoding='utf-8'))
 stage['project']['mode'] = os.environ['PROJECT_MODE']
+stage.setdefault('lifecycle', {})
+stage['lifecycle']['lifecycle_state'] = os.environ['LIFECYCLE_STATE']
+stage['lifecycle']['target_lifecycle_state'] = os.environ['TARGET_LIFECYCLE_STATE']
+stage['lifecycle']['conversion_required'] = os.environ['CONVERSION_REQUIRED'] == 'true'
+stage['lifecycle']['conversion_gate_status'] = 'pending' if os.environ['CONVERSION_REQUIRED'] == 'true' else 'not_applicable'
 (root/'.chatgpt/stage-state.yaml').write_text(yaml.safe_dump(stage, allow_unicode=True, sort_keys=False), encoding='utf-8')
 active = yaml.safe_load((root/'.chatgpt/active-scenarios.yaml').read_text(encoding='utf-8'))
 active['project_preset'] = os.environ['PROJECT_PRESET']

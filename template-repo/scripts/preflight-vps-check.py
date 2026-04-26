@@ -296,6 +296,7 @@ def _print_report(checks: list[CheckResult], project_root: Path, project_slug: s
         print("\nЕсть блокирующие проблемы. Сначала исправьте их, затем снова запустите мастер.")
     else:
         print("\nКритичных блокеров нет. Можно продолжать запуск первого проекта.")
+        print("Напоминание: greenfield - steady-state product development; brownfield без repo - intake/reconstruction path; brownfield с repo - adoption/modernization path. Оба brownfield пути должны завершиться greenfield-product или documented blocker.")
         script_root = Path(__file__).resolve().parent.parent
         launcher_hint = (
             "template-repo/scripts/factory-launcher.py"

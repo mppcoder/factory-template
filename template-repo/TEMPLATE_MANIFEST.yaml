@@ -5,6 +5,8 @@ release_line_2_5_status: ga-ready
 supports_modes:
 - greenfield
 - brownfield
+brownfield_is_transitional: true
+brownfield_conversion_target: greenfield-product
 supports_project_presets:
 - greenfield-product
 - brownfield-with-repo-modernization

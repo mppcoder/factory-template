@@ -41,7 +41,13 @@ This root AGENTS.md is a materialized clone for the downstream repo.
 Manual edits in this clone will be overwritten by the canonical template sync flow.
 -->
 """
-TIER_ORDER = ("safe-generated", "safe-clone", "advisory-review", "manual-project-owned")
+TIER_ORDER = (
+    "safe-generated",
+    "safe-clone",
+    "advisory-review",
+    "manual-project-owned",
+    "brownfield-historical-evidence",
+)
 LEGACY_TIER_ALIASES = {
     "safe": "safe-generated",
     "advisory": "advisory-review",
@@ -112,6 +118,35 @@ def tier_operator_action(manifest: dict, tier: str) -> str:
 def tier_safety_reason(manifest: dict, tier: str) -> str:
     config = tier_config(manifest, tier)
     return str(config.get("safety_reason") or "")
+
+
+def load_yaml_if_exists(path: Path) -> dict:
+    if not path.exists():
+        return {}
+    data = yaml.safe_load(path.read_text(encoding="utf-8")) or {}
+    return data if isinstance(data, dict) else {}
+
+
+def project_lifecycle_status(project: Path) -> str:
+    profile = load_yaml_if_exists(project / ".chatgpt" / "project-profile.yaml")
+    stage = load_yaml_if_exists(project / ".chatgpt" / "stage-state.yaml")
+    lifecycle = stage.get("lifecycle") if isinstance(stage.get("lifecycle"), dict) else {}
+    preset = str(profile.get("project_preset", "")).strip()
+    state = str(lifecycle.get("lifecycle_state") or profile.get("lifecycle_state") or "").strip()
+    target = str(lifecycle.get("target_lifecycle_state") or profile.get("target_lifecycle_state") or "").strip()
+    brownfield_presets = {
+        "brownfield-without-repo",
+        "brownfield-with-repo-modernization",
+        "brownfield-with-repo-integration",
+        "brownfield-with-repo-audit",
+    }
+    if preset == "greenfield-product" and state == "greenfield-converted":
+        return "converted_greenfield"
+    if preset in brownfield_presets and target == "greenfield-converted":
+        return "conversion_ready"
+    if preset in brownfield_presets or state.startswith("brownfield-"):
+        return "transitional_brownfield"
+    return "greenfield_active"
 
 
 def should_materialize(manifest: dict, tier: str, mode: str) -> bool:
@@ -238,6 +273,7 @@ clean_output(out)
 
 version_meta = json.loads(read_text(Path(r"$BUNDLE_VERSION"))) if Path(r"$BUNDLE_VERSION").exists() else {}
 template_version = parse_version(read_text(template / "VERSION.md")) or version_meta.get("template_version") or "unknown"
+project_lifecycle = project_lifecycle_status(project)
 summary: list[str] = []
 changed: list[str] = []
 safe_changed: list[str] = []
@@ -403,6 +439,7 @@ metadata = {
     "template_version": template_version,
     "sync_contract_version": manifest.get("sync_contract_version", version_meta.get("sync_contract_version")),
     "mode": mode,
+    "project_lifecycle_status": project_lifecycle,
     "tiers": tier_counts,
     "tier_order": TIER_ORDER,
     "safe_generated_files": len(safe_changed),
@@ -422,6 +459,7 @@ metadata = {
     f"- template_version: {template_version}\\n"
     f"- sync_contract_version: {metadata.get('sync_contract_version')}\\n"
     f"- mode: {mode}\\n\\n"
+    f"- project_lifecycle_status: {project_lifecycle}\\n\\n"
     "## Tiered preview\\n\\n"
     + "\\n".join(
         f"- {tier}: preview={tier_counts[tier]['total']}, "

@@ -1,5 +1,7 @@
 profiles_manifest_version: 1
 
+lifecycle_note: "factory-template and battle projects share one lifecycle core; brownfield source files describe transitional adoption to greenfield-product."
+
 profiles:
   core_archive:
     export_name: sources-pack-core-20

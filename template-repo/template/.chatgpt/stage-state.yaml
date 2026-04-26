@@ -3,6 +3,12 @@ project:
   name: "{{PROJECT_NAME}}"
   slug: "{{PROJECT_SLUG}}"
   mode: "{{PROJECT_MODE}}"
+lifecycle:
+  lifecycle_state: "{{LIFECYCLE_STATE}}"
+  previous_lifecycle_state: ""
+  target_lifecycle_state: "{{TARGET_LIFECYCLE_STATE}}"
+  conversion_required: false
+  conversion_gate_status: not_applicable
 stage:
   current: "intake"
   previous: ""

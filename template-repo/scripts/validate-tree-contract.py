@@ -172,6 +172,51 @@ def validate_contour(target_root: Path, contour: dict[str, Any], label: str, err
     validate_top_level(target_root, contour, label, errors)
 
 
+def validate_lifecycle_and_ownership(contract: dict[str, Any], errors: list[str]) -> None:
+    required_states = {
+        "greenfield-active",
+        "brownfield-without-repo-intake",
+        "brownfield-without-repo-reconstruction",
+        "brownfield-with-repo-audit",
+        "brownfield-with-repo-adoption",
+        "brownfield-to-greenfield-conversion",
+        "greenfield-converted",
+    }
+    required_ownership = {
+        "project-core",
+        "template-owned-safe",
+        "template-owned-clone",
+        "template-owned-advisory",
+        "project-owned",
+        "brownfield-evidence-owned",
+        "brownfield-reconstruction-owned",
+        "brownfield-audit-owned",
+        "factory-producer-owned",
+        "historical-archive",
+        "transient-generated",
+    }
+    states = set((contract.get("lifecycle_states", {}) or {}))
+    ownership = set((contract.get("ownership_classes", {}) or {}))
+    missing_states = sorted(required_states - states)
+    missing_ownership = sorted(required_ownership - ownership)
+    if missing_states:
+        errors.append(f"lifecycle_states отсутствуют: {', '.join(missing_states)}")
+    if missing_ownership:
+        errors.append(f"ownership_classes отсутствуют: {', '.join(missing_ownership)}")
+
+    structures = contract.get("project_structures", {}) or {}
+    for key in (
+        "common_project_core",
+        "factory_template_project",
+        "generated_greenfield",
+        "transitional_brownfield_without_repo",
+        "transitional_brownfield_with_repo",
+        "converted_greenfield",
+    ):
+        if key not in structures:
+            errors.append(f"project_structures.{key} отсутствует")
+
+
 def generated_contour_for(root: Path, contract: dict[str, Any]) -> str | None:
     profile_path = root / ".chatgpt" / "project-profile.yaml"
     if not profile_path.exists():
@@ -200,6 +245,7 @@ def validate_factory_root(root: Path, contract: dict[str, Any], errors: list[str
     validate_compatibility_aliases(root, contract, errors)
     validate_active_ux_literals(root, contract, errors)
     validate_path_terms(root, contract, errors)
+    validate_lifecycle_and_ownership(contract, errors)
 
 
 def main() -> int:

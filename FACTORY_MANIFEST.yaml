@@ -6,6 +6,10 @@ core: true
 release_line_2_5_status: ga-ready
 supports_greenfield: true
 supports_brownfield: true
+brownfield_is_transitional: true
+brownfield_conversion_target: greenfield-product
+factory_template_project_preset: greenfield-product
+factory_producer_layer: true
 optional_domain_references:
 - openclaw-reference
 workspace_packs:

@@ -3,6 +3,11 @@ sources_profiles_manifest: packaging/sources/sources-profiles.yaml
 boundary_actions:
   repo_name: factory-template
   project_name: Factory Template
+  lifecycle_model:
+    project_core_rule: Same lifecycle rules apply to factory-template and battle projects.
+    factory_template_product: The product of factory-template is the project factory.
+    producer_layer: factory-producer-owned paths are factory-only and excluded from battle project sync.
+    brownfield_done_rule: Brownfield adoption is complete only after conversion to greenfield-product or a documented blocker.
   completion_impacts:
     factory_sources: Обновление repo-first инструкции проекта шаблона в ChatGPT
     downstream_template_sync: Обновление шаблона в боевых repo
