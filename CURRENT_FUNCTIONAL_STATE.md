@@ -93,6 +93,10 @@
 - downstream upgrade UX closeout зафиксирован в `UPGRADE_SUMMARY.md`
 - `G25-GA` прошел на `2026-04-26`: full-KPI evidence зафиксирован для всех `M25-*`
 - consolidated evidence: `docs/releases/2.5-ga-kpi-evidence.md`
+- граница evidence: `2.5.0 GA Ready` означает repo-controlled GA evidence; field-proven статус для real battle projects пока не заявлен
+- post-GA field pilot roadmap: `docs/releases/2.5.1-field-pilot-roadmap.md`
+- field pilot evidence register: `reports/release/2.5-field-pilot-evidence.md`
+- текущий field evidence status: `no-field-evidence`
 
 ## Что работает частично
 - matrix runner как единый источник истины
@@ -108,6 +112,7 @@
 ## Что еще не закрыто
 - финальная проверка на реальных greenfield и brownfield проектах
 - production feedback от реальных converted brownfield проектов после нескольких template sync циклов
+- field pilot scenarios FP-01..FP-05: battle greenfield, battle brownfield without repo, battle brownfield with repo, downstream sync cycle 1, downstream sync cycle 2
 - окончательная polish-фаза для runner layer и operational reports
 - отдельный release-facing validator/report для curated pack quality beyond structural checks
 - дальнейшее production hardening runtime-нестабильности git sync beyond current fallback strategy

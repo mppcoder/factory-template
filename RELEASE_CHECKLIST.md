@@ -109,3 +109,15 @@
 - [x] `G25-0` — program framing и scope normalization закрыты.
 - [x] `G25-RC` — RC closeout evidence прошел для downstream trial.
 - [x] `G25-GA` — passed: full KPI evidence подтвержден.
+
+## 2.5.1 field pilot follow-up
+
+- [x] Зафиксировано, что `2.5.0 GA Ready` опирается на repo-controlled evidence, а не на completed field proof.
+- [x] Создан roadmap полевого пилота: `docs/releases/2.5.1-field-pilot-roadmap.md`.
+- [x] Создан field evidence register: `reports/release/2.5-field-pilot-evidence.md`.
+- [x] Созданы scenario checklists с pass/fail criteria: `reports/release/field-pilot-scenarios/*.md`.
+- [ ] FP-01 battle greenfield project executed and evidence retained.
+- [ ] FP-02 battle brownfield without repo executed and evidence retained.
+- [ ] FP-03 battle brownfield with repo executed and evidence retained.
+- [ ] FP-04 downstream sync cycle 1 executed and evidence retained.
+- [ ] FP-05 downstream sync cycle 2 executed on same lineage and evidence retained.

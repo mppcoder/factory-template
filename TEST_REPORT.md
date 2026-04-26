@@ -70,6 +70,24 @@ Conversion gates enforced:
 
 Blocker report: `reports/bugs/2026-04-26-25-ga-readiness-gap.md`.
 
+## Field pilot evidence / полевая проверка
+
+Статус field evidence на `2026-04-26`: `no-field-evidence`.
+
+Что реально проверено: repo-controlled GA evidence, controlled novice scenarios, validators, `MATRIX_TEST.sh` и synthetic downstream safe-sync checks.
+
+Что остается pending и не считается GA evidence:
+
+- battle greenfield project;
+- battle brownfield without repo;
+- battle brownfield with repo;
+- downstream sync cycle 1 на real downstream lineage;
+- downstream sync cycle 2 на той же lineage.
+
+Полевой roadmap: `docs/releases/2.5.1-field-pilot-roadmap.md`.
+Полевой evidence register: `reports/release/2.5-field-pilot-evidence.md`.
+Gap report: `reports/bugs/2026-04-26-field-pilot-evidence-gap.md`.
+
 ## Что проверено
 - strict tree contract для factory root, template base и generated project contours
 - consolidated verify entrypoint (`template-repo/scripts/verify-all.sh`)
@@ -178,11 +196,13 @@ Evidence / quality / DoD до смыслового наполнения арте
 - документальные intent signals сейчас реализованы только для `release`, а не для всех фаз.
 - document intent signals сейчас реализованы для `release` и `bugfix-drift`, но ещё не покрывают возможные более тонкие подфазы внутри controlled fixes.
 - phase-aware export/reference packs остаются вспомогательным слоем и не заменяют чтение сценариев из GitHub repo.
+- field evidence для real battle greenfield, brownfield without repo, brownfield with repo и двух downstream sync cycles пока pending; synthetic smoke и controlled pilot не смешиваются с field proof.
 
 ## Открытые вопросы
 - По bug set `bug-026/027/028` критичных открытых дефектов после remediation не осталось.
 - Follow-up для будущего улучшения (не blocker текущего RC): расширить novice long-flow с synthetic smoke до более предметных domain сценариев в downstream проектах.
 - GA blocker `reports/bugs/2026-04-26-25-ga-readiness-gap.md` закрыт после добавления KPI evidence.
+- Field pilot для `2.5.1-field-pilot` должен выполнить пять pending scenarios из `reports/release/field-pilot-scenarios/`.
 
 ## Статус CI baseline
 - Статус: `green` (GitHub Actions run `24840192862`, 2026-04-23: `verify-baseline` = success, `release-bundle-dry-run` = success; локально подтверждено 2026-04-26 через `verify-all.sh ci`).
