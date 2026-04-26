@@ -37,7 +37,7 @@
 - `work/features/first-feature` создан как first task workspace.
 - `/projects/openclaw-brownfield/src/openclaw-plus` содержит sanitized reconstruction из `/root/openclaw-plus`.
 - Raw `/root/.openclaw` и raw `/etc/openclaw-plus.env` не перенесены.
-- Общий field pilot status стал `partial-field-evidence`, `2/5`; FP-03/FP-04/FP-05 не помечались как пройденные.
+- Общий field pilot status стал `partial-field-evidence`, `3/5`; FP-03 помечен пройденным на `mppcoder/openclaw-brownfield` commit `3c026fd`, FP-04/FP-05 остаются pending.
 - Generated/dependency zones исключены через denylist: `.venvs`, `node_modules`, `__pycache__`, `var`, logs, sqlite, jsonl.
 - `render_direct_task_response` теперь генерирует publishable direct-task response с `## Handoff в Codex`, continuation rule и closeout instruction rule.
 - `validate-codex-routing.py` закрепляет запрет остановки на self-handoff и требование `## Инструкция пользователю` / `Внешних действий не требуется.`.
@@ -58,6 +58,9 @@
 - `git -C /projects/openclaw-brownfield status --short --branch`: clean on `main`.
 - `bash scripts/verify-all.sh` в `/projects/greenfield-test`: прошла.
 - `git -C /projects/greenfield-test status --short --branch`: clean on `main...origin/main`.
+- `bash scripts/verify-all.sh` в `/projects/openclaw-brownfield` после FP-03 audit update: прошла.
+- `git -C /projects/openclaw-brownfield status --short --branch`: clean on `main...origin/main`.
+- `git -C /projects/openclaw-brownfield rev-parse --short HEAD`: `3c026fd`.
 - `bash template-repo/scripts/verify-all.sh` в `/projects/factory-template`: прошла, `VERIFY-ALL ПРОЙДЕН (full)`.
 
 ## Итоговый вывод
@@ -65,4 +68,5 @@
 - Source-candidate map и reconstruction boundary подготовлены.
 - Недостающий repo creation + GitHub remote step выполнен: `https://github.com/mppcoder/openclaw-brownfield`, latest commit `7b3d1a4`.
 - Roadmap продвинут до FP-01: `https://github.com/mppcoder/greenfield-test`, latest commit `cca68d5`.
+- Roadmap продвинут до FP-03: `https://github.com/mppcoder/openclaw-brownfield`, latest audit commit `3c026fd`.
 - Runtime OpenClaw не изменялся.

@@ -10,6 +10,7 @@
 - Исправить нечеткие инструкции по внешним действиям.
 - Продолжить roadmap после закрытия FP-02 defects.
 - Выполнить следующий roadmap step FP-01.
+- Использовать `https://github.com/mppcoder/openclaw-brownfield` для FP-03.
 
 ## Что реально сделано
 - Выполнен defect-capture для reusable closeout/direct-task defect.
@@ -24,7 +25,8 @@
 - Исправлен generated `scripts/verify-all.sh` для downstream root-level launch.
 - Создан и запушен FP-01 greenfield repo `https://github.com/mppcoder/greenfield-test`, latest commit `cca68d5`.
 - В FP-01 project создан first feature workspace `work/features/first-feature`.
-- Общий field pilot register обновлен до `partial-field-evidence`, `2/5`.
+- Общий field pilot register обновлен до `partial-field-evidence`, `3/5`.
+- FP-03 brownfield-with-repo audit выполнен на `https://github.com/mppcoder/openclaw-brownfield`, latest audit commit `3c026fd`.
 - Созданы reconstruction allowlist, denylist и change-map.
 - Исправлен генератор `render_direct_task_response`.
 - Усилен `validate-codex-routing.py`.
@@ -50,6 +52,7 @@
 - `brownfield/change-map.md`
 - `reports/release/field-pilot-scenarios/02-brownfield-without-repo.md`
 - `reports/release/field-pilot-scenarios/01-greenfield-battle-project.md`
+- `reports/release/field-pilot-scenarios/03-brownfield-with-repo.md`
 - `reports/release/2.5-field-pilot-evidence.md`
 - `docs/releases/2.5.1-field-pilot-roadmap.md`
 - `docs/releases/2.5-success-metrics.md`
@@ -86,4 +89,4 @@
 - FP-02 roadmap шаг выполнен и сохранен как field evidence с фактическим repo creation.
 - GitHub-backed repo проекта: `https://github.com/mppcoder/openclaw-brownfield`, latest commit `7b3d1a4`.
 - Greenfield roadmap repo: `https://github.com/mppcoder/greenfield-test`, latest commit `cca68d5`.
-- Следующий roadmap шаг требует real brownfield-with-repo/downstream lineage для FP-03/FP-04/FP-05; без него нельзя честно продолжать field proof дальше.
+- Следующие roadmap шаги требуют downstream sync cycle 1 и cycle 2 на одной lineage для FP-04/FP-05; без них нельзя честно закрыть full field proof.

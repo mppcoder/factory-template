@@ -16,7 +16,7 @@
 - [FIX] `template-repo/scripts/validate-codex-routing.py` обновлен: direct-task response невалиден без continuation guardrail и `## Инструкция пользователю`/`Внешних действий не требуется.` guardrails.
 - [REAL] Source-candidate scan подтвердил generated/dependency denylist zones: `/root/openclaw-plus/.venvs`, `node_modules`, `__pycache__`, `/root/openclaw-plus/var`.
 - [REAL] FP-02 field pilot evidence retained: `reports/release/field-pilot-scenarios/02-brownfield-without-repo.md` переведен в `passed` для sanitized OpenClaw+ brownfield-without-repo case.
-- [PROJECT] `/projects` scan нашел только `/projects/factory-template` как git repo; FP-03/FP-04/FP-05 требуют отдельного real downstream/battle repo и остаются pending external boundary.
+- [PROJECT] `/projects` scan initially found only `/projects/factory-template`; later FP-02 created `/projects/openclaw-brownfield`, which is now reused as the existing GitHub-backed brownfield repo for FP-03. FP-04/FP-05 remain pending downstream sync waves.
 - [BUG] Пользовательский follow-up подтвердил, что FP-02 был преждевременно помечен `passed` до фактического создания repo проекта.
 - [REAL] Создан локальный project repo `/projects/openclaw-brownfield`; sanitized source reconstruction находится в `src/openclaw-plus`, raw `/root/.openclaw` не копировался.
 - [VERIFY] `/projects/openclaw-brownfield` зафиксирован commit `4a58c8d`; targeted validators `validate-brownfield-transition.py`, `validate-evidence.py`, `validate-codex-task-pack.py` прошли.
@@ -25,3 +25,5 @@
 - [VERIFY] `/projects/openclaw-brownfield` запушен до commit `7b3d1a4`; `bash scripts/verify-all.sh` в project repo прошел после исправления generated root script.
 - [REAL] FP-01 greenfield project создан в `/projects/greenfield-test`, опубликован в `https://github.com/mppcoder/greenfield-test`, latest commit `cca68d5`.
 - [VERIFY] `bash scripts/verify-all.sh` в `/projects/greenfield-test` прошел; first feature workspace создан в `work/features/first-feature`.
+- [REAL] FP-03 brownfield-with-repo audit executed on `https://github.com/mppcoder/openclaw-brownfield`; latest pushed audit commit `3c026fd`.
+- [VERIFY] `bash scripts/verify-all.sh` в `/projects/openclaw-brownfield` passed after FP-03 audit artifacts update; `git status --short --branch` clean on `main...origin/main`.

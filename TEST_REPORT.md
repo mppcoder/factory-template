@@ -81,13 +81,13 @@ Blocker report: `reports/bugs/2026-04-26-25-ga-readiness-gap.md`.
 - FP-01 `Battle greenfield project` выполнен на real GitHub-backed project repo `mppcoder/greenfield-test`, latest commit `cca68d5`.
 - FP-02 `Battle brownfield without repo` выполнен на реальном sanitized OpenClaw+ кейсе с корнями `/root/.openclaw` и `/root/openclaw-plus`.
 - Created project repo: `/projects/openclaw-brownfield`, remote `https://github.com/mppcoder/openclaw-brownfield`, latest commit `7b3d1a4`.
+- FP-03 `Battle brownfield with repo` выполнен на existing GitHub-backed brownfield repo `mppcoder/openclaw-brownfield`, latest audit commit `3c026fd`.
+- Retained artifacts: `/projects/openclaw-brownfield/brownfield/repo-audit.md`, `system-inventory.md`, `as-is-architecture.md`, `change-map.md`, `risks-and-constraints.md`.
 - Retained artifacts: `brownfield/system-inventory.md`, `brownfield/repo-audit.md`, `brownfield/as-is-architecture.md`, `brownfield/source-candidate-map.md`, `brownfield/reconstruction-allowlist.md`, `brownfield/reconstruction-denylist.md`, `brownfield/reconstruction-repo-report.md`, `brownfield/change-map.md`, `reports/release/field-pilot-scenarios/02-brownfield-without-repo.md`, `reports/bugs/bug-037-github-repo-creation-misclassified-as-user-step.md`, `reports/bugs/bug-038-generated-project-root-script-verify-all-wrong-root.md`.
 - Runtime remediation не выполнялась; evidence sanitized, secret values не переносились.
 
 Что остается pending и не считается GA evidence:
 
-- battle greenfield project;
-- battle brownfield with repo;
 - downstream sync cycle 1 на real downstream lineage;
 - downstream sync cycle 2 на той же lineage.
 
@@ -203,7 +203,7 @@ Evidence / quality / DoD до смыслового наполнения арте
 - документальные intent signals сейчас реализованы только для `release`, а не для всех фаз.
 - document intent signals сейчас реализованы для `release` и `bugfix-drift`, но ещё не покрывают возможные более тонкие подфазы внутри controlled fixes.
 - phase-aware export/reference packs остаются вспомогательным слоем и не заменяют чтение сценариев из GitHub repo.
-- field evidence для real brownfield with repo и двух downstream sync cycles пока pending; synthetic smoke и controlled pilot не смешиваются с field proof.
+- field evidence для двух downstream sync cycles пока pending; synthetic smoke и controlled pilot не смешиваются с field proof.
 
 ## Открытые вопросы
 - По bug set `bug-026/027/028` критичных открытых дефектов после remediation не осталось.

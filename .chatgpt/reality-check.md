@@ -116,3 +116,20 @@ FP-02 теперь подтвержден repo creation evidence, а не тол
 ### Вывод
 
 GitHub remote creation и first push являются internal Codex work, если `gh`/connector доступен, owner/name однозначны и нет permission blocker.
+
+## Аудит brownfield с repo
+
+Дата: 2026-04-26
+
+### Что подтверждено
+
+- Пользователь предоставил `https://github.com/mppcoder/openclaw-brownfield` как repo для дальнейшего field pilot.
+- Repo существует, private, non-empty, default branch `main`.
+- `/projects/openclaw-brownfield` clean on `main...origin/main`.
+- FP-03 audit artifacts обновлены в самом repo: `repo-audit.md`, `system-inventory.md`, `as-is-architecture.md`, `change-map.md`, `risks-and-constraints.md`.
+- Latest pushed audit commit: `3c026fd`.
+- `bash scripts/verify-all.sh` в `/projects/openclaw-brownfield`: passed.
+
+### Вывод
+
+FP-03 можно считать пройденным как brownfield-with-repo audit. Остающиеся field pilot шаги: FP-04 и FP-05 downstream sync cycles на одной lineage.
