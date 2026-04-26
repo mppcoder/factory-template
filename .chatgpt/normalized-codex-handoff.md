@@ -1,14 +1,14 @@
 # Нормализованный handoff для Codex
 
 ## Источник запуска
-direct-task
+chatgpt-handoff
 
 ## Класс задачи
 deep
 
 ## Evidence для класса задачи
-- явный override task_class: deep
-- явный override selected_profile: deep
+- keyword-hit: audit
+- явный reasoning/model override совпал с default profile: deep
 
 ## Выбранный профиль
 deep
@@ -39,34 +39,26 @@ manual-ui
 optional
 
 ## Профиль проекта
-brownfield-without-repo
+unknown-project-profile
 
 ## Выбранный сценарий
-brownfield/00-brownfield-entry.md
+00-master-router.md
 
 ## Этап pipeline
-brownfield-without-repo-intake
+done
 
 ## Артефакты для обновления
-- .chatgpt/task-launch.yaml
-- .chatgpt/direct-task-source.md
-- .chatgpt/direct-task-self-handoff.md
-- .chatgpt/normalized-codex-handoff.md
-- brownfield/system-inventory.md
-- brownfield/repo-audit.md
-- brownfield/as-is-architecture.md
-- brownfield/gap-register.md
-- brownfield/reverse-engineering-plan.md
-- brownfield/reverse-engineering-summary.md
-- brownfield/decision-log.md
-- .chatgpt/evidence-register.md
-- .chatgpt/reality-check.md
+- .chatgpt/codex-input.md
+- .chatgpt/codex-context.md
+- .chatgpt/codex-task-pack.md
+- .chatgpt/verification-report.md
+- .chatgpt/done-report.md
 
 ## Разрешение handoff
-no
+yes (forbidden)
 
 ## Маршрут defect-capture
-brownfield gap -> structured defect/gap report before remediation planning
+not-required-by-text-signal
 
 ## Правило launch boundary
 Выбор модели и reasoning mode считается надежным только на новом запуске Codex для новой задачи.
@@ -96,10 +88,10 @@ available
 selected_model совпадает с последним сохраненным snapshot repo catalog; перед внешними обещаниями повторите live catalog check
 
 ## Путь launch artifact
-`.chatgpt/direct-task-source.md`
+`.chatgpt/codex-input.md`
 
 ## Опциональная команда строгого запуска
-`./scripts/launch-codex-task.sh --launch-source direct-task --task-file .chatgpt/direct-task-source.md --execute`
+`./scripts/launch-codex-task.sh --launch-source chatgpt-handoff --task-file .chatgpt/codex-input.md --execute`
 
 ## Сценарии для строгого запуска
 - автоматизация
@@ -120,26 +112,4 @@ selected_model совпадает с последним сохраненным s
 - Если новый model ID появился в live catalog, сначала создайте proposal через `scripts/check-codex-model-catalog.py --write-proposal`; promotion profile mapping требует ручного review.
 
 ## Текст задачи
-task_class: deep
-selected_profile: deep
-project_profile: brownfield-without-repo
-selected_scenario: brownfield/00-brownfield-entry.md
-pipeline_stage: brownfield-without-repo-intake
-handoff_allowed: no
-artifacts_to_update:
-  - .chatgpt/task-launch.yaml
-  - .chatgpt/direct-task-source.md
-  - .chatgpt/direct-task-self-handoff.md
-  - .chatgpt/normalized-codex-handoff.md
-  - brownfield/system-inventory.md
-  - brownfield/repo-audit.md
-  - brownfield/as-is-architecture.md
-  - brownfield/gap-register.md
-  - brownfield/reverse-engineering-plan.md
-  - brownfield/reverse-engineering-summary.md
-  - brownfield/decision-log.md
-  - .chatgpt/evidence-register.md
-  - .chatgpt/reality-check.md
-defect_capture_path: brownfield gap -> structured defect/gap report before remediation planning
-
-Полевой тест шаблона фабрики проектов на brownfield without repo. Реальные входные корни: /root/.openclaw как настроенный дистрибутив, /root/openclaw-plus как тонкий слой кастомных доработок дистрибутива. Начать evidence-first intake/reconstruction, проверить фактическое наличие корней, repo-state и безопасную canonical project layout; не переходить к remediation до фиксации inventory/repo-audit/gap register.
+audit: проверить repo на остаточный английский человекочитаемый слой

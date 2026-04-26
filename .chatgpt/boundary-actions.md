@@ -82,6 +82,8 @@
 - Нельзя заменять handoff ссылкой на файл, несколькими разрозненными блоками или инструкцией собрать handoff из `codex-input.md`, `codex-context.md`, `codex-task-pack.md`.
 - Если remaining work еще остается внутренним repo follow-up, handoff не должен исчезать из-за будущего user footer.
 - Release-followup, source-pack refresh, export refresh, closeout-sync и release-facing consistency pass внутри repo считаются внутренней работой Codex.
+- Brownfield source-candidate map, reconstruction allowlist/denylist, change-map и reverse-engineering summary внутри repo тоже считаются внутренней работой Codex.
+- Если такой внутренний follow-up уже назван и route текущей live-сессии совместим, Codex продолжает выполнение в этом task и не завершает ответ просьбой пользователя вручную написать "продолжай".
 - Перед финальным ответом Codex обязан выполнить `git status --short --branch`; dirty worktree или branch ahead без конкретного blocker означает, что closeout еще не завершен.
 - Если `origin` настроен, verify green и sync технически доступен, Codex выполняет `VALIDATE_VERIFIED_SYNC_PREREQS.sh` и `VERIFIED_SYNC.sh` сам; commit/push нельзя оставлять пользователю.
 - Финальный ответ по внутренне закрытому repo change должен назвать commit hash / sync status или `no-op`.

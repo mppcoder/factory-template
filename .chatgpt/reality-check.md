@@ -54,3 +54,20 @@
 
 Evidence-first intake завершен на минимально достаточном уровне для следующего шага: `source-candidate-map`.
 Remediation пока не разрешена.
+
+## Follow-up по source-candidate
+
+Дата: 2026-04-26
+
+### Что подтверждено
+
+- `source-candidate-map` является внутренним Codex-eligible follow-up, а не пользовательским ручным шагом.
+- `/root/openclaw-plus` является основным source candidate root.
+- `/root/.openclaw` является limited candidate root только после redaction/review.
+- `.venvs`, `node_modules`, `__pycache__`, `var`, logs, sqlite и jsonl/session files должны быть исключены из reconstruction.
+
+### Проверка реальности дефекта
+
+- Предыдущий closeout остановился перед внутренним follow-up и не дал `## Инструкция пользователю`.
+- Это reusable process defect, а не ошибка пользователя.
+- Исправление должно жить в generator/validator/scenario layer, а не только в текущем ответе.

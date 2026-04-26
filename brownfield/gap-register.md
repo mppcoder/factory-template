@@ -125,3 +125,26 @@ Decision:
 - отдельный script-level remediation пока не выполнялась, потому что текущий field test не меняет template launcher/generator.
 
 Status: fixed-in-current-scope for artifact; open for reusable generator remediation
+
+## GAP-008: closeout остановился перед internal source-candidate follow-up
+
+Severity: high
+
+Evidence:
+- после intake был явно назван следующий безопасный этап `source-candidate-map`;
+- этап является внутренней Codex-eligible работой внутри repo;
+- финальный ответ остановился на summary и пользователь был вынужден написать "продолжай";
+- обязательный `## Инструкция пользователю` для фактически оставленного пользовательского шага отсутствовал.
+
+Impact:
+- brownfield flow может требовать ручного продолжения без реального external blocker;
+- completion package может появиться только после напоминания пользователя;
+- это reusable process defect в closeout/direct-task layer.
+
+Decision:
+- оформлен `reports/bugs/bug-035-closeout-stopped-before-internal-followup-and-user-instruction.md`;
+- оформлен `reports/factory-feedback/feedback-035-closeout-stopped-before-internal-followup-and-user-instruction.md`;
+- generator/validator/scenario rules обновлены;
+- source-candidate map выполнен в текущем scope.
+
+Status: fixed-in-current-scope

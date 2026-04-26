@@ -264,6 +264,19 @@ def main() -> int:
             for section in DIRECT_TASK_RESPONSE_SECTIONS:
                 if section not in direct_response_text:
                     errors.append(f"direct-task response не содержит обязательный раздел `{section}`")
+            for section in [
+                "## Применение в Codex UI",
+                "## Строгий launch mode (опционально)",
+                "## Handoff в Codex",
+            ]:
+                if section not in direct_response_text:
+                    errors.append(f"direct-task response не содержит publishable section `{section}`")
+            if "Не завершай ответ только self-handoff block" not in direct_response_text:
+                errors.append("direct-task response не содержит запрет остановки на self-handoff без продолжения")
+            if "## Инструкция пользователю" not in direct_response_text:
+                errors.append("direct-task response не содержит обязательное упоминание финального блока `## Инструкция пользователю`")
+            if "Внешних действий не требуется." not in direct_response_text:
+                errors.append("direct-task response не содержит обязательную формулу для closeout без внешних действий")
 
     normalized = root / ".chatgpt" / "normalized-codex-handoff.md"
     if not normalized.exists():

@@ -50,12 +50,14 @@
 К внутреннему follow-up по умолчанию относятся:
 - release note и release-facing changelog/update внутри repo;
 - source-pack, curated sources, export/manifests refresh;
+- brownfield source-candidate map, reconstruction allowlist/denylist, change-map и reverse-engineering summary внутри repo;
 - closeout artifact sync;
 - verify-summary, done-summary и release-facing consistency pass;
 - release bundle preparation;
 - другой release-followup, который делается внутри repo без внешнего UI/manual шага.
 
 Если remaining work относится к такому internal follow-up, выдай inline Codex handoff в том же ответе.
+Если текущий route уже совместим и internal follow-up можно выполнить в той же live Codex-сессии, продолжай выполнение вместо остановки на summary или просьбе "продолжить". Остановка допустима только при реальном blocker, внешнем действии, несовместимом route или необходимости нового task launch.
 
 User-only closeout допустим только если remaining next step действительно внешний и Codex не может выполнить его через доступные инструменты:
 - GitHub UI только при реальном блокере: нет авторизации, нет прав на действие, требуется обязательный человеческий review/approval, checks red/pending, конфликт, неясная merge strategy или действие является release/security approval;

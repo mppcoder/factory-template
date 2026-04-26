@@ -27,7 +27,7 @@ codex --profile deep
 Отвечай пользователю по-русски. Английский допустим только для technical literal values: команды, пути, YAML/JSON keys, model IDs и route fields.
 
 Цель:
-Провести evidence-first intake/reconstruction для полевого теста шаблона фабрики проектов на brownfield without repo.
+Выполнить direct-task self-handoff и продолжить работу в этом же task, если текущий live route совпадает с routing ниже. Не завершай ответ только self-handoff block и не требуй ручного продолжения пользователя для внутренней Codex-eligible работы.
 
 Repo rules:
 В рамках repo приоритет у repo rules, AGENTS, runbook и policy files репозитория. Общие рабочие инструкции применяются только там, где не противоречат правилам repo и старшим системным ограничениям среды.
@@ -42,57 +42,73 @@ Routing:
 - apply_mode: manual-ui
 - strict_launch_mode: optional
 - project_profile: brownfield-without-repo
-- selected_scenario: brownfield/00-brownfield-entry.md
-- pipeline_stage: brownfield-without-repo-intake
+- selected_scenario: brownfield/06-reverse-engineering-plan.md
+- pipeline_stage: source-candidate-map-and-closeout-defect-remediation
 - handoff_allowed: no
-- defect_capture_path: brownfield gap -> structured defect/gap report before remediation planning
+- defect_capture_path: reproduce -> evidence -> bug report -> layer classification -> factory feedback if reusable -> remediation
 
-Входные корни:
-- /root/.openclaw — настроенный live runtime / дистрибутив.
-- /root/openclaw-plus — package / overlay / тонкий слой кастомных доработок.
-
-Границы scope:
-- Делать только inventory, repo-audit, as-is architecture, gap capture и reverse-engineering planning.
-- Не выполнять remediation runtime.
-- Не создавать git repo внутри /root/.openclaw или /root/openclaw-plus.
-- Не создавать temporary/intermediate repo прямо в /projects.
-- Не переносить значения секретов в repo-артефакты.
-
-Обязательные артефакты:
+Артефакты для обновления:
 - .chatgpt/task-launch.yaml
 - .chatgpt/direct-task-source.md
 - .chatgpt/direct-task-self-handoff.md
 - .chatgpt/normalized-codex-handoff.md
-- brownfield/system-inventory.md
-- brownfield/repo-audit.md
-- brownfield/as-is-architecture.md
-- brownfield/gap-register.md
+- .chatgpt/direct-task-response.md
+- template-repo/scripts/codex_task_router.py
+- template-repo/scripts/validate-codex-routing.py
+- template-repo/scripts/create-codex-task-pack.py
+- template-repo/scripts/validate-codex-task-pack.py
+- reports/bugs/bug-035-closeout-stopped-before-internal-followup-and-user-instruction.md
+- reports/factory-feedback/feedback-035-closeout-stopped-before-internal-followup-and-user-instruction.md
+- brownfield/source-candidate-map.md
+- brownfield/reconstruction-allowlist.md
+- brownfield/reconstruction-denylist.md
+- brownfield/change-map.md
 - brownfield/reverse-engineering-plan.md
-- brownfield/reverse-engineering-summary.md
-- brownfield/decision-log.md
+- brownfield/gap-register.md
 - .chatgpt/evidence-register.md
 - .chatgpt/reality-check.md
 
-Verify expectations:
-- Подтвердить существование обоих корней.
-- Подтвердить git/repo-state обоих корней.
-- Зафиксировать сервисы и валидаторы без изменения runtime.
-- Проверить, что /root/.openclaw не подменен старым ошибочным путем /root/openclaw.
-- Запустить repo validators для evidence, handoff language, brownfield transition и handoff response format.
+Текст задачи:
+task_class: deep
+selected_profile: deep
+project_profile: brownfield-without-repo
+selected_scenario: brownfield/06-reverse-engineering-plan.md
+pipeline_stage: source-candidate-map-and-closeout-defect-remediation
+handoff_allowed: no
+artifacts_to_update:
+  - .chatgpt/task-launch.yaml
+  - .chatgpt/direct-task-source.md
+  - .chatgpt/direct-task-self-handoff.md
+  - .chatgpt/normalized-codex-handoff.md
+  - .chatgpt/direct-task-response.md
+  - template-repo/scripts/codex_task_router.py
+  - template-repo/scripts/validate-codex-routing.py
+  - template-repo/scripts/create-codex-task-pack.py
+  - template-repo/scripts/validate-codex-task-pack.py
+  - reports/bugs/bug-035-closeout-stopped-before-internal-followup-and-user-instruction.md
+  - reports/factory-feedback/feedback-035-closeout-stopped-before-internal-followup-and-user-instruction.md
+  - brownfield/source-candidate-map.md
+  - brownfield/reconstruction-allowlist.md
+  - brownfield/reconstruction-denylist.md
+  - brownfield/change-map.md
+  - brownfield/reverse-engineering-plan.md
+  - brownfield/gap-register.md
+  - .chatgpt/evidence-register.md
+  - .chatgpt/reality-check.md
+defect_capture_path: reproduce -> evidence -> bug report -> layer classification -> factory feedback if reusable -> remediation
 
-Риски и ограничения:
-- Package root содержит тяжелые generated/dependency зоны.
-- Runtime и env содержат secret-bearing state.
-- Backup-файлы требуют отдельного triage.
-- Validator green может содержать warning, который нужно оформить как gap до remediation.
+Продолжить полевой тест OpenClaw+ после intake и исправить reusable defect: предыдущий closeout остановился перед внутренним source-candidate-map и не дал обязательный пользовательский completion package. Построить source-candidate map и reconstruction boundary для /root/.openclaw и /root/openclaw-plus. Исправить генератор/валидаторы direct-task closeout так, чтобы self-handoff не требовал ручного продолжения, а финальная инструкция пользователю не пропадала. Не выполнять remediation OpenClaw runtime, не создавать repo в /root, не раскрывать секреты.
 
-Factory feedback:
-Если обнаружен template-level defect или generated handoff format defect, зафиксируй его в gap register. Если defect исправлен в рамках текущего scope, отметь fixed-in-current-scope.
+Continuation rule:
+Если задача пришла в уже открытую Codex-сессию и этот route совместим с текущей сессией, после видимого self-handoff продолжай remediation / implementation / verification без отдельного запроса пользователя. Остановка допустима только при реальном blocker, внешнем действии, несовместимом route или необходимости нового task launch.
+
+Completion rule:
+Если в конце остается следующий пользовательский или внешний шаг, финальный ответ обязан завершаться разделом `## Инструкция пользователю`. Если внешних действий нет, финальный ответ обязан явно сказать: `Внешних действий не требуется.`
 ```
 
 ## Совместимость validator
 
-Этот раздел фиксирует обязательные legacy-маркеры direct-task response без создания второго handoff-блока:
+Этот раздел фиксирует legacy-маркеры direct-task response без создания второго handoff-блока:
 
 - `## Self-handoff для прямой задачи`
 - `## Классификация`

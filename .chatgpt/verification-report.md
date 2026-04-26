@@ -1,28 +1,35 @@
 # Отчет о проверке результата
 
 ## Что проверяли
-- Repo-wide audit на остаточный английский человекочитаемый слой.
-- Отличие technical literal values от prose-нарушений.
-- Свежий source-facing слой после частичной очистки.
+- Исправление остановки closeout перед внутренним brownfield follow-up.
+- Исправление отсутствия обязательной пользовательской инструкции в generated direct-task / closeout guidance.
+- Source-candidate map и reconstruction boundary для `/root/.openclaw` и `/root/openclaw-plus`.
+- Совместимость новых generator/validator правил с существующими routing и handoff validators.
 
 ## Статус defect-capture
-- Bug report создан: `reports/bugs/bug-033-repo-wide-english-human-layer-residue.md`.
-- Factory feedback создан: `reports/factory-feedback/feedback-033-repo-wide-english-human-layer-residue.md`.
-- Статус remediation: partial-remediation; full repo cleanup остается отдельным scope.
+- Bug report создан: `reports/bugs/bug-035-closeout-stopped-before-internal-followup-and-user-instruction.md`.
+- Factory feedback создан: `reports/factory-feedback/feedback-035-closeout-stopped-before-internal-followup-and-user-instruction.md`.
+- Статус remediation: fixed-in-current-scope.
 
 ## Что подтверждено
-- Широкий heading scan нашел реальные остатки английского в source docs, skill docs и historical reports.
-- Исправлены свежие source-facing документы и generator note, которые были ближе всего к текущему handoff/closeout issue.
-- Остались historical artifacts и часть skill docs с английскими headings/prose; это не закрыто текущей частичной правкой.
+- `source-candidate-map` является internal Codex-eligible follow-up, а не ручным пользовательским шагом.
+- `/root/openclaw-plus` является основным source candidate root.
+- `/root/.openclaw` допускается только как limited candidate root после redaction/review.
+- Generated/dependency zones исключены через denylist: `.venvs`, `node_modules`, `__pycache__`, `var`, logs, sqlite, jsonl.
+- `render_direct_task_response` теперь генерирует publishable direct-task response с `## Handoff в Codex`, continuation rule и closeout instruction rule.
+- `validate-codex-routing.py` закрепляет запрет остановки на self-handoff и требование `## Инструкция пользователю` / `Внешних действий не требуется.`.
+- `create-codex-task-pack.py` и `validate-codex-task-pack.py` закрепляют brownfield source-candidate follow-up как internal repo work.
 
 ## Команды проверки
-- `rg -n "^#{1,6} [A-Za-z][A-Za-z0-9 ,:;/'()_.&+-]*$" ...`: нашла остатки.
-- `rg -n "Troubleshooting:|Goal:|Target outcomes:|..." ...`: нашла остатки.
-- `python3 template-repo/scripts/validate-codex-task-pack.py .`: прошла.
-- `python3 template-repo/scripts/validate-defect-capture.py .`: прошла.
-- `python3 template-repo/scripts/validate-handoff-response-format.py .chatgpt/handoff-response.md`: прошла.
-- `python3 template-repo/scripts/validate-codex-routing.py .`: прошла.
+- `python template-repo/scripts/validate-codex-routing.py .`: прошла.
+- `python template-repo/scripts/validate-handoff-response-format.py .chatgpt/direct-task-response.md`: прошла.
+- `python template-repo/scripts/validate-codex-task-pack.py .`: прошла.
+- `python template-repo/scripts/validate-evidence.py .`: прошла.
+- `python template-repo/scripts/validate-brownfield-transition.py .`: прошла.
+- `python template-repo/scripts/validate-quality.py .`: прошла.
+- `python template-repo/scripts/validate-human-language-layer.py .`: прошла.
 
 ## Итоговый вывод
-- В repo не выполнено состояние “английского человекочитаемого слоя больше нигде нет”.
-- Нужна отдельная full cleanup задача или documented archival exception policy.
+- Оба заявленных дефекта исправлены в source-of-truth repo.
+- Source-candidate map и reconstruction boundary подготовлены.
+- Runtime OpenClaw не изменялся.

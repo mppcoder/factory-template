@@ -34,9 +34,12 @@
 - release notes / release-facing changelog entries;
 - source-pack / curated sources refresh;
 - export / manifests refresh;
+- brownfield source-candidate map / reconstruction allowlist / reconstruction denylist / change-map;
 - closeout artifact sync;
 - verify-summary / done-summary / release-facing consistency pass;
 - release bundle preparation.
+
+Если такой следующий шаг уже назван, route совместим и он выполняется внутри repo доступными инструментами Codex, нельзя завершать ответ просьбой пользователя "продолжить". Нужно выполнить шаг в текущем task или выдать inline handoff только когда действительно нужен новый task launch.
 
 Если completed change затрагивает downstream-consumed content, после классификации internal/external/mixed follow-up дополнительно классифицируй impact по update contours:
 - `impact.factory_sources`

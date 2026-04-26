@@ -57,6 +57,8 @@
 - completion package теперь по умолчанию не требует обновлять `factory-template ChatGPT Project`, если canonical repo/path/entrypoint и короткая repo-first instruction text не менялись
 - direct task to Codex теперь проходит такой же нормализованный self-handoff, как и handoff из ChatGPT Project, включая `task_class`, `selected_profile`, `selected_model` и `defect_capture_path`
 - direct task теперь дополнительно требует visible self-handoff block в первом substantive ответе, а не только artifact-level фиксацию
+- direct-task response теперь является publishable handoff package и содержит continuation guardrail: совместимый internal follow-up выполняется без ручного "продолжай", а финальный closeout обязан дать `## Инструкция пользователю` или явно сказать `Внешних действий не требуется.`
+- brownfield source-candidate map, reconstruction allowlist/denylist и change-map закреплены как internal Codex-eligible follow-up, а не пользовательский ручной шаг
 - recommended Codex handoff model routing обновлен под GPT-5.5: `build`, `deep` и `review` используют `gpt-5.5`, а `quick` сохраняет `gpt-5.4-mini` для lightweight задач
 - model availability auto-check добавлен в executable routing layer: `codex-model-routing.yaml`, `check-codex-model-catalog.py`, live validation через `codex debug models`, proposal-only promotion policy и strict/unavailable validator modes
 - optional skills/prompt-artifact quality loop добавлен как advanced maintenance contour: `skill-master-lite`, `skill-tester-lite`, test design guide и report template помогают улучшать trigger/usefulness без утяжеления beginner default path

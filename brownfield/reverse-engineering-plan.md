@@ -32,7 +32,7 @@
 
 ## Фаза 2: source candidate map
 
-Статус: pending
+Статус: completed
 
 Действия:
 - разделить files на source / docs / config / templates / generated / runtime-state / secret-bearing;
@@ -42,6 +42,9 @@
 
 Ожидаемый артефакт:
 - `brownfield/source-candidate-map.md`
+- `brownfield/reconstruction-allowlist.md`
+- `brownfield/reconstruction-denylist.md`
+- `brownfield/change-map.md`
 
 ## Фаза 3: reconstruction workspace
 

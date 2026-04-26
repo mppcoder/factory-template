@@ -50,11 +50,13 @@ Closeout без handoff допустим только при реальном о
 Если остаются internal repo follow-up задачи, user-only closeout запрещен. К таким задачам относятся:
 - release note / release-facing update внутри repo;
 - source-pack и export/manifests refresh;
+- brownfield source-candidate map, reconstruction allowlist/denylist, change-map и reverse-engineering closeout внутри repo;
 - closeout artifact sync;
 - verify-summary / done-summary / release-facing consistency pass;
 - release bundle preparation.
 
 Наличие такого внутреннего долга блокирует `done_complete` и требует inline handoff в Codex, а не только инструкцию пользователю.
+Если route текущей live-сессии совместим и внутренний follow-up можно выполнить сразу, Codex должен продолжить выполнение вместо финального ответа, который требует от пользователя ручного "продолжай".
 
 Финальный ответ должен явно зафиксировать одно из двух состояний:
 - change завершен полностью;
@@ -63,6 +65,8 @@ Closeout без handoff допустим только при реальном о
 Если выбран первый вариант, это нельзя оставлять только как подразумеваемое состояние. Финальный текст должен явно сказать, что:
 - change завершен полностью;
 - внешних действий или следующего пользовательского шага не требуется.
+
+Если change не завершен полностью и есть внешний или пользовательский следующий шаг, финальный ответ обязан иметь раздел `## Инструкция пользователю`. Если внешних действий нет, но внутренний follow-up был невозможен, финальный ответ обязан назвать blocker и сказать, что именно осталось внутри repo.
 
 Финальный человекочитаемый текст для `factory-template` должен быть на русском языке. Английские технические идентификаторы допустимы только как имена команд, файлов, полей, branch, commit, PR, actions или literal values.
 

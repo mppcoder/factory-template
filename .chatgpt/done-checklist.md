@@ -14,6 +14,8 @@
 - [ ] Перед финальным ответом выполнить `git status --short --branch`
 - [ ] Если branch ahead или рабочее дерево dirty, выполнить sync/push или явно назвать blocker
 - [ ] В финальном ответе указать commit hash / sync status или `no-op`
+- [ ] Если остался внутренний Codex-eligible follow-up, выполнить его в текущем task или выдать inline handoff; не просить пользователя вручную написать "продолжай"
+- [ ] Если в финале назван следующий этап pipeline, классифицировать его как internal / external / mixed / fully done до отправки ответа
 
 ## Классификация влияния
 

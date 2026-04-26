@@ -1,53 +1,54 @@
 # Отчет о завершении
 
 ## Что было запрошено
-- Проверить весь repo на остаточный английский человекочитаемый слой.
-- Не путать technical literal values с prose-нарушениями.
+- Продолжить brownfield field test после остановки.
+- Исправить баг остановки, требующей ручного "продолжай".
+- Исправить баг отсутствия инструкции пользователю по дальнейшим действиям.
 
 ## Что реально сделано
-- Выполнен repo-wide scan по Markdown headings и типовым английским prose-фразам.
-- Создан `reports/bugs/bug-033-repo-wide-english-human-layer-residue.md`.
-- Создан `reports/factory-feedback/feedback-033-repo-wide-english-human-layer-residue.md`.
-- Исправлены найденные свежие source-facing места: README, docs/operator-next-step, roadmap, template docs, model catalog note generator, skill tester report template.
-- Текущий route/handoff artifacts перегенерированы после исправления `codex_task_router.py`.
-- Зафиксировано, что historical reports/work artifacts и часть skill docs остаются отдельным cleanup-хвостом, а не “английского больше нет”.
+- Выполнен defect-capture для reusable closeout/direct-task defect.
+- Созданы bug report и factory feedback `035`.
+- Продолжен brownfield flow до `source-candidate-map`.
+- Созданы reconstruction allowlist, denylist и change-map.
+- Исправлен генератор `render_direct_task_response`.
+- Усилен `validate-codex-routing.py`.
+- Усилены scenario-pack closeout/decision/router rules.
+- Усилены generated boundary/done checklist и validator task-pack.
 
 ## Какие артефакты обновлены
-- `.chatgpt/boundary-actions.md`
-- `.chatgpt/codex-input.md`
-- `.chatgpt/codex-task-pack.md`
-- `.chatgpt/normalized-codex-handoff.md`
 - `.chatgpt/task-launch.yaml`
+- `.chatgpt/direct-task-source.md`
+- `.chatgpt/direct-task-self-handoff.md`
+- `.chatgpt/direct-task-response.md`
+- `.chatgpt/normalized-codex-handoff.md`
+- `.chatgpt/boundary-actions.md`
+- `.chatgpt/done-checklist.md`
+- `.chatgpt/evidence-register.md`
+- `.chatgpt/reality-check.md`
 - `.chatgpt/verification-report.md`
 - `.chatgpt/done-report.md`
-- `README.md`
-- `template-repo/README.md`
-- `template-repo/codex-routing.yaml`
-- `docs/operator-next-step.md`
-- `docs/releases/2.5-roadmap.md`
-- `docs/releases/2.5-success-metrics.md`
-- `docs/releases/sources-pack-usage.md`
-- `docs/guided-launcher.md`
-- `docs/downstream-upgrade-policy.md`
-- `docs/skills-quality-loop.md`
-- `docs/feature-planning.md`
-- `docs/spec-traceability.md`
-- `docs/deploy-on-vps.md`
-- `template-repo/README.md`
-- `template-repo/scripts/create-codex-task-pack.py`
+- `brownfield/source-candidate-map.md`
+- `brownfield/reconstruction-allowlist.md`
+- `brownfield/reconstruction-denylist.md`
+- `brownfield/change-map.md`
+- `brownfield/reverse-engineering-plan.md`
+- `brownfield/gap-register.md`
+- `reports/bugs/bug-035-closeout-stopped-before-internal-followup-and-user-instruction.md`
+- `reports/factory-feedback/feedback-035-closeout-stopped-before-internal-followup-and-user-instruction.md`
+- `template-repo/scenario-pack/00-master-router.md`
+- `template-repo/scenario-pack/02-decision-policy.md`
+- `template-repo/scenario-pack/16-done-closeout.md`
 - `template-repo/scripts/codex_task_router.py`
-- `template-repo/template/docs/codex-workflow.md`
-- `template-repo/template/docs/integrations.md`
-- `template-repo/skills/skill-tester-lite/references/report-template.md`
-- `reports/bugs/bug-033-repo-wide-english-human-layer-residue.md`
-- `reports/factory-feedback/feedback-033-repo-wide-english-human-layer-residue.md`
-- `reports/model-routing/model-routing-proposal.md`
+- `template-repo/scripts/create-codex-task-pack.py`
+- `template-repo/scripts/validate-codex-routing.py`
+- `template-repo/scripts/validate-codex-task-pack.py`
 
 ## Что не потребовалось
-- Новый handoff обратно в ChatGPT не требуется.
-- Обновление repo-first инструкции `factory-template ChatGPT Project` не требуется: repo/path/entrypoint/instruction contract не менялись.
+- Runtime remediation OpenClaw не выполнялась.
+- Git repo в `/root/.openclaw` или `/root/openclaw-plus` не создавался.
+- Значения секретов не переносились в repo.
 
 ## Итог закрытия
-- Ответ на вопрос “больше нигде нет английского?”: нет, в repo еще есть английский человекочитаемый слой.
-- Свежий source-facing контур частично очищен.
-- Полная очистка historical artifacts и skill docs требует отдельной cleanup-задачи или явного archival exception policy.
+- Баг остановки перед внутренним follow-up исправлен.
+- Баг отсутствия пользовательской инструкции исправлен.
+- Следующий безопасный этап после этого change: reconstruction workspace / redacted source pack, но только после явного решения запускать reconstruction.
