@@ -4,11 +4,13 @@
 - Task: `FIELD-PILOT-EVIDENCE`
 - Type: release evidence / field validation gap
 - Layer: release documentation, downstream validation, evidence taxonomy
-- Status: fixed in current scope as documentation and roadmap remediation
+- Status: partially fixed; roadmap/evidence taxonomy fixed, FP-02 field evidence retained, FP-01/FP-03/FP-04/FP-05 pending
 
 ## Summary
 
-Release 2.5.0 has repository-controlled GA evidence, but the release-facing documentation did not yet give field pilot evidence its own explicit status, roadmap and pass/fail criteria. This could let readers confuse synthetic smoke, controlled novice scenarios and downstream safe-sync checks with real battle-project proof.
+Release 2.5.0 has repository-controlled GA evidence, but the release-facing documentation initially did not give field pilot evidence its own explicit status, roadmap and pass/fail criteria. This could let readers confuse synthetic smoke, controlled novice scenarios and downstream safe-sync checks with real battle-project proof.
+
+Update on 2026-04-26: FP-02 now has sanitized field evidence for a real brownfield without repo OpenClaw+ case. The overall field pilot is still partial because FP-01, FP-03, FP-04 and FP-05 remain pending.
 
 ## Reproduction
 
@@ -25,7 +27,8 @@ Release 2.5.0 has repository-controlled GA evidence, but the release-facing docu
 ## Evidence
 
 - Repo-controlled evidence exists for novice smoke, controlled pilot checklist, validators and downstream safe-sync dry-run/apply/rollback checks.
-- No repository artifact currently records completed real external or battle-project field pilot runs.
+- FP-02 now records a completed real sanitized brownfield without repo run.
+- No repository artifact currently records completed FP-01, FP-03, FP-04 or FP-05 field pilot runs.
 - `CURRENT_FUNCTIONAL_STATE.md` already lists real greenfield/brownfield checks and production feedback as not closed, but the release evidence package lacks a dedicated field pilot roadmap and scenario checklist.
 
 ## Impact
@@ -46,8 +49,16 @@ Release 2.5.0 has repository-controlled GA evidence, but the release-facing docu
 2. Add `reports/release/2.5-field-pilot-evidence.md`.
 3. Add field scenario checklists under `reports/release/field-pilot-scenarios/`.
 4. Update release docs to state that 2.5.0 GA is repo-controlled, while field proof is pending for 2.5.1 follow-up.
-5. Keep `TEST_REPORT.md` honest: no field evidence is claimed until real projects are executed.
+5. Keep `TEST_REPORT.md` honest: only executed field scenarios are claimed; missing waves remain pending.
 
 ## Verification
 
 - `bash template-repo/scripts/verify-all.sh quick`
+
+## Остаточный статус
+
+Остается active follow-up для:
+- FP-01 battle greenfield project;
+- FP-03 battle brownfield with repo;
+- FP-04 downstream sync cycle 1;
+- FP-05 downstream sync cycle 2.

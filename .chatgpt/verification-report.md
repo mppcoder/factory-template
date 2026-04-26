@@ -4,6 +4,7 @@
 - Исправление остановки closeout перед внутренним brownfield follow-up.
 - Исправление отсутствия обязательной пользовательской инструкции в generated direct-task / closeout guidance.
 - Source-candidate map и reconstruction boundary для `/root/.openclaw` и `/root/openclaw-plus`.
+- Продвижение field pilot roadmap до FP-02 evidence completion.
 - Совместимость новых generator/validator правил с существующими routing и handoff validators.
 
 ## Статус defect-capture
@@ -15,6 +16,8 @@
 - `source-candidate-map` является internal Codex-eligible follow-up, а не ручным пользовательским шагом.
 - `/root/openclaw-plus` является основным source candidate root.
 - `/root/.openclaw` допускается только как limited candidate root после redaction/review.
+- `reports/release/field-pilot-scenarios/02-brownfield-without-repo.md` переведен в `passed` на sanitized OpenClaw+ кейсе.
+- Общий field pilot status стал `partial-field-evidence`, `1/5`; FP-01/FP-03/FP-04/FP-05 не помечались как пройденные.
 - Generated/dependency zones исключены через denylist: `.venvs`, `node_modules`, `__pycache__`, `var`, logs, sqlite, jsonl.
 - `render_direct_task_response` теперь генерирует publishable direct-task response с `## Handoff в Codex`, continuation rule и closeout instruction rule.
 - `validate-codex-routing.py` закрепляет запрет остановки на self-handoff и требование `## Инструкция пользователю` / `Внешних действий не требуется.`.

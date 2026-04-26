@@ -1,30 +1,40 @@
 launch:
-  timestamp_utc: '2026-04-26T18:26:51+00:00'
+  timestamp_utc: '2026-04-26T18:32:41+00:00'
   launch_unit: new-task-launch
-  launch_source: chatgpt-handoff
+  launch_source: direct-task
   router_layer: executable
   task_class: deep
   task_class_reasons:
-  - 'keyword-hit: audit'
-  - 'явный reasoning/model override совпал с default profile: deep'
+  - 'явный override task_class: deep'
+  - 'явный override selected_profile: deep'
   selected_profile: deep
   selected_model: gpt-5.5
   selected_reasoning_effort: high
   selected_plan_mode_reasoning_effort: high
   apply_mode: manual-ui
   strict_launch_mode: optional
-  project_profile: unknown-project-profile
-  selected_scenario: 00-master-router.md
-  pipeline_stage: done
+  project_profile: brownfield-without-repo
+  selected_scenario: brownfield/10-evidence-pack-completion.md
+  pipeline_stage: field-pilot-fp-02-evidence-pack-completion
   artifacts_to_update:
-  - .chatgpt/codex-input.md
-  - .chatgpt/codex-context.md
-  - .chatgpt/codex-task-pack.md
+  - .chatgpt/task-launch.yaml
+  - .chatgpt/direct-task-source.md
+  - .chatgpt/direct-task-self-handoff.md
+  - .chatgpt/normalized-codex-handoff.md
+  - .chatgpt/direct-task-response.md
+  - reports/release/2.5-field-pilot-evidence.md
+  - reports/release/field-pilot-scenarios/02-brownfield-without-repo.md
+  - docs/releases/2.5.1-field-pilot-roadmap.md
+  - brownfield/reverse-engineering-summary.md
+  - brownfield/gap-register.md
+  - .chatgpt/evidence-register.md
+  - .chatgpt/reality-check.md
   - .chatgpt/verification-report.md
   - .chatgpt/done-report.md
-  handoff_allowed: yes (forbidden)
-  defect_capture_path: not-required-by-text-signal
-  task_summary: 'audit: проверить repo на остаточный английский человекочитаемый слой'
+  handoff_allowed: 'no'
+  defect_capture_path: brownfield gap -> structured defect/gap report before remediation
+    planning
+  task_summary: 'task_class: deep'
   launch_boundary_rule: Выбор модели и reasoning mode считается надежным только на
     новом запуске Codex для новой задачи.
   interactive_default_rule: 'Для интерактивной работы в VS Code Codex extension основной
@@ -57,9 +67,9 @@ launch:
   - scripts/check-codex-model-catalog.py
   - scripts/launch-codex-task.sh
   - .codex/config.toml с именованными profiles
-  launch_artifact_path: .chatgpt/codex-input.md
-  launch_command: ./scripts/launch-codex-task.sh --launch-source chatgpt-handoff --task-file
-    .chatgpt/codex-input.md --execute
+  launch_artifact_path: .chatgpt/direct-task-source.md
+  launch_command: ./scripts/launch-codex-task.sh --launch-source direct-task --task-file
+    .chatgpt/direct-task-source.md --execute
   codex_profile_command: codex --profile deep
   strict_launch_use_cases:
   - автоматизация
@@ -83,9 +93,9 @@ launch:
     local profile mapping, прежде чем обещать этот model ID пользователю.
   - Если новый model ID появился в live catalog, сначала создайте proposal через `scripts/check-codex-model-catalog.py
     --write-proposal`; promotion profile mapping требует ручного review.
-  direct_self_handoff_required: false
-  direct_self_handoff_completed: false
-  requested_task_class: null
-  requested_selected_profile: null
+  direct_self_handoff_required: true
+  direct_self_handoff_completed: true
+  requested_task_class: deep
+  requested_selected_profile: deep
   requested_selected_model: null
   requested_selected_reasoning_effort: null

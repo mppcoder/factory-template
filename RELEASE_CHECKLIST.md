@@ -117,7 +117,7 @@
 - [x] Создан field evidence register: `reports/release/2.5-field-pilot-evidence.md`.
 - [x] Созданы scenario checklists с pass/fail criteria: `reports/release/field-pilot-scenarios/*.md`.
 - [ ] FP-01 battle greenfield project executed and evidence retained.
-- [ ] FP-02 battle brownfield without repo executed and evidence retained.
+- [x] FP-02 battle brownfield without repo executed and evidence retained.
 - [ ] FP-03 battle brownfield with repo executed and evidence retained.
 - [ ] FP-04 downstream sync cycle 1 executed and evidence retained.
 - [ ] FP-05 downstream sync cycle 2 executed on same lineage and evidence retained.

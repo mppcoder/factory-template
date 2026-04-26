@@ -26,8 +26,15 @@
 - backup-файлы важны как evidence, но опасны как source-of-truth без triage.
 - README не отражает реальную архитектуру; evidence нужно собирать из architecture/runbooks/known-bugs/validators/runtime.
 
+## Выполненный follow-up
+
+- `brownfield/source-candidate-map.md` создан.
+- `brownfield/reconstruction-allowlist.md` создан.
+- `brownfield/reconstruction-denylist.md` создан.
+- `brownfield/change-map.md` создан.
+
 ## Следующий безопасный шаг
 
-Сделать source candidate map и reconstruction allowlist/denylist.
+Создать reconstruction workspace внутри выделенного project root, например `/projects/openclaw-brownfield/reconstruction/`, и собрать redacted source pack по allowlist/denylist.
 
-Remediation пока не разрешена.
+Remediation runtime пока не разрешена.

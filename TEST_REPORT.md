@@ -72,14 +72,19 @@ Blocker report: `reports/bugs/2026-04-26-25-ga-readiness-gap.md`.
 
 ## Field pilot evidence / полевая проверка
 
-Статус field evidence на `2026-04-26`: `no-field-evidence`.
+Статус field evidence на `2026-04-26`: `partial-field-evidence`.
 
 Что реально проверено: repo-controlled GA evidence, controlled novice scenarios, validators, `MATRIX_TEST.sh` и synthetic downstream safe-sync checks.
+
+Что добавлено как field evidence:
+
+- FP-02 `Battle brownfield without repo` выполнен на реальном sanitized OpenClaw+ кейсе с корнями `/root/.openclaw` и `/root/openclaw-plus`.
+- Retained artifacts: `brownfield/system-inventory.md`, `brownfield/repo-audit.md`, `brownfield/as-is-architecture.md`, `brownfield/source-candidate-map.md`, `brownfield/reconstruction-allowlist.md`, `brownfield/reconstruction-denylist.md`, `brownfield/change-map.md`, `reports/release/field-pilot-scenarios/02-brownfield-without-repo.md`.
+- Runtime remediation не выполнялась; evidence sanitized, secret values не переносились.
 
 Что остается pending и не считается GA evidence:
 
 - battle greenfield project;
-- battle brownfield without repo;
 - battle brownfield with repo;
 - downstream sync cycle 1 на real downstream lineage;
 - downstream sync cycle 2 на той же lineage.

@@ -42,10 +42,10 @@ Routing:
 - apply_mode: manual-ui
 - strict_launch_mode: optional
 - project_profile: brownfield-without-repo
-- selected_scenario: brownfield/06-reverse-engineering-plan.md
-- pipeline_stage: source-candidate-map-and-closeout-defect-remediation
+- selected_scenario: brownfield/10-evidence-pack-completion.md
+- pipeline_stage: field-pilot-fp-02-evidence-pack-completion
 - handoff_allowed: no
-- defect_capture_path: reproduce -> evidence -> bug report -> layer classification -> factory feedback if reusable -> remediation
+- defect_capture_path: brownfield gap -> structured defect/gap report before remediation planning
 
 Артефакты для обновления:
 - .chatgpt/task-launch.yaml
@@ -53,27 +53,22 @@ Routing:
 - .chatgpt/direct-task-self-handoff.md
 - .chatgpt/normalized-codex-handoff.md
 - .chatgpt/direct-task-response.md
-- template-repo/scripts/codex_task_router.py
-- template-repo/scripts/validate-codex-routing.py
-- template-repo/scripts/create-codex-task-pack.py
-- template-repo/scripts/validate-codex-task-pack.py
-- reports/bugs/bug-035-closeout-stopped-before-internal-followup-and-user-instruction.md
-- reports/factory-feedback/feedback-035-closeout-stopped-before-internal-followup-and-user-instruction.md
-- brownfield/source-candidate-map.md
-- brownfield/reconstruction-allowlist.md
-- brownfield/reconstruction-denylist.md
-- brownfield/change-map.md
-- brownfield/reverse-engineering-plan.md
+- reports/release/2.5-field-pilot-evidence.md
+- reports/release/field-pilot-scenarios/02-brownfield-without-repo.md
+- docs/releases/2.5.1-field-pilot-roadmap.md
+- brownfield/reverse-engineering-summary.md
 - brownfield/gap-register.md
 - .chatgpt/evidence-register.md
 - .chatgpt/reality-check.md
+- .chatgpt/verification-report.md
+- .chatgpt/done-report.md
 
 Текст задачи:
 task_class: deep
 selected_profile: deep
 project_profile: brownfield-without-repo
-selected_scenario: brownfield/06-reverse-engineering-plan.md
-pipeline_stage: source-candidate-map-and-closeout-defect-remediation
+selected_scenario: brownfield/10-evidence-pack-completion.md
+pipeline_stage: field-pilot-fp-02-evidence-pack-completion
 handoff_allowed: no
 artifacts_to_update:
   - .chatgpt/task-launch.yaml
@@ -81,23 +76,18 @@ artifacts_to_update:
   - .chatgpt/direct-task-self-handoff.md
   - .chatgpt/normalized-codex-handoff.md
   - .chatgpt/direct-task-response.md
-  - template-repo/scripts/codex_task_router.py
-  - template-repo/scripts/validate-codex-routing.py
-  - template-repo/scripts/create-codex-task-pack.py
-  - template-repo/scripts/validate-codex-task-pack.py
-  - reports/bugs/bug-035-closeout-stopped-before-internal-followup-and-user-instruction.md
-  - reports/factory-feedback/feedback-035-closeout-stopped-before-internal-followup-and-user-instruction.md
-  - brownfield/source-candidate-map.md
-  - brownfield/reconstruction-allowlist.md
-  - brownfield/reconstruction-denylist.md
-  - brownfield/change-map.md
-  - brownfield/reverse-engineering-plan.md
+  - reports/release/2.5-field-pilot-evidence.md
+  - reports/release/field-pilot-scenarios/02-brownfield-without-repo.md
+  - docs/releases/2.5.1-field-pilot-roadmap.md
+  - brownfield/reverse-engineering-summary.md
   - brownfield/gap-register.md
   - .chatgpt/evidence-register.md
   - .chatgpt/reality-check.md
-defect_capture_path: reproduce -> evidence -> bug report -> layer classification -> factory feedback if reusable -> remediation
+  - .chatgpt/verification-report.md
+  - .chatgpt/done-report.md
+defect_capture_path: brownfield gap -> structured defect/gap report before remediation planning
 
-Продолжить полевой тест OpenClaw+ после intake и исправить reusable defect: предыдущий closeout остановился перед внутренним source-candidate-map и не дал обязательный пользовательский completion package. Построить source-candidate map и reconstruction boundary для /root/.openclaw и /root/openclaw-plus. Исправить генератор/валидаторы direct-task closeout так, чтобы self-handoff не требовал ручного продолжения, а финальная инструкция пользователю не пропадала. Не выполнять remediation OpenClaw runtime, не создавать repo в /root, не раскрывать секреты.
+Продолжить roadmap полевого теста шаблона: закрыть FP-02 Battle brownfield without repo как sanitized field evidence по фактическому OpenClaw+ кейсу (/root/.openclaw + /root/openclaw-plus), обновить release field-pilot evidence и scenario file. Не выдавать synthetic checks за недостающие FP-01/FP-03/FP-04/FP-05; если следующий roadmap шаг требует недоступный real project, зафиксировать blocker/next external boundary в инструкции пользователю.
 
 Continuation rule:
 Если задача пришла в уже открытую Codex-сессию и этот route совместим с текущей сессией, после видимого self-handoff продолжай remediation / implementation / verification без отдельного запроса пользователя. Остановка допустима только при реальном blocker, внешнем действии, несовместимом route или необходимости нового task launch.

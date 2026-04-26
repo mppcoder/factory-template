@@ -4,11 +4,14 @@
 - Продолжить brownfield field test после остановки.
 - Исправить баг остановки, требующей ручного "продолжай".
 - Исправить баг отсутствия инструкции пользователю по дальнейшим действиям.
+- Продвинуть roadmap полевого теста шаблона дальше.
 
 ## Что реально сделано
 - Выполнен defect-capture для reusable closeout/direct-task defect.
 - Созданы bug report и factory feedback `035`.
 - Продолжен brownfield flow до `source-candidate-map`.
+- FP-02 field pilot scenario закрыт как `passed` на sanitized OpenClaw+ brownfield-without-repo case.
+- Общий field pilot register обновлен до `partial-field-evidence`, `1/5`.
 - Созданы reconstruction allowlist, denylist и change-map.
 - Исправлен генератор `render_direct_task_response`.
 - Усилен `validate-codex-routing.py`.
@@ -31,6 +34,12 @@
 - `brownfield/reconstruction-allowlist.md`
 - `brownfield/reconstruction-denylist.md`
 - `brownfield/change-map.md`
+- `reports/release/field-pilot-scenarios/02-brownfield-without-repo.md`
+- `reports/release/2.5-field-pilot-evidence.md`
+- `docs/releases/2.5.1-field-pilot-roadmap.md`
+- `docs/releases/2.5-success-metrics.md`
+- `TEST_REPORT.md`
+- `RELEASE_CHECKLIST.md`
 - `brownfield/reverse-engineering-plan.md`
 - `brownfield/gap-register.md`
 - `reports/bugs/bug-035-closeout-stopped-before-internal-followup-and-user-instruction.md`
@@ -51,4 +60,5 @@
 ## Итог закрытия
 - Баг остановки перед внутренним follow-up исправлен.
 - Баг отсутствия пользовательской инструкции исправлен.
-- Следующий безопасный этап после этого change: reconstruction workspace / redacted source pack, но только после явного решения запускать reconstruction.
+- FP-02 roadmap шаг выполнен и сохранен как field evidence.
+- Следующий roadmap шаг требует real battle/downstream repo для FP-01 или FP-03/FP-04/FP-05; без него нельзя честно продолжать field proof.

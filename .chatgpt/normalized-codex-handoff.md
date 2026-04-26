@@ -1,14 +1,14 @@
 # Нормализованный handoff для Codex
 
 ## Источник запуска
-chatgpt-handoff
+direct-task
 
 ## Класс задачи
 deep
 
 ## Evidence для класса задачи
-- keyword-hit: audit
-- явный reasoning/model override совпал с default profile: deep
+- явный override task_class: deep
+- явный override selected_profile: deep
 
 ## Выбранный профиль
 deep
@@ -39,26 +39,35 @@ manual-ui
 optional
 
 ## Профиль проекта
-unknown-project-profile
+brownfield-without-repo
 
 ## Выбранный сценарий
-00-master-router.md
+brownfield/10-evidence-pack-completion.md
 
 ## Этап pipeline
-done
+field-pilot-fp-02-evidence-pack-completion
 
 ## Артефакты для обновления
-- .chatgpt/codex-input.md
-- .chatgpt/codex-context.md
-- .chatgpt/codex-task-pack.md
+- .chatgpt/task-launch.yaml
+- .chatgpt/direct-task-source.md
+- .chatgpt/direct-task-self-handoff.md
+- .chatgpt/normalized-codex-handoff.md
+- .chatgpt/direct-task-response.md
+- reports/release/2.5-field-pilot-evidence.md
+- reports/release/field-pilot-scenarios/02-brownfield-without-repo.md
+- docs/releases/2.5.1-field-pilot-roadmap.md
+- brownfield/reverse-engineering-summary.md
+- brownfield/gap-register.md
+- .chatgpt/evidence-register.md
+- .chatgpt/reality-check.md
 - .chatgpt/verification-report.md
 - .chatgpt/done-report.md
 
 ## Разрешение handoff
-yes (forbidden)
+no
 
 ## Маршрут defect-capture
-not-required-by-text-signal
+brownfield gap -> structured defect/gap report before remediation planning
 
 ## Правило launch boundary
 Выбор модели и reasoning mode считается надежным только на новом запуске Codex для новой задачи.
@@ -88,10 +97,10 @@ available
 selected_model совпадает с последним сохраненным snapshot repo catalog; перед внешними обещаниями повторите live catalog check
 
 ## Путь launch artifact
-`.chatgpt/codex-input.md`
+`.chatgpt/direct-task-source.md`
 
 ## Опциональная команда строгого запуска
-`./scripts/launch-codex-task.sh --launch-source chatgpt-handoff --task-file .chatgpt/codex-input.md --execute`
+`./scripts/launch-codex-task.sh --launch-source direct-task --task-file .chatgpt/direct-task-source.md --execute`
 
 ## Сценарии для строгого запуска
 - автоматизация
@@ -112,4 +121,27 @@ selected_model совпадает с последним сохраненным s
 - Если новый model ID появился в live catalog, сначала создайте proposal через `scripts/check-codex-model-catalog.py --write-proposal`; promotion profile mapping требует ручного review.
 
 ## Текст задачи
-audit: проверить repo на остаточный английский человекочитаемый слой
+task_class: deep
+selected_profile: deep
+project_profile: brownfield-without-repo
+selected_scenario: brownfield/10-evidence-pack-completion.md
+pipeline_stage: field-pilot-fp-02-evidence-pack-completion
+handoff_allowed: no
+artifacts_to_update:
+  - .chatgpt/task-launch.yaml
+  - .chatgpt/direct-task-source.md
+  - .chatgpt/direct-task-self-handoff.md
+  - .chatgpt/normalized-codex-handoff.md
+  - .chatgpt/direct-task-response.md
+  - reports/release/2.5-field-pilot-evidence.md
+  - reports/release/field-pilot-scenarios/02-brownfield-without-repo.md
+  - docs/releases/2.5.1-field-pilot-roadmap.md
+  - brownfield/reverse-engineering-summary.md
+  - brownfield/gap-register.md
+  - .chatgpt/evidence-register.md
+  - .chatgpt/reality-check.md
+  - .chatgpt/verification-report.md
+  - .chatgpt/done-report.md
+defect_capture_path: brownfield gap -> structured defect/gap report before remediation planning
+
+Продолжить roadmap полевого теста шаблона: закрыть FP-02 Battle brownfield without repo как sanitized field evidence по фактическому OpenClaw+ кейсу (/root/.openclaw + /root/openclaw-plus), обновить release field-pilot evidence и scenario file. Не выдавать synthetic checks за недостающие FP-01/FP-03/FP-04/FP-05; если следующий roadmap шаг требует недоступный real project, зафиксировать blocker/next external boundary в инструкции пользователю.
