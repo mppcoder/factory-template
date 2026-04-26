@@ -4,13 +4,13 @@
 - Task: `FIELD-PILOT-EVIDENCE`
 - Type: release evidence / field validation gap
 - Layer: release documentation, downstream validation, evidence taxonomy
-- Status: partially fixed; roadmap/evidence taxonomy fixed, FP-01/FP-02/FP-03 field evidence retained, FP-04/FP-05 pending
+- Status: fixed; roadmap/evidence taxonomy fixed, FP-01..FP-05 field evidence retained
 
 ## Summary
 
 Release 2.5.0 has repository-controlled GA evidence, but the release-facing documentation initially did not give field pilot evidence its own explicit status, roadmap and pass/fail criteria. This could let readers confuse synthetic smoke, controlled novice scenarios and downstream safe-sync checks with real battle-project proof.
 
-Update on 2026-04-26: FP-01 now has field evidence for real greenfield repo `mppcoder/greenfield-test` at commit `cca68d5`. FP-02 now has sanitized field evidence for a real brownfield without repo OpenClaw+ case, including creation and push of GitHub-backed project repo `mppcoder/openclaw-brownfield` at commit `7b3d1a4`. FP-03 now has brownfield-with-repo audit evidence on `mppcoder/openclaw-brownfield` at commit `3c026fd`. The overall field pilot is still partial because FP-04 and FP-05 remain pending.
+Update on 2026-04-26: FP-01 now has field evidence for real greenfield repo `mppcoder/greenfield-test` at commit `cca68d5`. FP-02 now has sanitized field evidence for a real brownfield without repo OpenClaw+ case, including creation and push of GitHub-backed project repo `mppcoder/openclaw-brownfield` at commit `7b3d1a4`. FP-03 now has brownfield-with-repo audit evidence on `mppcoder/openclaw-brownfield` at commit `3c026fd`. FP-04 and FP-05 now have same-lineage downstream sync evidence on `mppcoder/openclaw-brownfield` at commits `1826f07` and `2dc6515`. The field pilot is now complete: `5/5`.
 
 ## Reproduction
 
@@ -29,7 +29,7 @@ Update on 2026-04-26: FP-01 now has field evidence for real greenfield repo `mpp
 - Repo-controlled evidence exists for novice smoke, controlled pilot checklist, validators and downstream safe-sync dry-run/apply/rollback checks.
 - FP-01 now records a completed real greenfield launch-path run and created project repo.
 - FP-02 now records a completed real sanitized brownfield without repo run and created project repo.
-- No repository artifact currently records completed FP-04 or FP-05 downstream sync field pilot runs.
+- Repository artifacts now record completed FP-04 and FP-05 downstream sync field pilot runs.
 - `CURRENT_FUNCTIONAL_STATE.md` already lists real greenfield/brownfield checks and production feedback as not closed, but the release evidence package lacks a dedicated field pilot roadmap and scenario checklist.
 
 ## Impact
@@ -49,8 +49,8 @@ Update on 2026-04-26: FP-01 now has field evidence for real greenfield repo `mpp
 1. Add `docs/releases/2.5.1-field-pilot-roadmap.md`.
 2. Add `reports/release/2.5-field-pilot-evidence.md`.
 3. Add field scenario checklists under `reports/release/field-pilot-scenarios/`.
-4. Update release docs to state that 2.5.0 GA is repo-controlled, while field proof is pending for 2.5.1 follow-up.
-5. Keep `TEST_REPORT.md` honest: only executed field scenarios are claimed; missing waves remain pending.
+4. Update release docs to state that 2.5.0 GA is repo-controlled, while field proof is tracked separately as 2.5.1 follow-up.
+5. Keep `TEST_REPORT.md` honest: only executed field scenarios are claimed.
 
 ## Verification
 
@@ -58,6 +58,4 @@ Update on 2026-04-26: FP-01 now has field evidence for real greenfield repo `mpp
 
 ## Остаточный статус
 
-Остается active follow-up для:
-- FP-04 downstream sync cycle 1;
-- FP-05 downstream sync cycle 2.
+Active follow-up for the original 2.5.1 field pilot roadmap is closed.

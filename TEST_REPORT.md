@@ -72,7 +72,7 @@ Blocker report: `reports/bugs/2026-04-26-25-ga-readiness-gap.md`.
 
 ## Field pilot evidence / полевая проверка
 
-Статус field evidence на `2026-04-26`: `partial-field-evidence`.
+Статус field evidence на `2026-04-26`: `completed-field-evidence`.
 
 Что реально проверено: repo-controlled GA evidence, controlled novice scenarios, validators, `MATRIX_TEST.sh` и synthetic downstream safe-sync checks.
 
@@ -83,13 +83,13 @@ Blocker report: `reports/bugs/2026-04-26-25-ga-readiness-gap.md`.
 - Created project repo: `/projects/openclaw-brownfield`, remote `https://github.com/mppcoder/openclaw-brownfield`, latest commit `7b3d1a4`.
 - FP-03 `Battle brownfield with repo` выполнен на existing GitHub-backed brownfield repo `mppcoder/openclaw-brownfield`, latest audit commit `3c026fd`.
 - Retained artifacts: `/projects/openclaw-brownfield/brownfield/repo-audit.md`, `system-inventory.md`, `as-is-architecture.md`, `change-map.md`, `risks-and-constraints.md`.
+- FP-04 `Downstream sync cycle 1` выполнен на той же lineage `mppcoder/openclaw-brownfield`, evidence commit `1826f07`.
+- FP-05 `Downstream sync cycle 2` выполнен на той же lineage `mppcoder/openclaw-brownfield`, evidence commit `2dc6515`.
+- Retained sync artifacts: `/projects/openclaw-brownfield/downstream-sync/cycle-1.md`, `/projects/openclaw-brownfield/downstream-sync/cycle-2.md`.
 - Retained artifacts: `brownfield/system-inventory.md`, `brownfield/repo-audit.md`, `brownfield/as-is-architecture.md`, `brownfield/source-candidate-map.md`, `brownfield/reconstruction-allowlist.md`, `brownfield/reconstruction-denylist.md`, `brownfield/reconstruction-repo-report.md`, `brownfield/change-map.md`, `reports/release/field-pilot-scenarios/02-brownfield-without-repo.md`, `reports/bugs/bug-037-github-repo-creation-misclassified-as-user-step.md`, `reports/bugs/bug-038-generated-project-root-script-verify-all-wrong-root.md`.
 - Runtime remediation не выполнялась; evidence sanitized, secret values не переносились.
 
-Что остается pending и не считается GA evidence:
-
-- downstream sync cycle 1 на real downstream lineage;
-- downstream sync cycle 2 на той же lineage.
+Все пять field pilot scenarios выполнены; completed field proof остается post-GA evidence и не переписывает исходную repo-controlled природу решения `2.5.0 GA Ready`.
 
 Полевой roadmap: `docs/releases/2.5.1-field-pilot-roadmap.md`.
 Полевой evidence register: `reports/release/2.5-field-pilot-evidence.md`.
@@ -203,13 +203,13 @@ Evidence / quality / DoD до смыслового наполнения арте
 - документальные intent signals сейчас реализованы только для `release`, а не для всех фаз.
 - document intent signals сейчас реализованы для `release` и `bugfix-drift`, но ещё не покрывают возможные более тонкие подфазы внутри controlled fixes.
 - phase-aware export/reference packs остаются вспомогательным слоем и не заменяют чтение сценариев из GitHub repo.
-- field evidence для двух downstream sync cycles пока pending; synthetic smoke и controlled pilot не смешиваются с field proof.
+- field evidence для двух downstream sync cycles завершен на same-lineage repo `mppcoder/openclaw-brownfield`; synthetic smoke и controlled pilot не смешиваются с field proof.
 
 ## Открытые вопросы
 - По bug set `bug-026/027/028` критичных открытых дефектов после remediation не осталось.
 - Follow-up для будущего улучшения (не blocker текущего RC): расширить novice long-flow с synthetic smoke до более предметных domain сценариев в downstream проектах.
 - GA blocker `reports/bugs/2026-04-26-25-ga-readiness-gap.md` закрыт после добавления KPI evidence.
-- Field pilot для `2.5.1-field-pilot` должен выполнить пять pending scenarios из `reports/release/field-pilot-scenarios/`.
+- Field pilot для `2.5.1-field-pilot` выполнил пять scenarios из `reports/release/field-pilot-scenarios/`.
 
 ## Статус CI baseline
 - Статус: `green` (GitHub Actions run `24840192862`, 2026-04-23: `verify-baseline` = success, `release-bundle-dry-run` = success; локально подтверждено 2026-04-26 через `verify-all.sh ci`).

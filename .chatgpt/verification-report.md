@@ -37,7 +37,7 @@
 - `work/features/first-feature` создан как first task workspace.
 - `/projects/openclaw-brownfield/src/openclaw-plus` содержит sanitized reconstruction из `/root/openclaw-plus`.
 - Raw `/root/.openclaw` и raw `/etc/openclaw-plus.env` не перенесены.
-- Общий field pilot status стал `partial-field-evidence`, `3/5`; FP-03 помечен пройденным на `mppcoder/openclaw-brownfield` commit `3c026fd`, FP-04/FP-05 остаются pending.
+- Общий field pilot status стал `completed-field-evidence`, `5/5`; FP-03 помечен пройденным на `mppcoder/openclaw-brownfield` commit `3c026fd`, FP-04/FP-05 пройдены на той же lineage commits `1826f07` и `2dc6515`.
 - Generated/dependency zones исключены через denylist: `.venvs`, `node_modules`, `__pycache__`, `var`, logs, sqlite, jsonl.
 - `render_direct_task_response` теперь генерирует publishable direct-task response с `## Handoff в Codex`, continuation rule и closeout instruction rule.
 - `validate-codex-routing.py` закрепляет запрет остановки на self-handoff и требование `## Инструкция пользователю` / `Внешних действий не требуется.`.
@@ -60,7 +60,9 @@
 - `git -C /projects/greenfield-test status --short --branch`: clean on `main...origin/main`.
 - `bash scripts/verify-all.sh` в `/projects/openclaw-brownfield` после FP-03 audit update: прошла.
 - `git -C /projects/openclaw-brownfield status --short --branch`: clean on `main...origin/main`.
-- `git -C /projects/openclaw-brownfield rev-parse --short HEAD`: `3c026fd`.
+- `git -C /projects/openclaw-brownfield rev-parse --short HEAD` после FP-03 audit update: `3c026fd`.
+- FP-04 export/apply/rollback cycle: прошел; rollback restored `2`, missing backups `0`, snapshot restored `true`; evidence commit `1826f07`.
+- FP-05 export/apply/rollback cycle: прошел; cycle-1 evidence preserved; rollback restored `2`, missing backups `0`, snapshot restored `true`; evidence commit `2dc6515`.
 - `bash template-repo/scripts/verify-all.sh` в `/projects/factory-template`: прошла, `VERIFY-ALL ПРОЙДЕН (full)`.
 
 ## Итоговый вывод
@@ -69,4 +71,5 @@
 - Недостающий repo creation + GitHub remote step выполнен: `https://github.com/mppcoder/openclaw-brownfield`, latest commit `7b3d1a4`.
 - Roadmap продвинут до FP-01: `https://github.com/mppcoder/greenfield-test`, latest commit `cca68d5`.
 - Roadmap продвинут до FP-03: `https://github.com/mppcoder/openclaw-brownfield`, latest audit commit `3c026fd`.
+- Roadmap завершен до FP-05: `https://github.com/mppcoder/openclaw-brownfield`, latest downstream sync evidence commit `2dc6515`.
 - Runtime OpenClaw не изменялся.

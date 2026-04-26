@@ -25,8 +25,10 @@
 - Исправлен generated `scripts/verify-all.sh` для downstream root-level launch.
 - Создан и запушен FP-01 greenfield repo `https://github.com/mppcoder/greenfield-test`, latest commit `cca68d5`.
 - В FP-01 project создан first feature workspace `work/features/first-feature`.
-- Общий field pilot register обновлен до `partial-field-evidence`, `3/5`.
+- Общий field pilot register обновлен до `completed-field-evidence`, `5/5`.
 - FP-03 brownfield-with-repo audit выполнен на `https://github.com/mppcoder/openclaw-brownfield`, latest audit commit `3c026fd`.
+- FP-04 downstream sync cycle 1 выполнен на той же lineage, evidence commit `1826f07`.
+- FP-05 downstream sync cycle 2 выполнен на той же lineage, evidence commit `2dc6515`.
 - Созданы reconstruction allowlist, denylist и change-map.
 - Исправлен генератор `render_direct_task_response`.
 - Усилен `validate-codex-routing.py`.
@@ -53,6 +55,8 @@
 - `reports/release/field-pilot-scenarios/02-brownfield-without-repo.md`
 - `reports/release/field-pilot-scenarios/01-greenfield-battle-project.md`
 - `reports/release/field-pilot-scenarios/03-brownfield-with-repo.md`
+- `reports/release/field-pilot-scenarios/04-downstream-sync-cycle-1.md`
+- `reports/release/field-pilot-scenarios/05-downstream-sync-cycle-2.md`
 - `reports/release/2.5-field-pilot-evidence.md`
 - `docs/releases/2.5.1-field-pilot-roadmap.md`
 - `docs/releases/2.5-success-metrics.md`
@@ -89,4 +93,4 @@
 - FP-02 roadmap шаг выполнен и сохранен как field evidence с фактическим repo creation.
 - GitHub-backed repo проекта: `https://github.com/mppcoder/openclaw-brownfield`, latest commit `7b3d1a4`.
 - Greenfield roadmap repo: `https://github.com/mppcoder/greenfield-test`, latest commit `cca68d5`.
-- Следующие roadmap шаги требуют downstream sync cycle 1 и cycle 2 на одной lineage для FP-04/FP-05; без них нельзя честно закрыть full field proof.
+- Field pilot roadmap FP-01..FP-05 закрыт; внешних действий для текущего roadmap не осталось.

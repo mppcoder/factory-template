@@ -119,5 +119,5 @@
 - [x] FP-01 battle greenfield project executed and evidence retained.
 - [x] FP-02 battle brownfield without repo executed, GitHub repo `mppcoder/openclaw-brownfield` pushed at commit `7b3d1a4`, and evidence retained.
 - [x] FP-03 battle brownfield with repo executed on `mppcoder/openclaw-brownfield` commit `3c026fd` and evidence retained.
-- [ ] FP-04 downstream sync cycle 1 executed and evidence retained.
-- [ ] FP-05 downstream sync cycle 2 executed on same lineage and evidence retained.
+- [x] FP-04 downstream sync cycle 1 executed on `mppcoder/openclaw-brownfield` commit `1826f07` and evidence retained.
+- [x] FP-05 downstream sync cycle 2 executed on same lineage commit `2dc6515` and evidence retained.
