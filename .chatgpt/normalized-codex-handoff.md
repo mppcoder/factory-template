@@ -7,8 +7,8 @@ chatgpt-handoff
 deep
 
 ## Evidence для класса задачи
-- keyword hit: audit
-- explicit reasoning/model override matched default profile: deep
+- keyword-hit: audit
+- явный reasoning/model override совпал с default profile: deep
 
 ## Выбранный профиль
 deep
@@ -29,7 +29,11 @@ manual-ui
 - Откройте новый чат/окно Codex в VS Code extension.
 - Вручную выберите model `gpt-5.5` и reasoning `high` в picker.
 - Только после этого вставьте handoff.
+- Codex должен отвечать пользователю на русском языке; английский допустим только для technical literal values.
 - Уже открытая live session не считается надежным auto-switch boundary.
+
+## Язык ответа Codex
+Русский. Английский допустим только для technical literal values: команды, пути, YAML/JSON keys, model IDs и route fields.
 
 ## Строгий режим запуска
 optional

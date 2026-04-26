@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 ### Добавлено
+- bug report `reports/bugs/2026-04-26-handoff-codex-language-leak.md` для повторной утечки английского handoff/ответов Codex.
+- mandatory language contract in generated Codex handoff: `Язык ответа Codex: русский`.
 - ADR `docs/decisions/2026-04-26-project-core-producer-layer-and-brownfield-transition.md` фиксирует единый lifecycle core, factory producer layer и обязательный brownfield -> greenfield conversion.
 - `validate-brownfield-transition.py` и `validate-greenfield-conversion.py` добавлены в template validators и `verify-all.sh quick`.
 - `docs/brownfield-to-greenfield-transition.md` описывает without-repo и with-repo transition paths, conversion gates и done rule.
@@ -13,6 +15,7 @@
 - Downstream sync model теперь явно исключает `factory-producer-owned` paths и защищает brownfield historical evidence.
 
 ### Исправлено
+- `create-codex-task-pack.py`, `codex_task_router.py`, `validate-handoff-response-format.py`, `validate-handoff-language.py` теперь блокируют англоязычные labels `Repo:`, `Goal:`, `Entry point:`, `Scope:` и требуют прямую инструкцию Codex отвечать по-русски.
 - зафиксирован и исправлен reusable architecture defect: brownfield adoption больше не может считаться финальным project class без conversion или blocker.
 - зафиксирован и исправлен `bug-034`: финальный closeout теперь должен содержать `Рекомендация по внешним действиям` с явным статусом для factory ChatGPT Project, downstream sync, downstream ChatGPT Project и Sources fallback.
 

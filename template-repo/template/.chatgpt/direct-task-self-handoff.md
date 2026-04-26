@@ -1,52 +1,55 @@
-# Direct Task Self-Handoff / self-handoff прямой задачи
+# Self-handoff прямой задачи
 
-## Launch source / источник запуска
+## Источник запуска
 <!-- direct-task -->
 
-## Task class / класс задачи
+## Класс задачи
 <!-- quick / build / deep / review -->
 
-## Selected profile / выбранный профиль
+## Выбранный профиль
 <!-- quick / build / deep / review -->
 
-## Selected model / выбранная модель
+## Выбранная модель
 <!-- e.g. gpt-5.4 -->
 
-## Selected reasoning effort / выбранный reasoning effort
+## Выбранное reasoning effort
 <!-- low / medium / high -->
 
-## Apply mode / режим применения
+## Режим применения
 <!-- manual-ui -->
 
-## Manual UI apply / ручное применение в UI
-<!-- new chat/window, manual picker selection, then continue -->
+## Ручное применение в UI
+<!-- новый чат/окно, ручной выбор model/reasoning в picker, затем продолжение работы -->
 
-## Strict launch mode / строгий режим запуска
+## Язык ответа Codex
+<!-- русский; английский допустим только для technical literal values -->
+
+## Строгий режим запуска
 <!-- optional -->
 
-## Project profile / профиль проекта
+## Профиль проекта
 <!-- from .chatgpt/project-profile.yaml -->
 
-## Selected scenario / выбранный сценарий
+## Выбранный сценарий
 <!-- first scenario chosen from scenario-pack -->
 
-## Pipeline stage / этап pipeline
+## Этап pipeline
 <!-- current stage -->
 
-## Artifacts to update / артефакты для обновления
+## Артефакты для обновления
 <!-- list required artifacts -->
 
-## Handoff allowed / handoff разрешен
+## Handoff разрешен
 <!-- yes/no + policy -->
 
-## Defect capture path / путь фиксации дефекта
+## Путь фиксации дефекта
 <!-- reproduce -> evidence -> bug report -> classification -> feedback -> remediation -->
 
-## Optional strict launch command / опциональная strict launch command
+## Опциональная strict launch command
 <!-- launch command only when needed for strict routing -->
 
-## Task payload / payload задачи
+## Payload задачи
 <!-- normalized direct task text -->
 
-## Visible response requirement / требование видимого ответа
+## Требование видимого ответа
 <!-- self-handoff должен быть явно показан пользователю в первом substantive ответе Codex до remediation -->

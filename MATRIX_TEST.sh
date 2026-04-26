@@ -125,6 +125,8 @@ assert_pass 'factory-bugflow' validate-codex-task-pack.py "$ROOT/template-repo/s
 assert_pass 'factory-bugflow' validate-codex-routing.py "$ROOT/template-repo/scripts/validate-codex-routing.py" "$P"
 assert_pass 'factory-bugflow' validate-tree-contract.py "$ROOT/template-repo/scripts/validate-tree-contract.py" "$P"
 assert_pass 'factory-bugflow' validate-handoff-response-format.py "$ROOT/template-repo/scripts/validate-handoff-response-format.py" "$P/.chatgpt/handoff-response.md"
+assert_pass 'factory-bugflow' validate-handoff-language.py "$ROOT/template-repo/scripts/validate-handoff-language.py" "$P/.chatgpt/handoff-response.md"
+assert_fail 'factory-bugflow' 'reject-english-handoff-labels' bash -lc "printf '%s\n' '## Handoff в Codex' 'Repo: demo' 'Goal: do work' | '$ROOT/template-repo/scripts/validate-handoff-language.py' -"
 assert_pass 'factory-bugflow' boundary-actions.md test -f "$P/.chatgpt/boundary-actions.md"
 assert_pass 'factory-bugflow' validate-defect-capture.py "$ROOT/template-repo/scripts/validate-defect-capture.py" "$P"
 assert_pass 'factory-bugflow' validate-alignment.py "$ROOT/template-repo/scripts/validate-alignment.py" "$P"

@@ -50,6 +50,7 @@
 - novice E2E теперь фиксирует duration и manual intervention count, а `validate-25-ga-kpi-evidence.py` валидирует full-KPI evidence перед `ga_ready: true`
 - handoff source files и validator `validate-codex-task-pack.py` теперь явно требуют фиксировать приоритет repo rules при передаче задачи в Codex
 - handoff layer теперь явно запрещает выдачу handoff через файл или несколькими блоками: пользователю разрешён только один цельный блок для вставки в Codex
+- handoff layer теперь машинно требует language contract: generated handoff содержит `Язык ответа Codex: русский`, а Codex должен отвечать пользователю по-русски
 - generated project tooling теперь включает validator `validate-handoff-response-format.py`, который проверяет сам markdown-ответ на single-block handoff и запрещает file-based handoff patterns
 - task-based profile/model selection для Codex теперь вынесен в executable launch layer: named profiles, router scripts и launch log на границе новой задачи
 - completion/handoff layer теперь выдает отдельный executable launch boundary и не подменяет новый task launch понятием "новый чат"

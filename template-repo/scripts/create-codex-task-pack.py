@@ -110,6 +110,9 @@ def main() -> int:
 Новый чат + вставка handoff и executable launcher path — не одно и то же.
 Уже открытая live session не является надежным auto-switch механизмом.
 
+## Язык ответа Codex
+Русский. Codex должен отвечать пользователю по-русски; английский допустим только для technical literal values: команды, пути, YAML/JSON keys, model IDs и route fields.
+
 ## Опциональная команда строгого запуска
 {launch.get('launch_command', 'не определен')}
 
@@ -308,6 +311,7 @@ def main() -> int:
 - Финальный ответ по внутренне закрытому repo change должен назвать commit hash / sync status или `no-op`.
 - Человекочитаемые заголовки, инструкции, отчеты и closeout-тексты должны быть на русском языке; английский допустим только для технических идентификаторов, команд, файлов, ключей конфигурации и literal values.
 - Upstream ChatGPT-generated handoff в `.chatgpt/codex-input.md` тоже должен быть на русском в человекочитаемом слое; англоязычные разделы `Goal`, `Hard constraints`, `Required implementation`, `Verification commands`, `Completion requirements` считаются language-contract defect.
+- Codex обязан отвечать пользователю на русском языке. Английский допустим только для technical literal values: команды, пути, ключи конфигурации, model IDs и route fields.
 - Troubleshooting sticky state:
   - если пользователь открыл случайную или уже существующую Codex chat-сессию и просто вставил handoff, profile/model/reasoning могли не переключиться;
   - для интерактивного процесса сначала закройте устаревшую сессию, откройте новую и вручную проверьте picker;
@@ -362,10 +366,11 @@ def main() -> int:
 ## Handoff в Codex
 
 ```text
-Repo: {root.name}
+Репозиторий: {root.name}
 Цель: выполнить текущий handoff по проекту {root.name}.
+Язык ответа Codex: русский. Отвечай пользователю по-русски; английский оставляй только для technical literal values: команды, пути, YAML/JSON keys, model IDs и route fields.
 Приоритет: сначала правила repo (`AGENTS`, runbook, scenario-pack, policy files), затем общие инструкции без конфликта с ними.
-Entry point: {entrypoint}
+Точка входа: {entrypoint}
 Источник запуска: {launch.get('launch_source', 'chatgpt-handoff')}
 Класс задачи: {launch.get('task_class', 'build')}
 Выбранный профиль: {launch.get('selected_profile', 'build')}
@@ -383,7 +388,7 @@ Entry point: {entrypoint}
 Правило live session: уже открытая live session = non-canonical fallback; не обещать auto-switch.
 Этап pipeline: {launch.get('pipeline_stage', 'unknown-stage')}
 Разрешение handoff: {launch.get('handoff_allowed', 'unknown')}
-Scope: работать только в пределах этого repo и связанных project artifacts.
+Область работы: работать только в пределах этого repo и связанных project artifacts.
 Проверка: использовать актуальные validators, verification-report.md и done-report.md.
 ```
 

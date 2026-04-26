@@ -91,6 +91,8 @@ def main() -> int:
     ensure_contains(pack, "## Режим применения", errors, "codex-task-pack.md")
     ensure_contains(pack, "## Строгий режим запуска", errors, "codex-task-pack.md")
     ensure_contains(pack, "## Ручной UI по умолчанию", errors, "codex-task-pack.md")
+    ensure_contains(pack, "## Язык ответа Codex", errors, "codex-task-pack.md")
+    ensure_contains(pack, "Codex должен отвечать пользователю по-русски", errors, "codex-task-pack.md")
     ensure_contains(pack, "## Опциональная команда строгого запуска", errors, "codex-task-pack.md")
     ensure_contains(pack, "## Прямая команда Codex за launcher", errors, "codex-task-pack.md")
     ensure_contains(pack, "## Выбранный сценарий", errors, "codex-task-pack.md")
@@ -145,6 +147,7 @@ def main() -> int:
     ensure_contains(boundary, "workspace-packs/factory-ops/apply-template-patch.sh", errors, "boundary-actions.md")
     ensure_contains(boundary, "выполняет Codex внутри repo", errors, "boundary-actions.md")
     ensure_contains(boundary, "Troubleshooting sticky state", errors, "boundary-actions.md")
+    ensure_contains(boundary, "Codex обязан отвечать пользователю на русском языке", errors, "boundary-actions.md")
     if "описание не задано" in boundary:
         errors.append("boundary-actions.md содержит незаполненные impact descriptions")
     for required_file in ["`codex-input.md`", "`codex-context.md`", "`codex-task-pack.md`", "`boundary-actions.md`"]:
@@ -250,6 +253,8 @@ def main() -> int:
     ensure_contains(handoff_response, "## Применение в Codex UI", errors, "handoff-response.md")
     ensure_contains(handoff_response, "## Строгий launch mode (опционально)", errors, "handoff-response.md")
     ensure_contains(handoff_response, "## Handoff в Codex", errors, "handoff-response.md")
+    ensure_contains(handoff_response, "Язык ответа Codex: русский", errors, "handoff-response.md")
+    ensure_contains(handoff_response, "Отвечай пользователю по-русски", errors, "handoff-response.md")
     ensure_contains(handoff_response, "manual-ui", errors, "handoff-response.md")
     ensure_contains(handoff_response, "launch-codex-task.sh", errors, "handoff-response.md")
     ensure_contains(handoff_response, "новый чат + вставка handoff", errors, "handoff-response.md")

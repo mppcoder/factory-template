@@ -440,6 +440,7 @@ def render_normalized_handoff(record: dict, task_text: str, title: str) -> str:
             "- Откройте новый чат/окно Codex в VS Code extension.",
             f"- Вручную выберите model `{launch.get('selected_model', '')}` и reasoning `{launch.get('selected_reasoning_effort', '')}` в picker.",
             "- Только после этого вставьте handoff.",
+            "- Codex должен отвечать пользователю на русском языке; английский допустим только для technical literal values.",
             "- Уже открытая live session не считается надежным auto-switch boundary.",
         ]
     )
@@ -475,6 +476,9 @@ def render_normalized_handoff(record: dict, task_text: str, title: str) -> str:
 
 ## Ручное применение через UI
 {manual_ui_lines}
+
+## Язык ответа Codex
+Русский. Английский допустим только для technical literal values: команды, пути, YAML/JSON keys, model IDs и route fields.
 
 ## Строгий режим запуска
 {launch.get('strict_launch_mode', '')}
@@ -552,6 +556,7 @@ def render_direct_task_response(record: dict, task_text: str) -> str:
             "- Откройте новый чат/окно Codex.",
             f"- Вручную выберите model `{launch.get('selected_model', '')}` и reasoning `{launch.get('selected_reasoning_effort', '')}` в picker.",
             "- Только после этого продолжайте работу по self-handoff.",
+            "- Codex должен отвечать пользователю на русском языке; английский допустим только для technical literal values.",
             "- Уже открытая live session не является надежным auto-switch boundary.",
         ]
     )
@@ -590,6 +595,9 @@ direct-task
 
 ## Ручное применение через UI
 {manual_ui_lines}
+
+## Язык ответа Codex
+Русский. Английский допустим только для technical literal values: команды, пути, YAML/JSON keys, model IDs и route fields.
 
 ## Строгий режим запуска
 {launch.get('strict_launch_mode', '')}

@@ -130,10 +130,17 @@ def main() -> int:
     if handoff_text:
         if "```" not in handoff_text:
             errors.append("Внутри handoff-блока ожидается fenced code block для вставки")
+        if "Язык ответа Codex: русский" not in handoff_text:
+            errors.append("Handoff должен явно требовать: `Язык ответа Codex: русский`")
+        if "Отвечай пользователю по-русски" not in handoff_text:
+            errors.append("Handoff должен явно требовать русскоязычные ответы Codex пользователю")
         if re.search(r"(?mi)^##\s+Инструкция пользователю\s*$", handoff_text):
             errors.append("`## Инструкция пользователю` не должен попадать внутрь handoff-блока")
         if re.search(r"(?mi)^##\s+", handoff_text.replace(HANDOFF_HEADING, "", 1)):
             errors.append("Внутри handoff-блока найден дополнительный `##`-заголовок; handoff должен быть цельным")
+        for label in ("Repo", "Goal", "Entry point", "Scope"):
+            if re.search(rf"(?m)^{label}\s*:", handoff_text):
+                errors.append(f"Внутри handoff-блока найден англоязычный label `{label}:`; используйте русский label")
 
     for pattern in FORBIDDEN_PATTERNS:
         if re.search(pattern, lowered, flags=re.IGNORECASE | re.MULTILINE):

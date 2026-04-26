@@ -1,12 +1,12 @@
 launch:
-  timestamp_utc: '2026-04-25T18:52:54+00:00'
+  timestamp_utc: '2026-04-26T09:21:18+00:00'
   launch_unit: new-task-launch
   launch_source: chatgpt-handoff
   router_layer: executable
   task_class: deep
   task_class_reasons:
-  - 'keyword hit: audit'
-  - 'explicit reasoning/model override matched default profile: deep'
+  - 'keyword-hit: audit'
+  - 'явный reasoning/model override совпал с default profile: deep'
   selected_profile: deep
   selected_model: gpt-5.5
   selected_reasoning_effort: high

@@ -52,6 +52,16 @@ def main() -> int:
         if phrase in lowered:
             errors.append(f"англоязычная handoff phrase `{phrase}`")
 
+    for label in ("repo", "goal", "entry point", "scope"):
+        if re.search(rf"(?mi)^\s*{re.escape(label)}\s*:", text):
+            errors.append(f"англоязычный handoff label `{label}:`")
+
+    if "## handoff в codex" in lowered:
+        if "язык ответа codex: русский" not in lowered:
+            errors.append("handoff не фиксирует обязательный русский язык ответа Codex")
+        if "отвечай пользователю по-русски" not in lowered:
+            errors.append("handoff не содержит прямую инструкцию Codex отвечать пользователю по-русски")
+
     if errors:
         print("ЯЗЫК HANDOFF НЕВАЛИДЕН")
         print(f"Источник: {source}")

@@ -8,6 +8,12 @@
 - Добавлены validators для brownfield transition и greenfield conversion; они подключены к quick verify и matrix.
 - Sync manifest защищает brownfield history/project-owned zones и исключает factory-producer-owned paths из battle project sync.
 
+## Не выпущено - language contract для handoff
+
+- Generated handoff теперь явно содержит `Язык ответа Codex: русский`.
+- Codex handoff instructs: отвечать пользователю по-русски, английский оставлять только для technical literal values.
+- Validators блокируют англоязычные labels `Repo:`, `Goal:`, `Entry point:`, `Scope:` в copy-paste handoff.
+
 ## 2.5.0 - 2026-04-26
 
 ### Решение release

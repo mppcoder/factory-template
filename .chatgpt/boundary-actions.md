@@ -87,6 +87,7 @@
 - Финальный ответ по внутренне закрытому repo change должен назвать commit hash / sync status или `no-op`.
 - Человекочитаемые заголовки, инструкции, отчеты и closeout-тексты должны быть на русском языке; английский допустим только для технических идентификаторов, команд, файлов, ключей конфигурации и literal values.
 - Upstream ChatGPT-generated handoff в `.chatgpt/codex-input.md` тоже должен быть на русском в человекочитаемом слое; англоязычные разделы `Goal`, `Hard constraints`, `Required implementation`, `Verification commands`, `Completion requirements` считаются language-contract defect.
+- Codex обязан отвечать пользователю на русском языке. Английский допустим только для technical literal values: команды, пути, ключи конфигурации, model IDs и route fields.
 - Troubleshooting sticky state:
   - если пользователь открыл случайную или уже существующую Codex chat-сессию и просто вставил handoff, profile/model/reasoning могли не переключиться;
   - для интерактивного процесса сначала закройте устаревшую сессию, откройте новую и вручную проверьте picker;

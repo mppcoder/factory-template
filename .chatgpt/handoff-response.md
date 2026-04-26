@@ -26,10 +26,11 @@
 ## Handoff в Codex
 
 ```text
-Repo: factory-template
+Репозиторий: factory-template
 Цель: выполнить текущий handoff по проекту factory-template.
+Язык ответа Codex: русский. Отвечай пользователю по-русски; английский оставляй только для technical literal values: команды, пути, YAML/JSON keys, model IDs и route fields.
 Приоритет: сначала правила repo (`AGENTS`, runbook, scenario-pack, policy files), затем общие инструкции без конфликта с ними.
-Entry point: 00-master-router.md
+Точка входа: 00-master-router.md
 Источник запуска: chatgpt-handoff
 Класс задачи: deep
 Выбранный профиль: deep
@@ -47,7 +48,7 @@ Entry point: 00-master-router.md
 Правило live session: уже открытая live session = non-canonical fallback; не обещать auto-switch.
 Этап pipeline: done
 Разрешение handoff: yes (forbidden)
-Scope: работать только в пределах этого repo и связанных project artifacts.
+Область работы: работать только в пределах этого repo и связанных project artifacts.
 Проверка: использовать актуальные validators, verification-report.md и done-report.md.
 ```
 

@@ -20,6 +20,16 @@ TEST_REPORT.md is verification evidence, not the canonical release-status source
 - `bash template-repo/scripts/verify-all.sh ci` — pass.
 - `bash PRE_RELEASE_AUDIT.sh` — pass.
 
+## Проверка language-contract для handoff
+
+Дата: `2026-04-26`.
+
+- `python3 template-repo/scripts/validate-handoff-response-format.py .chatgpt/handoff-response.md` — pass.
+- `python3 template-repo/scripts/validate-handoff-language.py .chatgpt/handoff-response.md` — pass.
+- `python3 template-repo/scripts/validate-codex-task-pack.py .` — pass.
+- `python3 template-repo/scripts/validate-human-language-layer.py .` — pass, active findings `0`.
+- Negative matrix case `reject-english-handoff-labels` blocks `Repo:` / `Goal:` labels in copy-paste handoff.
+
 Conversion gates enforced:
 
 - repo-first core and master router present;

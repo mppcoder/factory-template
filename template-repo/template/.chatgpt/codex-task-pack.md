@@ -1,6 +1,6 @@
 # Task pack для Codex
 
-## Change ID / идентификатор изменения
+## Идентификатор изменения
 <!-- Укажите change.id -->
 
 ## Заголовок
@@ -12,53 +12,56 @@
 ## Режим выполнения
 <!-- manual / hybrid / codex-led -->
 
-## Launch source / источник запуска
+## Источник запуска
 <!-- chatgpt-handoff / direct-task -->
 
-## Task class / класс задачи
+## Класс задачи
 <!-- quick / build / deep / review -->
 
-## Selected profile / выбранный профиль
+## Выбранный профиль
 <!-- quick / build / deep / review -->
 
-## Selected model / выбранная модель
+## Выбранная модель
 <!-- например gpt-5.4 -->
 
-## Selected reasoning effort / выбранный reasoning effort
+## Выбранное reasoning effort
 <!-- low / medium / high -->
 
-## Selected plan mode reasoning effort / reasoning effort для plan mode
+## Выбранное reasoning effort для plan mode
 <!-- low / medium / high / xhigh -->
 
-## Model catalog status / статус model catalog
+## Статус model catalog
 <!-- repo-configured / available / unavailable; live validation comes from codex debug models -->
 
-## Apply mode / режим применения
+## Режим применения
 <!-- manual-ui -->
 
-## Strict launch mode / строгий режим запуска
+## Строгий режим запуска
 <!-- optional -->
 
-## Manual UI default / ручной UI по умолчанию
-<!-- new chat/window, manual picker selection, then paste handoff -->
+## Ручной UI по умолчанию
+<!-- новый чат/окно, ручной выбор model/reasoning в picker, затем вставка handoff -->
 
-## Optional strict launch command / опциональная strict launch command
+## Язык ответа Codex
+<!-- русский; английский допустим только для technical literal values -->
+
+## Опциональная strict launch command
 <!-- launch command only when needed for strict routing -->
 
-## Project profile / профиль проекта
+## Профиль проекта
 <!-- из .chatgpt/project-profile.yaml -->
 
-## Selected scenario / выбранный сценарий
+## Выбранный сценарий
 <!-- активный сценарий -->
 
-## Pipeline stage / этап pipeline
+## Этап pipeline
 <!-- текущий этап -->
 
-## Handoff allowed / handoff разрешен
+## Handoff разрешен
 <!-- yes/no + policy -->
 
-## Defect capture path / путь фиксации дефекта
+## Путь фиксации дефекта
 <!-- defect path или not-required -->
 
-## Handoff input / входной handoff
+## Входной handoff
 <!-- Сведите сюда ключевой handoff input. Человекочитаемый текст должен быть на русском; technical literal values можно не переводить. -->

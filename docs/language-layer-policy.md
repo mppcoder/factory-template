@@ -15,6 +15,14 @@
 
 Правило: заголовки и инструкции пишутся по-русски. Английский допустим как technical literal: команды, пути, YAML/JSON keys, model IDs, product names, established repo terms (`repo-first`, `handoff`, `routing`, `validator`, `release`, `apply`, `preview`) и цитаты внешних интерфейсов.
 
+Handoff в Codex обязан явно содержать правило ответа:
+
+```text
+Язык ответа Codex: русский.
+```
+
+Codex должен отвечать пользователю по-русски. Английский допустим только для technical literal values: команды, пути, YAML/JSON keys, model IDs и route fields.
+
 ## Archival exceptions / архивные исключения
 
 Исторические reports, старые `work/completed`, legacy packs и fixture evidence не переводятся массово задним числом. Они являются evidence records, поэтому сохраняют исходный текст, но должны быть перечислены в `template-repo/language-archive-exceptions.yaml`.

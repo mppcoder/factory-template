@@ -47,6 +47,9 @@ optional
 Новый чат + вставка handoff и executable launcher path — не одно и то же.
 Уже открытая live session не является надежным auto-switch механизмом.
 
+## Язык ответа Codex
+Русский. Codex должен отвечать пользователю по-русски; английский допустим только для technical literal values: команды, пути, YAML/JSON keys, model IDs и route fields.
+
 ## Опциональная команда строгого запуска
 ./scripts/launch-codex-task.sh --launch-source chatgpt-handoff --task-file .chatgpt/codex-input.md --execute
 
