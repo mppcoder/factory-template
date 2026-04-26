@@ -29,3 +29,4 @@
 - [VERIFY] `bash scripts/verify-all.sh` в `/projects/openclaw-brownfield` passed after FP-03 audit artifacts update; `git status --short --branch` clean on `main...origin/main`.
 - [REAL] FP-04 downstream sync cycle 1 executed on `/projects/openclaw-brownfield`; safe apply touched only `template-repo/scenario-pack/00-master-router.md` and `16-done-closeout.md`, rollback restored `2` files with snapshot restore, evidence commit `1826f07`.
 - [REAL] FP-05 downstream sync cycle 2 executed on the same lineage; cycle-1 evidence preserved, rollback restored `2` files with snapshot restore, evidence commit `2dc6515`.
+- [DOC] Свод багов, остановок и сбоев field pilot roadmap для ChatGPT сохранен в `reports/release/2.5-field-pilot-bugs-stops-failures-chatgpt-report.md`.

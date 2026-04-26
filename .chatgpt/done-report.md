@@ -30,6 +30,7 @@
 - FP-04 downstream sync cycle 1 выполнен на той же lineage, evidence commit `1826f07`.
 - FP-05 downstream sync cycle 2 выполнен на той же lineage, evidence commit `2dc6515`.
 - OpenClaw+ repo-local greenfield conversion выполнен, latest pushed commit `1f8fb6d`.
+- Подготовлен ChatGPT-ready свод багов, остановок и сбоев field pilot roadmap.
 - Созданы reconstruction allowlist, denylist и change-map.
 - Исправлен генератор `render_direct_task_response`.
 - Усилен `validate-codex-routing.py`.
@@ -59,6 +60,7 @@
 - `reports/release/field-pilot-scenarios/04-downstream-sync-cycle-1.md`
 - `reports/release/field-pilot-scenarios/05-downstream-sync-cycle-2.md`
 - `reports/release/2.5-field-pilot-evidence.md`
+- `reports/release/2.5-field-pilot-bugs-stops-failures-chatgpt-report.md`
 - `docs/releases/2.5.1-field-pilot-roadmap.md`
 - `docs/releases/2.5-success-metrics.md`
 - `TEST_REPORT.md`
@@ -95,3 +97,4 @@
 - GitHub-backed repo проекта: `https://github.com/mppcoder/openclaw-brownfield`, latest commit `7b3d1a4`.
 - Greenfield roadmap repo: `https://github.com/mppcoder/greenfield-test`, latest commit `cca68d5`.
 - Field pilot roadmap FP-01..FP-05 закрыт; внешних действий для текущего roadmap не осталось.
+- Свод для ChatGPT отчета сохранен в `reports/release/2.5-field-pilot-bugs-stops-failures-chatgpt-report.md`.
