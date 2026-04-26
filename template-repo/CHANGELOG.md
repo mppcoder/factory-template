@@ -1,6 +1,8 @@
 # Журнал изменений шаблона
 
 ## [Unreleased]
+### Исправлено
+- зафиксирован `bug-034`: generated boundary-actions и validator теперь требуют explicit recommendation matrix для внешних действий.
 
 ## [2.5.0] - 2026-04-26
 ### Добавлено

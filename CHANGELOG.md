@@ -1,6 +1,8 @@
 # Журнал изменений фабрики
 
 ## [Unreleased]
+### Исправлено
+- зафиксирован и исправлен `bug-034`: финальный closeout теперь должен содержать `Рекомендация по внешним действиям` с явным статусом для factory ChatGPT Project, downstream sync, downstream ChatGPT Project и Sources fallback.
 
 ## [2.5.0] - 2026-04-26
 ### Добавлено

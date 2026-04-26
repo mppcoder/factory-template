@@ -30,6 +30,18 @@ Internal repo follow-up, включая release-followup, source-pack refresh, e
 9. Пошаговая инструкция по окнам
 10. Что прислать обратно после внешнего шага
 
+Отдельно обязателен подраздел `Рекомендация по внешним действиям`.
+В нем для каждого внешнего contour нужно явно указать:
+- `Рекомендация`: `требуется`, `рекомендуется`, `не требуется`, `опционально` или `только legacy/hybrid fallback`;
+- `Причина`: почему именно такой статус;
+- `Действие пользователя`: точная команда, UI-шаг или фраза `действие не требуется`.
+
+Минимальный набор contour'ов:
+- `factory-template ChatGPT Project instructions`;
+- `downstream/battle repo sync`;
+- `downstream/battle ChatGPT Project instructions`;
+- `Sources fallback`.
+
 Контуры, которые нужно различать явно:
 
 - Обновление repo-first инструкции проекта шаблона в ChatGPT

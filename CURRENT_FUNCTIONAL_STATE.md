@@ -37,6 +37,7 @@
 - completion/handoff layer умеет требовать completion package с affected contours, delete-before-replace и repo-level sync steps для repo-first инструкций и downstream consumers
 - completion/handoff layer теперь явно требует, чтобы обязательный completion package появлялся в том же финальном ответе, а не только после дополнительного запроса пользователя
 - completion/handoff layer теперь различает готовые внешние boundary steps и внутренние prepare/export commands: сборка export artifacts выполняется Codex внутри repo до пользовательского блока
+- completion/handoff layer теперь требует `Рекомендация по внешним действиям` с явным статусом для factory ChatGPT Project, downstream repo sync, downstream ChatGPT Project и Sources fallback
 - repo-first instruction layer для ChatGPT Projects: сценарии читаются прямо из GitHub repo, а не из локально загруженных project artifacts
 - launcher и template docs больше не требуют отдельную project-local staging-конфигурацию
 - beginner-friendly acceptance smoke (`onboarding-smoke/run-novice-e2e.sh`) регулярно воспроизводит greenfield и brownfield novice launch path через wizard
