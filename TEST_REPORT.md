@@ -4,6 +4,23 @@ Status source of truth: `docs/releases/release-scorecard.yaml`.
 Current scorecard state: `2.5.0 GA Ready`.
 TEST_REPORT.md is verification evidence, not the canonical release-status source.
 
+## Проверка external actions closeout
+
+Дата: `2026-04-27`.
+
+Исправлен reusable closeout gap: completion package мог содержать общий `## Инструкция пользователю`, но не давать отдельный actionable реестр внешних действий.
+
+- Добавлен defect report `reports/bugs/2026-04-27-external-actions-closeout-gap.md`.
+- `template-repo/scenario-pack/00-master-router.md` и `16-done-closeout.md` теперь требуют `Реестр внешних действий` для downstream-consumed changes.
+- `template-repo/template/.chatgpt/done-checklist.md` синхронизирован с расширенным generated checklist.
+- `template-repo/scripts/create-codex-task-pack.py` добавляет `Когда выполнять` и `Реестр внешних действий` в boundary/checklist.
+- `template-repo/scripts/validate-codex-task-pack.py` проверяет, что boundary/checklist не регрессируют к общей фразе вместо actionable external action ledger.
+
+Проверки:
+
+- `python3 template-repo/scripts/validate-codex-task-pack.py .` — pass.
+- `bash template-repo/scripts/verify-all.sh quick` — pass.
+
 ## Проверка Artifact Eval Harness
 
 Дата: `2026-04-27`.

@@ -90,6 +90,14 @@ Closeout без handoff допустим только при реальном о
 - downstream repo template sync;
 - downstream/battle ChatGPT Project instructions.
 
+Такой блок должен содержать отдельный `Реестр внешних действий` или эквивалентную таблицу. Для каждого contour обязательно указать:
+- статус: `требуется`, `рекомендуется`, `не требуется`, `опционально` или `только legacy/hybrid fallback`;
+- причину статуса;
+- точное действие пользователя или `действие не требуется`;
+- когда выполнять действие: сейчас, при следующем downstream sync, только для legacy/hybrid fallback или не выполнять.
+
+Общая фраза вроде "downstream sync рекомендуется" без отдельной actionable строки не считается достаточным external boundary closeout.
+
 Для `factory-template ChatGPT Project instruction` по умолчанию ожидается `нет`, если repo/path/entrypoint/короткая repo-first instruction не менялись.
 Отдельное обновление этого contour допустимо только при реальном изменении instruction contract.
 
