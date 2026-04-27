@@ -15,11 +15,13 @@ services:
       - ${BACKUP_PATH:-./backups}:/backups
     networks:
       - app_net
-    entrypoint: ["/bin/sh", "-lc"]
-    command: >
-      mkdir -p /backups &&
-      pg_dump -h db -U "$${POSTGRES_USER}" "$${POSTGRES_DB}" > "/backups/$${POSTGRES_DB}-latest.sql" &&
-      find /backups -type f -name '*.sql' -mtime +"$${BACKUP_RETENTION_DAYS}" -delete
+    entrypoint: ["/bin/sh", "-c"]
+    command:
+      - |
+        set -eu
+        mkdir -p /backups
+        pg_dump -h db -U "$${POSTGRES_USER}" "$${POSTGRES_DB}" > "/backups/$${POSTGRES_DB}-latest.sql"
+        find /backups -type f -name '*.sql' -mtime +"$${BACKUP_RETENTION_DAYS}" -delete
     logging:
       driver: json-file
       options:

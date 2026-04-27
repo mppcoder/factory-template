@@ -4,6 +4,33 @@ Status source of truth: `docs/releases/release-scorecard.yaml`.
 Current scorecard state: `2.5.0 GA Ready`.
 TEST_REPORT.md is verification evidence, not the canonical release-status source.
 
+## Проверка 2.6 runtime proof
+
+Дата: `2026-04-27`.
+
+Approved runtime proof выполнен на VPS `72.56.26.209` в `/projects/factory-template` с preset `production`.
+
+- Pre-deploy env validation — pass, warning only for demo `APP_IMAGE`.
+- Production dry-run — pass.
+- Real deploy — pass.
+- HTTPS healthcheck — pass.
+- Backup run — pass, SQL dump created.
+- Restore test — pass into disposable DB, then dropped.
+- Rollback drill — pass with local candidate tag and rollback to previous image.
+- Sanitized report: `reports/release/2.6-runtime-proof-report.md`.
+- Boundary: `APP_IMAGE=nginx:1.27-alpine`, so this is infrastructure proof, not real application image proof.
+
+Runtime defects remediated:
+
+- `reports/bugs/2026-04-27-runtime-env-user-burden-gap.md`.
+- `reports/bugs/2026-04-27-backup-hook-command-splitting.md`.
+- `reports/bugs/2026-04-27-skip-pull-defeated-by-pull-policy.md`.
+
+Проверки repo после remediation:
+
+- `python3 template-repo/scripts/validate-human-language-layer.py .` — pass, active findings `0`.
+- `bash template-repo/scripts/verify-all.sh quick` — pass на `2026-04-27`.
+
 ## Проверка Plan №3 P3-S5
 
 Дата: `2026-04-27`.

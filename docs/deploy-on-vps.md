@@ -89,12 +89,21 @@ python3 template-repo/scripts/validate-operator-env.py --preset production
 bash template-repo/scripts/deploy-local-vps.sh --yes --preset production
 ```
 
+Чтобы Codex/operator не перекладывал на пользователя non-secret настройки, сначала можно подготовить defaults:
+
+```bash
+python3 template-repo/scripts/prepare-production-env-defaults.py
+```
+
+Скрипт выставит production preset, DB name/user, backup path, `sslip.io` domain для публичного IPv4, `ACME_AGREE=true` и оставит оператору только реальные secrets/manual values: `DB_PASSWORD`, `TLS_EMAIL` и при необходимости настоящий `APP_IMAGE`.
+
 ## Что настраивается через env
 
 Файл: `deploy/.env`
 
 - `OPERATOR_PRESET` — `starter`, `app-db`, `reverse-proxy-tls`, `backup`, `healthcheck`, `production` или список через запятую.
 - `APP_IMAGE` — Docker image приложения.
+- `APP_PULL_POLICY` — policy для получения image при deploy. По умолчанию `always`; для rollback drill с локальным candidate tag можно временно поставить `never`.
 - `APP_CONTAINER_NAME` — имя контейнера.
 - `APP_BIND_ADDRESS` — bind address для app-порта. Для reverse proxy обычно `127.0.0.1`.
 - `APP_PORT` — внешний порт на VPS.

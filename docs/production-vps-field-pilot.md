@@ -60,6 +60,14 @@ Machine-readable label: `Pre-deploy QA gate`.
 
 Pre-deploy QA может дать статус `ready-for-approved-runtime-run`, но не `production-proof-passed`.
 
+Codex/operator helper:
+
+```bash
+python3 template-repo/scripts/prepare-production-env-defaults.py
+```
+
+Он заполняет non-secret defaults и оставляет оператору только секреты/manual values. Не просите пользователя вручную заполнять значения, которые Codex может безопасно вывести на VPS.
+
 ## Этап 1: starter smoke
 
 Use this before production presets when validating a new VPS.

@@ -17,7 +17,7 @@ Production VPS field pilot path подготовлен и частично ав�
 
 No destructive deploy was executed in this remediation. Real VPS deploy, backup restore execution and rollback drill require explicit user approval and runtime VPS access.
 
-P3-S5 status: runtime QA boundary prepared, not executed. Pre-deploy QA, post-deploy QA, sanitized transcript requirements and proof boundaries are now explicit, but real production proof remains pending.
+P3-S5 status: runtime QA boundary prepared. On 2026-04-27 an approved 2.6 runtime proof was executed for production preset infrastructure path on VPS `72.56.26.209`; see `reports/release/2.6-runtime-proof-report.md`.
 
 ## Обновленные артефакты
 
@@ -104,3 +104,12 @@ Done evidence:
 - Backup restore execution.
 - Rollback drill execution and transcript.
 - Sanitized runtime transcript from an approved runtime run.
+
+## 2026-04-27 runtime execution summary
+
+- Production preset deploy: passed.
+- HTTPS healthcheck: passed.
+- Backup run: passed.
+- Restore test: passed.
+- Rollback drill: passed.
+- Boundary: demo `APP_IMAGE=nginx:1.27-alpine`; application-level production proof remains pending until a real app image is deployed.

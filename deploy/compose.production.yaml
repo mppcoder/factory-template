@@ -1,6 +1,6 @@
 services:
   app:
-    pull_policy: always
+    pull_policy: ${APP_PULL_POLICY:-always}
     init: true
     stop_grace_period: 30s
     logging:

@@ -101,6 +101,7 @@
 - Plan №3 P3-S3 расширил Artifact Eval Harness на routing-critical specs/reports: direct self-handoff, normalized handoff boundary, done closeout ledger, downstream sync boundary, production proof boundary и feature-execution-lite final verification negatives
 - Plan №3 P3-S4 провел real `feature-execution-lite` adoption: `work/completed/plan-3-eval-adoption` содержит advanced workspace closeout, done-report, Project Knowledge proposal и downstream-impact evidence
 - Plan №3 P3-S5 подготовил runtime QA boundary для 2.6: pre-deploy QA, post-deploy QA, backup restore, rollback drill, secrets/manual boundary и sanitized runtime transcript requirements documented; real VPS proof не выполнялся
+- 2.6 runtime proof executed on VPS `72.56.26.209` for production preset infrastructure path: deploy, HTTPS healthcheck, backup, disposable restore and rollback drill passed; boundary remains demo `APP_IMAGE=nginx:1.27-alpine`, so real application image proof is still pending
 
 ## Программа 2.5 (release truth)
 - release truth source: `docs/releases/release-scorecard.yaml`
@@ -131,7 +132,7 @@
 - `2.5.1` scope: downstream sync v3 stabilization, field pilot evidence discoverability, closeout/boundary guardrails, optional downstream sync adoption and release-facing docs.
 - `2.6` scope: real production VPS deploy, backup restore, rollback drill and runtime/source-hygiene backlog; expanded artifact eval, one real `feature-execution-lite` adoption and runtime QA boundary preparation are now Plan №3 repo-local evidence.
 - completed proof: `2.5.0` repo-controlled GA evidence, `2.5.1-field-pilot` real project proof, downstream sync v3 synthetic multi-cycle proof.
-- pending external runtime proof: real VPS deploy, real backup restore, real rollback drill, secrets/manual boundary and operator approval.
+- pending external runtime proof: real application image deploy proof. Infrastructure-level VPS deploy, backup restore and rollback drill passed on 2026-04-27 with demo `nginx` image.
 - Plan №3 status: P3-S0 audit captured; P3-S1 task-state-lite, P3-S2 learning patch loop, P3-S3 expanded evals, P3-S4 real adoption and P3-S5 runtime QA boundary preparation implemented; real runtime proof remains external pending.
 - `pavel-molyanov/molyanov-ai-dev` comparison recorded in `docs/releases/post-2.5-gap-register.md`; factory keeps useful spec/project-knowledge/eval ideas but does not import Claude-specific `.claude`, command or TeamCreate assumptions.
 
