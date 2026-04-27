@@ -277,6 +277,8 @@ def main() -> int:
                 errors.append("direct-task response не содержит обязательное упоминание финального блока `## Инструкция пользователю`")
             if "Внешних действий не требуется." not in direct_response_text:
                 errors.append("direct-task response не содержит обязательную формулу для closeout без внешних действий")
+            if "Следующий пользовательский шаг отсутствует; задачи текущего scope выполнены полностью." not in direct_response_text:
+                errors.append("direct-task response не содержит обязательный continuation outcome для fully done closeout")
 
     normalized = root / ".chatgpt" / "normalized-codex-handoff.md"
     if not normalized.exists():

@@ -27,7 +27,7 @@
 Если change затрагивает scenario-pack, launcher, validators, runbooks, codex-task-pack, `.chatgpt` artifacts или другой downstream-consumed template content, сначала определи, есть ли реальные внешние действия пользователя.
 
 Compact default:
-- если внешних действий нет, финальный ответ должен сказать только `Внешних действий не требуется.`;
+- если внешних действий нет, финальный ответ должен сказать `Внешних действий не требуется.` и дать fully-done continuation outcome;
 - если внешние действия есть, `## Инструкция пользователю` перечисляет только то, что пользователь реально должен сделать снаружи Codex;
 - не перечисляй contour'ы со статусом `не требуется`, если пользователь явно не запросил полный audit-style register или это не release/security approval.
 
@@ -118,6 +118,8 @@ Compact default:
 - Если GitHub repo creation действительно заблокирован, `Инструкция пользователю` должна явно указать owner/repo, целевой visibility, точную команду или UI-шаг, ожидаемый remote URL, команду проверки и что прислать обратно.
 - `Инструкция пользователю` не должна подменять внутренний handoff, если internal repo follow-up еще не завершен.
 - Если внешнего шага нет, финальный ответ все равно должен явно сказать, что внешних действий не требуется.
+- Каждый финальный ответ обязан содержать continuation outcome: либо `## Инструкция пользователю` с точным действием для продолжения, либо явную фразу `Следующий пользовательский шаг отсутствует; задачи текущего scope выполнены полностью.`
+- Если существует будущий roadmap stage, но он не actionable сейчас, назови его как future boundary и отдельно скажи, что текущий scope закрыт полностью.
 - Для обновления factory ChatGPT Project сначала сам подготовьте точный repo-first instruction text; этот шаг выполняет Codex внутри repo до пользовательского блока.
 - Для downstream repo sync сначала используйте `factory/producer/extensions/workspace-packs/factory-ops/export-template-patch.sh` и `factory/producer/extensions/workspace-packs/factory-ops/apply-template-patch.sh`.
 - Для downstream repo instruction layer source-of-truth хранится в `template-repo/AGENTS.md`, а Codex в battle repo должен читать materialized root `AGENTS.md`.
@@ -126,4 +128,4 @@ Compact default:
 
 Если closeout полностью внутренний и `Инструкция пользователю` не нужна, используйте явную формулировку вроде:
 - `Внешних действий не требуется.`
-- `Следующий пользовательский шаг отсутствует; change закрыт полностью внутри repo.`
+- `Следующий пользовательский шаг отсутствует; задачи текущего scope выполнены полностью.`

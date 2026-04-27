@@ -40,6 +40,7 @@
 - completion/handoff layer теперь явно требует, чтобы обязательный completion package появлялся в том же финальном ответе, а не только после дополнительного запроса пользователя
 - completion/handoff layer теперь различает готовые внешние boundary steps и внутренние prepare/export commands: сборка export artifacts выполняется Codex внутри repo до пользовательского блока
 - completion/handoff layer теперь использует compact default для внешних действий: если реальных действий нет, финал говорит `Внешних действий не требуется.`, а если действия есть, `## Инструкция пользователю` перечисляет только реальные external/manual steps
+- completion/handoff layer теперь требует continuation outcome в каждом финальном ответе: либо `## Инструкция пользователю` с конкретным действием для продолжения, либо явное сообщение, что следующий пользовательский шаг отсутствует и задачи текущего scope выполнены полностью
 - `Реестр внешних действий` теперь является actionable ledger, а не audit table всех возможных contour'ов со статусом `не требуется`; полный register допустим только по явному запросу или для release/security approval
 - repo-first instruction layer для ChatGPT Projects: сценарии читаются прямо из GitHub repo, а не из локально загруженных project artifacts
 - launcher и template docs больше не требуют отдельную project-local staging-конфигурацию

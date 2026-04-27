@@ -34,6 +34,18 @@ Runtime defects remediated:
 - `python3 template-repo/scripts/validate-human-language-layer.py .` — pass, active findings `0`.
 - `bash template-repo/scripts/verify-all.sh quick` — pass на `2026-04-27`.
 
+## Проверка closeout continuation outcome
+
+Дата: `2026-04-27`.
+
+Исправлен reusable closeout defect: финал больше не может ограничиться только `Внешних действий не требуется.` без ответа "что дальше" или "текущий scope полностью закрыт".
+
+- Defect report: `reports/bugs/2026-04-27-closeout-continuation-outcome-gap.md`.
+- `template-repo/scenario-pack/00-master-router.md` и `16-done-closeout.md` требуют continuation outcome.
+- `.chatgpt/boundary-actions.md`, `.chatgpt/done-checklist.md` и template checklist обновлены.
+- `validate-codex-task-pack.py` проверяет generated closeout guidance на continuation outcome.
+- Direct-task completion rule теперь требует fully-done формулировку для no-external-action closeout.
+
 ## Проверка Plan №3 P3-S6 roadmap continuity
 
 Дата: `2026-04-27`.
