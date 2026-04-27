@@ -437,6 +437,7 @@ Evidence / quality / DoD до смыслового наполнения арте
 - incidental defect `utcnow()` warning зафиксирован и исправлен in-scope: `reports/bugs/2026-04-23-factory-ops-utcnow-warning.md`.
 - Defect-capture по утечке английского текста в downstream sync v3 зафиксирован и исправлен in-scope: `reports/bugs/2026-04-26-downstream-sync-v3-language-leak.md`.
 - Defect-capture по пропуску автозавершения closeout sync зафиксирован и исправлен in-scope: `reports/bugs/2026-04-26-autocloseout-sync-skip.md`.
+- 2.6 runtime proof follow-up исправил лишнее требование к пользователю принести `APP_IMAGE`: добавлен local placeholder application image builder `template-repo/scripts/build-placeholder-app-image.py`; live VPS использует generated placeholder path до появления реального application image.
 
 ## Что вошло в релиз 2.5.0
 - full-KPI evidence layer для `G25-GA`;

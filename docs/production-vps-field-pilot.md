@@ -17,7 +17,7 @@
 - Docker Compose доступен: `docker compose version` или `docker-compose --version`.
 - Repo или generated project уже находится на VPS.
 - `deploy/.env` создан из `deploy/.env.example` и не содержит example secrets.
-- Production image/tag задан в `APP_IMAGE`; demo `nginx` допустим только для starter smoke.
+- Production image/tag задан в `APP_IMAGE`; если реального приложения ещё нет, используется локально сгенерированный placeholder application image, а не внешняя обязанность пользователя найти образ.
 - Для TLS: DNS `A/AAAA` для `DOMAIN` указывает на VPS, ports `80/443` открыты, `TLS_EMAIL` реальный, `ACME_AGREE=true`.
 - Для DB/backup: задан `DB_PASSWORD`, `DB_DATA_VOLUME`, `BACKUP_ENABLED=true`, `BACKUP_PATH`, retention policy и restore procedure.
 
@@ -68,19 +68,19 @@ python3 template-repo/scripts/prepare-production-env-defaults.py
 
 Он заполняет non-secret defaults и оставляет оператору только секреты/manual values. Не просите пользователя вручную заполнять значения, которые Codex может безопасно вывести на VPS.
 
-Если реального `APP_IMAGE` еще нет, установите generated placeholder page:
+Если реального `APP_IMAGE` еще нет, сгенерируйте локальный placeholder application image:
 
 ```bash
-python3 template-repo/scripts/install-static-placeholder.py
+python3 template-repo/scripts/build-placeholder-app-image.py --install-volume
 ```
 
 Для внешней картинки-заглушки:
 
 ```bash
-python3 template-repo/scripts/install-static-placeholder.py --image-url "https://example.com/placeholder.png"
+python3 template-repo/scripts/build-placeholder-app-image.py --install-volume --image-url "https://example.com/placeholder.png"
 ```
 
-Это снимает с пользователя лишнюю обязанность искать image или вручную собирать страницу-заглушку. Boundary остается явной: placeholder proof не является proof бизнес-приложения.
+Это снимает с пользователя лишнюю обязанность искать Docker image или вручную собирать страницу-заглушку. Boundary остается явной: placeholder proof не является proof бизнес-приложения.
 
 ## Этап 1: starter smoke
 

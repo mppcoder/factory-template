@@ -81,6 +81,7 @@ def main() -> int:
     parser.add_argument("--domain", default=None)
     parser.add_argument("--backup-path", default="/var/backups/factory-template-postgres")
     parser.add_argument("--app-image", default="nginx:1.27-alpine")
+    parser.add_argument("--app-pull-policy", default=None)
     parser.add_argument(
         "--placeholder-image-url",
         default="/placeholder.svg",
@@ -104,6 +105,7 @@ def main() -> int:
     updates = {
         "OPERATOR_PRESET": "production",
         "APP_IMAGE": values.get("APP_IMAGE") or args.app_image,
+        "APP_PULL_POLICY": values.get("APP_PULL_POLICY") or args.app_pull_policy or "always",
         "APP_BIND_ADDRESS": "127.0.0.1",
         "DB_NAME": values.get("DB_NAME") or args.db_name,
         "DB_USER": values.get("DB_USER") or args.db_user,
@@ -139,6 +141,7 @@ def main() -> int:
     print("remaining_user_fields=" + (",".join(remaining) if remaining else "none"))
     if final_values.get("APP_IMAGE", "").startswith("nginx:"):
         print("warning=APP_IMAGE is demo nginx; runtime proof is infrastructure-level until a real app image is set.")
+        print("hint=run build-placeholder-app-image.py to generate a local placeholder APP_IMAGE when no real application image exists yet.")
     return 0
 
 

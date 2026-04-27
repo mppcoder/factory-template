@@ -207,6 +207,7 @@ run_quick() {
   run_step "validate-greenfield-conversion" python3 "$ROOT/template-repo/scripts/validate-greenfield-conversion.py" "$ROOT"
   run_step "validate-operator-env-starter" python3 "$ROOT/template-repo/scripts/validate-operator-env.py" "$ROOT" --env-file "$ROOT/deploy/.env.example" --preset starter
   run_step "validate-operator-env-production-example" python3 "$ROOT/template-repo/scripts/validate-operator-env.py" "$ROOT" --env-file "$ROOT/deploy/.env.example" --preset production --allow-example-placeholders
+  run_step "placeholder-app-image-builder-dry-run" python3 "$ROOT/template-repo/scripts/build-placeholder-app-image.py" --env-file "$ROOT/deploy/.env.example" --static-dir "$ROOT/deploy/static-placeholder" --dry-run --install-volume
   run_step "deploy-dry-run-smoke-starter-app-db" run_deploy_dry_run_smoke
   run_step "validate-spec-traceability" python3 "$ROOT/template-repo/scripts/validate-spec-traceability.py" "$ROOT"
   run_step "validate-task-state-lite" python3 "$ROOT/template-repo/scripts/validate-task-state-lite.py" "$ROOT/template-repo/template"

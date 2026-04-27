@@ -95,18 +95,26 @@ bash template-repo/scripts/deploy-local-vps.sh --yes --preset production
 python3 template-repo/scripts/prepare-production-env-defaults.py
 ```
 
-Скрипт выставит production preset, DB name/user, backup path, `sslip.io` domain для публичного IPv4, `ACME_AGREE=true` и оставит оператору только реальные secrets/manual values: `DB_PASSWORD`, `TLS_EMAIL` и при необходимости настоящий `APP_IMAGE`.
+Скрипт выставит production preset, DB name/user, backup path, `sslip.io` domain для публичного IPv4, `ACME_AGREE=true` и оставит оператору только реальные secrets/manual values: `DB_PASSWORD`, `TLS_EMAIL`.
 
-Если реального app image еще нет, используйте generated placeholder вместо ручного поиска картинки:
+Если реального app image еще нет, Codex/operator должен сгенерировать локальный placeholder application image из repo-native заглушки:
+
+```bash
+python3 template-repo/scripts/build-placeholder-app-image.py --install-volume
+```
+
+По умолчанию он соберёт `factory-template-placeholder-app:local`, выставит `APP_IMAGE=factory-template-placeholder-app:local`, `APP_PULL_POLICY=never` и установит `deploy/static-placeholder/index.html` плюс `placeholder.svg` в app volume. Это не proof бизнес-приложения, а временная runtime-заглушка до замены реальным образом.
+
+Если Docker image уже задан, но нужно только заменить содержимое placeholder page в существующем volume:
 
 ```bash
 python3 template-repo/scripts/install-static-placeholder.py
 ```
 
-По умолчанию он установит `deploy/static-placeholder/index.html` и `placeholder.svg` в app volume. Для своей картинки можно передать URL:
+Для своей картинки на placeholder page можно передать URL:
 
 ```bash
-python3 template-repo/scripts/install-static-placeholder.py --image-url "https://example.com/placeholder.png"
+python3 template-repo/scripts/build-placeholder-app-image.py --install-volume --image-url "https://example.com/placeholder.png"
 ```
 
 ## Что настраивается через env
@@ -114,8 +122,8 @@ python3 template-repo/scripts/install-static-placeholder.py --image-url "https:/
 Файл: `deploy/.env`
 
 - `OPERATOR_PRESET` — `starter`, `app-db`, `reverse-proxy-tls`, `backup`, `healthcheck`, `production` или список через запятую.
-- `APP_IMAGE` — Docker image приложения.
-- `APP_PULL_POLICY` — policy для получения image при deploy. По умолчанию `always`; для rollback drill с локальным candidate tag можно временно поставить `never`.
+- `APP_IMAGE` — Docker image приложения. Если реального приложения ещё нет, допустим локально сгенерированный `factory-template-placeholder-app:local`.
+- `APP_PULL_POLICY` — policy для получения image при deploy. По умолчанию `always`; для локального placeholder image или rollback drill с локальным candidate tag используется `never`.
 - `APP_PLACEHOLDER_MODE` — `static`, если production smoke использует generated placeholder вместо реального приложения.
 - `APP_PLACEHOLDER_IMAGE_URL` — URL картинки для placeholder page. По умолчанию локальный `/placeholder.svg`.
 - `APP_CONTAINER_NAME` — имя контейнера.
@@ -171,7 +179,7 @@ python3 template-repo/scripts/install-static-placeholder.py --image-url "https:/
 - Порты `80` и `443` открыты на firewall/security group.
 - `docker compose version` проходит под операторским пользователем.
 - `deploy/.env` существует, права ограничены, секреты не коммитятся.
-- `APP_IMAGE` указывает на настоящий production image/tag.
+- `APP_IMAGE` указывает на настоящий production image/tag или на локально сгенерированный placeholder image `factory-template-placeholder-app:local`, если цель текущего запуска только infrastructure/runtime proof.
 - Для `reverse-proxy-tls`/`production`: `APP_BIND_ADDRESS=127.0.0.1`, `DOMAIN` не `example.com`, `TLS_EMAIL` реальный, `ACME_AGREE=true`.
 - Для `app-db`/`production`: `DB_PASSWORD` длинный и случайный, `DB_DATA_VOLUME` задан осознанно.
 - Для `backup`/`production`: `BACKUP_ENABLED=true`, `BACKUP_PATH` существует или будет создан, известен restore path.
@@ -283,4 +291,4 @@ bash template-repo/scripts/deploy-local-vps.sh --yes
 - `R-DEPLOY-01`: baseline рассчитан на single-VPS контур и не заменяет multi-node orchestration.
 - `R-DEPLOY-02`: скрипты зависят от `docker compose` (или legacy `docker-compose`) в окружении VPS.
 - `R-DEPLOY-03`: TLS/домен/реверс-прокси доступны как opt-in preset, но DNS/firewall/секреты остаются ответственностью оператора.
-- `R-DEPLOY-04`: дефолтный image (`nginx`) демонстрационный; для реального сервиса нужен явный production image в `APP_IMAGE`.
+- `R-DEPLOY-04`: дефолтный image (`nginx`) демонстрационный; если реального сервиса ещё нет, используйте `build-placeholder-app-image.py --install-volume`, а для application-level proof нужен явный production image в `APP_IMAGE`.
