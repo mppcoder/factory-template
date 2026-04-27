@@ -4,7 +4,7 @@
 
 ## Результат
 
-Status: `infrastructure-runtime-proof-passed-real-app-proof-pending`.
+Status: `template-runtime-proof-passed`.
 
 Production VPS field pilot path подготовлен и частично автоматизирован:
 
@@ -94,13 +94,13 @@ Done evidence:
 - Script report modes added.
 - Quick verify smoke extended to production field pilot report mode.
 
-## Внешняя граница pending
+## Опциональная будущая граница
 
-- Real business application Docker image.
-- Application-specific healthcheck/migration expectations.
-- Application-level backup/restore interpretation if the real app changes data semantics.
-- Approved repeat runtime proof if release claims depend on the real app workload.
-- Sanitized runtime transcript for that application-level proof.
+- Generated/downstream/battle project with its own real application Docker image.
+- Application-specific healthcheck/migration expectations for that project.
+- Application-level backup/restore interpretation if that real app changes data semantics.
+- Approved repeat runtime proof if release claims depend on the downstream/battle app workload.
+- Sanitized runtime transcript for that downstream/battle application-level proof.
 
 ## 2026-04-27 runtime execution summary
 
@@ -110,4 +110,4 @@ Done evidence:
 - Restore test: passed.
 - Rollback drill: passed.
 - Placeholder app deploy: passed with `APP_IMAGE=factory-template-placeholder-app:local`.
-- Boundary: application-level production proof remains pending until a real app image is deployed.
+- Boundary: `factory-template` template/runtime proof is passed. Application-level production proof is a separate downstream/battle project contour, not a missing app inside this template repo.

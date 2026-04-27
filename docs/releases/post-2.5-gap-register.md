@@ -13,7 +13,7 @@ Release truth source remains `docs/releases/release-scorecard.yaml`. This file i
 | ID | Gap | Current evidence | Target line | Status | Owner boundary |
 |---|---|---|---|---|---|
 | `P25-GAP-01` | Patch/stabilization roadmap was missing after field pilot completion. | This register and `docs/releases/2.5.1-roadmap.md`. | `2.5.1` | planned/remediated docs | repo |
-| `P25-GAP-02` | Need explicit split between completed repo-controlled/synthetic/infrastructure proof and pending real application proof. | `2.5.1-roadmap`, `2.6-roadmap`, production VPS report. | `2.5.1` | planned/remediated docs | repo |
+| `P25-GAP-02` | Need explicit split between completed repo-controlled/synthetic/template-infrastructure proof and optional downstream/battle application proof. | `2.5.1-roadmap`, `2.6-roadmap`, production VPS report. | `2.5.1` | planned/remediated docs | repo |
 | `P25-GAP-03` | Downstream sync v3 has synthetic multi-cycle proof, but optional real downstream adoption remains limited. | `reports/release/downstream-multi-cycle-sync-report.md`. | `2.5.1` then `2.6` | open follow-up | downstream repo sync |
 | `P25-GAP-04` | Production VPS path is dry-run/report-ready, not real production proof. | `reports/release/2.6-runtime-proof-report.md` records approved real VPS production preset infrastructure proof. | `2.6` | remediated for infrastructure proof | real VPS / user approval / secrets |
 | `P25-GAP-05` | Backup restore and rollback drill were documented but not executed before the approved 2.6 runtime proof. | `reports/release/2.6-runtime-proof-report.md` records backup, disposable restore and rollback drill. | `2.6` | remediated for infrastructure proof | real VPS / restore target |
@@ -32,9 +32,9 @@ Plan №3 records AIF/Molyanov-inspired improvements as repo-native follow-up wo
 | `P3-GAP-03` | Artifact Eval coverage needs expansion beyond current samples. | Related to `P25-GAP-06`; added routing-critical specs/reports for direct self-handoff, closeout ledger, downstream sync boundary, production proof boundary and extra negative fixtures. | P3-S3 / 2.6 | implemented/verified | repo |
 | `P3-GAP-04` | `feature-execution-lite` needs real factory adoption. | Related to `P25-GAP-07`; `work/completed/plan-3-eval-adoption` closes one real advanced workspace through Done Loop with artifact-eval evidence. | P3-S4 / 2.6 | implemented/verified | repo |
 | `P3-GAP-05` | Pre/post deploy QA must become an explicit runtime proof boundary. | Related to `P25-GAP-04` and `P25-GAP-05`; P3-S5 prepared the boundary, and 2.6 runtime proof executed deploy/healthcheck/backup/restore/rollback for infrastructure path with local placeholder app image. | P3-S5 / 2.6 | executed for infrastructure proof | external runtime |
-| `P3-GAP-06` | Runtime/source-hygiene boundary classifier needs a repo-native form. | Related to `P25-GAP-08`; docs now classify repo-local report-ready, manual secrets, sanitized transcript, downstream sync, external runtime proof and real app proof boundary. | P3-S5 / 2.6 | partially remediated / continuing backlog | mixed |
+| `P3-GAP-06` | Runtime/source-hygiene boundary classifier needs a repo-native form. | Related to `P25-GAP-08`; docs now classify repo-local report-ready, manual secrets, sanitized transcript, downstream sync, external runtime proof and optional downstream/battle app proof boundary. | P3-S5 / 2.6 | partially remediated / continuing backlog | mixed |
 | `P3-GAP-07` | Release-facing consistency pass is needed after Plan №3 planning and implementation stages. | P3-S0..P3-S6 status is reflected in this register, current state, test report, production VPS report and 2.6 roadmap. | each P3 closeout | implemented/verified | repo |
-| `P3-GAP-08` | Roadmap continuity broke after runtime proof and placeholder app remediation. | `reports/bugs/2026-04-27-roadmap-continuity-gap.md`; 2.6 roadmap now names P3-S6 continuity and P3-S7 real application image proof boundary. | P3-S6 | implemented/verified | repo |
+| `P3-GAP-08` | Roadmap continuity broke after runtime proof and placeholder app remediation. | `reports/bugs/2026-04-27-roadmap-continuity-gap.md`; 2.6 roadmap now names P3-S6 continuity and separates optional P3-S7 downstream/battle app proof boundary. | P3-S6 | implemented/verified | repo |
 
 ## `molyanov-ai-dev` adaptation register
 
@@ -56,6 +56,6 @@ Reference snapshot: `pavel-molyanov/molyanov-ai-dev` HEAD `1bfe745d43b0602d8279c
 ## Release-facing правила
 
 - Do not declare `2.5.1` ready until stabilization gates and verify evidence exist.
-- Do not declare `2.6` application-ready until runtime proof exists for every runtime gate being claimed with a real application image.
+- Do not declare a downstream/battle project application-ready until runtime proof exists for every runtime gate being claimed with that project's real application image.
 - Do not treat dry-run, fake Docker, synthetic downstream or controlled repo evidence as real production proof.
 - Do not commit secrets, runtime transcripts with sensitive values or real `.env` files.
