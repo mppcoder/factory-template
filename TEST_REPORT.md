@@ -46,6 +46,18 @@ Runtime defects remediated:
 - Назначение: first install, smoke check, recovery после VPS падения, пока downstream/battle app отсутствует.
 - Boundary: public Docker registry image или npm package остаются optional future packaging contour, не blocker текущего template proof.
 
+## Проверка 2.6 roadmap closeout
+
+Дата: `2026-04-27`.
+
+2.6 roadmap закрыт для `factory-template` template/runtime scope.
+
+- P3-S0..P3-S6 выполнены и проверены.
+- Production VPS deploy, HTTPS healthcheck, backup, disposable restore and rollback drill выполнены.
+- Reference runtime app для install/reinstall определен.
+- Optional downstream/battle application proof вынесен за пределы текущего roadmap closure.
+- Defect report: `reports/bugs/2026-04-27-roadmap-closure-status-gap.md`.
+
 ## Проверка closeout continuation outcome
 
 Дата: `2026-04-27`.
@@ -64,8 +76,8 @@ Runtime defects remediated:
 
 Исправлен release-facing разрыв после 2.6 runtime proof: roadmap/status docs больше не говорят одновременно `pending VPS proof`, `demo nginx` и `placeholder app live`.
 
-- `docs/releases/2.6-roadmap.md` теперь фиксирует P3-S6 continuity pass и отделяет optional P3-S7 downstream/battle application proof boundary.
-- `docs/releases/plan-3-aif-molyanov-audit.md` расширен до P3-S6/P3-S7.
+- `docs/releases/2.6-roadmap.md` теперь фиксирует P3-S6 closeout и отделяет optional future downstream/battle application proof boundary.
+- `docs/releases/plan-3-aif-molyanov-audit.md` расширен до P3-S6 roadmap closeout.
 - `CURRENT_FUNCTIONAL_STATE.md`, `reports/release/production-vps-field-pilot-report.md` и этот report выровнены вокруг статуса `template-runtime-proof-passed`.
 - Новый release-ready status не объявлен.
 

@@ -16,7 +16,7 @@
 - `feature-execution-lite` уже существует как optional advanced path с fixtures, validator и Artifact Eval sample target.
 - Production VPS path подготовлен как dry-run/report-ready; позднее approved 2.6 runtime proof выполнил deploy, HTTPS healthcheck, backup, disposable restore и rollback drill для infrastructure path с local placeholder application image.
 
-`Plan №3` начался как audit-only follow-up в P3-S0. По состоянию на P3-S6 закрыты repo-local task-state, learning patch loop, expanded Artifact Eval coverage, один real `feature-execution-lite` adoption closeout, runtime QA boundary preparation, approved infrastructure runtime proof и release-facing roadmap continuity pass. `factory-template` имеет собственный reference runtime app для install/reinstall; real business application image proof относится к будущему downstream/battle project contour, а не к обязательному proof внутри `factory-template`.
+`Plan №3` начался как audit-only follow-up в P3-S0. По состоянию на P3-S6 закрыты repo-local task-state, learning patch loop, expanded Artifact Eval coverage, один real `feature-execution-lite` adoption closeout, runtime QA boundary preparation, approved infrastructure runtime proof, reference runtime app и release-facing roadmap closeout. `factory-template` имеет собственный reference runtime app для install/reinstall; real business application image proof относится к будущему downstream/battle project contour, а не к обязательному proof внутри `factory-template`.
 
 ## Карта источников
 
@@ -44,10 +44,11 @@ External ideas используются только как input ideas, а не
 | `P3-GAP-05` pre/post deploy QA as runtime proof boundary | `P25-GAP-04`, `P25-GAP-05` | Реализована prep boundary; approved 2.6 runtime proof выполнил deploy, HTTPS healthcheck, backup, disposable restore и rollback drill для infrastructure path. | P3-S5 / 2.6 |
 | `P3-GAP-06` runtime/source-hygiene boundary classifier | `P25-GAP-08` | Реализована docs/report classification для repo-local dry-run, manual secrets, sanitized transcript, downstream sync, external runtime proof и real app proof boundary. | P3-S5 / 2.6 |
 | `P3-GAP-07` release-facing consistency pass | `251-STAB-05` | Release-facing docs обновлены после P3-S0..P3-S5 closeouts. | каждый P3 closeout |
-| `P3-GAP-08` roadmap continuity after runtime proof | `251-STAB-05`, `P25-GAP-08` | Зафиксирован defect `reports/bugs/2026-04-27-roadmap-continuity-gap.md`; roadmap теперь называет P3-S6/P3-S7 и не оставляет stale pending/demo claims. | P3-S6 |
+| `P3-GAP-08` roadmap continuity after runtime proof | `251-STAB-05`, `P25-GAP-08` | Зафиксирован defect `reports/bugs/2026-04-27-roadmap-continuity-gap.md`; roadmap теперь называет P3-S6 closeout и не оставляет stale pending/demo claims. | P3-S6 |
 | `P3-GAP-09` template install/reinstall runtime artifact | `P25-GAP-08` | Зафиксирован defect `reports/bugs/2026-04-27-template-runtime-install-artifact-gap.md`; `docs/template-runtime-reference-app.md` описывает repo-owned reference app image для first install/recovery. | P3-S6 |
+| `P3-GAP-10` roadmap closure status | `251-STAB-05`, `P25-GAP-08` | Зафиксирован defect `reports/bugs/2026-04-27-roadmap-closure-status-gap.md`; 2.6 roadmap закрыт для `factory-template` template/runtime scope, optional downstream app proof вынесен за пределы closure. | P3-S6 |
 
-Plan №3 gaps не reopen `2.5.0 GA Ready` и не превращают placeholder infrastructure proof в proof реального бизнес-приложения. P3-S0..P3-S6 являются implemented/verified evidence для template repo; real app image proof является optional future downstream/battle runtime boundary.
+Plan №3 gaps не reopen `2.5.0 GA Ready` и не превращают placeholder/reference infrastructure proof в proof реального бизнес-приложения. P3-S0..P3-S6 являются implemented/verified evidence для template repo; текущий 2.6 roadmap закрыт, а real app image proof является optional future downstream/battle runtime boundary.
 
 ## Добавить / не добавлять / уже покрыто
 
@@ -89,8 +90,8 @@ Plan №3 gaps не reopen `2.5.0 GA Ready` и не превращают placeho
 | P3-S3 | Расширить Artifact Eval coverage. | Реализовано: routing-critical specs/reports и meaningful negative fixtures подключены к quick smoke. |
 | P3-S4 | Adoption `feature-execution-lite` на одном real factory change. | Реализовано: `work/completed/plan-3-eval-adoption` закрыт через Done Loop с evidence. |
 | P3-S5 | Подготовить runtime QA boundary для 2.6. | Реализовано: pre/post deploy QA, restore, rollback и sanitized transcript requirements documented; на момент P3-S5 это была prep boundary, execution evidence записан в 2.6 runtime proof. |
-| P3-S6 | Закрыть roadmap continuity после approved runtime proof. | Реализовано: release-facing status docs выровнены вокруг template reference runtime proof, install/reinstall artifact и optional downstream app-proof boundary. |
-| P3-S7 | Downstream/battle application proof. | Optional future external/runtime contour: нужен generated/battle project с настоящим application Docker image; внутри `factory-template` этот этап не обязателен. |
+| P3-S6 | Закрыть roadmap continuity и roadmap status после approved runtime proof. | Реализовано: release-facing status docs выровнены вокруг template reference runtime proof, install/reinstall artifact и закрытия текущего 2.6 roadmap. |
+| Future optional | Downstream/battle application proof. | Вне текущего roadmap closure: нужен generated/battle project с настоящим application Docker image; внутри `factory-template` этот этап не обязателен. |
 
 ## Граничные решения
 
