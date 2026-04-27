@@ -15,6 +15,15 @@ Harness проверяет не модельный transcript, а сам reusabl
 - не потеряны ли repo-first, handoff, defect-capture и beginner-path boundaries;
 - для `feature-execution-lite` есть ли execution-plan, checkpoint/resume, decisions, task waves и final verification evidence.
 
+После Plan №3 P3-S3 smoke-набор также покрывает routing-critical границы:
+
+- direct task self-handoff;
+- normalized Codex handoff response;
+- done/closeout external actions ledger;
+- downstream sync boundary;
+- production VPS proof boundary;
+- feature-execution-lite final verification negative cases.
+
 ## Спецификация
 
 Минимальный YAML:
@@ -78,7 +87,7 @@ python3 template-repo/scripts/eval-artifact.py tests/artifact-eval/specs/master-
 python3 template-repo/scripts/validate-artifact-eval-report.py /tmp/master-router-eval.md
 ```
 
-Static sample reports лежат в `tests/artifact-eval/reports/`. Они нужны как example evidence и как validator fixtures.
+Static sample reports лежат в `tests/artifact-eval/reports/`. Они нужны как example evidence, routing-critical evidence и validator fixtures.
 
 ## Порог
 

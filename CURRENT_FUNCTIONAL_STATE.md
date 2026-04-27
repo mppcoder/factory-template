@@ -98,6 +98,8 @@
 - `feature-execution-lite` включен в sample artifact eval target: harness проверяет execution-plan, checkpoint, decisions, task waves, review rounds, boundaries и final verification evidence как reusable advanced execution artifact
 - Plan №3 P3-S1 task-state-lite добавлен как beginner-safe `.chatgpt/task-state.yaml` слой для current state, owner boundary, next action, blockers и разделения internal/external/runtime/downstream boundaries
 - Plan №3 P3-S2 learning patch loop добавлен как repo-native proposal слой: reusable bug reports требуют learning proposal или `not_required` reason, а fake/overclaim proposals ловятся validator fixtures
+- Plan №3 P3-S3 расширил Artifact Eval Harness на routing-critical specs/reports: direct self-handoff, normalized handoff boundary, done closeout ledger, downstream sync boundary, production proof boundary и feature-execution-lite final verification negatives
+- Plan №3 P3-S4 провел real `feature-execution-lite` adoption: `work/completed/plan-3-eval-adoption` содержит advanced workspace closeout, done-report, Project Knowledge proposal и downstream-impact evidence
 
 ## Программа 2.5 (release truth)
 - release truth source: `docs/releases/release-scorecard.yaml`
@@ -124,12 +126,12 @@
 - gap register: `docs/releases/post-2.5-gap-register.md`
 - Plan №3 audit: `docs/releases/plan-3-aif-molyanov-audit.md`
 - текущая стадия: `release-followup -> planning`
-- текущий planning status: `Plan №3 P3-S1/P3-S2 implemented and quick-verified, not release-ready`
+- текущий planning status: `Plan №3 P3-S1/P3-S4 implemented and verification-backed, P3-S5 remains runtime-boundary prep`
 - `2.5.1` scope: downstream sync v3 stabilization, field pilot evidence discoverability, closeout/boundary guardrails, optional downstream sync adoption and release-facing docs.
-- `2.6` scope: real production VPS deploy, backup restore, rollback drill, expanded artifact eval, real `feature-execution-lite` adoption and runtime/source-hygiene backlog.
+- `2.6` scope: real production VPS deploy, backup restore, rollback drill and runtime/source-hygiene backlog; expanded artifact eval and one real `feature-execution-lite` adoption are now P3-S3/P3-S4 repo-local evidence.
 - completed proof: `2.5.0` repo-controlled GA evidence, `2.5.1-field-pilot` real project proof, downstream sync v3 synthetic multi-cycle proof.
 - pending external runtime proof: real VPS deploy, real backup restore, real rollback drill, secrets/manual boundary and operator approval.
-- Plan №3 status: P3-S0 audit captured; P3-S1 task-state-lite and P3-S2 learning patch loop implemented; expanded evals, real dogfood and runtime QA boundary remain planned follow-up stages.
+- Plan №3 status: P3-S0 audit captured; P3-S1 task-state-lite, P3-S2 learning patch loop, P3-S3 expanded evals and P3-S4 real adoption implemented; runtime QA boundary remains P3-S5 follow-up.
 - `pavel-molyanov/molyanov-ai-dev` comparison recorded in `docs/releases/post-2.5-gap-register.md`; factory keeps useful spec/project-knowledge/eval ideas but does not import Claude-specific `.claude`, command or TeamCreate assumptions.
 
 ## Что работает частично

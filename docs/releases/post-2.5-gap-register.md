@@ -17,8 +17,8 @@ Release truth source remains `docs/releases/release-scorecard.yaml`. This file i
 | `P25-GAP-03` | Downstream sync v3 has synthetic multi-cycle proof, but optional real downstream adoption remains limited. | `reports/release/downstream-multi-cycle-sync-report.md`. | `2.5.1` then `2.6` | open follow-up | downstream repo sync |
 | `P25-GAP-04` | Production VPS path is dry-run/report-ready, not real production proof. | `reports/release/production-vps-field-pilot-report.md`. | `2.6` | external pending | real VPS / user approval / secrets |
 | `P25-GAP-05` | Backup restore and rollback drill are documented but not executed on real runtime. | `docs/production-vps-field-pilot.md`. | `2.6` | external pending | real VPS / restore target |
-| `P25-GAP-06` | Artifact Eval Harness has sample coverage, not broad routing-critical coverage. | `docs/artifact-eval-harness.md`, `tests/artifact-eval/reports/*`. | `2.6` | open | repo |
-| `P25-GAP-07` | `feature-execution-lite` is implemented and fixture-tested, but real factory feature adoption is still pending. | `docs/feature-execution-lite.md`, quick verify smoke. | `2.6` | open | repo |
+| `P25-GAP-06` | Artifact Eval Harness had sample coverage, not broad routing-critical coverage. | `docs/artifact-eval-harness.md`, expanded `tests/artifact-eval/specs/*`, validator-backed reports. | `2.6` | remediated for P3-S3 | repo |
+| `P25-GAP-07` | `feature-execution-lite` was implemented and fixture-tested, but real factory feature adoption was pending. | `docs/feature-execution-lite.md`, quick verify smoke, `work/completed/plan-3-eval-adoption`. | `2.6` | remediated for P3-S4 | repo |
 | `P25-GAP-08` | Runtime/source-hygiene backlog needs explicit classification by internal/external/downstream/manual boundary. | Current state docs and known limitations. | `2.6` | open | mixed |
 
 ## Plan №3 AIF/Molyanov follow-up gaps
@@ -29,11 +29,11 @@ Plan №3 records AIF/Molyanov-inspired improvements as repo-native follow-up wo
 |---|---|---|---|---|---|
 | `P3-GAP-01` | AIF-lite task-state visibility is missing as one compact repo artifact. | `docs/task-state-lite.md`, template `.chatgpt/task-state.yaml`, `validate-task-state-lite.py`, quick verify. | P3-S1 | implemented/verified | repo |
 | `P3-GAP-02` | Learning patch / evolve proposal loop is not explicit for reusable bugs. | `docs/learning-patch-loop.md`, template `reports/learnings/`, learning proposal template, `validate-learning-patch-loop.py`, negative fixtures and quick verify. | P3-S2 | implemented/verified | repo |
-| `P3-GAP-03` | Artifact Eval coverage needs expansion beyond current samples. | Related to `P25-GAP-06`; current specs cover samples, not broad routing-critical and negative fixtures. | P3-S3 / 2.6 | planned | repo |
-| `P3-GAP-04` | `feature-execution-lite` needs real factory dogfood adoption. | Related to `P25-GAP-07`; validator and fixtures exist, but durable real-work evidence is pending. | P3-S4 / 2.6 | planned | repo |
+| `P3-GAP-03` | Artifact Eval coverage needs expansion beyond current samples. | Related to `P25-GAP-06`; added routing-critical specs/reports for direct self-handoff, closeout ledger, downstream sync boundary, production proof boundary and extra negative fixtures. | P3-S3 / 2.6 | implemented/verified | repo |
+| `P3-GAP-04` | `feature-execution-lite` needs real factory adoption. | Related to `P25-GAP-07`; `work/completed/plan-3-eval-adoption` closes one real advanced workspace through Done Loop with artifact-eval evidence. | P3-S4 / 2.6 | implemented/verified | repo |
 | `P3-GAP-05` | Pre/post deploy QA must become an explicit runtime proof boundary. | Related to `P25-GAP-04` and `P25-GAP-05`; production path is dry-run/report-ready, not real deploy/restore/rollback proof. | P3-S5 / 2.6 | planned | external runtime |
 | `P3-GAP-06` | Runtime/source-hygiene boundary classifier needs a repo-native form. | Related to `P25-GAP-08`; known backlog needs internal repo, downstream sync, manual-only and external runtime classification. | P3-S5 / 2.6 | planned | mixed |
-| `P3-GAP-07` | Release-facing consistency pass is needed after Plan №3 planning and future implementation stages. | `docs/releases/plan-3-aif-molyanov-audit.md` becomes the planning anchor; release-facing docs must stay aligned as stages close. | each P3 closeout | planned | repo |
+| `P3-GAP-07` | Release-facing consistency pass is needed after Plan №3 planning and implementation stages. | P3-S0..P3-S4 status is reflected in this register, current state, test report and 2.6 roadmap; P3-S5 still remains. | each P3 closeout | in progress | repo |
 
 ## `molyanov-ai-dev` adaptation register
 

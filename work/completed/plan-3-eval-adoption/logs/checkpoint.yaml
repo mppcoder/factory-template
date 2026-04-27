@@ -1,0 +1,49 @@
+schema: feature-execution-lite/v1
+feature_id: "plan-3-eval-adoption"
+feature_title: "Plan 3 Artifact Eval Adoption"
+feature_dir: "work/features/plan-3-eval-adoption"
+execution_plan: "work/features/plan-3-eval-adoption/logs/execution-plan.md"
+decisions: "work/features/plan-3-eval-adoption/decisions.md"
+
+feature_status: done
+current_wave: null
+last_completed_wave: 2
+next_wave: null
+total_waves: 2
+max_review_rounds: 3
+
+tasks:
+  T-001:
+    wave: 1
+    status: done
+    depends_on: []
+    verify_smoke: "python3 template-repo/scripts/validate-artifact-eval-report.py tests/artifact-eval/reports/*.md"
+    verify_user: not_required
+    decisions_entry: "decisions.md: Wave 1"
+  T-002:
+    wave: 2
+    status: done
+    depends_on: ["T-001"]
+    verify_smoke: "python3 template-repo/scripts/validate-feature-execution-lite.py --workspace work/features/plan-3-eval-adoption --require-advanced"
+    verify_user: not_required
+    decisions_entry: "decisions.md: Wave 2"
+
+decisions_updated: true
+
+final_verification:
+  status: passed
+  smoke: "Artifact Eval report validator and feature-execution-lite advanced validator passed before closeout."
+  user: not_required
+  evidence:
+    - "python3 template-repo/scripts/validate-artifact-eval-report.py tests/artifact-eval/reports/*.md"
+    - "python3 template-repo/scripts/validate-feature-execution-lite.py --workspace work/features/plan-3-eval-adoption --require-advanced"
+
+boundaries:
+  internal_work_remaining: []
+  external_user_action_required: []
+  runtime_backlog:
+    - "P3-S5 runtime QA boundary remains separate; no real VPS mutation in this feature."
+
+resume_notes:
+  last_safe_resume_point: "После Wave 2, перед close-feature-workspace.py"
+  blockers: []

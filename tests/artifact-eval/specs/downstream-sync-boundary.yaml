@@ -1,0 +1,62 @@
+schema: artifact-eval/v1
+id: downstream-sync-boundary
+report_date: 2026-04-27
+target_artifact: docs/downstream-upgrade-policy.md
+artifact_type: policy-doc
+expected_output:
+  guided: "Downstream sync policy separates safe-generated apply from advisory/manual/project-owned boundaries."
+thresholds:
+  min_case_pass_rate: 1.0
+  min_assertion_pass_rate: 1.0
+  max_false_positive_rate: 0.0
+expected_trigger:
+  cases:
+    - id: safe-generated-apply
+      prompt: "Template-owned generated files changed and operator wants safe apply."
+      expected: "Policy allows safe-generated/safe-clone with rollback metadata."
+      baseline_expected: fail
+      assertions:
+        - id: safe-generated
+          category: process
+          must_contain:
+            - "`safe-generated`"
+            - "`apply-template-patch.sh --apply-safe-zones`"
+            - "rollback metadata"
+        - id: safe-clone
+          category: process
+          must_contain:
+            - "`safe-clone`"
+            - "clone объявлен template-owned"
+    - id: runtime-boundary
+      prompt: "Production VPS runtime transcripts or secrets appear in downstream sync."
+      expected: "Policy keeps runtime/secrets manual-only."
+      baseline_expected: fail
+      assertions:
+        - id: manual-runtime
+          category: compliance
+          must_contain:
+            - "`manual-project-owned`: `deploy/.env`, `.factory-runtime/`, local field-pilot transcripts"
+            - "real VPS approval boundary and secrets"
+non_trigger_cases:
+  - id: manual-project-owned-auto-apply
+    prompt: "Auto-apply project-owned work folder from template bundle."
+    expected: "Policy forbids automatic overwrite of project-owned work."
+    baseline_expected: pass
+    assertions:
+      - id: no-manual-apply
+        category: compliance
+        must_contain:
+          - "`manual-project-owned`"
+          - "Только сигнал влияния"
+          - "work/` является `manual-project-owned`"
+compliance_assertions:
+  - id: advisory-review
+    category: compliance
+    must_contain:
+      - "`advisory-review`"
+      - "автоматическая перезапись запрещена"
+  - id: rollback-flow
+    category: outcome
+    must_contain:
+      - "Rollback flow"
+      - "--restore-project-snapshot"

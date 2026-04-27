@@ -56,6 +56,16 @@ non_trigger_cases:
         category: compliance
         must_contain:
           - "Найден запрещенный file-based handoff pattern"
+  - id: multi-block-handoff
+    prompt: "Ответ содержит несколько handoff-блоков вместо одного цельного блока."
+    expected: "Artifact должен отклонить multi-block handoff response."
+    baseline_expected: pass
+    assertions:
+      - id: multiple-handoff-heading
+        category: compliance
+        must_contain:
+          - "Найдено несколько handoff-заголовков"
+          - "Ожидается ровно один блок"
 compliance_assertions:
   - id: russian-language-contract
     category: compliance

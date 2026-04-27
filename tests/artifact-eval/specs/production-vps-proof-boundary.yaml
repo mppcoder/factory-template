@@ -1,0 +1,65 @@
+schema: artifact-eval/v1
+id: production-vps-proof-boundary
+report_date: 2026-04-27
+target_artifact: docs/production-vps-field-pilot.md
+artifact_type: runbook
+expected_output:
+  guided: "Production VPS runbook keeps dry-run/report-ready evidence separate from real deploy, backup restore and rollback proof."
+thresholds:
+  min_case_pass_rate: 1.0
+  min_assertion_pass_rate: 1.0
+  max_false_positive_rate: 0.0
+expected_trigger:
+  cases:
+    - id: safe-report-first
+      prompt: "Operator wants production readiness evidence without approval."
+      expected: "Runbook allows dry-run/report only and keeps status pending."
+      baseline_expected: fail
+      assertions:
+        - id: no-destructive-default
+          category: compliance
+          must_contain:
+            - "без разрушительных действий по умолчанию"
+            - "только после явного approval оператора"
+        - id: dry-run-not-proof
+          category: compliance
+          must_contain:
+            - "Dry-run/report evidence не считается real production proof"
+            - "pending-real-vps-approval"
+    - id: restore-and-rollback
+      prompt: "2.6 wants backup restore and rollback proof."
+      expected: "Runbook separates restore test and rollback drill."
+      baseline_expected: fail
+      assertions:
+        - id: restore-test
+          category: outcome
+          must_contain:
+            - "Restore test"
+            - "Restore into a disposable database or staging VPS"
+        - id: rollback-drill
+          category: outcome
+          must_contain:
+            - "Тренировка отката"
+            - "Minimum image rollback"
+non_trigger_cases:
+  - id: dry-run-production-proof-overclaim
+    prompt: "Dry-run passed, declare real production deploy/restore/rollback proof."
+    expected: "Runbook forbids proof overclaim from dry-run."
+    baseline_expected: pass
+    assertions:
+      - id: no-proof-overclaim
+        category: compliance
+        must_contain:
+          - "Report file exists and says dry-run/report evidence is not real VPS proof"
+          - "No real VPS deploy was executed"
+compliance_assertions:
+  - id: secrets-boundary
+    category: compliance
+    must_contain:
+      - "`deploy/.env`"
+      - "не содержит example secrets"
+  - id: field-evidence
+    category: outcome
+    must_contain:
+      - "deploy transcript if approved"
+      - "rollback/restore result"

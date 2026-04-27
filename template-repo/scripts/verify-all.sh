@@ -86,7 +86,11 @@ run_artifact_eval_smoke() {
   local specs_dir="$ROOT/tests/artifact-eval/specs"
   for spec in \
     master-router \
+    direct-task-self-handoff \
     codex-handoff-response \
+    done-closeout-external-actions \
+    downstream-sync-boundary \
+    production-vps-proof-boundary \
     skill-tester-lite \
     feature-execution-lite
   do

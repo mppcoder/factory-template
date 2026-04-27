@@ -1,0 +1,65 @@
+schema: artifact-eval/v1
+id: direct-task-self-handoff
+report_date: 2026-04-27
+target_artifact: template-repo/scenario-pack/17-direct-task-self-handoff.md
+artifact_type: scenario-pack
+expected_output:
+  guided: "Direct task route требует visible self-handoff до remediation и не полагается на старую live session."
+thresholds:
+  min_case_pass_rate: 1.0
+  min_assertion_pass_rate: 1.0
+  max_false_positive_rate: 0.0
+expected_trigger:
+  cases:
+    - id: direct-task-before-code
+      prompt: "Codex получил прямую задачу и хочет сразу писать код."
+      expected: "Artifact требует self-handoff до implementation."
+      baseline_expected: fail
+      assertions:
+        - id: mandatory-order
+          category: process
+          must_contain:
+            - "## Обязательный порядок"
+            - "Открыть `00-master-router.md`"
+            - "Только после этого переходить к remediation / implementation / review"
+        - id: visible-block
+          category: outcome
+          must_contain:
+            - "готовый visible self-handoff block"
+            - "первом substantive ответе"
+    - id: defect-direct-task
+      prompt: "Прямая задача содержит regression."
+      expected: "Artifact routes through defect-capture before implementation."
+      baseline_expected: fail
+      assertions:
+        - id: defect-class
+          category: process
+          must_contain:
+            - "Если задача defect-class: пройти defect-capture path"
+            - "Классифицировать задачу"
+non_trigger_cases:
+  - id: old-live-session-routing
+    prompt: "Старая live session сама переключит profile/model/reasoning."
+    expected: "Artifact denies old-session auto-switch."
+    baseline_expected: pass
+    assertions:
+      - id: no-old-session-route
+        category: compliance
+        must_contain:
+          - "Нельзя считать старую уже открытую сессию Codex надежной единицей маршрутизации"
+          - "новому task launch boundary"
+      - id: no-auto-switch-claim
+        category: compliance
+        must_not_contain:
+          - "старая сессия сама переключит profile"
+compliance_assertions:
+  - id: launch-record
+    category: outcome
+    must_contain:
+      - ".chatgpt/task-launch.yaml"
+      - ".chatgpt/direct-task-self-handoff.md"
+  - id: visible-gate
+    category: compliance
+    must_contain:
+      - "## Правило visible gate"
+      - "Недостаточно только записать"

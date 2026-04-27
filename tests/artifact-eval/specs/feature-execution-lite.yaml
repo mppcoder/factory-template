@@ -57,6 +57,17 @@ non_trigger_cases:
         must_contain:
           - "optional advanced path"
           - "Продвинутый path включается только явно"
+  - id: done-without-final-verification
+    prompt: "Закрыть advanced feature как done без final verification evidence."
+    expected: "Artifact должен запрещать done/archive без final verification."
+    baseline_expected: pass
+    assertions:
+      - id: done-before-verification
+        category: compliance
+        must_contain:
+          - "Feature можно архивировать"
+          - "final_verification.status: passed"
+          - "не evidence overclaim"
 compliance_assertions:
   - id: required-artifacts
     category: outcome

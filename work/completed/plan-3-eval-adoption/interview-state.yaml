@@ -1,0 +1,56 @@
+schema_version: 1
+feature:
+  id: plan-3-eval-adoption
+  title: Plan 3 Artifact Eval Adoption
+  rough_idea: Закрыть P3-S3/P3-S4 через расширенный Artifact Eval и реальный feature-execution-lite
+    adoption
+  workspace: /projects/factory-template/work/features/plan-3-eval-adoption
+progress:
+  current_stage: interview
+  last_completed_stage: intake
+  next_step_hint: Заполните вопрос `problem`
+interview:
+  question_order:
+  - problem
+  - users
+  - value
+  - in_scope
+  - out_of_scope
+  - constraints
+  - acceptance
+  questions:
+    problem:
+      prompt: Какую проблему вы хотите решить?
+      required: true
+    users:
+      prompt: Кто основной пользователь результата?
+      required: true
+    value:
+      prompt: Почему это ценно для пользователя/команды?
+      required: true
+    in_scope:
+      prompt: Что точно входит в первый релиз?
+      required: true
+    out_of_scope:
+      prompt: Что точно не входит в первый релиз?
+      required: true
+    constraints:
+      prompt: Какие ограничения уже известны (время, доступы, legacy)?
+      required: false
+    acceptance:
+      prompt: Как понять, что результат принят?
+      required: true
+  answers:
+    problem: ''
+    users: ''
+    value: ''
+    in_scope: ''
+    out_of_scope: ''
+    constraints: ''
+    acceptance: ''
+timeline:
+  created_at: '2026-04-27T12:21:06'
+  updated_at: '2026-04-27T12:21:06'
+session:
+  last_actor: human
+  resume_note: 'Можно остановиться и продолжить позже: состояние сохраняется в interview-state.yaml'

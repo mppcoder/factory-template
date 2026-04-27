@@ -16,7 +16,7 @@
 - `feature-execution-lite` уже существует как optional advanced path с fixtures, validator и Artifact Eval sample target.
 - Production VPS path подготовлен как dry-run/report-ready, но real VPS deploy, backup restore и rollback drill остаются external runtime proof.
 
-`Plan №3` является audit-only follow-up: он фиксирует карту источников, карту gap'ов и поэтапную дорожную карту для AIF/Molyanov-inspired улучшений, не реализуя task-state, evolve loop или новые eval specs в этом stage.
+`Plan №3` начался как audit-only follow-up в P3-S0. По состоянию на P3-S4 уже закрыты repo-local task-state, learning patch loop, expanded Artifact Eval coverage и один real `feature-execution-lite` adoption closeout. Runtime QA boundary остается отдельной P3-S5 стадией.
 
 ## Карта источников
 
@@ -37,15 +37,15 @@ External ideas используются только как input ideas, а не
 
 | Plan №3 gap | Связанный gap | Текущий evidence | Target stage |
 |---|---|---|---|
-| `P3-GAP-01` AIF-lite task-state visibility | новый / связан с `P25-GAP-08` | Current state есть в release docs, но компактного task-state artifact пока нет. | P3-S1 |
-| `P3-GAP-02` learning patch / evolve proposal loop | связан с feedback loop и Done Loop | Defect-capture и Project Knowledge proposal уже есть, но reusable bug learnings не классифицируются единообразно как proposal vs `not_required`. | P3-S2 |
-| `P3-GAP-03` Artifact Eval coverage expansion | `P25-GAP-06` | Harness имеет sample coverage для routing-critical artifacts, но не broad negative coverage. | P3-S3 |
-| `P3-GAP-04` `feature-execution-lite` real dogfood adoption | `P25-GAP-07` | Validator и fixtures есть, но real factory feature еще не закрывалась через advanced path как durable evidence. | P3-S4 |
+| `P3-GAP-01` AIF-lite task-state visibility | новый / связан с `P25-GAP-08` | Реализовано через `docs/task-state-lite.md`, template `.chatgpt/task-state.yaml` и validator. | P3-S1 |
+| `P3-GAP-02` learning patch / evolve proposal loop | связан с feedback loop и Done Loop | Реализовано через `docs/learning-patch-loop.md`, learning proposal template и validator для reusable bug reports. | P3-S2 |
+| `P3-GAP-03` Artifact Eval coverage expansion | `P25-GAP-06` | Реализованы routing-critical specs/reports и negative fixtures; quick smoke расширен. | P3-S3 |
+| `P3-GAP-04` `feature-execution-lite` real adoption adoption | `P25-GAP-07` | Реальный workspace `work/completed/plan-3-eval-adoption` закрыт через advanced path и Done Loop. | P3-S4 |
 | `P3-GAP-05` pre/post deploy QA as runtime proof boundary | `P25-GAP-04`, `P25-GAP-05` | Production path report-ready; real deploy, restore и rollback не заявлены как выполненные. | P3-S5 |
 | `P3-GAP-06` runtime/source-hygiene boundary classifier | `P25-GAP-08` | Boundary concepts есть, но runtime/source-hygiene backlog требует явного classifier. | P3-S5 / 2.6 |
 | `P3-GAP-07` release-facing consistency pass | `251-STAB-05` | Release-facing docs требуют consistency pass после P3 planning и будущих implementation stages. | каждый P3 closeout |
 
-Plan №3 gaps являются follow-up planning items. Они не reopen `2.5.0 GA Ready` и не превращают pending runtime proof в completed proof.
+Plan №3 gaps не reopen `2.5.0 GA Ready` и не превращают pending runtime proof в completed proof. P3-S0..P3-S4 являются repo-local evidence; P3-S5 остается runtime-boundary preparation.
 
 ## Добавить / не добавлять / уже покрыто
 
@@ -54,7 +54,7 @@ Plan №3 gaps являются follow-up planning items. Они не reopen `2.
 - Repo-native task-state visibility that can live in docs or `.chatgpt` artifacts.
 - Learning patch / evolve proposal loop tied to defect-capture, incoming learnings and Project Knowledge Done Loop.
 - Expanded Artifact Eval specs/reports for routing-critical artifacts and negative cases.
-- One real `feature-execution-lite` dogfood workspace closed through Done Loop.
+- One real `feature-execution-lite` adoption workspace closed through Done Loop.
 - Pre-deploy and post-deploy QA boundary docs for 2.6 runtime proof.
 - Runtime/source-hygiene boundary classifier for internal repo, downstream sync, manual-only and external runtime work.
 
@@ -84,8 +84,8 @@ Plan №3 gaps являются follow-up planning items. Они не reopen `2.
 | P3-S0 | Audit capture, карта источников, карта gap'ов и staged roadmap. | Docs-only; без task-state/evolve/eval implementation. |
 | P3-S1 | Добавить lightweight AIF-lite task-state visibility. | Реализовано через template `.chatgpt/task-state.yaml`, docs и validator; beginner path остается легким. |
 | P3-S2 | Добавить learning patch / evolve proposal loop. | Реализовано через docs, template proposal, template `reports/learnings/` и validator для reusable bugs. |
-| P3-S3 | Расширить Artifact Eval coverage. | Больше routing-critical specs/reports и meaningful negative fixtures. |
-| P3-S4 | Dogfood `feature-execution-lite` на одном real factory change. | Real workspace закрыт через Done Loop с evidence. |
+| P3-S3 | Расширить Artifact Eval coverage. | Реализовано: routing-critical specs/reports и meaningful negative fixtures подключены к quick smoke. |
+| P3-S4 | Adoption `feature-execution-lite` на одном real factory change. | Реализовано: `work/completed/plan-3-eval-adoption` закрыт через Done Loop с evidence. |
 | P3-S5 | Подготовить runtime QA boundary для 2.6. | Pre/post deploy QA, restore, rollback и transcript requirements documented; без real VPS mutation. |
 
 ## Граничные решения

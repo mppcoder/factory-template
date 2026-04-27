@@ -1,0 +1,61 @@
+schema: artifact-eval/v1
+id: done-closeout-external-actions
+report_date: 2026-04-27
+target_artifact: template-repo/scenario-pack/16-done-closeout.md
+artifact_type: scenario-pack
+expected_output:
+  guided: "Done closeout различает internal follow-up, compact no-action closeout и actionable external ledger."
+thresholds:
+  min_case_pass_rate: 1.0
+  min_assertion_pass_rate: 1.0
+  max_false_positive_rate: 0.0
+expected_trigger:
+  cases:
+    - id: compact-no-external-actions
+      prompt: "Repo change завершен, внешних действий нет."
+      expected: "Artifact требует короткую фразу без audit table."
+      baseline_expected: fail
+      assertions:
+        - id: no-action-phrase
+          category: outcome
+          must_contain:
+            - "Внешних действий не требуется."
+            - "без таблицы всех contour'ов"
+        - id: no-noop-register
+          category: compliance
+          must_contain:
+            - "Запрещено перечислять contour'ы со статусом `не требуется`"
+            - "Если все потенциальные строки реестра имеют `действие не требуется`, реестр не нужен"
+    - id: external-action-ledger
+      prompt: "Есть настоящий external/manual step."
+      expected: "Artifact requires actionable external action ledger."
+      baseline_expected: fail
+      assertions:
+        - id: ledger-fields
+          category: process
+          must_contain:
+            - "`Реестр внешних действий`"
+            - "точное действие пользователя"
+            - "когда выполнять действие"
+non_trigger_cases:
+  - id: all-noop-verbose-register
+    prompt: "Ответ перечисляет только no-op строки в реестре внешних действий."
+    expected: "Artifact rejects oververbose all-noop ledger."
+    baseline_expected: pass
+    assertions:
+      - id: no-all-noop-ledger
+        category: compliance
+        must_contain:
+          - "Если все потенциальные строки реестра имеют `действие не требуется`, реестр не нужен"
+          - "Внешних действий не требуется."
+compliance_assertions:
+  - id: internal-follow-up
+    category: process
+    must_contain:
+      - "Если остаются internal repo follow-up задачи"
+      - "user-only closeout запрещен"
+  - id: sync-before-final
+    category: compliance
+    must_contain:
+      - "git status --short --branch"
+      - "commit hash / sync status"

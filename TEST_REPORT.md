@@ -4,6 +4,28 @@ Status source of truth: `docs/releases/release-scorecard.yaml`.
 Current scorecard state: `2.5.0 GA Ready`.
 TEST_REPORT.md is verification evidence, not the canonical release-status source.
 
+## Проверка Plan №3 P3-S3/P3-S4
+
+Дата: `2026-04-27`.
+
+Расширены Artifact Eval coverage и real `feature-execution-lite` adoption без изменения beginner default и без заявления production proof.
+
+- Добавлены specs/reports для `direct-task-self-handoff`, `done-closeout-external-actions`, `downstream-sync-boundary` и `production-vps-proof-boundary`.
+- Существующие `codex-handoff-response` и `feature-execution-lite` specs получили negative fixtures для multi-block/file-based handoff и done without final verification.
+- `template-repo/scripts/verify-all.sh quick` теперь smoke-проверяет расширенный набор Artifact Eval reports.
+- Закрыт real advanced workspace `work/completed/plan-3-eval-adoption` с `done-report.md`, `project-knowledge-update-proposal.md`, `downstream-impact.md`, task waves, checkpoint и decisions.
+- Incidental naming defect закрыт в текущем scope: `reports/bugs/2026-04-27-plan-3-restricted-term-workspace-id.md`; workspace evidence переименован в `plan-3-eval-adoption`, чтобы не нарушать tree contract.
+- P3-S5 runtime QA не выполнялся: real VPS deploy, backup restore и rollback drill остаются external/runtime boundary.
+
+Проверки:
+
+- `python3 template-repo/scripts/validate-artifact-eval-report.py tests/artifact-eval/reports/*.md` — pass.
+- `python3 template-repo/scripts/validate-feature-execution-lite.py --workspace work/features/plan-3-eval-adoption --require-advanced` — pass до closeout.
+- `python3 template-repo/scripts/validate-project-knowledge-update.py . --workspace work/completed/plan-3-eval-adoption` — pass.
+- `python3 template-repo/scripts/validate-feature-execution-lite.py .` — pass.
+- `python3 template-repo/scripts/validate-human-language-layer.py .` — pass, active findings `0`.
+- `bash template-repo/scripts/verify-all.sh quick` — pass на `2026-04-27`.
+
 ## Проверка Plan №3 P3-S1/P3-S2
 
 Дата: `2026-04-27`.
@@ -37,7 +59,7 @@ TEST_REPORT.md is verification evidence, not the canonical release-status source
 - `docs/releases/plan-3-aif-molyanov-audit.md` фиксирует current state after Plan №2, source map, gap map, add/do-not-add/already-covered decisions, staged roadmap и runtime boundary decisions.
 - `docs/releases/post-2.5-gap-register.md` расширен gap'ами `P3-GAP-01`..`P3-GAP-07`.
 - `CURRENT_FUNCTIONAL_STATE.md` обновлен так, чтобы Plan №3 P3-S0 был виден как planning/audit status, а completed FP-01..FP-05 не выглядели pending.
-- Этот stage не добавлял task-state artifact, learning/evolve validator, новые Artifact Eval specs или real `feature-execution-lite` dogfood workspace.
+- Этот stage не добавлял task-state artifact, learning/evolve validator, новые Artifact Eval specs или real `feature-execution-lite` adoption workspace.
 - Новый release-ready status не объявлен; scorecard `2.5.0 GA Ready` не изменялся.
 
 Проверки:
