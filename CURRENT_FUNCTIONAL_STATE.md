@@ -111,10 +111,22 @@
 - downstream upgrade UX closeout зафиксирован в `UPGRADE_SUMMARY.md`
 - `G25-GA` прошел на `2026-04-26`: full-KPI evidence зафиксирован для всех `M25-*`
 - consolidated evidence: `docs/releases/2.5-ga-kpi-evidence.md`
-- граница evidence: `2.5.0 GA Ready` означает repo-controlled GA evidence; field-proven статус для real battle projects пока не заявлен
+- граница evidence: `2.5.0 GA Ready` означает repo-controlled GA evidence; post-GA field proof для real GitHub-backed projects завершен отдельно и не переписывает исходный scorecard gate
 - post-GA field pilot roadmap: `docs/releases/2.5.1-field-pilot-roadmap.md`
 - field pilot evidence register: `reports/release/2.5-field-pilot-evidence.md`
 - текущий field evidence status: `completed-field-evidence` (`FP-01`..`FP-05` passed, `5/5`)
+
+## Планирование после 2.5
+- stabilization roadmap: `docs/releases/2.5.1-roadmap.md`
+- next feature/runtime roadmap: `docs/releases/2.6-roadmap.md`
+- gap register: `docs/releases/post-2.5-gap-register.md`
+- текущая стадия: `release-followup -> planning`
+- текущий planning status: `planned, not release-ready`
+- `2.5.1` scope: downstream sync v3 stabilization, field pilot evidence discoverability, closeout/boundary guardrails, optional downstream sync adoption and release-facing docs.
+- `2.6` scope: real production VPS deploy, backup restore, rollback drill, expanded artifact eval, real `feature-execution-lite` adoption and runtime/source-hygiene backlog.
+- completed proof: `2.5.0` repo-controlled GA evidence, `2.5.1-field-pilot` real project proof, downstream sync v3 synthetic multi-cycle proof.
+- pending external runtime proof: real VPS deploy, real backup restore, real rollback drill, secrets/manual boundary and operator approval.
+- `pavel-molyanov/molyanov-ai-dev` comparison recorded in `docs/releases/post-2.5-gap-register.md`; factory keeps useful spec/project-knowledge/eval ideas but does not import Claude-specific `.claude`, command or TeamCreate assumptions.
 
 ## Что работает частично
 - matrix runner как единый источник истины

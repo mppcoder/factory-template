@@ -1,5 +1,12 @@
 # Release notes / заметки релиза
 
+## Не выпущено - post-2.5 planning
+
+- Добавлены roadmaps `2.5.1` и `2.6`: `2.5.1` ограничен stabilization/bugfix/docs/field proof, а `2.6` получает production VPS runtime proof, расширенный Artifact Eval Harness, adoption `feature-execution-lite` и runtime/source-hygiene backlog.
+- Добавлен `docs/releases/post-2.5-gap-register.md`, который отделяет completed repo-controlled/synthetic proof от pending external runtime proof.
+- Зафиксировано сравнение с `pavel-molyanov/molyanov-ai-dev`: что уже адаптировано, что полезно для 2.6 и что намеренно не переносится из Claude-specific execution model.
+- Новый release-ready статус не объявлен: `docs/releases/release-scorecard.yaml` остается source of truth для `2.5.0 GA Ready`.
+
 ## Не выпущено - архитектура brownfield transition
 
 - `factory-template` теперь описан как обычный `greenfield-product`, чей продукт — project factory, с дополнительным factory producer layer.

@@ -4,6 +4,23 @@ Status source of truth: `docs/releases/release-scorecard.yaml`.
 Current scorecard state: `2.5.0 GA Ready`.
 TEST_REPORT.md is verification evidence, not the canonical release-status source.
 
+## Проверка post-2.5 release planning
+
+Дата: `2026-04-27`.
+
+Добавлен planning layer после `2.5.0 GA Ready`.
+
+- `docs/releases/2.5.1-roadmap.md` фиксирует patch/stabilization scope: downstream sync v3 stabilization, field pilot evidence, closeout/boundary guardrails, optional downstream sync adoption.
+- `docs/releases/2.6-roadmap.md` выносит deeper scope: real production VPS deploy, backup restore, rollback drill, expanded artifact eval, `feature-execution-lite` adoption и runtime/source-hygiene backlog.
+- `docs/releases/post-2.5-gap-register.md` разделяет completed repo-controlled/synthetic proof и pending external runtime proof.
+- `reports/bugs/2026-04-27-post-25-release-planning-gap.md` фиксирует release-followup planning gap как remediated in current scope.
+- Сравнение с `pavel-molyanov/molyanov-ai-dev` записано как adaptation register: already adapted, useful but not yet adapted, intentionally not adapted.
+- Новый release-ready status не объявлен; scorecard `2.5.0 GA Ready` не изменялся.
+
+Проверки:
+
+- `bash template-repo/scripts/verify-all.sh quick` — pass на `2026-04-27`.
+
 ## Проверка Production VPS Field Pilot
 
 Дата: `2026-04-27`.

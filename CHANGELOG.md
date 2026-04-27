@@ -2,6 +2,9 @@
 
 ## [Unreleased]
 ### Добавлено
+- post-2.5 planning layer: `docs/releases/2.5.1-roadmap.md`, `docs/releases/2.6-roadmap.md` и `docs/releases/post-2.5-gap-register.md`.
+- defect report `reports/bugs/2026-04-27-post-25-release-planning-gap.md` для release-followup planning gap после `2.5.0 GA Ready`.
+- comparison register for `pavel-molyanov/molyanov-ai-dev`: already adapted, useful-not-yet-adapted and intentionally-not-adapted ideas.
 - defect report `reports/bugs/2026-04-26-root-still-has-nonstandard-top-level-folders.md` и ADR `docs/decisions/2026-04-26-root-physical-normalization.md` для physical root normalization.
 - bounded namespace `factory/producer/` для factory-producer-owned ops, packaging, registry, sync, reference, extensions и archive content.
 - bug report `reports/bugs/2026-04-26-handoff-codex-language-leak.md` для повторной утечки английского handoff/ответов Codex.
@@ -11,6 +14,8 @@
 - `docs/brownfield-to-greenfield-transition.md` описывает without-repo и with-repo transition paths, conversion gates и done rule.
 
 ### Изменено
+- release-facing docs теперь явно разделяют `2.5.1` stabilization scope и `2.6` runtime/advanced execution scope без изменения `2.5.0` scorecard.
+- post-2.5 docs фиксируют completed repo-controlled/synthetic proof отдельно от pending external runtime proof: real VPS deploy, backup restore и rollback drill остаются external/manual boundary.
 - legacy/factory-only root folders физически перенесены или растворены: `.dogfood-bootstrap`, `factory_template_only_pack`, `meta-template-project`, `onboarding-smoke`, `optional-domain-packs`, `packaging`, `registry`, `working-project-examples`, `workspace-packs`.
 - `template-repo/tree-contract.yaml` и `validate-tree-contract.py` теперь запрещают старые active root paths, проверяют `factory/producer/*` namespace и блокируют factory-producer-owned paths в generated/battle projects.
 - downstream sync tooling, source profiles, release scripts, docs и smoke/matrix paths обновлены на новые producer/test/reference locations.

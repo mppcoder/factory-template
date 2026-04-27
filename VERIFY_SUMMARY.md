@@ -24,6 +24,14 @@
 - Evidence: `docs/releases/2.5-ga-kpi-evidence.md`.
 - `ga_ready` установлен в `true`; release-facing docs синхронизированы с scorecard.
 
+## Baseline планирования после 2.5
+
+- `docs/releases/2.5.1-roadmap.md`: добавлен, status `planned, not release-ready`.
+- `docs/releases/2.6-roadmap.md`: добавлен, status `planned, not release-ready`.
+- `docs/releases/post-2.5-gap-register.md`: добавлен.
+- `reports/bugs/2026-04-27-post-25-release-planning-gap.md`: defect capture закрыт как `remediated-in-current-scope`.
+- Completed proof отделен от pending external runtime proof; `2.5.0` scorecard не изменялся.
+
 ## Проверенные слои
 
 - release metadata и version sync
