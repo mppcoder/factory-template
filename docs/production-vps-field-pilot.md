@@ -68,6 +68,20 @@ python3 template-repo/scripts/prepare-production-env-defaults.py
 
 Он заполняет non-secret defaults и оставляет оператору только секреты/manual values. Не просите пользователя вручную заполнять значения, которые Codex может безопасно вывести на VPS.
 
+Если реального `APP_IMAGE` еще нет, установите generated placeholder page:
+
+```bash
+python3 template-repo/scripts/install-static-placeholder.py
+```
+
+Для внешней картинки-заглушки:
+
+```bash
+python3 template-repo/scripts/install-static-placeholder.py --image-url "https://example.com/placeholder.png"
+```
+
+Это снимает с пользователя лишнюю обязанность искать image или вручную собирать страницу-заглушку. Boundary остается явной: placeholder proof не является proof бизнес-приложения.
+
 ## Этап 1: starter smoke
 
 Use this before production presets when validating a new VPS.

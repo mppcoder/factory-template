@@ -19,12 +19,14 @@ Approved runtime proof выполнен на VPS `72.56.26.209` в `/projects/fa
 - Rollback drill — pass with local candidate tag and rollback to previous image.
 - Sanitized report: `reports/release/2.6-runtime-proof-report.md`.
 - Boundary: `APP_IMAGE=nginx:1.27-alpine`, so this is infrastructure proof, not real application image proof.
+- Generated static placeholder page installed after runtime proof; live URL `https://72-56-26-209.sslip.io/`, image URL `https://72-56-26-209.sslip.io/placeholder.svg`.
 
 Runtime defects remediated:
 
 - `reports/bugs/2026-04-27-runtime-env-user-burden-gap.md`.
 - `reports/bugs/2026-04-27-backup-hook-command-splitting.md`.
 - `reports/bugs/2026-04-27-skip-pull-defeated-by-pull-policy.md`.
+- `reports/bugs/2026-04-27-app-image-placeholder-burden-gap.md`.
 
 Проверки repo после remediation:
 

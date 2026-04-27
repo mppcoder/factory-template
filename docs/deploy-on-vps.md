@@ -97,6 +97,18 @@ python3 template-repo/scripts/prepare-production-env-defaults.py
 
 Скрипт выставит production preset, DB name/user, backup path, `sslip.io` domain для публичного IPv4, `ACME_AGREE=true` и оставит оператору только реальные secrets/manual values: `DB_PASSWORD`, `TLS_EMAIL` и при необходимости настоящий `APP_IMAGE`.
 
+Если реального app image еще нет, используйте generated placeholder вместо ручного поиска картинки:
+
+```bash
+python3 template-repo/scripts/install-static-placeholder.py
+```
+
+По умолчанию он установит `deploy/static-placeholder/index.html` и `placeholder.svg` в app volume. Для своей картинки можно передать URL:
+
+```bash
+python3 template-repo/scripts/install-static-placeholder.py --image-url "https://example.com/placeholder.png"
+```
+
 ## Что настраивается через env
 
 Файл: `deploy/.env`
@@ -104,6 +116,8 @@ python3 template-repo/scripts/prepare-production-env-defaults.py
 - `OPERATOR_PRESET` — `starter`, `app-db`, `reverse-proxy-tls`, `backup`, `healthcheck`, `production` или список через запятую.
 - `APP_IMAGE` — Docker image приложения.
 - `APP_PULL_POLICY` — policy для получения image при deploy. По умолчанию `always`; для rollback drill с локальным candidate tag можно временно поставить `never`.
+- `APP_PLACEHOLDER_MODE` — `static`, если production smoke использует generated placeholder вместо реального приложения.
+- `APP_PLACEHOLDER_IMAGE_URL` — URL картинки для placeholder page. По умолчанию локальный `/placeholder.svg`.
 - `APP_CONTAINER_NAME` — имя контейнера.
 - `APP_BIND_ADDRESS` — bind address для app-порта. Для reverse proxy обычно `127.0.0.1`.
 - `APP_PORT` — внешний порт на VPS.

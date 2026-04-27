@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="720" viewBox="0 0 1200 720" role="img" aria-labelledby="title desc">
+  <title id="title">Factory Template runtime placeholder</title>
+  <desc id="desc">A clean placeholder illustration for a freshly deployed factory-template production smoke page.</desc>
+  <defs>
+    <linearGradient id="sky" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0" stop-color="#f7fbff"/>
+      <stop offset="0.52" stop-color="#e7f1f7"/>
+      <stop offset="1" stop-color="#f8f4e8"/>
+    </linearGradient>
+    <linearGradient id="panel" x1="0" x2="1">
+      <stop offset="0" stop-color="#2b5f73"/>
+      <stop offset="1" stop-color="#49654f"/>
+    </linearGradient>
+    <filter id="soft" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="18" stdDeviation="18" flood-color="#18323f" flood-opacity="0.18"/>
+    </filter>
+  </defs>
+  <rect width="1200" height="720" fill="url(#sky)"/>
+  <path d="M0 548 C170 500 285 575 440 530 C605 482 710 532 858 498 C1012 464 1090 520 1200 486 L1200 720 L0 720 Z" fill="#d8e6dd"/>
+  <path d="M0 620 C170 576 324 632 468 592 C642 544 780 610 940 560 C1058 524 1134 548 1200 532 L1200 720 L0 720 Z" fill="#bdd2c4"/>
+  <g filter="url(#soft)">
+    <rect x="250" y="132" width="700" height="402" rx="24" fill="#ffffff"/>
+    <rect x="278" y="164" width="644" height="64" rx="14" fill="url(#panel)"/>
+    <circle cx="314" cy="196" r="9" fill="#f4d35e"/>
+    <circle cx="346" cy="196" r="9" fill="#ee6c4d"/>
+    <circle cx="378" cy="196" r="9" fill="#9fd3c7"/>
+    <rect x="318" y="278" width="244" height="28" rx="8" fill="#284b63"/>
+    <rect x="318" y="326" width="430" height="18" rx="9" fill="#9bb6bd"/>
+    <rect x="318" y="362" width="356" height="18" rx="9" fill="#bdc9b5"/>
+    <rect x="318" y="426" width="190" height="48" rx="12" fill="#2b5f73"/>
+    <rect x="574" y="276" width="250" height="174" rx="18" fill="#f1efe7"/>
+    <path d="M618 404 L674 346 L724 392 L758 358 L804 404 Z" fill="#6c8f7d"/>
+    <circle cx="764" cy="322" r="20" fill="#f4d35e"/>
+  </g>
+  <text x="600" y="596" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="30" font-weight="700" fill="#274653">Runtime placeholder is live</text>
+  <text x="600" y="636" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="20" fill="#47636b">Replace this page with your real application image when ready.</text>
+</svg>

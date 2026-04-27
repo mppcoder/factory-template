@@ -102,6 +102,7 @@
 - Plan №3 P3-S4 провел real `feature-execution-lite` adoption: `work/completed/plan-3-eval-adoption` содержит advanced workspace closeout, done-report, Project Knowledge proposal и downstream-impact evidence
 - Plan №3 P3-S5 подготовил runtime QA boundary для 2.6: pre-deploy QA, post-deploy QA, backup restore, rollback drill, secrets/manual boundary и sanitized runtime transcript requirements documented; real VPS proof не выполнялся
 - 2.6 runtime proof executed on VPS `72.56.26.209` for production preset infrastructure path: deploy, HTTPS healthcheck, backup, disposable restore and rollback drill passed; boundary remains demo `APP_IMAGE=nginx:1.27-alpine`, so real application image proof is still pending
+- production placeholder path now includes generated static placeholder assets and installer, so Codex can serve a visible placeholder page or a custom placeholder image URL without requiring the user to provide a real app image first
 
 ## Программа 2.5 (release truth)
 - release truth source: `docs/releases/release-scorecard.yaml`

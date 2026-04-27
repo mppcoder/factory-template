@@ -81,6 +81,12 @@ def main() -> int:
     parser.add_argument("--domain", default=None)
     parser.add_argument("--backup-path", default="/var/backups/factory-template-postgres")
     parser.add_argument("--app-image", default="nginx:1.27-alpine")
+    parser.add_argument(
+        "--placeholder-image-url",
+        default="/placeholder.svg",
+        help="Use a generated static placeholder page and set its image URL. Pass an external URL if you want the placeholder page to reference a custom image.",
+    )
+    parser.add_argument("--no-placeholder", action="store_true", help="Do not set placeholder mode fields.")
     parser.add_argument("--db-name", default="factory_template")
     parser.add_argument("--db-user", default="factory_template")
     args = parser.parse_args()
@@ -107,6 +113,9 @@ def main() -> int:
         "DOMAIN": values.get("DOMAIN") if values.get("DOMAIN") not in {"", "example.com"} else domain,
         "ACME_AGREE": "true",
     }
+    if not args.no_placeholder:
+        updates["APP_PLACEHOLDER_MODE"] = "static"
+        updates["APP_PLACEHOLDER_IMAGE_URL"] = args.placeholder_image_url
     for key, placeholder in SECRET_PLACEHOLDERS.items():
         if is_missing_or_placeholder(values, key):
             updates[key] = placeholder
@@ -125,6 +134,8 @@ def main() -> int:
     print(f"env_file={env_path}")
     print(f"backup_path={args.backup_path}")
     print(f"domain={final_values.get('DOMAIN', '')}")
+    if not args.no_placeholder:
+        print(f"placeholder_image_url={final_values.get('APP_PLACEHOLDER_IMAGE_URL', '')}")
     print("remaining_user_fields=" + (",".join(remaining) if remaining else "none"))
     if final_values.get("APP_IMAGE", "").startswith("nginx:"):
         print("warning=APP_IMAGE is demo nginx; runtime proof is infrastructure-level until a real app image is set.")
