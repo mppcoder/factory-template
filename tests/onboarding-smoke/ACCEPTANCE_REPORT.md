@@ -1,6 +1,6 @@
 # Onboarding Smoke Acceptance
 
-- Run timestamp (UTC): `2026-04-26T22:00:11Z`
+- Run timestamp (UTC): `2026-04-27T05:14:48Z`
 - Runner: `tests/onboarding-smoke/run-novice-e2e.sh`
 - Root: `/projects/factory-template`
 
@@ -11,7 +11,7 @@
 - expected preset: `greenfield-product`
 - generated project: `/projects/factory-template/tests/onboarding-smoke/.tmp-run/greenfield-novice/novice-greenfield-smoke`
 - log: `/projects/factory-template/tests/onboarding-smoke/.tmp-run/greenfield-novice.txt`
-- duration_seconds: `3`
+- duration_seconds: `2`
 - manual_interventions: `0`
 
 2. `brownfield-without-repo-novice`
@@ -27,7 +27,7 @@
 - expected preset: `brownfield-with-repo-modernization`
 - generated project: `/projects/factory-template/tests/onboarding-smoke/.tmp-run/brownfield-modernization-novice/novice-brownfield-modernization-smoke`
 - log: `/projects/factory-template/tests/onboarding-smoke/.tmp-run/brownfield-modernization-novice.txt`
-- duration_seconds: `2`
+- duration_seconds: `3`
 - manual_interventions: `0`
 
 4. `brownfield-integration-novice`

@@ -22,5 +22,11 @@
 - `rollback-template-patch.sh --check|--rollback` откатывает materialized safe-generated/safe-clone файлы по сохраненному state;
 - `rollback-template-patch.sh --rollback --restore-project-snapshot` восстанавливает full-project snapshot (если он был создан на apply-шаге);
 - `check-template-drift.py --format human` дает readable drift summary без ручного чтения raw JSON.
+- `validate-downstream-multi-cycle-sync.py` создает synthetic downstream fixture и проверяет несколько циклов sync/apply/manual edits/advisory review/rollback/converted brownfield.
+
+Production VPS field-pilot contour в manifest разделен так:
+- reusable deploy templates/scripts — `safe-generated`;
+- runbooks и release field-pilot report — `advisory-review`;
+- `deploy/.env`, `.factory-runtime/`, runtime transcripts, secrets и real VPS approval boundary — manual-only/project-owned.
 
 Подробная policy: `docs/downstream-upgrade-policy.md`.

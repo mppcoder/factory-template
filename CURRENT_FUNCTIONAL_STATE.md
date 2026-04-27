@@ -71,6 +71,8 @@
 - `validate-project-knowledge-update.py` и `project-knowledge-done-loop-smoke` подключены к quick verify, поэтому done closeout проверяет непустые decisions, явный Project Knowledge proposal, archive/blocker и downstream impact note
 - Production VPS Field Pilot подготовлен как safe report-first path: `docs/production-vps-field-pilot.md`, `reports/release/production-vps-field-pilot-report.md`, `deploy-dry-run.sh --field-pilot-report`, `operator-dashboard.py --field-pilot-report` и `validate-operator-env.py --field-pilot-report` отделяют dry-run evidence от real VPS proof
 - Starter остаётся beginner default, а `app-db`, `reverse-proxy-tls`, `backup`, `healthcheck` и `production` остаются opt-in; quick verify покрывает production report mode через fake Docker Compose без destructive deploy
+- downstream sync v3 теперь имеет multi-cycle proof: synthetic fixture проверяет initial safe sync, project-owned manual edits, advisory-review без auto-apply, safe-generated/safe-clone update, rollback после нескольких циклов и `converted_greenfield` brownfield history protection
+- production VPS field-pilot artifacts включены в downstream sync boundary: reusable deploy templates/scripts идут через `safe-generated`, field-pilot docs/report через `advisory-review`, а `deploy/.env`, `.factory-runtime/`, runtime transcripts, real VPS approval и secrets остаются manual-only
 - репо больше не считает один static profile или старую сессию Codex надежной единицей маршрутизации
 - в repo появился единый visual/workflow reference layer по самому шаблону, greenfield, brownfield и downstream update contour
 - root-level `RELEASE_NOTES.md` теперь является каноническим source для опубликованных release notes и release executor

@@ -1,30 +1,32 @@
 launch:
-  timestamp_utc: '2026-04-26T18:55:18+00:00'
+  timestamp_utc: '2026-04-27T05:06:48+00:00'
   launch_unit: new-task-launch
   launch_source: chatgpt-handoff
   router_layer: executable
   task_class: deep
   task_class_reasons:
-  - 'keyword-hit: audit'
-  - 'явный reasoning/model override совпал с default profile: deep'
+  - 'явный override task_class: deep'
+  - 'явный override selected_profile: deep'
   selected_profile: deep
   selected_model: gpt-5.5
   selected_reasoning_effort: high
   selected_plan_mode_reasoning_effort: high
   apply_mode: manual-ui
   strict_launch_mode: optional
-  project_profile: unknown-project-profile
-  selected_scenario: 00-master-router.md
-  pipeline_stage: done
+  project_profile: factory-template
+  selected_scenario: post-2.5/downstream-multi-cycle-sync
+  pipeline_stage: audit → evidence → remediation-if-needed
   artifacts_to_update:
   - .chatgpt/codex-input.md
   - .chatgpt/codex-context.md
   - .chatgpt/codex-task-pack.md
   - .chatgpt/verification-report.md
   - .chatgpt/done-report.md
-  handoff_allowed: yes (forbidden)
-  defect_capture_path: not-required-by-text-signal
-  task_summary: 'audit: проверить repo на остаточный английский человекочитаемый слой'
+  - reports/bugs/
+  - reports/factory-feedback/
+  handoff_allowed: 'yes'
+  defect_capture_path: reports/bugs/YYYY-MM-DD-downstream-multi-cycle-sync-gap.md
+  task_summary: CODEX HANDOFF — DOWNSTREAM MULTI-CYCLE SYNC PROOF
   launch_boundary_rule: Выбор модели и reasoning mode считается надежным только на
     новом запуске Codex для новой задачи.
   interactive_default_rule: 'Для интерактивной работы в VS Code Codex extension основной
@@ -85,7 +87,7 @@ launch:
     --write-proposal`; promotion profile mapping требует ручного review.
   direct_self_handoff_required: false
   direct_self_handoff_completed: false
-  requested_task_class: null
-  requested_selected_profile: null
-  requested_selected_model: null
-  requested_selected_reasoning_effort: null
+  requested_task_class: downstream-sync-validation
+  requested_selected_profile: deep
+  requested_selected_model: gpt-5.5
+  requested_selected_reasoning_effort: high

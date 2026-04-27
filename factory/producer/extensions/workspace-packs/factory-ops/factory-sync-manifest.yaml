@@ -49,6 +49,59 @@ tiers:
         note: reusable task blocks для Codex принадлежат шаблону
       - path: template-repo/template/work-templates
         note: task/spec templates принадлежат шаблону; project work в work/ остается защищенным
+    materialized_files:
+      - source: deploy/.env.example
+        target: deploy/.env.example
+        mode: copy
+        note: example env template; real deploy/.env remains manual/project-owned and excluded
+      - source: deploy/compose.yaml
+        target: deploy/compose.yaml
+        mode: copy
+        note: reusable single-VPS compose baseline
+      - source: deploy/compose.production.yaml
+        target: deploy/compose.production.yaml
+        mode: copy
+        note: reusable production compose overlay
+      - source: deploy/presets/starter.yaml
+        target: deploy/presets/starter.yaml
+        mode: copy
+        note: reusable operator preset
+      - source: deploy/presets/app-db.yaml
+        target: deploy/presets/app-db.yaml
+        mode: copy
+        note: reusable operator preset
+      - source: deploy/presets/reverse-proxy-tls.yaml
+        target: deploy/presets/reverse-proxy-tls.yaml
+        mode: copy
+        note: reusable operator preset
+      - source: deploy/presets/backup.yaml
+        target: deploy/presets/backup.yaml
+        mode: copy
+        note: reusable operator preset
+      - source: deploy/presets/healthcheck.yaml
+        target: deploy/presets/healthcheck.yaml
+        mode: copy
+        note: reusable operator preset
+      - source: template-repo/scripts/deploy-dry-run.sh
+        target: scripts/deploy-dry-run.sh
+        mode: copy
+        note: template-owned deploy dry-run script; real VPS deploy still requires operator approval
+      - source: template-repo/scripts/deploy-local-vps.sh
+        target: scripts/deploy-local-vps.sh
+        mode: copy
+        note: template-owned deploy script; destructive use remains approval-gated
+      - source: template-repo/scripts/operator-dashboard.py
+        target: scripts/operator-dashboard.py
+        mode: copy
+        note: template-owned operator summary/report helper
+      - source: template-repo/scripts/validate-operator-env.py
+        target: scripts/validate-operator-env.py
+        mode: copy
+        note: template-owned env readiness validator
+      - source: template-repo/scripts/preflight-vps-check.py
+        target: scripts/preflight-vps-check.py
+        mode: copy
+        note: template-owned VPS preflight checker
 
   safe-clone:
     description: Materialized clone files, полученные из template source.
@@ -73,6 +126,19 @@ tiers:
       - template-repo/template/docs
       - path: template-repo/template/project-knowledge
         note: default advisory; используйте diff/merge guidance, а не automatic overwrite
+    materialized_files:
+      - source: docs/deploy-on-vps.md
+        target: docs/deploy-on-vps.md
+        mode: copy
+        note: production VPS runbook is review-only because downstream runtime topology may differ
+      - source: docs/production-vps-field-pilot.md
+        target: docs/production-vps-field-pilot.md
+        mode: copy
+        note: field pilot runbook is review-only; real VPS approval boundary stays local
+      - source: reports/release/production-vps-field-pilot-report.md
+        target: reports/release/production-vps-field-pilot-report.md
+        mode: copy
+        note: template release report is advisory evidence, not downstream runtime proof
 
   manual-project-owned:
     description: Project-specific lifecycle content; никогда не применять автоматически из bundle.
@@ -96,6 +162,8 @@ tiers:
         note: starter files only; downstream brownfield content becomes historical evidence after conversion
 
 exclude_zones:
+  - deploy/.env
+  - .factory-runtime
   - factory/producer
   - factory/producer/registry
   - factory/producer/reference/examples

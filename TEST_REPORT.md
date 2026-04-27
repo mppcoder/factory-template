@@ -250,6 +250,7 @@ Evidence / quality / DoD до смыслового наполнения арте
 - `python3 template-repo/scripts/validate-mode-parity.py .` проходит и подтверждает общий core layer для template base, greenfield, brownfield-without-repo и всех brownfield-with-repo presets.
 - `bash template-repo/scripts/verify-all.sh quick` проходит.
 - `bash template-repo/scripts/verify-all.sh ci` проходит.
+- `bash template-repo/scripts/verify-all.sh ci` повторно проходит на `2026-04-27` после добавления downstream multi-cycle sync proof.
 - `deploy-dry-run-smoke-starter-app-db` входит в `verify-all.sh quick/ci` и проверяет dry-run для `starter` и `app-db` через локальный fake `docker compose`, без зависимости от Docker daemon.
 - Production VPS preset gap зафиксирован и исправлен in-scope: `reports/bugs/2026-04-26-production-vps-preset-gap.md`.
 - `MATRIX_TEST.sh` подтверждает `validate-tree-contract.py` на generated greenfield, brownfield-without-repo и brownfield-with-repo контурах.
@@ -279,6 +280,9 @@ Evidence / quality / DoD до смыслового наполнения арте
 - `MATRIX_TEST.sh` подтверждает, что generated `codex task pack` проходит отдельный semantic validator и подхватывает active scenario routing.
 - `MATRIX_TEST.sh` подтверждает upgrade closeout path v3: `upgrade-report.py`, `apply-template-patch.sh --apply-safe-zones`, `rollback-template-patch.sh --check|--rollback`.
 - `MATRIX_TEST.sh` подтверждает multi-zone downstream preview: `safe-generated` materializes больше двух template-owned файлов, `advisory-review` показывает `project-knowledge` только как diff/merge guidance, `manual-project-owned` показывает live `work/` только как impact signal.
+- `MATRIX_TEST.sh` подтверждает downstream multi-cycle sync proof: initial safe sync, project-owned manual edits, advisory-review без auto-apply, safe-generated/safe-clone update, rollback после нескольких циклов и `converted_greenfield` brownfield history protection.
+- Production VPS field-pilot downstream boundary проверен synthetic proof: deploy templates/scripts идут как `safe-generated`, field-pilot docs/report как `advisory-review`, а `deploy/.env`, `.factory-runtime/`, runtime transcripts, real VPS approval и secrets остаются manual-only.
+- Release evidence: `reports/release/downstream-multi-cycle-sync-report.md`.
 - `MATRIX_TEST.sh` подтверждает, что `upgrade-report.py` не возвращает известные англоязычные человекочитаемые фразы в markdown summary.
 - `validate-codex-task-pack.py` теперь проверяет auto-closeout guardrails: финальный `git status --short --branch`, запрет dirty/ahead closeout без blocker и обязательное отражение commit hash / sync status.
 - `VALIDATE_FACTORY_TEMPLATE_OPS.sh` подтверждает semantic profile для `sources-pack-core-20`, `sources-pack-release-20` и `sources-pack-bugfix-20`.
