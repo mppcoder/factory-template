@@ -120,12 +120,14 @@
 - stabilization roadmap: `docs/releases/2.5.1-roadmap.md`
 - next feature/runtime roadmap: `docs/releases/2.6-roadmap.md`
 - gap register: `docs/releases/post-2.5-gap-register.md`
+- Plan №3 audit: `docs/releases/plan-3-aif-molyanov-audit.md`
 - текущая стадия: `release-followup -> planning`
-- текущий planning status: `planned, not release-ready`
+- текущий planning status: `Plan №3 P3-S0 audit captured, not release-ready`
 - `2.5.1` scope: downstream sync v3 stabilization, field pilot evidence discoverability, closeout/boundary guardrails, optional downstream sync adoption and release-facing docs.
 - `2.6` scope: real production VPS deploy, backup restore, rollback drill, expanded artifact eval, real `feature-execution-lite` adoption and runtime/source-hygiene backlog.
 - completed proof: `2.5.0` repo-controlled GA evidence, `2.5.1-field-pilot` real project proof, downstream sync v3 synthetic multi-cycle proof.
 - pending external runtime proof: real VPS deploy, real backup restore, real rollback drill, secrets/manual boundary and operator approval.
+- Plan №3 P3-S0 scope: AIF/Molyanov source-map, gap-map and staged roadmap only; task-state, learning/evolve loop, expanded evals and real dogfood remain planned follow-up stages.
 - `pavel-molyanov/molyanov-ai-dev` comparison recorded in `docs/releases/post-2.5-gap-register.md`; factory keeps useful spec/project-knowledge/eval ideas but does not import Claude-specific `.claude`, command or TeamCreate assumptions.
 
 ## Что работает частично
@@ -140,8 +142,8 @@
 - `2.5` объявлен GA-ready после добавления измеримого KPI evidence
 
 ## Что еще не закрыто
-- финальная проверка на реальных greenfield и brownfield проектах
-- production feedback от реальных converted brownfield проектов после нескольких template sync циклов
+- дальнейшая проверка на новых реальных greenfield и brownfield проектах beyond completed FP-01..FP-05
+- production feedback от новых real converted brownfield проектов после нескольких template sync циклов
 - дальнейший field hardening beyond FP-01..FP-05 при появлении новых real downstream программ
 - окончательная polish-фаза для runner layer и operational reports
 - отдельный release-facing validator/report для curated pack quality beyond structural checks

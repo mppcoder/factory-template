@@ -21,6 +21,20 @@ Release truth source remains `docs/releases/release-scorecard.yaml`. This file i
 | `P25-GAP-07` | `feature-execution-lite` is implemented and fixture-tested, but real factory feature adoption is still pending. | `docs/feature-execution-lite.md`, quick verify smoke. | `2.6` | open | repo |
 | `P25-GAP-08` | Runtime/source-hygiene backlog needs explicit classification by internal/external/downstream/manual boundary. | Current state docs and known limitations. | `2.6` | open | mixed |
 
+## Plan №3 AIF/Molyanov follow-up gaps
+
+Plan №3 records AIF/Molyanov-inspired improvements as repo-native follow-up work. These gaps do not reopen `2.5.0 GA Ready`, do not mix Plan №2 completion evidence with future work and do not import foreign runtime workflow assumptions.
+
+| ID | Gap | Current evidence | Target stage | Status | Owner boundary |
+|---|---|---|---|---|---|
+| `P3-GAP-01` | AIF-lite task-state visibility is missing as one compact repo artifact. | State exists across roadmaps, task packs and closeout docs, but no lightweight current-state/owner/next-action/blocker view exists. | P3-S1 | planned | repo |
+| `P3-GAP-02` | Learning patch / evolve proposal loop is not explicit for reusable bugs. | Defect-capture, incoming learnings and Project Knowledge Done Loop exist, but reusable learnings do not yet require proposal or `not_required` reason. | P3-S2 | planned | repo |
+| `P3-GAP-03` | Artifact Eval coverage needs expansion beyond current samples. | Related to `P25-GAP-06`; current specs cover samples, not broad routing-critical and negative fixtures. | P3-S3 / 2.6 | planned | repo |
+| `P3-GAP-04` | `feature-execution-lite` needs real factory dogfood adoption. | Related to `P25-GAP-07`; validator and fixtures exist, but durable real-work evidence is pending. | P3-S4 / 2.6 | planned | repo |
+| `P3-GAP-05` | Pre/post deploy QA must become an explicit runtime proof boundary. | Related to `P25-GAP-04` and `P25-GAP-05`; production path is dry-run/report-ready, not real deploy/restore/rollback proof. | P3-S5 / 2.6 | planned | external runtime |
+| `P3-GAP-06` | Runtime/source-hygiene boundary classifier needs a repo-native form. | Related to `P25-GAP-08`; known backlog needs internal repo, downstream sync, manual-only and external runtime classification. | P3-S5 / 2.6 | planned | mixed |
+| `P3-GAP-07` | Release-facing consistency pass is needed after Plan №3 planning and future implementation stages. | `docs/releases/plan-3-aif-molyanov-audit.md` becomes the planning anchor; release-facing docs must stay aligned as stages close. | each P3 closeout | planned | repo |
+
 ## `molyanov-ai-dev` adaptation register
 
 Reference snapshot: `pavel-molyanov/molyanov-ai-dev` HEAD `1bfe745d43b0602d8279cb4c9cb7894b1bb56bba`.

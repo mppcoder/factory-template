@@ -4,6 +4,23 @@ Status source of truth: `docs/releases/release-scorecard.yaml`.
 Current scorecard state: `2.5.0 GA Ready`.
 TEST_REPORT.md is verification evidence, not the canonical release-status source.
 
+## Проверка Plan №3 AIF/Molyanov audit P3-S0
+
+Дата: `2026-04-27`.
+
+Добавлен audit-only planning artifact для Plan №3 без реализации task-state/evolve/eval кода.
+
+- `docs/releases/plan-3-aif-molyanov-audit.md` фиксирует current state after Plan №2, source map, gap map, add/do-not-add/already-covered decisions, staged roadmap и runtime boundary decisions.
+- `docs/releases/post-2.5-gap-register.md` расширен gap'ами `P3-GAP-01`..`P3-GAP-07`.
+- `CURRENT_FUNCTIONAL_STATE.md` обновлен так, чтобы Plan №3 P3-S0 был виден как planning/audit status, а completed FP-01..FP-05 не выглядели pending.
+- Этот stage не добавлял task-state artifact, learning/evolve validator, новые Artifact Eval specs или real `feature-execution-lite` dogfood workspace.
+- Новый release-ready status не объявлен; scorecard `2.5.0 GA Ready` не изменялся.
+
+Проверки:
+
+- `python3 template-repo/scripts/validate-human-language-layer.py .` — pass, active findings `0`.
+- `bash template-repo/scripts/verify-all.sh quick` — pass на `2026-04-27`.
+
 ## Проверка post-2.5 release planning
 
 Дата: `2026-04-27`.
