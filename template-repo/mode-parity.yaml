@@ -61,6 +61,7 @@ all_presets_required_artifacts: &all_presets_required_artifacts
   - template-repo/mode-parity.yaml
   - .chatgpt/project-profile.yaml
   - .chatgpt/task-index.yaml
+  - .chatgpt/task-state.yaml
   - .chatgpt/stage-state.yaml
   - .chatgpt/active-scenarios.yaml
   - .chatgpt/direct-task-self-handoff.md
@@ -73,6 +74,7 @@ all_presets_required_artifacts: &all_presets_required_artifacts
   - .chatgpt/done-report.md
   - tasks/codex/codex-task-mandatory-bug-capture.block.md
   - reports/bugs
+  - reports/learnings
   - meta-feedback/factory-bug-report.md
   - VERSION.md
   - CHANGELOG.md
@@ -120,6 +122,7 @@ core_capabilities:
     generated_paths:
       - .chatgpt/project-profile.yaml
       - .chatgpt/task-index.yaml
+      - .chatgpt/task-state.yaml
       - .chatgpt/stage-state.yaml
       - .chatgpt/active-scenarios.yaml
       - .chatgpt/intake.yaml
@@ -130,6 +133,7 @@ core_capabilities:
     source_paths:
       - template-repo/template/.chatgpt/project-profile.yaml
       - template-repo/template/.chatgpt/task-index.yaml
+      - template-repo/template/.chatgpt/task-state.yaml
       - template-repo/template/.chatgpt/stage-state.yaml
       - template-repo/template/.chatgpt/active-scenarios.yaml
       - template-repo/template/.chatgpt/intake.yaml
@@ -167,6 +171,7 @@ core_capabilities:
       - .chatgpt/bugflow-status.yaml
       - .chatgpt/classification.md
       - reports/bugs
+      - reports/learnings
       - reports/factory-feedback
       - meta-feedback/factory-bug-report.md
       - meta-feedback/factory-task.md
@@ -175,6 +180,8 @@ core_capabilities:
       - template-repo/template/.chatgpt/bugflow-status.yaml
       - template-repo/template/.chatgpt/classification.md
       - template-repo/template/reports/bugs/.gitkeep
+      - template-repo/template/reports/learnings/.gitkeep
+      - template-repo/template/reports/learnings/learning-patch-proposal.md.template
       - template-repo/template/reports/factory-feedback/.gitkeep
       - template-repo/template/meta-feedback/factory-bug-report.md
       - template-repo/template/meta-feedback/factory-task.md
@@ -237,7 +244,9 @@ core_capabilities:
       - work-templates/checkpoint.yaml.template
       - work-templates/tasks/task.md.template
       - scripts/init-feature-workspace.sh
+      - scripts/validate-task-state-lite.py
       - scripts/validate-feature-execution-lite.py
+      - scripts/validate-learning-patch-loop.py
     source_paths:
       - template-repo/template/work/features/.gitkeep
       - template-repo/template/work/completed/.gitkeep
@@ -249,7 +258,9 @@ core_capabilities:
       - template-repo/template/work-templates/checkpoint.yaml.template
       - template-repo/template/work-templates/tasks/task.md.template
       - template-repo/scripts/init-feature-workspace.sh
+      - template-repo/scripts/validate-task-state-lite.py
       - template-repo/scripts/validate-feature-execution-lite.py
+      - template-repo/scripts/validate-learning-patch-loop.py
   verify_done_checklist:
     title: Verify and done checklist
     justification: "All modes share the same verification, done-report and closeout checklist path."
@@ -362,6 +373,7 @@ modes:
     required_paths:
       - README.md
       - .chatgpt/task-index.yaml
+      - .chatgpt/task-state.yaml
       - .chatgpt/active-scenarios.yaml
       - .chatgpt/codex-input.md
       - .chatgpt/done-checklist.md

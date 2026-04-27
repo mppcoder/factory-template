@@ -140,6 +140,7 @@ common_generated_required_paths: &common_generated_required_paths
   - .chatgpt
   - .chatgpt/project-profile.yaml
   - .chatgpt/task-index.yaml
+  - .chatgpt/task-state.yaml
   - .chatgpt/stage-state.yaml
   - .chatgpt/active-scenarios.yaml
   - .chatgpt/evidence-register.md
@@ -159,6 +160,7 @@ common_generated_required_paths: &common_generated_required_paths
   - tasks/chatgpt
   - tasks/codex
   - tests
+  - reports/learnings
   - work/active
   - work/features
   - work/completed
@@ -389,6 +391,7 @@ contours:
       - PROJECT_BRIEF.md
       - .chatgpt/project-profile.yaml
       - .chatgpt/task-index.yaml
+      - .chatgpt/task-state.yaml
       - .chatgpt/stage-state.yaml
       - .chatgpt/active-scenarios.yaml
       - .chatgpt/direct-task-self-handoff.md
@@ -402,6 +405,8 @@ contours:
       - meta-feedback/factory-bug-report.md
       - project-knowledge/README.md
       - reports/bugs/.gitkeep
+      - reports/learnings/.gitkeep
+      - reports/learnings/learning-patch-proposal.md.template
       - reports/factory-feedback/.gitkeep
       - tasks/codex/codex-task-mandatory-bug-capture.block.md
       - work/active/.gitkeep

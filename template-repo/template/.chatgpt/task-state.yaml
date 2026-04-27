@@ -1,0 +1,21 @@
+# Легкий state-layer для текущей задачи.
+# Английские ключи оставлены для validator/scripts; значения можно писать по-русски.
+schema: task-state-lite/v1
+current_state: intake
+owner_boundary: internal_repo
+next_action:
+  type: internal
+  summary: "Заполнить task-index, stage-state и следующий конкретный шаг."
+blocked:
+  status: false
+  reason: not_required
+boundaries:
+  internal_work:
+    - "Repo work внутри текущего проекта."
+  external_user_actions: []
+  external_runtime: []
+  downstream_sync: []
+source_artifacts:
+  - ".chatgpt/task-index.yaml"
+  - ".chatgpt/stage-state.yaml"
+last_updated: ""

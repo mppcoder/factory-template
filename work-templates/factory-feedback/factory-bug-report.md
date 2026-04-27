@@ -21,6 +21,11 @@
 ## Что нужно исправить в фабрике
 <!-- Кратко сформулируйте желаемое исправление -->
 
+## Вывод learning patch
+reusable: false
+learning_patch_status: not_required
+learning_patch_reason: "Заполните причину, если reusable learning не нужен; иначе укажите required и создайте reports/learnings/<bug-id>-learning-patch.md."
+
 ## Какие файлы фабрики, вероятно, затронуты
 <!-- Перечислите предполагаемые файлы -->
 

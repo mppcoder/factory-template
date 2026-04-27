@@ -26,9 +26,9 @@ YAML-манифест остается machine-readable контрактом; д
 Обязательный набор core artifacts общий для всех generated presets:
 
 - repo-first entry: `AGENTS.md`, `template-repo/scenario-pack/00-master-router.md`
-- `.chatgpt` task layer: `project-profile.yaml`, `task-index.yaml`, `stage-state.yaml`, `active-scenarios.yaml`
+- `.chatgpt` task layer: `project-profile.yaml`, `task-index.yaml`, `task-state.yaml`, `stage-state.yaml`, `active-scenarios.yaml`
 - handoff layer: `codex-input.md`, `direct-task-self-handoff.md`, `normalized-codex-handoff.md`, `task-launch.yaml`
-- defect layer: `.chatgpt/bugflow-status.yaml`, `reports/bugs`, `reports/factory-feedback`, `meta-feedback/factory-bug-report.md`
+- defect layer: `.chatgpt/bugflow-status.yaml`, `reports/bugs`, `reports/learnings`, `reports/factory-feedback`, `meta-feedback/factory-bug-report.md`
 - docs/versioning layer: `VERSION.md`, `CHANGELOG.md`, `CURRENT_FUNCTIONAL_STATE.md`, `README.md`, `docs/architecture.md`, `docs/codex-workflow.md`
 - project knowledge: `project-knowledge/README.md` and topic files
 - work lifecycle: `work/features`, `work/completed`, `work-templates/*`

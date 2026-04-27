@@ -34,6 +34,7 @@ project_presets:
     - template-repo/mode-parity.yaml
     - .chatgpt/project-profile.yaml
     - .chatgpt/task-index.yaml
+    - .chatgpt/task-state.yaml
     - .chatgpt/stage-state.yaml
     - .chatgpt/active-scenarios.yaml
     - .chatgpt/direct-task-self-handoff.md
@@ -46,6 +47,7 @@ project_presets:
     - .chatgpt/done-report.md
     - tasks/codex/codex-task-mandatory-bug-capture.block.md
     - reports/bugs
+    - reports/learnings
     - meta-feedback/factory-bug-report.md
     - VERSION.md
     - CHANGELOG.md
@@ -97,6 +99,7 @@ project_presets:
     - template-repo/mode-parity.yaml
     - .chatgpt/project-profile.yaml
     - .chatgpt/task-index.yaml
+    - .chatgpt/task-state.yaml
     - .chatgpt/stage-state.yaml
     - .chatgpt/active-scenarios.yaml
     - .chatgpt/direct-task-self-handoff.md
@@ -109,6 +112,7 @@ project_presets:
     - .chatgpt/done-report.md
     - tasks/codex/codex-task-mandatory-bug-capture.block.md
     - reports/bugs
+    - reports/learnings
     - meta-feedback/factory-bug-report.md
     - VERSION.md
     - CHANGELOG.md
@@ -164,6 +168,7 @@ project_presets:
     - template-repo/mode-parity.yaml
     - .chatgpt/project-profile.yaml
     - .chatgpt/task-index.yaml
+    - .chatgpt/task-state.yaml
     - .chatgpt/stage-state.yaml
     - .chatgpt/active-scenarios.yaml
     - .chatgpt/direct-task-self-handoff.md
@@ -176,6 +181,7 @@ project_presets:
     - .chatgpt/done-report.md
     - tasks/codex/codex-task-mandatory-bug-capture.block.md
     - reports/bugs
+    - reports/learnings
     - meta-feedback/factory-bug-report.md
     - VERSION.md
     - CHANGELOG.md
@@ -230,6 +236,7 @@ project_presets:
     - template-repo/mode-parity.yaml
     - .chatgpt/project-profile.yaml
     - .chatgpt/task-index.yaml
+    - .chatgpt/task-state.yaml
     - .chatgpt/stage-state.yaml
     - .chatgpt/active-scenarios.yaml
     - .chatgpt/direct-task-self-handoff.md
@@ -242,6 +249,7 @@ project_presets:
     - .chatgpt/done-report.md
     - tasks/codex/codex-task-mandatory-bug-capture.block.md
     - reports/bugs
+    - reports/learnings
     - meta-feedback/factory-bug-report.md
     - VERSION.md
     - CHANGELOG.md
@@ -297,6 +305,7 @@ project_presets:
     - template-repo/mode-parity.yaml
     - .chatgpt/project-profile.yaml
     - .chatgpt/task-index.yaml
+    - .chatgpt/task-state.yaml
     - .chatgpt/stage-state.yaml
     - .chatgpt/active-scenarios.yaml
     - .chatgpt/direct-task-self-handoff.md
@@ -309,6 +318,7 @@ project_presets:
     - .chatgpt/done-report.md
     - tasks/codex/codex-task-mandatory-bug-capture.block.md
     - reports/bugs
+    - reports/learnings
     - meta-feedback/factory-bug-report.md
     - VERSION.md
     - CHANGELOG.md

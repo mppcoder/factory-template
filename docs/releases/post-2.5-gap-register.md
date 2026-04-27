@@ -27,8 +27,8 @@ Plan №3 records AIF/Molyanov-inspired improvements as repo-native follow-up wo
 
 | ID | Gap | Current evidence | Target stage | Status | Owner boundary |
 |---|---|---|---|---|---|
-| `P3-GAP-01` | AIF-lite task-state visibility is missing as one compact repo artifact. | State exists across roadmaps, task packs and closeout docs, but no lightweight current-state/owner/next-action/blocker view exists. | P3-S1 | planned | repo |
-| `P3-GAP-02` | Learning patch / evolve proposal loop is not explicit for reusable bugs. | Defect-capture, incoming learnings and Project Knowledge Done Loop exist, but reusable learnings do not yet require proposal or `not_required` reason. | P3-S2 | planned | repo |
+| `P3-GAP-01` | AIF-lite task-state visibility is missing as one compact repo artifact. | `docs/task-state-lite.md`, `.chatgpt/task-state.yaml`, template `.chatgpt/task-state.yaml`, `validate-task-state-lite.py`, quick verify. | P3-S1 | implemented/verified | repo |
+| `P3-GAP-02` | Learning patch / evolve proposal loop is not explicit for reusable bugs. | `docs/learning-patch-loop.md`, `reports/learnings/`, template learning proposal, `validate-learning-patch-loop.py`, negative fixtures and quick verify. | P3-S2 | implemented/verified | repo |
 | `P3-GAP-03` | Artifact Eval coverage needs expansion beyond current samples. | Related to `P25-GAP-06`; current specs cover samples, not broad routing-critical and negative fixtures. | P3-S3 / 2.6 | planned | repo |
 | `P3-GAP-04` | `feature-execution-lite` needs real factory dogfood adoption. | Related to `P25-GAP-07`; validator and fixtures exist, but durable real-work evidence is pending. | P3-S4 / 2.6 | planned | repo |
 | `P3-GAP-05` | Pre/post deploy QA must become an explicit runtime proof boundary. | Related to `P25-GAP-04` and `P25-GAP-05`; production path is dry-run/report-ready, not real deploy/restore/rollback proof. | P3-S5 / 2.6 | planned | external runtime |

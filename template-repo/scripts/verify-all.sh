@@ -99,6 +99,31 @@ run_artifact_eval_smoke() {
   rm -rf "$tmp_dir"
 }
 
+run_task_state_lite_smoke() {
+  python3 "$ROOT/template-repo/scripts/validate-task-state-lite.py" "$ROOT/tests/task-state-lite/valid"
+  if python3 "$ROOT/template-repo/scripts/validate-task-state-lite.py" "$ROOT/tests/task-state-lite/missing-state" >/tmp/task-state-lite-negative.log 2>&1; then
+    echo "task-state-lite negative fixture unexpectedly passed" >&2
+    cat /tmp/task-state-lite-negative.log >&2
+    return 1
+  fi
+  rm -f /tmp/task-state-lite-negative.log
+}
+
+run_learning_patch_loop_smoke() {
+  python3 "$ROOT/template-repo/scripts/validate-learning-patch-loop.py" "$ROOT/tests/learning-patch-loop/valid"
+  if python3 "$ROOT/template-repo/scripts/validate-learning-patch-loop.py" "$ROOT/tests/learning-patch-loop/fake-proposal" >/tmp/learning-patch-fake.log 2>&1; then
+    echo "learning-patch fake proposal fixture unexpectedly passed" >&2
+    cat /tmp/learning-patch-fake.log >&2
+    return 1
+  fi
+  if python3 "$ROOT/template-repo/scripts/validate-learning-patch-loop.py" "$ROOT/tests/learning-patch-loop/overclaim" >/tmp/learning-patch-overclaim.log 2>&1; then
+    echo "learning-patch overclaim fixture unexpectedly passed" >&2
+    cat /tmp/learning-patch-overclaim.log >&2
+    return 1
+  fi
+  rm -f /tmp/learning-patch-fake.log /tmp/learning-patch-overclaim.log
+}
+
 run_project_knowledge_done_loop_smoke() {
   local tmp_dir
   tmp_dir="$(mktemp -d)"
@@ -139,7 +164,9 @@ run_generated_project_quick() {
   run_step "validate-change-profile" python3 "$ROOT/scripts/validate-change-profile.py" "$ROOT"
   run_step "validate-task-graph" python3 "$ROOT/scripts/validate-task-graph.py" "$ROOT"
   run_step "validate-stage" python3 "$ROOT/scripts/validate-stage.py" "$ROOT"
+  run_step "validate-task-state-lite" python3 "$ROOT/scripts/validate-task-state-lite.py" "$ROOT"
   run_step "validate-feature-execution-lite" python3 "$ROOT/scripts/validate-feature-execution-lite.py" "$ROOT"
+  run_step "validate-learning-patch-loop" python3 "$ROOT/scripts/validate-learning-patch-loop.py" "$ROOT"
   run_step "validate-versioning-layer" python3 "$ROOT/scripts/validate-versioning-layer.py" "$ROOT"
   run_step "validate-defect-capture" python3 "$ROOT/scripts/validate-defect-capture.py" "$ROOT"
   run_step "validate-alignment" python3 "$ROOT/scripts/validate-alignment.py" "$ROOT"
@@ -176,7 +203,11 @@ run_quick() {
   run_step "validate-operator-env-production-example" python3 "$ROOT/template-repo/scripts/validate-operator-env.py" "$ROOT" --env-file "$ROOT/deploy/.env.example" --preset production --allow-example-placeholders
   run_step "deploy-dry-run-smoke-starter-app-db" run_deploy_dry_run_smoke
   run_step "validate-spec-traceability" python3 "$ROOT/template-repo/scripts/validate-spec-traceability.py" "$ROOT"
+  run_step "validate-task-state-lite" python3 "$ROOT/template-repo/scripts/validate-task-state-lite.py" "$ROOT"
+  run_step "task-state-lite-smoke" run_task_state_lite_smoke
   run_step "validate-feature-execution-lite" python3 "$ROOT/template-repo/scripts/validate-feature-execution-lite.py" "$ROOT"
+  run_step "validate-learning-patch-loop" python3 "$ROOT/template-repo/scripts/validate-learning-patch-loop.py" "$ROOT"
+  run_step "learning-patch-loop-smoke" run_learning_patch_loop_smoke
   run_step "artifact-eval-smoke" run_artifact_eval_smoke
   run_step "project-knowledge-done-loop-smoke" run_project_knowledge_done_loop_smoke
   run_step "validate-release-scorecard" python3 "$ROOT/template-repo/scripts/validate-release-scorecard.py" "$ROOT"

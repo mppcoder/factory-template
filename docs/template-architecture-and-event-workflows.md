@@ -213,6 +213,7 @@ flowchart TD
 - `template-repo/scenario-pack/00-master-router.md`
 - `.chatgpt/task-launch.yaml`
 - `.chatgpt/task-index.yaml`
+- `.chatgpt/task-state.yaml`
 
 ### Gate’ы
 
@@ -453,6 +454,7 @@ flowchart TD
 
 - любые затронутые repo files;
 - `.chatgpt/task-index.yaml`
+- `.chatgpt/task-state.yaml`
 - `work/completed/*.md`
 
 ### Gate’ы

@@ -1,0 +1,16 @@
+schema: task-state-lite/v1
+owner_boundary: internal_repo
+next_action:
+  type: internal
+  summary: "Состояние намеренно пропущено."
+blocked:
+  status: false
+  reason: not_required
+boundaries:
+  internal_work:
+    - "Negative fixture."
+  external_user_actions: []
+  external_runtime: []
+  downstream_sync: []
+source_artifacts:
+  - ".chatgpt/task-index.yaml"

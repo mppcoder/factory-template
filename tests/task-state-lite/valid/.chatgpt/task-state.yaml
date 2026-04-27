@@ -1,0 +1,18 @@
+schema: task-state-lite/v1
+current_state: in_progress
+owner_boundary: internal_repo
+next_action:
+  type: internal
+  summary: "Выполнить repo-local проверку."
+blocked:
+  status: false
+  reason: not_required
+boundaries:
+  internal_work:
+    - "Запустить validator."
+  external_user_actions: []
+  external_runtime: []
+  downstream_sync: []
+source_artifacts:
+  - ".chatgpt/task-index.yaml"
+last_updated: "2026-04-27"

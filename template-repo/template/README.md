@@ -6,6 +6,7 @@
 - `.chatgpt/intake.yaml`
 - `.chatgpt/stage-state.yaml`
 - `.chatgpt/task-index.yaml`
+- `.chatgpt/task-state.yaml`
 - `PROJECT_BRIEF.md`
 - `CURRENT_FUNCTIONAL_STATE.md`
 

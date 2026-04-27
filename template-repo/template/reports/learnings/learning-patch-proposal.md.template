@@ -1,0 +1,20 @@
+# Learning patch proposal
+
+source_bug: reports/bugs/<bug-id>.md
+status: proposed
+target_surface: scenario-pack | validator | template | docs | project-knowledge | release-docs
+proposed_change: "Кратко опишите reusable изменение."
+verification: "Кратко опишите validator, smoke или review check."
+justification: "Для status proposed укажите, почему learning reusable; для not_required укажите причину отказа."
+
+## Контекст
+
+Опишите, какой defect/gap обнаружен и почему вывод пригодится будущим задачам.
+
+## Предложение
+
+Опишите минимальное repo-native изменение. Не добавляйте web UI, daemon, DB или autonomous background promises для beginner default.
+
+## Проверка
+
+Опишите, как будущая remediation подтвердит изменение.

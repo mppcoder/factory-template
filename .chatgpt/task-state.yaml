@@ -1,0 +1,21 @@
+# Легкий state-layer для текущей задачи.
+# Английские ключи оставлены для validator/scripts; значения можно писать по-русски.
+schema: task-state-lite/v1
+current_state: done
+owner_boundary: internal_repo
+next_action:
+  type: none
+  summary: ""
+blocked:
+  status: false
+  reason: not_required
+boundaries:
+  internal_work:
+    - "P3-S1/S2 документация, шаблоны, validators и fixtures реализованы."
+  external_user_actions: []
+  external_runtime: []
+  downstream_sync: []
+source_artifacts:
+  - "docs/releases/plan-3-aif-molyanov-audit.md"
+  - "docs/releases/post-2.5-gap-register.md"
+last_updated: "2026-04-27"

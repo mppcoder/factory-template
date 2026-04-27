@@ -4,6 +4,29 @@ Status source of truth: `docs/releases/release-scorecard.yaml`.
 Current scorecard state: `2.5.0 GA Ready`.
 TEST_REPORT.md is verification evidence, not the canonical release-status source.
 
+## Проверка Plan №3 P3-S1/P3-S2
+
+Дата: `2026-04-27`.
+
+Добавлены repo-native lightweight улучшения без AIF Handoff web app, daemon, SQLite, Telegram stack или autonomous background promises.
+
+- `docs/task-state-lite.md` описывает отдельный `.chatgpt/task-state.yaml` слой для current state, owner boundary, next action, blockers и boundary-разделения.
+- `template-repo/template/.chatgpt/task-state.yaml` добавлен как beginner-safe template artifact; существующий `task-index.yaml` не перегружался state-семантикой.
+- `template-repo/scripts/validate-task-state-lite.py` проверяет schema, current_state, owner boundary, next action, blocker и internal/external/runtime/downstream separation.
+- `docs/learning-patch-loop.md` описывает proposal loop для reusable bugs поверх defect-capture и Project Knowledge Done Loop.
+- `template-repo/template/reports/learnings/learning-patch-proposal.md.template` добавлен как repo-native proposal template.
+- `template-repo/scripts/validate-learning-patch-loop.py` требует learning proposal или `not_required` reason для явно reusable bug reports и блокирует fake/overclaim proposals.
+- `template-repo/scripts/verify-all.sh quick` подключает оба validators и targeted negative fixtures для missing state, fake learning proposal и overclaim.
+- Beginner default остается легким: advanced execution, web UI и runtime services не стали обязательными.
+
+Проверки:
+
+- `python3 template-repo/scripts/validate-task-state-lite.py .` — pass.
+- `python3 template-repo/scripts/validate-learning-patch-loop.py .` — pass.
+- Targeted negative fixtures: missing state, fake learning proposal, overclaim — pass, validator возвращает non-zero.
+- `python3 template-repo/scripts/validate-human-language-layer.py .` — pass, active findings `0`.
+- `bash template-repo/scripts/verify-all.sh quick` — pass на `2026-04-27`.
+
 ## Проверка Plan №3 AIF/Molyanov audit P3-S0
 
 Дата: `2026-04-27`.
