@@ -76,7 +76,9 @@ FAKE_DOCKER
     --preset production \
     --field-pilot-report "$tmp_dir/production-vps-field-pilot.md"
   grep -q "evidence boundary" "$tmp_dir/operator-env-field-pilot.md"
+  grep -q "sanitized runtime transcript" "$tmp_dir/operator-env-field-pilot.md"
   grep -q "real VPS deploy status" "$tmp_dir/production-vps-field-pilot.md"
+  grep -q "sanitized runtime transcript" "$tmp_dir/production-vps-field-pilot.md"
   rm -rf "$tmp_dir"
 }
 

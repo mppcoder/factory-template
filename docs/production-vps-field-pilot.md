@@ -8,6 +8,8 @@
 - production presets остаются opt-in: `app-db`, `reverse-proxy-tls`, `backup`, `healthcheck` или alias `production`.
 - Dry-run/report evidence не считается real production proof.
 - Field deploy status до реального VPS запуска: `pending-real-vps-approval`.
+- P3-S5 готовит runtime QA boundary: pre-deploy QA, post-deploy QA, backup restore test, rollback drill и sanitized runtime transcript requirements.
+- Этот runbook не просит хранить секреты в repo и не превращает report-ready состояние в passed production gate.
 
 ## Предусловия
 
@@ -43,6 +45,20 @@ Failure handling:
 - Env validation failure: fix `deploy/.env`; do not deploy.
 - Compose config failure: inspect selected preset overlay; do not deploy.
 - Missing Docker Compose: install Compose or use a VPS image that includes it.
+
+## Предварительная QA перед deploy
+
+Machine-readable label: `Pre-deploy QA gate`.
+
+Перед approved production deploy оператор фиксирует:
+
+- `validate-operator-env.py --preset production --field-pilot-report` без `FAIL`.
+- `deploy-dry-run.sh --preset production --strict-env --field-pilot-report` проходит на том же VPS и с тем же env.
+- DNS, firewall, Docker Compose, production image/tag, DB volume, backup path и healthcheck endpoint проверены.
+- `deploy/.env` заполнен вне repo; секреты не копируются в task notes, commit, screenshots или runtime transcript.
+- Backup restore procedure известна до cutover; если restore target не approved, production proof остается pending.
+
+Pre-deploy QA может дать статус `ready-for-approved-runtime-run`, но не `production-proof-passed`.
 
 ## Этап 1: starter smoke
 
@@ -143,6 +159,26 @@ Expected output:
 - `HEALTHCHECK_ENDPOINT` returns success through the final public route.
 - `.factory-runtime/reports/production-vps-field-pilot-latest.md` records deploy evidence.
 
+## Последующая QA после deploy
+
+Machine-readable label: `Post-deploy QA gate`.
+
+После approved deploy оператор фиксирует sanitized runtime transcript:
+
+- deploy command, preset, image tag and timestamp;
+- `docker compose ps` summary without secrets;
+- public healthcheck result;
+- backup command result and backup filename/path with sensitive host/user values redacted if needed;
+- restore test result or explicit `restore_test_status: pending`;
+- rollback drill result or explicit `rollback_drill_status: pending`;
+- final status: `passed` only when deploy, healthcheck, backup restore and rollback drill evidence are all present.
+
+Transcript redaction rules:
+
+- Replace secrets, tokens, private keys, passwords, full `.env` contents and private connection strings with `[REDACTED]`.
+- Keep commands, timestamps, image tags, service names and pass/fail status.
+- Do not commit raw `.factory-runtime/` reports from a real VPS if they include sensitive values; commit only sanitized release evidence.
+
 ## Тренировка отката
 
 Minimum image rollback:
@@ -171,7 +207,8 @@ For this field pilot, record:
 - Rollback выводы: previous/current image tags, rollback command, healthcheck after rollback.
 - Downstream impact: whether downstream repos need template sync.
 - Done evidence: env report, dry-run report, deploy transcript if approved, rollback/restore result.
+- Sanitized transcript: required for any claim beyond dry-run/report-ready.
 
 ## Текущие repo-доказательства
 
-As of 2026-04-27, this repo has dry-run/report automation only. No real VPS deploy was executed in this remediation because destructive deploy requires explicit user approval and runtime VPS access.
+As of 2026-04-27, this repo has dry-run/report automation and P3-S5 runtime QA boundary docs only. No real VPS deploy, backup restore test or rollback drill was executed in this remediation because destructive runtime work requires explicit user approval and runtime VPS access.

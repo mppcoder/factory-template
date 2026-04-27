@@ -17,6 +17,8 @@ Production VPS field pilot path подготовлен и частично ав�
 
 No destructive deploy was executed in this remediation. Real VPS deploy, backup restore execution and rollback drill require explicit user approval and runtime VPS access.
 
+P3-S5 status: runtime QA boundary prepared, not executed. Pre-deploy QA, post-deploy QA, sanitized transcript requirements and proof boundaries are now explicit, but real production proof remains pending.
+
 ## Обновленные артефакты
 
 - `docs/deploy-on-vps.md`
@@ -58,6 +60,9 @@ python3 template-repo/scripts/operator-dashboard.py \
 - Docker Compose: covered by dashboard status and dry-run.
 - Env secrets: covered by `validate-operator-env.py`.
 - Backup restore test: documented as required runtime proof; dry-run checks only backup inputs.
+- Pre-deploy QA: documented as env + dry-run + DNS/firewall/backup/rollback readiness gate.
+- Post-deploy QA: documented as healthcheck + backup restore + rollback evidence gate.
+- Sanitized runtime transcript: required for any production proof claim beyond report-ready/dry-run evidence.
 
 ## Выводы по rollback и backup
 
@@ -74,6 +79,7 @@ Decisions recorded:
 - Keep production aliases/presets opt-in to avoid forcing DNS, DB, TLS and backup secrets on first deploy.
 - Treat report-mode and dry-run as evidence, not production proof.
 - Require external approval for real deploy/rollback/restore because those mutate runtime infrastructure.
+- Require sanitized runtime transcript before declaring deploy, restore or rollback passed.
 
 Downstream impact:
 
@@ -97,3 +103,4 @@ Done evidence:
 - Secret entry into `deploy/.env`.
 - Backup restore execution.
 - Rollback drill execution and transcript.
+- Sanitized runtime transcript from an approved runtime run.

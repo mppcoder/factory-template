@@ -100,6 +100,7 @@
 - Plan №3 P3-S2 learning patch loop добавлен как repo-native proposal слой: reusable bug reports требуют learning proposal или `not_required` reason, а fake/overclaim proposals ловятся validator fixtures
 - Plan №3 P3-S3 расширил Artifact Eval Harness на routing-critical specs/reports: direct self-handoff, normalized handoff boundary, done closeout ledger, downstream sync boundary, production proof boundary и feature-execution-lite final verification negatives
 - Plan №3 P3-S4 провел real `feature-execution-lite` adoption: `work/completed/plan-3-eval-adoption` содержит advanced workspace closeout, done-report, Project Knowledge proposal и downstream-impact evidence
+- Plan №3 P3-S5 подготовил runtime QA boundary для 2.6: pre-deploy QA, post-deploy QA, backup restore, rollback drill, secrets/manual boundary и sanitized runtime transcript requirements documented; real VPS proof не выполнялся
 
 ## Программа 2.5 (release truth)
 - release truth source: `docs/releases/release-scorecard.yaml`
@@ -126,12 +127,12 @@
 - gap register: `docs/releases/post-2.5-gap-register.md`
 - Plan №3 audit: `docs/releases/plan-3-aif-molyanov-audit.md`
 - текущая стадия: `release-followup -> planning`
-- текущий planning status: `Plan №3 P3-S1/P3-S4 implemented and verification-backed, P3-S5 remains runtime-boundary prep`
+- текущий planning status: `Plan №3 P3-S1/P3-S5 implemented/prepared and verification-backed; real runtime proof remains external pending`
 - `2.5.1` scope: downstream sync v3 stabilization, field pilot evidence discoverability, closeout/boundary guardrails, optional downstream sync adoption and release-facing docs.
-- `2.6` scope: real production VPS deploy, backup restore, rollback drill and runtime/source-hygiene backlog; expanded artifact eval and one real `feature-execution-lite` adoption are now P3-S3/P3-S4 repo-local evidence.
+- `2.6` scope: real production VPS deploy, backup restore, rollback drill and runtime/source-hygiene backlog; expanded artifact eval, one real `feature-execution-lite` adoption and runtime QA boundary preparation are now Plan №3 repo-local evidence.
 - completed proof: `2.5.0` repo-controlled GA evidence, `2.5.1-field-pilot` real project proof, downstream sync v3 synthetic multi-cycle proof.
 - pending external runtime proof: real VPS deploy, real backup restore, real rollback drill, secrets/manual boundary and operator approval.
-- Plan №3 status: P3-S0 audit captured; P3-S1 task-state-lite, P3-S2 learning patch loop, P3-S3 expanded evals and P3-S4 real adoption implemented; runtime QA boundary remains P3-S5 follow-up.
+- Plan №3 status: P3-S0 audit captured; P3-S1 task-state-lite, P3-S2 learning patch loop, P3-S3 expanded evals, P3-S4 real adoption and P3-S5 runtime QA boundary preparation implemented; real runtime proof remains external pending.
 - `pavel-molyanov/molyanov-ai-dev` comparison recorded in `docs/releases/post-2.5-gap-register.md`; factory keeps useful spec/project-knowledge/eval ideas but does not import Claude-specific `.claude`, command or TeamCreate assumptions.
 
 ## Что работает частично

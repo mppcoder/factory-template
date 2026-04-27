@@ -41,6 +41,26 @@ expected_trigger:
           must_contain:
             - "Тренировка отката"
             - "Minimum image rollback"
+    - id: pre-post-deploy-qa
+      prompt: "2.6 wants pre-deploy QA, post-deploy QA and sanitized runtime transcript boundaries."
+      expected: "Runbook names QA gates and transcript redaction rules without claiming execution."
+      baseline_expected: fail
+      assertions:
+        - id: pre-deploy-gate
+          category: process
+          must_contain:
+            - "Pre-deploy QA gate"
+            - "ready-for-approved-runtime-run"
+        - id: post-deploy-gate
+          category: process
+          must_contain:
+            - "Post-deploy QA gate"
+            - "sanitized runtime transcript"
+        - id: transcript-redaction
+          category: compliance
+          must_contain:
+            - "Transcript redaction rules"
+            - "[REDACTED]"
 non_trigger_cases:
   - id: dry-run-production-proof-overclaim
     prompt: "Dry-run passed, declare real production deploy/restore/rollback proof."
@@ -51,7 +71,7 @@ non_trigger_cases:
         category: compliance
         must_contain:
           - "Report file exists and says dry-run/report evidence is not real VPS proof"
-          - "No real VPS deploy was executed"
+          - "No real VPS deploy, backup restore test or rollback drill was executed"
 compliance_assertions:
   - id: secrets-boundary
     category: compliance
@@ -63,3 +83,11 @@ compliance_assertions:
     must_contain:
       - "deploy transcript if approved"
       - "rollback/restore result"
+  - id: no-passed-runtime-claim
+    category: compliance
+    must_contain:
+      - "No real VPS deploy, backup restore test or rollback drill was executed"
+    must_not_contain:
+      - "real VPS deploy passed"
+      - "backup restore passed"
+      - "rollback drill passed"

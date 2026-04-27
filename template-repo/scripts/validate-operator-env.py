@@ -351,6 +351,7 @@ def write_field_pilot_report(root: Path, env_path: Path, preset: str, findings: 
                 f"- failures: `{len(failures)}`",
                 f"- warnings: `{len(warnings)}`",
                 "- evidence boundary: env validation only; this is not real VPS deploy proof.",
+                "- sanitized runtime transcript: required before claiming deploy, backup restore or rollback passed.",
                 "",
                 "## Checklist production готовности",
                 "",
@@ -370,6 +371,7 @@ def write_field_pilot_report(root: Path, env_path: Path, preset: str, findings: 
                 "## Граница выполнения",
                 "",
                 "- Real VPS deploy, DNS propagation checks, firewall changes, backup restore execution and rollback drill require operator approval and runtime access.",
+                "- Dry-run/report-ready evidence is not production proof; approved runtime evidence must be sanitized before committing.",
             ]
         )
         + "\n",

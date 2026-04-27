@@ -494,6 +494,7 @@ def write_field_pilot_report(root: Path, preset: str, rows: list[StatusRow], out
                 f"- generated at: `{datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ')}`",
                 "- destructive action: none by this report mode.",
                 "- proof boundary: dry-run/report evidence is not real production VPS proof.",
+                "- sanitized runtime transcript: required before claiming real deploy, backup restore or rollback proof.",
                 "",
                 "## Сводка evidence",
                 "",
@@ -509,6 +510,7 @@ def write_field_pilot_report(root: Path, preset: str, rows: list[StatusRow], out
                 f"- [{_checkbox(env_ready)}] Env secrets: selected preset passes operator env validation.",
                 f"- [{_checkbox(backup_input_ready)}] Backup restore test: backup preset has path/enabled inputs; actual restore execution still requires runtime proof.",
                 f"- [{_checkbox(uses_db or not production_preset)}] App DB: `app-db` is active when stateful production deploy is expected.",
+                f"- [ ] Post-deploy QA: requires approved deploy transcript, public healthcheck, backup restore evidence and rollback drill evidence.",
                 "",
                 "## Строки статуса",
                 "",
@@ -525,6 +527,12 @@ def write_field_pilot_report(root: Path, preset: str, rows: list[StatusRow], out
                 "",
                 "- Minimum drill: record current `APP_IMAGE`, deploy a candidate tag, revert `APP_IMAGE`, rerun dry-run, deploy the previous tag, then verify healthcheck.",
                 "- DB/schema rollback requires a fresh backup before migration and an application-specific restore/migration rollback procedure.",
+                "",
+                "## Sanitized runtime transcript requirements",
+                "",
+                "- Keep commands, timestamps, preset, image tag, service status and pass/fail results.",
+                "- Redact secrets, tokens, private keys, passwords, full `.env` contents and private connection strings.",
+                "- Do not claim production proof from dry-run/report-ready evidence.",
             ]
         )
         + "\n",

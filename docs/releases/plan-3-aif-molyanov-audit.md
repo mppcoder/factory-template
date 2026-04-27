@@ -16,7 +16,7 @@
 - `feature-execution-lite` уже существует как optional advanced path с fixtures, validator и Artifact Eval sample target.
 - Production VPS path подготовлен как dry-run/report-ready, но real VPS deploy, backup restore и rollback drill остаются external runtime proof.
 
-`Plan №3` начался как audit-only follow-up в P3-S0. По состоянию на P3-S4 уже закрыты repo-local task-state, learning patch loop, expanded Artifact Eval coverage и один real `feature-execution-lite` adoption closeout. Runtime QA boundary остается отдельной P3-S5 стадией.
+`Plan №3` начался как audit-only follow-up в P3-S0. По состоянию на P3-S5 закрыты repo-local task-state, learning patch loop, expanded Artifact Eval coverage, один real `feature-execution-lite` adoption closeout и runtime QA boundary preparation. Real VPS deploy, backup restore и rollback drill остаются external runtime proof.
 
 ## Карта источников
 
@@ -41,11 +41,11 @@ External ideas используются только как input ideas, а не
 | `P3-GAP-02` learning patch / evolve proposal loop | связан с feedback loop и Done Loop | Реализовано через `docs/learning-patch-loop.md`, learning proposal template и validator для reusable bug reports. | P3-S2 |
 | `P3-GAP-03` Artifact Eval coverage expansion | `P25-GAP-06` | Реализованы routing-critical specs/reports и negative fixtures; quick smoke расширен. | P3-S3 |
 | `P3-GAP-04` `feature-execution-lite` real adoption adoption | `P25-GAP-07` | Реальный workspace `work/completed/plan-3-eval-adoption` закрыт через advanced path и Done Loop. | P3-S4 |
-| `P3-GAP-05` pre/post deploy QA as runtime proof boundary | `P25-GAP-04`, `P25-GAP-05` | Production path report-ready; real deploy, restore и rollback не заявлены как выполненные. | P3-S5 |
-| `P3-GAP-06` runtime/source-hygiene boundary classifier | `P25-GAP-08` | Boundary concepts есть, но runtime/source-hygiene backlog требует явного classifier. | P3-S5 / 2.6 |
-| `P3-GAP-07` release-facing consistency pass | `251-STAB-05` | Release-facing docs требуют consistency pass после P3 planning и будущих implementation stages. | каждый P3 closeout |
+| `P3-GAP-05` pre/post deploy QA as runtime proof boundary | `P25-GAP-04`, `P25-GAP-05` | Реализована prep boundary: pre-deploy QA, post-deploy QA и sanitized transcript requirements; real deploy, restore и rollback не заявлены как выполненные. | P3-S5 |
+| `P3-GAP-06` runtime/source-hygiene boundary classifier | `P25-GAP-08` | Реализована docs/report classification для repo-local dry-run, manual secrets, sanitized transcript, downstream sync и external runtime proof. | P3-S5 / 2.6 |
+| `P3-GAP-07` release-facing consistency pass | `251-STAB-05` | Release-facing docs обновлены после P3-S0..P3-S5 closeouts. | каждый P3 closeout |
 
-Plan №3 gaps не reopen `2.5.0 GA Ready` и не превращают pending runtime proof в completed proof. P3-S0..P3-S4 являются repo-local evidence; P3-S5 остается runtime-boundary preparation.
+Plan №3 gaps не reopen `2.5.0 GA Ready` и не превращают pending runtime proof в completed proof. P3-S0..P3-S5 являются repo-local evidence/preparation; real runtime proof остается pending external boundary.
 
 ## Добавить / не добавлять / уже покрыто
 
@@ -86,7 +86,7 @@ Plan №3 gaps не reopen `2.5.0 GA Ready` и не превращают pending
 | P3-S2 | Добавить learning patch / evolve proposal loop. | Реализовано через docs, template proposal, template `reports/learnings/` и validator для reusable bugs. |
 | P3-S3 | Расширить Artifact Eval coverage. | Реализовано: routing-critical specs/reports и meaningful negative fixtures подключены к quick smoke. |
 | P3-S4 | Adoption `feature-execution-lite` на одном real factory change. | Реализовано: `work/completed/plan-3-eval-adoption` закрыт через Done Loop с evidence. |
-| P3-S5 | Подготовить runtime QA boundary для 2.6. | Pre/post deploy QA, restore, rollback и transcript requirements documented; без real VPS mutation. |
+| P3-S5 | Подготовить runtime QA boundary для 2.6. | Реализовано: pre/post deploy QA, restore, rollback и sanitized transcript requirements documented; без real VPS mutation. |
 
 ## Граничные решения
 

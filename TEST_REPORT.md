@@ -4,6 +4,26 @@ Status source of truth: `docs/releases/release-scorecard.yaml`.
 Current scorecard state: `2.5.0 GA Ready`.
 TEST_REPORT.md is verification evidence, not the canonical release-status source.
 
+## Проверка Plan №3 P3-S5
+
+Дата: `2026-04-27`.
+
+Подготовлена runtime QA boundary для 2.6 без real VPS mutation, без запроса/хранения secrets и без заявления production proof.
+
+- `docs/production-vps-field-pilot.md` явно разделяет pre-deploy QA, post-deploy QA, backup restore test, rollback drill и sanitized runtime transcript requirements.
+- `docs/deploy-on-vps.md` фиксирует, что dry-run/report-ready не является production proof.
+- `reports/release/production-vps-field-pilot-report.md` обновлен как P3-S5 prepared/not-executed evidence.
+- `operator-dashboard.py` и `validate-operator-env.py` field-pilot reports теперь пишут sanitized transcript boundary.
+- `verify-all.sh quick` проверяет наличие transcript boundary в generated field-pilot reports.
+- `production-vps-proof-boundary` Artifact Eval spec/report покрывает pre/post deploy QA и запрет runtime proof overclaim.
+
+Проверки:
+
+- `python3 template-repo/scripts/eval-artifact.py tests/artifact-eval/specs/production-vps-proof-boundary.yaml --output tests/artifact-eval/reports/production-vps-proof-boundary.md --json` — pass.
+- `python3 template-repo/scripts/validate-artifact-eval-report.py tests/artifact-eval/reports/production-vps-proof-boundary.md` — pass.
+- `python3 template-repo/scripts/validate-human-language-layer.py .` — pass, active findings `0`.
+- `bash template-repo/scripts/verify-all.sh quick` — pass на `2026-04-27`.
+
 ## Проверка Plan №3 P3-S3/P3-S4
 
 Дата: `2026-04-27`.

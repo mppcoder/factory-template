@@ -211,6 +211,24 @@ python3 template-repo/scripts/operator-dashboard.py --verify-summary
 
 Важно: field pilot report фиксирует evidence boundary. Если был только dry-run, отчет должен оставаться в статусе pending real VPS/user approval и не считается production proof.
 
+## QA до и после deploy
+
+Pre-deploy QA перед real production run:
+
+- env validation и dry-run проходят на том же VPS, тем же preset и тем же `deploy/.env`;
+- DNS/firewall/TLS/backup/healthcheck inputs проверены;
+- secrets остаются только в `deploy/.env` или внешнем secret manager, не в repo notes;
+- backup restore target и rollback drill plan утверждены до cutover.
+
+Post-deploy QA после approved run:
+
+- healthcheck проходит через final public route;
+- backup создан и restore test выполнен на disposable/staging target либо явно отмечен pending;
+- rollback drill выполнен либо явно отмечен pending;
+- sanitized runtime transcript записывает команды, timestamps, image tags и pass/fail results без secrets.
+
+Dry-run/report-ready не является production proof. Production proof можно заявлять только после approved runtime run и sanitized transcript с deploy, healthcheck, backup restore и rollback evidence.
+
 ## Rollback (минимальный)
 
 Откат к предыдущему image/tag:
