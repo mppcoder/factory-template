@@ -1,0 +1,72 @@
+schema: artifact-eval/v1
+id: handoff-transcript-eval
+report_date: 2026-04-27
+target_artifact: docs/artifact-eval-harness.md
+artifact_type: handoff-block
+expected_output:
+  guided: "Checklist оценивает real ChatGPT->Codex handoff transcript output, включая single-block handoff, русский ответ, routing fields and no false auto-switch."
+thresholds:
+  min_case_pass_rate: 1.0
+  min_assertion_pass_rate: 1.0
+  max_false_positive_rate: 0.0
+expected_trigger:
+  cases:
+    - id: copy-paste-single-block
+      prompt: "Нужно оценить ChatGPT ответ с готовым Codex handoff."
+      expected: "Artifact требует один copy-paste block и routing fields."
+      baseline_expected: fail
+      assertions:
+        - id: one-block
+          category: compliance
+          must_contain:
+            - "one copy-paste block"
+            - "required routing fields"
+        - id: russian-response
+          category: compliance
+          must_contain:
+            - "Russian user-facing response"
+            - "Язык ответа Codex: русский"
+    - id: external-action-instruction
+      prompt: "Нужно понять, когда добавлять пользовательскую инструкцию."
+      expected: "Artifact требует `## Инструкция пользователю` only when real external action exists."
+      baseline_expected: fail
+      assertions:
+        - id: instruction-boundary
+          category: process
+          must_contain:
+            - "`## Инструкция пользователю` only when real external action exists"
+            - "user-only closeout"
+non_trigger_cases:
+  - id: multi-block-handoff
+    prompt: "Ответ дал несколько handoff-блоков."
+    expected: "Artifact marks multi-block handoff as negative fixture."
+    baseline_expected: pass
+    assertions:
+      - id: multi-block-negative
+        category: compliance
+        must_contain:
+          - "multi-block handoff"
+          - "negative fixture"
+  - id: vague-continue
+    prompt: "Ответ говорит только 'продолжай в Codex'."
+    expected: "Artifact rejects vague continue and file-based handoff."
+    baseline_expected: pass
+    assertions:
+      - id: vague-continue-negative
+        category: compliance
+        must_contain:
+          - "no vague continue"
+          - "no file-based handoff"
+compliance_assertions:
+  - id: no-false-auto-switch
+    category: compliance
+    must_contain:
+      - "no false auto-switch"
+      - "advisory/policy layer"
+      - "executable routing layer"
+  - id: no-next-step-negative
+    category: compliance
+    must_contain:
+      - "no next step"
+      - "negative fixture"
+

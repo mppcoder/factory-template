@@ -85,3 +85,29 @@ Validator требует:
 - для `feature-execution-lite` — execution-plan, checkpoint, task waves, final verification и artifact-eval evidence link/justification.
 
 `verify-all.sh quick` запускает smoke fixture и проверяет реальный archive/proposal/evidence path во временной директории.
+
+## Project Knowledge reuse proof контур
+
+Plan №4 добавляет second-task proof checklist. Первый task не обязан молча менять `project-knowledge/`, но должен явно закрыть reuse boundary:
+
+- first task creates a Project Knowledge proposal;
+- proposal status is `status: required` or `status: not_required`;
+- second task reads and reuses relevant Project Knowledge;
+- second task records `reuse_evidence`;
+- stale/irrelevant Project Knowledge is not copied blindly;
+- user-only closeout for internal follow-up is a negative fixture, потому что repo-internal reuse/follow-up должен быть выполнен Codex или зафиксирован как blocker.
+
+Negative fixtures для этого proof:
+
+- second task ignores Project Knowledge;
+- stale/irrelevant Project Knowledge is not copied blindly;
+- user-only closeout for internal follow-up;
+- proposal exists but has no decision about reuse.
+
+Минимальная запись во втором task:
+
+```text
+project_knowledge_reuse: checked
+reuse_evidence: reused deployment boundary from project-knowledge/runtime.md
+stale_entries_skipped: project-knowledge/legacy.md was not applicable
+```

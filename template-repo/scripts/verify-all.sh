@@ -94,7 +94,9 @@ run_artifact_eval_smoke() {
     downstream-sync-boundary \
     production-vps-proof-boundary \
     skill-tester-lite \
-    feature-execution-lite
+    feature-execution-lite \
+    handoff-transcript-eval \
+    project-knowledge-reuse-proof
   do
     python3 "$ROOT/template-repo/scripts/eval-artifact.py" \
       "$specs_dir/$spec.yaml" \
@@ -144,6 +146,19 @@ run_project_knowledge_done_loop_smoke() {
     "$ROOT" \
     --workspace "$tmp_dir/work/completed/feat-closeout-smoke"
   rm -rf "$tmp_dir"
+}
+
+run_downstream_application_proof_smoke() {
+  python3 "$ROOT/template-repo/scripts/validate-downstream-application-proof.py" \
+    "$ROOT/tests/downstream-application-proof/valid/downstream-application-proof-report.md"
+  if python3 "$ROOT/template-repo/scripts/validate-downstream-application-proof.py" \
+    "$ROOT/tests/downstream-application-proof/missing-evidence/downstream-application-proof-report.md" \
+    >/tmp/downstream-application-proof-negative.log 2>&1; then
+    echo "downstream application proof negative fixture unexpectedly passed" >&2
+    cat /tmp/downstream-application-proof-negative.log >&2
+    return 1
+  fi
+  rm -f /tmp/downstream-application-proof-negative.log
 }
 
 project_preset() {
@@ -216,6 +231,7 @@ run_quick() {
   run_step "validate-learning-patch-loop" python3 "$ROOT/template-repo/scripts/validate-learning-patch-loop.py" "$ROOT"
   run_step "learning-patch-loop-smoke" run_learning_patch_loop_smoke
   run_step "artifact-eval-smoke" run_artifact_eval_smoke
+  run_step "downstream-application-proof-smoke" run_downstream_application_proof_smoke
   run_step "project-knowledge-done-loop-smoke" run_project_knowledge_done_loop_smoke
   run_step "validate-release-scorecard" python3 "$ROOT/template-repo/scripts/validate-release-scorecard.py" "$ROOT"
   run_step "validate-25-ga-kpi-evidence" python3 "$ROOT/template-repo/scripts/validate-25-ga-kpi-evidence.py" "$ROOT"

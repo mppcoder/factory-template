@@ -4,6 +4,31 @@ Status source of truth: `docs/releases/release-scorecard.yaml`.
 Current scorecard state: `2.5.0 GA Ready`.
 TEST_REPORT.md is verification evidence, not the canonical release-status source.
 
+## Проверка Plan №4 P4-S0/P4-S4 preparation
+
+Дата: `2026-04-27`.
+
+Plan №4 подготовил optional downstream/battle application proof contour после Plan №3, не смешивая его с уже passed `factory-template` template/runtime proof.
+
+- Audit/roadmap: `docs/releases/plan-4-battle-app-proof-roadmap.md`.
+- Gap capture: `reports/bugs/2026-04-27-plan-4-audit-gap.md`, `reports/bugs/2026-04-27-plan-4-downstream-proof-gap.md`, `reports/bugs/2026-04-27-plan-4-handoff-pk-reuse-gap.md`.
+- Downstream proof scenario: `docs/downstream-application-proof.md`.
+- Report template: `template-repo/template/reports/release/downstream-application-proof-report.md.template`.
+- Validator: `template-repo/scripts/validate-downstream-application-proof.py`.
+- Positive/negative fixtures: `tests/downstream-application-proof/valid/` and `tests/downstream-application-proof/missing-evidence/`.
+- Artifact Eval additions: `handoff-transcript-eval` and `project-knowledge-reuse-proof` specs/reports.
+- Boundary: P4-S5/P4-S6 real pilot is blocked until downstream repo, real app image, target, external secrets/approval and sanitized transcript exist.
+
+Проверки:
+
+- `python3 template-repo/scripts/validate-downstream-application-proof.py tests/downstream-application-proof/valid/downstream-application-proof-report.md` — pass.
+- Negative fixture `tests/downstream-application-proof/missing-evidence/downstream-application-proof-report.md` — validator returns non-zero as expected.
+- `python3 template-repo/scripts/eval-artifact.py tests/artifact-eval/specs/handoff-transcript-eval.yaml --output tests/artifact-eval/reports/handoff-transcript-eval.md --json` — pass.
+- `python3 template-repo/scripts/eval-artifact.py tests/artifact-eval/specs/project-knowledge-reuse-proof.yaml --output tests/artifact-eval/reports/project-knowledge-reuse-proof.md --json` — pass.
+- `python3 template-repo/scripts/validate-artifact-eval-report.py tests/artifact-eval/reports/handoff-transcript-eval.md tests/artifact-eval/reports/project-knowledge-reuse-proof.md` — pass.
+- `python3 template-repo/scripts/validate-human-language-layer.py .` — pass, active findings `0`.
+- `bash template-repo/scripts/verify-all.sh quick` — pass на `2026-04-27`.
+
 ## Проверка 2.6 runtime proof
 
 Дата: `2026-04-27`.

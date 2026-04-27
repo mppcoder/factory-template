@@ -1,0 +1,47 @@
+# Отчет downstream application proof
+
+Дата: {{YYYY-MM-DD}}
+
+proof_status: not_run
+downstream_repo: {{downstream_repo_path_or_url}}
+app_image: {{real_app_image}}
+runtime_target: {{approved_vps_or_staging_target}}
+healthcheck_url: {{https_url_or_internal_probe}}
+healthcheck_result: not_run
+migrations: not_applicable
+backup_result: not_run
+restore_result: not_run
+rollback_result: not_run
+sanitized_transcript: missing
+secrets_boundary: unconfirmed
+blocker_reason: external_inputs_missing
+
+## Runtime evidence данные
+
+- app_image_evidence: {{image_digest_or_registry_reference}}
+- healthcheck_evidence: {{status_code_probe_or_service_health}}
+- migrations_evidence: {{migration_log_or_not_applicable_reason}}
+- backup_evidence: {{backup_file_or_snapshot_id_without_secrets}}
+- restore_evidence: {{disposable_restore_target_and_result}}
+- rollback_evidence: {{previous_image_or_version_restored_and_probe}}
+- transcript_evidence: {{sanitized_transcript_location_or_inline_summary}}
+- secrets_boundary_evidence: {{confirmation_that_secrets_were_entered_outside_repo}}
+
+## Novice-to-deploy scorecard данные
+
+time_to_first_handoff_minutes: {{integer_minutes}}
+handoff_rework_loops: {{integer_count}}
+manual_interventions: {{integer_count}}
+external_blockers: {{integer_count_or_none}}
+deploy_result: not_run
+scorecard_evidence: {{operator_notes_without_secrets}}
+
+## Санитизированный transcript
+
+```text
+{{no_secrets_transcript}}
+```
+
+## Boundary правило
+
+This report proves only the selected downstream/battle application named above. It does not change `factory-template` template/runtime proof status.

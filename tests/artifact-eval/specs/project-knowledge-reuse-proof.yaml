@@ -1,0 +1,62 @@
+schema: artifact-eval/v1
+id: project-knowledge-reuse-proof
+report_date: 2026-04-27
+target_artifact: docs/done-and-project-knowledge-loop.md
+artifact_type: policy-doc
+expected_output:
+  guided: "Checklist proves a second task reads and reuses relevant Project Knowledge while avoiding stale copy-forward."
+thresholds:
+  min_case_pass_rate: 1.0
+  min_assertion_pass_rate: 1.0
+  max_false_positive_rate: 0.0
+expected_trigger:
+  cases:
+    - id: first-task-pk-proposal
+      prompt: "Первый task закрыл feature и создал Project Knowledge proposal."
+      expected: "Artifact требует proposal with required/not_required status."
+      baseline_expected: fail
+      assertions:
+        - id: proposal-required
+          category: process
+          must_contain:
+            - "first task creates a Project Knowledge proposal"
+            - "status: required"
+            - "status: not_required"
+    - id: second-task-reuse
+      prompt: "Второй task должен reuse relevant Project Knowledge."
+      expected: "Artifact requires read/reuse evidence."
+      baseline_expected: fail
+      assertions:
+        - id: reuse-evidence
+          category: outcome
+          must_contain:
+            - "second task reads and reuses relevant Project Knowledge"
+            - "reuse_evidence"
+non_trigger_cases:
+  - id: second-task-ignores-pk
+    prompt: "Второй task игнорирует Project Knowledge."
+    expected: "Artifact names this as negative fixture."
+    baseline_expected: pass
+    assertions:
+      - id: ignores-negative
+        category: compliance
+        must_contain:
+          - "second task ignores Project Knowledge"
+          - "negative fixture"
+  - id: stale-pk-copy
+    prompt: "Второй task blindly copies stale Project Knowledge."
+    expected: "Artifact rejects stale/irrelevant copy-forward."
+    baseline_expected: pass
+    assertions:
+      - id: stale-negative
+        category: compliance
+        must_contain:
+          - "stale/irrelevant Project Knowledge is not copied blindly"
+          - "negative fixture"
+compliance_assertions:
+  - id: external-vs-internal
+    category: compliance
+    must_contain:
+      - "user-only closeout for internal follow-up"
+      - "negative fixture"
+

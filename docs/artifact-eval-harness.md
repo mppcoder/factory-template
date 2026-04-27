@@ -24,6 +24,19 @@ Harness проверяет не модельный transcript, а сам reusabl
 - production VPS proof boundary;
 - feature-execution-lite final verification negative cases.
 
+После Plan №4 P4-S3 smoke-набор дополнительно покрывает handoff transcript eval для real ChatGPT->Codex handoff output:
+
+- one copy-paste block, not file references or multiple fragments;
+- Russian user-facing response with `Язык ответа Codex: русский`;
+- required routing fields from repo handoff contract;
+- no file-based handoff;
+- no vague continue as a substitute for a concrete task;
+- no false auto-switch claims: advisory/policy layer and executable routing layer stay separate;
+- `## Инструкция пользователю` only when real external action exists;
+- negative fixture: multi-block handoff;
+- negative fixture: no next step after internal follow-up remains;
+- negative fixture: user-only closeout for repo-internal work.
+
 ## Спецификация
 
 Минимальный YAML:

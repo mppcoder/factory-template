@@ -38,6 +38,20 @@ Plan №3 records AIF/Molyanov-inspired improvements as repo-native follow-up wo
 | `P3-GAP-09` | Template runtime install/reinstall artifact was not explicit after separating template proof from battle app proof. | `reports/bugs/2026-04-27-template-runtime-install-artifact-gap.md`; `docs/template-runtime-reference-app.md`; `build-placeholder-app-image.py`. | P3-S6 / 2.6 | implemented/verified | repo |
 | `P3-GAP-10` | 2.6 roadmap still looked open because optional future contours were listed like current next stages. | `reports/bugs/2026-04-27-roadmap-closure-status-gap.md`; 2.6 roadmap now says completed for `factory-template` template/runtime scope. | P3-S6 / 2.6 | implemented/verified | repo |
 
+## Plan №4 downstream/battle application proof gaps
+
+Plan №4 prepares optional downstream/battle application proof after the completed Plan №3 template/runtime proof. These gaps do not reopen `factory-template` template/runtime closure and cannot be claimed complete inside this repo without a real downstream project.
+
+| ID | Gap | Current evidence | Target stage | Status | Owner boundary |
+|---|---|---|---|---|---|
+| `P4-GAP-01` | Missing guided downstream app proof scenario from placeholder to real `APP_IMAGE`. | `docs/downstream-application-proof.md`; `docs/template-runtime-reference-app.md`. | P4-S1 | implemented as preparation | repo docs / downstream runtime |
+| `P4-GAP-02` | Missing application-level proof report template. | `template-repo/template/reports/release/downstream-application-proof-report.md.template`. | P4-S1 | implemented as preparation | generated repo evidence |
+| `P4-GAP-03` | Novice-to-deploy scorecard could claim pass without evidence. | `validate-downstream-application-proof.py` and positive/negative fixtures. | P4-S2 | implemented/verified as validator contour | repo validator / downstream evidence |
+| `P4-GAP-04` | Handoff transcript eval needed coverage beyond reusable handoff format. | `handoff-transcript-eval` spec/report. | P4-S3 | implemented/verified as eval contour | repo eval |
+| `P4-GAP-05` | Project Knowledge reuse across a second task needed explicit proof checklist. | `docs/done-and-project-knowledge-loop.md`; `project-knowledge-reuse-proof` spec/report. | P4-S4 | implemented/verified as eval contour | repo docs/eval |
+| `P4-GAP-06` | Real downstream pilot cannot run inside `factory-template` alone. | Plan №4 roadmap marks P4-S5 blocked by external inputs. | P4-S5 | blocked_external_inputs | downstream repo / real VPS |
+| `P4-GAP-07` | Release continuity must preserve template proof complete vs app proof optional future boundary. | `docs/releases/plan-4-battle-app-proof-roadmap.md`, current state and test report. | P4-S6 | implemented for preparation / future after pilot | repo release docs |
+
 ## `molyanov-ai-dev` adaptation register
 
 Reference snapshot: `pavel-molyanov/molyanov-ai-dev` HEAD `1bfe745d43b0602d8279cb4c9cb7894b1bb56bba`.

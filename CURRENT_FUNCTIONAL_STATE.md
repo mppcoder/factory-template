@@ -106,6 +106,9 @@
 - production placeholder path now includes generated static placeholder assets, a local placeholder app image builder and installer, so Codex can serve a visible placeholder application without requiring the user to provide a real app image first
 - `factory-template-placeholder-app:local` is now documented as the template-owned reference runtime app for first install, smoke checks and VPS recovery when no downstream/battle app exists
 - Plan №3 P3-S6 closed the roadmap continuity and closure gap after runtime proof: release-facing docs now mark the 2.6 `factory-template` template/runtime roadmap complete and separate optional future downstream/battle application proof
+- Plan №4 P4-S0..P4-S4 prepared the optional downstream/battle application proof contour without reopening template/runtime proof: roadmap, downstream proof doc, report template, scorecard validator, handoff transcript eval and Project Knowledge reuse proof are repo-local preparation artifacts
+- downstream/battle application proof now has a generated report template and validator: a passed claim requires real app image, healthcheck, migrations policy, backup, restore, rollback, sanitized transcript, secrets boundary and novice-to-deploy scorecard evidence
+- Artifact Eval Harness now includes handoff transcript eval and Project Knowledge reuse proof specs/reports for multi-block handoff, vague continuation, false auto-switch, user-only internal closeout, ignored Project Knowledge and stale Project Knowledge negative fixtures
 
 ## Программа 2.5 (release truth)
 - release truth source: `docs/releases/release-scorecard.yaml`
@@ -132,12 +135,13 @@
 - gap register: `docs/releases/post-2.5-gap-register.md`
 - Plan №3 audit: `docs/releases/plan-3-aif-molyanov-audit.md`
 - текущая стадия: `release-followup -> planning`
-- текущий planning status: `Plan №3 P3-S0/P3-S6 implemented/verified; 2.6 factory-template template/runtime roadmap complete; downstream/battle application proof is optional future external contour`
+- текущий planning status: `Plan №4 P4-S0/P4-S4 preparation implemented/verified; 2.6 factory-template template/runtime roadmap complete; downstream/battle application pilot P4-S5/P4-S6 remains optional future external contour`
 - `2.5.1` scope: downstream sync v3 stabilization, field pilot evidence discoverability, closeout/boundary guardrails, optional downstream sync adoption and release-facing docs.
 - `2.6` scope: completed for `factory-template` template/runtime proof: real production VPS deploy, backup restore, rollback drill, runtime/source-hygiene classification, expanded artifact eval, one real `feature-execution-lite` adoption, runtime QA boundary and reference runtime app.
 - completed proof: `2.5.0` repo-controlled GA evidence, `2.5.1-field-pilot` real project proof, downstream sync v3 synthetic multi-cycle proof.
-- optional future external proof: downstream/battle project application image deploy proof, only if validating a generated project with a real app. Infrastructure-level VPS deploy, backup restore and rollback drill passed on 2026-04-27 with local placeholder app image for `factory-template`.
+- optional future external proof: downstream/battle project application image deploy proof, only if validating a generated project with a real app. Infrastructure-level VPS deploy, backup restore and rollback drill passed on 2026-04-27 with local placeholder app image for `factory-template`; Plan №4 now provides the preparation docs/template/validator/eval contour for that future proof.
 - Plan №3 status: P3-S0 audit captured; P3-S1 task-state-lite, P3-S2 learning patch loop, P3-S3 expanded evals, P3-S4 real adoption, P3-S5 runtime QA boundary preparation and P3-S6 roadmap closeout implemented.
+- Plan №4 status: P4-S0 audit captured; P4-S1/P4-S2 downstream app proof scenario and novice scorecard validator implemented as preparation; P4-S3/P4-S4 handoff transcript eval and Project Knowledge reuse proof implemented as repo-local eval/checklist; P4-S5/P4-S6 blocked until a real downstream/battle project is selected.
 - `pavel-molyanov/molyanov-ai-dev` comparison recorded in `docs/releases/post-2.5-gap-register.md`; factory keeps useful spec/project-knowledge/eval ideas but does not import Claude-specific `.claude`, command or TeamCreate assumptions.
 
 ## Что работает частично
@@ -161,6 +165,7 @@
 - дальнейшее расширение KPI evidence за пределы repo-controlled pilot к внешним downstream программам
 - дальнейшее расширение novice acceptance от parity-level long-flow smoke к предметным domain-сценариям реальных downstream систем
 - downstream/battle application image proof требует отдельного generated/battle project, application artifact, approved runtime run, secrets outside repo and sanitized transcript; текущий repo статус: `template-runtime-proof-passed`
+- Plan №4 real pilot requires external inputs: downstream repo path, real application image, approved VPS/staging target, secrets entered outside repo, deploy/restore/rollback approval and sanitized transcript.
 
 ## Граница core
 Core включает фабрику, шаблон, versioning/documentation layer, `.chatgpt`, scenario-pack, examples и feedback loop.
