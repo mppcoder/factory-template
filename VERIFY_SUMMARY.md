@@ -32,6 +32,13 @@
 - `reports/bugs/2026-04-27-post-25-release-planning-gap.md`: defect capture закрыт как `remediated-in-current-scope`.
 - Completed proof отделен от pending external runtime proof; `2.5.0` scorecard не изменялся.
 
+## Baseline внешних действий
+
+- `reports/bugs/2026-04-27-external-actions-oververbose-closeout.md`: defect capture закрыт как `remediated-in-current-scope`.
+- Compact closeout contract: если внешних действий нет, финальный ответ говорит `Внешних действий не требуется.`
+- Если внешние действия есть, `## Инструкция пользователю` содержит только реальные external/manual actions.
+- `validate-codex-task-pack.py` закрепляет compact outcome и ловит oververbose no-op ledger.
+
 ## Проверенные слои
 
 - release metadata и version sync

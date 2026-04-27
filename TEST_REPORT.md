@@ -71,12 +71,17 @@ TEST_REPORT.md is verification evidence, not the canonical release-status source
 Дата: `2026-04-27`.
 
 Исправлен reusable closeout gap: completion package мог содержать общий `## Инструкция пользователю`, но не давать отдельный actionable реестр внешних действий.
+Затем закрыт follow-up UX defect: отсутствие внешних действий больше не должно превращаться в длинный audit-style register с no-op строками.
 
 - Добавлен defect report `reports/bugs/2026-04-27-external-actions-closeout-gap.md`.
+- Добавлен defect report `reports/bugs/2026-04-27-external-actions-oververbose-closeout.md`.
 - `template-repo/scenario-pack/00-master-router.md` и `16-done-closeout.md` теперь требуют `Реестр внешних действий` для downstream-consumed changes.
+- Для no-action closeout теперь требуется compact outcome: `Внешних действий не требуется.` или `Внешние действия: нет`.
+- Если реальные external actions есть, `Реестр внешних действий` содержит только actionable строки, а не все возможные contour'ы.
 - `template-repo/template/.chatgpt/done-checklist.md` синхронизирован с расширенным generated checklist.
-- `template-repo/scripts/create-codex-task-pack.py` добавляет `Когда выполнять` и `Реестр внешних действий` в boundary/checklist.
-- `template-repo/scripts/validate-codex-task-pack.py` проверяет, что boundary/checklist не регрессируют к общей фразе вместо actionable external action ledger.
+- `template-repo/scripts/create-codex-task-pack.py` добавляет compact external-actions contract в boundary/checklist.
+- `template-repo/scripts/validate-codex-task-pack.py` проверяет, что boundary/checklist не регрессируют к общей фразе и ловит oververbose no-op ledger.
+- Manual sample check подтверждает: no-action closeout принимается как `Внешних действий не требуется.`, one-action ledger принимается, all-noop ledger блокируется.
 
 Проверки:
 

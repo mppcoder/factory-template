@@ -2,6 +2,7 @@
 
 ## [Unreleased]
 ### Добавлено
+- defect report `reports/bugs/2026-04-27-external-actions-oververbose-closeout.md` для чрезмерно длинного closeout внешних действий.
 - post-2.5 planning layer: `docs/releases/2.5.1-roadmap.md`, `docs/releases/2.6-roadmap.md` и `docs/releases/post-2.5-gap-register.md`.
 - defect report `reports/bugs/2026-04-27-post-25-release-planning-gap.md` для release-followup planning gap после `2.5.0 GA Ready`.
 - comparison register for `pavel-molyanov/molyanov-ai-dev`: already adapted, useful-not-yet-adapted and intentionally-not-adapted ideas.
@@ -14,6 +15,8 @@
 - `docs/brownfield-to-greenfield-transition.md` описывает without-repo и with-repo transition paths, conversion gates и done rule.
 
 ### Изменено
+- closeout guidance теперь использует compact default: если внешних действий нет, финал говорит `Внешних действий не требуется.`, а если действия есть, `## Инструкция пользователю` перечисляет только реальные действия снаружи Codex.
+- `Реестр внешних действий` больше не должен быть audit table всех возможных contour'ов со статусом `не требуется`; полный register допускается только по явному запросу или для release/security approval.
 - release-facing docs теперь явно разделяют `2.5.1` stabilization scope и `2.6` runtime/advanced execution scope без изменения `2.5.0` scorecard.
 - post-2.5 docs фиксируют completed repo-controlled/synthetic proof отдельно от pending external runtime proof: real VPS deploy, backup restore и rollback drill остаются external/manual boundary.
 - legacy/factory-only root folders физически перенесены или растворены: `.dogfood-bootstrap`, `factory_template_only_pack`, `meta-template-project`, `onboarding-smoke`, `optional-domain-packs`, `packaging`, `registry`, `working-project-examples`, `workspace-packs`.
@@ -25,6 +28,7 @@
 - Downstream sync model теперь явно исключает `factory-producer-owned` paths и защищает brownfield historical evidence.
 
 ### Исправлено
+- зафиксирован и исправлен reusable closeout UX defect: отсутствие внешних действий больше не разворачивается в длинный completion package с no-op строками.
 - `create-codex-task-pack.py`, `codex_task_router.py`, `validate-handoff-response-format.py`, `validate-handoff-language.py` теперь блокируют англоязычные labels `Repo:`, `Goal:`, `Entry point:`, `Scope:` и требуют прямую инструкцию Codex отвечать по-русски.
 - зафиксирован и исправлен reusable architecture defect: brownfield adoption больше не может считаться финальным project class без conversion или blocker.
 - зафиксирован и исправлен `bug-034`: финальный closeout теперь должен содержать `Рекомендация по внешним действиям` с явным статусом для factory ChatGPT Project, downstream sync, downstream ChatGPT Project и Sources fallback.

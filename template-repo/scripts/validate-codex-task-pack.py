@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import sys
 from pathlib import Path
+import re
 import subprocess
 
 import yaml
@@ -15,6 +16,40 @@ def read_text(path: Path) -> str:
 def ensure_contains(text: str, needle: str, errors: list[str], label: str) -> None:
     if needle not in text:
         errors.append(f"{label}: отсутствует обязательный фрагмент `{needle}`")
+
+
+def detect_oververbose_noop_ledger(text: str, errors: list[str], label: str) -> None:
+    ledger_match = re.search(
+        r"(?ims)^##?\s*Реестр внешних действий\s*$"
+        r"(?P<body>.*?)(?=^##?\s+\S|\Z)",
+        text,
+    )
+    if not ledger_match:
+        return
+    body = ledger_match.group("body")
+    rows = [
+        line.strip()
+        for line in body.splitlines()
+        if line.strip().startswith("|") and "---" not in line
+    ]
+    data_rows = rows[1:] if rows and "действ" in rows[0].lower() else rows
+    if len(data_rows) < 2:
+        return
+    no_action_rows = [
+        row
+        for row in data_rows
+        if re.search(r"\bне требуется\b|действие не требуется|не выполнять", row, re.I)
+    ]
+    actionable_rows = [
+        row
+        for row in data_rows
+        if re.search(r"\bтребуется\b|\bрекомендуется\b|\bсейчас\b|при следующем downstream sync", row, re.I)
+        and not re.search(r"\bне требуется\b|действие не требуется|не выполнять", row, re.I)
+    ]
+    if no_action_rows and len(no_action_rows) == len(data_rows) and not actionable_rows:
+        errors.append(
+            f"{label}: `Реестр внешних действий` содержит только no-op строки; используйте `Внешних действий не требуется.`"
+        )
 
 
 def run_handoff_language_validator(root: Path, path: Path, errors: list[str]) -> None:
@@ -67,6 +102,12 @@ def main() -> int:
     launch_yaml = yaml.safe_load(read_text(launch_path)) or {}
     normalized_handoff = read_text(normalized_handoff_path)
     handoff_response = read_text(handoff_response_path)
+    for label, text in [
+        ("boundary-actions.md", boundary),
+        ("done-checklist.md", checklist),
+        ("handoff-response.md", handoff_response),
+    ]:
+        detect_oververbose_noop_ledger(text, errors, label)
     run_handoff_language_validator(root, codex_input_path, errors)
     run_handoff_language_validator(root, normalized_handoff_path, errors)
 
@@ -142,15 +183,13 @@ def main() -> int:
     ensure_contains(boundary, "Обновление шаблона в боевых repo", errors, "boundary-actions.md")
     ensure_contains(boundary, "Обновление repo-first инструкции боевых ChatGPT Projects", errors, "boundary-actions.md")
     ensure_contains(boundary, "canonical default — `нет`, если downstream уже живет в чистом repo-first режиме", errors, "boundary-actions.md")
-    ensure_contains(boundary, "Рекомендация по внешним действиям", errors, "boundary-actions.md")
-    ensure_contains(boundary, "`Рекомендация`: `требуется`, `рекомендуется`, `не требуется`, `опционально` или `только legacy/hybrid fallback`", errors, "boundary-actions.md")
-    ensure_contains(boundary, "`Когда выполнять`: сейчас, при следующем downstream sync, только для legacy/hybrid fallback или не выполнять", errors, "boundary-actions.md")
+    ensure_contains(boundary, "Compact default", errors, "boundary-actions.md")
+    ensure_contains(boundary, "Внешние действия: нет", errors, "boundary-actions.md")
+    ensure_contains(boundary, "Финальный блок должен содержать только реальные внешние действия пользователя.", errors, "boundary-actions.md")
+    ensure_contains(boundary, "Если внешних действий нет, не пиши таблицу contour'ов", errors, "boundary-actions.md")
     ensure_contains(boundary, "Реестр внешних действий", errors, "boundary-actions.md")
-    ensure_contains(boundary, "Нельзя ограничиваться общей фразой", errors, "boundary-actions.md")
-    ensure_contains(boundary, "`factory-template ChatGPT Project instructions`", errors, "boundary-actions.md")
-    ensure_contains(boundary, "`downstream/battle repo sync`", errors, "boundary-actions.md")
-    ensure_contains(boundary, "`downstream/battle ChatGPT Project instructions`", errors, "boundary-actions.md")
-    ensure_contains(boundary, "`Sources fallback`", errors, "boundary-actions.md")
+    ensure_contains(boundary, "actionable ledger, а не audit table", errors, "boundary-actions.md")
+    ensure_contains(boundary, "не добавляй его в пользовательскую инструкцию", errors, "boundary-actions.md")
     ensure_contains(boundary, "Удалить перед заменой", errors, "boundary-actions.md")
     ensure_contains(boundary, "factory/producer/extensions/workspace-packs/factory-ops/export-template-patch.sh", errors, "boundary-actions.md")
     ensure_contains(boundary, "factory/producer/extensions/workspace-packs/factory-ops/apply-template-patch.sh", errors, "boundary-actions.md")
@@ -186,11 +225,12 @@ def main() -> int:
     ensure_contains(checklist, "## Пакет завершения для изменений repo-first инструкций", errors, "done-checklist.md")
     ensure_contains(checklist, "По умолчанию: нет, если canonical repo/path/entrypoint/instruction text не менялись", errors, "done-checklist.md")
     ensure_contains(checklist, "По умолчанию: нет для чистого repo-first режима", errors, "done-checklist.md")
-    ensure_contains(checklist, "Рекомендация по внешним действиям", errors, "done-checklist.md")
+    ensure_contains(checklist, "Определено: есть ли реальные внешние действия пользователя", errors, "done-checklist.md")
+    ensure_contains(checklist, "Compact outcome: `Внешние действия: нет` или `Реестр внешних действий`", errors, "done-checklist.md")
     ensure_contains(checklist, "Реестр внешних действий", errors, "done-checklist.md")
-    ensure_contains(checklist, "Для каждого contour указан статус", errors, "done-checklist.md")
-    ensure_contains(checklist, "Для каждого contour указана причина", errors, "done-checklist.md")
-    ensure_contains(checklist, "Для каждого contour указано, когда выполнять действие", errors, "done-checklist.md")
+    ensure_contains(checklist, "только actionable строки", errors, "done-checklist.md")
+    ensure_contains(checklist, "Не перечислены contour'ы со статусом `не требуется`", errors, "done-checklist.md")
+    ensure_contains(checklist, "Для каждого actionable contour указана причина", errors, "done-checklist.md")
     ensure_contains(checklist, "Внешние действия перечислены отдельными actionable строками", errors, "done-checklist.md")
     ensure_contains(checklist, "Пакет завершения выдан в том же финальном ответе", errors, "done-checklist.md")
     ensure_contains(checklist, "bash VALIDATE_VERIFIED_SYNC_PREREQS.sh", errors, "done-checklist.md")
