@@ -14,9 +14,9 @@
 - Artifact Eval Harness уже существует как optional advanced contour с sample specs/reports.
 - Project Knowledge Done Loop уже существует и подключен к quick verify.
 - `feature-execution-lite` уже существует как optional advanced path с fixtures, validator и Artifact Eval sample target.
-- Production VPS path подготовлен как dry-run/report-ready, но real VPS deploy, backup restore и rollback drill остаются external runtime proof.
+- Production VPS path подготовлен как dry-run/report-ready; позднее approved 2.6 runtime proof выполнил deploy, HTTPS healthcheck, backup, disposable restore и rollback drill для infrastructure path с local placeholder application image.
 
-`Plan №3` начался как audit-only follow-up в P3-S0. По состоянию на P3-S5 закрыты repo-local task-state, learning patch loop, expanded Artifact Eval coverage, один real `feature-execution-lite` adoption closeout и runtime QA boundary preparation. Real VPS deploy, backup restore и rollback drill остаются external runtime proof.
+`Plan №3` начался как audit-only follow-up в P3-S0. По состоянию на P3-S6 закрыты repo-local task-state, learning patch loop, expanded Artifact Eval coverage, один real `feature-execution-lite` adoption closeout, runtime QA boundary preparation, approved infrastructure runtime proof и release-facing roadmap continuity pass. Real business application image proof остается внешней runtime boundary до появления настоящего приложения.
 
 ## Карта источников
 
@@ -41,11 +41,12 @@ External ideas используются только как input ideas, а не
 | `P3-GAP-02` learning patch / evolve proposal loop | связан с feedback loop и Done Loop | Реализовано через `docs/learning-patch-loop.md`, learning proposal template и validator для reusable bug reports. | P3-S2 |
 | `P3-GAP-03` Artifact Eval coverage expansion | `P25-GAP-06` | Реализованы routing-critical specs/reports и negative fixtures; quick smoke расширен. | P3-S3 |
 | `P3-GAP-04` `feature-execution-lite` real adoption adoption | `P25-GAP-07` | Реальный workspace `work/completed/plan-3-eval-adoption` закрыт через advanced path и Done Loop. | P3-S4 |
-| `P3-GAP-05` pre/post deploy QA as runtime proof boundary | `P25-GAP-04`, `P25-GAP-05` | Реализована prep boundary: pre-deploy QA, post-deploy QA и sanitized transcript requirements; real deploy, restore и rollback не заявлены как выполненные. | P3-S5 |
-| `P3-GAP-06` runtime/source-hygiene boundary classifier | `P25-GAP-08` | Реализована docs/report classification для repo-local dry-run, manual secrets, sanitized transcript, downstream sync и external runtime proof. | P3-S5 / 2.6 |
+| `P3-GAP-05` pre/post deploy QA as runtime proof boundary | `P25-GAP-04`, `P25-GAP-05` | Реализована prep boundary; approved 2.6 runtime proof выполнил deploy, HTTPS healthcheck, backup, disposable restore и rollback drill для infrastructure path. | P3-S5 / 2.6 |
+| `P3-GAP-06` runtime/source-hygiene boundary classifier | `P25-GAP-08` | Реализована docs/report classification для repo-local dry-run, manual secrets, sanitized transcript, downstream sync, external runtime proof и real app proof boundary. | P3-S5 / 2.6 |
 | `P3-GAP-07` release-facing consistency pass | `251-STAB-05` | Release-facing docs обновлены после P3-S0..P3-S5 closeouts. | каждый P3 closeout |
+| `P3-GAP-08` roadmap continuity after runtime proof | `251-STAB-05`, `P25-GAP-08` | Зафиксирован defect `reports/bugs/2026-04-27-roadmap-continuity-gap.md`; roadmap теперь называет P3-S6/P3-S7 и не оставляет stale pending/demo claims. | P3-S6 |
 
-Plan №3 gaps не reopen `2.5.0 GA Ready` и не превращают pending runtime proof в completed proof. P3-S0..P3-S5 являются repo-local evidence/preparation; real runtime proof остается pending external boundary.
+Plan №3 gaps не reopen `2.5.0 GA Ready` и не превращают placeholder infrastructure proof в proof реального бизнес-приложения. P3-S0..P3-S6 являются implemented/verified evidence; real app image proof остается pending external runtime boundary.
 
 ## Добавить / не добавлять / уже покрыто
 
@@ -86,13 +87,15 @@ Plan №3 gaps не reopen `2.5.0 GA Ready` и не превращают pending
 | P3-S2 | Добавить learning patch / evolve proposal loop. | Реализовано через docs, template proposal, template `reports/learnings/` и validator для reusable bugs. |
 | P3-S3 | Расширить Artifact Eval coverage. | Реализовано: routing-critical specs/reports и meaningful negative fixtures подключены к quick smoke. |
 | P3-S4 | Adoption `feature-execution-lite` на одном real factory change. | Реализовано: `work/completed/plan-3-eval-adoption` закрыт через Done Loop с evidence. |
-| P3-S5 | Подготовить runtime QA boundary для 2.6. | Реализовано: pre/post deploy QA, restore, rollback и sanitized transcript requirements documented; без real VPS mutation. |
+| P3-S5 | Подготовить runtime QA boundary для 2.6. | Реализовано: pre/post deploy QA, restore, rollback и sanitized transcript requirements documented; на момент P3-S5 это была prep boundary, execution evidence записан в 2.6 runtime proof. |
+| P3-S6 | Закрыть roadmap continuity после approved runtime proof. | Реализовано: release-facing status docs выровнены вокруг placeholder infrastructure proof и next external app-proof boundary. |
+| P3-S7 | Real application image proof. | Pending external/runtime: нужен настоящий application Docker image вместо `factory-template-placeholder-app:local`; только тогда повторять application-level proof. |
 
 ## Граничные решения
 
 - Beginner default остается guided и lightweight; advanced execution остается opt-in.
 - Dry-run, fake Docker, synthetic downstream и report-ready artifacts не являются production proof.
-- Real VPS deploy, restore и rollback требуют explicit user approval, access, secrets entered outside repo и sanitized runtime transcript.
+- Real VPS deploy, restore и rollback требуют explicit user approval, access, secrets entered outside repo и sanitized runtime transcript. Infrastructure path already passed with placeholder app image; business app proof is a separate future boundary.
 - Advisory/policy layer и executable routing layer остаются разделенными.
 - Надежная единица routing - new task launch; manual UI model selection не равен launcher-driven executable routing.
 - `factory-template` остается repo-first handoff/vibecoding template product; model routing поддерживает продукт, но не является его main value.

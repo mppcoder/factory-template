@@ -100,9 +100,10 @@
 - Plan №3 P3-S2 learning patch loop добавлен как repo-native proposal слой: reusable bug reports требуют learning proposal или `not_required` reason, а fake/overclaim proposals ловятся validator fixtures
 - Plan №3 P3-S3 расширил Artifact Eval Harness на routing-critical specs/reports: direct self-handoff, normalized handoff boundary, done closeout ledger, downstream sync boundary, production proof boundary и feature-execution-lite final verification negatives
 - Plan №3 P3-S4 провел real `feature-execution-lite` adoption: `work/completed/plan-3-eval-adoption` содержит advanced workspace closeout, done-report, Project Knowledge proposal и downstream-impact evidence
-- Plan №3 P3-S5 подготовил runtime QA boundary для 2.6: pre-deploy QA, post-deploy QA, backup restore, rollback drill, secrets/manual boundary и sanitized runtime transcript requirements documented; real VPS proof не выполнялся
-- 2.6 runtime proof executed on VPS `72.56.26.209` for production preset infrastructure path: deploy, HTTPS healthcheck, backup, disposable restore and rollback drill passed; boundary remains demo `APP_IMAGE=nginx:1.27-alpine`, so real application image proof is still pending
-- production placeholder path now includes generated static placeholder assets and installer, so Codex can serve a visible placeholder page or a custom placeholder image URL without requiring the user to provide a real app image first
+- Plan №3 P3-S5 подготовил runtime QA boundary для 2.6: pre-deploy QA, post-deploy QA, backup restore, rollback drill, secrets/manual boundary и sanitized runtime transcript requirements documented
+- 2.6 runtime proof executed on VPS `72.56.26.209` for production preset infrastructure path: deploy, HTTPS healthcheck, backup, disposable restore and rollback drill passed with local placeholder application image `factory-template-placeholder-app:local`
+- production placeholder path now includes generated static placeholder assets, a local placeholder app image builder and installer, so Codex can serve a visible placeholder application without requiring the user to provide a real app image first
+- Plan №3 P3-S6 closed the roadmap continuity gap after runtime proof: release-facing docs now name the next external boundary as real business application image proof, not generic pending VPS work
 
 ## Программа 2.5 (release truth)
 - release truth source: `docs/releases/release-scorecard.yaml`
@@ -129,12 +130,12 @@
 - gap register: `docs/releases/post-2.5-gap-register.md`
 - Plan №3 audit: `docs/releases/plan-3-aif-molyanov-audit.md`
 - текущая стадия: `release-followup -> planning`
-- текущий planning status: `Plan №3 P3-S1/P3-S5 implemented/prepared and verification-backed; real runtime proof remains external pending`
+- текущий planning status: `Plan №3 P3-S0/P3-S6 implemented/verified; infrastructure runtime proof passed; real business application image proof remains external pending`
 - `2.5.1` scope: downstream sync v3 stabilization, field pilot evidence discoverability, closeout/boundary guardrails, optional downstream sync adoption and release-facing docs.
 - `2.6` scope: real production VPS deploy, backup restore, rollback drill and runtime/source-hygiene backlog; expanded artifact eval, one real `feature-execution-lite` adoption and runtime QA boundary preparation are now Plan №3 repo-local evidence.
 - completed proof: `2.5.0` repo-controlled GA evidence, `2.5.1-field-pilot` real project proof, downstream sync v3 synthetic multi-cycle proof.
-- pending external runtime proof: real application image deploy proof. Infrastructure-level VPS deploy, backup restore and rollback drill passed on 2026-04-27 with demo `nginx` image.
-- Plan №3 status: P3-S0 audit captured; P3-S1 task-state-lite, P3-S2 learning patch loop, P3-S3 expanded evals, P3-S4 real adoption and P3-S5 runtime QA boundary preparation implemented; real runtime proof remains external pending.
+- pending external proof: real business application image deploy proof. Infrastructure-level VPS deploy, backup restore and rollback drill passed on 2026-04-27 with local placeholder app image.
+- Plan №3 status: P3-S0 audit captured; P3-S1 task-state-lite, P3-S2 learning patch loop, P3-S3 expanded evals, P3-S4 real adoption, P3-S5 runtime QA boundary preparation and P3-S6 roadmap continuity pass implemented.
 - `pavel-molyanov/molyanov-ai-dev` comparison recorded in `docs/releases/post-2.5-gap-register.md`; factory keeps useful spec/project-knowledge/eval ideas but does not import Claude-specific `.claude`, command or TeamCreate assumptions.
 
 ## Что работает частично
@@ -157,7 +158,7 @@
 - дальнейшее production hardening runtime-нестабильности git sync beyond current fallback strategy
 - дальнейшее расширение KPI evidence за пределы repo-controlled pilot к внешним downstream программам
 - дальнейшее расширение novice acceptance от parity-level long-flow smoke к предметным domain-сценариям реальных downstream систем
-- реальный production VPS field deploy, backup restore test и rollback drill требуют отдельного user approval, VPS access, secrets и runtime transcript; текущий repo статус: `repo-controlled-dry-run-ready-real-vps-pending`
+- real business application image proof требует отдельного application artifact, approved runtime run, secrets outside repo and sanitized transcript; текущий repo статус: `infrastructure-runtime-proof-passed-real-app-proof-pending`
 
 ## Граница core
 Core включает фабрику, шаблон, versioning/documentation layer, `.chatgpt`, scenario-pack, examples и feedback loop.

@@ -10,7 +10,7 @@ TEST_REPORT.md is verification evidence, not the canonical release-status source
 
 Approved runtime proof выполнен на VPS `72.56.26.209` в `/projects/factory-template` с preset `production`.
 
-- Pre-deploy env validation — pass, warning only for demo `APP_IMAGE`.
+- Pre-deploy env validation — pass; initial demo `APP_IMAGE` warning remediated by local placeholder app image.
 - Production dry-run — pass.
 - Real deploy — pass.
 - HTTPS healthcheck — pass.
@@ -18,8 +18,8 @@ Approved runtime proof выполнен на VPS `72.56.26.209` в `/projects/fa
 - Restore test — pass into disposable DB, then dropped.
 - Rollback drill — pass with local candidate tag and rollback to previous image.
 - Sanitized report: `reports/release/2.6-runtime-proof-report.md`.
-- Boundary: `APP_IMAGE=nginx:1.27-alpine`, so this is infrastructure proof, not real application image proof.
-- Generated static placeholder page installed after runtime proof; live URL `https://72-56-26-209.sslip.io/`, image URL `https://72-56-26-209.sslip.io/placeholder.svg`.
+- Boundary: `APP_IMAGE=factory-template-placeholder-app:local`, so this is infrastructure/placeholder application proof, not real business application proof.
+- Generated placeholder app image and static page installed after runtime proof; live URL `https://72-56-26-209.sslip.io/`, image URL `https://72-56-26-209.sslip.io/placeholder.svg`.
 
 Runtime defects remediated:
 
@@ -27,11 +27,23 @@ Runtime defects remediated:
 - `reports/bugs/2026-04-27-backup-hook-command-splitting.md`.
 - `reports/bugs/2026-04-27-skip-pull-defeated-by-pull-policy.md`.
 - `reports/bugs/2026-04-27-app-image-placeholder-burden-gap.md`.
+- `reports/bugs/2026-04-27-roadmap-continuity-gap.md`.
 
 Проверки repo после remediation:
 
 - `python3 template-repo/scripts/validate-human-language-layer.py .` — pass, active findings `0`.
 - `bash template-repo/scripts/verify-all.sh quick` — pass на `2026-04-27`.
+
+## Проверка Plan №3 P3-S6 roadmap continuity
+
+Дата: `2026-04-27`.
+
+Исправлен release-facing разрыв после 2.6 runtime proof: roadmap/status docs больше не говорят одновременно `pending VPS proof`, `demo nginx` и `placeholder app live`.
+
+- `docs/releases/2.6-roadmap.md` теперь фиксирует P3-S6 continuity pass и P3-S7 real application image proof boundary.
+- `docs/releases/plan-3-aif-molyanov-audit.md` расширен до P3-S6/P3-S7.
+- `CURRENT_FUNCTIONAL_STATE.md`, `reports/release/production-vps-field-pilot-report.md` и этот report выровнены вокруг статуса `infrastructure-runtime-proof-passed-real-app-proof-pending`.
+- Новый release-ready status не объявлен.
 
 ## Проверка Plan №3 P3-S5
 
@@ -64,7 +76,7 @@ Runtime defects remediated:
 - `template-repo/scripts/verify-all.sh quick` теперь smoke-проверяет расширенный набор Artifact Eval reports.
 - Закрыт real advanced workspace `work/completed/plan-3-eval-adoption` с `done-report.md`, `project-knowledge-update-proposal.md`, `downstream-impact.md`, task waves, checkpoint и decisions.
 - Incidental naming defect закрыт в текущем scope: `reports/bugs/2026-04-27-plan-3-restricted-term-workspace-id.md`; workspace evidence переименован в `plan-3-eval-adoption`, чтобы не нарушать tree contract.
-- P3-S5 runtime QA не выполнялся: real VPS deploy, backup restore и rollback drill остаются external/runtime boundary.
+- At P3-S3/P3-S4 time P3-S5 runtime QA была будущей boundary; later approved 2.6 runtime proof completed infrastructure deploy, backup, restore and rollback evidence with placeholder app boundary.
 
 Проверки:
 
@@ -124,7 +136,7 @@ Runtime defects remediated:
 
 - `docs/releases/2.5.1-roadmap.md` фиксирует patch/stabilization scope: downstream sync v3 stabilization, field pilot evidence, closeout/boundary guardrails, optional downstream sync adoption.
 - `docs/releases/2.6-roadmap.md` выносит deeper scope: real production VPS deploy, backup restore, rollback drill, expanded artifact eval, `feature-execution-lite` adoption и runtime/source-hygiene backlog.
-- `docs/releases/post-2.5-gap-register.md` разделяет completed repo-controlled/synthetic proof и pending external runtime proof.
+- `docs/releases/post-2.5-gap-register.md` разделяет completed repo-controlled/synthetic/infrastructure proof и pending real application proof.
 - `reports/bugs/2026-04-27-post-25-release-planning-gap.md` фиксирует release-followup planning gap как remediated in current scope.
 - Сравнение с `pavel-molyanov/molyanov-ai-dev` записано как adaptation register: already adapted, useful but not yet adapted, intentionally not adapted.
 - Новый release-ready status не объявлен; scorecard `2.5.0 GA Ready` не изменялся.
@@ -141,14 +153,14 @@ Runtime defects remediated:
 
 - `docs/production-vps-field-pilot.md` добавляет runbook `starter -> app-db -> reverse-proxy-tls -> backup -> healthcheck -> rollback drill`.
 - `docs/deploy-on-vps.md` теперь явно отделяет dry-run/report evidence от real production proof.
-- `reports/release/production-vps-field-pilot-report.md` фиксирует текущий статус: `repo-controlled-dry-run-ready-real-vps-pending`.
+- `reports/release/production-vps-field-pilot-report.md` фиксирует текущий статус: `infrastructure-runtime-proof-passed-real-app-proof-pending`.
 - `template-repo/scripts/deploy-dry-run.sh --field-pilot-report` пишет markdown field pilot report после успешного dry-run.
 - `template-repo/scripts/deploy-local-vps.sh --field-pilot-report` пишет report после operator-approved deploy.
 - `template-repo/scripts/operator-dashboard.py --field-pilot-report` собирает runtime/evidence summary без deploy.
 - `template-repo/scripts/validate-operator-env.py --field-pilot-report` пишет env readiness report.
 - Starter остаётся default, production presets остаются opt-in.
 - DNS, firewall, Docker Compose, env secrets и backup restore checklist зафиксированы в runbook/report.
-- Real VPS deploy, restore test и rollback drill не выполнялись без user approval; статус field deploy остаётся pending.
+- Real VPS deploy, restore test и rollback drill выполнены после explicit approval; real business application image proof остается pending до появления настоящего app image.
 
 Проверки:
 
@@ -437,7 +449,7 @@ Evidence / quality / DoD до смыслового наполнения арте
 - incidental defect `utcnow()` warning зафиксирован и исправлен in-scope: `reports/bugs/2026-04-23-factory-ops-utcnow-warning.md`.
 - Defect-capture по утечке английского текста в downstream sync v3 зафиксирован и исправлен in-scope: `reports/bugs/2026-04-26-downstream-sync-v3-language-leak.md`.
 - Defect-capture по пропуску автозавершения closeout sync зафиксирован и исправлен in-scope: `reports/bugs/2026-04-26-autocloseout-sync-skip.md`.
-- 2.6 runtime proof follow-up исправил лишнее требование к пользователю принести `APP_IMAGE`: добавлен local placeholder application image builder `template-repo/scripts/build-placeholder-app-image.py`; live VPS использует generated placeholder path до появления реального application image.
+- 2.6 runtime proof follow-up исправил лишнее требование к пользователю принести `APP_IMAGE`: добавлен local placeholder application image builder `template-repo/scripts/build-placeholder-app-image.py`; live VPS использует `factory-template-placeholder-app:local` до появления реального application image.
 
 ## Что вошло в релиз 2.5.0
 - full-KPI evidence layer для `G25-GA`;
