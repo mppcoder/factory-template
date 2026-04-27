@@ -1,0 +1,73 @@
+schema: artifact-eval/v1
+id: codex-handoff-response-format
+report_date: 2026-04-27
+target_artifact: template-repo/scripts/validate-handoff-response-format.py
+artifact_type: handoff-block
+expected_output:
+  guided: "Validator ловит file-based или multi-block handoff response и требует русский цельный block с UI/strict distinction."
+thresholds:
+  min_case_pass_rate: 1.0
+  min_assertion_pass_rate: 1.0
+  max_false_positive_rate: 0.0
+expected_trigger:
+  cases:
+    - id: one-inline-handoff
+      prompt: "Нужно проверить готовый ответ ChatGPT с handoff в Codex."
+      expected: "Artifact требует ровно один блок handoff."
+      baseline_expected: fail
+      assertions:
+        - id: one-handoff-heading
+          category: compliance
+          must_contain:
+            - "HANDOFF_HEADING"
+            - "Ожидается ровно один блок"
+        - id: no-multiple-handoff
+          category: compliance
+          must_contain:
+            - "Найдено несколько handoff-заголовков"
+    - id: manual-ui-vs-strict
+      prompt: "Ответ должен различать новый чат + вставка handoff и executable launch."
+      expected: "Artifact проверяет UI и strict launch sections."
+      baseline_expected: fail
+      assertions:
+        - id: ui-heading
+          category: process
+          must_contain:
+            - "UI_HEADING"
+            - "manual-ui"
+            - "picker"
+        - id: strict-heading
+          category: process
+          must_contain:
+            - "STRICT_HEADING"
+            - "launch-codex-task.sh"
+non_trigger_cases:
+  - id: file-based-handoff
+    prompt: "Скажи пользователю собрать handoff из файлов codex-input.md и codex-context.md."
+    expected: "Artifact должен отклонить file-based handoff response."
+    baseline_expected: pass
+    assertions:
+      - id: forbidden-file-patterns
+        category: compliance
+        must_contain:
+          - "FORBIDDEN_PATTERNS"
+          - "собери.*codex-input"
+      - id: no-user-file-assembly
+        category: compliance
+        must_contain:
+          - "Найден запрещенный file-based handoff pattern"
+compliance_assertions:
+  - id: russian-language-contract
+    category: compliance
+    must_contain:
+      - "Язык ответа Codex: русский"
+      - "Отвечай пользователю по-русски"
+  - id: no-user-instruction-inside-handoff
+    category: compliance
+    must_contain:
+      - "`## Инструкция пользователю` не должен попадать внутрь handoff-блока"
+  - id: advisory-switch-check
+    category: compliance
+    must_contain:
+      - "advisory layer"
+      - "не переключает"

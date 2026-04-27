@@ -65,6 +65,7 @@
 - recommended Codex handoff model routing обновлен под GPT-5.5: `build`, `deep` и `review` используют `gpt-5.5`, а `quick` сохраняет `gpt-5.4-mini` для lightweight задач
 - model availability auto-check добавлен в executable routing layer: `codex-model-routing.yaml`, `check-codex-model-catalog.py`, live validation через `codex debug models`, proposal-only promotion policy и strict/unavailable validator modes
 - optional skills/prompt-artifact quality loop добавлен как advanced maintenance contour: `skill-master-lite`, `skill-tester-lite`, test design guide и report template помогают улучшать trigger/usefulness без утяжеления beginner default path
+- Artifact Eval Harness добавлен как optional advanced contour: `artifact-eval/v1` specs, deterministic `eval-artifact.py`, report validator и sample evals проверяют scenario-pack, handoff blocks, runbooks, policy docs, template skills и `feature-execution-lite` artifacts без runner farm
 - репо больше не считает один static profile или старую сессию Codex надежной единицей маршрутизации
 - в repo появился единый visual/workflow reference layer по самому шаблону, greenfield, brownfield и downstream update contour
 - root-level `RELEASE_NOTES.md` теперь является каноническим source для опубликованных release notes и release executor
@@ -87,6 +88,7 @@
 - `init-feature-workspace.sh --advanced-execution` создаёт advanced execution artifacts только по явному флагу, поэтому beginner path не усложнён
 - `validate-feature-execution-lite.py` подключен к quick verify и проверяет checkpoint, wave dependencies, decisions, verify-smoke/verify-user и запрет закрытия `done` без final verification
 - feature execution docs явно разделяют internal repo work, external user action и runtime backlog, чтобы не повторять field-pilot классы сбоев premature closeout, wrong boundary и evidence overclaim
+- `feature-execution-lite` включен в sample artifact eval target: harness проверяет execution-plan, checkpoint, decisions, task waves, review rounds, boundaries и final verification evidence как reusable advanced execution artifact
 
 ## Программа 2.5 (release truth)
 - release truth source: `docs/releases/release-scorecard.yaml`

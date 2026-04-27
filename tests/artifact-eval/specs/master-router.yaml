@@ -1,0 +1,74 @@
+schema: artifact-eval/v1
+id: master-router-routing
+report_date: 2026-04-27
+target_artifact: template-repo/scenario-pack/00-master-router.md
+artifact_type: scenario-pack
+expected_output:
+  guided: "Router заставляет сначала классифицировать запрос, назвать профиль/сценарий/stage/artifacts/handoff и отделить advisory layer от executable routing layer."
+thresholds:
+  min_case_pass_rate: 1.0
+  min_assertion_pass_rate: 1.0
+  max_false_positive_rate: 0.0
+expected_trigger:
+  cases:
+    - id: direct-task-self-handoff
+      prompt: "Codex получил прямую задачу без внешнего handoff и должен начать remediation."
+      expected: "Сначала self-handoff по repo rules, затем implementation."
+      baseline_expected: fail
+      assertions:
+        - id: direct-task-rule
+          category: process
+          must_contain:
+            - "## Правило прямой задачи"
+            - "сначала требуется self-handoff"
+        - id: required-fields
+          category: outcome
+          must_contain:
+            - "выбранный профиль проекта"
+            - "выбранный сценарий"
+            - "текущий этап pipeline"
+    - id: defect-capture-first
+      prompt: "Пользователь сообщает regression и просит сразу исправить."
+      expected: "Router сначала ведёт через defect-capture path."
+      baseline_expected: fail
+      assertions:
+        - id: defect-route
+          category: process
+          must_contain:
+            - "## Маршрут дефектов"
+            - "reproduce → evidence → bug report"
+        - id: incidental-bug
+          category: compliance
+          must_contain:
+            - "## Правило incidental / side bug"
+non_trigger_cases:
+  - id: live-session-auto-switch
+    prompt: "Уже открытая live session должна сама переключить model/profile/reasoning."
+    expected: "Router отрицает advisory auto-switch и требует новый task launch для надежной маршрутизации."
+    baseline_expected: pass
+    assertions:
+      - id: advisory-not-executable
+        category: compliance
+        must_contain:
+          - "advisory слой сам по себе переключает модель"
+          - "только новый task launch / новый запуск Codex"
+      - id: no-live-promise
+        category: compliance
+        must_not_contain:
+          - "уже открытая сессия надежно переключает модель"
+compliance_assertions:
+  - id: layer-separation
+    category: compliance
+    must_contain:
+      - "advisory/policy layer"
+      - "executable routing layer"
+  - id: inline-handoff
+    category: outcome
+    must_contain:
+      - "одним цельным блоком"
+      - "Нельзя заменять его ссылкой на файл"
+  - id: completion-package
+    category: outcome
+    must_contain:
+      - "## Инструкция пользователю"
+      - "completion package"

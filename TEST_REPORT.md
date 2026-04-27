@@ -4,6 +4,29 @@ Status source of truth: `docs/releases/release-scorecard.yaml`.
 Current scorecard state: `2.5.0 GA Ready`.
 TEST_REPORT.md is verification evidence, not the canonical release-status source.
 
+## Проверка Artifact Eval Harness
+
+Дата: `2026-04-27`.
+
+Добавлен optional advanced harness для deterministic desk-eval reusable artifacts без Claude-specific runners и без утяжеления beginner path.
+
+- `docs/artifact-eval-harness.md` описывает общий spec для scenario-pack, handoff blocks, runbooks, policy docs, prompt-like artifacts, template skills и advanced execution artifacts.
+- `template-repo/scripts/eval-artifact.py` генерирует deterministic markdown report из `artifact-eval/v1` YAML.
+- `template-repo/scripts/validate-artifact-eval-report.py` валидирует report и ловит пустые/фиктивные outputs.
+- `template-repo/skills/skill-tester-lite/` обновлён: ручной lite-loop сохранён, machine-readable spec вынесен в optional advanced path.
+- `tests/artifact-eval/specs/` содержит sample evals для `master-router`, Codex handoff response, `skill-tester-lite` и `feature-execution-lite`.
+- `tests/artifact-eval/reports/` содержит static sample reports; минимум два sample reports теперь доступны как reusable evidence.
+- `verify-all.sh quick` запускает `artifact-eval-smoke` в `/tmp` и валидирует static reports.
+
+Проверки:
+
+- `python3 template-repo/scripts/eval-artifact.py tests/artifact-eval/specs/master-router.yaml --output tests/artifact-eval/reports/master-router.md --json` — pass.
+- `python3 template-repo/scripts/eval-artifact.py tests/artifact-eval/specs/codex-handoff-response.yaml --output tests/artifact-eval/reports/codex-handoff-response.md --json` — pass.
+- `python3 template-repo/scripts/eval-artifact.py tests/artifact-eval/specs/skill-tester-lite.yaml --output tests/artifact-eval/reports/skill-tester-lite.md --json` — pass.
+- `python3 template-repo/scripts/eval-artifact.py tests/artifact-eval/specs/feature-execution-lite.yaml --output tests/artifact-eval/reports/feature-execution-lite.md --json` — pass.
+- `python3 template-repo/scripts/validate-artifact-eval-report.py tests/artifact-eval/reports/*.md` — pass.
+- Negative empty/fake report fixture — validator returns non-zero.
+
 ## Проверка feature-execution-lite
 
 Дата: `2026-04-27`.

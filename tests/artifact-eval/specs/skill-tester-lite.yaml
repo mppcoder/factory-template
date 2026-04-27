@@ -1,0 +1,76 @@
+schema: artifact-eval/v1
+id: skill-tester-lite-artifact-eval
+report_date: 2026-04-27
+target_artifact: template-repo/skills/skill-tester-lite/SKILL.md
+artifact_type: template-skill
+expected_output:
+  guided: "Skill остаётся лёгким QA loop, но умеет направить maintainer к artifact-eval spec и validator."
+thresholds:
+  min_case_pass_rate: 1.0
+  min_assertion_pass_rate: 1.0
+  max_false_positive_rate: 0.0
+expected_trigger:
+  cases:
+    - id: reusable-artifact-validation
+      prompt: "Проверь scenario-pack route и handoff block на trigger/usefulness."
+      expected: "skill-tester-lite должен trigger для reusable prompt-like artifacts."
+      baseline_expected: fail
+      assertions:
+        - id: artifact-classes
+          category: process
+          must_contain:
+            - "scenario-pack"
+            - "handoff-block"
+            - "runbook"
+            - "policy-doc"
+        - id: trigger-usefulness
+          category: outcome
+          must_contain:
+            - "trigger-positive cases"
+            - "trigger-negative cases"
+            - "baseline vs guided expectation"
+    - id: durable-report
+      prompt: "Сделай durable report для проверки skill или policy doc."
+      expected: "skill points to artifact-eval spec, eval script and validator."
+      baseline_expected: fail
+      assertions:
+        - id: eval-script
+          category: process
+          must_contain:
+            - "eval-artifact.py"
+            - "validate-artifact-eval-report.py"
+        - id: spec-reference
+          category: outcome
+          must_contain:
+            - "references/artifact-eval-spec.md"
+non_trigger_cases:
+  - id: beginner-first-project
+    prompt: "Я запускаю первый проект из factory-template, какую команду выполнить?"
+    expected: "skill should not make beginner path heavier."
+    baseline_expected: pass
+    assertions:
+      - id: beginner-boundary
+        category: compliance
+        must_contain:
+          - "Не требуйте этот loop от first-time users"
+          - "beginner default path"
+      - id: no-runner-farm
+        category: compliance
+        must_contain:
+          - "Не стройте full benchmark harness"
+          - "Не переносите Claude-specific runners"
+compliance_assertions:
+  - id: defect-capture
+    category: compliance
+    must_contain:
+      - "Не прячьте defect"
+      - "repo defect-capture path"
+  - id: advisory-boundary
+    category: compliance
+    must_contain:
+      - "Не считайте advisory text executable profile/model switch"
+  - id: criteria
+    category: outcome
+    must_contain:
+      - "process/outcome/compliance assertions"
+      - "beginner default path не становится тяжелее"

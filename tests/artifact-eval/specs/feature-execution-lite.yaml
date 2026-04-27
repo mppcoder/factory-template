@@ -1,0 +1,75 @@
+schema: artifact-eval/v1
+id: feature-execution-lite-artifacts
+report_date: 2026-04-27
+target_artifact: docs/feature-execution-lite.md
+artifact_type: advanced-execution
+expected_output:
+  guided: "Advanced execution docs проверяемы как artifact target: waves, checkpoint, decisions, boundaries и final verification evidence."
+thresholds:
+  min_case_pass_rate: 1.0
+  min_assertion_pass_rate: 1.0
+  max_false_positive_rate: 0.0
+expected_trigger:
+  cases:
+    - id: multi-wave-feature
+      prompt: "Большая фича распадается на несколько независимых волн и требует resume."
+      expected: "Artifact routes to feature-execution-lite advanced path."
+      baseline_expected: fail
+      assertions:
+        - id: wave-rule
+          category: process
+          must_contain:
+            - "Волны задач"
+            - "wave"
+            - "depends_on"
+        - id: checkpoint-resume
+          category: process
+          must_contain:
+            - "Checkpoint и resume"
+            - "logs/checkpoint.yaml"
+    - id: final-verification-before-done
+      prompt: "Закрыть feature как done после нескольких task waves."
+      expected: "Artifact requires final verification before archive."
+      baseline_expected: fail
+      assertions:
+        - id: final-verification
+          category: compliance
+          must_contain:
+            - "Финальное закрытие и архив"
+            - "final_verification.status: passed"
+        - id: boundaries
+          category: compliance
+          must_contain:
+            - "internal work, external user action и runtime backlog"
+non_trigger_cases:
+  - id: tiny-first-feature
+    prompt: "Маленькая первая feature без риска и без нескольких задач."
+    expected: "Artifact keeps beginner/simple path out of advanced mode."
+    baseline_expected: pass
+    assertions:
+      - id: beginner-path
+        category: compliance
+        must_contain:
+          - "Beginner path остаётся прежним"
+          - "Не используйте режим по умолчанию"
+      - id: optional-advanced
+        category: compliance
+        must_contain:
+          - "optional advanced path"
+          - "Продвинутый path включается только явно"
+compliance_assertions:
+  - id: required-artifacts
+    category: outcome
+    must_contain:
+      - "logs/execution-plan.md"
+      - "decisions.md"
+      - "tasks/T-xxx.md"
+  - id: review-rounds
+    category: process
+    must_contain:
+      - "Раунды review/fix"
+      - "max_review_rounds"
+  - id: validator
+    category: outcome
+    must_contain:
+      - "validate-feature-execution-lite.py"

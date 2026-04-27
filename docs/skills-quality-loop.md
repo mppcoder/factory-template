@@ -11,8 +11,9 @@
 ```
 
 - `skill-master-lite` помогает создать или улучшить небольшой skill/prompt artifact.
-- `skill-tester-lite` помогает проверить trigger, usefulness и границы применения.
-- References внутри tester skill дают простой формат тест-кейсов и отчета.
+- `skill-tester-lite` помогает проверить trigger, usefulness, baseline vs guided и границы применения.
+- Artifact Eval Harness добавляет optional machine-readable `artifact-eval/v1` spec и deterministic report для reusable artifacts.
+- References внутри tester skill дают простой формат тест-кейсов, отчета и spec.
 
 ## Когда использовать
 
@@ -22,6 +23,7 @@
 - сценарий в `template-repo/scenario-pack/`;
 - handoff/runbook/policy текст;
 - task template или checklist, который должен менять поведение Codex.
+- advanced execution artifact вроде `feature-execution-lite`.
 
 Не используйте его как обязательный шаг для новичка. Для обычного первого проекта достаточно guided launcher и существующих validators.
 
@@ -37,6 +39,8 @@
 4. Исправьте только то, что улучшает trigger/usefulness или boundary clarity.
 5. При необходимости сохраните короткий отчет по шаблону:
    `template-repo/skills/skill-tester-lite/references/report-template.md`.
+6. Если нужен reusable deterministic report, используйте:
+   `docs/artifact-eval-harness.md` и `template-repo/scripts/eval-artifact.py`.
 
 ## Пример на артефакте factory-template
 
@@ -75,10 +79,12 @@ I am starting my first project from the factory template. What command do I run?
 - Текст помогает Codex действовать лучше, а не просто звучит подробнее.
 - Beginner path не становится длиннее.
 - Repo-first и routing boundaries остаются явными.
+- Для durable checks есть валидный report, который проходит `validate-artifact-eval-report.py`.
 
 ## Что не делать
 
 - Не переносить целиком внешний comparison repo.
 - Не строить benchmark harness без отдельного решения.
+- Не переносить Claude-specific runners, parallel teams или transcript graders в default path.
 - Не добавлять этот цикл в mandatory onboarding.
 - Не считать advisory text автоматическим переключением model/profile/reasoning.

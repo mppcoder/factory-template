@@ -14,6 +14,8 @@ Loop нужен для улучшения самого factory-template. Это 
 
 - trigger fit: when the skill or prompt should activate;
 - trigger rejection: when it should stay silent;
+- baseline vs guided delta: what improves when the artifact is followed;
+- process/outcome/compliance assertions: what can be checked deterministically;
 - usefulness: what behavior becomes better after using it;
 - boundary safety: repo-first, routing, beginner-path, and defect-capture constraints.
 
@@ -42,6 +44,12 @@ PASS | FAIL | UNCLEAR
 - execution: were the required steps concrete enough;
 - restraint: did it avoid adding mandatory work outside the requested scope.
 
+Для durable checks используйте те же dimensions как `artifact-eval/v1` assertions:
+
+- `process`: порядок действий, required first step, route/handoff sequence;
+- `outcome`: форма результата, expected report, completion package;
+- `compliance`: запреты, boundaries, repo-first и executable routing contract.
+
 ## Heuristics улучшения
 
 Если positive cases fail:
@@ -67,6 +75,12 @@ PASS | FAIL | UNCLEAR
 - пометьте workflow как optional advanced mode;
 - уберите его из quick-start paths;
 - ссылайтесь на него только из maintenance или quality sections.
+
+Если baseline comparison не показывает difference:
+
+- замените слишком лёгкую assertion;
+- добавьте realistic trigger-negative near miss;
+- явно зафиксируйте assertion как non-discriminating, а не выдавайте её за value.
 
 ## Пример factory-template
 

@@ -69,6 +69,25 @@ FAKE_DOCKER
   rm -rf "$tmp_dir"
 }
 
+run_artifact_eval_smoke() {
+  local tmp_dir
+  tmp_dir="$(mktemp -d)"
+  local specs_dir="$ROOT/tests/artifact-eval/specs"
+  for spec in \
+    master-router \
+    codex-handoff-response \
+    skill-tester-lite \
+    feature-execution-lite
+  do
+    python3 "$ROOT/template-repo/scripts/eval-artifact.py" \
+      "$specs_dir/$spec.yaml" \
+      --output "$tmp_dir/$spec.md" >/dev/null
+    python3 "$ROOT/template-repo/scripts/validate-artifact-eval-report.py" "$tmp_dir/$spec.md"
+  done
+  python3 "$ROOT/template-repo/scripts/validate-artifact-eval-report.py" "$ROOT"/tests/artifact-eval/reports/*.md
+  rm -rf "$tmp_dir"
+}
+
 project_preset() {
   python3 - "$ROOT/.chatgpt/project-profile.yaml" <<'PY'
 from pathlib import Path
@@ -131,6 +150,7 @@ run_quick() {
   run_step "deploy-dry-run-smoke-starter-app-db" run_deploy_dry_run_smoke
   run_step "validate-spec-traceability" python3 "$ROOT/template-repo/scripts/validate-spec-traceability.py" "$ROOT"
   run_step "validate-feature-execution-lite" python3 "$ROOT/template-repo/scripts/validate-feature-execution-lite.py" "$ROOT"
+  run_step "artifact-eval-smoke" run_artifact_eval_smoke
   run_step "validate-release-scorecard" python3 "$ROOT/template-repo/scripts/validate-release-scorecard.py" "$ROOT"
   run_step "validate-25-ga-kpi-evidence" python3 "$ROOT/template-repo/scripts/validate-25-ga-kpi-evidence.py" "$ROOT"
   run_step "validate-human-language-layer" python3 "$ROOT/template-repo/scripts/validate-human-language-layer.py" "$ROOT"
