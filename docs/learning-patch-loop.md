@@ -24,11 +24,19 @@ reusable: true
 learning_patch_status: required
 ```
 
-Затем создать proposal:
+Затем создать proposal в generated/battle project:
 
 ```text
 reports/learnings/<bug-id>-learning-patch.md
 ```
+
+Source-of-truth template path в `factory-template`:
+
+```text
+template-repo/template/reports/learnings/learning-patch-proposal.md.template
+```
+
+Не создавайте root-level `reports/learnings/` в `factory-template` для шаблонного proposal path. Root `reports/bugs/` остается местом defect-capture evidence самого factory repo.
 
 Если reusable learning не нужен:
 

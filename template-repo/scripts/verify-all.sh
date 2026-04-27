@@ -203,7 +203,7 @@ run_quick() {
   run_step "validate-operator-env-production-example" python3 "$ROOT/template-repo/scripts/validate-operator-env.py" "$ROOT" --env-file "$ROOT/deploy/.env.example" --preset production --allow-example-placeholders
   run_step "deploy-dry-run-smoke-starter-app-db" run_deploy_dry_run_smoke
   run_step "validate-spec-traceability" python3 "$ROOT/template-repo/scripts/validate-spec-traceability.py" "$ROOT"
-  run_step "validate-task-state-lite" python3 "$ROOT/template-repo/scripts/validate-task-state-lite.py" "$ROOT"
+  run_step "validate-task-state-lite" python3 "$ROOT/template-repo/scripts/validate-task-state-lite.py" "$ROOT/template-repo/template"
   run_step "task-state-lite-smoke" run_task_state_lite_smoke
   run_step "validate-feature-execution-lite" python3 "$ROOT/template-repo/scripts/validate-feature-execution-lite.py" "$ROOT"
   run_step "validate-learning-patch-loop" python3 "$ROOT/template-repo/scripts/validate-learning-patch-loop.py" "$ROOT"

@@ -6,11 +6,19 @@
 
 ## Артефакт
 
-Канонический путь:
+Канонический путь в generated/battle project:
 
 ```text
 .chatgpt/task-state.yaml
 ```
+
+Source-of-truth в `factory-template`:
+
+```text
+template-repo/template/.chatgpt/task-state.yaml
+```
+
+Не добавляйте root-level `.chatgpt/task-state.yaml` в `factory-template` для этой feature: root `.chatgpt/` в factory repo используется для factory-level task artifacts, а template source живет под `template-repo/template/`.
 
 Минимальные поля:
 

@@ -82,8 +82,8 @@ Plan №3 gaps являются follow-up planning items. Они не reopen `2.
 | Stage | Goal | Output boundary |
 |---|---|---|
 | P3-S0 | Audit capture, карта источников, карта gap'ов и staged roadmap. | Docs-only; без task-state/evolve/eval implementation. |
-| P3-S1 | Добавить lightweight AIF-lite task-state visibility. | Реализовано через `.chatgpt/task-state.yaml`, docs, template и validator; beginner path остается легким. |
-| P3-S2 | Добавить learning patch / evolve proposal loop. | Реализовано через docs, proposal template, `reports/learnings/` и validator для reusable bugs. |
+| P3-S1 | Добавить lightweight AIF-lite task-state visibility. | Реализовано через template `.chatgpt/task-state.yaml`, docs и validator; beginner path остается легким. |
+| P3-S2 | Добавить learning patch / evolve proposal loop. | Реализовано через docs, template proposal, template `reports/learnings/` и validator для reusable bugs. |
 | P3-S3 | Расширить Artifact Eval coverage. | Больше routing-critical specs/reports и meaningful negative fixtures. |
 | P3-S4 | Dogfood `feature-execution-lite` на одном real factory change. | Real workspace закрыт через Done Loop с evidence. |
 | P3-S5 | Подготовить runtime QA boundary для 2.6. | Pre/post deploy QA, restore, rollback и transcript requirements documented; без real VPS mutation. |

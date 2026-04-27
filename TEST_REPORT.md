@@ -11,13 +11,14 @@ TEST_REPORT.md is verification evidence, not the canonical release-status source
 Добавлены repo-native lightweight улучшения без AIF Handoff web app, daemon, SQLite, Telegram stack или autonomous background promises.
 
 - `docs/task-state-lite.md` описывает отдельный `.chatgpt/task-state.yaml` слой для current state, owner boundary, next action, blockers и boundary-разделения.
-- `template-repo/template/.chatgpt/task-state.yaml` добавлен как beginner-safe template artifact; существующий `task-index.yaml` не перегружался state-семантикой.
+- `template-repo/template/.chatgpt/task-state.yaml` добавлен как beginner-safe template artifact; root-level project-instance state artifact не требуется.
 - `template-repo/scripts/validate-task-state-lite.py` проверяет schema, current_state, owner boundary, next action, blocker и internal/external/runtime/downstream separation.
 - `docs/learning-patch-loop.md` описывает proposal loop для reusable bugs поверх defect-capture и Project Knowledge Done Loop.
-- `template-repo/template/reports/learnings/learning-patch-proposal.md.template` добавлен как repo-native proposal template.
+- `template-repo/template/reports/learnings/learning-patch-proposal.md.template` добавлен как repo-native proposal template для generated projects.
 - `template-repo/scripts/validate-learning-patch-loop.py` требует learning proposal или `not_required` reason для явно reusable bug reports и блокирует fake/overclaim proposals.
 - `template-repo/scripts/verify-all.sh quick` подключает оба validators и targeted negative fixtures для missing state, fake learning proposal и overclaim.
 - Beginner default остается легким: advanced execution, web UI и runtime services не стали обязательными.
+- Root contamination remediation зафиксирован в `reports/bugs/2026-04-27-plan-3-root-contamination.md`: root-level `.chatgpt/task-state.yaml` и `reports/learnings/.gitkeep` удалены, source-of-truth оставлен в `template-repo/template/`.
 
 Проверки:
 
