@@ -104,6 +104,7 @@
 - Plan №3 P3-S5 подготовил runtime QA boundary для 2.6: pre-deploy QA, post-deploy QA, backup restore, rollback drill, secrets/manual boundary и sanitized runtime transcript requirements documented
 - 2.6 runtime proof executed on VPS `72.56.26.209` for production preset infrastructure path: deploy, HTTPS healthcheck, backup, disposable restore and rollback drill passed with local placeholder application image `factory-template-placeholder-app:local`
 - production placeholder path now includes generated static placeholder assets, a local placeholder app image builder and installer, so Codex can serve a visible placeholder application without requiring the user to provide a real app image first
+- `factory-template-placeholder-app:local` is now documented as the template-owned reference runtime app for first install, smoke checks and VPS recovery when no downstream/battle app exists
 - Plan №3 P3-S6 closed the roadmap continuity gap after runtime proof: release-facing docs now separate completed `factory-template` template/runtime proof from optional future downstream/battle application proof
 
 ## Программа 2.5 (release truth)

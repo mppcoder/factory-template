@@ -97,13 +97,13 @@ python3 template-repo/scripts/prepare-production-env-defaults.py
 
 Скрипт выставит production preset, DB name/user, backup path, `sslip.io` domain для публичного IPv4, `ACME_AGREE=true` и оставит оператору только реальные secrets/manual values: `DB_PASSWORD`, `TLS_EMAIL`.
 
-Если реального app image еще нет, Codex/operator должен сгенерировать локальный placeholder application image из repo-native заглушки:
+Для самого `factory-template` реальный боевой app image не нужен. Если downstream приложение еще не существует, Codex/operator должен собрать template-owned reference runtime app из repo-native assets:
 
 ```bash
 python3 template-repo/scripts/build-placeholder-app-image.py --install-volume
 ```
 
-По умолчанию он соберёт `factory-template-placeholder-app:local`, выставит `APP_IMAGE=factory-template-placeholder-app:local`, `APP_PULL_POLICY=never` и установит `deploy/static-placeholder/index.html` плюс `placeholder.svg` в app volume. Это не proof бизнес-приложения, а временная runtime-заглушка до замены реальным образом.
+По умолчанию он соберёт `factory-template-placeholder-app:local`, выставит `APP_IMAGE=factory-template-placeholder-app:local`, `APP_PULL_POLICY=never` и установит `deploy/static-placeholder/index.html` плюс `placeholder.svg` в app volume. Это canonical reference app для первичной установки, smoke-проверки и recovery `factory-template`; это не proof бизнес-приложения downstream проекта.
 
 Если Docker image уже задан, но нужно только заменить содержимое placeholder page в существующем volume:
 
@@ -157,6 +157,8 @@ python3 template-repo/scripts/build-placeholder-app-image.py --install-volume --
 По умолчанию используется демонстрационный безопасный baseline:
 - image: `nginx:1.27-alpine`
 - порт: `8080`
+
+Для production-like проверки самого шаблона используйте reference runtime app: `factory-template-placeholder-app:local`. Подробнее: `docs/template-runtime-reference-app.md`.
 
 ## Что делает каждый compose-файл
 

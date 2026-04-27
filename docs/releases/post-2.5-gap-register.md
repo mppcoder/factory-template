@@ -35,6 +35,7 @@ Plan №3 records AIF/Molyanov-inspired improvements as repo-native follow-up wo
 | `P3-GAP-06` | Runtime/source-hygiene boundary classifier needs a repo-native form. | Related to `P25-GAP-08`; docs now classify repo-local report-ready, manual secrets, sanitized transcript, downstream sync, external runtime proof and optional downstream/battle app proof boundary. | P3-S5 / 2.6 | partially remediated / continuing backlog | mixed |
 | `P3-GAP-07` | Release-facing consistency pass is needed after Plan №3 planning and implementation stages. | P3-S0..P3-S6 status is reflected in this register, current state, test report, production VPS report and 2.6 roadmap. | each P3 closeout | implemented/verified | repo |
 | `P3-GAP-08` | Roadmap continuity broke after runtime proof and placeholder app remediation. | `reports/bugs/2026-04-27-roadmap-continuity-gap.md`; 2.6 roadmap now names P3-S6 continuity and separates optional P3-S7 downstream/battle app proof boundary. | P3-S6 | implemented/verified | repo |
+| `P3-GAP-09` | Template runtime install/reinstall artifact was not explicit after separating template proof from battle app proof. | `reports/bugs/2026-04-27-template-runtime-install-artifact-gap.md`; `docs/template-runtime-reference-app.md`; `build-placeholder-app-image.py`. | P3-S6 / 2.6 | implemented/verified | repo |
 
 ## `molyanov-ai-dev` adaptation register
 

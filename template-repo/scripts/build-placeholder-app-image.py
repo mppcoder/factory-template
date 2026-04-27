@@ -77,7 +77,7 @@ def run(command: list[str], dry_run: bool) -> int:
 
 def main() -> int:
     parser = argparse.ArgumentParser(
-        description="Build a local placeholder application Docker image from repo-native static assets.",
+        description="Build the factory-template reference runtime Docker image from repo-native static assets.",
     )
     parser.add_argument("--env-file", default="deploy/.env")
     parser.add_argument("--static-dir", default="deploy/static-placeholder")
@@ -95,6 +95,7 @@ def main() -> int:
     if not source_dir.exists():
         raise SystemExit(f"static dir not found: {source_dir}")
 
+    print("reference_runtime_app_image_build=true")
     print("placeholder_app_image_build=true")
     print(f"image_tag={args.image_tag}")
     print(f"base_image={args.base_image}")

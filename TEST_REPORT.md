@@ -34,6 +34,18 @@ Runtime defects remediated:
 - `python3 template-repo/scripts/validate-human-language-layer.py .` — pass, active findings `0`.
 - `bash template-repo/scripts/verify-all.sh quick` — pass на `2026-04-27`.
 
+## Проверка template runtime reference app
+
+Дата: `2026-04-27`.
+
+Уточнен install/reinstall contract для самого `factory-template`: шаблон имеет repo-owned reference runtime app, а не требует внешний npm package или боевое приложение.
+
+- Reference docs: `docs/template-runtime-reference-app.md`.
+- Build script: `template-repo/scripts/build-placeholder-app-image.py`.
+- Runtime image tag: `factory-template-placeholder-app:local`.
+- Назначение: first install, smoke check, recovery после VPS падения, пока downstream/battle app отсутствует.
+- Boundary: public Docker registry image или npm package остаются optional future packaging contour, не blocker текущего template proof.
+
 ## Проверка closeout continuation outcome
 
 Дата: `2026-04-27`.
