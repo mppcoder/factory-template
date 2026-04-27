@@ -3,7 +3,7 @@ set -euo pipefail
 
 usage() {
   cat <<'USAGE'
-Usage: bash template-repo/scripts/deploy-dry-run.sh [--init-env] [--env-file path] [--preset preset-list] [--strict-env]
+Usage: bash template-repo/scripts/deploy-dry-run.sh [--init-env] [--env-file path] [--preset preset-list] [--strict-env] [--field-pilot-report [path]]
 
 Options:
   --init-env    If deploy/.env is missing, create it from deploy/.env.example.
@@ -12,6 +12,9 @@ Options:
                 Values: starter, app-db, reverse-proxy-tls, backup, healthcheck, production.
                 Multiple overlays may be comma-separated, for example app-db,backup.
   --strict-env  Treat example placeholders as failures.
+  --field-pilot-report
+                Write a markdown field-pilot report after successful dry-run.
+                Optional path may be supplied; default is .factory-runtime/reports/production-vps-field-pilot-latest.md.
   -h, --help    Show help.
 USAGE
 }
@@ -27,6 +30,8 @@ INIT_ENV=0
 ENV_FILE_OVERRIDE=""
 PRESET_OVERRIDE=""
 STRICT_ENV=0
+FIELD_PILOT_REPORT=0
+FIELD_PILOT_REPORT_PATH=""
 while [[ $# -gt 0 ]]; do
   case "$1" in
     --init-env)
@@ -44,6 +49,15 @@ while [[ $# -gt 0 ]]; do
     --strict-env)
       STRICT_ENV=1
       shift
+      ;;
+    --field-pilot-report)
+      FIELD_PILOT_REPORT=1
+      if [[ $# -gt 1 && "${2:-}" != --* ]]; then
+        FIELD_PILOT_REPORT_PATH="$2"
+        shift 2
+      else
+        shift
+      fi
       ;;
     -h|--help|help)
       usage
@@ -281,3 +295,24 @@ fi
   echo "compose_bin=$COMPOSE_BIN"
   echo "services=$SERVICES_CSV"
 } > "$REPORT_FILE"
+
+if [[ "$FIELD_PILOT_REPORT" -eq 1 ]]; then
+  DASHBOARD_SCRIPT="$REPO_ROOT/template-repo/scripts/operator-dashboard.py"
+  if [[ ! -f "$DASHBOARD_SCRIPT" ]]; then
+    DASHBOARD_SCRIPT="$REPO_ROOT/scripts/operator-dashboard.py"
+  fi
+  if [[ ! -f "$DASHBOARD_SCRIPT" ]]; then
+    echo "Отчет field pilot пропущен: operator-dashboard.py не найден." >&2
+  else
+    REPORT_ARGS=(--env-file "$ACTIVE_ENV" --preset "$PRESET" --field-pilot-report)
+    if [[ -n "$FIELD_PILOT_REPORT_PATH" ]]; then
+      REPORT_ARGS+=("$FIELD_PILOT_REPORT_PATH")
+    fi
+    python3 "$DASHBOARD_SCRIPT" "${REPORT_ARGS[@]}" >/dev/null
+    if [[ -n "$FIELD_PILOT_REPORT_PATH" ]]; then
+      echo "Отчет field pilot: $FIELD_PILOT_REPORT_PATH"
+    else
+      echo "Отчет field pilot: .factory-runtime/reports/production-vps-field-pilot-latest.md"
+    fi
+  fi
+fi

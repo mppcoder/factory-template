@@ -7,7 +7,7 @@ import shutil
 import subprocess
 import sys
 from dataclasses import dataclass
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 
 
@@ -87,7 +87,9 @@ def parse_env_file(path: Path) -> dict[str, str]:
     return result
 
 
-def active_env(root: Path) -> tuple[Path | None, str]:
+def active_env(root: Path, env_file_override: Path | None = None) -> tuple[Path | None, str]:
+    if env_file_override is not None:
+        return env_file_override, "custom"
     env_file = root / "deploy" / ".env"
     env_example = root / "deploy" / ".env.example"
     if env_file.exists():
@@ -97,10 +99,10 @@ def active_env(root: Path) -> tuple[Path | None, str]:
     return None, "missing"
 
 
-def selected_preset(root: Path, preset_override: str | None = None) -> str:
+def selected_preset(root: Path, preset_override: str | None = None, env_file_override: Path | None = None) -> str:
     if preset_override:
         return preset_override
-    env_path, _mode = active_env(root)
+    env_path, _mode = active_env(root, env_file_override)
     env = parse_env_file(env_path) if env_path else {}
     return env.get("OPERATOR_PRESET") or "starter"
 
@@ -178,14 +180,14 @@ def _compose_status() -> tuple[str, str]:
     return "fail", "Не найден Docker Compose (`docker compose` или `docker-compose`)."
 
 
-def build_status_rows(root: Path, preset_override: str | None = None) -> list[StatusRow]:
+def build_status_rows(root: Path, preset_override: str | None = None, env_file_override: Path | None = None) -> list[StatusRow]:
     compose_base = root / "deploy" / "compose.yaml"
     compose_prod = root / "deploy" / "compose.production.yaml"
-    env_path, env_mode = active_env(root)
+    env_path, env_mode = active_env(root, env_file_override)
     verify_summary = root / "VERIFY_SUMMARY.md"
     dry_run_report = root / ".factory-runtime" / "reports" / "deploy-dry-run-latest.txt"
     deploy_report = root / ".factory-runtime" / "reports" / "deploy-last-run.txt"
-    preset = selected_preset(root, preset_override)
+    preset = selected_preset(root, preset_override, env_file_override)
     preset_tokens, unknown_presets = parse_preset_expression(preset)
 
     rows: list[StatusRow] = []
@@ -432,6 +434,104 @@ def print_verify_summary(root: Path, max_lines: int = 12) -> None:
         print(f"... и ещё {len(interesting) - max_lines} строк(и).")
 
 
+def _checkbox(ok: bool) -> str:
+    return "x" if ok else " "
+
+
+def write_field_pilot_report(root: Path, preset: str, rows: list[StatusRow], output: Path, env_file_override: Path | None = None) -> None:
+    env_path, env_mode = active_env(root, env_file_override)
+    env = parse_env_file(env_path) if env_path else {}
+    preset_tokens, unknown = parse_preset_expression(preset)
+    by_title = {row.title: row for row in rows}
+    dry_run_report = root / ".factory-runtime" / "reports" / "deploy-dry-run-latest.txt"
+    deploy_report = root / ".factory-runtime" / "reports" / "deploy-last-run.txt"
+    dry_data = parse_report(dry_run_report)
+    deploy_data = parse_report(deploy_report)
+
+    uses_tls = "reverse-proxy-tls" in preset_tokens
+    uses_backup = "backup" in preset_tokens
+    uses_db = "app-db" in preset_tokens
+    production_preset = preset != "starter"
+    dns_ready = not uses_tls or (
+        bool(env.get("DOMAIN"))
+        and env.get("DOMAIN") != "example.com"
+        and "." in env.get("DOMAIN", "")
+    )
+    firewall_ready = not uses_tls or (
+        env.get("HTTP_PORT", "80").isdigit()
+        and env.get("HTTPS_PORT", "443").isdigit()
+        and env.get("HTTP_PORT", "80") != env.get("HTTPS_PORT", "443")
+    )
+    compose_ready = by_title.get("Docker Compose", StatusRow("", "fail", "")).status != "fail"
+    env_ready = by_title.get("Operator env validation", StatusRow("", "fail", "")).status != "fail"
+    backup_input_ready = not uses_backup or (
+        env.get("BACKUP_ENABLED", "").lower() in {"1", "true", "yes", "y", "on"}
+        and bool(env.get("BACKUP_PATH"))
+        and env.get("BACKUP_PATH") not in {"/", "."}
+    )
+    dry_run_ready = dry_data.get("status") == "pass" and dry_data.get("preset") == preset
+    deploy_seen = deploy_data.get("status") == "deployed" and deploy_data.get("preset") == preset
+
+    pilot_status = "pending-real-vps-approval"
+    if not production_preset and dry_run_ready:
+        pilot_status = "starter-dry-run-ready"
+    elif production_preset and dry_run_ready and env_ready:
+        pilot_status = "production-dry-run-ready-real-deploy-pending"
+    elif by_title.get("Operator env validation", StatusRow("", "fail", "")).status == "fail":
+        pilot_status = "blocked-env-validation"
+
+    output.parent.mkdir(parents=True, exist_ok=True)
+    output.write_text(
+        "\n".join(
+            [
+                "# Runtime отчет production VPS field pilot",
+                "",
+                f"- status: `{pilot_status}`",
+                f"- preset: `{preset}`",
+                f"- preset tokens: `{', '.join(preset_tokens)}`",
+                f"- env mode: `{env_mode}`",
+                f"- env file: `{env_path if env_path else 'missing'}`",
+                f"- generated at: `{datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ')}`",
+                "- destructive action: none by this report mode.",
+                "- proof boundary: dry-run/report evidence is not real production VPS proof.",
+                "",
+                "## Сводка evidence",
+                "",
+                f"- dry-run status: `{dry_data.get('status', 'missing')}`; preset `{dry_data.get('preset', 'missing')}`; services `{dry_data.get('services', 'missing')}`.",
+                f"- deploy status: `{deploy_data.get('status', 'missing')}`; preset `{deploy_data.get('preset', 'missing')}`; services `{deploy_data.get('services', 'missing')}`.",
+                f"- real VPS deploy status: `{'seen-in-local-report' if deploy_seen else 'pending-user-approval-and-runtime-evidence'}`.",
+                "",
+                "## Checklist",
+                "",
+                f"- [{_checkbox(dns_ready)}] DNS: `DOMAIN` points to the VPS before TLS cutover.",
+                f"- [{_checkbox(firewall_ready)}] Firewall: ports `80` and `443` are open for TLS preset.",
+                f"- [{_checkbox(compose_ready)}] Docker compose: `docker compose version` or `docker-compose` is available.",
+                f"- [{_checkbox(env_ready)}] Env secrets: selected preset passes operator env validation.",
+                f"- [{_checkbox(backup_input_ready)}] Backup restore test: backup preset has path/enabled inputs; actual restore execution still requires runtime proof.",
+                f"- [{_checkbox(uses_db or not production_preset)}] App DB: `app-db` is active when stateful production deploy is expected.",
+                "",
+                "## Строки статуса",
+                "",
+                *[f"- `{row.status}` {row.title}: {row.details}" for row in rows],
+                "",
+                "## Обработка сбоев",
+                "",
+                "- If env validation fails, fix `deploy/.env` and rerun dry-run before deploy.",
+                "- If compose config fails, inspect the failing preset overlay and do not run deploy.",
+                "- If TLS fails on VPS, verify DNS/firewall/ACME agreement before retrying.",
+                "- If backup fails, do not perform cutover until `db-backup` creates a readable dump and restore path is known.",
+                "",
+                "## Граница rollback drill",
+                "",
+                "- Minimum drill: record current `APP_IMAGE`, deploy a candidate tag, revert `APP_IMAGE`, rerun dry-run, deploy the previous tag, then verify healthcheck.",
+                "- DB/schema rollback requires a fresh backup before migration and an application-specific restore/migration rollback procedure.",
+            ]
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+
+
 def run_shell(root: Path, command: list[str]) -> int:
     proc = subprocess.run(command, cwd=root, check=False)
     return proc.returncode
@@ -460,23 +560,44 @@ def main() -> int:
         "--preset",
         help="Override OPERATOR_PRESET from env for dashboard and optional dry-run.",
     )
+    parser.add_argument(
+        "--env-file",
+        help="Env file for dashboard/report validation. По умолчанию deploy/.env или deploy/.env.example.",
+    )
+    parser.add_argument(
+        "--field-pilot-report",
+        nargs="?",
+        const="",
+        metavar="PATH",
+        help="Записать markdown report для production VPS field pilot без deploy.",
+    )
     args = parser.parse_args()
 
     root = detect_repo_root()
-    preset = selected_preset(root, args.preset)
+    env_file_override = Path(args.env_file).resolve() if args.env_file else None
+    preset = selected_preset(root, args.preset, env_file_override)
 
     if args.run_dry_run or args.full:
         dry_script = script_path(root, "deploy-dry-run.sh")
         if dry_script.exists():
             preset_args = ["--preset", preset] if args.preset else []
-            print(f"Запуск dry-run: bash {script_hint(root, 'deploy-dry-run.sh')} {' '.join(preset_args)}".rstrip())
-            code = run_shell(root, ["bash", str(dry_script), *preset_args])
+            env_args = ["--env-file", str(env_file_override)] if env_file_override else []
+            print(f"Запуск dry-run: bash {script_hint(root, 'deploy-dry-run.sh')} {' '.join(env_args + preset_args)}".rstrip())
+            code = run_shell(root, ["bash", str(dry_script), *env_args, *preset_args])
             if code != 0:
                 print(f"\nDry-run завершился с кодом {code}.")
         else:
             print("Dry-run скрипт не найден.")
 
-    rows = build_status_rows(root, args.preset)
+    rows = build_status_rows(root, args.preset, env_file_override)
+    if args.field_pilot_report is not None:
+        output = (
+            Path(args.field_pilot_report).resolve()
+            if args.field_pilot_report
+            else root / ".factory-runtime" / "reports" / "production-vps-field-pilot-latest.md"
+        )
+        write_field_pilot_report(root, preset, rows, output, env_file_override)
+        print(f"Отчет field pilot: {output}")
     print("Панель оператора")
     print("-" * 72)
     print(f"Папка проекта: {root}")

@@ -29,10 +29,10 @@ cp deploy/.env.example deploy/.env
 bash template-repo/scripts/deploy-dry-run.sh
 ```
 
-4. Выполните deploy:
+4. Выполните deploy только после явного решения оператора:
 
 ```bash
-bash template-repo/scripts/deploy-local-vps.sh --yes
+bash template-repo/scripts/deploy-local-vps.sh
 ```
 
 5. Проверьте короткий verify summary:
@@ -68,6 +68,16 @@ bash template-repo/scripts/deploy-dry-run.sh --preset production
 
 ```bash
 bash template-repo/scripts/deploy-dry-run.sh --env-file /path/to/prod.env --preset production --strict-env
+```
+
+Для production field pilot evidence без deploy:
+
+```bash
+bash template-repo/scripts/deploy-dry-run.sh \
+  --env-file /path/to/prod.env \
+  --preset production \
+  --strict-env \
+  --field-pilot-report /path/to/production-vps-field-pilot-latest.md
 ```
 
 Для реального deploy с production presets используйте `deploy/.env`, а не только `.env.example`:
@@ -149,6 +159,8 @@ bash template-repo/scripts/deploy-local-vps.sh --yes --preset production
 bash template-repo/scripts/deploy-dry-run.sh --preset production --strict-env
 ```
 
+Расширенный field pilot runbook: `docs/production-vps-field-pilot.md`.
+
 ## Backups / резервные копии
 
 `backup` preset добавляет одноразовый backup hook `db-backup`. Он требует `app-db` и не запускается как daemon при обычном `up -d`; его нужно вызывать явно или из cron/systemd timer:
@@ -192,8 +204,12 @@ python3 template-repo/scripts/operator-dashboard.py --verify-summary
 Скрипты пишут короткие отчёты:
 - `.factory-runtime/reports/deploy-dry-run-latest.txt`
 - `.factory-runtime/reports/deploy-last-run.txt`
+- `.factory-runtime/reports/production-vps-field-pilot-latest.md` при `--field-pilot-report`
+- `.factory-runtime/reports/operator-env-field-pilot-latest.md` при `validate-operator-env.py --field-pilot-report`
 
 Панель оператора читает эти файлы и выдаёт рекомендацию "что дальше".
+
+Важно: field pilot report фиксирует evidence boundary. Если был только dry-run, отчет должен оставаться в статусе pending real VPS/user approval и не считается production proof.
 
 ## Rollback (минимальный)
 

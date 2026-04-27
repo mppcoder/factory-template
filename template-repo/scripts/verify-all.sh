@@ -66,6 +66,17 @@ FAKE_DOCKER
 
   PATH="$tmp_dir:$PATH" bash "$ROOT/template-repo/scripts/deploy-dry-run.sh" --env-file "$tmp_dir/operator.env" --preset starter
   PATH="$tmp_dir:$PATH" bash "$ROOT/template-repo/scripts/deploy-dry-run.sh" --env-file "$tmp_dir/operator.env" --preset app-db
+  python3 "$ROOT/template-repo/scripts/validate-operator-env.py" \
+    "$ROOT" \
+    --env-file "$tmp_dir/operator.env" \
+    --preset production \
+    --field-pilot-report "$tmp_dir/operator-env-field-pilot.md" >/dev/null
+  PATH="$tmp_dir:$PATH" bash "$ROOT/template-repo/scripts/deploy-dry-run.sh" \
+    --env-file "$tmp_dir/operator.env" \
+    --preset production \
+    --field-pilot-report "$tmp_dir/production-vps-field-pilot.md"
+  grep -q "evidence boundary" "$tmp_dir/operator-env-field-pilot.md"
+  grep -q "real VPS deploy status" "$tmp_dir/production-vps-field-pilot.md"
   rm -rf "$tmp_dir"
 }
 

@@ -4,6 +4,29 @@ Status source of truth: `docs/releases/release-scorecard.yaml`.
 Current scorecard state: `2.5.0 GA Ready`.
 TEST_REPORT.md is verification evidence, not the canonical release-status source.
 
+## Проверка Production VPS Field Pilot
+
+Дата: `2026-04-27`.
+
+Подготовлен safe field pilot path для single-VPS deploy без destructive действий по умолчанию.
+
+- `docs/production-vps-field-pilot.md` добавляет runbook `starter -> app-db -> reverse-proxy-tls -> backup -> healthcheck -> rollback drill`.
+- `docs/deploy-on-vps.md` теперь явно отделяет dry-run/report evidence от real production proof.
+- `reports/release/production-vps-field-pilot-report.md` фиксирует текущий статус: `repo-controlled-dry-run-ready-real-vps-pending`.
+- `template-repo/scripts/deploy-dry-run.sh --field-pilot-report` пишет markdown field pilot report после успешного dry-run.
+- `template-repo/scripts/deploy-local-vps.sh --field-pilot-report` пишет report после operator-approved deploy.
+- `template-repo/scripts/operator-dashboard.py --field-pilot-report` собирает runtime/evidence summary без deploy.
+- `template-repo/scripts/validate-operator-env.py --field-pilot-report` пишет env readiness report.
+- Starter остаётся default, production presets остаются opt-in.
+- DNS, firewall, Docker Compose, env secrets и backup restore checklist зафиксированы в runbook/report.
+- Real VPS deploy, restore test и rollback drill не выполнялись без user approval; статус field deploy остаётся pending.
+
+Проверки:
+
+- `template-repo/scripts/verify-all.sh quick` включает fake-Docker smoke для `starter`, `app-db` и `production --field-pilot-report`.
+- `validate-operator-env.py --field-pilot-report` проверен на production fixture.
+- `bash template-repo/scripts/verify-all.sh quick` — pass на `2026-04-27`.
+
 ## Проверка Project Knowledge Done Loop
 
 Дата: `2026-04-27`.

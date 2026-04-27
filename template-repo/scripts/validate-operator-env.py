@@ -302,6 +302,81 @@ def print_report(preset: str, findings: list[Finding]) -> None:
         print(f"finding_{index}={finding.level}:{finding.key}:{finding.message}")
 
 
+def _mark(ok: bool) -> str:
+    return "x" if ok else " "
+
+
+def write_field_pilot_report(root: Path, env_path: Path, preset: str, findings: list[Finding], output: Path) -> None:
+    failures = [finding for finding in findings if finding.level == "fail"]
+    warnings = [finding for finding in findings if finding.level == "warn"]
+    preset_tokens, _unknown = parse_preset_expression(preset)
+    env = parse_env_file(env_path)
+    uses_tls = "reverse-proxy-tls" in preset_tokens
+    uses_backup = "backup" in preset_tokens
+    uses_db = "app-db" in preset_tokens
+    production_like = preset != "starter"
+
+    dns_ready = not uses_tls or validate_domain(env.get("DOMAIN", ""))
+    firewall_ready = not uses_tls or (
+        valid_port(env.get("HTTP_PORT", "80")) and valid_port(env.get("HTTPS_PORT", "443"))
+    )
+    docker_compose_artifacts_ready = all(
+        (root / rel).exists()
+        for rel in ["deploy/compose.yaml", "deploy/compose.production.yaml"]
+        + [rel for token in preset_tokens for rel in PRESET_COMPOSE_FILES.get(token, [])]
+    )
+    secrets_ready = not any(
+        finding.level == "fail"
+        and finding.key in {"DB_PASSWORD", "DOMAIN", "TLS_EMAIL", "ACME_AGREE", "BACKUP_PATH", "BACKUP_ENABLED"}
+        for finding in findings
+    )
+    backup_restore_ready = not uses_backup or (
+        as_bool(env.get("BACKUP_ENABLED", "false")) and validate_backup_path(env.get("BACKUP_PATH", ""))
+    )
+
+    status = "blocked" if failures else "ready-for-dry-run-evidence"
+    if not production_like and not failures:
+        status = "starter-default-ready"
+
+    output.parent.mkdir(parents=True, exist_ok=True)
+    output.write_text(
+        "\n".join(
+            [
+                "# Отчет operator env для field pilot",
+                "",
+                f"- status: `{status}`",
+                f"- preset: `{preset}`",
+                f"- preset tokens: `{', '.join(preset_tokens)}`",
+                f"- env file: `{env_path}`",
+                f"- failures: `{len(failures)}`",
+                f"- warnings: `{len(warnings)}`",
+                "- evidence boundary: env validation only; this is not real VPS deploy proof.",
+                "",
+                "## Checklist production готовности",
+                "",
+                f"- [{_mark(dns_ready)}] DNS: `DOMAIN` is real when `reverse-proxy-tls` is active.",
+                f"- [{_mark(firewall_ready)}] Firewall: HTTP/HTTPS ports are valid for TLS preset.",
+                f"- [{_mark(docker_compose_artifacts_ready)}] Docker compose: required compose and preset files exist.",
+                f"- [{_mark(secrets_ready)}] Env secrets: required non-placeholder secrets/ACME values are present.",
+                f"- [{_mark(backup_restore_ready)}] Backup restore test input: backup path and enablement are set when `backup` is active.",
+                "",
+                "## Findings проверки",
+                "",
+                *[
+                    f"- `{finding.level}` `{finding.key}`: {finding.message}"
+                    for finding in findings
+                ],
+                "",
+                "## Граница выполнения",
+                "",
+                "- Real VPS deploy, DNS propagation checks, firewall changes, backup restore execution and rollback drill require operator approval and runtime access.",
+            ]
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description="Проверить operator deploy env для starter и optional production presets.")
     parser.add_argument("root", nargs="?", default=None, help="Корень repo")
@@ -309,6 +384,13 @@ def main() -> int:
     parser.add_argument("--preset", help="Переопределить OPERATOR_PRESET из env. Можно указать starter, app-db, reverse-proxy-tls, backup, healthcheck, production или список через запятую.")
     parser.add_argument("--allow-example-placeholders", action="store_true", help="Понизить ошибки example secrets/domain до предупреждений.")
     parser.add_argument("--format", choices=["text", "report"], default="text")
+    parser.add_argument(
+        "--field-pilot-report",
+        nargs="?",
+        const="",
+        metavar="PATH",
+        help="Записать markdown report для production VPS field pilot env evidence.",
+    )
     args = parser.parse_args()
 
     root = Path(args.root).resolve() if args.root else detect_repo_root()
@@ -324,6 +406,14 @@ def main() -> int:
         print_report(preset, findings)
     else:
         print_text(preset, findings)
+    if args.field_pilot_report is not None:
+        output = (
+            Path(args.field_pilot_report).resolve()
+            if args.field_pilot_report
+            else root / ".factory-runtime" / "reports" / "operator-env-field-pilot-latest.md"
+        )
+        write_field_pilot_report(root, env_path, preset, findings, output)
+        print(f"Отчет field pilot env: {output}")
     return 1 if any(finding.level == "fail" for finding in findings) else 0
 
 

@@ -69,6 +69,8 @@
 - Artifact Eval Harness добавлен как optional advanced contour: `artifact-eval/v1` specs, deterministic `eval-artifact.py`, report validator и sample evals проверяют scenario-pack, handoff blocks, runbooks, policy docs, template skills и `feature-execution-lite` artifacts без runner farm
 - Project Knowledge Done Loop добавлен как closeout contour: `close-feature-workspace.py` читает `user-spec`, `tech-spec`, `decisions.md`, создает `done-report.md`, `project-knowledge-update-proposal.md`, `downstream-impact.md`, архивирует feature в `work/completed/` и связывает `feature-execution-lite` с artifact-eval evidence link/justification
 - `validate-project-knowledge-update.py` и `project-knowledge-done-loop-smoke` подключены к quick verify, поэтому done closeout проверяет непустые decisions, явный Project Knowledge proposal, archive/blocker и downstream impact note
+- Production VPS Field Pilot подготовлен как safe report-first path: `docs/production-vps-field-pilot.md`, `reports/release/production-vps-field-pilot-report.md`, `deploy-dry-run.sh --field-pilot-report`, `operator-dashboard.py --field-pilot-report` и `validate-operator-env.py --field-pilot-report` отделяют dry-run evidence от real VPS proof
+- Starter остаётся beginner default, а `app-db`, `reverse-proxy-tls`, `backup`, `healthcheck` и `production` остаются opt-in; quick verify покрывает production report mode через fake Docker Compose без destructive deploy
 - репо больше не считает один static profile или старую сессию Codex надежной единицей маршрутизации
 - в repo появился единый visual/workflow reference layer по самому шаблону, greenfield, brownfield и downstream update contour
 - root-level `RELEASE_NOTES.md` теперь является каноническим source для опубликованных release notes и release executor
@@ -132,6 +134,7 @@
 - дальнейшее production hardening runtime-нестабильности git sync beyond current fallback strategy
 - дальнейшее расширение KPI evidence за пределы repo-controlled pilot к внешним downstream программам
 - дальнейшее расширение novice acceptance от parity-level long-flow smoke к предметным domain-сценариям реальных downstream систем
+- реальный production VPS field deploy, backup restore test и rollback drill требуют отдельного user approval, VPS access, secrets и runtime transcript; текущий repo статус: `repo-controlled-dry-run-ready-real-vps-pending`
 
 ## Граница core
 Core включает фабрику, шаблон, versioning/documentation layer, `.chatgpt`, scenario-pack, examples и feedback loop.
