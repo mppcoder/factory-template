@@ -11,6 +11,7 @@
 - Если задача отклонилась от user-spec, укажите связанный `DEV-*` и `US-*`.
 - Если решение стало устойчивым правилом проекта, перенесите вывод в `project-knowledge/`.
 - Для `feature-execution-lite` фиксируйте wave, review rounds и boundary: internal work, external user action или runtime backlog.
+- Перед архивированием feature closeout прочитает этот файл и создаст `project-knowledge-update-proposal.md`; не оставляйте важные решения только в чате.
 
 ## Записи
 
@@ -30,3 +31,13 @@
   - user: что подтвердил пользователь или `Не требуется`
 - follow_up: что нужно перенести в project-knowledge или `Нет`
 -->
+
+## Напоминание closeout
+
+Перед переносом workspace в `work/completed/` выполните:
+
+```bash
+python3 template-repo/scripts/close-feature-workspace.py work/features/{{FEATURE_ID}}
+```
+
+Closeout должен создать `done-report.md`, `project-knowledge-update-proposal.md` и `downstream-impact.md`. Если перенос в `project-knowledge/` не нужен, proposal все равно должен объяснить почему.

@@ -24,6 +24,8 @@
 - [ ] Команда знает окно релиза и план действий
 - [ ] Final Verification из tech-spec выполнен или явно признан неприменимым
 - [ ] Decisions/deviations после выполнения перенесены в `decisions.md`
+- [ ] Feature closeout создал `done-report.md`, `project-knowledge-update-proposal.md` и `downstream-impact.md`
+- [ ] Если использовался `feature-execution-lite`, checkpoint и artifact-eval evidence link/justification отражены в done evidence
 
 ## 4. Откат и аварийный сценарий
 

@@ -44,6 +44,7 @@ generated_or_technical_exclusions:
   - ".matrix-test/"
   - "factory/producer/archive/legacy-bootstrap/"
   - "tests/onboarding-smoke/.tmp-run/"
+  - "tests/project-knowledge-done-loop/"
   - "node_modules/"
   - "__pycache__/"
   - ".pytest_cache/"

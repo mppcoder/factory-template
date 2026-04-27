@@ -67,6 +67,8 @@
 - model availability auto-check добавлен в executable routing layer: `codex-model-routing.yaml`, `check-codex-model-catalog.py`, live validation через `codex debug models`, proposal-only promotion policy и strict/unavailable validator modes
 - optional skills/prompt-artifact quality loop добавлен как advanced maintenance contour: `skill-master-lite`, `skill-tester-lite`, test design guide и report template помогают улучшать trigger/usefulness без утяжеления beginner default path
 - Artifact Eval Harness добавлен как optional advanced contour: `artifact-eval/v1` specs, deterministic `eval-artifact.py`, report validator и sample evals проверяют scenario-pack, handoff blocks, runbooks, policy docs, template skills и `feature-execution-lite` artifacts без runner farm
+- Project Knowledge Done Loop добавлен как closeout contour: `close-feature-workspace.py` читает `user-spec`, `tech-spec`, `decisions.md`, создает `done-report.md`, `project-knowledge-update-proposal.md`, `downstream-impact.md`, архивирует feature в `work/completed/` и связывает `feature-execution-lite` с artifact-eval evidence link/justification
+- `validate-project-knowledge-update.py` и `project-knowledge-done-loop-smoke` подключены к quick verify, поэтому done closeout проверяет непустые decisions, явный Project Knowledge proposal, archive/blocker и downstream impact note
 - репо больше не считает один static profile или старую сессию Codex надежной единицей маршрутизации
 - в repo появился единый visual/workflow reference layer по самому шаблону, greenfield, brownfield и downstream update contour
 - root-level `RELEASE_NOTES.md` теперь является каноническим source для опубликованных release notes и release executor

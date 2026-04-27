@@ -19,6 +19,9 @@ SYNC_REPORT = ROOT / '.factory-runtime' / 'reports' / 'verified-sync-report.yaml
 CLASSES_FILE = ROOT / 'change-classes.yaml'
 if not CLASSES_FILE.exists():
     CLASSES_FILE = Path(__file__).resolve().parents[1] / 'change-classes.yaml'
+PK_DONE_VALIDATOR = ROOT / 'template-repo' / 'scripts' / 'validate-project-knowledge-update.py'
+if not PK_DONE_VALIDATOR.exists():
+    PK_DONE_VALIDATOR = ROOT / 'scripts' / 'validate-project-knowledge-update.py'
 
 missing = [str(p) for p in [VERIFY, DONE, STATE, CURRENT] if not p.exists()]
 if missing:
@@ -128,6 +131,21 @@ if defect_active and bugflow.get('factory_feedback_required', False) and not fee
     print('DOD НЕ ПРОЙДЕН')
     print('- defect reusable, но отсутствует factory feedback в reports/factory-feedback/')
     raise SystemExit(1)
+if PK_DONE_VALIDATOR.exists():
+    proc = subprocess.run(
+        [sys.executable, str(PK_DONE_VALIDATOR), str(ROOT), '--allow-empty'],
+        cwd=ROOT,
+        text=True,
+        capture_output=True,
+        check=False,
+    )
+    if proc.returncode != 0:
+        print('DOD НЕ ПРОЙДЕН')
+        print('- project-knowledge done-loop closeout artifacts невалидны')
+        for line in (proc.stdout + proc.stderr).splitlines():
+            if line.strip():
+                print(f'  {line}')
+        raise SystemExit(1)
 if has_origin_remote(ROOT):
     if not SYNC_REPORT.exists():
         print('DOD НЕ ПРОЙДЕН')

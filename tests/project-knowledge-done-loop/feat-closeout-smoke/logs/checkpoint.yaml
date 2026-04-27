@@ -1,0 +1,18 @@
+schema: feature-execution-lite/v1
+feature_id: feat-closeout-smoke
+feature_status: done
+last_completed_wave: 1
+next_wave: null
+max_review_rounds: 3
+tasks:
+  T-001:
+    status: done
+    wave: 1
+final_verification:
+  status: passed
+  evidence:
+    - validate-project-knowledge-update smoke fixture
+boundaries:
+  internal_work_remaining: []
+  external_user_action_required: []
+  runtime_backlog: []

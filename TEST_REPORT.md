@@ -4,6 +4,28 @@ Status source of truth: `docs/releases/release-scorecard.yaml`.
 Current scorecard state: `2.5.0 GA Ready`.
 TEST_REPORT.md is verification evidence, not the canonical release-status source.
 
+## Проверка Project Knowledge Done Loop
+
+Дата: `2026-04-27`.
+
+Добавлен factory-native closeout после feature work, чтобы `decisions.md` не терялся после завершения задачи, а обновление `project-knowledge/` стало явным проверяемым шагом.
+
+- `docs/done-and-project-knowledge-loop.md` объясняет beginner-friendly loop: прочитать `user-spec`, `tech-spec`, `decisions.md`, создать proposal для Project Knowledge, зафиксировать downstream impact и архивировать feature.
+- `template-repo/scripts/close-feature-workspace.py` создает `done-report.md`, `project-knowledge-update-proposal.md`, `downstream-impact.md` и переносит workspace в `work/completed/`.
+- `template-repo/scripts/validate-project-knowledge-update.py` проверяет done report, непустые decisions, Project Knowledge proposal, downstream impact и archive/blocker.
+- Для `feature-execution-lite` closeout/validator проверяют execution-plan, checkpoint, task waves, decisions, final verification и artifact-eval evidence link/justification.
+- `template-repo/scripts/check-dod.py` подключает validator для closed feature workspaces.
+- `template-repo/scripts/verify-all.sh quick` запускает `project-knowledge-done-loop-smoke` на fixture из `tests/project-knowledge-done-loop/`.
+- `template-repo/template/project-knowledge/*` и `decisions.md.template` обновлены правилами closeout/proposal/archive.
+
+Проверки:
+
+- `python3 template-repo/scripts/validate-project-knowledge-update.py . --allow-empty` — pass.
+- Project Knowledge Done Loop smoke: `close-feature-workspace.py` -> archive в `/tmp/work/completed/feat-closeout-smoke` -> `validate-project-knowledge-update.py` — pass.
+- `python3 template-repo/scripts/validate-feature-execution-lite.py .` — pass.
+- `python3 template-repo/scripts/validate-human-language-layer.py .` — pass, active findings `0`.
+- `bash template-repo/scripts/verify-all.sh quick` — pass.
+
 ## Проверка external actions closeout
 
 Дата: `2026-04-27`.

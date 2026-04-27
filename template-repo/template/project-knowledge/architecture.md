@@ -46,6 +46,8 @@
 
 Если архитектура меняет исходное пользовательское намерение, в tech-spec должна быть запись `User-Spec Deviations` с `approval=approved`.
 
+При closeout используйте `project-knowledge-update-proposal.md`: переносите сюда только те architecture decisions, которые стали правилом проекта, а не временной реализационной заметкой.
+
 ## 7. Технический долг
 
 - Долг:

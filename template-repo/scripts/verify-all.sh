@@ -88,6 +88,22 @@ run_artifact_eval_smoke() {
   rm -rf "$tmp_dir"
 }
 
+run_project_knowledge_done_loop_smoke() {
+  local tmp_dir
+  tmp_dir="$(mktemp -d)"
+  mkdir -p "$tmp_dir/work/features" "$tmp_dir/work/completed"
+  cp -R "$ROOT/tests/project-knowledge-done-loop/feat-closeout-smoke" "$tmp_dir/work/features/feat-closeout-smoke"
+  python3 "$ROOT/template-repo/scripts/close-feature-workspace.py" \
+    "$tmp_dir/work/features/feat-closeout-smoke" \
+    --root "$ROOT" \
+    --archive-base "$tmp_dir/work/completed" \
+    --artifact-eval-report "$ROOT/tests/artifact-eval/reports/feature-execution-lite.md"
+  python3 "$ROOT/template-repo/scripts/validate-project-knowledge-update.py" \
+    "$ROOT" \
+    --workspace "$tmp_dir/work/completed/feat-closeout-smoke"
+  rm -rf "$tmp_dir"
+}
+
 project_preset() {
   python3 - "$ROOT/.chatgpt/project-profile.yaml" <<'PY'
 from pathlib import Path
@@ -151,6 +167,7 @@ run_quick() {
   run_step "validate-spec-traceability" python3 "$ROOT/template-repo/scripts/validate-spec-traceability.py" "$ROOT"
   run_step "validate-feature-execution-lite" python3 "$ROOT/template-repo/scripts/validate-feature-execution-lite.py" "$ROOT"
   run_step "artifact-eval-smoke" run_artifact_eval_smoke
+  run_step "project-knowledge-done-loop-smoke" run_project_knowledge_done_loop_smoke
   run_step "validate-release-scorecard" python3 "$ROOT/template-repo/scripts/validate-release-scorecard.py" "$ROOT"
   run_step "validate-25-ga-kpi-evidence" python3 "$ROOT/template-repo/scripts/validate-25-ga-kpi-evidence.py" "$ROOT"
   run_step "validate-human-language-layer" python3 "$ROOT/template-repo/scripts/validate-human-language-layer.py" "$ROOT"

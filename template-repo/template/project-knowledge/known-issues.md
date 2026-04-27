@@ -6,3 +6,4 @@
 
 - Если feature создавалась до появления `decisions.md`, у неё может не быть decision log. При следующем изменении создайте `decisions.md` и перенесите туда только актуальные решения.
 - Старые task-файлы могут не иметь `Verify-smoke` или `Verify-user`. Перед реализацией такой задачи добавьте хотя бы один понятный путь проверки.
+- Старые archived features могут не иметь `project-knowledge-update-proposal.md`. Не переносите их автоматически; при следующем касании восстановите closeout evidence или зафиксируйте, что Project Knowledge update не требуется.
