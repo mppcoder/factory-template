@@ -37,6 +37,16 @@ expected_trigger:
             - "`Реестр внешних действий`"
             - "точное действие пользователя"
             - "когда выполнять действие"
+    - id: roadmap-next-branch-recommendation
+      prompt: "Roadmap stage закрыт, но есть две возможные следующие ветки."
+      expected: "Artifact требует рекомендованную ветку и fallback-ветку."
+      baseline_expected: fail
+      assertions:
+        - id: branch-recommendation
+          category: outcome
+          must_contain:
+            - "рекомендованную ветку и fallback-ветку"
+            - "не заменяет рекомендацию следующего этапа"
 non_trigger_cases:
   - id: all-noop-verbose-register
     prompt: "Ответ перечисляет только no-op строки в реестре внешних действий."
@@ -59,3 +69,8 @@ compliance_assertions:
     must_contain:
       - "git status --short --branch"
       - "commit hash / sync status"
+  - id: no-roadmap-silence
+    category: compliance
+    must_contain:
+      - "Нельзя писать только `Следующий пользовательский шаг отсутствует`"
+      - "next-roadmap recommendation"

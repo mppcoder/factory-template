@@ -14,6 +14,7 @@
 
 Если остается хотя бы один pending external/user step, closeout без блока `## Инструкция пользователю` недопустим.
 Если остается future roadmap stage, но он не требует действия пользователя сейчас, closeout должен назвать его как future boundary, а затем отдельно сказать, что текущий scope закрыт полностью.
+Если roadmap closeout или roadmap readout содержит несколько возможных следующих веток, closeout должен назвать рекомендованную ветку и fallback-ветку. Нельзя писать только `Следующий пользовательский шаг отсутствует`, если пользователь ожидает roadmap recommendation: эта формула закрывает текущий scope, но не заменяет рекомендацию следующего этапа.
 
 Перед тем как отнести GitHub PR merge, закрытие PR или удаление branch к пользовательскому внешнему шагу, Codex обязан проверить доступный GitHub write path:
 - `gh auth status` или доступный GitHub connector;
@@ -104,6 +105,7 @@ Closeout без handoff допустим только при реальном о
 Запрещено перечислять contour'ы со статусом `не требуется`, если пользователь явно не запросил полный audit-style register или задача не является release/security approval.
 Если все потенциальные строки реестра имеют `действие не требуется`, реестр не нужен; напиши `Внешних действий не требуется.` и fully-done continuation outcome.
 При no-op external closeout не останавливайся на этой одной фразе: добавь continuation outcome, что следующий пользовательский шаг отсутствует и текущие задачи выполнены полностью.
+Если no-op external closeout завершает roadmap stage, добавь next-roadmap recommendation: например `если есть real downstream/battle app, следующий шаг P4-S5/P4-S6; если нет, следующий repo-local шаг Plan №5 / hardening contour`.
 
 Для `factory-template ChatGPT Project instruction` по умолчанию ожидается `нет`, если repo/path/entrypoint/короткая repo-first instruction не менялись.
 Отдельное обновление этого contour допустимо только при реальном изменении instruction contract.

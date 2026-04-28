@@ -160,6 +160,8 @@ def main() -> int:
 - [ ] В финальном ответе указать commit hash / sync status или `no-op`
 - [ ] Если остался внутренний Codex-eligible follow-up, выполнить его в текущем task или выдать inline handoff; не просить пользователя вручную написать "продолжай"
 - [ ] Если в финале назван следующий этап pipeline, классифицировать его как internal / external / mixed / fully done до отправки ответа
+- [ ] Если roadmap/readout содержит несколько следующих веток, финальный ответ называет рекомендованную ветку и fallback-ветку
+- [ ] Если текущий scope закрыт, но есть next-roadmap recommendation, финал не заменяет ее фразой `Следующий пользовательский шаг отсутствует`
 - [ ] В финальном ответе есть continuation outcome: `## Инструкция пользователю` с действием для продолжения или явное `Следующий пользовательский шаг отсутствует; задачи текущего scope выполнены полностью.`
 
 ## Классификация влияния
@@ -353,6 +355,7 @@ Compact default:
 - Если внешнего шага нет, финальный ответ все равно должен явно сказать, что внешних действий не требуется.
 - Каждый финальный ответ обязан содержать continuation outcome: либо `## Инструкция пользователю` с точным действием для продолжения, либо явную фразу `Следующий пользовательский шаг отсутствует; задачи текущего scope выполнены полностью.`
 - Если существует будущий roadmap stage, но он не actionable сейчас, назови его как future boundary и отдельно скажи, что текущий scope закрыт полностью.
+- Если roadmap/readout содержит несколько возможных следующих веток, финальный ответ обязан назвать рекомендованную ветку и fallback-ветку; `Следующий пользовательский шаг отсутствует` закрывает только текущий scope и не заменяет next-roadmap recommendation.
 - Для обновления factory ChatGPT Project сначала сам подготовьте точный repo-first instruction text; этот шаг выполняет Codex внутри repo до пользовательского блока.
 - Для downstream repo sync сначала используйте `factory/producer/extensions/workspace-packs/factory-ops/export-template-patch.sh` и `factory/producer/extensions/workspace-packs/factory-ops/apply-template-patch.sh`.
 - Для downstream repo instruction layer source-of-truth хранится в `template-repo/AGENTS.md`, а Codex в battle repo должен читать materialized root `AGENTS.md`.
@@ -362,6 +365,7 @@ Compact default:
 Если closeout полностью внутренний и `Инструкция пользователю` не нужна, используйте явную формулировку вроде:
 - `Внешних действий не требуется.`
 - `Следующий пользовательский шаг отсутствует; задачи текущего scope выполнены полностью.`
+- `Рекомендованный следующий roadmap шаг: P4-S5/P4-S6 при наличии real downstream/battle app; иначе Plan №5 / hardening contour.`
 """
 
     handoff_response = f"""## Применение в Codex UI

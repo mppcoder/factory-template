@@ -41,6 +41,7 @@
 - completion/handoff layer теперь различает готовые внешние boundary steps и внутренние prepare/export commands: сборка export artifacts выполняется Codex внутри repo до пользовательского блока
 - completion/handoff layer теперь использует compact default для внешних действий: если реальных действий нет, финал говорит `Внешних действий не требуется.`, а если действия есть, `## Инструкция пользователю` перечисляет только реальные external/manual steps
 - completion/handoff layer теперь требует continuation outcome в каждом финальном ответе: либо `## Инструкция пользователю` с конкретным действием для продолжения, либо явное сообщение, что следующий пользовательский шаг отсутствует и задачи текущего scope выполнены полностью
+- roadmap closeout теперь требует next-step recommendation при развилке: если есть real downstream/battle app, рекомендовать P4-S5/P4-S6; если нет, рекомендовать internal Plan №5 / hardening contour, а не подменять это фразой `следующий пользовательский шаг отсутствует`
 - `Реестр внешних действий` теперь является actionable ledger, а не audit table всех возможных contour'ов со статусом `не требуется`; полный register допустим только по явному запросу или для release/security approval
 - repo-first instruction layer для ChatGPT Projects: сценарии читаются прямо из GitHub repo, а не из локально загруженных project artifacts
 - launcher и template docs больше не требуют отдельную project-local staging-конфигурацию
@@ -142,6 +143,8 @@
 - optional future external proof: downstream/battle project application image deploy proof, only if validating a generated project with a real app. Infrastructure-level VPS deploy, backup restore and rollback drill passed on 2026-04-27 with local placeholder app image for `factory-template`; Plan №4 now provides the preparation docs/template/validator/eval contour for that future proof.
 - Plan №3 status: P3-S0 audit captured; P3-S1 task-state-lite, P3-S2 learning patch loop, P3-S3 expanded evals, P3-S4 real adoption, P3-S5 runtime QA boundary preparation and P3-S6 roadmap closeout implemented.
 - Plan №4 status: P4-S0 audit captured; P4-S1/P4-S2 downstream app proof scenario and novice scorecard validator implemented as preparation; P4-S3/P4-S4 handoff transcript eval and Project Knowledge reuse proof implemented as repo-local eval/checklist; P4-S5/P4-S6 blocked until a real downstream/battle project is selected.
+- Recommended next roadmap step after Plan №4: run P4-S5/P4-S6 only if a real downstream/battle app exists with real `APP_IMAGE`; otherwise open internal Plan №5 / hardening contour for runner/operational reports, curated pack quality, git sync hardening and novice domain-scenario acceptance.
+- Router, done-closeout scenario and generated Codex task-pack checklist now require roadmap readouts with multiple branches to name the recommended branch and fallback branch.
 - `pavel-molyanov/molyanov-ai-dev` comparison recorded in `docs/releases/post-2.5-gap-register.md`; factory keeps useful spec/project-knowledge/eval ideas but does not import Claude-specific `.claude`, command or TeamCreate assumptions.
 
 ## Что работает частично
@@ -166,6 +169,7 @@
 - дальнейшее расширение novice acceptance от parity-level long-flow smoke к предметным domain-сценариям реальных downstream систем
 - downstream/battle application image proof требует отдельного generated/battle project, application artifact, approved runtime run, secrets outside repo and sanitized transcript; текущий repo статус: `template-runtime-proof-passed`
 - Plan №4 real pilot requires external inputs: downstream repo path, real application image, approved VPS/staging target, secrets entered outside repo, deploy/restore/rollback approval and sanitized transcript.
+- If those Plan №4 external inputs are absent, next actionable repo-local work is internal Plan №5 / hardening contour, not a simulated downstream pilot.
 
 ## Граница core
 Core включает фабрику, шаблон, versioning/documentation layer, `.chatgpt`, scenario-pack, examples и feedback loop.

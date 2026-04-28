@@ -18,6 +18,26 @@ Plan №4 подготовил optional downstream/battle application proof cont
 - Positive/negative fixtures: `tests/downstream-application-proof/valid/` and `tests/downstream-application-proof/missing-evidence/`.
 - Artifact Eval additions: `handoff-transcript-eval` and `project-knowledge-reuse-proof` specs/reports.
 - Boundary: P4-S5/P4-S6 real pilot is blocked until downstream repo, real app image, target, external secrets/approval and sanitized transcript exist.
+- Next-step recommendation: if a real downstream/battle app exists, run P4-S5/P4-S6 there; otherwise open internal Plan №5 / hardening contour.
+
+## Проверка roadmap next-step recommendation
+
+Дата: `2026-04-28`.
+
+Исправлен guidance defect: roadmap closeout now names the recommended next step instead of leaving the user with two unranked branches.
+
+- Defect report: `reports/bugs/2026-04-28-roadmap-next-step-recommendation-gap.md`.
+- `docs/releases/plan-4-battle-app-proof-roadmap.md` now recommends P4-S5/P4-S6 only when a real downstream/battle app exists.
+- If no real downstream app exists, the recommended actionable path is internal Plan №5 / hardening contour.
+- Router, `16-done-closeout`, boundary-actions and checklist now require roadmap readouts with multiple branches to name the recommended branch and fallback branch.
+- `done-closeout-external-actions` Artifact Eval now includes a regression case for roadmap branch recommendation.
+
+Проверки:
+
+- `python3 template-repo/scripts/eval-artifact.py tests/artifact-eval/specs/done-closeout-external-actions.yaml --output tests/artifact-eval/reports/done-closeout-external-actions.md --json` — pass.
+- `python3 template-repo/scripts/validate-codex-task-pack.py .` — pass.
+- `python3 template-repo/scripts/validate-human-language-layer.py .` — pass, active findings `0`.
+- `bash template-repo/scripts/verify-all.sh quick` — pass на `2026-04-28`.
 
 Проверки:
 
