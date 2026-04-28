@@ -4,6 +4,35 @@ Status source of truth: `docs/releases/release-scorecard.yaml`.
 Current scorecard state: `2.5.0 GA Ready`.
 TEST_REPORT.md is verification evidence, not the canonical release-status source.
 
+## Проверка Plan №5 internal hardening
+
+Дата: `2026-04-28`.
+
+Plan №5 добавил internal hardening contour после Plan №4 без переоткрытия `2.6` template/runtime proof и без заявления P4-S5 real downstream app pilot.
+
+- Roadmap/source map: `docs/releases/plan-5-internal-hardening-roadmap.md`.
+- VPS Remote SSH-first runbook: `docs/operator/factory-template/04-vps-remote-ssh-full-handoff-orchestration.md`.
+- Runner: `template-repo/scripts/orchestrate-codex-handoff.py`.
+- Orchestration validator: `template-repo/scripts/validate-codex-orchestration.py`.
+- Curated pack validator: `template-repo/scripts/validate-curated-pack-quality.py`.
+- Git sync fallback evidence validator: `template-repo/scripts/validate-verified-sync-fallback-evidence.py`.
+- Positive/negative fixtures: `tests/codex-orchestration/`, `tests/curated-pack-quality/`.
+- Artifact Eval: `vps-remote-ssh-orchestration`.
+- Domain acceptance expansion: `docs/domain-scenario-acceptance.md`.
+- Fallback evidence: `reports/release/verified-sync-fallback-evidence.md`.
+
+Проверки:
+
+- `python3 -m py_compile template-repo/scripts/orchestrate-codex-handoff.py template-repo/scripts/validate-codex-orchestration.py template-repo/scripts/orchestrate_codex_handoff_import.py template-repo/scripts/validate-curated-pack-quality.py template-repo/scripts/validate-verified-sync-fallback-evidence.py` — pass.
+- `python3 template-repo/scripts/validate-codex-orchestration.py .` — pass.
+- Negative orchestration fixtures for missing child routing, secret-like content and multi-block handoff — pass, validators return non-zero.
+- `python3 template-repo/scripts/orchestrate-codex-handoff.py --root . --plan tests/codex-orchestration/fixtures/valid/parent-plan.yaml --report reports/orchestration/parent-orchestration-report.md` — pass, dry-run report written.
+- `python3 template-repo/scripts/validate-curated-pack-quality.py .` — pass.
+- Curated pack positive fixture — pass; missing-routing-doc negative fixture returns non-zero as expected.
+- `python3 template-repo/scripts/validate-verified-sync-fallback-evidence.py reports/release/verified-sync-fallback-evidence.md` — pass.
+- `python3 template-repo/scripts/eval-artifact.py tests/artifact-eval/specs/vps-remote-ssh-orchestration.yaml --output tests/artifact-eval/reports/vps-remote-ssh-orchestration.md --json` — pass.
+- `bash template-repo/scripts/verify-all.sh quick` — pass на `2026-04-28`.
+
 ## Проверка Plan №4 P4-S0/P4-S4 preparation
 
 Дата: `2026-04-27`.

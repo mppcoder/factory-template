@@ -1,5 +1,13 @@
 # Release notes / заметки релиза
 
+## Не выпущено - Plan №5 internal hardening
+
+- Добавлен VPS Remote SSH-first Full Handoff Orchestration Layer: operator runbook, dry-run parent runner, per-subtask session files and parent report.
+- Codex App/Cloud Director закреплен как optional path, not default; default workflow остается VS Code Remote SSH to VPS plus repo-native Codex CLI sessions.
+- Добавлены validators и fixtures для explicit child routing, one-block handoff, secret boundary and curated/reference pack quality.
+- Добавлен sync fallback evidence report без изменения stable sync logic.
+- Добавлен domain scenario acceptance template beyond parity smoke; real downstream pilots остаются future external contour.
+
 ## Не выпущено - post-2.5 planning
 
 - Добавлены roadmaps `2.5.1` и `2.6`: `2.5.1` ограничен stabilization/bugfix/docs/field proof, а `2.6` получает production VPS runtime proof, расширенный Artifact Eval Harness, adoption `feature-execution-lite` и runtime/source-hygiene backlog.

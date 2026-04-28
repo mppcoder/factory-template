@@ -1,0 +1,192 @@
+# VPS Remote SSH-first full handoff orchestration
+
+## Назначение
+
+Этот runbook описывает default путь для большой задачи:
+
+1. Browser ChatGPT Project готовит один большой Codex handoff.
+2. Operator открывает VS Code Remote SSH window, connected to VPS.
+3. В этом окне открыт repo root `mppcoder/factory-template`.
+4. Codex extension в этом же VS Code Remote SSH контексте получает один цельный handoff.
+5. Repo-native orchestrator раскладывает handoff в subtask specs.
+6. Отдельные Codex CLI sessions запускаются на VPS/repo context.
+7. Parent orchestration report собирает результаты, blockers и финальный closeout.
+
+## Default path по умолчанию
+
+Default user-facing path: `VPS Remote SSH-first`.
+
+Минимальный операторский поток:
+
+1. Откройте Browser ChatGPT Project и получите один большой handoff block.
+2. Откройте VS Code, подключенный к VPS через Remote SSH.
+3. Откройте repo root на VPS.
+4. Откройте новый Codex chat/window в VS Code Remote SSH.
+5. Вручную выберите `selected_model` и `selected_reasoning_effort` в picker, если picker доступен.
+6. Вставьте один цельный handoff block.
+7. Запустите repo-native orchestration dry-run:
+
+```bash
+python3 template-repo/scripts/orchestrate-codex-handoff.py \
+  --plan tests/codex-orchestration/fixtures/valid/parent-plan.yaml \
+  --report reports/orchestration/parent-orchestration-report.md
+```
+
+Dry-run пишет parent report и per-subtask handoff files. Отдельные Codex CLI sessions реально стартуют только при явном `--execute`.
+
+## Опциональные альтернативы
+
+Codex app local/remote repo context допустим только если thread работает с тем же VPS/repo filesystem and shell context.
+
+Codex App / Cloud Director является optional, not default. Используйте cloud delegation только если пользователь явно выбрал cloud, repo/security boundary это разрешает, и задача не требует local-only secrets/runtime.
+
+## Граница routing
+
+Already-open live session не является надежным auto-switch mechanism.
+
+`Новый чат + вставка handoff` и executable launch через repo runner — разные вещи:
+- manual UI path требует ручного выбора model/reasoning в picker;
+- strict path требует нового task launch/profile selection;
+- child session не наследует parent route by default.
+
+Каждый child subtask должен иметь:
+- `selected_profile`;
+- `selected_model`;
+- `selected_reasoning_effort`;
+- `selected_plan_mode_reasoning_effort`;
+- `selected_scenario`;
+- `task_class`.
+
+Если live model availability не проверена, report должен писать `requires live validation`, а не обещать availability.
+
+## Ответственность parent orchestrator
+
+Parent orchestrator:
+- validates one parent handoff / one orchestration plan;
+- resolves each subtask through repo routing config;
+- writes per-subtask handoff/session files;
+- prints dry-run commands;
+- writes parent report;
+- records blockers and owner boundary;
+- does not execute specialist work inline when subtask routing says separate session/profile.
+
+Parent orchestrator does not:
+- store secrets;
+- hardcode VPS IP, username, token or private transcript;
+- silently change configured model mapping;
+- promote Codex App/Cloud Director into the default path;
+- claim that a pasted handoff changes model/profile/reasoning inside an already-open session.
+
+Security boundary: no secrets in handoff, reports, fixtures, transcripts or repo.
+
+## Таксономия failure/blocker
+
+| Code | Meaning | Owner boundary |
+|---|---|---|
+| `internal-repo-follow-up` | Repo docs/scripts/tests need update. | Codex/repo |
+| `external-user-action` | User must choose/approve/provide an external artifact. | operator |
+| `runtime-action` | VPS/runtime/deploy action needs approved runtime context. | operator + runtime |
+| `downstream-battle-action` | Real downstream repo/app proof is needed. | downstream owner |
+| `model-mapping-blocker` | Configured model/profile is missing or requires live validation. | repo + live Codex catalog |
+| `secret-boundary-blocker` | Secret-like content appeared in handoff/fixtures/report. | operator |
+
+## Пример parent handoff
+
+```yaml
+schema: codex-orchestration/v1
+parent:
+  id: p5-example-parent
+  title: VPS Remote SSH-first orchestration example
+  launch_source: chatgpt-handoff
+  selected_scenario: template-repo/scenario-pack/00-master-router.md -> template-repo/scenario-pack/15-handoff-to-codex.md
+  apply_mode: manual-ui
+  strict_launch_mode: optional
+  default_context: VPS Remote SSH repo context
+subtasks:
+  - id: docs-quick
+    title: Update operator wording
+    task_class: quick
+    selected_profile: quick
+    selected_model: gpt-5.4-mini
+    selected_reasoning_effort: low
+    selected_plan_mode_reasoning_effort: medium
+    selected_scenario: template-repo/scenario-pack/14-docs-normalization.md
+    owner_boundary: internal-repo-follow-up
+    prompt: "Проверить wording docs and update Russian operator text."
+  - id: runner-build
+    title: Patch runner script
+    task_class: build
+    selected_profile: build
+    selected_model: gpt-5.5
+    selected_reasoning_effort: medium
+    selected_plan_mode_reasoning_effort: medium
+    selected_scenario: template-repo/scenario-pack/15-handoff-to-codex.md
+    owner_boundary: internal-repo-follow-up
+    prompt: "Implement dry-run report generation."
+  - id: audit-deep
+    title: Audit routing mismatch
+    task_class: deep
+    selected_profile: deep
+    selected_model: gpt-5.5
+    selected_reasoning_effort: high
+    selected_plan_mode_reasoning_effort: high
+    selected_scenario: template-repo/scenario-pack/00-master-router.md
+    owner_boundary: internal-repo-follow-up
+    prompt: "Audit routing docs versus executable config."
+  - id: verify-review
+    title: Review verification evidence
+    task_class: review
+    selected_profile: review
+    selected_model: gpt-5.5
+    selected_reasoning_effort: high
+    selected_plan_mode_reasoning_effort: high
+    selected_scenario: template-repo/scenario-pack/16-done-closeout.md
+    owner_boundary: internal-repo-follow-up
+    prompt: "Run targeted validators and summarize residual risk."
+```
+
+## Пример dry-run output
+
+```text
+ORCHESTRATION DRY-RUN
+- docs-quick: codex --profile quick < reports/orchestration/sessions/docs-quick.md
+- runner-build: codex --profile build < reports/orchestration/sessions/runner-build.md
+- audit-deep: codex --profile deep < reports/orchestration/sessions/audit-deep.md
+- verify-review: codex --profile review < reports/orchestration/sessions/verify-review.md
+```
+
+## Пример report output
+
+```text
+# Отчет parent Codex orchestration
+
+Status: dry-run
+Default path: VPS Remote SSH-first
+Cloud default: false
+
+| Subtask | Profile | Model | Reasoning | Status | Boundary |
+|---|---|---|---|---|---|
+| docs-quick | quick | gpt-5.4-mini | low | session-file-written | internal-repo-follow-up |
+| runner-build | build | gpt-5.5 | medium | session-file-written | internal-repo-follow-up |
+| audit-deep | deep | gpt-5.5 | high | session-file-written | internal-repo-follow-up |
+| verify-review | review | gpt-5.5 | high | session-file-written | internal-repo-follow-up |
+```
+
+## Правила validation
+
+The repo validator rejects:
+- docs that promote Codex App/Cloud Director into the default path;
+- child subtasks without explicit profile/model/reasoning/scenario;
+- multi-block handoff for user copy-paste;
+- wording that treats an already-open session as route switching;
+- unredacted secrets, `.env`-like content or private transcripts in examples.
+
+## Official boundary note / официальная граница
+
+OpenAI docs describe Codex CLI as a local terminal agent that can read, edit and run code in the selected directory. Codex IDE extension works side by side in the IDE and can also delegate to cloud. Codex app local mode asks the user to select a project folder and make sure Local is selected. Help Center distinguishes `Codex Local` controls from `Codex Cloud` controls.
+
+References:
+- `https://developers.openai.com/codex/cli`
+- `https://developers.openai.com/codex/ide`
+- `https://developers.openai.com/codex/app`
+- `https://help.openai.com/en/articles/11369540-icodex-in-chatgpt`

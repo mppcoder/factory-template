@@ -25,9 +25,10 @@
 2. `02-runbook-dlya-codex-factory-template.md`
 3. `03-mode-routing-factory-template.md`
 4. `04-chatgpt-project-sources-factory-template-20-cap.md`
-5. `05-backlog-dorabotok-factory-template.md`
-6. `06-codex-config-factory-template.toml`
-7. `07-AGENTS-factory-template.md`
+5. `04-vps-remote-ssh-full-handoff-orchestration.md`
+6. `05-backlog-dorabotok-factory-template.md`
+7. `06-codex-config-factory-template.toml`
+8. `07-AGENTS-factory-template.md`
 
 ## Назначение
 

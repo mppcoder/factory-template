@@ -110,6 +110,11 @@
 - Plan №4 P4-S0..P4-S4 prepared the optional downstream/battle application proof contour without reopening template/runtime proof: roadmap, downstream proof doc, report template, scorecard validator, handoff transcript eval and Project Knowledge reuse proof are repo-local preparation artifacts
 - downstream/battle application proof now has a generated report template and validator: a passed claim requires real app image, healthcheck, migrations policy, backup, restore, rollback, sanitized transcript, secrets boundary and novice-to-deploy scorecard evidence
 - Artifact Eval Harness now includes handoff transcript eval and Project Knowledge reuse proof specs/reports for multi-block handoff, vague continuation, false auto-switch, user-only internal closeout, ignored Project Knowledge and stale Project Knowledge negative fixtures
+- Plan №5 internal hardening добавил VPS Remote SSH-first Full Handoff Orchestration Layer: operator runbook, repo-native dry-run parent orchestrator, per-subtask handoff/session files, parent orchestration report, guardrails against Cloud/App default overclaim, child route inheritance and secrets in orchestration artifacts
+- `orchestrate-codex-handoff.py` and `validate-codex-orchestration.py` now validate one large parent handoff plan, explicit child `quick/build/deep/review` routes, model/reasoning/scenario fields, dry-run commands and negative fixtures for missing child routing, secret-like content and multi-block handoff
+- curated/reference pack quality validator now checks usefulness, phase/profile fit, routing-critical docs, stale hot/cold duplicates, over-noisy packs and manifest file existence; `sources-profiles.yaml` includes the VPS Remote SSH orchestration runbook in core packs
+- verified sync fallback hardening now has release-facing evidence coverage for blocked push, remote drift, protected branch, branch ahead, dirty state and `FACTORY_SYNC_FALLBACK_PUSH_URL` instructions without rewriting stable sync logic
+- domain scenario acceptance template now extends novice acceptance beyond parity smoke with CRM and inventory examples while keeping real downstream field pilots as future external contour
 
 ## Программа 2.5 (release truth)
 - release truth source: `docs/releases/release-scorecard.yaml`
@@ -135,15 +140,15 @@
 - next feature/runtime roadmap: `docs/releases/2.6-roadmap.md`
 - gap register: `docs/releases/post-2.5-gap-register.md`
 - Plan №3 audit: `docs/releases/plan-3-aif-molyanov-audit.md`
-- текущая стадия: `release-followup -> planning`
-- текущий planning status: `Plan №4 P4-S0/P4-S4 preparation implemented/verified; 2.6 factory-template template/runtime roadmap complete; downstream/battle application pilot P4-S5/P4-S6 remains optional future external contour`
+- текущая стадия: `release-followup -> internal-hardening`
+- текущий planning status: `Plan №5 implemented/verified for internal hardening; Plan №4 P4-S5/P4-S6 remains optional future external contour if real downstream/battle app inputs exist`
 - `2.5.1` scope: downstream sync v3 stabilization, field pilot evidence discoverability, closeout/boundary guardrails, optional downstream sync adoption and release-facing docs.
 - `2.6` scope: completed for `factory-template` template/runtime proof: real production VPS deploy, backup restore, rollback drill, runtime/source-hygiene classification, expanded artifact eval, one real `feature-execution-lite` adoption, runtime QA boundary and reference runtime app.
 - completed proof: `2.5.0` repo-controlled GA evidence, `2.5.1-field-pilot` real project proof, downstream sync v3 synthetic multi-cycle proof.
 - optional future external proof: downstream/battle project application image deploy proof, only if validating a generated project with a real app. Infrastructure-level VPS deploy, backup restore and rollback drill passed on 2026-04-27 with local placeholder app image for `factory-template`; Plan №4 now provides the preparation docs/template/validator/eval contour for that future proof.
 - Plan №3 status: P3-S0 audit captured; P3-S1 task-state-lite, P3-S2 learning patch loop, P3-S3 expanded evals, P3-S4 real adoption, P3-S5 runtime QA boundary preparation and P3-S6 roadmap closeout implemented.
 - Plan №4 status: P4-S0 audit captured; P4-S1/P4-S2 downstream app proof scenario and novice scorecard validator implemented as preparation; P4-S3/P4-S4 handoff transcript eval and Project Knowledge reuse proof implemented as repo-local eval/checklist; P4-S5/P4-S6 blocked until a real downstream/battle project is selected.
-- Recommended next roadmap step after Plan №4: run P4-S5/P4-S6 only if a real downstream/battle app exists with real `APP_IMAGE`; otherwise open internal Plan №5 / hardening contour for runner/operational reports, curated pack quality, git sync hardening and novice domain-scenario acceptance.
+- Recommended next roadmap step after Plan №5: run P4-S5/P4-S6 only if a real downstream/battle app exists with real `APP_IMAGE`; otherwise continue future field hardening from newly added orchestration/quality evidence layer.
 - Router, done-closeout scenario and generated Codex task-pack checklist now require roadmap readouts with multiple branches to name the recommended branch and fallback branch.
 - `pavel-molyanov/molyanov-ai-dev` comparison recorded in `docs/releases/post-2.5-gap-register.md`; factory keeps useful spec/project-knowledge/eval ideas but does not import Claude-specific `.claude`, command or TeamCreate assumptions.
 
@@ -162,11 +167,10 @@
 - дальнейшая проверка на новых реальных greenfield и brownfield проектах beyond completed FP-01..FP-05
 - production feedback от новых real converted brownfield проектов после нескольких template sync циклов
 - дальнейший field hardening beyond FP-01..FP-05 при появлении новых real downstream программ
-- окончательная polish-фаза для runner layer и operational reports
-- отдельный release-facing validator/report для curated pack quality beyond structural checks
-- дальнейшее production hardening runtime-нестабильности git sync beyond current fallback strategy
+- future polish for runner layer after real multi-session operator use
+- future production hardening for git sync only if new remote/provider failures appear beyond the current fallback evidence matrix
 - дальнейшее расширение KPI evidence за пределы repo-controlled pilot к внешним downstream программам
-- дальнейшее расширение novice acceptance от parity-level long-flow smoke к предметным domain-сценариям реальных downstream систем
+- real downstream domain-scenario pilots beyond synthetic CRM/inventory acceptance examples
 - downstream/battle application image proof требует отдельного generated/battle project, application artifact, approved runtime run, secrets outside repo and sanitized transcript; текущий repo статус: `template-runtime-proof-passed`
 - Plan №4 real pilot requires external inputs: downstream repo path, real application image, approved VPS/staging target, secrets entered outside repo, deploy/restore/rollback approval and sanitized transcript.
 - If those Plan №4 external inputs are absent, next actionable repo-local work is internal Plan №5 / hardening contour, not a simulated downstream pilot.

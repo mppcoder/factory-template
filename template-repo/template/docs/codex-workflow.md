@@ -21,6 +21,33 @@
 - первый substantive ответ Codex по direct task должен явно показать self-handoff block до remediation.
 - если после manual UI apply или strict launch виден sticky last-used state, завершите текущую сессию, откройте новую и при необходимости выполните launcher еще раз, а затем сверьте model с `codex debug models`.
 
+## VPS Remote SSH-first orchestration по умолчанию
+
+Default path для большой задачи: `VPS Remote SSH-first`.
+
+1. Browser ChatGPT Project выдает один большой handoff.
+2. VS Code Remote SSH открывает repo на VPS.
+3. Codex extension в этом Remote SSH окне получает handoff.
+4. Repo-native orchestrator раскладывает работу на child subtasks.
+5. Codex CLI sessions запускаются на VPS/repo context отдельно для каждого `selected_profile`.
+6. Parent orchestration report собирает results, blockers и closeout.
+
+`Codex App / Cloud Director` допустим как optional, not default. Codex App local/remote repo context допустим только если работает с тем же repo filesystem and shell context. Cloud delegation допустим только по явному выбору пользователя и при разрешенной repo/security boundary.
+
+Already-open live session не является reliable auto-switch boundary. Child subtask не наследует parent route by default: каждый child handoff должен явно фиксировать `task_class`, `selected_profile`, `selected_model`, `selected_reasoning_effort`, `selected_plan_mode_reasoning_effort` и `selected_scenario`.
+
+Dry-run orchestration command:
+
+```bash
+python3 template-repo/scripts/orchestrate-codex-handoff.py --plan tests/codex-orchestration/fixtures/valid/parent-plan.yaml --report reports/orchestration/parent-orchestration-report.md
+```
+
+Validator:
+
+```bash
+python3 template-repo/scripts/validate-codex-orchestration.py .
+```
+
 ## Model availability auto-check / авто-проверка доступности моделей
 
 Repo-configured mapping живет в `codex-model-routing.yaml`: `task_class_routing` выбирает profile, `profile_routes` выбирает model/reasoning/plan-mode reasoning. Live Codex catalog не является тем же самым: его нужно проверять командой `python3 scripts/check-codex-model-catalog.py .`, которая вызывает `codex debug models`, когда CLI доступен.

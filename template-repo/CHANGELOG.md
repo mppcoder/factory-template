@@ -1,6 +1,14 @@
 # Журнал изменений шаблона
 
 ## [Unreleased]
+### Добавлено
+- VPS Remote SSH-first orchestration runbook and template Codex workflow guidance for full handoff orchestration.
+- `scripts/orchestrate-codex-handoff.py`, `scripts/validate-codex-orchestration.py`, curated pack quality validator and verified sync fallback evidence validator.
+
+### Изменено
+- generated normalized handoff template uses Russian human-facing headings and includes orchestration boundary.
+- quick verify now covers orchestration, curated pack quality and sync fallback evidence validators.
+
 ### Исправлено
 - зафиксирован `bug-034`: generated boundary-actions и validator теперь требуют explicit recommendation matrix для внешних действий.
 

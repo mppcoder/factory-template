@@ -17,6 +17,8 @@ routing_contract:
     - "scripts/bootstrap-codex-task.py"
     - "scripts/check-codex-model-catalog.py"
     - "scripts/launch-codex-task.sh"
+    - "scripts/orchestrate-codex-handoff.py"
+    - "scripts/validate-codex-orchestration.py"
     - ".codex/config.toml с именованными profiles"
   launch_sources:
     - "chatgpt-handoff"

@@ -91,6 +91,28 @@ Handoff должен явно различать:
 - затем вставить один цельный handoff block;
 - не считать этот путь эквивалентом executable launcher path.
 
+## VPS Remote SSH-first orchestration для full handoff
+
+Если handoff большой и содержит несколько независимых child subtasks, default path для `factory-template`:
+
+1. Browser ChatGPT Project создает один цельный handoff.
+2. Operator открывает VS Code Remote SSH window на VPS и repo root.
+3. Codex extension получает handoff в этом VPS/repo context.
+4. Repo-native orchestrator раскладывает parent handoff в child subtask specs.
+5. Отдельные Codex CLI sessions запускаются на VPS/repo context с явными `selected_profile`, `selected_model`, `selected_reasoning_effort`, `selected_plan_mode_reasoning_effort` и `selected_scenario`.
+6. Parent orchestration report собирает child results, blockers и final closeout.
+
+`Codex App / Cloud Director` допускается только как optional, not default. Cloud delegation нельзя описывать как default path и нельзя включать без явного выбора пользователя и разрешенной repo/security boundary.
+
+Already-open live session не является reliable auto-switch boundary. Parent orchestrator не выполняет specialist work inline, если subtask routing требует separate session/profile.
+
+Orchestration guardrails:
+- один parent handoff для copy-paste; multi-block handoff запрещен;
+- child session не наследует parent route by default;
+- secrets, `.env` content, private transcripts и tokens запрещены в handoff, fixtures и reports;
+- если model availability не проверена live catalog check, писать `requires live validation`;
+- stale/missing model mapping нужно report/fail, а не silently fallback.
+
 ## Handoff для incidental defect
 Если в ходе основного task найден unresolved incidental bug, handoff-пакет должен включать:
 - краткий bug report summary;

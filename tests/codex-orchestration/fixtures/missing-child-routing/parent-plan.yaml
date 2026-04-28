@@ -1,0 +1,15 @@
+schema: codex-orchestration/v1
+parent:
+  id: p5-negative-missing-child-routing
+  title: Missing child routing fields
+  launch_source: chatgpt-handoff
+  selected_scenario: template-repo/scenario-pack/00-master-router.md
+  apply_mode: manual-ui
+  strict_launch_mode: optional
+subtasks:
+  - id: child-without-model
+    title: Child lacks explicit routing
+    task_class: build
+    selected_profile: build
+    selected_scenario: template-repo/scenario-pack/15-handoff-to-codex.md
+    prompt: "This fixture must fail because model/reasoning fields are missing."

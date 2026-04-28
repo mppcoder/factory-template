@@ -1,0 +1,21 @@
+schema: codex-orchestration/v1
+parent:
+  id: p5-negative-multi-block
+  title: Multi-block handoff fixture
+  launch_source: chatgpt-handoff
+  selected_scenario: template-repo/scenario-pack/00-master-router.md
+  apply_mode: manual-ui
+  strict_launch_mode: optional
+  copy_paste_handoff_blocks:
+    - "first handoff block"
+    - "second handoff block"
+subtasks:
+  - id: valid-looking-child
+    title: Valid-looking child
+    task_class: quick
+    selected_profile: quick
+    selected_model: gpt-5.4-mini
+    selected_reasoning_effort: low
+    selected_plan_mode_reasoning_effort: medium
+    selected_scenario: template-repo/scenario-pack/14-docs-normalization.md
+    prompt: "This fixture must fail because parent has multiple handoff blocks."

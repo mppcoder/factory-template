@@ -1,0 +1,33 @@
+profiles_manifest_version: 1
+profiles:
+  core_archive:
+    export_name: sources-pack-core-20
+    kind: archive_pack
+    purpose: too thin core pack that misses routing critical docs
+    files:
+      - README.md
+      - CURRENT_FUNCTIONAL_STATE.md
+  core_hot_direct:
+    export_name: core-hot-15
+    kind: direct_sources
+    purpose: direct pack without orchestration doc should fail
+    files:
+      - template-repo/scenario-pack/00-master-router.md
+  core_cold_archive:
+    export_name: core-cold-5
+    kind: archive_pack
+    purpose: cold reference remainder archive without duplicates from hot set
+    files:
+      - CHANGELOG.md
+  release_archive:
+    export_name: sources-pack-release-20
+    kind: archive_pack
+    purpose: release pack missing release fit should fail
+    files:
+      - README.md
+  bugfix_archive:
+    export_name: sources-pack-bugfix-20
+    kind: archive_pack
+    purpose: bugfix pack missing scripts fit should fail
+    files:
+      - README.md

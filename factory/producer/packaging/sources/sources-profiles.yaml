@@ -24,15 +24,15 @@ profiles:
       - docs/operator/factory-template/01-runbook-dlya-polzovatelya-factory-template.md
       - docs/operator/factory-template/02-runbook-dlya-codex-factory-template.md
       - docs/operator/factory-template/03-mode-routing-factory-template.md
+      - docs/operator/factory-template/04-vps-remote-ssh-full-handoff-orchestration.md
       - docs/operator/factory-template/07-AGENTS-factory-template.md
       - README.md
-      - VERSION.md
       - CHANGELOG.md
       - CURRENT_FUNCTIONAL_STATE.md
       - docs/releases/factory-template-release-notes.md
       - template-repo/project-presets.yaml
-      - template-repo/policy-presets.yaml
       - template-repo/change-classes.yaml
+      - template-repo/codex-routing.yaml
       - CONTROLLED_FIXES_AUDIT_2026-04-19.md
       - TEST_REPORT.md
 
@@ -55,12 +55,12 @@ profiles:
       - docs/operator/factory-template/01-runbook-dlya-polzovatelya-factory-template.md
       - docs/operator/factory-template/02-runbook-dlya-codex-factory-template.md
       - docs/operator/factory-template/03-mode-routing-factory-template.md
+      - docs/operator/factory-template/04-vps-remote-ssh-full-handoff-orchestration.md
       - docs/operator/factory-template/07-AGENTS-factory-template.md
       - CURRENT_FUNCTIONAL_STATE.md
-      - VERSION.md
       - template-repo/change-classes.yaml
-      - template-repo/policy-presets.yaml
       - template-repo/project-presets.yaml
+      - template-repo/codex-routing.yaml
 
   core_cold_archive:
     export_name: core-cold-5

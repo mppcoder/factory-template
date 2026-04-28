@@ -1,0 +1,58 @@
+schema: codex-orchestration/v1
+parent:
+  id: p5-fixture-parent
+  title: VPS Remote SSH-first orchestration fixture
+  launch_source: chatgpt-handoff
+  selected_scenario: template-repo/scenario-pack/00-master-router.md -> template-repo/scenario-pack/15-handoff-to-codex.md
+  apply_mode: manual-ui
+  strict_launch_mode: optional
+  default_context: VPS Remote SSH repo context
+subtasks:
+  - id: docs-quick
+    title: Update operator docs wording
+    task_class: quick
+    selected_profile: quick
+    selected_model: gpt-5.4-mini
+    selected_reasoning_effort: low
+    selected_plan_mode_reasoning_effort: medium
+    selected_scenario: template-repo/scenario-pack/14-docs-normalization.md
+    owner_boundary: internal-repo-follow-up
+    artifacts_to_update:
+      - docs/operator/factory-template/04-vps-remote-ssh-full-handoff-orchestration.md
+    prompt: "Проверить русскоязычный operator wording и default VPS Remote SSH-first boundary."
+  - id: runner-build
+    title: Implement dry-run runner checks
+    task_class: build
+    selected_profile: build
+    selected_model: gpt-5.5
+    selected_reasoning_effort: medium
+    selected_plan_mode_reasoning_effort: medium
+    selected_scenario: template-repo/scenario-pack/15-handoff-to-codex.md
+    owner_boundary: internal-repo-follow-up
+    artifacts_to_update:
+      - template-repo/scripts/orchestrate-codex-handoff.py
+    prompt: "Добавить dry-run safe parent report generation."
+  - id: audit-deep
+    title: Audit routing and model availability
+    task_class: deep
+    selected_profile: deep
+    selected_model: gpt-5.5
+    selected_reasoning_effort: high
+    selected_plan_mode_reasoning_effort: high
+    selected_scenario: template-repo/scenario-pack/00-master-router.md
+    owner_boundary: internal-repo-follow-up
+    artifacts_to_update:
+      - template-repo/codex-routing.yaml
+    prompt: "Сверить advisory routing docs with executable model/profile mapping."
+  - id: verify-review
+    title: Verify orchestration artifacts
+    task_class: review
+    selected_profile: review
+    selected_model: gpt-5.5
+    selected_reasoning_effort: high
+    selected_plan_mode_reasoning_effort: high
+    selected_scenario: template-repo/scenario-pack/16-done-closeout.md
+    owner_boundary: internal-repo-follow-up
+    artifacts_to_update:
+      - TEST_REPORT.md
+    prompt: "Запустить targeted validators and summarize residual risk."

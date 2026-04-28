@@ -142,3 +142,28 @@ Direct task сначала проходит self-handoff и только пот�
 - self-handoff standard для direct task.
 
 Этого достаточно, чтобы routing был не advisory, а executable.
+
+---
+
+## 5. VPS Remote SSH-first orchestration
+
+Для больших handoff default path — `VPS Remote SSH-first`, а не Codex App/Cloud Director.
+
+Canonical flow:
+
+1. Browser ChatGPT Project готовит один большой handoff.
+2. VS Code Remote SSH открывает repo на VPS.
+3. Codex extension в этом Remote SSH window получает handoff.
+4. Repo-native orchestrator создает child subtask specs.
+5. Codex CLI sessions запускаются на VPS/repo context отдельно по `quick / build / deep / review`.
+6. Parent report собирает результат и blockers.
+
+`Codex App / Cloud Director` допускается как optional, not default. Cloud delegation нельзя описывать как default path; она возможна только по явному выбору пользователя и если repo/security boundary это разрешает.
+
+Already-open live session не является надежным auto-switch mechanism. Child session не наследует parent route by default: каждый child subtask обязан явно фиксировать `selected_profile`, `selected_model`, `selected_reasoning_effort`, `selected_plan_mode_reasoning_effort` и `selected_scenario`.
+
+Связанные artifacts:
+
+- `docs/operator/factory-template/04-vps-remote-ssh-full-handoff-orchestration.md`
+- `template-repo/scripts/orchestrate-codex-handoff.py`
+- `template-repo/scripts/validate-codex-orchestration.py`

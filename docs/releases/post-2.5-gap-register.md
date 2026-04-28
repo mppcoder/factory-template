@@ -52,6 +52,19 @@ Plan №4 prepares optional downstream/battle application proof after the comple
 | `P4-GAP-06` | Real downstream pilot cannot run inside `factory-template` alone. | Plan №4 roadmap marks P4-S5 blocked by external inputs. | P4-S5 | blocked_external_inputs | downstream repo / real VPS |
 | `P4-GAP-07` | Release continuity must preserve template proof complete vs app proof optional future boundary. | `docs/releases/plan-4-battle-app-proof-roadmap.md`, current state and test report. | P4-S6 | implemented for preparation / future after pilot | repo release docs |
 
+## Plan №5 internal hardening gaps
+
+Plan №5 closes the recommended internal hardening contour after Plan №4 when no real downstream/battle app is available. It does not reopen completed 2.6 template/runtime proof and does not claim P4-S5/P4-S6 real app pilot evidence.
+
+| ID | Gap | Current evidence | Target stage | Status | Owner boundary |
+|---|---|---|---|---|---|
+| `P5-GAP-01` | Parent orchestration layer for one large handoff was missing. | `docs/operator/factory-template/04-vps-remote-ssh-full-handoff-orchestration.md`; `orchestrate-codex-handoff.py`; `validate-codex-orchestration.py`; fixtures. | P5-S1/P5-S2 | implemented/verified | repo |
+| `P5-GAP-02` | Operational report contract did not cover parent/child orchestration results. | `reports/orchestration/parent-orchestration-report.md`; per-subtask session files; runbook report example. | P5-S3 | implemented/verified | repo |
+| `P5-GAP-03` | Curated/reference packs needed quality validation beyond structural checks. | `validate-curated-pack-quality.py`; positive/negative fixtures; updated `sources-profiles.yaml`. | P5-S4 | implemented/verified | repo |
+| `P5-GAP-04` | Git sync fallback strategy had no release-facing coverage matrix. | `reports/release/verified-sync-fallback-evidence.md`; `validate-verified-sync-fallback-evidence.py`. | P5-S5 | implemented/verified without sync logic rewrite | repo evidence |
+| `P5-GAP-05` | Novice acceptance needed domain scenario examples beyond parity smoke. | `docs/domain-scenario-acceptance.md` with CRM and inventory examples. | P5-S6 | implemented as repo-local examples | repo / future downstream |
+| `P5-GAP-06` | Cloud/App default overclaim and child route inheritance needed orchestration-specific guardrails. | Orchestration validator rejects Cloud default wording, missing child routing, multi-block handoff and secret-like fixtures. | P5-S1/P5-S2 | implemented/verified | repo |
+
 ## `molyanov-ai-dev` adaptation register
 
 Reference snapshot: `pavel-molyanov/molyanov-ai-dev` HEAD `1bfe745d43b0602d8279cb4c9cb7894b1bb56bba`.

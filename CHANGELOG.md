@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 ### Добавлено
+- Plan №5 internal hardening roadmap, VPS Remote SSH-first orchestration runbook, repo-native dry-run parent orchestrator and orchestration validator.
+- curated/reference pack quality validator with positive/negative fixtures and quick verify integration.
+- verified sync fallback evidence report/validator for blocked push, remote drift, protected branch, branch ahead, dirty state and fallback instructions.
+- domain scenario acceptance template with CRM and inventory examples beyond parity smoke.
 - defect report `reports/bugs/2026-04-27-external-actions-oververbose-closeout.md` для чрезмерно длинного closeout внешних действий.
 - post-2.5 planning layer: `docs/releases/2.5.1-roadmap.md`, `docs/releases/2.6-roadmap.md` и `docs/releases/post-2.5-gap-register.md`.
 - defect report `reports/bugs/2026-04-27-post-25-release-planning-gap.md` для release-followup planning gap после `2.5.0 GA Ready`.
@@ -15,6 +19,8 @@
 - `docs/brownfield-to-greenfield-transition.md` описывает without-repo и with-repo transition paths, conversion gates и done rule.
 
 ### Изменено
+- Codex workflow docs and handoff scenario now document VPS Remote SSH-first as default for full handoff orchestration, with Codex App/Cloud Director optional only.
+- curated sources profiles now include the VPS Remote SSH orchestration runbook and routing config in core packs.
 - closeout guidance теперь использует compact default: если внешних действий нет, финал говорит `Внешних действий не требуется.`, а если действия есть, `## Инструкция пользователю` перечисляет только реальные действия снаружи Codex.
 - `Реестр внешних действий` больше не должен быть audit table всех возможных contour'ов со статусом `не требуется`; полный register допускается только по явному запросу или для release/security approval.
 - release-facing docs теперь явно разделяют `2.5.1` stabilization scope и `2.6` runtime/advanced execution scope без изменения `2.5.0` scorecard.

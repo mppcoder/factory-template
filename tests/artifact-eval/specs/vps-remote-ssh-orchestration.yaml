@@ -1,0 +1,67 @@
+schema: artifact-eval/v1
+id: vps-remote-ssh-orchestration
+report_date: 2026-04-28
+target_artifact: docs/operator/factory-template/04-vps-remote-ssh-full-handoff-orchestration.md
+artifact_type: operator-runbook
+expected_output:
+  guided: "Runbook фиксирует VPS Remote SSH-first default, optional Cloud/App boundary, explicit child routing fields, dry-run runner and report contract."
+thresholds:
+  min_case_pass_rate: 1.0
+  min_assertion_pass_rate: 1.0
+  max_false_positive_rate: 0.0
+expected_trigger:
+  cases:
+    - id: remote-ssh-default
+      prompt: "Оператор хочет вставить большой handoff из ChatGPT в Codex."
+      expected: "Runbook выбирает VS Code Remote SSH to VPS as default."
+      baseline_expected: fail
+      assertions:
+        - id: default-path
+          category: process
+          must_contain:
+            - "VPS Remote SSH-first"
+            - "VS Code Remote SSH"
+    - id: child-routing-fields
+      prompt: "Parent orchestrator должен запустить child sessions."
+      expected: "Каждый child subtask имеет explicit profile/model/reasoning/scenario."
+      baseline_expected: fail
+      assertions:
+        - id: explicit-child-route
+          category: compliance
+          must_contain:
+            - "selected_profile"
+            - "selected_model"
+            - "selected_reasoning_effort"
+            - "selected_scenario"
+non_trigger_cases:
+  - id: cloud-default-overclaim
+    prompt: "Док говорит, что Codex Cloud default."
+    expected: "Runbook marks Cloud as optional, not default."
+    baseline_expected: pass
+    assertions:
+      - id: cloud-optional
+        category: compliance
+        must_contain:
+          - "optional, not default"
+          - "Cloud Director"
+  - id: secret-boundary
+    prompt: "Handoff contains env secrets."
+    expected: "Runbook rejects secrets and .env-like content."
+    baseline_expected: pass
+    assertions:
+      - id: no-secrets
+        category: security
+        must_contain:
+          - "no secrets"
+          - ".env"
+compliance_assertions:
+  - id: dry-run-runner
+    category: compliance
+    must_contain:
+      - "orchestrate-codex-handoff.py"
+      - "Dry-run"
+  - id: no-auto-switch
+    category: compliance
+    must_contain:
+      - "Already-open live session"
+      - "auto-switch"

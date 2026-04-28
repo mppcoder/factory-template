@@ -1,55 +1,61 @@
-# Normalized Codex Handoff / нормализованный handoff
+# Нормализованный handoff для Codex
 
-## Launch source / источник запуска
+## Источник запуска
 <!-- chatgpt-handoff / direct-task -->
 
-## Task class / класс задачи
+## Класс задачи
 <!-- quick / build / deep / review -->
 
-## Selected profile / выбранный профиль
+## Выбранный профиль
 <!-- quick / build / deep / review -->
 
-## Selected model / выбранная модель
-<!-- e.g. gpt-5.4 -->
+## Выбранная модель
+<!-- gpt-5.5 или repo-configured model -->
 
-## Selected reasoning effort / выбранный reasoning effort
-<!-- low / medium / high -->
+## Выбранное reasoning effort
+<!-- low / medium / high / xhigh -->
 
-## Apply mode / режим применения
+## Выбранное reasoning effort для plan mode
+<!-- low / medium / high / xhigh -->
+
+## Режим применения
 <!-- manual-ui -->
 
-## Manual UI apply / ручное применение в UI
-<!-- new chat/window, manual picker selection, then paste handoff -->
+## Ручное применение в UI
+<!-- новый chat/window, ручной picker selection, затем один цельный handoff -->
 
-## Strict launch mode / строгий режим запуска
+## Строгий режим запуска
 <!-- optional -->
 
-## Project profile / профиль проекта
-<!-- from .chatgpt/project-profile.yaml -->
+## Профиль проекта
+<!-- из .chatgpt/project-profile.yaml -->
 
-## Selected scenario / выбранный сценарий
-<!-- first scenario chosen from scenario-pack -->
+## Выбранный сценарий
+<!-- первый выбранный scenario из scenario-pack -->
 
-## Pipeline stage / этап pipeline
-<!-- current stage -->
+## Этап pipeline
+<!-- текущий stage -->
 
-## Artifacts to update / артефакты для обновления
-<!-- list required artifacts -->
+## Артефакты для обновления
+<!-- список обязательных artifacts -->
 
-## Handoff allowed / handoff разрешен
+## Разрешение handoff
 <!-- yes/no + policy -->
 
-## Defect capture path / путь фиксации дефекта
+## Маршрут defect-capture
 <!-- reproduce -> evidence -> bug report -> classification -> feedback -> remediation -->
 
-## Optional strict launch command / опциональная strict launch command
-<!-- launch command only when needed for strict routing -->
+## VPS Remote SSH-first orchestration по умолчанию
+<!-- default path для full handoff orchestration; Codex App / Cloud Director optional, not default -->
 
-## Direct Codex command behind launcher / прямая команда Codex за launcher
+## Опциональная strict launch command
+<!-- launch command только когда нужен strict routing -->
+
+## Прямая команда Codex за launcher
 <!-- codex --profile <profile> -->
 
-## Troubleshooting / диагностика
+## Диагностика
 <!-- stale live session, manual UI vs strict launch, picker checks -->
 
-## Task payload / payload задачи
+## Payload задачи
 <!-- normalized task text -->

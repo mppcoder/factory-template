@@ -1,0 +1,18 @@
+schema: codex-orchestration/v1
+parent:
+  id: p5-negative-secret
+  title: Secret-like content fixture
+  launch_source: chatgpt-handoff
+  selected_scenario: template-repo/scenario-pack/00-master-router.md
+  apply_mode: manual-ui
+  strict_launch_mode: optional
+subtasks:
+  - id: secret-child
+    title: Secret child
+    task_class: quick
+    selected_profile: quick
+    selected_model: gpt-5.4-mini
+    selected_reasoning_effort: low
+    selected_plan_mode_reasoning_effort: medium
+    selected_scenario: template-repo/scenario-pack/14-docs-normalization.md
+    prompt: "Do not accept API_KEY=example-secret-value in orchestration fixtures."

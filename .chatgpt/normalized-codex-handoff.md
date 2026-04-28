@@ -39,28 +39,39 @@ manual-ui
 optional
 
 ## Профиль проекта
-factory-template
+factory-template as greenfield-product + factory-producer-owned layer
 
 ## Выбранный сценарий
-post-2.5/downstream-multi-cycle-sync
+template-repo/scenario-pack/00-master-router.md -> template-repo/scenario-pack/15-handoff-to-codex.md -> minimal required self-improvement/change/release-followup path
 
 ## Этап pipeline
-audit → evidence → remediation-if-needed
+Plan №5 kickoff -> internal hardening -> runner + quality evidence polish -> VPS Remote SSH-first full handoff orchestration -> verification -> release-facing closeout
 
 ## Артефакты для обновления
-- .chatgpt/codex-input.md
-- .chatgpt/codex-context.md
-- .chatgpt/codex-task-pack.md
-- .chatgpt/verification-report.md
-- .chatgpt/done-report.md
-- reports/bugs/
-- reports/factory-feedback/
+- docs/releases/plan-5-internal-hardening-roadmap.md
+- docs/operator/factory-template/04-vps-remote-ssh-full-handoff-orchestration.md
+- template-repo/template/docs/codex-workflow.md
+- docs/operator/factory-template/03-mode-routing-factory-template.md
+- template-repo/codex-routing.yaml
+- template-repo/scenario-pack/15-handoff-to-codex.md
+- .chatgpt/normalized-codex-handoff.md
+- template-repo/template/.chatgpt/normalized-codex-handoff.md
+- template-repo/scripts/orchestrate-codex-handoff.py
+- template-repo/scripts/validate-codex-orchestration.py
+- template-repo/scripts/validate-curated-pack-quality.py
+- template-repo/scripts/validate-verified-sync-fallback-evidence.py
+- tests/codex-orchestration/
+- tests/curated-pack-quality/
+- docs/releases/post-2.5-gap-register.md
+- CURRENT_FUNCTIONAL_STATE.md
+- TEST_REPORT.md
+- CHANGELOG.md
 
 ## Разрешение handoff
 yes
 
 ## Маршрут defect-capture
-reports/bugs/YYYY-MM-DD-downstream-multi-cycle-sync-gap.md
+not defect-class initially; if any mismatch, stale routing, validator gap, false default path, Cloud/App overclaim, or repo-rule inconsistency is found, run defect-capture first, then remediate.
 
 ## Правило launch boundary
 Выбор модели и reasoning mode считается надежным только на новом запуске Codex для новой задачи.
@@ -114,49 +125,8 @@ selected_model совпадает с последним сохраненным s
 - Если новый model ID появился в live catalog, сначала создайте proposal через `scripts/check-codex-model-catalog.py --write-proposal`; promotion profile mapping требует ручного review.
 
 ## Текст задачи
-CODEX HANDOFF — DOWNSTREAM MULTI-CYCLE SYNC PROOF
+Plan №5: internal hardening / runner + quality evidence polish + VPS Remote SSH-first Full Handoff Orchestration Layer.
 
-launch_source: chatgpt-handoff
-task_class: downstream-sync-validation
-selected_profile: deep
-selected_model: gpt-5.5
-selected_reasoning_effort: high
-project_profile: factory-template
-selected_scenario: post-2.5/downstream-multi-cycle-sync
-pipeline_stage: audit → evidence → remediation-if-needed
-handoff_allowed: true
-defect_capture_path: reports/bugs/YYYY-MM-DD-downstream-multi-cycle-sync-gap.md
+Цель: добавить repo-native orchestration layer, где default path идет через VS Code Remote SSH to VPS, Codex extension в этом repo context, repo-native parent orchestrator, отдельные Codex CLI child sessions и parent operational report. Codex App / Cloud Director optional, not default.
 
-Язык ответа Codex: русский.
-
-ЦЕЛЬ: Доказать, что downstream sync v3 выдерживает несколько циклов: initial template sync, manual project-owned edits, advisory review, safe-generated update, safe-clone update, rollback, brownfield transition → greenfield conversion.
-
-АРТЕФАКТЫ ОБНОВИТЬ:
-- docs/downstream-upgrade-policy.md
-- reports/release/downstream-multi-cycle-sync-report.md
-- factory/producer/extensions/workspace-packs/factory-ops/*
-- MATRIX_TEST.sh
-- TEST_REPORT.md
-- CURRENT_FUNCTIONAL_STATE.md
-
-ЗАДАЧИ:
-1. Создать synthetic downstream fixture для multi-cycle sync.
-2. В цикле 1 применить safe-generated/safe-clone.
-3. В цикле 2 сделать manual project-owned edits.
-4. В цикле 3 обновить template-owned files и проверить project-owned не перезаписан, advisory-review не применён автоматически, rollback metadata корректна.
-5. В цикле 4 проверить rollback.
-6. В отдельном сценарии проверить brownfield converted_greenfield.
-7. Обновить report и TEST_REPORT.
-
-Дополнительно учесть Stage 5: проверить production VPS field pilot docs/scripts/reports как template-owned/safe или advisory зоны без перезаписи project-owned runtime env/secrets: deploy/.env, .factory-runtime/, field-pilot reports, backup/rollback transcripts и real VPS approval boundary.
-
-КРИТЕРИИ ПРИЕМКИ:
-- Multi-cycle sync report есть и честен.
-- Project-owned изменения защищены.
-- Advisory-review требует ручного review.
-- Rollback работает после нескольких циклов.
-- Brownfield history сохраняется после conversion.
-- bash template-repo/scripts/verify-all.sh ci проходит.
-
-COMPLETION PACKAGE:
-В финале указать downstream/battle repo sync commands, что safe to apply, что review-only, что manual-only, требуется ли ChatGPT Project Sources fallback, и Реестр внешних действий по контурам: factory-template ChatGPT Project, downstream repo sync, downstream ChatGPT Project, real VPS/user approval, secrets/manual boundary.
+Граница scope: не переоткрывать Plan №4 P4-S5 real downstream app pilot и не требовать real downstream app для Plan №5.

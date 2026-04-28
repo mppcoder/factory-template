@@ -93,6 +93,7 @@ run_artifact_eval_smoke() {
     done-closeout-external-actions \
     downstream-sync-boundary \
     production-vps-proof-boundary \
+    vps-remote-ssh-orchestration \
     skill-tester-lite \
     feature-execution-lite \
     handoff-transcript-eval \
@@ -159,6 +160,58 @@ run_downstream_application_proof_smoke() {
     return 1
   fi
   rm -f /tmp/downstream-application-proof-negative.log
+}
+
+run_codex_orchestration_smoke() {
+  local tmp_dir
+  tmp_dir="$(mktemp -d)"
+  python3 "$ROOT/template-repo/scripts/validate-codex-orchestration.py" "$ROOT"
+  python3 "$ROOT/template-repo/scripts/orchestrate-codex-handoff.py" \
+    --root "$ROOT" \
+    --plan "$ROOT/tests/codex-orchestration/fixtures/valid/parent-plan.yaml" \
+    --report "$tmp_dir/parent-orchestration-report.md" >/dev/null
+  if python3 "$ROOT/template-repo/scripts/validate-codex-orchestration.py" \
+    "$ROOT" \
+    --plan "$ROOT/tests/codex-orchestration/fixtures/missing-child-routing/parent-plan.yaml" \
+    >/tmp/codex-orchestration-missing-routing.log 2>&1; then
+    echo "codex orchestration missing-routing negative fixture unexpectedly passed" >&2
+    cat /tmp/codex-orchestration-missing-routing.log >&2
+    return 1
+  fi
+  if python3 "$ROOT/template-repo/scripts/validate-codex-orchestration.py" \
+    "$ROOT" \
+    --plan "$ROOT/tests/codex-orchestration/fixtures/secret-like/parent-plan.yaml" \
+    >/tmp/codex-orchestration-secret.log 2>&1; then
+    echo "codex orchestration secret-like negative fixture unexpectedly passed" >&2
+    cat /tmp/codex-orchestration-secret.log >&2
+    return 1
+  fi
+  if python3 "$ROOT/template-repo/scripts/validate-codex-orchestration.py" \
+    "$ROOT" \
+    --plan "$ROOT/tests/codex-orchestration/fixtures/multi-block-handoff/parent-plan.yaml" \
+    >/tmp/codex-orchestration-multi-block.log 2>&1; then
+    echo "codex orchestration multi-block negative fixture unexpectedly passed" >&2
+    cat /tmp/codex-orchestration-multi-block.log >&2
+    return 1
+  fi
+  rm -f /tmp/codex-orchestration-missing-routing.log /tmp/codex-orchestration-secret.log /tmp/codex-orchestration-multi-block.log
+  rm -rf "$tmp_dir"
+}
+
+run_curated_pack_quality_smoke() {
+  python3 "$ROOT/template-repo/scripts/validate-curated-pack-quality.py" "$ROOT"
+  python3 "$ROOT/template-repo/scripts/validate-curated-pack-quality.py" \
+    "$ROOT" \
+    --manifest "$ROOT/tests/curated-pack-quality/valid/sources-profiles.yaml"
+  if python3 "$ROOT/template-repo/scripts/validate-curated-pack-quality.py" \
+    "$ROOT" \
+    --manifest "$ROOT/tests/curated-pack-quality/missing-routing-doc/sources-profiles.yaml" \
+    >/tmp/curated-pack-quality-negative.log 2>&1; then
+    echo "curated pack quality negative fixture unexpectedly passed" >&2
+    cat /tmp/curated-pack-quality-negative.log >&2
+    return 1
+  fi
+  rm -f /tmp/curated-pack-quality-negative.log
 }
 
 project_preset() {
@@ -232,6 +285,9 @@ run_quick() {
   run_step "learning-patch-loop-smoke" run_learning_patch_loop_smoke
   run_step "artifact-eval-smoke" run_artifact_eval_smoke
   run_step "downstream-application-proof-smoke" run_downstream_application_proof_smoke
+  run_step "codex-orchestration-smoke" run_codex_orchestration_smoke
+  run_step "curated-pack-quality-smoke" run_curated_pack_quality_smoke
+  run_step "validate-verified-sync-fallback-evidence" python3 "$ROOT/template-repo/scripts/validate-verified-sync-fallback-evidence.py" "$ROOT/reports/release/verified-sync-fallback-evidence.md"
   run_step "project-knowledge-done-loop-smoke" run_project_knowledge_done_loop_smoke
   run_step "validate-release-scorecard" python3 "$ROOT/template-repo/scripts/validate-release-scorecard.py" "$ROOT"
   run_step "validate-25-ga-kpi-evidence" python3 "$ROOT/template-repo/scripts/validate-25-ga-kpi-evidence.py" "$ROOT"
