@@ -162,6 +162,8 @@ Canonical flow:
 
 Already-open live session не является надежным auto-switch mechanism. Child session не наследует parent route by default: каждый child subtask обязан явно фиксировать `selected_profile`, `selected_model`, `selected_reasoning_effort`, `selected_plan_mode_reasoning_effort` и `selected_scenario`.
 
+Большой handoff дополнительно использует `user_actions_policy: defer-to-final-closeout`: пользовательские действия, реальные external values, runtime approvals и downstream/battle inputs переносятся в конец parent plan. До этого child sessions работают на repo-local задачах; где возможно, используются temporary placeholders, а parent report обязан вывести `deferred_user_actions` и `placeholder_replacements`.
+
 Связанные artifacts:
 
 - `docs/operator/factory-template/04-vps-remote-ssh-full-handoff-orchestration.md`

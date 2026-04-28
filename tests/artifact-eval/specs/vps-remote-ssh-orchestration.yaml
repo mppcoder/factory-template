@@ -4,7 +4,7 @@ report_date: 2026-04-28
 target_artifact: docs/operator/factory-template/04-vps-remote-ssh-full-handoff-orchestration.md
 artifact_type: operator-runbook
 expected_output:
-  guided: "Runbook фиксирует VPS Remote SSH-first default, optional Cloud/App boundary, explicit child routing fields, dry-run runner and report contract."
+  guided: "Runbook фиксирует VPS Remote SSH-first default, optional Cloud/App boundary, explicit child routing fields, user actions last, placeholder reminders, dry-run runner and report contract."
 thresholds:
   min_case_pass_rate: 1.0
   min_assertion_pass_rate: 1.0
@@ -33,6 +33,17 @@ expected_trigger:
             - "selected_model"
             - "selected_reasoning_effort"
             - "selected_scenario"
+    - id: user-actions-last
+      prompt: "Большой handoff требует данных пользователя, но часть работы можно делать с заглушками."
+      expected: "Runbook переносит user actions в конец и требует placeholder replacement reminders."
+      baseline_expected: fail
+      assertions:
+        - id: deferred-user-actions
+          category: process
+          must_contain:
+            - "defer-to-final-closeout"
+            - "deferred_user_actions"
+            - "placeholder_replacements"
 non_trigger_cases:
   - id: cloud-default-overclaim
     prompt: "Док говорит, что Codex Cloud default."

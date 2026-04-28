@@ -194,7 +194,23 @@ run_codex_orchestration_smoke() {
     cat /tmp/codex-orchestration-multi-block.log >&2
     return 1
   fi
-  rm -f /tmp/codex-orchestration-missing-routing.log /tmp/codex-orchestration-secret.log /tmp/codex-orchestration-multi-block.log
+  if python3 "$ROOT/template-repo/scripts/validate-codex-orchestration.py" \
+    "$ROOT" \
+    --plan "$ROOT/tests/codex-orchestration/fixtures/user-action-as-subtask/parent-plan.yaml" \
+    >/tmp/codex-orchestration-user-action.log 2>&1; then
+    echo "codex orchestration user-action negative fixture unexpectedly passed" >&2
+    cat /tmp/codex-orchestration-user-action.log >&2
+    return 1
+  fi
+  if python3 "$ROOT/template-repo/scripts/validate-codex-orchestration.py" \
+    "$ROOT" \
+    --plan "$ROOT/tests/codex-orchestration/fixtures/bad-placeholder/parent-plan.yaml" \
+    >/tmp/codex-orchestration-bad-placeholder.log 2>&1; then
+    echo "codex orchestration bad-placeholder negative fixture unexpectedly passed" >&2
+    cat /tmp/codex-orchestration-bad-placeholder.log >&2
+    return 1
+  fi
+  rm -f /tmp/codex-orchestration-missing-routing.log /tmp/codex-orchestration-secret.log /tmp/codex-orchestration-multi-block.log /tmp/codex-orchestration-user-action.log /tmp/codex-orchestration-bad-placeholder.log
   rm -rf "$tmp_dir"
 }
 

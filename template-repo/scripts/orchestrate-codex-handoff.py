@@ -28,6 +28,8 @@ REQUIRED_SUBTASK_FIELDS = [
     "selected_scenario",
     "prompt",
 ]
+DEFERRED_BOUNDARIES = {"external-user-action", "runtime-action", "downstream-battle-action"}
+PLACEHOLDER_RE = re.compile(r"^__[A-Z0-9_]+__$")
 SECRET_PATTERNS = [
     re.compile(r"(?i)\b[A-Z0-9_]*(TOKEN|SECRET|PASSWORD|API_KEY|PRIVATE_KEY)\s*[:=]\s*['\"]?[^'\"\s]+"),
     re.compile(r"(?i)^[-\w]*\.env(?:\.\w+)?\s*$"),
@@ -68,6 +70,8 @@ def validate_plan(data: dict[str, Any], root: Path) -> tuple[list[str], list[str
     if not isinstance(parent, dict):
         errors.append("parent должен быть mapping")
         parent = {}
+    if parent.get("user_actions_policy") != "defer-to-final-closeout":
+        errors.append("parent.user_actions_policy должен быть `defer-to-final-closeout`")
     dumped = yaml.safe_dump(data, allow_unicode=True)
     if "Cloud Director is default" in dumped or "Codex Cloud is default" in dumped:
         errors.append("plan содержит forbidden wording: Cloud Director is default")
@@ -76,6 +80,26 @@ def validate_plan(data: dict[str, Any], root: Path) -> tuple[list[str], list[str
     blocks = parent.get("copy_paste_handoff_blocks")
     if isinstance(blocks, list) and len(blocks) > 1:
         errors.append("parent handoff должен быть одним цельным block; multi-block handoff запрещен")
+    deferred_actions = data.get("deferred_user_actions", [])
+    if deferred_actions is not None and not isinstance(deferred_actions, list):
+        errors.append("deferred_user_actions должен быть list")
+    placeholder_replacements = data.get("placeholder_replacements", [])
+    if placeholder_replacements is not None and not isinstance(placeholder_replacements, list):
+        errors.append("placeholder_replacements должен быть list")
+    if isinstance(placeholder_replacements, list):
+        for index, item in enumerate(placeholder_replacements, 1):
+            if not isinstance(item, dict):
+                errors.append(f"placeholder_replacements[{index}] должен быть mapping")
+                continue
+            placeholder = str(item.get("placeholder") or "")
+            final_value_owner = str(item.get("final_value_owner") or "")
+            replacement_timing = str(item.get("replacement_timing") or "")
+            if not PLACEHOLDER_RE.match(placeholder):
+                errors.append(f"placeholder_replacements[{index}].placeholder должен иметь вид `__PLACEHOLDER_NAME__`")
+            if final_value_owner != "operator":
+                errors.append(f"placeholder_replacements[{index}].final_value_owner должен быть `operator`")
+            if replacement_timing != "final-user-action":
+                errors.append(f"placeholder_replacements[{index}].replacement_timing должен быть `final-user-action`")
     if has_secret_like_text(data):
         errors.append("plan содержит secret-like или .env-like content")
     subtasks = data.get("subtasks")
@@ -103,6 +127,12 @@ def validate_plan(data: dict[str, Any], root: Path) -> tuple[list[str], list[str
             errors.append(f"subtasks[{index}] должен быть mapping")
             continue
         subtask_id = str(item.get("id") or f"#{index}")
+        owner_boundary = str(item.get("owner_boundary") or "internal-repo-follow-up")
+        if owner_boundary in DEFERRED_BOUNDARIES:
+            errors.append(
+                f"subtask `{subtask_id}` имеет boundary `{owner_boundary}`; "
+                "действия пользователя/runtime/downstream должны быть перенесены в deferred_user_actions"
+            )
         if subtask_id in seen_ids:
             errors.append(f"duplicate subtask id `{subtask_id}`")
         seen_ids.add(subtask_id)
@@ -189,6 +219,10 @@ def render_report(
     executed: bool,
 ) -> str:
     parent = data.get("parent", {}) if isinstance(data.get("parent"), dict) else {}
+    deferred_actions = data.get("deferred_user_actions", []) if isinstance(data.get("deferred_user_actions", []), list) else []
+    placeholder_replacements = (
+        data.get("placeholder_replacements", []) if isinstance(data.get("placeholder_replacements", []), list) else []
+    )
     status = "failed" if errors else ("executed" if executed else "dry-run")
     lines = [
         "# Отчет parent Codex orchestration",
@@ -208,6 +242,7 @@ def render_report(
         f"- selected_scenario: `{parent.get('selected_scenario', '')}`",
         f"- apply_mode: `{parent.get('apply_mode', '')}`",
         f"- strict_launch_mode: `{parent.get('strict_launch_mode', '')}`",
+        f"- user_actions_policy: `{parent.get('user_actions_policy', '')}`",
         "",
         "## Subtasks / подзадачи",
         "",
@@ -223,6 +258,30 @@ def render_report(
     lines.extend([f"- {item}" for item in warnings] or ["- none"])
     lines.extend(["", "## Errors / ошибки", ""])
     lines.extend([f"- {item}" for item in errors] or ["- none"])
+    lines.extend(["", "## Финальные действия пользователя", ""])
+    if deferred_actions:
+        for item in deferred_actions:
+            if isinstance(item, dict):
+                lines.append(
+                    f"- `{item.get('id', 'user-action')}`: {item.get('action', '')} "
+                    f"(timing: `{item.get('timing', 'final-closeout')}`)"
+                )
+            else:
+                lines.append(f"- {item}")
+    else:
+        lines.append("- none")
+    lines.extend(["", "## Напоминания о замене placeholder values", ""])
+    if placeholder_replacements:
+        for item in placeholder_replacements:
+            if isinstance(item, dict):
+                lines.append(
+                    f"- `{item.get('placeholder', '')}` -> {item.get('description', '')} "
+                    f"(owner: `{item.get('final_value_owner', '')}`, timing: `{item.get('replacement_timing', '')}`)"
+                )
+            else:
+                lines.append(f"- {item}")
+    else:
+        lines.append("- none")
     lines.extend(
         [
             "",
@@ -230,6 +289,8 @@ def render_report(
             "",
             "- Collect child result summaries.",
             "- Separate internal repo follow-up, external user action, runtime action and downstream/battle action.",
+            "- Move all user-required actions to the final closeout block.",
+            "- Use safe temporary placeholders where possible and remind the operator to replace them with real data at the end.",
             "- Do not claim Cloud/App default.",
             "- Do not claim already-open session auto-switch.",
             "- If external action remains, final answer must include compact `## Инструкция пользователю`.",

@@ -1,0 +1,25 @@
+schema: codex-orchestration/v1
+parent:
+  id: p5-negative-bad-placeholder
+  title: Bad placeholder metadata
+  launch_source: chatgpt-handoff
+  selected_scenario: template-repo/scenario-pack/00-master-router.md
+  apply_mode: manual-ui
+  strict_launch_mode: optional
+  user_actions_policy: defer-to-final-closeout
+subtasks:
+  - id: docs-quick
+    title: Valid child
+    task_class: quick
+    selected_profile: quick
+    selected_model: gpt-5.4-mini
+    selected_reasoning_effort: low
+    selected_plan_mode_reasoning_effort: medium
+    selected_scenario: template-repo/scenario-pack/14-docs-normalization.md
+    owner_boundary: internal-repo-follow-up
+    prompt: "This child is fine; placeholder metadata must fail."
+placeholder_replacements:
+  - placeholder: REAL_APP_IMAGE
+    description: "Missing placeholder delimiters and wrong owner."
+    final_value_owner: codex
+    replacement_timing: before-subtasks

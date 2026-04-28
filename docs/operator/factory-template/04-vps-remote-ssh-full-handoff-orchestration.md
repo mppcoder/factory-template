@@ -64,6 +64,9 @@ Already-open live session не является надежным auto-switch mec
 Parent orchestrator:
 - validates one parent handoff / one orchestration plan;
 - resolves each subtask through repo routing config;
+- applies `user_actions_policy: defer-to-final-closeout`;
+- moves all user-required actions into `deferred_user_actions`;
+- uses safe temporary placeholders where possible and records `placeholder_replacements`;
 - writes per-subtask handoff/session files;
 - prints dry-run commands;
 - writes parent report;
@@ -78,6 +81,29 @@ Parent orchestrator does not:
 - claim that a pasted handoff changes model/profile/reasoning inside an already-open session.
 
 Security boundary: no secrets in handoff, reports, fixtures, transcripts or repo.
+
+## Правило user actions last
+
+Для большого handoff оркестр агентов работает по правилу `defer-to-final-closeout`.
+
+Это значит:
+- все действия, где нужен пользователь, внешний UI, secret entry, real VPS approval, real downstream repo или real application artifact, переносятся в конец parent plan;
+- child subtasks получают только repo-local работу, которую можно выполнить без ожидания пользователя;
+- если работа может продолжаться с synthetic/safe data, используются temporary placeholders;
+- каждый placeholder записывается в `placeholder_replacements` с owner `operator` и timing `final-user-action`;
+- финальный parent closeout обязан напомнить, какие placeholders заменить на реальные данные и какие checks повторить после замены.
+
+Safe placeholder examples:
+- `__REAL_APP_IMAGE__` вместо настоящего application image;
+- `__REAL_DOMAIN__` вместо production hostname;
+- `__REAL_VPS_TARGET__` вместо конкретного target host;
+- `__REAL_DOWNSTREAM_REPO__` вместо private downstream repo path.
+
+Forbidden placeholder use:
+- нельзя подставлять fake secrets;
+- нельзя коммитить `.env` content;
+- нельзя утверждать, что placeholder evidence является real runtime/downstream proof;
+- нельзя блокировать internal repo subtasks только потому, что финальное external значение будет известно позже.
 
 ## Таксономия failure/blocker
 
@@ -102,6 +128,7 @@ parent:
   apply_mode: manual-ui
   strict_launch_mode: optional
   default_context: VPS Remote SSH repo context
+  user_actions_policy: defer-to-final-closeout
 subtasks:
   - id: docs-quick
     title: Update operator wording
@@ -143,6 +170,16 @@ subtasks:
     selected_scenario: template-repo/scenario-pack/16-done-closeout.md
     owner_boundary: internal-repo-follow-up
     prompt: "Run targeted validators and summarize residual risk."
+deferred_user_actions:
+  - id: replace-real-app-image
+    action: "Заменить `__REAL_APP_IMAGE__` на настоящий application image перед real downstream proof."
+    timing: final-closeout
+    owner_boundary: external-user-action
+placeholder_replacements:
+  - placeholder: __REAL_APP_IMAGE__
+    description: "Настоящий application image для downstream/battle runtime proof."
+    final_value_owner: operator
+    replacement_timing: final-user-action
 ```
 
 ## Пример dry-run output
@@ -170,6 +207,16 @@ Cloud default: false
 | runner-build | build | gpt-5.5 | medium | session-file-written | internal-repo-follow-up |
 | audit-deep | deep | gpt-5.5 | high | session-file-written | internal-repo-follow-up |
 | verify-review | review | gpt-5.5 | high | session-file-written | internal-repo-follow-up |
+```
+
+Final user-action reminder example:
+
+```text
+## Финальные действия пользователя
+- replace-real-app-image: заменить `__REAL_APP_IMAGE__` на настоящий image и повторить runtime proof.
+
+## Напоминания о замене placeholder values
+- `__REAL_APP_IMAGE__` -> настоящий application image для downstream/battle runtime proof.
 ```
 
 ## Правила validation

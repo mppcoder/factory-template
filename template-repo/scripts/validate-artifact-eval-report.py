@@ -52,7 +52,7 @@ def validate_report(path: Path) -> list[str]:
         if fragment not in text:
             errors.append(f"{path}: отсутствует обязательный фрагмент `{fragment}`")
 
-    if re.search(r"<[^>\n]+>|TODO|TBD|placeholder|stub|fake report", text, flags=re.IGNORECASE):
+    if re.search(r"<[^>\n]+>|TODO|TBD|stub|fake report", text, flags=re.IGNORECASE):
         errors.append(f"{path}: report содержит placeholder/fake marker")
 
     status_match = re.search(r"^Status:\s*(PASS|FAIL)\s*$", text, flags=re.MULTILINE)

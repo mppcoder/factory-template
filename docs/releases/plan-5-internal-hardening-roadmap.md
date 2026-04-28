@@ -81,6 +81,8 @@ Required behavior:
 - default dry-run prints commands and writes reports;
 - launch separate Codex CLI subprocesses only with explicit `--execute`;
 - record selected profile/model/reasoning/scenario per subtask;
+- move all user-required/external/runtime/downstream actions to `deferred_user_actions` at final closeout;
+- use safe temporary placeholders where possible and record `placeholder_replacements` for final replacement reminders;
 - detect stale/missing model mapping and report instead of silently falling back;
 - keep secrets outside repo.
 

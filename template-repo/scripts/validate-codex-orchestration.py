@@ -29,12 +29,18 @@ REQUIRED_DOC_FRAGMENTS = [
     "selected_model",
     "selected_reasoning_effort",
     "selected_scenario",
+    "defer-to-final-closeout",
+    "deferred_user_actions",
+    "placeholder_replacements",
+    "temporary placeholders",
 ]
 
 FORBIDDEN_PATTERNS = [
     re.compile(r"(?i)(codex app|cloud director|codex cloud)\s+(is|является|—|-)?\s*(the\s+)?default"),
     re.compile(r"(?i)already-open (?:live )?session (?:is|является)?\s*(?:a\s+)?(?:reliable\s+)?auto-switch"),
     re.compile(r"(?i)one pasted handoff.*switch(?:es)? model"),
+    re.compile(r"(?i)ask the user first"),
+    re.compile(r"(?i)wait for user data before internal subtasks"),
     re.compile(r"(?i)\b[A-Z0-9_]*(TOKEN|SECRET|PASSWORD|API_KEY|PRIVATE_KEY)\s*[:=]\s*['\"]?[^'\"\s]+"),
     re.compile(r"-----BEGIN [A-Z ]*PRIVATE KEY-----"),
 ]

@@ -3,6 +3,7 @@
 ## Не выпущено - Plan №5 internal hardening
 
 - Добавлен VPS Remote SSH-first Full Handoff Orchestration Layer: operator runbook, dry-run parent runner, per-subtask session files and parent report.
+- Добавлено правило `user_actions_policy: defer-to-final-closeout`: пользовательские действия и реальные external values уходят в конец parent plan, а временные заглушки фиксируются в финальных напоминаниях о замене.
 - Codex App/Cloud Director закреплен как optional path, not default; default workflow остается VS Code Remote SSH to VPS plus repo-native Codex CLI sessions.
 - Добавлены validators и fixtures для explicit child routing, one-block handoff, secret boundary and curated/reference pack quality.
 - Добавлен sync fallback evidence report без изменения stable sync logic.

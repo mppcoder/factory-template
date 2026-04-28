@@ -7,6 +7,7 @@ parent:
   apply_mode: manual-ui
   strict_launch_mode: optional
   default_context: VPS Remote SSH repo context
+  user_actions_policy: defer-to-final-closeout
 subtasks:
   - id: docs-quick
     title: Update operator docs wording
@@ -56,3 +57,13 @@ subtasks:
     artifacts_to_update:
       - TEST_REPORT.md
     prompt: "Запустить targeted validators and summarize residual risk."
+deferred_user_actions:
+  - id: replace-real-app-image
+    action: "Заменить `__REAL_APP_IMAGE__` на настоящий application image перед real downstream proof."
+    timing: final-closeout
+    owner_boundary: external-user-action
+placeholder_replacements:
+  - placeholder: __REAL_APP_IMAGE__
+    description: "Настоящий application image для downstream/battle runtime proof."
+    final_value_owner: operator
+    replacement_timing: final-user-action

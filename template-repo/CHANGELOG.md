@@ -4,6 +4,7 @@
 ### Добавлено
 - VPS Remote SSH-first orchestration runbook and template Codex workflow guidance for full handoff orchestration.
 - `scripts/orchestrate-codex-handoff.py`, `scripts/validate-codex-orchestration.py`, curated pack quality validator and verified sync fallback evidence validator.
+- orchestration support for `deferred_user_actions` and `placeholder_replacements`, including negative fixtures for user action subtasks and invalid placeholder metadata.
 
 ### Изменено
 - generated normalized handoff template uses Russian human-facing headings and includes orchestration boundary.

@@ -109,6 +109,11 @@ Already-open live session не является reliable auto-switch boundary. P
 Orchestration guardrails:
 - один parent handoff для copy-paste; multi-block handoff запрещен;
 - child session не наследует parent route by default;
+- parent plan должен фиксировать `user_actions_policy: defer-to-final-closeout`;
+- все user-required actions, external UI actions, runtime approvals, real downstream inputs and secret-entry steps переносятся в конец parent plan как `deferred_user_actions`;
+- если subtask можно выполнить без реальных внешних данных, используй safe temporary placeholders и занеси их в `placeholder_replacements`;
+- финальный closeout обязан напомнить, какие placeholders заменить на реальные данные и какие checks повторить после замены;
+- child subtasks не должны блокироваться на пользовательском действии, если есть safe placeholder path;
 - secrets, `.env` content, private transcripts и tokens запрещены в handoff, fixtures и reports;
 - если model availability не проверена live catalog check, писать `requires live validation`;
 - stale/missing model mapping нужно report/fail, а не silently fallback.

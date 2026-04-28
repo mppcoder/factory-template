@@ -25,13 +25,15 @@ Plan №5 добавил internal hardening contour после Plan №4 без 
 
 - `python3 -m py_compile template-repo/scripts/orchestrate-codex-handoff.py template-repo/scripts/validate-codex-orchestration.py template-repo/scripts/orchestrate_codex_handoff_import.py template-repo/scripts/validate-curated-pack-quality.py template-repo/scripts/validate-verified-sync-fallback-evidence.py` — pass.
 - `python3 template-repo/scripts/validate-codex-orchestration.py .` — pass.
-- Negative orchestration fixtures for missing child routing, secret-like content and multi-block handoff — pass, validators return non-zero.
+- Negative orchestration fixtures for missing child routing, secret-like content, multi-block handoff, user action as child subtask and invalid placeholder metadata — pass, validators return non-zero.
 - `python3 template-repo/scripts/orchestrate-codex-handoff.py --root . --plan tests/codex-orchestration/fixtures/valid/parent-plan.yaml --report reports/orchestration/parent-orchestration-report.md` — pass, dry-run report written.
 - `python3 template-repo/scripts/validate-curated-pack-quality.py .` — pass.
 - Curated pack positive fixture — pass; missing-routing-doc negative fixture returns non-zero as expected.
 - `python3 template-repo/scripts/validate-verified-sync-fallback-evidence.py reports/release/verified-sync-fallback-evidence.md` — pass.
 - `python3 template-repo/scripts/eval-artifact.py tests/artifact-eval/specs/vps-remote-ssh-orchestration.yaml --output tests/artifact-eval/reports/vps-remote-ssh-orchestration.md --json` — pass.
 - `bash template-repo/scripts/verify-all.sh quick` — pass на `2026-04-28`.
+
+Follow-up на `2026-04-28`: orchestration contract усилен правилом `user_actions_policy: defer-to-final-closeout`. Все user-required/external/runtime/downstream действия уходят в конец parent plan, internal child subtasks продолжают работу на safe temporary placeholders, а parent report выводит `deferred_user_actions` и `placeholder_replacements` как финальные напоминания о замене на real data.
 
 ## Проверка Plan №4 P4-S0/P4-S4 preparation
 

@@ -36,6 +36,8 @@ Default path для большой задачи: `VPS Remote SSH-first`.
 
 Already-open live session не является reliable auto-switch boundary. Child subtask не наследует parent route by default: каждый child handoff должен явно фиксировать `task_class`, `selected_profile`, `selected_model`, `selected_reasoning_effort`, `selected_plan_mode_reasoning_effort` и `selected_scenario`.
 
+Для большого handoff действует правило `user_actions_policy: defer-to-final-closeout`: все действия пользователя, ввод реальных external values, runtime approvals и downstream/battle inputs переносятся в конец parent plan как `deferred_user_actions`. Если internal work можно продолжить без них, orchestrator использует temporary placeholders и фиксирует `placeholder_replacements`, чтобы финальный closeout напомнил заменить placeholders на реальные данные и повторить нужные checks.
+
 Dry-run orchestration command:
 
 ```bash

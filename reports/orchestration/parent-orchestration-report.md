@@ -1,6 +1,6 @@
 # Отчет parent Codex orchestration
 
-Generated UTC: 2026-04-28T04:55:05+00:00
+Generated UTC: 2026-04-28T05:00:17+00:00
 Status: dry-run
 Plan: /projects/factory-template/tests/codex-orchestration/fixtures/valid/parent-plan.yaml
 Report: /projects/factory-template/reports/orchestration/parent-orchestration-report.md
@@ -15,6 +15,7 @@ Cloud default: false
 - selected_scenario: `template-repo/scenario-pack/00-master-router.md -> template-repo/scenario-pack/15-handoff-to-codex.md`
 - apply_mode: `manual-ui`
 - strict_launch_mode: `optional`
+- user_actions_policy: `defer-to-final-closeout`
 
 ## Subtasks / подзадачи
 
@@ -33,10 +34,20 @@ Cloud default: false
 
 - none
 
+## Финальные действия пользователя
+
+- `replace-real-app-image`: Заменить `__REAL_APP_IMAGE__` на настоящий application image перед real downstream proof. (timing: `final-closeout`)
+
+## Напоминания о замене placeholder values
+
+- `__REAL_APP_IMAGE__` -> Настоящий application image для downstream/battle runtime proof. (owner: `operator`, timing: `final-user-action`)
+
 ## Финальный parent closeout contract
 
 - Collect child result summaries.
 - Separate internal repo follow-up, external user action, runtime action and downstream/battle action.
+- Move all user-required actions to the final closeout block.
+- Use safe temporary placeholders where possible and remind the operator to replace them with real data at the end.
 - Do not claim Cloud/App default.
 - Do not claim already-open session auto-switch.
 - If external action remains, final answer must include compact `## Инструкция пользователю`.

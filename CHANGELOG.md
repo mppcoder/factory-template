@@ -3,6 +3,7 @@
 ## [Unreleased]
 ### Добавлено
 - Plan №5 internal hardening roadmap, VPS Remote SSH-first orchestration runbook, repo-native dry-run parent orchestrator and orchestration validator.
+- orchestration rule `user_actions_policy: defer-to-final-closeout`: user-required actions move to final parent closeout, safe temporary placeholders can unblock internal child subtasks, and final reports list replacement reminders.
 - curated/reference pack quality validator with positive/negative fixtures and quick verify integration.
 - verified sync fallback evidence report/validator for blocked push, remote drift, protected branch, branch ahead, dirty state and fallback instructions.
 - domain scenario acceptance template with CRM and inventory examples beyond parity smoke.
