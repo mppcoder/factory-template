@@ -4,7 +4,9 @@
 ### Добавлено
 - Defect report `reports/bugs/2026-04-28-runbook-packages-missing-beginner-copy-paste-flow.md` для gap, где package layer был abstract routing/checklist, а не beginner zero-to-Codex-ready flow.
 - Beginner-first runbook contract: packages теперь обязаны разделять `USER-ONLY SETUP` и `CODEX-AUTOMATION`, фиксировать Codex takeover point и использовать copy-paste step cards с окном, командами, expected result и диагностикой.
-- Validator coverage для beginner runbook flow: обязательные factory steps `FT-000`..`FT-500`, contours `codex-app-remote-ssh` / `vscode-remote-ssh-codex-extension`, Timeweb/VPS/SSH/Codex setup tokens и automation boundary.
+- Validator coverage для beginner runbook flow: обязательные factory steps `FT-000`..`FT-180`, contours `codex-app-remote-ssh` / `vscode-remote-ssh-codex-extension`, Timeweb/VPS/SSH/Codex setup tokens и automation boundary.
+- Второй remediation pass закрепил точный beginner flow `FT-000`..`FT-180`, включая `FT-150A` для Codex App Remote SSH, `FT-150B` для VS Code Remote SSH + Codex extension, `FT-170` takeover checkpoint и `FT-180` диагностику неудачного запуска.
+- Dashboard `runbook_packages` получил поля `current_step`, `active_contour`, `takeover_ready` и `checklist_path`.
 - Финальный слой `docs/operator/runbook-packages/` с package contract и четырьмя complete runbook-checklist packages: `factory-template`, `greenfield-product`, `brownfield-with-repo-to-greenfield`, `brownfield-without-repo-to-greenfield`.
 - Validator `validate-runbook-packages.py`, подключенный к quick verify: проверяет existence, command/path lint, brownfield conversion gates, greenfield final state, dashboard integration, archive/cleanup wording и handoff language/routing boundary.
 - Dashboard contract `runbook_packages` для current phase, gates, blockers, next action и owner boundary по каждому package.
@@ -38,6 +40,8 @@
 
 ### Изменено
 - `01-factory-template/01-user-runbook.md` переписан как novice runbook от Windows PC до remote Codex takeover; `02-codex-runbook.md` теперь явно берет на себя VPS preflight, package install, clone, bootstrap, verify, dashboard update и verified sync.
+- `01-factory-template/03-checklist.md` теперь является таблицей-зеркалом пользовательских шагов и не содержит process/meta checks; process checks перенесены в Codex/verify слой.
+- `01-factory-template/04-verify.md` разделен на user readiness verify до takeover и Codex automation verify после takeover.
 - Greenfield и оба brownfield packages выровнены под ту же user-only/Codex-automation архитектуру, чтобы external setup не смешивался с internal repo follow-up.
 - Release-facing workflow map, lifecycle dashboard doc и source manifest теперь знают про runbook package layer; отдельный export profile `sources-pack-runbook-packages` включает полный набор package files.
 - Canonical VPS layout в active docs, scenario-pack и bootstrap guidance теперь явно требует размещать все intermediate repos внутри repo целевого `greenfield-product`.

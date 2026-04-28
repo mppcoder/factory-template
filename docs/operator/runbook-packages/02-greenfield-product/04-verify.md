@@ -2,6 +2,21 @@
 
 Package layer должен содержать `USER-ONLY SETUP`, `CODEX-AUTOMATION`, takeover point и beginner step cards.
 
+User readiness до takeover:
+
+- project slug и GitHub repo/access определены;
+- ChatGPT Project подключен к GitHub;
+- remote Codex context открыт;
+- Codex может выполнить remote shell command.
+
+Codex automation после takeover:
+
+- `/projects/<project-slug>` создан;
+- greenfield docs заполнены;
+- dashboard validates;
+- generated quick verify green;
+- sync clean или blocker documented.
+
 Из factory-template root для проверки package layer:
 
 ```bash

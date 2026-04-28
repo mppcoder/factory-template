@@ -112,10 +112,10 @@ BEGINNER_STEP_FIELDS = [
     "- Зачем:",
     "- Что нужно до начала:",
     "- Где взять значения:",
-    "- Команды для копирования:",
     "- Куда вставить:",
     "- Ожидаемый результат:",
     "- Если ошибка:",
+    "- Evidence:",
     "- Следующий шаг:",
 ]
 FACTORY_REQUIRED_STEPS = [
@@ -134,10 +134,55 @@ FACTORY_REQUIRED_STEPS = [
     "FT-120",
     "FT-130",
     "FT-140",
-    "FT-200",
-    "FT-300",
-    "FT-400",
-    "FT-500",
+    "FT-150A",
+    "FT-150B",
+    "FT-160",
+    "FT-170",
+    "FT-180",
+]
+FACTORY_REQUIRED_COMMANDS = [
+    '$KEY="$env:USERPROFILE\\.ssh\\factory_timeweb_ed25519"',
+    'ssh-keygen -t ed25519 -C "factory-template-timeweb-vps" -f $KEY',
+    'Get-Content "$KEY.pub"',
+    "notepad $env:USERPROFILE\\.ssh\\config",
+    "Host factory-vps",
+    "HostName <VPS_IP>",
+    "User root",
+    "IdentityFile ~/.ssh/factory_timeweb_ed25519",
+    "IdentitiesOnly yes",
+    "ssh factory-vps",
+    "root@<server-hostname>:~#",
+]
+FACTORY_CODEX_AUTOMATION_TOKENS = [
+    "whoami",
+    "pwd",
+    "uname -a",
+    "lsb_release -a || cat /etc/os-release",
+    "apt-get update",
+    "apt-get install -y git curl ca-certificates gnupg unzip jq build-essential python3 python3-venv python3-pip pipx",
+    "corepack",
+    "pnpm",
+    "gh --version",
+    "npm i -g @openai/codex",
+    "codex --version",
+    "mkdir -p /projects",
+    "git clone https://github.com/mppcoder/factory-template.git factory-template",
+    "sed -n '1,240p' AGENTS.md",
+    "bash template-repo/scripts/verify-all.sh quick",
+    "bash VERIFIED_SYNC.sh",
+    "git status --short --branch",
+]
+FORBIDDEN_USER_CHECKLIST_PHRASES = [
+    "Advisory/policy layer",
+    "advisory layer",
+    "defect-capture",
+    "Defect-capture",
+    "release-facing",
+    "route receipt",
+    "self-handoff",
+    "handoff route receipt",
+    "Dashboard отражает",
+    "обновлены только релевантные docs",
 ]
 
 
@@ -159,6 +204,8 @@ def add_missing(path: Path, errors: list[str]) -> None:
 
 def command_target_exists(root: Path, target: str) -> bool:
     normalized = target.strip()
+    if normalized.startswith("-"):
+        return True
     direct = root / normalized
     if direct.exists():
         return True
@@ -218,15 +265,69 @@ def validate_package_files(root: Path, errors: list[str]) -> None:
                     errors.append(f"`{codex_path}` может содержать fake already-open session switch wording")
 
 
+STEP_RE = re.compile(r"^###\s+([A-Z]+-[0-9]+[A-Z]?)\.\s+(.+)$", re.MULTILINE)
+CHECKLIST_ID_RE = re.compile(r"^\|\s*([A-Z]+-[0-9]+[A-Z]?)\s*\|", re.MULTILINE)
+
+
+def extract_step_sections(text: str) -> dict[str, str]:
+    matches = list(STEP_RE.finditer(text))
+    sections: dict[str, str] = {}
+    for index, match in enumerate(matches):
+        start = match.start()
+        end = matches[index + 1].start() if index + 1 < len(matches) else len(text)
+        sections[match.group(1)] = text[start:end]
+    return sections
+
+
+def extract_checklist_ids(text: str) -> set[str]:
+    ids: set[str] = set()
+    for match in CHECKLIST_ID_RE.finditer(text):
+        step_id = match.group(1)
+        if step_id not in {"ID"}:
+            ids.add(step_id)
+    return ids
+
+
+def validate_step_cards(path: Path, sections: dict[str, str], errors: list[str]) -> None:
+    for step_id, section in sorted(sections.items()):
+        missing_fields = [field for field in BEGINNER_STEP_FIELDS if field not in section]
+        if missing_fields:
+            errors.append(f"`{path}` шаг `{step_id}` не содержит поля: {', '.join(missing_fields)}")
+        if "- Команды для копирования:" not in section and "UI path" not in section:
+            errors.append(f"`{path}` шаг `{step_id}` не содержит `Команды для копирования` или UI path")
+
+
+def validate_checklist_mirror(user_path: Path, checklist_path: Path, user_text: str, checklist_text: str, errors: list[str]) -> None:
+    user_sections = extract_step_sections(user_text)
+    checklist_ids = extract_checklist_ids(checklist_text)
+    if not checklist_ids:
+        errors.append(f"`{checklist_path}` не содержит табличные user step IDs")
+        return
+    missing_in_checklist = sorted(set(user_sections) - checklist_ids)
+    extra_in_checklist = sorted(checklist_ids - set(user_sections))
+    if missing_in_checklist:
+        errors.append(f"`{checklist_path}` не содержит user-runbook шаги: {', '.join(missing_in_checklist)}")
+    if extra_in_checklist:
+        errors.append(f"`{checklist_path}` содержит ID без user-runbook шага: {', '.join(extra_in_checklist)}")
+    for phrase in FORBIDDEN_USER_CHECKLIST_PHRASES:
+        if phrase in checklist_text:
+            errors.append(f"`{checklist_path}` содержит запрещенную meta-policy фразу `{phrase}`")
+    for column in ["ID", "Статус [ ]", "Окно", "Кто делает", "Действие", "Команда / UI path", "Ожидаемый результат", "Evidence", "Следующий шаг"]:
+        if column not in checklist_text:
+            errors.append(f"`{checklist_path}` не содержит колонку `{column}`")
+
+
 def validate_beginner_flow(root: Path, errors: list[str]) -> None:
     base = root / PACKAGE_ROOT
     for package in PACKAGES:
         user_path = base / package / "01-user-runbook.md"
         codex_path = base / package / "02-codex-runbook.md"
+        checklist_path = base / package / "03-checklist.md"
         if not user_path.exists() or not codex_path.exists():
             continue
         user_text = read(user_path)
         codex_text = read(codex_path)
+        checklist_text = read(checklist_path) if checklist_path.exists() else ""
         for marker in ["USER-ONLY SETUP", "CODEX-AUTOMATION"]:
             if marker not in user_text:
                 errors.append(f"`{user_path}` не содержит beginner boundary `{marker}`")
@@ -236,13 +337,29 @@ def validate_beginner_flow(root: Path, errors: list[str]) -> None:
             errors.append(f"`{user_path}` не фиксирует Codex takeover point")
         if "Codex сам" not in user_text and "Codex выполняет" not in user_text:
             errors.append(f"`{user_path}` не отделяет Codex automation от user-only steps")
-        missing_fields = [field for field in BEGINNER_STEP_FIELDS if field not in user_text]
-        if missing_fields:
-            errors.append(f"`{user_path}` не содержит поля beginner step card: {', '.join(missing_fields)}")
+        step_sections = extract_step_sections(user_text)
+        validate_step_cards(user_path, step_sections, errors)
+        if checklist_text:
+            validate_checklist_mirror(user_path, checklist_path, user_text, checklist_text, errors)
         if package == "01-factory-template":
             for step_id in FACTORY_REQUIRED_STEPS:
                 if step_id not in user_text:
                     errors.append(f"`{user_path}` не содержит обязательный шаг `{step_id}`")
+            for stale_step_id in ["FT-200", "FT-300", "FT-400", "FT-500"]:
+                if stale_step_id in user_text or stale_step_id in checklist_text:
+                    errors.append(f"`{package}` содержит устаревший шаг `{stale_step_id}`")
+            for command in FACTORY_REQUIRED_COMMANDS:
+                if command not in user_text:
+                    errors.append(f"`{user_path}` не содержит обязательную команду/вывод `{command}`")
+            for token in ["codex-app-remote-ssh", "vscode-remote-ssh-codex-extension", "FT-170", "Codex делает clone/setup/verify сам"]:
+                if token not in user_text:
+                    errors.append(f"`{user_path}` не содержит takeover/contour marker `{token}`")
+            for placeholder in ["<VPS_IP>", "<GITHUB_USER>", "<server-hostname>", "<handoff block>"]:
+                if placeholder not in user_text:
+                    errors.append(f"`{user_path}` не объясняет placeholder `{placeholder}`")
+            for token in FACTORY_CODEX_AUTOMATION_TOKENS:
+                if token not in codex_text:
+                    errors.append(f"`{codex_path}` не содержит automation step token `{token}`")
             for token in [
                 "ChatGPT plan",
                 "GitHub account",
@@ -289,7 +406,19 @@ def validate_dashboard(root: Path, errors: list[str]) -> None:
             continue
         package_id = str(item.get("id") or "")
         seen.add(package_id)
-        for key in ["id", "path", "current_phase", "gates", "blockers", "next_action", "owner_boundary"]:
+        for key in [
+            "id",
+            "path",
+            "current_phase",
+            "current_step",
+            "active_contour",
+            "takeover_ready",
+            "checklist_path",
+            "gates",
+            "blockers",
+            "next_action",
+            "owner_boundary",
+        ]:
             if key not in item:
                 errors.append(f"runbook_packages[{package_id or index}] не содержит `{key}`")
         if package_id and package_id not in PACKAGES:
@@ -303,6 +432,17 @@ def validate_dashboard(root: Path, errors: list[str]) -> None:
         path = str(item.get("path") or "")
         if path and not (root / path).exists():
             errors.append(f"dashboard runbook package `{package_id}` ссылается на отсутствующий path `{path}`")
+        checklist_path = str(item.get("checklist_path") or "")
+        if checklist_path and not (root / checklist_path).exists():
+            errors.append(f"dashboard runbook package `{package_id}` ссылается на отсутствующий checklist_path `{checklist_path}`")
+        if str(item.get("active_contour") or "") not in {
+            "not_selected",
+            "codex-app-remote-ssh",
+            "vscode-remote-ssh-codex-extension",
+        }:
+            errors.append(f"runbook package `{package_id}` содержит неизвестный active_contour")
+        if not isinstance(item.get("takeover_ready"), bool):
+            errors.append(f"runbook package `{package_id}` takeover_ready должен быть boolean")
     missing = sorted(set(PACKAGES) - seen)
     if missing:
         errors.append("dashboard не содержит packages: " + ", ".join(missing))

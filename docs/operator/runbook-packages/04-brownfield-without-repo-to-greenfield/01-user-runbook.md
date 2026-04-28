@@ -1,30 +1,22 @@
 # Пользовательский ранбук: путь без repo
 
-Цель: принять входящие материалы без нормализованного repo, реконструировать canonical repo внутри target project root, затем пройти with-repo adoption/conversion и завершить как `greenfield-product` / `greenfield-converted`.
+Цель: собрать входящие материалы в target root, затем передать Codex inventory/reconstruction/with-repo conversion.
 
-Brownfield without repo — это intake/reconstruction path, не финальный тип проекта.
+Brownfield without repo — intake/reconstruction path, не финальный тип проекта.
 
 ## Настройка только пользователем
 
 Маркер слоя: `USER-ONLY SETUP`.
-Пользователь делает только внешний setup:
+Пользователь собирает incoming materials в `_incoming`, дает access/approvals и открывает remote Codex context. Codex выполняет inventory/reconstruction/conversion.
+Допустимые contours: `vscode-remote-ssh-codex-extension` или fallback `codex-app-remote-ssh`.
 
-- ChatGPT plan с Codex access;
-- GitHub account и connector;
-- remote SSH / VPS / SSH alias;
-- VS Code Remote SSH + Codex IDE extension или Codex app remote connection;
-- передача исходных материалов в sanitized form;
-- approvals на ownership, reconstruction и secrets boundary.
-
-Если remote/Codex setup еще не готов, сначала пройдите `../01-factory-template/01-user-runbook.md` до `FT-500`, заменив alias/root на проектные значения.
-
-### BWO-000. Зафиксировать target root и входящие материалы
+### BWO-000. Зафиксировать target root и incoming boundary
 
 - Окно: Browser ChatGPT / Windows Explorer / VS Code Remote SSH.
 - Делает: Пользователь.
 - Зачем: Temporary/reconstructed/intermediate repos не должны быть siblings в `/projects`.
-- Что нужно до начала: Есть архив, папка, ссылка или другой набор исходных материалов.
-- Где взять значения: `<project-slug>` придумайте латиницей; `<incoming-source>` это путь/ссылка на материалы.
+- Что нужно до начала: Есть архив, папка, ссылка или другой набор исходных материалов; factory-template remote setup готов.
+- Где взять значения: `<project-slug>` придумать латиницей; `<incoming-source>` взять из локальной папки/архива/ссылки.
 - Команды для копирования:
 
 ```text
@@ -38,16 +30,17 @@ done_rule: conversion или documented blocker
 ```
 
 - Куда вставить: В ChatGPT handoff или заметки.
-- Ожидаемый результат: Есть один target root; все входящие материалы идут внутрь него.
-- Если ошибка: Не создавайте `/projects/reconstructed-repo` или `/projects/temp-audit` как sibling project root.
+- Ожидаемый результат: Один target root определен; `_incoming` живет внутри него.
+- Если ошибка: Не создавайте `/projects/reconstructed-repo` или `/projects/temp-audit`.
+- Evidence: Target root и incoming source записаны без секретов.
 - Следующий шаг: `BWO-010`.
 
-### BWO-010. Поместить материалы в `_incoming/`
+### BWO-010. Разместить материалы в `_incoming`
 
 - Окно: VS Code Remote SSH terminal / Explorer upload / SCP client.
 - Делает: Пользователь.
-- Зачем: Codex должен реконструировать repo из bounded input directory.
-- Что нужно до начала: Remote SSH доступ работает.
+- Зачем: Codex должен видеть bounded input directory.
+- Что нужно до начала: `BWO-000`, remote SSH доступ работает.
 - Где взять значения: `<project-slug>` из `BWO-000`.
 - Команды для копирования:
 
@@ -60,14 +53,15 @@ ls -la _incoming
 
 - Куда вставить: Remote terminal. Затем загрузить архивы/файлы в `_incoming/` через VS Code Explorer, SCP или другой безопасный канал.
 - Ожидаемый результат: Материалы находятся в `/projects/<project-slug>/_incoming/`.
-- Если ошибка: Если материалы содержат secrets, production dumps или private transcripts, не коммитьте их; попросите Codex сделать sanitized intake register.
+- Если ошибка: Если материалы содержат secrets, production dumps или private transcripts, не коммитьте их; Codex должен сделать sanitized intake register.
+- Evidence: `ls -la _incoming` показывает материалы или пустую папку, готовую к upload.
 - Следующий шаг: `BWO-020`.
 
 ### BWO-020. Точка передачи Codex
 
-- Окно: Codex extension / Codex chat.
+- Окно: Remote Codex chat/window.
 - Делает: Пользователь.
-- Зачем: Передать intake/reconstruction/adoption Codex.
+- Зачем: Передать inventory/reconstruction/conversion Codex.
 - Что нужно до начала: Remote Codex context открыт в `/projects/<project-slug>`.
 - Где взять значения: Handoff из ChatGPT Project.
 - Команды для копирования:
@@ -76,12 +70,13 @@ ls -la _incoming
 Вставить один цельный handoff block.
 Обязательно: Язык ответа Codex: русский.
 Обязательно: temporary/reconstructed/intermediate repos не являются siblings в /projects.
-Обязательно: brownfield done требует conversion или documented blocker.
+После вставки Codex делает inventory/reconstruction/conversion сам.
 ```
 
-- Куда вставить: Новый Codex chat/window в remote context.
-- Ожидаемый результат: Codex дает route receipt и начинает CODEX-AUTOMATION.
-- Если ошибка: Если Codex видит только `/projects` без target root, откройте `/projects/<project-slug>`.
+- Куда вставить: Новый remote Codex chat/window.
+- Ожидаемый результат: Codex дает route receipt и начинает `02-codex-runbook.md`.
+- Если ошибка: Если Codex открыт в `/projects`, а не `/projects/<project-slug>`, открыть target root заново.
+- Evidence: Route receipt и remote root check.
 - Следующий шаг: `CODEX-AUTOMATION`.
 
 Маркер границы: `Codex takeover point`.
@@ -89,4 +84,4 @@ ls -la _incoming
 ## Автоматизация Codex
 
 Маркер слоя: `CODEX-AUTOMATION`.
-После takeover Codex сам проводит intake, secret scan/sanitization register, reconstruction внутри target root, with-repo adoption cycle, conversion gates, validators и verified sync при доступности.
+Codex выполняет inventory, sanitized evidence, reconstruction inside target root, with-repo conversion, validators и verified sync при доступности.

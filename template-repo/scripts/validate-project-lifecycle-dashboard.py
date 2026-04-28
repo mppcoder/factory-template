@@ -278,9 +278,17 @@ def validate_dashboard(data: dict[str, Any]) -> list[str]:
                 seen_packages.add(package_id)
                 if package_id not in RUNBOOK_PACKAGE_IDS:
                     errors.append(f"runbook_packages[{index}].id неизвестен: `{package_id}`")
-                for field in ["path", "current_phase", "next_action", "owner_boundary"]:
+                for field in ["path", "current_phase", "current_step", "active_contour", "checklist_path", "next_action", "owner_boundary"]:
                     if not str(package.get(field) or "").strip():
                         errors.append(f"runbook_packages[{package_id or index}].{field} обязателен")
+                if str(package.get("active_contour") or "") not in {
+                    "not_selected",
+                    "codex-app-remote-ssh",
+                    "vscode-remote-ssh-codex-extension",
+                }:
+                    errors.append(f"runbook_packages[{package_id or index}].active_contour неизвестен")
+                if not isinstance(package.get("takeover_ready"), bool):
+                    errors.append(f"runbook_packages[{package_id or index}].takeover_ready должен быть boolean")
                 if str(package.get("owner_boundary") or "") != "internal-repo-follow-up":
                     errors.append(f"runbook_packages[{package_id or index}].owner_boundary должен быть internal-repo-follow-up")
                 if not isinstance(package.get("gates"), list) or not package.get("gates"):

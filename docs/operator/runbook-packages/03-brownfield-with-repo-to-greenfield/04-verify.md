@@ -2,6 +2,20 @@
 
 Package layer должен содержать `USER-ONLY SETUP`, `CODEX-AUTOMATION`, takeover point и beginner step cards.
 
+User readiness до takeover:
+
+- existing repo URL и target root зафиксированы;
+- GitHub access/approval boundary известен;
+- remote Codex context открыт;
+- Codex может выполнить remote shell/repo check.
+
+Codex automation после takeover:
+
+- audit evidence создан;
+- conversion выполнена в `greenfield-product` / `greenfield-converted` или documented blocker;
+- validators green;
+- sync clean или blocker documented.
+
 До conversion:
 
 ```bash

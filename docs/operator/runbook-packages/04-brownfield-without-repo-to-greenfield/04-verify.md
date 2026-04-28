@@ -2,6 +2,21 @@
 
 Package layer должен содержать `USER-ONLY SETUP`, `CODEX-AUTOMATION`, takeover point и beginner step cards.
 
+User readiness до takeover:
+
+- target root и `_incoming` определены;
+- incoming materials загружены или blocker documented;
+- remote Codex context открыт в `/projects/<project-slug>`;
+- Codex может выполнить remote root check.
+
+Codex automation после takeover:
+
+- inventory/evidence создан;
+- reconstruction выполнена внутри target root;
+- with-repo conversion выполнена или documented blocker;
+- validators green;
+- sync clean или blocker documented.
+
 Intake/reconstruction gate:
 
 ```bash

@@ -1,16 +1,7 @@
 # Чеклист: путь с существующим repo
 
-- [ ] USER-ONLY SETUP выполнен: ChatGPT, GitHub repo access, remote SSH, Codex contour.
-- [ ] Codex takeover point достигнут через `codex-app-remote-ssh` или `vscode-remote-ssh-codex-extension`.
-- [ ] Existing repo открыт как canonical project root.
-- [ ] Brownfield preset является transitional, не final.
-- [ ] Repo-first core materialized.
-- [ ] Evidence docs заполнены.
-- [ ] Product-owned zones protected.
-- [ ] Template-owned zones marked.
-- [ ] Sync manifest безопасен для downstream.
-- [ ] Conversion gates закрыты или есть documented blocker.
-- [ ] Active profile после conversion: `greenfield-product`.
-- [ ] Lifecycle после conversion: `greenfield-converted`.
-- [ ] Transitional brownfield материалы остаются history/evidence, но не active mode driver.
-- [ ] Verification green.
+| ID | Статус [ ] | Окно | Кто делает | Действие | Команда / UI path | Ожидаемый результат | Evidence | Следующий шаг |
+|---|---|---|---|---|---|---|---|---|
+| BWR-000 | [ ] | Browser GitHub / ChatGPT | Пользователь | Зафиксировать existing repo и target root | `existing_repo: <repo-owner>/<repo-name>` | Canonical root определен | Repo URL + root | BWR-010 |
+| BWR-010 | [ ] | Browser GitHub / ChatGPT | Пользователь | Дать repo access и approvals | GitHub connector/permissions/protected branch review | Access boundary ясен | Access state или blocker | BWR-020 |
+| BWR-020 | [ ] | Remote Codex chat/window | Пользователь | Вставить one-block handoff | Новый remote Codex chat/window -> paste one block | Codex начинает audit/adoption/conversion | Route receipt | CODEX-AUTOMATION |

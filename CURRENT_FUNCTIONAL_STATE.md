@@ -132,8 +132,10 @@
 - добавлен финальный слой `docs/operator/runbook-packages/` с четырьмя runbook-checklist packages: `factory-template`, `greenfield-product`, `brownfield-with-repo-to-greenfield`, `brownfield-without-repo-to-greenfield`; каждый package разделяет Browser ChatGPT Project, VS Code Remote SSH, Codex chat, terminal fallback, external UI и secrets/approvals
 - `validate-runbook-packages.py` подключен к quick verify и проверяет package existence, command/path lint, greenfield-only final state, brownfield conversion gates, cleanup/archive wording, dashboard contract, one-block handoff/language boundary и запрет fake auto-switch claims
 - runbook packages теперь beginner-first: `USER-ONLY SETUP` ведет пользователя от Windows PC, ChatGPT/GitHub, VS Code/Codex, Timeweb VPS Ubuntu 24.04 и SSH alias до remote Codex takeover, а `CODEX-AUTOMATION` передает install/clone/bootstrap/verify/dashboard/sync Codex
-- `validate-runbook-packages.py` теперь дополнительно проверяет beginner step cards, обязательные `FT-000`..`FT-500`, contours `codex-app-remote-ssh` и `vscode-remote-ssh-codex-extension`, Timeweb/VPS/SSH/Codex setup markers и takeover boundary
+- `validate-runbook-packages.py` теперь дополнительно проверяет beginner step cards, обязательные `FT-000`..`FT-180`, checklist mirror coverage, forbidden user-checklist meta-policy phrases, contours `codex-app-remote-ssh` и `vscode-remote-ssh-codex-extension`, Timeweb/VPS/SSH/Codex setup markers и takeover boundary
+- factory-template user checklist стал таблицей-зеркалом пользовательских шагов, а verify layer разделен на user readiness до takeover и Codex automation после takeover
 - lifecycle dashboard теперь показывает `runbook_packages` с current phase, gates, blockers, next action и owner boundary для четырех entry paths без добавления web app/daemon/SQLite/Telegram stack
+- lifecycle dashboard `runbook_packages` теперь дополнительно показывает `current_step`, `active_contour`, `takeover_ready` и `checklist_path`
 
 ## Программа 2.5 (release truth)
 - release truth source: `docs/releases/release-scorecard.yaml`

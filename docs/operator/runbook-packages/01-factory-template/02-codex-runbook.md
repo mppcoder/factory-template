@@ -1,61 +1,82 @@
 # Ранбук для Codex: factory-template
 
-Этот runbook начинается только после `01-user-runbook.md` takeover point: Codex уже работает в remote context на VPS через `codex-app-remote-ssh` или `vscode-remote-ssh-codex-extension`.
+Этот runbook начинается только после `FT-170`: пользователь уже вставил один handoff в remote Codex context. Пользователь больше не выполняет clone/setup/verify вручную, если remote shell доступен.
 
 ## Подтверждение маршрута
 
+Codex сначала выводит route receipt:
+
 - `launch_source`: `chatgpt-handoff` или `direct-task`.
 - `project_profile`: `factory-template as greenfield-product + factory-producer-owned layer`.
-- `selected_scenario`: `template-repo/scenario-pack/00-master-router.md -> template-repo/scenario-pack/15-handoff-to-codex.md` или более точный route из handoff.
-- `apply_mode`: `manual-ui` default.
-- `strict_launch_mode`: `optional`.
+- `selected_scenario`: маршрут из handoff после `template-repo/scenario-pack/00-master-router.md`.
+- `pipeline_stage`: текущий stage из handoff.
+- `handoff_allowed`: `yes`.
+- `defect_capture_path`: `required` или `not-required`.
 - Язык ответа Codex: русский. Отвечай пользователю по-русски.
 
-Для `chatgpt-handoff` дай только `handoff receipt` / `route receipt`, не называй его self-handoff. Для `direct-task` сначала покажи visible self-handoff.
+Для `chatgpt-handoff` не называй receipt self-handoff. Для `direct-task` сначала покажи visible self-handoff.
 
 ## Граница пользовательской настройки
 
 Маркер слоя: `USER-ONLY SETUP`.
-Не проси пользователя вручную устанавливать packages, clone-ить repo, запускать bootstrap или verify, если remote shell доступен. Пользователь нужен только для external UI, secret entry, billing/account action, required approval или отсутствующего доступа.
+Пользователь нужен только для external UI, secret entry, billing/account action, required approval, Codex sign in blocker или отсутствующего доступа. Не проси пользователя вручную выполнять install/clone/bootstrap/verify, если remote shell доступен.
 
 ## Автоматизация Codex
 
 Маркер слоя: `CODEX-AUTOMATION`.
 
-### CX-000. Проверить remote context
+### CX-000. Определить contour и remote shell
+
+Определи, где запущен Codex:
+
+- `codex-app-remote-ssh`: Codex app remote thread выполняет команды на VPS.
+- `vscode-remote-ssh-codex-extension`: Codex extension работает в VS Code Remote SSH context.
+- `unknown`: если evidence недостаточно, продолжай remote shell checks и не утверждай contour.
+
+Выполни:
 
 ```bash
 set -euo pipefail
-hostname
 whoami
 pwd
-lsb_release -a
+uname -a
+lsb_release -a || cat /etc/os-release
 ```
 
-Ожидается Ubuntu 24.04 на VPS. Если host локальный Windows/macOS или путь не remote, остановись и попроси пользователя вернуться к `FT-500`.
+Ожидается remote Ubuntu 24.04 VPS. Если это локальный Windows/macOS context или нет shell access, остановись с blocker `remote-codex-context-not-ready` и попроси пользователя вернуться к `FT-170`/`FT-180`.
 
-### CX-010. Подготовить базовые системные пакеты
+### CX-010. Установить baseline packages на VPS
 
 ```bash
 set -euo pipefail
 export DEBIAN_FRONTEND=noninteractive
 apt-get update
-apt-get install -y ca-certificates curl gnupg git jq build-essential python3 python3-venv python3-pip nodejs npm openssh-client rsync unzip
+apt-get install -y git curl ca-certificates gnupg unzip jq build-essential python3 python3-venv python3-pip pipx
 ```
 
-Если текущий пользователь не `root`, используй `sudo` и проверь, что sudo доступен.
+Если пользователь не `root`, используй `sudo` и явно проверь `sudo -n true`.
 
-### CX-020. Установить или обновить Codex CLI на VPS
+### CX-020. Установить Node.js, corepack и pnpm по repo-approved strategy
 
 ```bash
 set -euo pipefail
-npm i -g @openai/codex
-codex --version
+if ! command -v node >/dev/null 2>&1; then
+  apt-get install -y nodejs npm
+fi
+node --version
+npm --version
+if command -v corepack >/dev/null 2>&1; then
+  corepack enable
+  corepack prepare pnpm@latest --activate || true
+else
+  npm i -g corepack pnpm
+fi
+pnpm --version || npm i -g pnpm
 ```
 
-Если `codex` требует sign in и интерактивный sign in невозможен внутри текущего tool context, зафиксируй external blocker `codex-remote-sign-in-required` и попроси пользователя выполнить sign in в remote terminal. Не проси его продолжать install/clone вручную.
+Если repo позже содержит `.node-version`, `.nvmrc`, `packageManager` или другой более точный strategy, следуй repo source-of-truth и зафиксируй это в closeout.
 
-### CX-030. Установить GitHub CLI, если нужен verified sync
+### CX-030. Установить GitHub CLI при необходимости verified sync
 
 ```bash
 set -euo pipefail
@@ -68,11 +89,24 @@ if ! command -v gh >/dev/null 2>&1; then
   apt-get install -y gh
 fi
 gh --version
+gh auth status || true
 ```
 
-Если GitHub auth нужен для private repo или push, сначала проверь `gh auth status`. Secret/token вводит только пользователь в официальном `gh auth login` flow.
+Если push требует auth и `gh auth status` не green, зафиксируй blocker `github-auth-required`. Secret/token вводит только пользователь в официальный `gh auth login` flow.
 
-### CX-040. Создать `/projects` и clone/sync repo
+### CX-040. Установить Codex CLI на remote host, если contour требует
+
+```bash
+set -euo pipefail
+if ! command -v codex >/dev/null 2>&1; then
+  npm i -g @openai/codex
+fi
+codex --version
+```
+
+Если `codex` требует interactive sign in, зафиксируй blocker `codex-remote-sign-in-required`. Не перекладывай на пользователя clone/setup/verify.
+
+### CX-050. Создать `/projects` и clone/sync repo
 
 ```bash
 set -euo pipefail
@@ -86,44 +120,30 @@ git status --short --branch
 git remote -v
 ```
 
-Если repo private и HTTPS clone fails, попробуй authenticated `gh repo clone mppcoder/factory-template factory-template` после `gh auth status`. Если auth недоступен, зафиксируй blocker.
+Если repo уже существует, не перетирай user changes. Если clone private/auth fails, попробуй `gh repo clone mppcoder/factory-template factory-template` только после successful `gh auth status`; иначе blocker.
 
-### CX-050. Прочитать repo router и route files
+### CX-060. Прочитать repo rules
 
 ```bash
 set -euo pipefail
 cd /projects/factory-template
+sed -n '1,240p' AGENTS.md
 sed -n '1,240p' template-repo/scenario-pack/00-master-router.md
 ```
 
-Если router отправляет в дополнительные repo files, прочитай их до реализации.
+Если router отправляет в другие repo files, прочитай их до реализации.
 
-### CX-060. Запустить setup/bootstrap discovery
-
-```bash
-set -euo pipefail
-cd /projects/factory-template
-test -f AGENTS.md && sed -n '1,220p' AGENTS.md
-find . -maxdepth 3 -type f \( -name 'README.md' -o -name 'package.json' -o -name 'pyproject.toml' -o -name 'requirements*.txt' -o -name 'Makefile' \) | sort
-```
-
-Если repo содержит явный bootstrap script, используй его. Если нет, не выдумывай тяжелый bootstrap; переходи к repo validators.
-
-### CX-070. Целевая проверка
+### CX-070. Запустить setup/bootstrap discovery
 
 ```bash
 set -euo pipefail
 cd /projects/factory-template
-python3 template-repo/scripts/validate-runbook-packages.py .
-python3 template-repo/scripts/validate-codex-routing.py .
-python3 template-repo/scripts/validate-project-lifecycle-dashboard.py template-repo/template/.chatgpt/project-lifecycle-dashboard.yaml
-python3 template-repo/scripts/validate-brownfield-transition.py .
-python3 template-repo/scripts/validate-greenfield-conversion.py .
+find . -maxdepth 3 -type f \( -name 'README.md' -o -name 'package.json' -o -name 'pyproject.toml' -o -name 'requirements*.txt' -o -name 'Makefile' -o -name 'setup.sh' -o -name 'bootstrap*.sh' \) | sort
 ```
 
-Если targeted verify fails, исправь drift в repo-owned files и повтори targeted verify.
+Если найден repo-approved setup/bootstrap script, запусти его. Если явного bootstrap нет, не придумывай heavy setup; переходи к validators.
 
-### CX-080. Быстрая проверка
+### CX-080. Запустить быструю проверку
 
 ```bash
 set -euo pipefail
@@ -131,20 +151,20 @@ cd /projects/factory-template
 bash template-repo/scripts/verify-all.sh quick
 ```
 
-Если quick verify слишком долгий или зависает из-за внешнего runtime, зафиксируй точный blocker и оставь targeted verify evidence.
+Если verify failed: пройти defect-capture -> remediation -> verify again. Для нового defect создать report в `reports/bugs/`, классифицировать layer и исправить repo-owned drift.
 
-### CX-090. Обновить dashboard и closeout artifacts
+### CX-090. Обновить dashboard/readout
 
-Обнови только релевантные repo artifacts:
+Обнови dashboard/readout только внутри repo-owned artifacts:
 
 - `template-repo/template/.chatgpt/project-lifecycle-dashboard.yaml`;
-- defect report в `reports/bugs/`;
-- release-facing docs (`CHANGELOG.md`, `RELEASE_NOTES.md`, `CURRENT_FUNCTIONAL_STATE.md`), если change release-facing;
-- source/export manifests, если добавлены новые package files.
+- relevant `.chatgpt` readout files, если route требует;
+- `CURRENT_FUNCTIONAL_STATE.md`, `CHANGELOG.md`, `RELEASE_NOTES.md`, если change release-facing;
+- `docs/template-architecture-and-event-workflows.md`, если workflow wording изменился.
 
-Dashboard должен показывать phase, gates, blockers и next action для runbook packages.
+Dashboard должен фиксировать `current_step`, `active_contour`, `takeover_ready`, `checklist_path`, blockers и next action для runbook packages.
 
-### CX-100. Проверенная синхронизация
+### CX-100. Выполнить verified sync
 
 ```bash
 set -euo pipefail
@@ -153,26 +173,20 @@ git status --short --branch
 git diff --check
 ```
 
-Если verify green, `origin` доступен, branch не защищен и repo rules разрешают sync, выполни canonical verified sync path. Если sync невозможен, зафиксируй blocker с evidence: auth, protected branch, remote drift, dirty unrelated changes или missing origin.
+Если verify green и `origin` доступен, выполни canonical verified sync:
 
-## Форма handoff после передачи Codex
-
-Пользователь вставляет один цельный handoff. Он не должен быть ссылкой на файл и должен содержать:
-
-```text
-Язык ответа Codex: русский. Отвечай пользователю по-русски.
-launch_source: chatgpt-handoff
-task_class: deep
-selected_profile: deep
-selected_model: gpt-5.5
-selected_reasoning_effort: high
-apply_mode: manual-ui
-strict_launch_mode: optional
-project_profile: factory-template as greenfield-product + factory-producer-owned layer
-selected_scenario: template-repo/scenario-pack/00-master-router.md -> ...
-pipeline_stage: ...
-handoff_allowed: yes
-defect_capture_path: required|not-required
+```bash
+bash VERIFIED_SYNC.sh
 ```
 
-Already-open live session не является надежным auto-switch boundary. Надежная executable boundary для strict mode: новый task launch через repo launcher/profile scripts; manual UI default: новый Codex chat/window, ручной picker, один handoff block.
+Если sync невозможен, зафиксируй blocker: auth, protected branch, remote drift, dirty unrelated changes или missing origin.
+
+### CX-110. Финал Codex
+
+Финал должен назвать:
+
+- contour: `codex-app-remote-ssh`, `vscode-remote-ssh-codex-extension` или `unknown`;
+- verify result;
+- commit hash / push status или blocker;
+- `git status --short --branch`;
+- внешний next step только если есть real external blocker.

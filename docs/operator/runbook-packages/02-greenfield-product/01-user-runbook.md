@@ -1,34 +1,21 @@
 # Пользовательский ранбук: greenfield-product
 
-Цель: создать или вести новый боевой проект, который с первого рабочего состояния является `greenfield-product` и `greenfield-active`.
+Цель: создать или вести новый боевой проект, который сразу является `greenfield-product` / `greenfield-active`.
+Этот package стартует не с пустого ПК, а после готового `factory-template` setup: пользователь уже умеет открыть remote Codex context по `docs/operator/runbook-packages/01-factory-template/01-user-runbook.md`.
 
 ## Настройка только пользователем
 
 Маркер слоя: `USER-ONLY SETUP`.
-Пользователь делает только внешний setup:
+Пользователь делает только external setup: имя проекта, GitHub repo/access, ChatGPT Project, secrets/approvals и открытие remote Codex context.
+Допустимые contours: `vscode-remote-ssh-codex-extension` через `Codex extension / Codex chat` в VS Code Remote SSH или fallback `codex-app-remote-ssh`.
 
-- ChatGPT plan с Codex access;
-- GitHub account и, если нужен private repo, доступ к нужной организации;
-- GitHub connector в ChatGPT Project;
-- VS Code, Remote - SSH, GitHub Pull Requests and Issues, Codex IDE extension, YAML, Markdown All in One;
-- Codex app optional;
-- Timeweb/VPS или другой remote host;
-- SSH key, `~/.ssh/config`, проверка `ssh <project-vps-alias>`;
-- выбор contour `codex-app-remote-ssh` или `vscode-remote-ssh-codex-extension`.
+### GF-000. Зафиксировать параметры проекта
 
-Если setup делается с нуля, пройдите `../01-factory-template/01-user-runbook.md` шаги `FT-000`..`FT-500`, заменив:
-
-- repo: `<OWNER>/<NEW_REPO>`;
-- target root: `/projects/<project-slug>`;
-- SSH alias: `<project-slug>-vps`.
-
-### GF-000. Зафиксировать параметры нового проекта
-
-- Окно: Browser ChatGPT / заметки.
+- Окно: Browser ChatGPT / Browser GitHub.
 - Делает: Пользователь.
-- Зачем: Codex нужен project slug и GitHub target.
-- Что нужно до начала: ChatGPT, GitHub и remote SSH setup готовы.
-- Где взять значения: `<project-slug>` придумайте латиницей; `<repo-owner>` и `<repo-name>` берутся из GitHub.
+- Зачем: Codex нужен canonical project target.
+- Что нужно до начала: Factory-template setup готов до remote Codex takeover.
+- Где взять значения: `<project-slug>` придумать латиницей; `<repo-owner>/<repo-name>` взять из GitHub.
 - Команды для копирования:
 
 ```text
@@ -40,47 +27,55 @@ github_repo: <repo-owner>/<repo-name>
 remote_root: /projects/<project-slug>
 ```
 
-- Куда вставить: В будущий ChatGPT handoff или заметки.
-- Ожидаемый результат: Есть один canonical project root `/projects/<project-slug>`.
-- Если ошибка: Не создавайте sibling helper repos в `/projects`; входящие материалы кладите в `/projects/<project-slug>/_incoming/`.
+- Куда вставить: В ChatGPT handoff или заметки.
+- Ожидаемый результат: Есть один target root `/projects/<project-slug>`.
+- Если ошибка: Не создавайте helper repo как sibling в `/projects`; временные материалы кладите в `/projects/<project-slug>/_incoming/`.
+- Evidence: Project slug и repo target записаны без секретов.
 - Следующий шаг: `GF-010`.
 
-### GF-010. Открыть remote Codex context
+### GF-010. Подготовить external access
 
-- Окно: VS Code Remote SSH / Codex app remote thread.
+- Окно: Browser GitHub / Browser ChatGPT.
 - Делает: Пользователь.
-- Зачем: После этого Codex сам materialize-ит project root.
-- Что нужно до начала: SSH alias работает.
-- Где взять значения: SSH alias из `~/.ssh/config`.
+- Зачем: Codex сможет создать/вести project repo и handoff.
+- Что нужно до начала: `GF-000`.
+- Где взять значения: GitHub owner/name и ChatGPT Project connector.
 - Команды для копирования:
 
-```bash
-hostname && whoami && pwd
+```text
+Проверить:
+- GitHub repo создан или owner/name однозначны для создания Codex;
+- ChatGPT Project подключен к GitHub;
+- secrets/approvals не вставлены в handoff;
+- release/deploy approval нужен только если scope этого требует.
 ```
 
-- Куда вставить: Remote terminal в VS Code или Codex app remote shell check.
-- Ожидаемый результат: Команда выполняется на VPS, не на локальном Windows.
-- Если ошибка: Вернитесь к SSH setup из factory-template user-runbook.
+- Куда вставить: Не вставлять; выполнить в GitHub/ChatGPT UI.
+- Ожидаемый результат: Repo/access/approvals готовы или blocker явно известен.
+- Если ошибка: Если GitHub write path недоступен, Codex должен зафиксировать blocker, а не просить пользователя выполнять internal repo work.
+- Evidence: Repo URL или planned owner/name; секреты не копировать.
 - Следующий шаг: `GF-020`.
 
 ### GF-020. Точка передачи Codex
 
-- Окно: Codex extension / Codex chat.
+- Окно: VS Code Remote SSH `Codex extension / Codex chat` или Codex app remote thread.
 - Делает: Пользователь.
-- Зачем: Передать создание greenfield project Codex.
-- Что нужно до начала: Remote Codex context открыт.
-- Где взять значения: Handoff готовит ChatGPT Project; он должен содержать `Язык ответа Codex: русский`.
+- Зачем: Передать создание/ведение greenfield project Codex.
+- Что нужно до начала: Remote Codex context готов по factory-template user-runbook.
+- Где взять значения: Handoff из ChatGPT Project.
 - Команды для копирования:
 
 ```text
 Вставить один цельный handoff block.
-Не использовать ссылку на файл.
-Не делить handoff на несколько сообщений.
+Обязательно: Язык ответа Codex: русский.
+Обязательно: project_preset greenfield-product.
+После вставки Codex создает/ведет project root сам.
 ```
 
-- Куда вставить: Новый Codex chat/window в remote context.
-- Ожидаемый результат: Codex дает route receipt и переходит к `02-codex-runbook.md`.
-- Если ошибка: Если Codex не в remote context, открыть новый remote chat/window.
+- Куда вставить: Новый remote Codex chat/window.
+- Ожидаемый результат: Codex дает route receipt и начинает `02-codex-runbook.md`.
+- Если ошибка: Если Codex context локальный, открыть remote chat/window заново.
+- Evidence: Route receipt и remote shell check.
 - Следующий шаг: `CODEX-AUTOMATION`.
 
 Маркер границы: `Codex takeover point`.
@@ -88,9 +83,4 @@ hostname && whoami && pwd
 ## Автоматизация Codex
 
 Маркер слоя: `CODEX-AUTOMATION`.
-После `GF-020` Codex сам создает `/projects/<project-slug>`, запускает `first-project-wizard.py` или equivalent scaffold path, materialize-ит repo-first core, создает/подключает GitHub repo при доступном write path, заполняет greenfield docs, запускает verify и closeout.
-
-## Границы
-
-Brownfield artifacts не должны появляться, если проект не проходит adoption/conversion path.
-Already-open live session является только non-canonical fallback и не переключает model/profile/reasoning сама по себе.
+После `GF-020` Codex выполняет project creation/materialization, GitHub repo setup при доступном write path, greenfield docs, verify и sync.

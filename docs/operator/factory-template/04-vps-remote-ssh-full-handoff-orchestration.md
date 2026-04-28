@@ -15,8 +15,8 @@
 ## Default path по умолчанию
 
 Default user-facing path: `VPS Remote SSH-first`.
-Beginner zero-to-Codex-ready setup is maintained in `docs/operator/runbook-packages/01-factory-template/01-user-runbook.md`.
-This orchestration runbook starts after the same takeover point: the operator has a remote Codex context on the VPS through `codex-app-remote-ssh` or `vscode-remote-ssh-codex-extension`.
+Beginner zero-to-Codex-ready setup описан в `docs/operator/runbook-packages/01-factory-template/01-user-runbook.md`.
+Этот orchestration runbook начинается после той же takeover-точки: у оператора уже есть remote Codex context на VPS через `codex-app-remote-ssh` или `vscode-remote-ssh-codex-extension`.
 
 Минимальный операторский поток — one-paste autopilot:
 
@@ -28,9 +28,9 @@ This orchestration runbook starts after the same takeover point: the operator ha
 6. Вставьте один цельный handoff block.
 
 На этом пользовательское действие для запуска full handoff заканчивается. Дальше parent Codex в этом VPS/repo context сам:
-- verifies the VPS context;
-- installs missing system/Codex tooling when needed;
-- clones or opens `/projects/factory-template`;
+- проверяет VPS context;
+- устанавливает недостающие system/Codex tools, если нужно;
+- клонирует или открывает `/projects/factory-template`;
 - выводит `handoff receipt` / `route receipt`;
 - materializes or reads the parent orchestration plan from the pasted handoff;
 - validates the plan before any session files are written;

@@ -120,6 +120,10 @@ runbook_packages:
     title: "Factory-template package"
     path: "docs/operator/runbook-packages/01-factory-template"
     current_phase: execution
+    current_step: FT-000
+    active_contour: not_selected
+    takeover_ready: false
+    checklist_path: "docs/operator/runbook-packages/01-factory-template/03-checklist.md"
     gates:
       - route-receipt
       - implementation
@@ -132,6 +136,10 @@ runbook_packages:
     title: "Greenfield product package"
     path: "docs/operator/runbook-packages/02-greenfield-product"
     current_phase: intake
+    current_step: GF-000
+    active_contour: not_selected
+    takeover_ready: false
+    checklist_path: "docs/operator/runbook-packages/02-greenfield-product/03-checklist.md"
     gates:
       - scaffold
       - greenfield-docs
@@ -144,6 +152,10 @@ runbook_packages:
     title: "Brownfield with repo conversion package"
     path: "docs/operator/runbook-packages/03-brownfield-with-repo-to-greenfield"
     current_phase: adoption
+    current_step: BWR-000
+    active_contour: not_selected
+    takeover_ready: false
+    checklist_path: "docs/operator/runbook-packages/03-brownfield-with-repo-to-greenfield/03-checklist.md"
     gates:
       - audit
       - adoption
@@ -156,6 +168,10 @@ runbook_packages:
     title: "Brownfield without repo reconstruction package"
     path: "docs/operator/runbook-packages/04-brownfield-without-repo-to-greenfield"
     current_phase: reconstruction
+    current_step: BWO-000
+    active_contour: not_selected
+    takeover_ready: false
+    checklist_path: "docs/operator/runbook-packages/04-brownfield-without-repo-to-greenfield/03-checklist.md"
     gates:
       - intake
       - reconstruction

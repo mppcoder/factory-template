@@ -1,123 +1,121 @@
 # Пользовательский ранбук: factory-template
 
-Этот файл ведет новичка от состояния "есть только Windows PC и браузер" до состояния "Codex работает в remote context на VPS и может сам продолжить установку". После takeover point пользователь больше не устанавливает пакеты, не клонирует repo и не запускает verify вручную: это делает Codex по `02-codex-runbook.md`.
+Стартовая точка для новичка: `FT-000`.
+Цель: довести пользователя от состояния "есть только Windows PC и браузер" до состояния "remote Codex context готов, можно вставить один большой handoff". После `FT-170` пользовательский ранбук останавливается: дальше Codex сам делает clone/setup/verify/dashboard/sync по `02-codex-runbook.md`.
 
 ## Настройка только пользователем
 
 Маркер слоя: `USER-ONLY SETUP`.
-Пользователь делает только действия, где нужен внешний UI, учетная запись, SSH-доступ, секрет или ручной sign in.
-
-Плейсхолдеры:
-
-- `<WINDOWS_USER>`: имя папки пользователя Windows, например `Ivan`.
-- `<GITHUB_USER>`: login GitHub из `https://github.com/<GITHUB_USER>`.
-- `<VPS_IP>`: публичный IPv4 адрес сервера в Timeweb Cloud.
-- `<VPS_USER>`: обычно `root`, если при создании VPS не выбран отдельный пользователь.
-- `<SSH_KEY_NAME>`: `factory-template-vps`.
+Пользователь делает только внешние действия: аккаунты, подписки, GitHub/ChatGPT/Codex sign in, Timeweb Cloud, VPS, SSH key, SSH config и выбор рабочего Codex contour.
 
 ## Автоматизация Codex
 
 Маркер слоя: `CODEX-AUTOMATION`.
-Начинается после шагов `FT-300` или `FT-400`, когда remote Codex thread/extension может выполнять команды на VPS. Дальше пользователь вставляет один большой handoff в Codex, а Codex сам проверяет VPS, ставит tools, клонирует `mppcoder/factory-template`, запускает bootstrap/verify, чинит drift, обновляет dashboard и делает verified sync.
+После takeover пользователь вставляет один handoff, а Codex сам проверяет VPS, ставит пакеты, создает `/projects/factory-template`, клонирует `mppcoder/factory-template`, запускает setup/bootstrap, `verify-all.sh quick`, чинит drift, обновляет dashboard и делает verified sync при доступном `origin`.
 
-## Варианты Codex setup
+## Плейсхолдеры
 
-- `codex-app-remote-ssh`: Codex app подключается к `factory-vps` и открывает remote folder на VPS.
-- `vscode-remote-ssh-codex-extension`: VS Code подключается к `factory-vps`, а `Codex extension / Codex chat` работает внутри VS Code Remote SSH window.
+- `<VPS_IP>`: публичный IPv4 адрес из Timeweb Cloud Dashboard -> карточка VPS.
+- `<GITHUB_USER>`: GitHub login из профиля `https://github.com/<GITHUB_USER>`.
+- `<server-hostname>`: hostname VPS после входа по SSH.
+- `<handoff block>`: один цельный текст из ChatGPT Project, без ссылки на файл и без разбиения на несколько сообщений.
+- `Codex takeover point`: момент `FT-170`, когда remote `Codex extension / Codex chat` или Codex app thread уже может выполнять команды на VPS.
 
-Выберите один вариант. Если сомневаетесь, используйте `vscode-remote-ssh-codex-extension`: он проще проверяется через встроенный remote terminal.
+## Шаги
 
 ### FT-000. Стартовое состояние
 
 - Окно: Windows PC / Browser.
 - Делает: Пользователь.
-- Зачем: Зафиксировать исходную точку и не начинать с repo-команд, пока нет доступа.
-- Что нужно до начала: Компьютер с Windows 10/11, браузер, интернет, права устанавливать программы.
-- Где взять значения: Пока значения не нужны.
+- Зачем: Зафиксировать, что repo-команды еще не нужны.
+- Что нужно до начала: Windows PC, браузер, интернет, права устанавливать программы.
+- Где взять значения: Значения пока не нужны.
 - Команды для копирования:
 
 ```text
 Старт: есть Windows PC, браузер и интернет.
-Цель user-runbook: довести Codex до remote VPS context.
+Иду по ранбуку с FT-000 до FT-170.
+После FT-170 Codex делает clone/setup/verify сам.
 ```
 
-- Куда вставить: Можно никуда не вставлять; это контрольная заметка.
-- Ожидаемый результат: Вы понимаете, что все repo-команды начнутся только после takeover point.
-- Если ошибка: Если нет прав устанавливать программы, используйте учетную запись Windows с правами администратора.
+- Куда вставить: Можно вставить в заметки; в терминал не вставлять.
+- Ожидаемый результат: Понятна граница: пользователь готовит доступ, Codex автоматизирует repo work.
+- Если ошибка: Если нет прав установки программ, используйте Windows account с правами администратора.
+- Evidence: Пользователь может открыть браузер и Windows PowerShell.
 - Следующий шаг: `FT-010`.
 
 ### FT-010. Оформить или проверить ChatGPT plan с Codex access
 
 - Окно: Browser ChatGPT.
 - Делает: Пользователь.
-- Зачем: Codex CLI, IDE extension и app должны иметь доступ через ChatGPT account или API key.
-- Что нужно до начала: Аккаунт ChatGPT.
-- Где взять значения: Текущий plan виден в ChatGPT account settings.
+- Зачем: Codex app, IDE extension или CLI должны быть доступны через ChatGPT account или официальный auth flow.
+- Что нужно до начала: Email/phone для ChatGPT account.
+- Где взять значения: ChatGPT -> account menu -> Settings / Plan.
 - Команды для копирования:
 
 ```text
-Проверить:
-- ChatGPT account открыт.
-- Plan дает доступ к Codex.
-- Я могу открыть Codex client и пройти sign in.
+Проверить в ChatGPT:
+- account открыт;
+- plan/workspace дает доступ к Codex;
+- sign in в Codex client доступен.
 ```
 
-- Куда вставить: Не вставлять; сверить в ChatGPT web UI.
-- Ожидаемый результат: В настройках аккаунта виден plan с Codex access; Codex sign in доступен.
-- Если ошибка: Если Codex недоступен, проверьте plan/region/workspace controls в ChatGPT settings.
+- Куда вставить: Не вставлять; выполнить в Browser ChatGPT.
+- Ожидаемый результат: ChatGPT account активен, Codex access виден или Codex sign in открывается.
+- Если ошибка: Если Codex не виден, проверьте plan, workspace controls и доступность Codex в вашем регионе/account.
+- Evidence: Скриншот или текстовый статус plan без секретов.
 - Следующий шаг: `FT-020`.
 
 ### FT-020. Создать или проверить GitHub account
 
 - Окно: Browser GitHub.
 - Делает: Пользователь.
-- Зачем: `factory-template` хранится в GitHub repo, а ChatGPT/Codex должны уметь читать или клонировать его.
-- Что нужно до начала: Email и браузер.
-- Где взять значения: `<GITHUB_USER>` виден в правом верхнем меню GitHub или в profile URL.
+- Зачем: Repo `mppcoder/factory-template` читается из GitHub, а sync требует GitHub identity.
+- Что нужно до начала: Email для GitHub.
+- Где взять значения: `<GITHUB_USER>` взять в GitHub profile menu или из profile URL.
 - Команды для копирования:
 
 ```text
 GitHub checklist:
-- Login: <GITHUB_USER>
-- Email подтвержден.
-- Я могу открыть https://github.com/mppcoder/factory-template
+- login: <GITHUB_USER>
+- email подтвержден;
+- открывается https://github.com/mppcoder/factory-template
 ```
 
-- Куда вставить: Не вставлять; сверить в GitHub UI.
-- Ожидаемый результат: Открывается GitHub account и repo page.
-- Если ошибка: Если repo не открывается, проверьте login или доступ к организации/репозиторию.
+- Куда вставить: Не вставлять; проверить в Browser GitHub.
+- Ожидаемый результат: GitHub account открыт, repo page доступна.
+- Если ошибка: Если repo не открывается, проверьте login, организацию и права доступа.
+- Evidence: `<GITHUB_USER>` и факт, что repo page открывается; токены не копировать.
 - Следующий шаг: `FT-030`.
 
 ### FT-030. Подключить GitHub account к ChatGPT Project или connector
 
-- Окно: Browser ChatGPT / Settings / Apps.
+- Окно: Browser ChatGPT / Browser GitHub OAuth.
 - Делает: Пользователь.
-- Зачем: ChatGPT Project должен читать GitHub repo и готовить repo-first handoff.
+- Зачем: ChatGPT Project должен читать repo-first source и готовить handoff из GitHub repo.
 - Что нужно до начала: `FT-010`, `FT-020`.
-- Где взять значения: GitHub account выбирается в OAuth screen; repo name: `mppcoder/factory-template`.
+- Где взять значения: GitHub OAuth выбирает account `<GITHUB_USER>`; repo path `mppcoder/factory-template`.
 - Команды для копирования:
 
 ```text
-Подключить GitHub к ChatGPT:
-1. ChatGPT -> Settings -> Apps.
-2. Найти GitHub.
-3. Connect.
-4. Разрешить доступ к repo mppcoder/factory-template.
-5. Проверить поиск repo:mppcoder/factory-template.
+ChatGPT -> Settings -> Apps/Connectors -> GitHub -> Connect.
+Разрешить доступ к mppcoder/factory-template.
+Проверить, что ChatGPT может найти repo:mppcoder/factory-template.
 ```
 
-- Куда вставить: Не вставлять; выполнить в Browser ChatGPT и GitHub OAuth windows.
-- Ожидаемый результат: ChatGPT может найти или открыть `mppcoder/factory-template`.
-- Если ошибка: Если GitHub app не виден, проверьте доступность connector для вашего plan/workspace; если repo не индексируется, выполните поиск по `repo:mppcoder/factory-template`.
+- Куда вставить: Не вставлять; пройти UI в Browser ChatGPT и GitHub OAuth.
+- Ожидаемый результат: GitHub connector подключен, ChatGPT видит repo.
+- Если ошибка: Если connector недоступен, зафиксируйте это как external blocker; если repo не виден, проверьте scope GitHub app.
+- Evidence: ChatGPT/GitHub connector показывает connected state.
 - Следующий шаг: `FT-040`.
 
 ### FT-040. Установить VS Code
 
-- Окно: Browser / Windows installer.
+- Окно: Windows PowerShell.
 - Делает: Пользователь.
-- Зачем: Для default contour `vscode-remote-ssh-codex-extension`.
+- Зачем: Default contour для новичка: `vscode-remote-ssh-codex-extension`.
 - Что нужно до начала: Windows PC с правами установки.
-- Где взять значения: Официальный сайт: `https://code.visualstudio.com/`.
+- Где взять значения: Package id фиксирован: `Microsoft.VisualStudioCode`.
 - Команды для копирования:
 
 ```powershell
@@ -131,16 +129,17 @@ winget install --id Microsoft.VisualStudioCode -e
 Successfully installed
 ```
 
-- Если ошибка: Если `winget` недоступен, скачайте installer с сайта VS Code; если Windows спрашивает разрешение, подтвердите установку.
+- Если ошибка: Если `winget` отсутствует, скачайте VS Code с `https://code.visualstudio.com/`; если Windows просит подтверждение, подтвердите установку.
+- Evidence: VS Code запускается из Start menu.
 - Следующий шаг: `FT-050`.
 
 ### FT-050. Установить VS Code extensions
 
-- Окно: Windows PowerShell / VS Code.
+- Окно: Windows PowerShell.
 - Делает: Пользователь.
-- Зачем: Remote SSH, GitHub integration, Codex IDE extension, YAML и Markdown нужны для комфортной работы.
+- Зачем: Remote SSH, GitHub и Codex IDE extension нужны для remote takeover.
 - Что нужно до начала: `FT-040`.
-- Где взять значения: Extension IDs используются в командах ниже.
+- Где взять значения: Extension IDs ниже; если Codex extension ID изменился, найти `Codex` или `OpenAI` в VS Code Extensions.
 - Команды для копирования:
 
 ```powershell
@@ -159,37 +158,39 @@ code --install-extension ms-azuretools.vscode-docker
 Extension '...' was successfully installed.
 ```
 
-- Если ошибка: Если `code` не найден, откройте VS Code -> Command Palette -> `Shell Command: Install 'code' command in PATH`, затем повторите; если Codex extension ID изменился, найдите `Codex` или `OpenAI` в Extensions UI.
+- Если ошибка: Если `code` не найден, откройте VS Code -> Command Palette -> `Shell Command: Install 'code' command in PATH`; если Codex extension не находится, установить через Extensions UI.
+- Evidence: VS Code Extensions view показывает Remote - SSH, GitHub Pull Requests and Issues, Codex/OpenAI extension, YAML, Markdown All in One.
 - Следующий шаг: `FT-060`.
 
 ### FT-060. Установить Codex app на ПК
 
-- Окно: Browser / Codex app installer.
+- Окно: Browser / Codex app.
 - Делает: Пользователь.
-- Зачем: Для альтернативного contour `codex-app-remote-ssh`.
-- Что нужно до начала: ChatGPT account с Codex access.
-- Где взять значения: Официальная Codex app page из OpenAI Codex docs.
+- Зачем: Fallback contour `codex-app-remote-ssh`.
+- Что нужно до начала: `FT-010`.
+- Где взять значения: Официальная Codex app page: `https://developers.openai.com/codex/app`.
 - Команды для копирования:
 
 ```text
 Codex app checklist:
-- Скачать Codex app для Windows.
-- Установить приложение.
-- Открыть приложение.
-- Sign in через ChatGPT account.
+- открыть официальную Codex app page;
+- скачать Codex app для Windows, если доступна;
+- установить app;
+- выполнить sign in через ChatGPT account.
 ```
 
-- Куда вставить: Не вставлять; выполнить в Browser и Codex app installer.
+- Куда вставить: Не вставлять; выполнить в Browser и Codex app.
 - Ожидаемый результат: Codex app открывается и показывает signed-in account.
-- Если ошибка: Если app не устанавливается, используйте `vscode-remote-ssh-codex-extension` как основной путь.
+- Если ошибка: Если Codex app недоступен на ПК, используйте default contour `vscode-remote-ssh-codex-extension`.
+- Evidence: Codex app открыт или зафиксирован fallback на VS Code contour.
 - Следующий шаг: `FT-070`.
 
 ### FT-070. Установить Codex CLI локально, если нужен локальный test contour
 
 - Окно: Windows PowerShell.
 - Делает: Пользователь.
-- Зачем: Локальный CLI не обязателен для VPS takeover, но полезен для проверки sign in и fallback.
-- Что нужно до начала: Node/npm на Windows или возможность установить Node.js.
+- Зачем: Локальный CLI не обязателен для remote takeover, но помогает проверить auth/fallback.
+- Что нужно до начала: `FT-010`; возможность установить Node.js LTS.
 - Где взять значения: Codex CLI package: `@openai/codex`.
 - Команды для копирования:
 
@@ -206,193 +207,179 @@ codex --version
 codex <version>
 ```
 
-- Если ошибка: Закройте и откройте PowerShell после установки Node; если `npm` не найден, переустановите Node.js LTS.
+- Если ошибка: Если `npm` не найден после установки Node.js, закройте и снова откройте PowerShell.
+- Evidence: Вывод `codex --version` или решение пропустить local test contour.
 - Следующий шаг: `FT-080`.
 
 ### FT-080. Войти в Codex через ChatGPT account или API key
 
-- Окно: Windows PowerShell / Codex app / VS Code Codex sidebar.
+- Окно: Codex app / VS Code Codex sidebar / Windows PowerShell.
 - Делает: Пользователь.
 - Зачем: Codex должен быть авторизован до remote takeover.
-- Что нужно до начала: `FT-010`, один установленный Codex client.
-- Где взять значения: ChatGPT account или API key вводится только в официальный sign-in flow; не вставляйте секреты в repo или handoff.
+- Что нужно до начала: `FT-010`, установленный Codex client.
+- Где взять значения: ChatGPT account используется в официальном sign-in flow; API key вводить только в официальный prompt, не в repo и не в handoff.
 - Команды для копирования:
 
 ```powershell
 codex
 ```
 
-- Куда вставить: Windows PowerShell, если установлен локальный CLI. Для app/extension используйте кнопку Sign in.
-- Ожидаемый результат: Codex открывает sign-in flow; после входа показывает интерактивный prompt или signed-in state.
-- Если ошибка: Если ранее использовался API key mode и sign in не появляется, выполните `codex logout`, затем снова `codex`.
+- Куда вставить: Windows PowerShell, если установлен Codex CLI; для app/extension нажать Sign in в UI.
+- Ожидаемый результат: Открывается auth flow, после входа Codex показывает signed-in state или prompt.
+- Если ошибка: Если sign in не появляется, выполните `codex logout`, затем снова `codex`; если используете extension/app, перезапустите client.
+- Evidence: Codex client показывает signed-in state; секреты не сохранять.
 - Следующий шаг: `FT-090`.
 
 ### FT-090. Создать Timeweb Cloud account
 
-- Окно: Browser Timeweb Cloud.
+- Окно: Timeweb Cloud в браузере.
 - Делает: Пользователь.
-- Зачем: VPS нужен как remote machine, где Codex будет разворачивать factory-template.
-- Что нужно до начала: Email/телефон/платежный метод по правилам Timeweb.
-- Где взять значения: Аккаунт создается в Timeweb Cloud dashboard.
+- Зачем: VPS нужен как remote host для Codex.
+- Что нужно до начала: Email/phone/payment method по правилам Timeweb.
+- Где взять значения: Timeweb Cloud Dashboard после регистрации.
 - Команды для копирования:
 
 ```text
 Timeweb checklist:
-- Account создан.
-- Billing/phone/email подтверждены.
-- Cloud dashboard открывается.
+- account создан;
+- email/phone/billing подтверждены;
+- Cloud Dashboard открывается.
 ```
 
 - Куда вставить: Не вставлять; выполнить в Timeweb Cloud UI.
-- Ожидаемый результат: Вы видите Timeweb Cloud dashboard.
-- Если ошибка: Если account или платеж не подтверждается, остановитесь: без VPS takeover невозможен.
+- Ожидаемый результат: Timeweb Cloud Dashboard доступен.
+- Если ошибка: Если billing/account не подтвержден, остановитесь: VPS создать нельзя.
+- Evidence: Dashboard открыт, без платежных данных в handoff.
 - Следующий шаг: `FT-100`.
 
 ### FT-100. Создать VPS Ubuntu 24.04 в Timeweb
 
 - Окно: Timeweb Cloud.
 - Делает: Пользователь.
-- Зачем: Создать remote host для Codex.
+- Зачем: Создать remote machine для Codex.
 - Что нужно до начала: `FT-090`.
-- Где взять значения: `<VPS_IP>` появится в карточке сервера после создания; `<VPS_USER>` обычно `root`.
+- Где взять значения: `<VPS_IP>` появится в карточке VPS; username для этого runbook: `root`.
 - Команды для копирования:
 
 ```text
-VPS choices:
+VPS settings:
 - OS: Ubuntu 24.04
-- SSH access: enabled
-- SSH key: добавить на шаге FT-120 или выбрать уже добавленный key
-- Host alias для локального ПК: factory-vps
+- User: root
+- SSH key access: включить
+- Public IP: <VPS_IP>
+- Local SSH alias будет: factory-vps
 ```
 
-- Куда вставить: Не вставлять; выбрать значения в Timeweb Cloud UI при создании сервера.
-- Ожидаемый результат: Сервер создан, status `running`, публичный IP виден в dashboard.
-- Если ошибка: Если UI предлагает только password access, включите SSH key access или добавьте ключ после создания через server settings.
+- Куда вставить: Не вставлять; выбрать значения в Timeweb Cloud UI.
+- Ожидаемый результат: VPS создан, status running, публичный `<VPS_IP>` виден в Dashboard.
+- Если ошибка: Если VPS доступен только по password, добавьте SSH key на `FT-120` или через Timeweb console.
+- Evidence: `<VPS_IP>` записан в заметки; password/secrets не копировать.
 - Следующий шаг: `FT-110`.
 
 ### FT-110. Создать SSH-ключ на ПК в Windows PowerShell
 
 - Окно: Windows PowerShell.
 - Делает: Пользователь.
-- Зачем: SSH key позволит безопасно подключаться к VPS без вставки пароля в Codex.
-- Что нужно до начала: Windows OpenSSH Client. В Windows 10/11 обычно уже установлен.
-- Где взять значения: `<SSH_KEY_NAME>` используйте `factory-template-vps`.
+- Зачем: SSH key позволит подключаться к VPS без пароля.
+- Что нужно до начала: Windows OpenSSH Client установлен; обычно есть в Windows 10/11.
+- Где взять значения: Key path фиксирован: `$env:USERPROFILE\.ssh\factory_timeweb_ed25519`.
 - Команды для копирования:
 
 ```powershell
-ssh -V
-New-Item -ItemType Directory -Force "$env:USERPROFILE\.ssh"
-ssh-keygen -t ed25519 -a 100 -f "$env:USERPROFILE\.ssh\factory-template-vps" -C "factory-template-vps"
-Get-Content "$env:USERPROFILE\.ssh\factory-template-vps.pub"
-```
-
-- Куда вставить: Windows PowerShell. На вопрос passphrase можно нажать Enter для пустой passphrase или задать свою; если зададите passphrase, храните ее вне repo.
-- Ожидаемый результат:
-
-```text
-ssh-ed25519 AAAA... factory-template-vps
-```
-
-- Если ошибка: Если `ssh` не найден, Windows Settings -> Optional Features -> Add feature -> OpenSSH Client; если файл уже существует, не перезаписывайте его без причины.
-- Следующий шаг: `FT-120`.
-
-### FT-120. Добавить SSH public key в Timeweb/VPS
-
-- Окно: Timeweb Cloud / Server settings / SSH keys.
-- Делает: Пользователь.
-- Зачем: VPS должен доверять public key с вашего ПК.
-- Что нужно до начала: `FT-110`, созданный VPS.
-- Где взять значения: Public key скопируйте из вывода `Get-Content "$env:USERPROFILE\.ssh\factory-template-vps.pub"`.
-- Команды для копирования:
-
-```powershell
-Get-Content "$env:USERPROFILE\.ssh\factory-template-vps.pub"
-```
-
-- Куда вставить: Windows PowerShell для вывода ключа; затем скопировать всю строку `ssh-ed25519 ...` в Timeweb Cloud -> SSH keys -> Add key или Server -> Access -> SSH keys.
-- Ожидаемый результат: В Timeweb Cloud появляется ключ `factory-template-vps`, сервер привязан к этому ключу.
-- Если ошибка: Если ключ добавлен после создания VPS, используйте Timeweb console или server settings, чтобы применить ключ к серверу; если UI требует reboot, выполните reboot из панели.
-- Следующий шаг: `FT-130`.
-
-### FT-130. Настроить SSH alias `factory-vps`
-
-- Окно: Windows PowerShell / Notepad.
-- Делает: Пользователь.
-- Зачем: Codex app и VS Code Remote SSH будут подключаться по одному понятному alias.
-- Что нужно до начала: `<VPS_IP>`, `<VPS_USER>`, private key file.
-- Где взять значения: `<VPS_IP>` в Timeweb server card; `<VPS_USER>` в server access settings, обычно `root`.
-- Команды для копирования:
-
-```powershell
-notepad "$env:USERPROFILE\.ssh\config"
-```
-
-```sshconfig
-Host factory-vps
-    HostName <VPS_IP>
-    User <VPS_USER>
-    IdentityFile ~/.ssh/factory-template-vps
-    IdentitiesOnly yes
-    ServerAliveInterval 30
-```
-
-- Куда вставить: Первую команду вставить в Windows PowerShell. Второй block вставить в Notepad, заменить `<VPS_IP>` и `<VPS_USER>`, сохранить файл.
-- Ожидаемый результат: Файл `%USERPROFILE%\.ssh\config` содержит host `factory-vps`.
-- Если ошибка: Если Notepad спрашивает создать файл, нажмите Yes; если путь с пробелами ломается, используйте именно команду с кавычками.
-- Следующий шаг: `FT-140`.
-
-### FT-140. Проверить `ssh factory-vps`
-
-- Окно: Windows PowerShell.
-- Делает: Пользователь.
-- Зачем: До Codex setup надо доказать, что Windows PC может войти на VPS.
-- Что нужно до начала: `FT-130`.
-- Где взять значения: Значения уже в SSH config.
-- Команды для копирования:
-
-```powershell
-ssh factory-vps "hostname && whoami && lsb_release -a"
+$KEY="$env:USERPROFILE\.ssh\factory_timeweb_ed25519"
+ssh-keygen -t ed25519 -C "factory-template-timeweb-vps" -f $KEY
+Get-Content "$KEY.pub"
 ```
 
 - Куда вставить: Windows PowerShell.
 - Ожидаемый результат:
 
 ```text
-<server-hostname>
-root
-Distributor ID: Ubuntu
-Description:    Ubuntu 24.04...
+ssh-ed25519 AAAA... factory-template-timeweb-vps
 ```
 
-- Если ошибка: `Permission denied (publickey)` означает, что public key не применен к серверу или выбран не тот private key; `Connection timed out` означает, что IP/firewall/сервер недоступны.
-- Следующий шаг: `FT-200`.
+- Если ошибка: Если `.ssh` folder отсутствует, выполните `New-Item -ItemType Directory -Force "$env:USERPROFILE\.ssh"` и повторите; если key уже существует, не перезаписывайте без осознанного решения.
+- Evidence: Public key строка `ssh-ed25519 ... factory-template-timeweb-vps` скопирована для `FT-120`.
+- Следующий шаг: `FT-120`.
 
-### FT-200. Выбрать Codex contour
+### FT-120. Добавить public SSH key в Timeweb
 
-- Окно: Browser / заметки.
+- Окно: Timeweb Cloud / Windows PowerShell.
 - Делает: Пользователь.
-- Зачем: Дальше нужен один remote Codex path.
-- Что нужно до начала: `ssh factory-vps` работает.
-- Где взять значения: Выберите один ID: `codex-app-remote-ssh` или `vscode-remote-ssh-codex-extension`.
+- Зачем: VPS должен доверять public key с вашего ПК.
+- Что нужно до начала: `FT-100`, `FT-110`.
+- Где взять значения: Public key взять из вывода `Get-Content "$KEY.pub"`.
 - Команды для копирования:
 
-```text
-Выбранный contour: vscode-remote-ssh-codex-extension
-Fallback contour: codex-app-remote-ssh
+```powershell
+$KEY="$env:USERPROFILE\.ssh\factory_timeweb_ed25519"
+Get-Content "$KEY.pub"
 ```
 
-- Куда вставить: Можно вставить в заметки или оставить как решение.
-- Ожидаемый результат: Вы знаете, по какой ветке идти.
-- Если ошибка: Если не уверены, идите на `FT-400`.
-- Следующий шаг: `FT-300` для Codex app или `FT-400` для VS Code.
+- Куда вставить: Команды вставить в Windows PowerShell; затем всю строку `ssh-ed25519 ...` вставить в Timeweb Cloud -> SSH-ключи / Server access -> Add key.
+- Ожидаемый результат: В Timeweb Cloud есть SSH key `factory-template-timeweb-vps`, привязанный к VPS.
+- Если ошибка: Если key добавлен после создания VPS и не применяется, используйте Timeweb server settings или console, затем reboot по требованию UI.
+- Evidence: Timeweb Cloud показывает добавленный SSH key; private key не копировать.
+- Следующий шаг: `FT-130`.
 
-### FT-300. Настроить `codex-app-remote-ssh`
+### FT-130. Настроить SSH config на ПК
+
+- Окно: Windows PowerShell / Notepad.
+- Делает: Пользователь.
+- Зачем: VS Code Remote SSH и Codex app будут подключаться по alias `factory-vps`.
+- Что нужно до начала: `FT-100`, `FT-120`, значение `<VPS_IP>`.
+- Где взять значения: `<VPS_IP>` взять в Timeweb Cloud Dashboard -> карточка VPS.
+- Команды для копирования:
+
+```powershell
+notepad $env:USERPROFILE\.ssh\config
+```
+
+```sshconfig
+Host factory-vps
+    HostName <VPS_IP>
+    User root
+    IdentityFile ~/.ssh/factory_timeweb_ed25519
+    IdentitiesOnly yes
+```
+
+- Куда вставить: Первую команду вставить в Windows PowerShell. Второй блок вставить в Notepad, заменить `<VPS_IP>` на реальный IP, сохранить файл.
+- Ожидаемый результат: `%USERPROFILE%\.ssh\config` содержит host `factory-vps`.
+- Если ошибка: Если Notepad предлагает создать файл, нажмите Yes; если SSH config уже содержит `Host factory-vps`, обновите existing block вместо дублирования.
+- Evidence: В config есть `Host factory-vps`, `User root`, `IdentityFile ~/.ssh/factory_timeweb_ed25519`.
+- Следующий шаг: `FT-140`.
+
+### FT-140. Проверить SSH
+
+- Окно: Windows PowerShell.
+- Делает: Пользователь.
+- Зачем: До Codex setup нужно доказать, что ПК может войти на VPS.
+- Что нужно до начала: `FT-130`.
+- Где взять значения: Значения уже сохранены в SSH config.
+- Команды для копирования:
+
+```powershell
+ssh factory-vps
+```
+
+- Куда вставить: Windows PowerShell.
+- Ожидаемый результат:
+
+```text
+root@<server-hostname>:~#
+```
+
+- Если ошибка: `Permission denied (publickey)` означает, что public key не применен к VPS или выбран не тот private key; `Connection timed out` означает неверный `<VPS_IP>`, firewall или stopped VPS.
+- Evidence: SSH prompt `root@<server-hostname>:~#` открыт; для выхода можно выполнить `exit`.
+- Следующий шаг: `FT-150A` или `FT-150B`.
+
+### FT-150A. Вариант A: настроить Codex App + Remote SSH
 
 - Окно: Windows PowerShell / VPS terminal / Codex app.
 - Делает: Пользователь.
-- Зачем: Codex app должен открыть remote connection `factory-vps`.
+- Зачем: Fallback contour: Codex app remote thread выполняет команды на VPS.
 - Что нужно до начала: `FT-060`, `FT-080`, `FT-140`.
-- Где взять значения: SSH alias: `factory-vps`; remote folder до clone можно выбрать `/projects` или `/root`.
+- Где взять значения: SSH alias `factory-vps`; remote folder до clone: `/projects` или `/root`.
 - Команды для копирования:
 
 ```powershell
@@ -405,32 +392,33 @@ notepad "$env:USERPROFILE\.codex\config.toml"
 remote_connections = true
 ```
 
-- Куда вставить: Первые две команды в Windows PowerShell. Третью команду в Windows PowerShell, затем добавить `remote_connections = true` в config file. После этого открыть Codex app -> Settings -> Connections -> add/enable `factory-vps` -> выбрать remote folder `/projects` или `/root`.
+- Куда вставить: Первые две команды вставить в Windows PowerShell. Третью команду вставить в Windows PowerShell, затем добавить `remote_connections = true` в config file. После этого открыть Codex app -> Settings -> Connections -> add/enable `factory-vps` -> выбрать remote folder `/projects` или `/root`.
 - Ожидаемый результат:
 
 ```text
 codex <version>
 ```
 
-Codex app показывает connection `factory-vps` и может открыть remote thread.
-- Если ошибка: Если remote Codex просит sign in, выполните `ssh factory-vps`, затем `codex` на VPS и пройдите sign in; если app не видит connection, перезапустите Codex app после изменения config.
-- Следующий шаг: `FT-500`.
+Codex app показывает remote connection `factory-vps`, remote thread может выполнить команду на VPS.
+- Если ошибка: Если remote host просит sign in, выполните `ssh factory-vps`, затем `codex` на VPS и пройдите sign in; если Codex app не видит connection, перезапустите app после изменения config.
+- Evidence: Codex app remote thread выполняет `whoami` на VPS и показывает `root`.
+- Следующий шаг: `FT-160`.
 
-### FT-400. Настроить `vscode-remote-ssh-codex-extension`
+### FT-150B. Вариант B: настроить VS Code Remote SSH + Codex IDE extension
 
 - Окно: VS Code / Command Palette / VS Code Remote SSH / VPS terminal / Codex sidebar.
 - Делает: Пользователь.
-- Зачем: Default path: Codex extension работает в VS Code Remote SSH context, где есть remote terminal.
+- Зачем: Default contour: Codex IDE extension работает внутри VS Code Remote SSH context.
 - Что нужно до начала: `FT-040`, `FT-050`, `FT-080`, `FT-140`.
-- Где взять значения: SSH alias: `factory-vps`; remote folder до clone: `/projects` или `/root`.
+- Где взять значения: SSH alias `factory-vps`; remote folder до clone: `/projects` или `/root`.
 - Команды для копирования:
 
 ```text
-VS Code UI steps:
+VS Code UI path:
 1. Ctrl+Shift+P.
 2. Remote-SSH: Connect to Host.
 3. Выбрать factory-vps.
-4. Открыть remote folder /projects или /root.
+4. Open Folder: /projects или /root.
 5. Terminal -> New Terminal.
 6. Открыть Codex sidebar.
 7. Sign in в Codex extension.
@@ -438,10 +426,13 @@ VS Code UI steps:
 ```
 
 ```bash
-hostname && whoami && pwd && lsb_release -a
+whoami
+pwd
+uname -a
+lsb_release -a || cat /etc/os-release
 ```
 
-- Куда вставить: Первый block выполнить в VS Code UI. Второй block вставить в VS Code Remote SSH terminal.
+- Куда вставить: Первый блок выполнить в VS Code UI. Второй блок вставить в VS Code Remote SSH terminal.
 - Ожидаемый результат:
 
 ```text
@@ -450,42 +441,82 @@ root
 Description:    Ubuntu 24.04...
 ```
 
-Codex sidebar signed in и новый Codex chat/window открыт именно в Remote SSH window.
-- Если ошибка: Если Remote SSH не подключается, вернитесь к `FT-140`; если Codex sidebar открылся в локальном VS Code window, закройте его и откройте внутри Remote SSH window.
-- Следующий шаг: `FT-500`.
+Codex sidebar signed in, новый Codex chat/window открыт в Remote SSH window.
+- Если ошибка: Если Remote SSH не подключается, вернитесь к `FT-140`; если Codex открылся в локальном VS Code window, закройте его и откройте внутри Remote SSH window.
+- Evidence: VS Code status bar показывает SSH: `factory-vps`, terminal выполняет `whoami`, Codex sidebar signed in.
+- Следующий шаг: `FT-160`.
 
-### FT-500. Codex takeover point: вставить один большой handoff
+### FT-160. Выбрать рабочий вариант Codex
 
-- Окно: Codex app remote thread или VS Code Remote SSH Codex chat/window.
+- Окно: Codex app / VS Code Remote SSH.
 - Делает: Пользователь.
-- Зачем: Передать работу Codex. С этого момента Codex-runbook устанавливает tools, clone-ит repo и запускает verify.
-- Что нужно до начала: Remote Codex context может выполнять команды на VPS; в terminal или Codex visible context текущий host показывает Ubuntu 24.04.
-- Где взять значения: Handoff готовит Browser ChatGPT Project; он должен содержать `Язык ответа Codex: русский`.
+- Зачем: Для takeover нужен один рабочий contour, не оба сразу.
+- Что нужно до начала: Выполнен `FT-150A` или `FT-150B`.
+- Где взять значения: Выбранный contour по факту успешной remote команды.
 - Команды для копирования:
 
 ```text
-Перед вставкой handoff проверить:
-- Я в Codex app remote thread ИЛИ VS Code Remote SSH Codex chat.
-- Remote host: factory-vps.
-- Remote shell может выполнить hostname/whoami/pwd.
-- Handoff вставляется одним цельным блоком.
-- В новом Codex chat/window вручную выбран нужный model/reasoning, если picker доступен.
+Выбранный contour:
+- vscode-remote-ssh-codex-extension, если VS Code Remote SSH terminal и Codex sidebar работают.
+- codex-app-remote-ssh, если Codex app remote thread выполняет команды на VPS.
+```
+
+- Куда вставить: Можно вставить в заметки или оставить как контрольный список.
+- Ожидаемый результат: Один contour выбран как рабочий; default для новичка `vscode-remote-ssh-codex-extension`.
+- Если ошибка: Если ни один contour не выполняет remote command, перейти к `FT-180`.
+- Evidence: Название выбранного contour и результат remote command.
+- Следующий шаг: `FT-170`.
+
+### FT-170. Точка передачи Codex
+
+- Окно: Codex app remote thread или VS Code Remote SSH Codex chat/window.
+- Делает: Пользователь.
+- Зачем: Передать работу Codex; после этого пользователь не сопровождает clone/setup/verify руками.
+- Что нужно до начала: `FT-160`; remote Codex context может выполнять команды на VPS.
+- Где взять значения: `<handoff block>` взять из Browser ChatGPT Project. Он должен содержать `Язык ответа Codex: русский`.
+- Команды для копирования:
+
+```text
+Проверить перед вставкой:
+- открыт новый Codex chat/window;
+- выбран model/reasoning в picker, если picker доступен;
+- context remote: factory-vps;
+- handoff вставляется одним цельным блоком;
+- после вставки Codex делает clone/setup/verify сам.
+
+Вставить:
+<handoff block>
 ```
 
 - Куда вставить: В Codex app remote thread или VS Code Remote SSH Codex chat/window.
-- Ожидаемый результат: Codex отвечает по-русски route receipt и начинает выполнять `02-codex-runbook.md`.
-- Если ошибка: Если Codex отвечает из локального context, остановите его, откройте remote context заново и повторите; если handoff разделился на несколько сообщений, создайте новый chat/window и вставьте одним блоком.
-- Следующий шаг: `02-codex-runbook.md`, начиная с `CODEX-AUTOMATION`.
+- Ожидаемый результат: Codex отвечает route receipt по-русски и начинает `02-codex-runbook.md`: проверяет VPS, ставит packages, clone-ит repo, запускает verify и sync.
+- Если ошибка: Если Codex отвечает из локального context, остановить и открыть remote chat/window заново; если handoff разбился на несколько сообщений, создать новый chat/window и вставить одним блоком.
+- Evidence: Codex вывел route receipt и remote shell check.
+- Следующий шаг: `STOP` для пользователя; если Codex не стартовал, `FT-180`.
 
-## Что пользователь не делает после takeover
+### FT-180. Что прислать обратно, если Codex не стартовал
 
-После `FT-500` пользователь не выполняет вручную:
+- Окно: Windows PowerShell / VS Code Remote SSH / Codex app.
+- Делает: Пользователь.
+- Зачем: Дать минимальную диагностику без секретов, чтобы починить setup.
+- Что нужно до начала: Попытка `FT-170` не удалась.
+- Где взять значения: Error text из Codex/VS Code/SSH; выбранный contour из `FT-160`.
+- Команды для копирования:
 
-- `apt-get install`;
-- clone `mppcoder/factory-template`;
-- bootstrap/setup;
-- verify;
-- dashboard update;
-- commit/push или verified sync.
+```powershell
+ssh factory-vps
+```
 
-Эти действия принадлежат Codex, если нет external blocker, secret prompt или required approval.
+```text
+Диагностика для отправки:
+- выбранный contour: codex-app-remote-ssh или vscode-remote-ssh-codex-extension
+- что видно в Codex: <error text или screenshot без секретов>
+- вывод ssh factory-vps: <успешный prompt или ошибка>
+- где открыт Codex: local window или remote factory-vps window
+```
+
+- Куда вставить: Первую команду вставить в Windows PowerShell. Второй блок заполнить и отправить в ChatGPT/Codex support thread без токенов, паролей и private key.
+- Ожидаемый результат: Есть достаточная диагностика: screenshot/error text, output `ssh factory-vps`, выбранный contour A/B.
+- Если ошибка: Если `ssh factory-vps` тоже не работает, вернуться к `FT-130` и `FT-140`.
+- Evidence: Error text/screenshot без секретов и результат `ssh factory-vps`.
+- Следующий шаг: Исправить setup по диагностике, затем вернуться к `FT-170`.
