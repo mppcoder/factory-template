@@ -415,6 +415,7 @@ Compact default:
 Прямая команда Codex за launcher: {launch.get('codex_profile_command', 'codex --profile build')}
 Правило маршрутизации: advisory/handoff text не равен executable profile switch; надежная единица маршрутизации — только новый task launch.
 Правило приема ChatGPT handoff: если launch_source = chatgpt-handoff, Codex исполняет этот входящий handoff; первый ответ может содержать только handoff receipt / route receipt и не должен называть его self-handoff.
+Правило full orchestration: если handoff содержит parent orchestration plan, пользовательское действие заканчивается после вставки; parent Codex сам запускает repo-native orchestrator с validation gate и `--execute`, а ручная shell-команда пользователя является только troubleshooting/strict fallback.
 Правило ручного UI: для VS Code Codex extension откройте новый чат/окно, вручную выберите model/reasoning в picker, затем вставьте этот handoff.
 Правило live session: уже открытая live session = non-canonical fallback; не обещать auto-switch.
 Этап pipeline: {launch.get('pipeline_stage', 'unknown-stage')}

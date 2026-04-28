@@ -22,6 +22,7 @@ DOC_PATHS = [
 
 REQUIRED_DOC_FRAGMENTS = [
     "VPS Remote SSH-first",
+    "one-paste autopilot",
     "Codex App / Cloud Director",
     "optional, not default",
     "Already-open live session",
@@ -33,6 +34,7 @@ REQUIRED_DOC_FRAGMENTS = [
     "deferred_user_actions",
     "placeholder_replacements",
     "temporary placeholders",
+    "orchestrate-codex-handoff.py --execute",
 ]
 
 FORBIDDEN_PATTERNS = [

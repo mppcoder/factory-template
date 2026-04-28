@@ -122,6 +122,13 @@ Handoff должен явно различать:
 5. Отдельные Codex CLI sessions запускаются на VPS/repo context с явными `selected_profile`, `selected_model`, `selected_reasoning_effort`, `selected_plan_mode_reasoning_effort` и `selected_scenario`.
 6. Parent orchestration report собирает child results, blockers и final closeout.
 
+Для full orchestration handoff пользовательский default должен быть one-paste autopilot:
+- пользователь вставляет parent handoff один раз;
+- parent Codex сам выводит `handoff receipt`;
+- parent Codex сам materializes/reads parent orchestration plan;
+- parent Codex сам запускает `orchestrate-codex-handoff.py --execute` после validation gate;
+- ручной запуск shell-команды пользователем остается только troubleshooting / strict reproduction fallback.
+
 `Codex App / Cloud Director` допускается только как optional, not default. Cloud delegation нельзя описывать как default path и нельзя включать без явного выбора пользователя и разрешенной repo/security boundary.
 
 Already-open live session не является reliable auto-switch boundary. Parent orchestrator не выполняет specialist work inline, если subtask routing требует separate session/profile.

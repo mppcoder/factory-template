@@ -16,7 +16,7 @@
 
 Default user-facing path: `VPS Remote SSH-first`.
 
-Минимальный операторский поток:
+Минимальный операторский поток — one-paste autopilot:
 
 1. Откройте Browser ChatGPT Project и получите один большой handoff block.
 2. Откройте VS Code, подключенный к VPS через Remote SSH.
@@ -24,7 +24,29 @@ Default user-facing path: `VPS Remote SSH-first`.
 4. Откройте новый Codex chat/window в VS Code Remote SSH.
 5. Вручную выберите `selected_model` и `selected_reasoning_effort` в picker, если picker доступен.
 6. Вставьте один цельный handoff block.
-7. Запустите repo-native orchestration dry-run:
+
+На этом пользовательское действие для запуска full handoff заканчивается. Дальше parent Codex в этом VPS/repo context сам:
+- выводит `handoff receipt` / `route receipt`;
+- materializes or reads the parent orchestration plan from the pasted handoff;
+- validates the plan before any session files are written;
+- runs the repo-native orchestrator with explicit execution when the handoff is marked as full orchestration;
+- collects the parent orchestration report and child results;
+- performs repo-local verification, commit and push when allowed by repo closeout rules.
+
+Canonical parent Codex command for full orchestration:
+
+`orchestrate-codex-handoff.py --execute` is the parent Codex execution path for one-paste autopilot.
+
+```bash
+python3 template-repo/scripts/orchestrate-codex-handoff.py \
+  --plan <parent-orchestration-plan.yaml> \
+  --report reports/orchestration/parent-orchestration-report.md \
+  --execute
+```
+
+Manual shell execution by the operator is not the default path. It is only a troubleshooting / strict reproduction fallback.
+
+Dry-run fallback for debugging:
 
 ```bash
 python3 template-repo/scripts/orchestrate-codex-handoff.py \
@@ -32,7 +54,7 @@ python3 template-repo/scripts/orchestrate-codex-handoff.py \
   --report reports/orchestration/parent-orchestration-report.md
 ```
 
-Dry-run пишет parent report и per-subtask handoff files. Отдельные Codex CLI sessions реально стартуют только при явном `--execute`.
+Dry-run writes the parent report and per-subtask handoff files without starting child Codex CLI sessions. Real child sessions start only when parent Codex uses explicit `--execute` from the parent handoff instructions.
 
 ## Опциональные альтернативы
 
@@ -72,6 +94,7 @@ Parent orchestrator:
 - writes parent report;
 - records blockers and owner boundary;
 - does not execute specialist work inline when subtask routing says separate session/profile.
+- in one-paste autopilot, is launched by parent Codex after paste, not by a second operator action.
 
 Parent orchestrator does not:
 - store secrets;

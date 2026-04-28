@@ -4,7 +4,7 @@ report_date: 2026-04-28
 target_artifact: docs/operator/factory-template/04-vps-remote-ssh-full-handoff-orchestration.md
 artifact_type: operator-runbook
 expected_output:
-  guided: "Runbook фиксирует VPS Remote SSH-first default, optional Cloud/App boundary, explicit child routing fields, user actions last, placeholder reminders, dry-run runner and report contract."
+  guided: "Runbook фиксирует VPS Remote SSH-first one-paste autopilot, optional Cloud/App boundary, explicit child routing fields, user actions last, placeholder reminders, runner execution and report contract."
 thresholds:
   min_case_pass_rate: 1.0
   min_assertion_pass_rate: 1.0
@@ -21,6 +21,18 @@ expected_trigger:
           must_contain:
             - "VPS Remote SSH-first"
             - "VS Code Remote SSH"
+    - id: one-paste-autopilot
+      prompt: "Оператор хочет сделать одно действие: вставить parent handoff в Codex, подключенный по SSH к VPS."
+      expected: "Runbook says operator action ends after paste and parent Codex runs orchestrator."
+      baseline_expected: fail
+      assertions:
+        - id: paste-once-parent-runs
+          category: process
+          must_contain:
+            - "one-paste autopilot"
+            - "На этом пользовательское действие для запуска full handoff заканчивается"
+            - "parent Codex"
+            - "--execute"
     - id: child-routing-fields
       prompt: "Parent orchestrator должен запустить child sessions."
       expected: "Каждый child subtask имеет explicit profile/model/reasoning/scenario."
@@ -71,6 +83,11 @@ compliance_assertions:
     must_contain:
       - "orchestrate-codex-handoff.py"
       - "Dry-run"
+  - id: execute-runner
+    category: compliance
+    must_contain:
+      - "orchestrate-codex-handoff.py --execute"
+      - "Manual shell execution by the operator is not the default path"
   - id: no-auto-switch
     category: compliance
     must_contain:

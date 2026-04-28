@@ -51,6 +51,11 @@ Handoff terminology follow-up на `2026-04-28`: исправлена ambiguity,
 - Defect report: `reports/bugs/2026-04-28-chatgpt-handoff-self-handoff-duplication.md`.
 - Factory feedback: `reports/factory-feedback/feedback-041-chatgpt-handoff-self-handoff-duplication.md`.
 
+One-paste orchestration follow-up на `2026-04-28`: full handoff UX уточнен как one-paste autopilot. После вставки parent handoff в Codex в VPS Remote SSH repo context parent Codex сам запускает repo-native orchestrator с validation gate и `--execute`; ручной shell-запуск оператора оставлен только как troubleshooting/strict fallback.
+
+- Defect report: `reports/bugs/2026-04-28-one-paste-orchestration-autopilot-gap.md`.
+- Factory feedback: `reports/factory-feedback/feedback-042-one-paste-orchestration-autopilot-gap.md`.
+
 ## Проверка Plan №4 P4-S0/P4-S4 preparation
 
 Дата: `2026-04-27`.

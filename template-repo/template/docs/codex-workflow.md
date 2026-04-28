@@ -25,6 +25,8 @@
 
 Default path для большой задачи: `VPS Remote SSH-first`.
 
+Для full orchestration handoff default UX — one-paste autopilot: пользователь вставляет parent handoff один раз, а parent Codex сам запускает repo-native orchestrator после validation gate. `orchestrate-codex-handoff.py --execute` является parent Codex execution path; ручной shell-запуск оператора остается troubleshooting / strict fallback.
+
 1. Browser ChatGPT Project выдает один большой handoff.
 2. VS Code Remote SSH открывает repo на VPS.
 3. Codex extension в этом Remote SSH окне получает handoff.
@@ -42,6 +44,12 @@ Dry-run orchestration command:
 
 ```bash
 python3 template-repo/scripts/orchestrate-codex-handoff.py --plan tests/codex-orchestration/fixtures/valid/parent-plan.yaml --report reports/orchestration/parent-orchestration-report.md
+```
+
+Execute orchestration command, normally run by parent Codex after paste:
+
+```bash
+python3 template-repo/scripts/orchestrate-codex-handoff.py --plan <parent-orchestration-plan.yaml> --report reports/orchestration/parent-orchestration-report.md --execute
 ```
 
 Validator:
