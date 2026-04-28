@@ -2,6 +2,8 @@
 
 ## Критерии завершения
 
+- User-runbook останавливается на takeover point, а не заставляет пользователя вручную выполнять Codex automation.
+- Codex-runbook берет на себя install/clone/bootstrap/verify/dashboard/sync после remote context.
 - Targeted/quick verify green или documented blocker.
 - `CURRENT_FUNCTIONAL_STATE.md`, `CHANGELOG.md` и `RELEASE_NOTES.md` обновлены, если change release-facing.
 - Source/export manifests обновлены, если новые operator docs должны входить в curated/reference packs.

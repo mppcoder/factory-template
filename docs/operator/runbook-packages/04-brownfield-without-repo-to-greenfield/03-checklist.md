@@ -1,5 +1,7 @@
 # Чеклист: путь без repo
 
+- [ ] USER-ONLY SETUP выполнен: ChatGPT, GitHub, remote SSH, Codex contour, incoming materials boundary.
+- [ ] Codex takeover point достигнут через `codex-app-remote-ssh` или `vscode-remote-ssh-codex-extension`.
 - [ ] Target root создан как `/projects/<project-slug>`.
 - [ ] `_incoming/` находится внутри target root.
 - [ ] Temporary/reconstructed/helper repo не является sibling в `/projects`.

@@ -1,5 +1,7 @@
 # Чеклист: путь с существующим repo
 
+- [ ] USER-ONLY SETUP выполнен: ChatGPT, GitHub repo access, remote SSH, Codex contour.
+- [ ] Codex takeover point достигнут через `codex-app-remote-ssh` или `vscode-remote-ssh-codex-extension`.
 - [ ] Existing repo открыт как canonical project root.
 - [ ] Brownfield preset является transitional, не final.
 - [ ] Repo-first core materialized.

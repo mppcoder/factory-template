@@ -1,5 +1,7 @@
 # Проверка: путь без repo
 
+Package layer должен содержать `USER-ONLY SETUP`, `CODEX-AUTOMATION`, takeover point и beginner step cards.
+
 Intake/reconstruction gate:
 
 ```bash

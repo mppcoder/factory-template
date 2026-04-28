@@ -21,12 +21,13 @@ PACKAGES = {
     "01-factory-template": {
         "must": [
             "factory-producer-owned",
-            "Browser ChatGPT Project",
             "VS Code Remote SSH",
             "Codex extension / Codex chat",
-            "Terminal only fallback",
-            "GitHub UI / external UI",
-            "Secrets",
+            "USER-ONLY SETUP",
+            "CODEX-AUTOMATION",
+            "codex-app-remote-ssh",
+            "vscode-remote-ssh-codex-extension",
+            "Codex takeover point",
             "Внешних действий не требуется",
         ],
         "final": ["greenfield-product", "factory-producer-owned"],
@@ -35,12 +36,13 @@ PACKAGES = {
         "must": [
             "greenfield-product",
             "greenfield-active",
-            "Browser ChatGPT Project",
             "VS Code Remote SSH",
             "Codex extension / Codex chat",
-            "Terminal only fallback",
-            "GitHub UI / external UI",
-            "Secrets",
+            "USER-ONLY SETUP",
+            "CODEX-AUTOMATION",
+            "codex-app-remote-ssh",
+            "vscode-remote-ssh-codex-extension",
+            "takeover point",
         ],
         "final": ["greenfield-product", "greenfield"],
     },
@@ -52,6 +54,11 @@ PACKAGES = {
             "greenfield-converted",
             "documented blocker",
             "archive",
+            "USER-ONLY SETUP",
+            "CODEX-AUTOMATION",
+            "codex-app-remote-ssh",
+            "vscode-remote-ssh-codex-extension",
+            "takeover point",
             "validate-brownfield-transition.py",
             "validate-greenfield-conversion.py",
         ],
@@ -68,6 +75,11 @@ PACKAGES = {
             "greenfield-converted",
             "documented blocker",
             "archived/renamed/moved",
+            "USER-ONLY SETUP",
+            "CODEX-AUTOMATION",
+            "codex-app-remote-ssh",
+            "vscode-remote-ssh-codex-extension",
+            "takeover point",
         ],
         "final": ["greenfield-product", "greenfield-converted"],
     },
@@ -94,6 +106,39 @@ FAKE_AUTOSWITCH_PATTERNS = [
     re.compile(r"(?i)(handoff|advisory|сценари|инструкц).{0,100}(автоматически переключает|сам переключает)"),
 ]
 HIDDEN_SHELL_PATTERN = re.compile(r"(?i)(default|по умолчанию).{0,120}(запустите|run).{0,40}(orchestrate|launch-codex|codex --profile)")
+BEGINNER_STEP_FIELDS = [
+    "- Окно:",
+    "- Делает:",
+    "- Зачем:",
+    "- Что нужно до начала:",
+    "- Где взять значения:",
+    "- Команды для копирования:",
+    "- Куда вставить:",
+    "- Ожидаемый результат:",
+    "- Если ошибка:",
+    "- Следующий шаг:",
+]
+FACTORY_REQUIRED_STEPS = [
+    "FT-000",
+    "FT-010",
+    "FT-020",
+    "FT-030",
+    "FT-040",
+    "FT-050",
+    "FT-060",
+    "FT-070",
+    "FT-080",
+    "FT-090",
+    "FT-100",
+    "FT-110",
+    "FT-120",
+    "FT-130",
+    "FT-140",
+    "FT-200",
+    "FT-300",
+    "FT-400",
+    "FT-500",
+]
 
 
 def read(path: Path) -> str:
@@ -173,6 +218,45 @@ def validate_package_files(root: Path, errors: list[str]) -> None:
                     errors.append(f"`{codex_path}` может содержать fake already-open session switch wording")
 
 
+def validate_beginner_flow(root: Path, errors: list[str]) -> None:
+    base = root / PACKAGE_ROOT
+    for package in PACKAGES:
+        user_path = base / package / "01-user-runbook.md"
+        codex_path = base / package / "02-codex-runbook.md"
+        if not user_path.exists() or not codex_path.exists():
+            continue
+        user_text = read(user_path)
+        codex_text = read(codex_path)
+        for marker in ["USER-ONLY SETUP", "CODEX-AUTOMATION"]:
+            if marker not in user_text:
+                errors.append(f"`{user_path}` не содержит beginner boundary `{marker}`")
+            if marker not in codex_text:
+                errors.append(f"`{codex_path}` не содержит automation boundary `{marker}`")
+        if "takeover point" not in user_text.lower() and "takeover-точ" not in user_text.lower():
+            errors.append(f"`{user_path}` не фиксирует Codex takeover point")
+        if "Codex сам" not in user_text and "Codex выполняет" not in user_text:
+            errors.append(f"`{user_path}` не отделяет Codex automation от user-only steps")
+        missing_fields = [field for field in BEGINNER_STEP_FIELDS if field not in user_text]
+        if missing_fields:
+            errors.append(f"`{user_path}` не содержит поля beginner step card: {', '.join(missing_fields)}")
+        if package == "01-factory-template":
+            for step_id in FACTORY_REQUIRED_STEPS:
+                if step_id not in user_text:
+                    errors.append(f"`{user_path}` не содержит обязательный шаг `{step_id}`")
+            for token in [
+                "ChatGPT plan",
+                "GitHub account",
+                "Timeweb Cloud",
+                "Ubuntu 24.04",
+                "ssh factory-vps",
+                "remote_connections = true",
+                "npm i -g @openai/codex",
+                "mppcoder/factory-template",
+            ]:
+                if token not in user_text + "\n" + codex_text:
+                    errors.append(f"`{package}` не содержит beginner setup token `{token}`")
+
+
 def validate_command_lint(root: Path, errors: list[str]) -> None:
     for path in sorted((root / PACKAGE_ROOT).glob("**/*.md")):
         text = read(path)
@@ -245,6 +329,7 @@ def main() -> int:
     errors: list[str] = []
 
     validate_package_files(root, errors)
+    validate_beginner_flow(root, errors)
     validate_command_lint(root, errors)
     validate_dashboard(root, errors)
     validate_validator_coverage(root, errors)

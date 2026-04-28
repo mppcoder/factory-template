@@ -1,5 +1,51 @@
 # Контракт слоя пакетов ранбуков
 
+## Контракт для новичка
+
+Runbook packages являются практическим слоем "с пустого ПК до Codex takeover", а не пересказом scenario-pack.
+Каждый package обязан явно разделять:
+
+- `USER-ONLY SETUP`: действия, которые Codex не может сделать без внешнего доступа, UI, учетной записи, secret entry или remote connection.
+- `CODEX-AUTOMATION`: действия, которые начинаются после takeover point и выполняются Codex в remote/repo context.
+
+User-runbook должен вести новичка через конкретные окна, значения и команды.
+Для каждого user-facing шага используется card format:
+
+- `Окно`;
+- `Делает`;
+- `Зачем`;
+- `Что нужно до начала`;
+- `Где взять значения`;
+- `Команды для копирования`;
+- `Куда вставить`;
+- `Ожидаемый результат`;
+- `Если ошибка`;
+- `Следующий шаг`.
+
+Если шаг выполняется в UI без shell command, в `Команды для копирования` пишется короткий checklist block, который оператор может copy-paste в заметки или сверить по экрану.
+
+User-runbook останавливается на `Codex takeover point`: remote Codex context уже может выполнять команды на VPS. После этого пользователь вставляет один большой handoff, а Codex переходит к Codex-runbook.
+
+Обязательные Codex setup contours:
+
+- `codex-app-remote-ssh`;
+- `vscode-remote-ssh-codex-extension`.
+
+Оба contour должны иметь явную takeover point и не обещать, что advisory text сам переключит model/profile/reasoning.
+
+Codex-runbook обязан начинаться с проверки remote context и дальше сам выполнять:
+
+- VPS preflight;
+- установку системных пакетов;
+- установку Node/Python/git/gh/Codex CLI и нужных tools;
+- создание project root;
+- clone/sync GitHub repo;
+- bootstrap/setup;
+- targeted/quick verify;
+- drift remediation;
+- dashboard update;
+- verified sync, если доступен `origin` и verify green.
+
 ## Источники истины
 
 Executable routing остается в:

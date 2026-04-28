@@ -1,5 +1,7 @@
 # Проверка: greenfield-product
 
+Package layer должен содержать `USER-ONLY SETUP`, `CODEX-AUTOMATION`, takeover point и beginner step cards.
+
 Из factory-template root для проверки package layer:
 
 ```bash

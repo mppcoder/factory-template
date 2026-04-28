@@ -1,5 +1,7 @@
 # Проверка: путь с существующим repo
 
+Package layer должен содержать `USER-ONLY SETUP`, `CODEX-AUTOMATION`, takeover point и beginner step cards.
+
 До conversion:
 
 ```bash

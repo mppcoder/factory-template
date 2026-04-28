@@ -1,5 +1,7 @@
 # Проверка: factory-template
 
+Проверка подтверждает не только наличие package files, но и beginner zero-to-Codex-ready flow: `USER-ONLY SETUP`, `CODEX-AUTOMATION`, `codex-app-remote-ssh`, `vscode-remote-ssh-codex-extension`, `Codex takeover point`, обязательные `FT-*` шаги и copy-paste step format.
+
 Targeted verify:
 
 ```bash

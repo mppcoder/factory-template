@@ -1,7 +1,7 @@
 # Пакеты ранбуков и чеклистов
 
-Этот каталог — финальный слой пошаговых пакетов "с нуля до рабочего состояния".
-Он не заменяет scenario-pack, presets или validators. Он связывает их в operator-facing маршрут.
+Этот каталог — финальный слой пошаговых пакетов "с пустого ПК до Codex takeover и рабочего состояния".
+Он не заменяет scenario-pack, presets или validators. Он связывает их в operator-facing маршрут и отделяет user-only setup от automation, которую после takeover выполняет Codex.
 
 ## Пакеты
 
@@ -21,6 +21,20 @@
    - `04-verify.md`;
    - `05-closeout.md`.
 4. Для любой новой задачи сначала все равно открывайте `template-repo/scenario-pack/00-master-router.md`.
+
+## Граница для новичка
+
+В каждом package есть два слоя:
+
+- `USER-ONLY SETUP`: пользователь делает внешние действия: аккаунты, GitHub connector, VPS, SSH key, Remote SSH, Codex sign in, approvals и secrets.
+- `CODEX-AUTOMATION`: после remote Codex takeover Codex сам ставит packages, clone-ит repo, запускает bootstrap/verify, обновляет dashboard и делает verified sync при доступности.
+
+Основные Codex contours:
+
+- `codex-app-remote-ssh`;
+- `vscode-remote-ssh-codex-extension`.
+
+User-runbook должен остановиться на takeover point: один большой handoff вставлен в remote Codex chat/thread. Дальше пользователь не выполняет internal repo commands вручную.
 
 ## Правило финального состояния
 

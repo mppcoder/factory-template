@@ -1,5 +1,7 @@
 # Чеклист: greenfield-product
 
+- [ ] USER-ONLY SETUP выполнен: ChatGPT, GitHub, remote SSH, Codex contour.
+- [ ] Codex takeover point достигнут через `codex-app-remote-ssh` или `vscode-remote-ssh-codex-extension`.
 - [ ] Project root открыт как `/projects/<project-slug>`.
 - [ ] `project_preset: greenfield-product`.
 - [ ] `recommended_mode: greenfield`.
