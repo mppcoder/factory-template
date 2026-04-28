@@ -2,57 +2,54 @@
 
 ## Что было запрошено
 
-- Переработать prompt-like artifacts `factory-template` под GPT-5.5 как fresh prompt baseline.
-- Использовать только официальные OpenAI sources для внешней baseline-части.
-- Сохранить repo-first, defect-capture, handoff, routing и closeout invariants.
-- Обновить tests/evals/validators, чтобы drift старых prompt patterns ловился автоматически.
+- Дополнительно предусмотреть обновление политики промптов под новую модель при автообновлении выбора моделей и режимов.
+- Делать это по рекомендациям OpenAI, а не только через замену model slug.
 
 ## Что реально сделано
 
-- Собран prompt inventory и source map.
-- Зафиксирован reusable defect stale/prompt-contract gap.
-- Обновлен active `.chatgpt/codex-input.md`.
-- Обновлены generated `.chatgpt` task artifacts.
-- Добавлен базовый prompt contract для GPT-5.5 в генераторы task-pack и normalized handoff.
-- Template `.chatgpt/codex-input.md` переведен на outcome-first sections.
-- Добавлен validator `validate-gpt55-prompt-contract.py`.
-- Добавлен Artifact Eval spec/report `gpt-5-5-prompt-contract`.
-- `verify-all.sh` подключает новый validator и eval spec.
+- Зафиксирован reusable defect model update без prompt-policy gate.
+- Добавлен `prompt_migration_policy` в `template-repo/codex-model-routing.yaml`.
+- Model-routing proposal теперь включает prompt migration section.
+- Добавлен validator `template-repo/scripts/validate-model-prompt-policy.py`.
+- Добавлен Artifact Eval spec/report `model-prompt-policy`.
+- `verify-all.sh` запускает новый validator и eval spec.
+- Обновлены docs `template-repo/README.md`, `codex-workflow.md`, `integrations.md`.
 
 ## Какие артефакты обновлены
 
-- `.chatgpt/codex-input.md`
 - `.chatgpt/codex-context.md`
 - `.chatgpt/codex-task-pack.md`
+- `.chatgpt/direct-task-source.md`
+- `.chatgpt/direct-task-self-handoff.md`
+- `.chatgpt/direct-task-response.md`
 - `.chatgpt/normalized-codex-handoff.md`
-- `.chatgpt/handoff-response.md`
+- `.chatgpt/task-launch.yaml`
 - `.chatgpt/task-index.yaml`
 - `.chatgpt/stage-state.yaml`
-- `.chatgpt/task-launch.yaml`
 - `.chatgpt/verification-report.md`
 - `.chatgpt/done-report.md`
-- `reports/bugs/2026-04-28-gpt-5-5-prompt-migration-gap.md`
-- `reports/factory-feedback/feedback-2026-04-28-gpt-5-5-prompt-migration-gap.md`
-- `reports/prompt-migration/2026-04-28-gpt-5-5-prompt-inventory.md`
-- `reports/prompt-migration/2026-04-28-gpt-5-5-prompt-migration-report.md`
-- `template-repo/scripts/create-codex-task-pack.py`
-- `template-repo/scripts/codex_task_router.py`
-- `template-repo/scripts/validate-gpt55-prompt-contract.py`
+- `CHANGELOG.md`
+- `CURRENT_FUNCTIONAL_STATE.md`
+- `VERIFY_SUMMARY.md`
+- `reports/bugs/2026-04-28-model-update-missing-prompt-policy-gap.md`
+- `reports/factory-feedback/feedback-2026-04-28-model-update-missing-prompt-policy-gap.md`
+- `reports/model-routing/model-routing-proposal.md`
+- `template-repo/codex-model-routing.yaml`
+- `template-repo/scripts/check-codex-model-catalog.py`
+- `template-repo/scripts/validate-model-prompt-policy.py`
 - `template-repo/scripts/verify-all.sh`
-- `template-repo/template/.chatgpt/codex-input.md`
-- `template-repo/template/.chatgpt/codex-task-pack.md`
-- `tests/artifact-eval/specs/gpt-5-5-prompt-contract.yaml`
-- `tests/artifact-eval/reports/gpt-5-5-prompt-contract.md`
-- `tests/onboarding-smoke/ACCEPTANCE_REPORT.md`
+- `template-repo/README.md`
+- `template-repo/template/docs/codex-workflow.md`
+- `template-repo/template/docs/integrations.md`
+- `tests/artifact-eval/specs/model-prompt-policy.yaml`
+- `tests/artifact-eval/reports/model-prompt-policy.md`
 
 ## Что осталось вне объема
 
-- Automatic promotion `quick` с `gpt-5.4-mini` на `gpt-5.5` не выполнялся; это требует отдельного proposal/manual review.
-- API migration не выполнялась, потому что задача касалась prompt-like artifacts и Codex routing.
+- Фактический promotion `quick` на `gpt-5.5` не выполнялся; proposal помечает это как manual review required.
 
 ## Итог закрытия
 
-- Verification contour прошел.
-- Model catalog live check доступен и подтверждает `gpt-5.5`.
-- Defect/factory feedback созданы.
-- Внешних действий по текущему scope не требуется.
+- Prompt-policy companion gate добавлен.
+- Новая model больше не может считаться только routing update без prompt migration review.
+- Verification прошел; sync status фиксируется через verified sync.

@@ -1,0 +1,60 @@
+schema: artifact-eval/v1
+id: model-prompt-policy
+report_date: 2026-04-28
+target_artifact: template-repo/scripts/validate-model-prompt-policy.py
+artifact_type: prompt-contract-validator
+expected_output:
+  guided: "Validator закрепляет связку model promotion и prompt policy update по official OpenAI docs."
+thresholds:
+  min_case_pass_rate: 1.0
+  min_assertion_pass_rate: 1.0
+  max_false_positive_rate: 0.0
+expected_trigger:
+  cases:
+    - id: missing-policy
+      prompt: "В model routing есть auto-check моделей, но нет prompt_migration_policy."
+      expected: "Validator должен требовать prompt_migration_policy."
+      baseline_expected: fail
+      assertions:
+        - id: policy-required
+          category: compliance
+          must_contain:
+            - "prompt_migration_policy"
+            - "proposal-required"
+    - id: proposal-rendering
+      prompt: "Model proposal не упоминает prompt migration."
+      expected: "Validator должен проверять, что proposal renderer содержит prompt migration section."
+      baseline_expected: fail
+      assertions:
+        - id: renderer-markers
+          category: outcome
+          must_contain:
+            - "Политика prompt migration"
+            - "prompt_review_required"
+            - "Official OpenAI source baseline"
+    - id: official-sources
+      prompt: "Prompt policy не ссылается на official OpenAI docs."
+      expected: "Validator должен требовать official OpenAI source URLs."
+      baseline_expected: fail
+      assertions:
+        - id: source-urls
+          category: evidence
+          must_contain:
+            - "https://developers.openai.com/api/docs/guides/latest-model"
+            - "https://developers.openai.com/api/docs/guides/prompt-guidance"
+            - "https://developers.openai.com/api/docs/guides/prompt-optimizer"
+compliance_assertions:
+  - id: prompt-review-markers
+    category: compliance
+    must_contain:
+      - "drop-in replacement"
+      - "fresh prompt baseline"
+      - "success criteria"
+      - "evidence requirements"
+      - "output shape"
+      - "stop rules"
+  - id: docs-markers
+    category: compliance
+    must_contain:
+      - "reports/prompt-migration/"
+      - "official OpenAI"

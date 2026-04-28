@@ -127,6 +127,7 @@
 - verified sync fallback hardening now has release-facing evidence coverage for blocked push, remote drift, protected branch, branch ahead, dirty state and `FACTORY_SYNC_FALLBACK_PUSH_URL` instructions without rewriting stable sync logic
 - domain scenario acceptance template now extends novice acceptance beyond parity smoke with CRM and inventory examples while keeping real downstream field pilots as future external contour
 - GPT-5.5 prompt migration закрепила fresh outcome-first baseline для Codex handoff/task-pack artifacts: active `.chatgpt` handoff обновлен, template `.chatgpt` input переведен на русскоязычные outcome/success/constraints/evidence/output/stop sections, generators добавляют базовый prompt contract для GPT-5.5, а `validate-gpt55-prompt-contract.py` и Artifact Eval spec ловят stale handoff и drift старых prompt patterns
+- model availability auto-check теперь связан с prompt policy migration: `prompt_migration_policy` в `codex-model-routing.yaml` требует official OpenAI source map, fresh prompt baseline, affected prompt-like artifacts, validators/evals и manual review до promotion новой model; `check-codex-model-catalog.py --write-proposal` выводит prompt migration section, а `validate-model-prompt-policy.py` подключен к verify
 
 ## Программа 2.5 (release truth)
 - release truth source: `docs/releases/release-scorecard.yaml`

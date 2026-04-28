@@ -57,6 +57,7 @@ def render_proposal(root: Path, summary: dict) -> str:
     proposed = summary["proposed_mapping"]
     live = summary["live_catalog"]
     findings = summary["findings"]
+    prompt_policy = summary.get("prompt_migration_policy", {})
     current_lines = "\n".join(
         f"- {name}: {meta.get('model')} / {meta.get('reasoning_effort')} / plan {meta.get('plan_mode_reasoning_effort')}"
         for name, meta in current.items()
@@ -75,6 +76,9 @@ def render_proposal(root: Path, summary: dict) -> str:
         "template-repo/template/.codex/config.toml",
         "template-repo/scripts/codex_task_router.py",
         "template-repo/scripts/validate-codex-routing.py",
+        "template-repo/scripts/validate-gpt55-prompt-contract.py или successor validator для новой model",
+        "tests/artifact-eval/specs/*prompt-contract*.yaml",
+        "reports/prompt-migration/",
     ]
     file_lines = "\n".join(f"- {item}" for item in files)
     manual_review_required = bool(
@@ -90,6 +94,24 @@ def render_proposal(root: Path, summary: dict) -> str:
     if findings["profiles_that_can_be_upgraded"]:
         risks.append("promotion модели для profile меняет executable routing и требует ручного review")
     risk_lines = "\n".join(f"- {item}" for item in risks) if risks else "- риски совместимости не обнаружены"
+    source_lines = "\n".join(
+        f"- {item}" for item in prompt_policy.get("official_source_baseline", [])
+    ) or "- official source baseline не настроен"
+    prompt_review_lines = "\n".join(
+        f"- {item}" for item in prompt_policy.get("required_prompt_review", [])
+    ) or "- prompt review policy не настроена"
+    prompt_artifact_lines = "\n".join(
+        f"- {item}" for item in prompt_policy.get("required_artifacts", [])
+    ) or "- prompt artifacts не настроены"
+    prompt_manual_lines = "\n".join(
+        f"- {item}" for item in prompt_policy.get("manual_review_required_for", [])
+    ) or "- manual prompt review boundary не настроен"
+    prompt_review_required = bool(
+        findings["profiles_that_can_be_upgraded"]
+        or findings["new_candidate_models"]
+        or findings["missing_configured_models"]
+        or findings["unsupported_reasoning"]
+    )
     return f"""# Proposal по маршрутизации моделей
 
 ## Текущий mapping
@@ -109,6 +131,24 @@ def render_proposal(root: Path, summary: dict) -> str:
 
 ## Риски совместимости
 {risk_lines}
+
+## Политика prompt migration
+default action: {prompt_policy.get('default_action', 'not-configured')}
+prompt_review_required: {str(prompt_review_required).lower()}
+
+Official OpenAI source baseline:
+{source_lines}
+
+Required prompt review:
+{prompt_review_lines}
+
+Required prompt artifacts:
+{prompt_artifact_lines}
+
+Manual review required for:
+{prompt_manual_lines}
+
+Новая model не считается drop-in replacement. Перед promotion profile mapping нужно проверить prompt-like artifacts по актуальным официальным рекомендациям OpenAI, обновить prompt contract / validators / evals и сохранить repo-first invariants.
 
 ## Точные файлы для обновления
 {file_lines}
@@ -149,6 +189,7 @@ def main() -> int:
         "live_catalog": live_models,
         "findings": findings,
         "proposed_mapping": proposed_mapping(model_routing, live_models),
+        "prompt_migration_policy": (model_routing.get("prompt_migration_policy", {}) or {}),
         "apply_safe_performed": False,
         "proposal_path": None,
     }

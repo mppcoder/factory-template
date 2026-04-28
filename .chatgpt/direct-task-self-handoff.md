@@ -4,30 +4,30 @@
 direct-task
 
 ## Класс задачи
-deep
+build
 
 ## Evidence для класса задачи
-- явный override task_class: deep
-- явный override selected_profile: deep
+- явный override task_class: build
+- явный reasoning/model override совпал с default profile: build
 
 ## Выбранный профиль
-deep
+build
 
 ## Выбранная модель
 gpt-5.5
 
 ## Выбранное reasoning effort
-high
+medium
 
 ## Выбранное reasoning effort для plan mode
-high
+medium
 
 ## Режим применения
 manual-ui
 
 ## Ручное применение через UI
 - Откройте новый чат/окно Codex в VS Code extension.
-- Вручную выберите model `gpt-5.5` и reasoning `high` в picker.
+- Вручную выберите model `gpt-5.5` и reasoning `medium` в picker.
 - Только после этого вставьте handoff.
 - Codex должен отвечать пользователю на русском языке; английский допустим только для technical literal values.
 - Уже открытая live session не считается надежным auto-switch boundary.
@@ -39,40 +39,26 @@ manual-ui
 optional
 
 ## Профиль проекта
-brownfield-without-repo
+unknown-project-profile
 
 ## Выбранный сценарий
-brownfield/11-codex-assisted-stabilization.md
+00-master-router.md
 
 ## Этап pipeline
-fp-02-github-remote-and-roadmap-continuation
+verification
 
 ## Артефакты для обновления
-- .chatgpt/task-launch.yaml
-- .chatgpt/direct-task-source.md
-- .chatgpt/direct-task-self-handoff.md
-- .chatgpt/normalized-codex-handoff.md
-- .chatgpt/direct-task-response.md
-- .chatgpt/boundary-actions.md
-- .chatgpt/done-checklist.md
-- reports/bugs/bug-037-github-repo-creation-misclassified-as-user-step.md
-- reports/factory-feedback/feedback-037-github-repo-creation-misclassified-as-user-step.md
-- reports/bugs/bug-038-generated-project-root-script-verify-all-wrong-root.md
-- reports/factory-feedback/feedback-038-generated-project-root-script-verify-all-wrong-root.md
-- reports/release/field-pilot-scenarios/02-brownfield-without-repo.md
-- reports/release/2.5-field-pilot-evidence.md
-- brownfield/reconstruction-repo-report.md
-- brownfield/gap-register.md
-- .chatgpt/evidence-register.md
-- .chatgpt/reality-check.md
+- .chatgpt/codex-input.md
+- .chatgpt/codex-context.md
+- .chatgpt/codex-task-pack.md
 - .chatgpt/verification-report.md
 - .chatgpt/done-report.md
 
 ## Разрешение handoff
-no
+yes (forbidden)
 
 ## Маршрут defect-capture
-reproduce -> evidence -> bug report -> layer classification -> factory feedback if reusable -> remediation
+not-required-by-text-signal
 
 ## Правило launch boundary
 Выбор модели и reasoning mode считается надежным только на новом запуске Codex для новой задачи.
@@ -101,6 +87,15 @@ available
 ## Примечание по live availability
 selected_model совпадает с последним сохраненным snapshot repo catalog; перед внешними обещаниями повторите live catalog check
 
+## Базовый prompt contract для GPT-5.5
+- GPT-5.5 не считать drop-in replacement для старого prompt stack.
+- Начинать с fresh baseline: роль/область ответственности, ожидаемый outcome, success criteria, constraints, output shape и stop rules.
+- Сохранять обязательные repo invariants: чтение router, defect-capture, handoff/routing/closeout rules.
+- Убирать лишнюю пошаговую процессность, если путь не является обязательным repo invariant.
+- Для tool-heavy задач явно задавать evidence requirements, validation commands и fallback/blocker behavior.
+- Держать stable rules выше task-specific dynamic content, чтобы prompt caching и повторное использование оставались устойчивыми.
+- Не вставлять current date как постоянную model instruction; даты reports/filenames фиксировать как metadata.
+
 ## Путь launch artifact
 `.chatgpt/direct-task-source.md`
 
@@ -114,7 +109,7 @@ selected_model совпадает с последним сохраненным s
 - scripted launch
 
 ## Прямая команда Codex за launcher
-`codex --profile deep`
+`codex --profile build`
 
 ## Диагностика проблем
 - Если вы работаете через VS Code Codex extension интерактивно, используйте новый чат/окно, вручную выставьте selected_model и selected_reasoning_effort в picker, а затем вставьте handoff.
@@ -126,32 +121,4 @@ selected_model совпадает с последним сохраненным s
 - Если новый model ID появился в live catalog, сначала создайте proposal через `scripts/check-codex-model-catalog.py --write-proposal`; promotion profile mapping требует ручного review.
 
 ## Текст задачи
-task_class: deep
-selected_profile: deep
-project_profile: brownfield-without-repo
-selected_scenario: brownfield/11-codex-assisted-stabilization.md
-pipeline_stage: fp-02-github-remote-and-roadmap-continuation
-handoff_allowed: no
-artifacts_to_update:
-  - .chatgpt/task-launch.yaml
-  - .chatgpt/direct-task-source.md
-  - .chatgpt/direct-task-self-handoff.md
-  - .chatgpt/normalized-codex-handoff.md
-  - .chatgpt/direct-task-response.md
-  - .chatgpt/boundary-actions.md
-  - .chatgpt/done-checklist.md
-  - reports/bugs/bug-037-github-repo-creation-misclassified-as-user-step.md
-  - reports/factory-feedback/feedback-037-github-repo-creation-misclassified-as-user-step.md
-  - reports/bugs/bug-038-generated-project-root-script-verify-all-wrong-root.md
-  - reports/factory-feedback/feedback-038-generated-project-root-script-verify-all-wrong-root.md
-  - reports/release/field-pilot-scenarios/02-brownfield-without-repo.md
-  - reports/release/2.5-field-pilot-evidence.md
-  - brownfield/reconstruction-repo-report.md
-  - brownfield/gap-register.md
-  - .chatgpt/evidence-register.md
-  - .chatgpt/reality-check.md
-  - .chatgpt/verification-report.md
-  - .chatgpt/done-report.md
-defect_capture_path: reproduce -> evidence -> bug report -> layer classification -> factory feedback if reusable -> remediation
-
-Исправить пойманные баги: не останавливаться просьбой пользователю создать GitHub repo и прислать URL, если gh/GitHub write path доступен; дать четкую инструкцию по внешним действиям только при реальном blocker; исправить generated root scripts/verify-all.sh, который в downstream repo вычислял ROOT как /projects. Создать/подключить GitHub remote для /projects/openclaw-brownfield и продолжить field pilot roadmap честно.
+Предусмотреть, чтобы auto-check/proposal новых Codex/OpenAI моделей обновлял не только model routing, но и prompt policy под новую model по official OpenAI guidance: fresh prompt baseline, outcome-first contract, reasoning/verbosity/tool-use guidance, validators/evals и reports/prompt-migration before profile promotion.

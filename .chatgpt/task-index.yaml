@@ -1,94 +1,76 @@
 change:
-  id: chg-20260428-gpt55-prompt-migration
-  title: GPT-5.5 prompt migration for factory-template
-  class: migration
+  id: chg-20260428-model-prompt-policy
+  title: Связать model updates с prompt policy migration
+  class: fix
   execution_mode: codex-led
   type: factory-improvement
   status: done
   priority: high
-  summary: Перевести prompt-like artifacts фабрики на GPT-5.5 fresh outcome-first baseline и закрепить drift checks.
+  summary: Добавить обязательный prompt-policy contour к model catalog/proposal flow для новых моделей.
   outputs:
-    - .chatgpt/codex-input.md
-    - .chatgpt/codex-context.md
-    - .chatgpt/codex-task-pack.md
+    - reports/bugs/2026-04-28-model-update-missing-prompt-policy-gap.md
+    - reports/factory-feedback/feedback-2026-04-28-model-update-missing-prompt-policy-gap.md
+    - reports/model-routing/model-routing-proposal.md
+    - template-repo/codex-model-routing.yaml
+    - template-repo/scripts/check-codex-model-catalog.py
+    - template-repo/scripts/validate-model-prompt-policy.py
+    - template-repo/scripts/verify-all.sh
+    - template-repo/README.md
+    - template-repo/template/docs/codex-workflow.md
+    - template-repo/template/docs/integrations.md
+    - tests/artifact-eval/specs/model-prompt-policy.yaml
+    - tests/artifact-eval/reports/model-prompt-policy.md
+    - template-repo/scripts/create-codex-task-pack.py
     - .chatgpt/verification-report.md
     - .chatgpt/done-report.md
-    - reports/prompt-migration/2026-04-28-gpt-5-5-prompt-inventory.md
-    - reports/prompt-migration/2026-04-28-gpt-5-5-prompt-migration-report.md
-    - reports/bugs/2026-04-28-gpt-5-5-prompt-migration-gap.md
-    - reports/factory-feedback/feedback-2026-04-28-gpt-5-5-prompt-migration-gap.md
-    - template-repo/scripts/create-codex-task-pack.py
-    - template-repo/scripts/codex_task_router.py
-    - template-repo/scripts/validate-gpt55-prompt-contract.py
-    - template-repo/scripts/verify-all.sh
-    - template-repo/template/.chatgpt/codex-input.md
-    - template-repo/template/.chatgpt/codex-task-pack.md
-    - tests/artifact-eval/specs/gpt-5-5-prompt-contract.yaml
-    - tests/artifact-eval/reports/gpt-5-5-prompt-contract.md
 tasks:
   - id: T-001
-    title: Собрать source map и prompt inventory
+    title: Зафиксировать reusable gap model promotion без prompt policy
     type: analysis
-    risk_level: medium
+    risk_level: low
     executor: developer
     depends_on: []
     outputs:
-      - reports/prompt-migration/2026-04-28-gpt-5-5-prompt-inventory.md
+      - reports/bugs/2026-04-28-model-update-missing-prompt-policy-gap.md
+      - reports/factory-feedback/feedback-2026-04-28-model-update-missing-prompt-policy-gap.md
     acceptance:
-      - prompt-like candidate zones checked
-      - old model/prompt markers classified
+      - defect classified as reusable factory gap
   - id: T-002
-    title: Зафиксировать reusable defect и factory feedback
-    type: docs
-    risk_level: low
+    title: Добавить prompt_migration_policy и proposal rendering
+    type: implementation
+    risk_level: medium
     executor: developer
     depends_on:
       - T-001
     outputs:
-      - reports/bugs/2026-04-28-gpt-5-5-prompt-migration-gap.md
-      - reports/factory-feedback/feedback-2026-04-28-gpt-5-5-prompt-migration-gap.md
+      - template-repo/codex-model-routing.yaml
+      - template-repo/scripts/check-codex-model-catalog.py
+      - reports/model-routing/model-routing-proposal.md
     acceptance:
-      - defect layer classified as factory-template
-      - remediation scope stated
+      - model proposal contains prompt migration section
   - id: T-003
-    title: Обновить prompt generators, templates и active handoff artifacts
-    type: migration
+    title: Добавить validator/eval и docs
+    type: test
     risk_level: medium
     executor: developer
     depends_on:
       - T-002
     outputs:
-      - .chatgpt/codex-input.md
-      - .chatgpt/codex-context.md
-      - .chatgpt/codex-task-pack.md
-      - template-repo/scripts/create-codex-task-pack.py
-      - template-repo/scripts/codex_task_router.py
-      - template-repo/template/.chatgpt/codex-input.md
-      - template-repo/template/.chatgpt/codex-task-pack.md
+      - template-repo/scripts/validate-model-prompt-policy.py
+      - tests/artifact-eval/specs/model-prompt-policy.yaml
+      - tests/artifact-eval/reports/model-prompt-policy.md
+      - template-repo/README.md
+      - template-repo/template/docs/codex-workflow.md
+      - template-repo/template/docs/integrations.md
     acceptance:
-      - GPT-5.5 prompt baseline present
-      - stable rules precede dynamic task fields
+      - missing prompt policy is caught automatically
   - id: T-004
-    title: Добавить prompt-contract validation и artifact eval
-    type: test
-    risk_level: medium
-    executor: developer
-    depends_on:
-      - T-003
-    outputs:
-      - template-repo/scripts/validate-gpt55-prompt-contract.py
-      - tests/artifact-eval/specs/gpt-5-5-prompt-contract.yaml
-      - tests/artifact-eval/reports/gpt-5-5-prompt-contract.md
-      - template-repo/scripts/verify-all.sh
-    acceptance:
-      - stale handoff and missing GPT-5.5 contract are caught automatically
-  - id: T-005
     title: Verify and close out
     type: verification
     risk_level: medium
     executor: developer
     depends_on:
-      - T-004
+      - T-003
     outputs:
       - .chatgpt/verification-report.md
       - .chatgpt/done-report.md
@@ -96,5 +78,4 @@ tasks:
       - VERIFY_SUMMARY.md
       - CHANGELOG.md
     acceptance:
-      - required verification commands run or blockers documented
-      - final status and sync state recorded
+      - required verification commands pass

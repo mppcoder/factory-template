@@ -4,13 +4,13 @@
 factory-template
 
 ## Классификация
-Классификация еще не заполнена.
+Direct task: reusable factory gap в связке model routing и prompt policy.
 
 ## Текущий этап
-done
+verification
 
 ## Идентификатор изменения
-chg-20260428-gpt55-prompt-migration
+chg-20260428-model-prompt-policy
 
 ## Краткое резюме
-Перевести prompt-like artifacts фабрики на GPT-5.5 fresh outcome-first baseline и закрепить drift checks.
+Auto-check/proposal новых моделей теперь обязан включать prompt migration policy: official OpenAI source baseline, fresh prompt baseline, affected prompt-like artifacts, validators/evals и manual review boundary до profile promotion.

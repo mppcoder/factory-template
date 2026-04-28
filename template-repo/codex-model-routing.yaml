@@ -53,6 +53,35 @@ model_policy:
       - "удаление configured model"
   manual_review_marker: "manual_review_required"
 
+prompt_migration_policy:
+  default_action: "proposal-required"
+  trigger_when:
+    - "live catalog показывает новый candidate model"
+    - "proposal меняет selected_model для любого profile"
+    - "proposal меняет reasoning effort или plan-mode reasoning effort"
+    - "OpenAI docs публикуют model-specific prompt guidance для candidate model"
+  official_source_baseline:
+    - "https://developers.openai.com/api/docs/guides/latest-model"
+    - "https://developers.openai.com/api/docs/guides/prompt-guidance"
+    - "https://developers.openai.com/api/docs/guides/prompt-optimizer"
+  required_prompt_review:
+    - "не считать новую model drop-in replacement"
+    - "создать fresh prompt baseline для affected prompt-like artifacts"
+    - "проверить outcome-first contract: целевой результат, success criteria, constraints, evidence requirements, output shape, stop rules"
+    - "сверить reasoning, verbosity и tool-use guidance с official OpenAI docs"
+    - "обновить validators/evals, которые ловят drift старого prompt pattern"
+    - "сохранить repo-first, defect-capture, handoff, routing и closeout invariants"
+  required_artifacts:
+    - "reports/model-routing/model-routing-proposal.md"
+    - "reports/prompt-migration/"
+    - "template-repo/scripts/validate-gpt55-prompt-contract.py или successor validator для новой model"
+    - "tests/artifact-eval/specs/*prompt-contract*.yaml"
+  manual_review_required_for:
+    - "любой automatic profile promotion"
+    - "удаление или ослабление prompt constraints"
+    - "перенос старого prompt stack без fresh baseline"
+    - "отсутствие official OpenAI source map"
+
 task_class_routing:
   quick:
     selected_profile: "quick"

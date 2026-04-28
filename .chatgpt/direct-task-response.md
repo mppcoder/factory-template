@@ -2,7 +2,7 @@
 
 `apply_mode: manual-ui (default)`.
 
-Для интерактивной работы открой новый чат/окно Codex в VS Code extension, вручную выбери model `gpt-5.5` и reasoning `high` в picker, затем вставь один цельный handoff block ниже.
+Для интерактивной работы открой новый чат/окно Codex в VS Code extension, вручную выбери model `gpt-5.5` и reasoning `medium` в picker, затем вставь один цельный handoff block ниже.
 
 Новый чат + вставка handoff и новый task launch через executable launcher — не одно и то же. Advisory layer сам по себе не переключает model/profile/reasoning; надежная единица маршрутизации — новый task launch. Уже открытая live session допустима только как non-canonical fallback без обещаний auto-switch.
 
@@ -17,7 +17,7 @@
 Прямая команда profile за launcher:
 
 ```bash
-codex --profile deep
+codex --profile build
 ```
 
 ## Handoff в Codex
@@ -34,70 +34,28 @@ Repo rules:
 
 Routing:
 - launch_source: direct-task
-- task_class: deep
-- selected_profile: deep
+- task_class: build
+- selected_profile: build
 - selected_model: gpt-5.5
-- selected_reasoning_effort: high
-- selected_plan_mode_reasoning_effort: high
+- selected_reasoning_effort: medium
+- selected_plan_mode_reasoning_effort: medium
 - apply_mode: manual-ui
 - strict_launch_mode: optional
-- project_profile: brownfield-without-repo
-- selected_scenario: brownfield/11-codex-assisted-stabilization.md
-- pipeline_stage: fp-02-github-remote-and-roadmap-continuation
-- handoff_allowed: no
-- defect_capture_path: reproduce -> evidence -> bug report -> layer classification -> factory feedback if reusable -> remediation
+- project_profile: unknown-project-profile
+- selected_scenario: 00-master-router.md
+- pipeline_stage: verification
+- handoff_allowed: yes (forbidden)
+- defect_capture_path: not-required-by-text-signal
 
 Артефакты для обновления:
-- .chatgpt/task-launch.yaml
-- .chatgpt/direct-task-source.md
-- .chatgpt/direct-task-self-handoff.md
-- .chatgpt/normalized-codex-handoff.md
-- .chatgpt/direct-task-response.md
-- .chatgpt/boundary-actions.md
-- .chatgpt/done-checklist.md
-- reports/bugs/bug-037-github-repo-creation-misclassified-as-user-step.md
-- reports/factory-feedback/feedback-037-github-repo-creation-misclassified-as-user-step.md
-- reports/bugs/bug-038-generated-project-root-script-verify-all-wrong-root.md
-- reports/factory-feedback/feedback-038-generated-project-root-script-verify-all-wrong-root.md
-- reports/release/field-pilot-scenarios/02-brownfield-without-repo.md
-- reports/release/2.5-field-pilot-evidence.md
-- brownfield/reconstruction-repo-report.md
-- brownfield/gap-register.md
-- .chatgpt/evidence-register.md
-- .chatgpt/reality-check.md
+- .chatgpt/codex-input.md
+- .chatgpt/codex-context.md
+- .chatgpt/codex-task-pack.md
 - .chatgpt/verification-report.md
 - .chatgpt/done-report.md
 
 Текст задачи:
-task_class: deep
-selected_profile: deep
-project_profile: brownfield-without-repo
-selected_scenario: brownfield/11-codex-assisted-stabilization.md
-pipeline_stage: fp-02-github-remote-and-roadmap-continuation
-handoff_allowed: no
-artifacts_to_update:
-  - .chatgpt/task-launch.yaml
-  - .chatgpt/direct-task-source.md
-  - .chatgpt/direct-task-self-handoff.md
-  - .chatgpt/normalized-codex-handoff.md
-  - .chatgpt/direct-task-response.md
-  - .chatgpt/boundary-actions.md
-  - .chatgpt/done-checklist.md
-  - reports/bugs/bug-037-github-repo-creation-misclassified-as-user-step.md
-  - reports/factory-feedback/feedback-037-github-repo-creation-misclassified-as-user-step.md
-  - reports/bugs/bug-038-generated-project-root-script-verify-all-wrong-root.md
-  - reports/factory-feedback/feedback-038-generated-project-root-script-verify-all-wrong-root.md
-  - reports/release/field-pilot-scenarios/02-brownfield-without-repo.md
-  - reports/release/2.5-field-pilot-evidence.md
-  - brownfield/reconstruction-repo-report.md
-  - brownfield/gap-register.md
-  - .chatgpt/evidence-register.md
-  - .chatgpt/reality-check.md
-  - .chatgpt/verification-report.md
-  - .chatgpt/done-report.md
-defect_capture_path: reproduce -> evidence -> bug report -> layer classification -> factory feedback if reusable -> remediation
-
-Исправить пойманные баги: не останавливаться просьбой пользователю создать GitHub repo и прислать URL, если gh/GitHub write path доступен; дать четкую инструкцию по внешним действиям только при реальном blocker; исправить generated root scripts/verify-all.sh, который в downstream repo вычислял ROOT как /projects. Создать/подключить GitHub remote для /projects/openclaw-brownfield и продолжить field pilot roadmap честно.
+Предусмотреть, чтобы auto-check/proposal новых Codex/OpenAI моделей обновлял не только model routing, но и prompt policy под новую model по official OpenAI guidance: fresh prompt baseline, outcome-first contract, reasoning/verbosity/tool-use guidance, validators/evals и reports/prompt-migration before profile promotion.
 
 Continuation rule:
 Если задача пришла в уже открытую Codex-сессию и этот route совместим с текущей сессией, после видимого self-handoff продолжай remediation / implementation / verification без отдельного запроса пользователя. Остановка допустима только при реальном blocker, внешнем действии, несовместимом route или необходимости нового task launch.

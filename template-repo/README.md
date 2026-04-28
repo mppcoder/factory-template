@@ -50,8 +50,11 @@ python3 scripts/check-codex-model-catalog.py . --write-proposal
 
 Если `codex debug models` недоступен, checker и validator должны честно предупредить и не продвигать mapping автоматически. `--apply-safe` разрешает только безопасное обновление snapshot metadata catalog; смена model для существующего profile остается proposal-only и требует ручного review.
 
+`prompt_migration_policy` в `codex-model-routing.yaml` связывает model promotion с prompt policy update. Если появляется новая candidate model или меняется mapping существующего profile, `--write-proposal` обязан добавить prompt migration section: official OpenAI source map, запрет считать model drop-in replacement, fresh prompt baseline, affected prompt-like artifacts, validators/evals и manual review boundary. Prompt policy нельзя считать обновленной только потому, что обновился `selected_model`.
+
 Диагностика:
 - новый model появился в live Codex catalog, но отсутствует в routing file: запустите `scripts/check-codex-model-catalog.py --write-proposal`, проверьте `reports/model-routing/model-routing-proposal.md`, затем осознанно обновите `codex-model-routing.yaml` и named profiles;
+- новый model требует prompt guidance update: используйте official OpenAI docs, создайте или обновите `reports/prompt-migration/`, prompt contract validator и Artifact Eval spec до promotion;
 - configured model исчез: считайте `selected_model` repo-configured только до успешной live validation; в strict automation запускайте validator с `--strict`;
 - reasoning level не поддерживается: обновите reasoning profile или model choice до уверенного handoff;
 - VS Code picker держит sticky model: откройте новый chat/window и вручную проверьте picker state;

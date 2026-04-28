@@ -64,8 +64,11 @@ Repo-configured mapping живет в `codex-model-routing.yaml`: `task_class_ro
 
 `--write-proposal` создает `reports/model-routing/model-routing-proposal.md` с текущим mapping, сводкой live catalog, предложенным mapping, evidence поддержки reasoning, рисками и точными файлами для обновления. `--apply-safe` может обновить только snapshot-поля catalog; promotion новых моделей в profile mapping требует ручного review.
 
+Model proposal также обязан обновлять prompt policy contour. `prompt_migration_policy` требует official OpenAI source map, fresh prompt baseline, проверку reasoning/verbosity/tool-use guidance, обновление `reports/prompt-migration/`, prompt contract validator и Artifact Eval spec. Новая model не считается drop-in replacement: сначала проверьте prompt-like artifacts, затем меняйте profile mapping.
+
 Диагностика:
 - новый model есть в live catalog, но отсутствует в routing: сначала создайте proposal, затем осознанно обновите `codex-model-routing.yaml` и named profiles в `.codex/config.toml`;
+- новый model имеет новые official OpenAI prompt recommendations: сначала обновите prompt migration report, validators/evals и handoff/task-pack contract;
 - configured model исчез: handoff должен сказать, что `selected_model` repo-configured и требует live validation; strict validator может упасть;
 - unsupported reasoning: выберите supported reasoning или другой `selected_model` до release-facing handoff;
 - sticky model в VS Code picker: откройте новый chat/window и вручную проверьте picker;

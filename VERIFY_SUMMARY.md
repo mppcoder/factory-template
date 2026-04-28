@@ -57,6 +57,7 @@
 - automatic phase detection self-test
 - согласованность README, release docs, scenario-pack guidance и фактической структуры repo
 - GPT-5.5 prompt contract: `validate-gpt55-prompt-contract.py`, Artifact Eval `gpt-5-5-prompt-contract`, official OpenAI source map и stale handoff drift checks
+- Model prompt policy: `validate-model-prompt-policy.py`, Artifact Eval `model-prompt-policy` и `reports/model-routing/model-routing-proposal.md` проверяют, что новая model требует companion prompt migration review до promotion
 
 ## Известные остаточные ограничения
 
@@ -68,6 +69,7 @@
 - git-операции в этом окружении нужно выполнять последовательно; параллельный `commit/push/fetch/remote change` может давать ложные результаты
 - auto GitHub Release publication зависит от доступности `gh` и не должна считаться гарантированной без отдельной проверки auth/runtime
 - `quick` profile остается на `gpt-5.4-mini`; live catalog показал upgrade candidate на `gpt-5.5`, но repo policy требует отдельный manual review proposal для promotion
+- Любой future model promotion должен обновлять `reports/prompt-migration/` и prompt-contract validators/evals по official OpenAI docs; model slug update без prompt-policy contour считается неполным
 
 ## Использование оператором
 

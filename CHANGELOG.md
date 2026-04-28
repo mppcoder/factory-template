@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 ### Добавлено
+- Связка model promotion и prompt policy update: `prompt_migration_policy` в `codex-model-routing.yaml`, prompt migration section в model-routing proposal, validator `validate-model-prompt-policy.py` и Artifact Eval spec/report `model-prompt-policy`.
+- Defect/factory feedback для gap, где новая model могла пройти через proposal только как `selected_model` update без prompt-policy migration по official OpenAI docs.
 - GPT-5.5 prompt migration contract: `validate-gpt55-prompt-contract.py`, Artifact Eval spec/report `gpt-5-5-prompt-contract`, prompt inventory и migration reports.
 - Reusable defect report `reports/bugs/2026-04-28-gpt-5-5-prompt-migration-gap.md` и factory feedback для stale/prompt-contract drift gap.
 - Plan №6 beginner-first orchestration productization: cockpit-lite, parent plan normalization wrapper, route-explain layer, beginner full handoff UX scorecard and safe synthetic rehearsal.
@@ -26,6 +28,7 @@
 - `docs/brownfield-to-greenfield-transition.md` описывает without-repo и with-repo transition paths, conversion gates и done rule.
 
 ### Изменено
+- `check-codex-model-catalog.py --write-proposal` теперь требует companion prompt migration review: fresh prompt baseline, affected prompt-like artifacts, validators/evals и official OpenAI source map до profile promotion.
 - Codex task-pack и normalized handoff generators теперь добавляют базовый prompt contract для GPT-5.5: fresh baseline, outcome, success criteria, constraints, evidence requirements, output shape и stop rules.
 - Template `.chatgpt/codex-input.md` переведен на русскоязычный outcome-first prompt shape; `quick` profile сохранен на `gpt-5.4-mini` без silent promotion.
 - Full handoff orchestration docs now explain beginner-visible cockpit/status, parent plan normalization, deterministic route explanation and UX scorecard without making model/profile switching the main product value.

@@ -26,6 +26,8 @@
 
 `codex-model-routing.yaml` фиксирует repo-configured mapping: task class -> selected_profile -> selected_model / selected_reasoning_effort / selected_plan_mode_reasoning_effort. Live Codex catalog проверяется отдельно через `scripts/check-codex-model-catalog.py`, который использует `codex debug models`, если CLI доступен.
 
+Тот же файл хранит `prompt_migration_policy`: при появлении новой model или promotion profile mapping нужно обновить prompt policy по official OpenAI docs, а не только поменять slug. Proposal должен назвать affected prompt-like artifacts, `reports/prompt-migration/`, validators/evals и manual review boundary.
+
 Ручной выбор в UI picker и strict launcher profile selection не одно и то же:
 - `manual-ui`: пользователь открывает новый VS Code Codex chat/window, вручную выбирает model/reasoning и вставляет handoff;
 - strict launcher: repo launcher передает `--profile` в новый executable launch;
@@ -33,6 +35,7 @@
 
 Диагностика:
 - новый model появился в live catalog: сначала создайте proposal через `--write-proposal`; не продвигайте profile mapping без review;
+- новая model меняет prompt guidance: обновите prompt contract и Artifact Eval checks до profile promotion;
 - configured model исчез: проверьте live catalog до обещания availability;
 - unsupported reasoning level: выберите supported reasoning или другую model;
 - sticky model в VS Code picker: откройте новый chat/window и выберите model заново;
