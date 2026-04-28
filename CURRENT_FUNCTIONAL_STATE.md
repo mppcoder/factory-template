@@ -129,6 +129,9 @@
 - domain scenario acceptance template now extends novice acceptance beyond parity smoke with CRM and inventory examples while keeping real downstream field pilots as future external contour
 - GPT-5.5 prompt migration закрепила fresh outcome-first baseline для Codex handoff/task-pack artifacts: active `.chatgpt` handoff обновлен, template `.chatgpt` input переведен на русскоязычные outcome/success/constraints/evidence/output/stop sections, generators добавляют базовый prompt contract для GPT-5.5, а `validate-gpt55-prompt-contract.py` и Artifact Eval spec ловят stale handoff и drift старых prompt patterns
 - model availability auto-check теперь связан с prompt policy migration: `prompt_migration_policy` в `codex-model-routing.yaml` требует official OpenAI source map, fresh prompt baseline, affected prompt-like artifacts, validators/evals и manual review до promotion новой model; `check-codex-model-catalog.py --write-proposal` выводит prompt migration section, а `validate-model-prompt-policy.py` подключен к verify
+- добавлен финальный слой `docs/operator/runbook-packages/` с четырьмя runbook-checklist packages: `factory-template`, `greenfield-product`, `brownfield-with-repo-to-greenfield`, `brownfield-without-repo-to-greenfield`; каждый package разделяет Browser ChatGPT Project, VS Code Remote SSH, Codex chat, terminal fallback, external UI и secrets/approvals
+- `validate-runbook-packages.py` подключен к quick verify и проверяет package existence, command/path lint, greenfield-only final state, brownfield conversion gates, cleanup/archive wording, dashboard contract, one-block handoff/language boundary и запрет fake auto-switch claims
+- lifecycle dashboard теперь показывает `runbook_packages` с current phase, gates, blockers, next action и owner boundary для четырех entry paths без добавления web app/daemon/SQLite/Telegram stack
 
 ## Программа 2.5 (release truth)
 - release truth source: `docs/releases/release-scorecard.yaml`

@@ -148,6 +148,7 @@ def render(data: dict[str, Any], root: Path, dashboard_path: Path) -> str:
     release = data.get("release_readiness", {}) if isinstance(data.get("release_readiness"), dict) else {}
     runtime = data.get("deploy_runtime", {}) if isinstance(data.get("deploy_runtime"), dict) else {}
     post_release = data.get("post_release_improvement", {}) if isinstance(data.get("post_release_improvement"), dict) else {}
+    runbook_packages = data.get("runbook_packages", []) if isinstance(data.get("runbook_packages"), list) else []
     recommended = data.get("recommended_next_step", {}) if isinstance(data.get("recommended_next_step"), dict) else {}
     fallback = data.get("fallback_next_step", {}) if isinstance(data.get("fallback_next_step"), dict) else {}
 
@@ -223,6 +224,24 @@ def render(data: dict[str, Any], root: Path, dashboard_path: Path) -> str:
             f"- parent handoff: `{value(orchestration, 'parent_handoff', 'id') or cockpit_parent.get('id', '')}` `{value(orchestration, 'parent_handoff', 'status') or cockpit_parent.get('status', '')}`",
             f"- selected profile/model/reasoning: `{orchestration.get('selected_profile') or cockpit_route.get('selected_profile', '')}` / `{orchestration.get('selected_model') or cockpit_route.get('selected_model', '')}` / `{orchestration.get('selected_reasoning_effort') or cockpit_route.get('selected_reasoning_effort', '')}`",
             f"- route boundary: {orchestration.get('route_explanation_boundary', '')}",
+            "",
+            "## Runbook packages",
+            "",
+            "| Package | Phase | Gates | Blockers | Next action |",
+            "|---|---|---|---|---|",
+        ]
+    )
+    for package in runbook_packages:
+        if not isinstance(package, dict):
+            continue
+        gates_text = ", ".join(f"`{gate}`" for gate in package.get("gates", []) or [])
+        blockers_text = ", ".join(map(str, package.get("blockers", []) or [])) or "none"
+        lines.append(
+            f"| `{package.get('id', '')}` | `{package.get('current_phase', '')}` | {gates_text} | {blockers_text} | {package.get('next_action', '')} |"
+        )
+
+    lines.extend(
+        [
             "",
             "## Release readiness",
             "",

@@ -115,6 +115,56 @@ handoff_orchestration:
   source_artifacts:
     - ".chatgpt/orchestration-cockpit.yaml"
 
+runbook_packages:
+  - id: 01-factory-template
+    title: "Factory-template package"
+    path: "docs/operator/runbook-packages/01-factory-template"
+    current_phase: execution
+    gates:
+      - route-receipt
+      - implementation
+      - verification
+      - verified-sync
+    blockers: []
+    next_action: "Для задач самого шаблона открыть package и пройти user/Codex/checklist/verify/closeout."
+    owner_boundary: internal-repo-follow-up
+  - id: 02-greenfield-product
+    title: "Greenfield product package"
+    path: "docs/operator/runbook-packages/02-greenfield-product"
+    current_phase: intake
+    gates:
+      - scaffold
+      - greenfield-docs
+      - verification
+      - closeout
+    blockers: []
+    next_action: "Для нового боевого проекта начать с greenfield-product package и wizard/preflight path."
+    owner_boundary: internal-repo-follow-up
+  - id: 03-brownfield-with-repo-to-greenfield
+    title: "Brownfield with repo conversion package"
+    path: "docs/operator/runbook-packages/03-brownfield-with-repo-to-greenfield"
+    current_phase: adoption
+    gates:
+      - audit
+      - adoption
+      - conversion
+      - verification
+    blockers: []
+    next_action: "Для существующего repo пройти audit/adoption и завершить conversion в greenfield-product."
+    owner_boundary: internal-repo-follow-up
+  - id: 04-brownfield-without-repo-to-greenfield
+    title: "Brownfield without repo reconstruction package"
+    path: "docs/operator/runbook-packages/04-brownfield-without-repo-to-greenfield"
+    current_phase: reconstruction
+    gates:
+      - intake
+      - reconstruction
+      - with-repo-adoption
+      - conversion
+    blockers: []
+    next_action: "Для входящих материалов без repo держать temporary workspaces внутри target root и затем пройти with-repo conversion."
+    owner_boundary: internal-repo-follow-up
+
 release_readiness:
   version: ""
   status: pending

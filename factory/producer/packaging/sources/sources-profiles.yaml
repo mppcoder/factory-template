@@ -126,3 +126,31 @@ profiles:
       - docs/operator/factory-template/02-runbook-dlya-codex-factory-template.md
       - docs/operator/factory-template/07-AGENTS-factory-template.md
       - template-repo/codex-routing.yaml
+
+  runbook_packages_archive:
+    export_name: sources-pack-runbook-packages
+    kind: archive_pack
+    purpose: complete runbook-checklist package layer for factory, greenfield and brownfield-to-greenfield entry paths
+    files:
+      - docs/operator/runbook-packages/README.md
+      - docs/operator/runbook-packages/00-package-contract.md
+      - docs/operator/runbook-packages/01-factory-template/01-user-runbook.md
+      - docs/operator/runbook-packages/01-factory-template/02-codex-runbook.md
+      - docs/operator/runbook-packages/01-factory-template/03-checklist.md
+      - docs/operator/runbook-packages/01-factory-template/04-verify.md
+      - docs/operator/runbook-packages/01-factory-template/05-closeout.md
+      - docs/operator/runbook-packages/02-greenfield-product/01-user-runbook.md
+      - docs/operator/runbook-packages/02-greenfield-product/02-codex-runbook.md
+      - docs/operator/runbook-packages/02-greenfield-product/03-checklist.md
+      - docs/operator/runbook-packages/02-greenfield-product/04-verify.md
+      - docs/operator/runbook-packages/02-greenfield-product/05-closeout.md
+      - docs/operator/runbook-packages/03-brownfield-with-repo-to-greenfield/01-user-runbook.md
+      - docs/operator/runbook-packages/03-brownfield-with-repo-to-greenfield/02-codex-runbook.md
+      - docs/operator/runbook-packages/03-brownfield-with-repo-to-greenfield/03-checklist.md
+      - docs/operator/runbook-packages/03-brownfield-with-repo-to-greenfield/04-verify.md
+      - docs/operator/runbook-packages/03-brownfield-with-repo-to-greenfield/05-closeout.md
+      - docs/operator/runbook-packages/04-brownfield-without-repo-to-greenfield/01-user-runbook.md
+      - docs/operator/runbook-packages/04-brownfield-without-repo-to-greenfield/02-codex-runbook.md
+      - docs/operator/runbook-packages/04-brownfield-without-repo-to-greenfield/03-checklist.md
+      - docs/operator/runbook-packages/04-brownfield-without-repo-to-greenfield/04-verify.md
+      - docs/operator/runbook-packages/04-brownfield-without-repo-to-greenfield/05-closeout.md

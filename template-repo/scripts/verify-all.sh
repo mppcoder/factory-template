@@ -429,6 +429,7 @@ run_quick() {
   run_step "VALIDATE_FACTORY_TEMPLATE_OPS" bash "$ROOT/VALIDATE_FACTORY_TEMPLATE_OPS.sh"
   run_step "validate-codex-task-pack" python3 "$ROOT/template-repo/scripts/validate-codex-task-pack.py" "$ROOT"
   run_step "validate-codex-routing" python3 "$ROOT/template-repo/scripts/validate-codex-routing.py" "$ROOT"
+  run_step "validate-runbook-packages" python3 "$ROOT/template-repo/scripts/validate-runbook-packages.py" "$ROOT"
   run_step "validate-gpt55-prompt-contract" run_gpt55_prompt_contract_smoke
   run_step "validate-model-prompt-policy" run_model_prompt_policy_smoke
   run_step "validate-tree-contract" python3 "$ROOT/template-repo/scripts/validate-tree-contract.py" "$ROOT"

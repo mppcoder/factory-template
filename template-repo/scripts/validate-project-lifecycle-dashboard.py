@@ -48,6 +48,12 @@ OWNER_BOUNDARIES = {
     "model-mapping-blocker",
     "secret-boundary-blocker",
 }
+RUNBOOK_PACKAGE_IDS = {
+    "01-factory-template",
+    "02-greenfield-product",
+    "03-brownfield-with-repo-to-greenfield",
+    "04-brownfield-without-repo-to-greenfield",
+}
 PROJECT_OWNER_BOUNDARIES = {
     "template-owned-generated-project-artifact",
     "factory-template-root",
@@ -257,6 +263,33 @@ def validate_dashboard(data: dict[str, Any]) -> list[str]:
         errors.append("handoff_orchestration.route_explanation_boundary обязателен")
     if "не переключ" not in boundary_text and "does not" not in boundary_text:
         errors.append("handoff_orchestration.route_explanation_boundary должен явно запрещать advisory auto-switch claim")
+
+    runbook_packages = data.get("runbook_packages")
+    if runbook_packages is not None:
+        if not isinstance(runbook_packages, list):
+            errors.append("runbook_packages должен быть list")
+        else:
+            seen_packages: set[str] = set()
+            for index, package in enumerate(runbook_packages, 1):
+                if not isinstance(package, dict):
+                    errors.append(f"runbook_packages[{index}] должен быть mapping")
+                    continue
+                package_id = str(package.get("id") or "")
+                seen_packages.add(package_id)
+                if package_id not in RUNBOOK_PACKAGE_IDS:
+                    errors.append(f"runbook_packages[{index}].id неизвестен: `{package_id}`")
+                for field in ["path", "current_phase", "next_action", "owner_boundary"]:
+                    if not str(package.get(field) or "").strip():
+                        errors.append(f"runbook_packages[{package_id or index}].{field} обязателен")
+                if str(package.get("owner_boundary") or "") != "internal-repo-follow-up":
+                    errors.append(f"runbook_packages[{package_id or index}].owner_boundary должен быть internal-repo-follow-up")
+                if not isinstance(package.get("gates"), list) or not package.get("gates"):
+                    errors.append(f"runbook_packages[{package_id or index}].gates должен быть непустым list")
+                if not isinstance(package.get("blockers"), list):
+                    errors.append(f"runbook_packages[{package_id or index}].blockers должен быть list")
+            missing_packages = sorted(RUNBOOK_PACKAGE_IDS - seen_packages)
+            if missing_packages:
+                errors.append("runbook_packages не содержит packages: " + ", ".join(missing_packages))
 
     release = as_mapping(data, "release_readiness", errors)
     validate_status(status_of(release), "release_readiness.status", errors)

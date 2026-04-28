@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 ### Добавлено
+- Финальный слой `docs/operator/runbook-packages/` с package contract и четырьмя complete runbook-checklist packages: `factory-template`, `greenfield-product`, `brownfield-with-repo-to-greenfield`, `brownfield-without-repo-to-greenfield`.
+- Validator `validate-runbook-packages.py`, подключенный к quick verify: проверяет existence, command/path lint, brownfield conversion gates, greenfield final state, dashboard integration, archive/cleanup wording и handoff language/routing boundary.
+- Dashboard contract `runbook_packages` для current phase, gates, blockers, next action и owner boundary по каждому package.
+- Defect report `reports/bugs/2026-04-28-runbook-package-layer-gap.md` для gap, где отдельные runbooks/presets/validators не давали complete package layer для четырех входов.
 - Project-root boundary для intermediate repos: machine-readable `workspace_layout_policy`, validator coverage и Artifact Eval `project-root-boundary` закрепляют, что temporary/intermediate/reconstructed/helper repos живут внутри repo целевого `greenfield-product`, а не как siblings в `/projects`.
 - Defect/factory feedback для gap, где промежуточные brownfield/reconstruction repo могли трактоваться как отдельные project roots в плоском `/projects` дереве.
 - Связка model promotion и prompt policy update: `prompt_migration_policy` в `codex-model-routing.yaml`, prompt migration section в model-routing proposal, validator `validate-model-prompt-policy.py` и Artifact Eval spec/report `model-prompt-policy`.
@@ -30,6 +34,7 @@
 - `docs/brownfield-to-greenfield-transition.md` описывает without-repo и with-repo transition paths, conversion gates и done rule.
 
 ### Изменено
+- Release-facing workflow map, lifecycle dashboard doc и source manifest теперь знают про runbook package layer; отдельный export profile `sources-pack-runbook-packages` включает полный набор package files.
 - Canonical VPS layout в active docs, scenario-pack и bootstrap guidance теперь явно требует размещать все intermediate repos внутри repo целевого `greenfield-product`.
 - `check-codex-model-catalog.py --write-proposal` теперь требует companion prompt migration review: fresh prompt baseline, affected prompt-like artifacts, validators/evals и official OpenAI source map до profile promotion.
 - Codex task-pack и normalized handoff generators теперь добавляют базовый prompt contract для GPT-5.5: fresh baseline, outcome, success criteria, constraints, evidence requirements, output shape и stop rules.

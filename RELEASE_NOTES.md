@@ -1,5 +1,14 @@
 # Release notes / заметки релиза
 
+## Не выпущено - runbook package layer
+
+- Добавлен полный слой `docs/operator/runbook-packages/` для четырех входов: сам `factory-template`, чистый `greenfield-product`, brownfield with repo -> greenfield и brownfield without repo -> greenfield.
+- Каждый package разделяет Browser ChatGPT Project, VS Code Remote SSH, Codex chat, terminal fallback, GitHub/external UI, secrets и approvals.
+- Brownfield packages закрепляют продуктовую логику: brownfield является только transitional path, а done требует conversion в `greenfield-product` / `greenfield-converted` или explicit documented blocker.
+- Добавлен validator `validate-runbook-packages.py` и quick verify coverage для package existence, command/path lint, dashboard contract, archive/cleanup wording, handoff language contract и запрета fake auto-switch claims.
+- Lifecycle dashboard получил `runbook_packages` readout с phase, gates, blockers и next action без добавления web app/daemon/SQLite/Telegram stack.
+- Source manifest получил отдельный `sources-pack-runbook-packages` для полного package export.
+
 ## Не выпущено - Plan №6 orchestration productization
 
 - Добавлен beginner-first слой для full handoff UX поверх Plan №5: cockpit-lite, parent plan normalization, route explanation, UX scorecard и safe synthetic rehearsal.

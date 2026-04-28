@@ -30,6 +30,7 @@
 - release readiness: version, changelog, release notes, scorecard, verification state;
 - deploy/runtime: signal из operator dashboard reports, если они есть;
 - post-release improvement: incidents, feedback, learning proposals, backlog candidates;
+- runbook packages: current phase, gates, blockers и next action для четырех entry paths;
 - external actions ledger: только реальные user/manual/runtime/downstream действия;
 - recommended next step и fallback next step.
 
@@ -55,6 +56,17 @@
 `operator-dashboard.py` остается runtime/deploy панелью: env, preset, dry-run, deploy reports, Docker Compose и next deploy step.
 
 Lifecycle dashboard не выполняет deploy и не обещает runtime automation. Он только показывает runtime/deploy state и evidence boundary. Dry-run/report evidence не считается real production proof.
+
+## Связь с runbook packages
+
+`runbook_packages` показывает четыре проверяемых пакета:
+
+- `01-factory-template`;
+- `02-greenfield-product`;
+- `03-brownfield-with-repo-to-greenfield`;
+- `04-brownfield-without-repo-to-greenfield`.
+
+Для каждого package dashboard фиксирует текущую phase, gates, blockers, next action и owner boundary. Это readout/control tower слой, а не отдельная automation runtime.
 
 ## Routing boundary
 

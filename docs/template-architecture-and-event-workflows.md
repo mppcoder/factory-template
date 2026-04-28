@@ -82,6 +82,7 @@ executable routing layer
 - verification подтверждает green baseline;
 - release-followup обновляет docs, exports, manifests и bundle;
 - completion package отделяет внутреннюю работу repo от внешних шагов пользователя.
+- runbook-checklist packages связывают user path, Codex path, checklist, verify и closeout для четырех входов: сам шаблон, чистый greenfield, brownfield with repo и brownfield without repo.
 
 ## 3. Дерево проекта и source-of-truth
 
@@ -142,6 +143,7 @@ factory-template/
 - `template-repo/template/`: scaffold, который materialize-ится в downstream project.
 - `docs/`: канонические обзорные reference-docs без дублирования сценарного слоя.
 - `docs/operator/factory-template/`: operator/codex runbooks и boundary/completion guidance.
+- `docs/operator/runbook-packages/`: финальные пошаговые packages "с нуля до рабочего состояния" для factory-template, greenfield-product и двух brownfield-to-greenfield entry paths.
 - `project-knowledge/factory/template-evolution/`: историческая knowledge-зона развития фабрики и release-facing meta notes; это не отдельный root workflow.
 - `factory/producer/packaging/sources/`: declarative source/export profiles.
 - `factory/producer/registry/`: release history, versions, projects created.
