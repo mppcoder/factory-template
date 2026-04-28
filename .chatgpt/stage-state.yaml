@@ -1,7 +1,7 @@
 project:
   name: factory-template
   slug: factory-template
-  mode: brownfield
+  mode: factory-improvement
 stage:
   current: done
   previous: verification

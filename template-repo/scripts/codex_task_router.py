@@ -448,6 +448,17 @@ def render_normalized_handoff(record: dict, task_text: str, title: str) -> str:
     strict_launch_lines = "\n".join(f"- {item}" for item in strict_launch_use_cases) if strict_launch_use_cases else "- none"
     troubleshooting = launch.get("troubleshooting", [])
     troubleshooting_lines = "\n".join(f"- {item}" for item in troubleshooting) if troubleshooting else "- none"
+    prompt_contract = "\n".join(
+        [
+            "- GPT-5.5 не считать drop-in replacement для старого prompt stack.",
+            "- Начинать с fresh baseline: роль/область ответственности, ожидаемый outcome, success criteria, constraints, output shape и stop rules.",
+            "- Сохранять обязательные repo invariants: чтение router, defect-capture, handoff/routing/closeout rules.",
+            "- Убирать лишнюю пошаговую процессность, если путь не является обязательным repo invariant.",
+            "- Для tool-heavy задач явно задавать evidence requirements, validation commands и fallback/blocker behavior.",
+            "- Держать stable rules выше task-specific dynamic content, чтобы prompt caching и повторное использование оставались устойчивыми.",
+            "- Не вставлять current date как постоянную model instruction; даты reports/filenames фиксировать как metadata.",
+        ]
+    )
     return f"""# {title}
 
 ## Источник запуска
@@ -527,6 +538,9 @@ def render_normalized_handoff(record: dict, task_text: str, title: str) -> str:
 
 ## Примечание по live availability
 {launch.get('model_catalog_validation_note', '')}
+
+## Базовый prompt contract для GPT-5.5
+{prompt_contract}
 
 ## Путь launch artifact
 `{launch.get('launch_artifact_path', '')}`

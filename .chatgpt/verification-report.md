@@ -1,77 +1,47 @@
 # Отчет о проверке результата
 
 ## Что проверяли
-- Исправление остановки closeout перед внутренним brownfield follow-up.
-- Исправление отсутствия обязательной пользовательской инструкции в generated direct-task / closeout guidance.
-- Source-candidate map и reconstruction boundary для `/root/.openclaw` и `/root/openclaw-plus`.
-- Продвижение field pilot roadmap до FP-02 evidence completion.
-- Исправление преждевременного FP-02 pass до создания project repo.
-- Создание локального project repo `/projects/openclaw-brownfield`.
-- Исправление GitHub remote creation, ошибочно оставленного пользователю.
-- Исправление generated root `scripts/verify-all.sh` в downstream project repo.
-- Продолжение roadmap до FP-01 battle greenfield project.
-- Совместимость новых generator/validator правил с существующими routing и handoff validators.
+
+- GPT-5.5 prompt migration для prompt-like artifacts `factory-template`.
+- Актуальность `.chatgpt/codex-input.md` для входящего `chatgpt-handoff`.
+- Outcome-first baseline в template `.chatgpt` и generated task-pack / normalized handoff.
+- Сохранение repo-first, defect-capture, handoff, routing и closeout invariants.
+- Reasoning profile policy без silent promotion `quick`.
+- Durable drift checks через validator и Artifact Eval.
 
 ## Статус defect-capture
-- Bug report создан: `reports/bugs/bug-035-closeout-stopped-before-internal-followup-and-user-instruction.md`.
-- Factory feedback создан: `reports/factory-feedback/feedback-035-closeout-stopped-before-internal-followup-and-user-instruction.md`.
-- Bug report создан: `reports/bugs/bug-036-fp02-marked-passed-before-repo-creation.md`.
-- Factory feedback создан: `reports/factory-feedback/feedback-036-fp02-marked-passed-before-repo-creation.md`.
-- Bug report создан: `reports/bugs/bug-037-github-repo-creation-misclassified-as-user-step.md`.
-- Factory feedback создан: `reports/factory-feedback/feedback-037-github-repo-creation-misclassified-as-user-step.md`.
-- Bug report создан: `reports/bugs/bug-038-generated-project-root-script-verify-all-wrong-root.md`.
-- Factory feedback создан: `reports/factory-feedback/feedback-038-generated-project-root-script-verify-all-wrong-root.md`.
+
+- Bug report создан: `reports/bugs/2026-04-28-gpt-5-5-prompt-migration-gap.md`.
+- Factory feedback создан: `reports/factory-feedback/feedback-2026-04-28-gpt-5-5-prompt-migration-gap.md`.
+- Слой: `factory-template`.
 - Статус remediation: fixed-in-current-scope.
 
 ## Что подтверждено
-- `source-candidate-map` является internal Codex-eligible follow-up, а не ручным пользовательским шагом.
-- `/root/openclaw-plus` является основным source candidate root.
-- `/root/.openclaw` допускается только как limited candidate root после redaction/review.
-- `reports/release/field-pilot-scenarios/02-brownfield-without-repo.md` переведен в `passed` на sanitized OpenClaw+ кейсе.
-- `/projects/openclaw-brownfield` создан как локальный project repo и зафиксирован commit `4a58c8d`.
-- GitHub repo `https://github.com/mppcoder/openclaw-brownfield` создан и подключен как `origin`.
-- `/projects/openclaw-brownfield` запушен до commit `7b3d1a4`.
-- `scripts/verify-all.sh` теперь проходит в generated project root contour.
-- `/projects/greenfield-test` создан как FP-01 greenfield project repo.
-- GitHub repo `https://github.com/mppcoder/greenfield-test` запушен до commit `cca68d5`.
-- `work/features/first-feature` создан как first task workspace.
-- `/projects/openclaw-brownfield/src/openclaw-plus` содержит sanitized reconstruction из `/root/openclaw-plus`.
-- Raw `/root/.openclaw` и raw `/etc/openclaw-plus.env` не перенесены.
-- Общий field pilot status стал `completed-field-evidence`, `5/5`; FP-03 помечен пройденным на `mppcoder/openclaw-brownfield` commit `3c026fd`, FP-04/FP-05 пройдены на той же lineage commits `1826f07` и `2dc6515`.
-- Generated/dependency zones исключены через denylist: `.venvs`, `node_modules`, `__pycache__`, `var`, logs, sqlite, jsonl.
-- `render_direct_task_response` теперь генерирует publishable direct-task response с `## Handoff в Codex`, continuation rule и closeout instruction rule.
-- `validate-codex-routing.py` закрепляет запрет остановки на self-handoff и требование `## Инструкция пользователю` / `Внешних действий не требуется.`.
-- `create-codex-task-pack.py` и `validate-codex-task-pack.py` закрепляют brownfield source-candidate follow-up как internal repo work.
+
+- `.chatgpt/codex-input.md` заменен со stale downstream sync task на текущий GPT-5.5 migration handoff.
+- `template-repo/scripts/create-codex-task-pack.py` и `template-repo/scripts/codex_task_router.py` добавляют базовый prompt contract для GPT-5.5.
+- `template-repo/template/.chatgpt/codex-input.md` использует русскоязычные outcome-first sections.
+- `tests/artifact-eval/specs/gpt-5-5-prompt-contract.yaml` и `validate-gpt55-prompt-contract.py` ловят stale handoff и отсутствие prompt contract.
+- `quick` остается на `gpt-5.4-mini` как осознанная routing policy; live catalog предложил upgrade candidate, но manual review required.
 
 ## Команды проверки
-- `python template-repo/scripts/validate-codex-routing.py .`: прошла.
-- `python template-repo/scripts/validate-handoff-response-format.py .chatgpt/direct-task-response.md`: прошла.
-- `python template-repo/scripts/validate-codex-task-pack.py .`: прошла.
-- `python template-repo/scripts/validate-evidence.py .`: прошла.
-- `python template-repo/scripts/validate-brownfield-transition.py .`: прошла.
-- `python template-repo/scripts/validate-quality.py .`: прошла.
-- `python template-repo/scripts/validate-human-language-layer.py .`: прошла.
-- `python scripts/validate-brownfield-transition.py .` в `/projects/openclaw-brownfield`: прошла.
-- `python scripts/validate-evidence.py .` в `/projects/openclaw-brownfield`: прошла.
-- `python scripts/validate-codex-task-pack.py .` в `/projects/openclaw-brownfield`: прошла.
-- `bash scripts/verify-all.sh` в `/projects/openclaw-brownfield`: прошла.
-- `git -C /projects/openclaw-brownfield status --short --branch`: clean on `main`.
-- `bash scripts/verify-all.sh` в `/projects/greenfield-test`: прошла.
-- `git -C /projects/greenfield-test status --short --branch`: clean on `main...origin/main`.
-- `bash scripts/verify-all.sh` в `/projects/openclaw-brownfield` после FP-03 audit update: прошла.
-- `git -C /projects/openclaw-brownfield status --short --branch`: clean on `main...origin/main`.
-- `git -C /projects/openclaw-brownfield rev-parse --short HEAD` после FP-03 audit update: `3c026fd`.
-- FP-04 export/apply/rollback cycle: прошел; rollback restored `2`, missing backups `0`, snapshot restored `true`; evidence commit `1826f07`.
-- FP-05 export/apply/rollback cycle: прошел; cycle-1 evidence preserved; rollback restored `2`, missing backups `0`, snapshot restored `true`; evidence commit `2dc6515`.
-- OpenClaw+ greenfield lifecycle conversion: passed in `/projects/openclaw-brownfield`; latest pushed commit `1f8fb6d`.
-- `bash template-repo/scripts/verify-all.sh` в `/projects/factory-template`: прошла, `VERIFY-ALL ПРОЙДЕН (full)`.
+
+- `git diff --check`: PASS.
+- `python3 template-repo/scripts/validate-codex-routing.py`: PASS.
+- `python3 template-repo/scripts/check-codex-model-catalog.py`: PASS, `catalog_status=available`, `gpt-5.5` live model present, `missing_configured_models=[]`.
+- `python3 template-repo/scripts/validate-beginner-handoff-ux.py`: PASS.
+- `python3 template-repo/scripts/validate-gpt55-prompt-contract.py .`: PASS.
+- `python3 template-repo/scripts/eval-artifact.py tests/artifact-eval/specs/gpt-5-5-prompt-contract.yaml --output tests/artifact-eval/reports/gpt-5-5-prompt-contract.md`: PASS.
+- `python3 template-repo/scripts/validate-artifact-eval-report.py tests/artifact-eval/reports/gpt-5-5-prompt-contract.md`: PASS.
+- `python3 template-repo/scripts/validate-human-language-layer.py .`: PASS, active findings `0`.
+- `bash template-repo/scripts/verify-all.sh ci`: PASS, `VERIFY-ALL ПРОЙДЕН (ci)`.
+
+## Аудит остаточных prompt patterns
+
+- `rg` по old model IDs: остатки классифицированы как intentional quick profile, model catalog compatibility, historical reports, orchestration fixtures или generated evidence.
+- `rg` по `think step by step|current date|as an AI`: остатки только в validator/spec negative markers и report classification; static `current date:` prompt instruction в critical surfaces не найден.
+- `rg` по `self-handoff`: допустимые остатки относятся к direct task / incidental defect boundary; `chatgpt-handoff` route фиксирует `handoff receipt`.
 
 ## Итоговый вывод
-- Оба заявленных дефекта исправлены в source-of-truth repo.
-- Source-candidate map и reconstruction boundary подготовлены.
-- Недостающий repo creation + GitHub remote step выполнен: `https://github.com/mppcoder/openclaw-brownfield`, latest commit `7b3d1a4`.
-- Roadmap продвинут до FP-01: `https://github.com/mppcoder/greenfield-test`, latest commit `cca68d5`.
-- Roadmap продвинут до FP-03: `https://github.com/mppcoder/openclaw-brownfield`, latest audit commit `3c026fd`.
-- Roadmap завершен до FP-05: `https://github.com/mppcoder/openclaw-brownfield`, latest downstream sync evidence commit `2dc6515`.
-- Runtime OpenClaw не изменялся.
-- Live runtime OpenClaw не изменялся during conversion; conversion was repo-lifecycle only.
+
+GPT-5.5 prompt migration выполнена и проверена. Repo green по обязательному verification contour; closeout/sync state фиксируется отдельно.

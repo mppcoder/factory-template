@@ -63,5 +63,8 @@
 ## Путь фиксации дефекта
 <!-- defect path или not-required -->
 
+## Базовый prompt contract для GPT-5.5
+<!-- Не считать GPT-5.5 drop-in replacement. Начинайте prompt-like task pack с outcome, success criteria, constraints, evidence requirements, output shape и stop rules. Подробную процессность оставляйте только для обязательных repo invariants. -->
+
 ## Входной handoff
-<!-- Сведите сюда ключевой handoff input. Человекочитаемый текст должен быть на русском; technical literal values можно не переводить. -->
+<!-- Сведите сюда ключевой handoff input. Стабильные правила должны идти выше dynamic task fields. Человекочитаемый текст должен быть на русском; technical literal values можно не переводить. -->

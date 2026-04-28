@@ -6,7 +6,7 @@
 
 ## Текущий verify baseline
 
-- `bash template-repo/scripts/verify-all.sh ci`: PASS (`2026-04-26`)
+- `bash template-repo/scripts/verify-all.sh ci`: PASS (`2026-04-28`)
 - `bash CLEAN_VERIFY_ARTIFACTS.sh`: PASS (`2026-04-26`)
 - `bash PRE_RELEASE_AUDIT.sh`: PASS (`2026-04-26`)
 - `bash RELEASE_BUILD.sh /tmp/factory-template-2.5.zip`: PASS (`2026-04-26`)
@@ -56,6 +56,7 @@
 - automatic phase detection
 - automatic phase detection self-test
 - согласованность README, release docs, scenario-pack guidance и фактической структуры repo
+- GPT-5.5 prompt contract: `validate-gpt55-prompt-contract.py`, Artifact Eval `gpt-5-5-prompt-contract`, official OpenAI source map и stale handoff drift checks
 
 ## Известные остаточные ограничения
 
@@ -66,6 +67,7 @@
 - release decision для `G25-GA` зафиксирован как GA pass; дальнейшие KPI расширения не блокируют текущий release
 - git-операции в этом окружении нужно выполнять последовательно; параллельный `commit/push/fetch/remote change` может давать ложные результаты
 - auto GitHub Release publication зависит от доступности `gh` и не должна считаться гарантированной без отдельной проверки auth/runtime
+- `quick` profile остается на `gpt-5.4-mini`; live catalog показал upgrade candidate на `gpt-5.5`, но repo policy требует отдельный manual review proposal для promotion
 
 ## Использование оператором
 

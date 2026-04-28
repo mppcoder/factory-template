@@ -1,46 +1,77 @@
-CODEX HANDOFF — DOWNSTREAM MULTI-CYCLE SYNC PROOF
+CODEX HANDOFF — GPT-5.5 PROMPT MIGRATION FOR FACTORY-TEMPLATE
 
 launch_source: chatgpt-handoff
-task_class: downstream-sync-validation
+task_class: deep
 selected_profile: deep
 selected_model: gpt-5.5
 selected_reasoning_effort: high
-project_profile: factory-template
-selected_scenario: post-2.5/downstream-multi-cycle-sync
-pipeline_stage: audit → evidence → remediation-if-needed
+selected_plan_mode_reasoning_effort: high
+apply_mode: manual-ui (default)
+strict_launch_mode: optional
+project_profile: factory-template self-improvement / prompt-migration
+selected_scenario: template-repo/scenario-pack/00-master-router.md -> template-repo/scenario-pack/15-handoff-to-codex.md
+pipeline_stage: source-map -> prompt-inventory -> migration-plan -> remediation -> verification -> closeout
 handoff_allowed: true
-defect_capture_path: reports/bugs/YYYY-MM-DD-downstream-multi-cycle-sync-gap.md
+defect_capture_path: reports/bugs/2026-04-28-gpt-5-5-prompt-migration-gap.md
 
 Язык ответа Codex: русский.
+Отвечай пользователю по-русски. Английский допустим только для technical literal values: команды, пути, YAML/JSON keys, model IDs и route fields.
 
-ЦЕЛЬ: Доказать, что downstream sync v3 выдерживает несколько циклов: initial template sync, manual project-owned edits, advisory review, safe-generated update, safe-clone update, rollback, brownfield transition → greenfield conversion.
+## Целевой результат
 
-АРТЕФАКТЫ ОБНОВИТЬ:
-- docs/downstream-upgrade-policy.md
-- reports/release/downstream-multi-cycle-sync-report.md
-- factory/producer/extensions/workspace-packs/factory-ops/*
-- MATRIX_TEST.sh
-- TEST_REPORT.md
-- CURRENT_FUNCTIONAL_STATE.md
+Переработать prompt-like артефакты `factory-template` под GPT-5.5 как fresh prompt baseline, не как drop-in replacement старого prompt stack.
 
-ЗАДАЧИ:
-1. Создать synthetic downstream fixture для multi-cycle sync.
-2. В цикле 1 применить safe-generated/safe-clone.
-3. В цикле 2 сделать manual project-owned edits.
-4. В цикле 3 обновить template-owned files и проверить project-owned не перезаписан, advisory-review не применён автоматически, rollback metadata корректна.
-5. В цикле 4 проверить rollback.
-6. В отдельном сценарии проверить brownfield converted_greenfield.
-7. Обновить report и TEST_REPORT.
+## Критерии успеха
 
-Дополнительно учесть Stage 5: проверить production VPS field pilot docs/scripts/reports как template-owned/safe или advisory зоны без перезаписи project-owned runtime env/secrets: deploy/.env, .factory-runtime/, field-pilot reports, backup/rollback transcripts и real VPS approval boundary.
+- Prompt-like handoff/task-pack/template artifacts начинаются с outcome-first contract: роль/область ответственности при необходимости, expected outcome, success criteria, constraints, evidence requirements, output shape, stop rules.
+- Обязательные repo invariants сохранены: сначала `00-master-router.md`, advisory vs executable routing, defect-capture, inline handoff, verification/closeout/sync-state.
+- Reasoning profile policy сохранен: `build` -> `gpt-5.5`/`medium`, `deep` -> `gpt-5.5`/`high`, `review` -> `gpt-5.5`/`high`, `quick` остается `gpt-5.4-mini` без silent promotion.
+- Validators/evals ловят drift старых prompt patterns: stale `.chatgpt/codex-input.md`, отсутствие GPT-5.5 prompt contract, `self-handoff` вместо `handoff receipt` для `chatgpt-handoff`, forbidden prompt phrases.
+- Closeout reports честно фиксируют source map, gap map, remediation, verification, model catalog status, defects/factory feedback и sync status.
 
-КРИТЕРИИ ПРИЕМКИ:
-- Multi-cycle sync report есть и честен.
-- Project-owned изменения защищены.
-- Advisory-review требует ручного review.
-- Rollback работает после нескольких циклов.
-- Brownfield history сохраняется после conversion.
-- bash template-repo/scripts/verify-all.sh ci проходит.
+## Ограничения
 
-COMPLETION PACKAGE:
-В финале указать downstream/battle repo sync commands, что safe to apply, что review-only, что manual-only, требуется ли ChatGPT Project Sources fallback, и Реестр внешних действий по контурам: factory-template ChatGPT Project, downstream repo sync, downstream ChatGPT Project, real VPS/user approval, secrets/manual boundary.
+- Использовать только официальные OpenAI/OpenAI Docs/Help Center sources для внешних рекомендаций.
+- Не утверждать live availability `selected_model` без live catalog check.
+- Не переписывать repo-first contract в мягкую рекомендацию.
+- Не удалять defect-capture gates.
+- Не добавлять secrets, tokens, private transcripts или credentials.
+- Не смешивать эту миграцию со старыми task artifacts.
+
+## Требования к доказательствам
+
+- Repo evidence: `AGENTS.md`, `template-repo/scenario-pack/00-master-router.md`, `template-repo/scenario-pack/15-handoff-to-codex.md`, `template-repo/codex-routing.yaml`, `template-repo/template/.codex/config.toml`.
+- Official docs evidence: OpenAI `Using GPT-5.5`, OpenAI `Prompt guidance`, OpenAI `Prompt optimizer`, OpenAI Help Center `GPT-5.3 and GPT-5.5 in ChatGPT`.
+- Prompt inventory: `.chatgpt/*`, template `.chatgpt/*`, scenario-pack, tasks/codex, skills, operator docs, bootstrap, template docs, artifact eval specs, routing/config and scripts that render handoff/task packs.
+
+## Артефакты для обновления
+
+- `.chatgpt/codex-input.md`
+- `.chatgpt/codex-context.md`
+- `.chatgpt/codex-task-pack.md`
+- `.chatgpt/verification-report.md`
+- `.chatgpt/done-report.md`
+- `reports/prompt-migration/2026-04-28-gpt-5-5-prompt-inventory.md`
+- `reports/prompt-migration/2026-04-28-gpt-5-5-prompt-migration-report.md`
+- `reports/bugs/2026-04-28-gpt-5-5-prompt-migration-gap.md`
+- `reports/factory-feedback/feedback-2026-04-28-gpt-5-5-prompt-migration-gap.md`
+- prompt-generating scripts, template `.chatgpt` files and artifact-eval specs when needed
+- `CURRENT_FUNCTIONAL_STATE.md`
+- `VERIFY_SUMMARY.md`
+- `CHANGELOG.md`
+
+## Проверка
+
+- `git status --short --branch`
+- `git diff --check`
+- `python3 template-repo/scripts/validate-codex-routing.py`
+- `python3 template-repo/scripts/check-codex-model-catalog.py` или зафиксировать blocker/live catalog unavailable
+- `python3 template-repo/scripts/validate-beginner-handoff-ux.py` или зафиксировать если script отсутствует/неприменим
+- `bash template-repo/scripts/verify-all.sh ci`
+- `rg` audit old model/prompt patterns with manual classification
+
+## Правила остановки
+
+- Если command отсутствует или падает из-за внешнего blocker, зафиксировать command, error summary, blocker/non-blocker и next-best check.
+- Если нужен model-routing promotion для `quick`, не менять автоматически; создать proposal в `reports/model-routing/` и пометить manual review required.
+- Если найден reusable defect, сначала зафиксировать bug report и factory feedback, затем remediation.

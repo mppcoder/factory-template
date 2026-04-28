@@ -98,7 +98,8 @@ run_artifact_eval_smoke() {
     feature-execution-lite \
     handoff-transcript-eval \
     project-knowledge-reuse-proof \
-    beginner-full-handoff-ux
+    beginner-full-handoff-ux \
+    gpt-5-5-prompt-contract
   do
     python3 "$ROOT/template-repo/scripts/eval-artifact.py" \
       "$specs_dir/$spec.yaml" \
@@ -306,6 +307,10 @@ run_plan6_productization_smoke() {
   rm -rf "$tmp_dir"
 }
 
+run_gpt55_prompt_contract_smoke() {
+  python3 "$ROOT/template-repo/scripts/validate-gpt55-prompt-contract.py" "$ROOT"
+}
+
 run_project_lifecycle_dashboard_smoke() {
   local tmp_dir
   tmp_dir="$(mktemp -d)"
@@ -417,6 +422,7 @@ run_quick() {
   run_step "VALIDATE_FACTORY_TEMPLATE_OPS" bash "$ROOT/VALIDATE_FACTORY_TEMPLATE_OPS.sh"
   run_step "validate-codex-task-pack" python3 "$ROOT/template-repo/scripts/validate-codex-task-pack.py" "$ROOT"
   run_step "validate-codex-routing" python3 "$ROOT/template-repo/scripts/validate-codex-routing.py" "$ROOT"
+  run_step "validate-gpt55-prompt-contract" run_gpt55_prompt_contract_smoke
   run_step "validate-tree-contract" python3 "$ROOT/template-repo/scripts/validate-tree-contract.py" "$ROOT"
   run_step "validate-mode-parity" python3 "$ROOT/template-repo/scripts/validate-mode-parity.py" "$ROOT"
   run_step "validate-brownfield-transition" python3 "$ROOT/template-repo/scripts/validate-brownfield-transition.py" "$ROOT"

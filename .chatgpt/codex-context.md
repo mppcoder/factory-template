@@ -10,7 +10,7 @@ factory-template
 done
 
 ## Идентификатор изменения
-chg-20260423-021
+chg-20260428-gpt55-prompt-migration
 
 ## Краткое резюме
-Исправлен reusable completion-layer defect, из-за которого contour `factory-template ChatGPT Project` слишком легко трактовался как обязательный даже без изменения repo/path/entrypoint/instruction text.
+Перевести prompt-like artifacts фабрики на GPT-5.5 fresh outcome-first baseline и закрепить drift checks.

@@ -1,0 +1,72 @@
+schema: artifact-eval/v1
+id: gpt-5-5-prompt-contract
+report_date: 2026-04-28
+target_artifact: template-repo/scripts/validate-gpt55-prompt-contract.py
+artifact_type: prompt-contract-validator
+expected_output:
+  guided: "Validator ловит stale handoff, отсутствие GPT-5.5 outcome-first baseline и запрещенные legacy prompt phrases."
+thresholds:
+  min_case_pass_rate: 1.0
+  min_assertion_pass_rate: 1.0
+  max_false_positive_rate: 0.0
+expected_trigger:
+  cases:
+    - id: stale-codex-input
+      prompt: "В `.chatgpt/codex-input.md` остался handoff от предыдущей задачи."
+      expected: "Validator должен проверять актуальный GPT-5.5 migration title и запрещать старый downstream handoff."
+      baseline_expected: fail
+      assertions:
+        - id: stale-title-check
+          category: compliance
+          must_contain:
+            - "stale or wrong handoff title"
+            - "DOWNSTREAM MULTI-CYCLE SYNC PROOF"
+    - id: outcome-first-template
+      prompt: "Шаблон Codex input не содержит outcome-first sections."
+      expected: "Validator должен требовать русскоязычные outcome-first sections с техническими терминами внутри: outcome, success criteria, constraints, evidence requirements, output shape, stop rules и dynamic task fields."
+      baseline_expected: fail
+      assertions:
+        - id: section-list
+          category: outcome
+          must_contain:
+            - "REQUIRED_PROMPT_SECTIONS"
+            - "## Целевой результат"
+            - "## Критерии успеха"
+            - "## Правила остановки"
+    - id: official-source-map
+      prompt: "Migration report не ссылается на официальные OpenAI sources."
+      expected: "Validator должен требовать official OpenAI docs/help center URLs."
+      baseline_expected: fail
+      assertions:
+        - id: source-markers
+          category: evidence
+          must_contain:
+            - "OFFICIAL_SOURCE_MARKERS"
+            - "https://developers.openai.com/api/docs/guides/latest-model"
+            - "https://developers.openai.com/api/docs/guides/prompt-guidance"
+non_trigger_cases:
+  - id: quick-profile-kept
+    prompt: "Repo сохраняет `quick` на `gpt-5.4-mini` без silent promotion."
+    expected: "Validator не должен запрещать все упоминания gpt-5.4-mini, потому что это разрешенный quick profile."
+    baseline_expected: pass
+    assertions:
+      - id: no-global-gpt54-ban
+        category: compliance
+        must_not_contain:
+          - "gpt-5\\.4"
+          - "GPT-5\\.4"
+compliance_assertions:
+  - id: forbidden-legacy-phrases
+    category: compliance
+    must_contain:
+      - "think step by step"
+      - "as an AI"
+      - "static current-date instruction"
+  - id: contract-markers
+    category: compliance
+    must_contain:
+      - "Базовый prompt contract для GPT-5.5"
+      - "drop-in replacement"
+      - "evidence requirements"
+      - "output shape"
+      - "stop rules"

@@ -1,70 +1,100 @@
 change:
-  id: chg-20260423-021
-  title: Default factory-template ChatGPT Project to no unless instruction contract changed
-  class: small-fix
+  id: chg-20260428-gpt55-prompt-migration
+  title: GPT-5.5 prompt migration for factory-template
+  class: migration
   execution_mode: codex-led
-  type: brownfield
+  type: factory-improvement
   status: done
-  priority: medium
-  summary: Исправлен reusable completion-layer defect, из-за которого contour `factory-template ChatGPT Project` слишком легко трактовался как обязательный даже без изменения repo/path/entrypoint/instruction text.
+  priority: high
+  summary: Перевести prompt-like artifacts фабрики на GPT-5.5 fresh outcome-first baseline и закрепить drift checks.
   outputs:
-    - template-repo/scenario-pack/00-master-router.md
-    - template-repo/scenario-pack/15-handoff-to-codex.md
-    - template-repo/scenario-pack/16-done-closeout.md
-    - template-repo/scripts/create-codex-task-pack.py
-    - template-repo/scripts/validate-codex-task-pack.py
-    - docs/template-architecture-and-event-workflows.md
     - .chatgpt/codex-input.md
     - .chatgpt/codex-context.md
     - .chatgpt/codex-task-pack.md
     - .chatgpt/verification-report.md
     - .chatgpt/done-report.md
-    - reports/bugs/bug-021-repo-first-completion-package-overstates-factory-chatgpt-update.md
-    - reports/factory-feedback/feedback-021-repo-first-completion-package-overstates-factory-chatgpt-update.md
-    - work/completed/chg-20260423-021.md
+    - reports/prompt-migration/2026-04-28-gpt-5-5-prompt-inventory.md
+    - reports/prompt-migration/2026-04-28-gpt-5-5-prompt-migration-report.md
+    - reports/bugs/2026-04-28-gpt-5-5-prompt-migration-gap.md
+    - reports/factory-feedback/feedback-2026-04-28-gpt-5-5-prompt-migration-gap.md
+    - template-repo/scripts/create-codex-task-pack.py
+    - template-repo/scripts/codex_task_router.py
+    - template-repo/scripts/validate-gpt55-prompt-contract.py
+    - template-repo/scripts/verify-all.sh
+    - template-repo/template/.chatgpt/codex-input.md
+    - template-repo/template/.chatgpt/codex-task-pack.md
+    - tests/artifact-eval/specs/gpt-5-5-prompt-contract.yaml
+    - tests/artifact-eval/reports/gpt-5-5-prompt-contract.md
 tasks:
   - id: T-001
-    title: Зафиксировать bug-021 и уточнить completion contour для factory-template ChatGPT Project
+    title: Собрать source map и prompt inventory
     type: analysis
-    risk_level: low
+    risk_level: medium
     executor: developer
     depends_on: []
     outputs:
-      - reports/bugs/bug-021-repo-first-completion-package-overstates-factory-chatgpt-update.md
-      - reports/factory-feedback/feedback-021-repo-first-completion-package-overstates-factory-chatgpt-update.md
-      - template-repo/scenario-pack/00-master-router.md
-      - template-repo/scenario-pack/15-handoff-to-codex.md
-      - template-repo/scenario-pack/16-done-closeout.md
+      - reports/prompt-migration/2026-04-28-gpt-5-5-prompt-inventory.md
     acceptance:
-      - 'factory-template ChatGPT Project contour явно имеет default "нет", если instruction contract не менялся'
-      - '"да" разрешено только при реальном изменении repo/path/entrypoint/instruction text'
+      - prompt-like candidate zones checked
+      - old model/prompt markers classified
   - id: T-002
-    title: Обновить generator и validator completion package под новый default
-    type: implementation
+    title: Зафиксировать reusable defect и factory feedback
+    type: docs
     risk_level: low
     executor: developer
     depends_on:
       - T-001
     outputs:
-      - template-repo/scripts/create-codex-task-pack.py
-      - template-repo/scripts/validate-codex-task-pack.py
-      - docs/template-architecture-and-event-workflows.md
+      - reports/bugs/2026-04-28-gpt-5-5-prompt-migration-gap.md
+      - reports/factory-feedback/feedback-2026-04-28-gpt-5-5-prompt-migration-gap.md
     acceptance:
-      - 'generated boundary-actions и done-checklist больше не подталкивают к обновлению factory-template ChatGPT Project без изменения instruction contract'
-      - 'validator закрепляет новую формулировку'
+      - defect layer classified as factory-template
+      - remediation scope stated
   - id: T-003
-    title: Пересобрать artifacts, проверить и запушить
-    type: verification
-    risk_level: low
+    title: Обновить prompt generators, templates и active handoff artifacts
+    type: migration
+    risk_level: medium
     executor: developer
     depends_on:
       - T-002
     outputs:
-      - .chatgpt/task-index.yaml
+      - .chatgpt/codex-input.md
+      - .chatgpt/codex-context.md
+      - .chatgpt/codex-task-pack.md
+      - template-repo/scripts/create-codex-task-pack.py
+      - template-repo/scripts/codex_task_router.py
+      - template-repo/template/.chatgpt/codex-input.md
+      - template-repo/template/.chatgpt/codex-task-pack.md
+    acceptance:
+      - GPT-5.5 prompt baseline present
+      - stable rules precede dynamic task fields
+  - id: T-004
+    title: Добавить prompt-contract validation и artifact eval
+    type: test
+    risk_level: medium
+    executor: developer
+    depends_on:
+      - T-003
+    outputs:
+      - template-repo/scripts/validate-gpt55-prompt-contract.py
+      - tests/artifact-eval/specs/gpt-5-5-prompt-contract.yaml
+      - tests/artifact-eval/reports/gpt-5-5-prompt-contract.md
+      - template-repo/scripts/verify-all.sh
+    acceptance:
+      - stale handoff and missing GPT-5.5 contract are caught automatically
+  - id: T-005
+    title: Verify and close out
+    type: verification
+    risk_level: medium
+    executor: developer
+    depends_on:
+      - T-004
+    outputs:
       - .chatgpt/verification-report.md
       - .chatgpt/done-report.md
-      - work/completed/chg-20260423-021.md
-      - .factory-runtime/reports/verified-sync-report.yaml
+      - CURRENT_FUNCTIONAL_STATE.md
+      - VERIFY_SUMMARY.md
+      - CHANGELOG.md
     acceptance:
-      - 'generated .chatgpt completion layer отражает default "нет" для factory-template ChatGPT Project, если instruction contract не менялся'
-      - 'validators и verified sync проходят'
+      - required verification commands run or blockers documented
+      - final status and sync state recorded

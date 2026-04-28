@@ -138,6 +138,18 @@ def main() -> int:
 При исполнении handoff приоритет у правил repo: `AGENTS`, runbook, scenario-pack, policy files и других канонических файлов этого репозитория.
 Общие рабочие инструкции применять только там, где они не конфликтуют с repo rules и старшими системными ограничениями среды.
 
+## Базовый prompt contract для GPT-5.5
+GPT-5.5 не считать drop-in replacement для старого prompt stack. Для prompt-like артефактов используйте fresh baseline:
+- роль / область ответственности, если она нужна;
+- ожидаемый outcome;
+- success criteria;
+- constraints и allowed side effects;
+- evidence requirements и tool-use rules;
+- output shape и verbosity;
+- stop rules / closeout conditions.
+
+Подробную пошаговую процессность оставляйте только там, где она является repo invariant: repo-first router, advisory vs executable routing, defect-capture, handoff, verification, closeout и sync-state. Stable rules держите выше dynamic task-specific fields.
+
 ## Входные данные handoff
 {codex_input}{bug_block}
 """
@@ -372,7 +384,7 @@ Compact default:
 
 - `apply_mode: {launch.get('apply_mode', 'manual-ui')} (default)`
 - Для VS Code Codex extension откройте новый чат/окно Codex.
-- Вручную выберите model `{launch.get('selected_model', 'gpt-5.4')}` и reasoning `{launch.get('selected_reasoning_effort', 'medium')}` в picker.
+- Вручную выберите model `{launch.get('selected_model', 'gpt-5.5')}` и reasoning `{launch.get('selected_reasoning_effort', 'medium')}` в picker.
 - Только после этого вставьте handoff-блок ниже.
 - новый чат + вставка handoff и новый task launch через executable launcher — не одно и то же.
 - Advisory handoff text сам по себе не переключает profile/model/reasoning в уже открытой или случайной Codex chat-сессии.
@@ -404,7 +416,7 @@ Compact default:
 Источник запуска: {launch.get('launch_source', 'chatgpt-handoff')}
 Класс задачи: {launch.get('task_class', 'build')}
 Выбранный профиль: {launch.get('selected_profile', 'build')}
-Выбранная модель: {launch.get('selected_model', 'gpt-5.4')}
+Выбранная модель: {launch.get('selected_model', 'gpt-5.5')}
 Выбранное reasoning effort: {launch.get('selected_reasoning_effort', 'medium')}
 Выбранное plan mode reasoning effort: {launch.get('selected_plan_mode_reasoning_effort', 'medium')}
 Статус model catalog: {launch.get('model_catalog_status', 'unknown')}
