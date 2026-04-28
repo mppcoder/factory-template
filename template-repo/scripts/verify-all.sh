@@ -97,7 +97,8 @@ run_artifact_eval_smoke() {
     skill-tester-lite \
     feature-execution-lite \
     handoff-transcript-eval \
-    project-knowledge-reuse-proof
+    project-knowledge-reuse-proof \
+    beginner-full-handoff-ux
   do
     python3 "$ROOT/template-repo/scripts/eval-artifact.py" \
       "$specs_dir/$spec.yaml" \
@@ -256,6 +257,55 @@ run_codex_orchestration_runner_negative_smoke() {
   rm -rf "$tmp_dir"
 }
 
+run_plan6_productization_smoke() {
+  local tmp_dir
+  tmp_dir="$(mktemp -d)"
+
+  python3 "$ROOT/template-repo/scripts/validate-parent-orchestration-plan.py" \
+    --root "$ROOT" \
+    --plan "$ROOT/tests/codex-orchestration/fixtures/valid/parent-plan.yaml"
+  python3 "$ROOT/template-repo/scripts/validate-parent-orchestration-plan.py" \
+    --root "$ROOT" \
+    --plan "$ROOT/tests/codex-orchestration/fixtures/future-placeholder/parent-plan.yaml"
+  if python3 "$ROOT/template-repo/scripts/validate-parent-orchestration-plan.py" \
+    --root "$ROOT" \
+    --plan "$ROOT/tests/codex-orchestration/fixtures/missing-child-routing/parent-plan.yaml" \
+    >/tmp/plan6-parent-plan-negative.log 2>&1; then
+    echo "plan6 parent-plan negative fixture unexpectedly passed" >&2
+    cat /tmp/plan6-parent-plan-negative.log >&2
+    return 1
+  fi
+  rm -f /tmp/plan6-parent-plan-negative.log
+
+  python3 "$ROOT/template-repo/scripts/validate-orchestration-cockpit.py" \
+    "$ROOT/template-repo/template/.chatgpt/orchestration-cockpit.yaml"
+  python3 "$ROOT/template-repo/scripts/render-orchestration-cockpit.py" \
+    --input "$ROOT/template-repo/template/.chatgpt/orchestration-cockpit.yaml" \
+    --output "$tmp_dir/orchestration-cockpit.md"
+  grep -q "Route receipt" "$tmp_dir/orchestration-cockpit.md"
+  grep -q "Placeholder replacements" "$tmp_dir/orchestration-cockpit.md"
+
+  python3 "$ROOT/template-repo/scripts/validate-route-explain.py" "$ROOT"
+  python3 "$ROOT/template-repo/scripts/validate-beginner-handoff-ux.py" \
+    "$ROOT/tests/beginner-handoff-ux/positive/handoff.md"
+  if python3 "$ROOT/template-repo/scripts/validate-beginner-handoff-ux.py" \
+    "$ROOT/tests/beginner-handoff-ux/multi-block/handoff.md" \
+    >/tmp/beginner-handoff-ux-multi-block.log 2>&1; then
+    echo "beginner handoff UX multi-block negative fixture unexpectedly passed" >&2
+    cat /tmp/beginner-handoff-ux-multi-block.log >&2
+    return 1
+  fi
+  if python3 "$ROOT/template-repo/scripts/validate-beginner-handoff-ux.py" \
+    "$ROOT/tests/beginner-handoff-ux/hidden-shell/handoff.md" \
+    >/tmp/beginner-handoff-ux-hidden-shell.log 2>&1; then
+    echo "beginner handoff UX hidden-shell negative fixture unexpectedly passed" >&2
+    cat /tmp/beginner-handoff-ux-hidden-shell.log >&2
+    return 1
+  fi
+  rm -f /tmp/beginner-handoff-ux-multi-block.log /tmp/beginner-handoff-ux-hidden-shell.log
+  rm -rf "$tmp_dir"
+}
+
 run_curated_pack_quality_smoke() {
   python3 "$ROOT/template-repo/scripts/validate-curated-pack-quality.py" "$ROOT"
   python3 "$ROOT/template-repo/scripts/validate-curated-pack-quality.py" \
@@ -345,6 +395,7 @@ run_quick() {
   run_step "downstream-application-proof-smoke" run_downstream_application_proof_smoke
   run_step "codex-orchestration-smoke" run_codex_orchestration_smoke
   run_step "codex-orchestration-runner-negative-smoke" run_codex_orchestration_runner_negative_smoke
+  run_step "plan6-productization-smoke" run_plan6_productization_smoke
   run_step "curated-pack-quality-smoke" run_curated_pack_quality_smoke
   run_step "validate-verified-sync-fallback-evidence" python3 "$ROOT/template-repo/scripts/validate-verified-sync-fallback-evidence.py" "$ROOT/reports/release/verified-sync-fallback-evidence.md"
   run_step "project-knowledge-done-loop-smoke" run_project_knowledge_done_loop_smoke

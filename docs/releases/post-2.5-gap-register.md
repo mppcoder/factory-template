@@ -66,6 +66,19 @@ Plan №5 closes the recommended internal hardening contour after Plan №4 when
 | `P5-GAP-06` | Cloud/App default overclaim and child route inheritance needed orchestration-specific guardrails. | Orchestration validator rejects Cloud default wording, missing child routing, multi-block handoff and secret-like fixtures. | P5-S1/P5-S2 | implemented/verified | repo |
 | `P5-GAP-07` | Orchestration runner could write child session files before failing invalid/secret-like plans; verify lacked runner-level negative smoke. | `reports/bugs/2026-04-28-plan-5-orchestration-runner-write-before-fail.md`; `orchestrate-codex-handoff.py` fail-fast gate; `verify-all.sh` runner negative smoke. | P5-S2/P5-S7 integrity follow-up | remediated/verified after follow-up | executable runner / verify |
 
+## Plan №6 orchestration productization gaps
+
+Plan №6 productizes the beginner-facing full handoff UX on top of Plan №5. It does not reopen Plan №5 runner/fallback/curated validator and does not claim real downstream/battle app proof.
+
+| ID | Gap | Current evidence | Target stage | Status | Owner boundary |
+|---|---|---|---|---|---|
+| `P6-GAP-01` | Beginner-readable cockpit/status view was absent. | `docs/operator/factory-template/05-orchestration-cockpit-lite.md`; `template-repo/template/.chatgpt/orchestration-cockpit.yaml`; `render-orchestration-cockpit.py`; `validate-orchestration-cockpit.py`. | P6-S1 | implemented/verified | repo UX |
+| `P6-GAP-02` | Parent handoff normalization needed a productized template/validator wrapper. | `template-repo/template/.chatgpt/parent-orchestration-plan.yaml.template`; `validate-parent-orchestration-plan.py`; existing positive/negative orchestration fixtures. | P6-S2 | implemented/verified | repo executable |
+| `P6-GAP-03` | Route explanation was implicit and could be confused with semantic classifier or advisory auto-switch. | `explain-codex-route.py`; `validate-route-explain.py`; scenario/runbook wording. | P6-S3 | implemented/verified | repo routing |
+| `P6-GAP-04` | Beginner full handoff UX lacked a dedicated scorecard. | `validate-beginner-handoff-ux.py`; `tests/beginner-handoff-ux/*`; Artifact Eval spec/report `beginner-full-handoff-ux`. | P6-S4 | implemented/verified | repo eval |
+| `P6-GAP-05` | Safe full orchestration rehearsal evidence was missing. | `reports/orchestration/plan-6-safe-rehearsal.md`; cockpit report; future-placeholder fixture. | P6-S5 | implemented/verified synthetic only | repo evidence |
+| `P6-GAP-06` | Future-boundary placeholders such as `future-user-action` needed normalization without real proof overclaim. | `tests/codex-orchestration/fixtures/future-placeholder/parent-plan.yaml`; runner placeholder timing accepts `final-user-action` and `future-user-action`. | P6-S2/P6-S5 | implemented/verified | executable validator |
+
 ## `molyanov-ai-dev` adaptation register
 
 Reference snapshot: `pavel-molyanov/molyanov-ai-dev` HEAD `1bfe745d43b0602d8279cb4c9cb7894b1bb56bba`.

@@ -1,0 +1,40 @@
+# Orchestration cockpit lite / лёгкая панель оркестрации
+
+Generated UTC: `{{generated_utc}}`
+
+Status: `{{parent_status}}`
+Parent: `{{parent_id}}`
+Title: {{parent_title}}
+
+## Route receipt / подтверждение маршрута
+
+- task_class: `{{task_class}}`
+- selected_profile: `{{selected_profile}}`
+- selected_model: `{{selected_model}}`
+- selected_reasoning_effort: `{{selected_reasoning_effort}}`
+- selected_plan_mode_reasoning_effort: `{{selected_plan_mode_reasoning_effort}}`
+- explanation: {{route_explanation}}
+
+## Child tasks / дочерние задачи
+
+{{child_tasks_table}}
+
+## Blockers / блокеры
+
+{{blockers}}
+
+## Deferred user actions / отложенные действия пользователя
+
+{{deferred_user_actions}}
+
+## Placeholder replacements / замены placeholder
+
+{{placeholder_replacements}}
+
+## Next action / следующее действие
+
+{{next_action}}
+
+## Continuation outcome / итог продолжения
+
+{{continuation_outcome}}

@@ -1,0 +1,35 @@
+schema: codex-orchestration/v1
+parent:
+  id: p6-future-placeholder
+  title: Future placeholder timing fixture
+  launch_source: chatgpt-handoff
+  selected_scenario: template-repo/scenario-pack/00-master-router.md -> template-repo/scenario-pack/15-handoff-to-codex.md
+  apply_mode: manual-ui
+  strict_launch_mode: optional
+  default_context: VPS Remote SSH repo context
+  user_actions_policy: defer-to-final-closeout
+subtasks:
+  - id: route-explain
+    title: Route explanation
+    task_class: build
+    selected_profile: build
+    selected_model: gpt-5.5
+    selected_reasoning_effort: medium
+    selected_plan_mode_reasoning_effort: medium
+    selected_scenario: template-repo/scenario-pack/15-handoff-to-codex.md
+    owner_boundary: internal-repo-follow-up
+    prompt: "Добавить route explanation без real downstream proof."
+deferred_user_actions:
+  - id: real-downstream-app-proof
+    action: "Запустить real downstream proof только после выбора real repo, real APP_IMAGE, approved runtime target and sanitized transcript."
+    timing: future-boundary
+    owner_boundary: downstream-battle-action
+placeholder_replacements:
+  - placeholder: __REAL_DOWNSTREAM_REPO__
+    description: "Настоящий downstream/battle repo path для будущего P4-S5/P4-S6."
+    final_value_owner: operator
+    replacement_timing: future-user-action
+  - placeholder: __REAL_APP_IMAGE__
+    description: "Настоящий application image для future real downstream app proof."
+    final_value_owner: operator
+    replacement_timing: future-user-action

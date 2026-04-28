@@ -1,0 +1,33 @@
+schema: codex-orchestration/v1
+parent:
+  id: __PARENT_HANDOFF_ID__
+  title: "__PARENT_HANDOFF_TITLE__"
+  launch_source: chatgpt-handoff
+  selected_scenario: template-repo/scenario-pack/00-master-router.md -> template-repo/scenario-pack/15-handoff-to-codex.md
+  apply_mode: manual-ui
+  strict_launch_mode: optional
+  default_context: VPS Remote SSH repo context
+  user_actions_policy: defer-to-final-closeout
+subtasks:
+  - id: __CHILD_TASK_ID__
+    title: "__CHILD_TASK_TITLE__"
+    task_class: build
+    selected_profile: build
+    selected_model: gpt-5.5
+    selected_reasoning_effort: medium
+    selected_plan_mode_reasoning_effort: medium
+    selected_scenario: template-repo/scenario-pack/15-handoff-to-codex.md
+    owner_boundary: internal-repo-follow-up
+    artifacts_to_update:
+      - __ARTIFACT_PATH__
+    prompt: "__CHILD_PROMPT__"
+deferred_user_actions:
+  - id: __DEFERRED_ACTION_ID__
+    action: "__DEFERRED_ACTION_DESCRIPTION__"
+    timing: future-boundary
+    owner_boundary: downstream-battle-action
+placeholder_replacements:
+  - placeholder: __REAL_APP_IMAGE__
+    description: "Настоящий application image для future real downstream/battle proof."
+    final_value_owner: operator
+    replacement_timing: future-user-action

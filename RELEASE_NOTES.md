@@ -1,5 +1,14 @@
 # Release notes / заметки релиза
 
+## Не выпущено - Plan №6 orchestration productization
+
+- Добавлен beginner-first слой для full handoff UX поверх Plan №5: cockpit-lite, parent plan normalization, route explanation, UX scorecard и safe synthetic rehearsal.
+- Cockpit показывает parent handoff id, child tasks, selected profile/model/reasoning, status, blockers, deferred user actions, placeholder replacements и next action без web app, daemon, SQLite, Telegram stack или background-worker promises.
+- Parent plan template and validator wrapper make a large ChatGPT handoff checkable as `codex-orchestration/v1` before child session artifacts are written.
+- Route explanation is deterministic keyword/rule-based, names evidence and live catalog boundary, and does not claim semantic classifier or advisory auto-switch.
+- Beginner full handoff UX scorecard checks one copy-paste block, no file-based handoff, no hidden second operator shell step, no fake auto-switch claims, owner boundaries, Russian human-readable layer and final continuation outcome.
+- Safe rehearsal remains synthetic/repo-local: no secrets, no real VPS mutation and no real downstream/battle app proof claim.
+
 ## Не выпущено - Plan №5 internal hardening
 
 - Добавлен VPS Remote SSH-first Full Handoff Orchestration Layer: operator runbook, dry-run parent runner, per-subtask session files and parent report.

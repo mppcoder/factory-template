@@ -129,6 +129,17 @@ Handoff должен явно различать:
 - parent Codex сам запускает `orchestrate-codex-handoff.py --execute` после validation gate;
 - ручной запуск shell-команды пользователем остается только troubleshooting / strict reproduction fallback.
 
+Plan №6 productization layer adds a beginner-readable status and validation contour:
+- parent Codex normalizes the large ChatGPT handoff into a checkable `codex-orchestration/v1` parent artifact before child session writes;
+- parent Codex may use `template-repo/template/.chatgpt/parent-orchestration-plan.yaml.template` as the normalization template;
+- `validate-parent-orchestration-plan.py` validates the parent artifact and keeps existing `validate-codex-orchestration.py` as the core runner contract;
+- `render-orchestration-cockpit.py` and `validate-orchestration-cockpit.py` maintain `orchestration-cockpit-lite` status for parent id, child tasks, blockers, deferred user actions, placeholder replacements and next action;
+- `explain-codex-route.py` records deterministic keyword/rule-based route explanation for task class/profile/model/reasoning and live catalog boundary;
+- `validate-beginner-handoff-ux.py` checks one copy-paste block, no file-based handoff, no hidden second operator shell step, no fake auto-switch claim, deferred user actions and final continuation outcome.
+
+Do not claim a semantic classifier when route explanation is deterministic/keyword/rule-based.
+Do not claim advisory handoff text switches model/profile/reasoning inside an already-open session.
+
 `Codex App / Cloud Director` допускается только как optional, not default. Cloud delegation нельзя описывать как default path и нельзя включать без явного выбора пользователя и разрешенной repo/security boundary.
 
 Already-open live session не является reliable auto-switch boundary. Parent orchestrator не выполняет specialist work inline, если subtask routing требует separate session/profile.

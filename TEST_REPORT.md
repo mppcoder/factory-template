@@ -4,6 +4,37 @@ Status source of truth: `docs/releases/release-scorecard.yaml`.
 Current scorecard state: `2.5.0 GA Ready`.
 TEST_REPORT.md is verification evidence, not the canonical release-status source.
 
+## Проверка Plan №6 orchestration productization
+
+Дата: `2026-04-28`.
+
+Plan №6 добавил beginner-first productization слой поверх Plan №5, не переоткрывая runner/fallback/curated validator и не заявляя real downstream/battle app proof.
+
+- Roadmap/source map: `docs/releases/plan-6-orchestration-productization-roadmap.md`.
+- Defect/gap capture: `reports/bugs/2026-04-28-plan-6-orchestration-productization-gap.md`.
+- Cockpit guide: `docs/operator/factory-template/05-orchestration-cockpit-lite.md`.
+- Cockpit template/report: `template-repo/template/.chatgpt/orchestration-cockpit.yaml`, `reports/orchestration/orchestration-cockpit.md`.
+- Parent plan template/validator: `template-repo/template/.chatgpt/parent-orchestration-plan.yaml.template`, `template-repo/scripts/validate-parent-orchestration-plan.py`.
+- Route explanation: `template-repo/scripts/explain-codex-route.py`, `template-repo/scripts/validate-route-explain.py`.
+- Beginner UX scorecard: `template-repo/scripts/validate-beginner-handoff-ux.py`, `tests/beginner-handoff-ux/`, `tests/artifact-eval/specs/beginner-full-handoff-ux.yaml`.
+- Safe rehearsal: `reports/orchestration/plan-6-safe-rehearsal.md`.
+
+Проверки:
+
+- `python3 -m py_compile template-repo/scripts/orchestrate-codex-handoff.py template-repo/scripts/validate-orchestration-cockpit.py template-repo/scripts/render-orchestration-cockpit.py template-repo/scripts/validate_orchestration_cockpit_import.py template-repo/scripts/validate-parent-orchestration-plan.py template-repo/scripts/explain-codex-route.py template-repo/scripts/validate-route-explain.py template-repo/scripts/validate-beginner-handoff-ux.py` — pass.
+- `python3 template-repo/scripts/validate-parent-orchestration-plan.py --root . --plan tests/codex-orchestration/fixtures/future-placeholder/parent-plan.yaml` — pass.
+- Negative parent plan fixture `missing-child-routing` — validator returns non-zero as expected.
+- `python3 template-repo/scripts/validate-orchestration-cockpit.py template-repo/template/.chatgpt/orchestration-cockpit.yaml` — pass.
+- `python3 template-repo/scripts/render-orchestration-cockpit.py --input template-repo/template/.chatgpt/orchestration-cockpit.yaml --output reports/orchestration/orchestration-cockpit.md` — pass.
+- `python3 template-repo/scripts/validate-route-explain.py .` — pass.
+- `python3 template-repo/scripts/validate-beginner-handoff-ux.py tests/beginner-handoff-ux/positive/handoff.md` — pass.
+- Negative beginner UX fixtures `multi-block` and `hidden-shell` — validator returns non-zero as expected.
+- `python3 template-repo/scripts/eval-artifact.py tests/artifact-eval/specs/beginner-full-handoff-ux.yaml --output tests/artifact-eval/reports/beginner-full-handoff-ux.md --json` — pass.
+- `python3 template-repo/scripts/validate-codex-orchestration.py . --plan tests/codex-orchestration/fixtures/future-placeholder/parent-plan.yaml` — pass.
+- `bash template-repo/scripts/verify-all.sh quick` — pass на `2026-04-28`; includes `plan6-productization-smoke`.
+
+Full verify decision: не запускался, потому что Plan №6 изменяет docs/templates/validators/fixtures и quick verification уже покрывает targeted productization smoke plus existing release-facing validators. Runtime, packaging matrix, onboarding E2E and downstream examples не менялись.
+
 ## Проверка Plan №5 internal hardening
 
 Дата: `2026-04-28`.

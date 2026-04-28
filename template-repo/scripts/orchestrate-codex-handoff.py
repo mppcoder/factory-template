@@ -30,6 +30,7 @@ REQUIRED_SUBTASK_FIELDS = [
 ]
 DEFERRED_BOUNDARIES = {"external-user-action", "runtime-action", "downstream-battle-action"}
 PLACEHOLDER_RE = re.compile(r"^__[A-Z0-9_]+__$")
+PLACEHOLDER_TIMINGS = {"final-user-action", "future-user-action"}
 SECRET_PATTERNS = [
     re.compile(r"(?i)\b[A-Z0-9_]*(TOKEN|SECRET|PASSWORD|API_KEY|PRIVATE_KEY)\s*[:=]\s*['\"]?[^'\"\s]+"),
     re.compile(r"(?i)^[-\w]*\.env(?:\.\w+)?\s*$"),
@@ -98,8 +99,11 @@ def validate_plan(data: dict[str, Any], root: Path) -> tuple[list[str], list[str
                 errors.append(f"placeholder_replacements[{index}].placeholder должен иметь вид `__PLACEHOLDER_NAME__`")
             if final_value_owner != "operator":
                 errors.append(f"placeholder_replacements[{index}].final_value_owner должен быть `operator`")
-            if replacement_timing != "final-user-action":
-                errors.append(f"placeholder_replacements[{index}].replacement_timing должен быть `final-user-action`")
+            if replacement_timing not in PLACEHOLDER_TIMINGS:
+                errors.append(
+                    f"placeholder_replacements[{index}].replacement_timing должен быть одним из "
+                    f"`{', '.join(sorted(PLACEHOLDER_TIMINGS))}`"
+                )
     if has_secret_like_text(data):
         errors.append("plan содержит secret-like или .env-like content")
     subtasks = data.get("subtasks")

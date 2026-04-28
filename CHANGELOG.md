@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 ### Добавлено
+- Plan №6 beginner-first orchestration productization: cockpit-lite, parent plan normalization wrapper, route-explain layer, beginner full handoff UX scorecard and safe synthetic rehearsal.
+- `docs/operator/factory-template/05-orchestration-cockpit-lite.md`, cockpit YAML template, cockpit renderer/validator and parent orchestration plan template.
+- `explain-codex-route.py` / `validate-route-explain.py` for deterministic keyword/rule-based route explanations with live catalog boundary.
+- `validate-beginner-handoff-ux.py` with positive/negative fixtures and Artifact Eval report `beginner-full-handoff-ux`.
 - Plan №5 internal hardening roadmap, VPS Remote SSH-first orchestration runbook, repo-native dry-run parent orchestrator and orchestration validator.
 - orchestration rule `user_actions_policy: defer-to-final-closeout`: user-required actions move to final parent closeout, safe temporary placeholders can unblock internal child subtasks, and final reports list replacement reminders.
 - curated/reference pack quality validator with positive/negative fixtures and quick verify integration.
@@ -20,6 +24,8 @@
 - `docs/brownfield-to-greenfield-transition.md` описывает without-repo и with-repo transition paths, conversion gates и done rule.
 
 ### Изменено
+- Full handoff orchestration docs now explain beginner-visible cockpit/status, parent plan normalization, deterministic route explanation and UX scorecard without making model/profile switching the main product value.
+- Parent orchestration placeholder metadata now accepts both `final-user-action` and `future-user-action` so future P4-S5/P4-S6 placeholders remain explicit without claiming real downstream proof.
 - Codex workflow docs and handoff scenario now document VPS Remote SSH-first as default for full handoff orchestration, with Codex App/Cloud Director optional only.
 - curated sources profiles now include the VPS Remote SSH orchestration runbook and routing config in core packs.
 - closeout guidance теперь использует compact default: если внешних действий нет, финал говорит `Внешних действий не требуется.`, а если действия есть, `## Инструкция пользователю` перечисляет только реальные действия снаружи Codex.

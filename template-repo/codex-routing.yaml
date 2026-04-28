@@ -18,6 +18,12 @@ routing_contract:
     - "scripts/check-codex-model-catalog.py"
     - "scripts/launch-codex-task.sh"
     - "scripts/orchestrate-codex-handoff.py"
+    - "scripts/validate-parent-orchestration-plan.py"
+    - "scripts/render-orchestration-cockpit.py"
+    - "scripts/validate-orchestration-cockpit.py"
+    - "scripts/explain-codex-route.py"
+    - "scripts/validate-route-explain.py"
+    - "scripts/validate-beginner-handoff-ux.py"
     - "scripts/validate-codex-orchestration.py"
     - ".codex/config.toml с именованными profiles"
   launch_sources:

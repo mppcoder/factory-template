@@ -115,6 +115,11 @@
 - `orchestrate-codex-handoff.py` and `validate-codex-orchestration.py` now validate one large parent handoff plan, explicit child `quick/build/deep/review` routes, model/reasoning/scenario fields, dry-run commands, `user_actions_policy: defer-to-final-closeout`, `deferred_user_actions`, `placeholder_replacements` and negative fixtures for missing child routing, secret-like content, multi-block handoff, user action as child subtask and invalid placeholder metadata
 - Plan №5 post-audit integrity fix makes invalid/secret-like orchestration plans fail before creating `sessions_dir`, child session files or prompt/session artifacts; quick verify includes runner-level negative smoke for write-before-fail regressions
 - Full handoff orchestration default clarified as one-paste autopilot: после вставки parent handoff в Codex на VPS parent Codex сам запускает repo-native orchestrator с validation gate и `--execute`; ручной shell-запуск остается troubleshooting/strict fallback
+- Plan №6 orchestration productization implemented/verified as beginner-first layer поверх Plan №5: cockpit-lite, parent orchestration plan template/validator wrapper, route-explain script, beginner full handoff UX scorecard, safe synthetic rehearsal and quick verify integration
+- `orchestration-cockpit-lite` now shows parent handoff id, route receipt, child tasks, profile/model/reasoning, status, blockers, deferred user actions, placeholder replacements and next action without importing a web app, daemon, SQLite, Telegram stack or background-worker promise
+- Parent orchestration plan normalization now has `template-repo/template/.chatgpt/parent-orchestration-plan.yaml.template` and `validate-parent-orchestration-plan.py`; future-boundary placeholders such as `future-user-action` are valid metadata and do not claim real downstream proof
+- Route explanation is deterministic keyword/rule-based and explicitly names evidence, selected profile/model/reasoning and live catalog validation boundary; it does not claim a semantic classifier or advisory auto-switch
+- Beginner full handoff UX scorecard validates one copy-paste block, no file-based handoff, no hidden second operator shell step, no fake auto-switch claim, user actions deferred to final closeout, owner boundaries, Russian human-readable layer and final continuation outcome
 - curated/reference pack quality validator now checks usefulness, phase/profile fit, routing-critical docs, stale hot/cold duplicates, over-noisy packs and manifest file existence; `sources-profiles.yaml` includes the VPS Remote SSH orchestration runbook in core packs
 - verified sync fallback hardening now has release-facing evidence coverage for blocked push, remote drift, protected branch, branch ahead, dirty state and `FACTORY_SYNC_FALLBACK_PUSH_URL` instructions without rewriting stable sync logic
 - domain scenario acceptance template now extends novice acceptance beyond parity smoke with CRM and inventory examples while keeping real downstream field pilots as future external contour
@@ -144,14 +149,14 @@
 - gap register: `docs/releases/post-2.5-gap-register.md`
 - Plan №3 audit: `docs/releases/plan-3-aif-molyanov-audit.md`
 - текущая стадия: `release-followup -> internal-hardening`
-- текущий planning status: `Plan №5 implemented/verified for internal hardening; Plan №4 P4-S5/P4-S6 remains optional future external contour if real downstream/battle app inputs exist`
+- текущий planning status: `Plan №6 implemented/verified for beginner-first orchestration productization; Plan №4 P4-S5/P4-S6 remains optional future external contour if real downstream/battle app inputs exist`
 - `2.5.1` scope: downstream sync v3 stabilization, field pilot evidence discoverability, closeout/boundary guardrails, optional downstream sync adoption and release-facing docs.
 - `2.6` scope: completed for `factory-template` template/runtime proof: real production VPS deploy, backup restore, rollback drill, runtime/source-hygiene classification, expanded artifact eval, one real `feature-execution-lite` adoption, runtime QA boundary and reference runtime app.
 - completed proof: `2.5.0` repo-controlled GA evidence, `2.5.1-field-pilot` real project proof, downstream sync v3 synthetic multi-cycle proof.
 - optional future external proof: downstream/battle project application image deploy proof, only if validating a generated project with a real app. Infrastructure-level VPS deploy, backup restore and rollback drill passed on 2026-04-27 with local placeholder app image for `factory-template`; Plan №4 now provides the preparation docs/template/validator/eval contour for that future proof.
 - Plan №3 status: P3-S0 audit captured; P3-S1 task-state-lite, P3-S2 learning patch loop, P3-S3 expanded evals, P3-S4 real adoption, P3-S5 runtime QA boundary preparation and P3-S6 roadmap closeout implemented.
 - Plan №4 status: P4-S0 audit captured; P4-S1/P4-S2 downstream app proof scenario and novice scorecard validator implemented as preparation; P4-S3/P4-S4 handoff transcript eval and Project Knowledge reuse proof implemented as repo-local eval/checklist; P4-S5/P4-S6 blocked until a real downstream/battle project is selected.
-- Recommended next roadmap step after Plan №5: run P4-S5/P4-S6 only if a real downstream/battle app exists with real `APP_IMAGE`; fallback is no immediate internal Plan №6 unless a new internal gap is selected.
+- Recommended next roadmap step after Plan №6: run P4-S5/P4-S6 only if a real downstream/battle app exists with real `APP_IMAGE`; fallback is no immediate internal follow-up unless a new internal gap is selected.
 - Router, done-closeout scenario and generated Codex task-pack checklist now require roadmap readouts with multiple branches to name the recommended branch and fallback branch.
 - `pavel-molyanov/molyanov-ai-dev` comparison recorded in `docs/releases/post-2.5-gap-register.md`; factory keeps useful spec/project-knowledge/eval ideas but does not import Claude-specific `.claude`, command or TeamCreate assumptions.
 
@@ -176,7 +181,7 @@
 - real downstream domain-scenario pilots beyond synthetic CRM/inventory acceptance examples
 - downstream/battle application image proof требует отдельного generated/battle project, application artifact, approved runtime run, secrets outside repo and sanitized transcript; текущий repo статус: `template-runtime-proof-passed`
 - Plan №4 real pilot requires external inputs: downstream repo path, real application image, approved VPS/staging target, secrets entered outside repo, deploy/restore/rollback approval and sanitized transcript.
-- If those Plan №4 external inputs are absent, there is no immediate internal Plan №6 by default; choose a new internal gap explicitly before opening another repo-local plan.
+- If those Plan №4 external inputs are absent, there is no immediate internal Plan №7 by default; choose a new internal gap explicitly before opening another repo-local plan.
 
 ## Граница core
 Core включает фабрику, шаблон, versioning/documentation layer, `.chatgpt`, scenario-pack, examples и feedback loop.

@@ -85,6 +85,9 @@ Already-open live session не является надежным auto-switch mec
 
 Parent orchestrator:
 - validates one parent handoff / one orchestration plan;
+- normalizes a large ChatGPT handoff into a checked `codex-orchestration/v1` parent plan when the parent handoff contains structured orchestration data;
+- renders or validates `orchestration-cockpit-lite` so the operator can see parent status, child tasks, blockers, deferred user actions, placeholder replacements and next action;
+- records route explanation for `task_class`, `selected_profile`, `selected_model`, reasoning effort and live catalog boundary;
 - resolves each subtask through repo routing config;
 - applies `user_actions_policy: defer-to-final-closeout`;
 - moves all user-required actions into `deferred_user_actions`;
@@ -250,6 +253,12 @@ The repo validator rejects:
 - multi-block handoff for user copy-paste;
 - wording that treats an already-open session as route switching;
 - unredacted secrets, `.env`-like content or private transcripts in examples.
+
+Plan №6 productization validators add beginner UX checks:
+- `validate-parent-orchestration-plan.py` checks the parent plan template and a concrete `codex-orchestration/v1` plan;
+- `validate-orchestration-cockpit.py` checks cockpit status, route receipt, blockers, deferred actions, placeholders and next action;
+- `validate-route-explain.py` checks deterministic keyword/rule-based route explanations and prevents semantic-classifier overclaim;
+- `validate-beginner-handoff-ux.py` checks one copy-paste block, no file-based handoff, no hidden second operator shell step, no fake auto-switch claims and final continuation outcome.
 
 ## Official boundary note / официальная граница
 

@@ -156,6 +156,17 @@ python3 template-repo/scripts/check-codex-model-catalog.py . --write-proposal
 
 `template-repo/codex-model-routing.yaml` хранит task class -> selected_profile -> selected_model / selected_reasoning_effort / selected_plan_mode_reasoning_effort. Live catalog берется из `codex debug models`, когда CLI доступен; если catalog недоступен, validator предупреждает и не делает automatic promotion mapping. Новый model ID в live catalog сначала попадает в proposal, исчезновение настроенной model и неподдерживаемый reasoning считаются routing risk, а sticky picker в VS Code или handoff, вставленный в уже открытую сессию, остаются manual boundary issues.
 
+## Full handoff cockpit / панель полного handoff
+
+Для больших ChatGPT handoff поверх Plan №5 runner добавлен beginner-first productization слой:
+
+- `docs/operator/factory-template/05-orchestration-cockpit-lite.md` — как читать parent status, child tasks, blockers, deferred user actions, placeholder replacements и next action;
+- `template-repo/template/.chatgpt/parent-orchestration-plan.yaml.template` — шаблон нормализации большого handoff в `codex-orchestration/v1`;
+- `template-repo/template/.chatgpt/orchestration-cockpit.yaml` — lightweight status artifact;
+- `template-repo/scripts/validate-parent-orchestration-plan.py`, `validate-orchestration-cockpit.py`, `explain-codex-route.py`, `validate-route-explain.py`, `validate-beginner-handoff-ux.py` — targeted проверки.
+
+Этот слой не добавляет web app, daemon, SQLite, Telegram notifications или обязательный cloud director. Его задача проще: один handoff, понятная parent orchestration, наблюдаемые child tasks, честные boundaries и ясный closeout.
+
 ## Optional skills quality loop для skills
 
 Для развития самого `factory-template` доступен облегченный advanced-контур для skills и prompt-like artifacts:

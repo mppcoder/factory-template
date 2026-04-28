@@ -1,0 +1,68 @@
+schema: artifact-eval/v1
+id: beginner-full-handoff-ux
+report_date: 2026-04-28
+target_artifact: tests/beginner-handoff-ux/positive/handoff.md
+artifact_type: handoff-fixture
+expected_output:
+  guided: "Beginner full handoff UX fixture keeps one copy-paste block, no file-based handoff, no fake auto-switch, user actions deferred to final closeout, owner boundaries visible and Russian human-readable layer present."
+thresholds:
+  min_case_pass_rate: 1.0
+  min_assertion_pass_rate: 1.0
+  max_false_positive_rate: 0.0
+expected_trigger:
+  cases:
+    - id: one-copy-paste-block
+      prompt: "Новичок должен вставить один handoff block."
+      expected: "Fixture contains one copy-paste block and Russian language contract."
+      baseline_expected: fail
+      assertions:
+        - id: single-block
+          category: process
+          must_contain:
+            - "Язык ответа Codex: русский"
+            - "один цельный"
+    - id: deferred-actions
+      prompt: "Большой handoff содержит future external values."
+      expected: "User actions are deferred to final parent closeout."
+      baseline_expected: fail
+      assertions:
+        - id: deferred-user-actions
+          category: process
+          must_contain:
+            - "defer-to-final-closeout"
+            - "deferred_user_actions"
+            - "placeholder_replacements"
+    - id: continuation-outcome
+      prompt: "Closeout должен сказать, что дальше."
+      expected: "Fixture contains final continuation outcome."
+      baseline_expected: fail
+      assertions:
+        - id: no-user-step
+          category: outcome
+          must_contain:
+            - "следующий пользовательский шаг отсутствует"
+non_trigger_cases:
+  - id: fake-auto-switch
+    prompt: "Handoff claims already-open live session auto-switch."
+    expected: "Fixture says already-open session is not reliable."
+    baseline_expected: pass
+    assertions:
+      - id: no-fake-auto-switch
+        category: compliance
+        must_contain:
+          - "Уже открытая live session не является надежным"
+  - id: owner-boundary
+    prompt: "Blocker owner should be visible."
+    expected: "Fixture contains owner_boundary."
+    baseline_expected: pass
+    assertions:
+      - id: owner-boundary-present
+        category: compliance
+        must_contain:
+          - "owner_boundary"
+compliance_assertions:
+  - id: no-file-based-handoff
+    category: compliance
+    must_not_contain:
+      - "file-based handoff"
+      - "read codex-input.md instead"

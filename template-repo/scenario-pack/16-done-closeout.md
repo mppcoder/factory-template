@@ -12,6 +12,16 @@
 Но такой closeout все равно обязан явно содержать формулировку, что внешних действий больше нет: например `Внешних действий не требуется.` или эквивалентную недвусмысленную фразу.
 Кроме этого, closeout обязан явно зафиксировать continuation outcome: `Следующий пользовательский шаг отсутствует; задачи текущего scope выполнены полностью.` или эквивалентную недвусмысленную формулировку.
 
+Для full handoff orchestration closeout дополнительно проверь beginner UX scorecard:
+- один цельный copy-paste handoff block;
+- нет file-based handoff вместо inline block;
+- нет скрытого второго shell step для оператора;
+- нет fake auto-switch claim для already-open live session;
+- external/user actions deferred to final closeout;
+- blockers named with owner boundary;
+- final continuation outcome present;
+- Russian human-readable layer present.
+
 Если остается хотя бы один pending external/user step, closeout без блока `## Инструкция пользователю` недопустим.
 Если остается future roadmap stage, но он не требует действия пользователя сейчас, closeout должен назвать его как future boundary, а затем отдельно сказать, что текущий scope закрыт полностью.
 Если roadmap closeout или roadmap readout содержит несколько возможных следующих веток, closeout должен назвать рекомендованную ветку и fallback-ветку. Нельзя писать только `Следующий пользовательский шаг отсутствует`, если пользователь ожидает roadmap recommendation: эта формула закрывает текущий scope, но не заменяет рекомендацию следующего этапа.
