@@ -1,0 +1,137 @@
+schema: project-lifecycle-dashboard/v1
+project:
+  name: "Demo"
+  slug: "demo"
+  profile: "greenfield-product"
+  lifecycle_state: "greenfield-active"
+  current_mode: "greenfield"
+  factory_producer_owned_layer: false
+  owner_boundary: template-owned-generated-project-artifact
+lifecycle_phase:
+  current: execution
+  previous: handoff
+  next: verification
+  allowed: [idea, intake, spec, architecture, handoff, execution, verification, release, deploy, operate, improve]
+active_change:
+  id: chg-demo-001
+  title: "Demo lifecycle dashboard"
+  class: feature
+  priority: medium
+  status: in_progress
+  owner_boundary: internal-repo-follow-up
+  source_artifacts: [".chatgpt/task-index.yaml"]
+stage_gates:
+  - id: intake
+    title: "Intake принят"
+    status: passed
+    evidence: [".chatgpt/intake.yaml"]
+  - id: classification
+    title: "Маршрут выбран"
+    status: passed
+    evidence: [".chatgpt/stage-state.yaml"]
+  - id: reuse_reality_check
+    title: "Reality-check выполнен"
+    status: passed
+    evidence: [".chatgpt/reality-check.md"]
+  - id: spec
+    title: "User spec готов"
+    status: passed
+    evidence: [".chatgpt/user-spec.md"]
+  - id: tech_spec
+    title: "Tech spec готов"
+    status: passed
+    evidence: [".chatgpt/tech-spec.md"]
+  - id: handoff_allowed
+    title: "Handoff разрешен"
+    status: passed
+    evidence: [".chatgpt/normalized-codex-handoff.md"]
+  - id: execution
+    title: "Execution идет"
+    status: in_progress
+    evidence: []
+  - id: verification
+    title: "Verification ожидает"
+    status: pending
+    evidence: []
+  - id: done
+    title: "Done ожидает"
+    status: pending
+    evidence: []
+multi_step_execution:
+  current_wave: 2
+  waves:
+    - id: wave-1
+      title: "Contract"
+      status: completed
+      evidence: ["work/features/demo/logs/checkpoint.yaml"]
+      tasks:
+        - id: T-001
+          title: "Contract"
+          status: done
+          owner_boundary: internal-repo-follow-up
+          evidence: ["work/features/demo/tasks/T-001.md"]
+    - id: wave-2
+      title: "Implementation"
+      status: in_progress
+      tasks:
+        - id: T-002
+          title: "Renderer"
+          status: in_progress
+          owner_boundary: internal-repo-follow-up
+          evidence: []
+  completed_tasks: [T-001]
+  blocked_tasks: []
+  next_task:
+    id: T-002
+    owner_boundary: internal-repo-follow-up
+    action: "Закончить renderer."
+  final_verification:
+    status: pending
+    evidence: []
+  archive_to_work_completed:
+    allowed: false
+    reason: "Нужна final verification."
+handoff_orchestration:
+  parent_handoff:
+    id: parent-demo
+    title: "Demo parent"
+    status: executing
+  child_tasks: []
+  selected_profile: deep
+  selected_model: gpt-5.5
+  selected_reasoning_effort: high
+  selected_plan_mode_reasoning_effort: high
+  route_explanation_boundary: "Advisory layer не переключает model/profile/reasoning внутри уже открытой Codex-сессии; нужен новый task launch или ручной picker."
+  source_artifacts: [".chatgpt/orchestration-cockpit.yaml"]
+release_readiness:
+  version: "0.1.0"
+  status: pending
+  changelog: "CHANGELOG.md"
+  release_notes: "RELEASE_NOTES.md"
+  scorecard: "docs/releases/release-scorecard.yaml"
+  verification_state: pending
+  evidence: []
+deploy_runtime:
+  status: pending
+  preset: starter
+  operator_dashboard_source: "template-repo/scripts/operator-dashboard.py"
+  runtime_reports: [".factory-runtime/reports/deploy-dry-run-latest.txt"]
+  evidence: []
+  boundary: "Dry-run не является real deploy proof."
+post_release_improvement:
+  incidents: []
+  feedback: []
+  learning_proposals: []
+  backlog_candidates: []
+external_actions_ledger:
+  - id: approve-runtime
+    owner_boundary: runtime-action
+    action: "Одобрить runtime deploy только после проверки secrets boundary."
+recommended_next_step:
+  owner_boundary: internal-repo-follow-up
+  action: "Закончить T-002."
+  evidence: []
+fallback_next_step:
+  owner_boundary: internal-repo-follow-up
+  action: "Если T-002 заблокирован, обновить blocker."
+  evidence: []

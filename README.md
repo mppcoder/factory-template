@@ -167,6 +167,17 @@ python3 template-repo/scripts/check-codex-model-catalog.py . --write-proposal
 
 Этот слой не добавляет web app, daemon, SQLite, Telegram notifications или обязательный cloud director. Его задача проще: один handoff, понятная parent orchestration, наблюдаемые child tasks, честные boundaries и ясный closeout.
 
+## Панель жизненного цикла проекта
+
+Для общего состояния проекта добавлен repo-native lifecycle dashboard:
+
+- `docs/operator/factory-template/06-project-lifecycle-dashboard.md` — как читать “что происходит сейчас”, blockers, next action, release/deploy/runtime state и improvement queue;
+- `template-repo/template/.chatgpt/project-lifecycle-dashboard.yaml` — canonical state artifact для generated проектов;
+- `template-repo/scripts/render-project-lifecycle-dashboard.py` — Markdown/CLI renderer;
+- `template-repo/scripts/validate-project-lifecycle-dashboard.py` — schema/status/evidence/boundary validator.
+
+Dashboard агрегирует task/stage state, feature execution progress, orchestration cockpit, release readiness и runtime signals. Он не заменяет cockpit или operator dashboard и не добавляет heavy runtime. Advisory route text может быть показан как readout, но не считается auto-switch mechanism для уже открытой Codex-сессии.
+
 ## Optional skills quality loop для skills
 
 Для развития самого `factory-template` доступен облегченный advanced-контур для skills и prompt-like artifacts:

@@ -1,0 +1,297 @@
+#!/usr/bin/env python3
+from __future__ import annotations
+
+import argparse
+import importlib.util
+from pathlib import Path
+from typing import Any
+
+import yaml
+
+from factory_automation_common import now_utc, read_text, read_yaml
+
+
+def detect_repo_root() -> Path:
+    script = Path(__file__).resolve()
+    for parent in script.parents:
+        if (parent / "template-repo" / "scripts").exists() and (parent / "README.md").exists():
+            return parent
+        if (parent / "scripts").exists() and (parent / ".chatgpt").exists():
+            return parent
+    return Path.cwd().resolve()
+
+
+def default_dashboard_path(root: Path) -> Path:
+    source_path = root / "template-repo" / "template" / ".chatgpt" / "project-lifecycle-dashboard.yaml"
+    if source_path.exists():
+        return source_path
+    return root / ".chatgpt" / "project-lifecycle-dashboard.yaml"
+
+
+def load_validator():
+    script = Path(__file__).resolve()
+    path = script.with_name("validate-project-lifecycle-dashboard.py")
+    spec = importlib.util.spec_from_file_location("validate_project_lifecycle_dashboard", path)
+    if spec is None or spec.loader is None:
+        raise RuntimeError("Не удалось загрузить validator")
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
+
+
+def load_yaml(path: Path) -> dict[str, Any]:
+    data = yaml.safe_load(path.read_text(encoding="utf-8")) or {}
+    return data if isinstance(data, dict) else {}
+
+
+def value(data: dict[str, Any], *keys: str, default: str = "") -> str:
+    current: Any = data
+    for key in keys:
+        if not isinstance(current, dict):
+            return default
+        current = current.get(key)
+    if current is None:
+        return default
+    return str(current)
+
+
+def list_value(data: dict[str, Any], *keys: str) -> list[Any]:
+    current: Any = data
+    for key in keys:
+        if not isinstance(current, dict):
+            return []
+        current = current.get(key)
+    return current if isinstance(current, list) else []
+
+
+def bullet(items: list[Any], empty: str = "- нет") -> str:
+    lines: list[str] = []
+    for item in items:
+        if isinstance(item, dict):
+            item_id = item.get("id") or item.get("title") or item.get("path") or "item"
+            status = f" `{item.get('status')}`" if item.get("status") else ""
+            boundary = f" (`{item.get('owner_boundary')}`)" if item.get("owner_boundary") else ""
+            text = item.get("action") or item.get("title") or item.get("summary") or item.get("reason") or item.get("path") or ""
+            lines.append(f"- `{item_id}`{status}: {text}{boundary}")
+        else:
+            lines.append(f"- {item}")
+    return "\n".join(lines) if lines else empty
+
+
+def evidence_text(item: dict[str, Any]) -> str:
+    evidence = item.get("evidence")
+    if isinstance(evidence, list) and evidence:
+        return ", ".join(f"`{entry}`" for entry in evidence)
+    if isinstance(evidence, str) and evidence.strip():
+        return f"`{evidence}`"
+    reason = item.get("accepted_reason") or item.get("reason")
+    if reason:
+        return str(reason)
+    return ""
+
+
+def optional_context(root: Path, dashboard_path: Path) -> dict[str, Any]:
+    chatgpt_dir = dashboard_path.parent
+    task_state = read_yaml(chatgpt_dir / "task-state.yaml")
+    stage_state = read_yaml(chatgpt_dir / "stage-state.yaml")
+    task_index = read_yaml(chatgpt_dir / "task-index.yaml")
+    cockpit = read_yaml(chatgpt_dir / "orchestration-cockpit.yaml")
+    verify_summary = read_text(root / "VERIFY_SUMMARY.md")
+    current_state = read_text(root / "CURRENT_FUNCTIONAL_STATE.md")
+    runtime_reports = {
+        "dry_run": read_text(root / ".factory-runtime" / "reports" / "deploy-dry-run-latest.txt"),
+        "deploy": read_text(root / ".factory-runtime" / "reports" / "deploy-last-run.txt"),
+    }
+    return {
+        "task_state": task_state,
+        "stage_state": stage_state,
+        "task_index": task_index,
+        "cockpit": cockpit,
+        "verify_summary": verify_summary,
+        "current_state_present": bool(current_state.strip()),
+        "runtime_reports": runtime_reports,
+    }
+
+
+def resolved_project(data: dict[str, Any], context: dict[str, Any]) -> dict[str, str]:
+    stage_project = context.get("stage_state", {}).get("project", {}) if isinstance(context.get("stage_state"), dict) else {}
+    stage_lifecycle = context.get("stage_state", {}).get("lifecycle", {}) if isinstance(context.get("stage_state"), dict) else {}
+    return {
+        "name": value(data, "project", "name") or str(stage_project.get("name") or ""),
+        "slug": value(data, "project", "slug") or str(stage_project.get("slug") or ""),
+        "profile": value(data, "project", "profile"),
+        "lifecycle_state": value(data, "project", "lifecycle_state") or str(stage_lifecycle.get("lifecycle_state") or ""),
+        "current_mode": value(data, "project", "current_mode") or str(stage_project.get("mode") or ""),
+        "factory_producer_owned_layer": value(data, "project", "factory_producer_owned_layer"),
+    }
+
+
+def resolved_change(data: dict[str, Any], context: dict[str, Any]) -> dict[str, str]:
+    task_change = context.get("task_index", {}).get("change", {}) if isinstance(context.get("task_index"), dict) else {}
+    dashboard_change = data.get("active_change", {}) if isinstance(data.get("active_change"), dict) else {}
+    result: dict[str, str] = {}
+    for key in ["id", "title", "class", "priority", "status"]:
+        result[key] = str(dashboard_change.get(key) or task_change.get(key) or "")
+    result["owner_boundary"] = str(dashboard_change.get("owner_boundary") or "internal-repo-follow-up")
+    return result
+
+
+def render(data: dict[str, Any], root: Path, dashboard_path: Path) -> str:
+    context = optional_context(root, dashboard_path)
+    project = resolved_project(data, context)
+    change = resolved_change(data, context)
+    lifecycle = data.get("lifecycle_phase", {}) if isinstance(data.get("lifecycle_phase"), dict) else {}
+    stage = context.get("stage_state", {}).get("stage", {}) if isinstance(context.get("stage_state"), dict) else {}
+    task_state = context.get("task_state", {}) if isinstance(context.get("task_state"), dict) else {}
+    execution = data.get("multi_step_execution", {}) if isinstance(data.get("multi_step_execution"), dict) else {}
+    orchestration = data.get("handoff_orchestration", {}) if isinstance(data.get("handoff_orchestration"), dict) else {}
+    release = data.get("release_readiness", {}) if isinstance(data.get("release_readiness"), dict) else {}
+    runtime = data.get("deploy_runtime", {}) if isinstance(data.get("deploy_runtime"), dict) else {}
+    post_release = data.get("post_release_improvement", {}) if isinstance(data.get("post_release_improvement"), dict) else {}
+    recommended = data.get("recommended_next_step", {}) if isinstance(data.get("recommended_next_step"), dict) else {}
+    fallback = data.get("fallback_next_step", {}) if isinstance(data.get("fallback_next_step"), dict) else {}
+
+    gates = list_value(data, "stage_gates")
+    waves = execution.get("waves", []) if isinstance(execution.get("waves"), list) else []
+    cockpit = context.get("cockpit", {}) if isinstance(context.get("cockpit"), dict) else {}
+    cockpit_parent = cockpit.get("parent", {}) if isinstance(cockpit.get("parent"), dict) else {}
+    cockpit_route = cockpit.get("route_receipt", {}) if isinstance(cockpit.get("route_receipt"), dict) else {}
+
+    lines = [
+        "# Панель жизненного цикла проекта / `project-lifecycle-dashboard`",
+        "",
+        f"Generated UTC: `{now_utc()}`",
+        f"Source: `{dashboard_path}`",
+        "",
+        "## Сейчас",
+        "",
+        f"- Проект: `{project['name']}` (`{project['slug']}`)",
+        f"- Профиль: `{project['profile']}`",
+        f"- Lifecycle state: `{project['lifecycle_state']}`",
+        f"- Текущий mode: `{project['current_mode']}`",
+        f"- Factory producer layer: `{project['factory_producer_owned_layer']}`",
+        f"- Фаза: `{lifecycle.get('current', '')}` -> next `{lifecycle.get('next', '')}`",
+        f"- Stage file говорит: current `{stage.get('current', '')}`, next `{stage.get('next', '')}`",
+        "",
+        "## Активное изменение",
+        "",
+        f"- id: `{change['id']}`",
+        f"- title: {change['title']}",
+        f"- class/priority/status: `{change['class']}` / `{change['priority']}` / `{change['status']}`",
+        f"- boundary: `{change['owner_boundary']}`",
+        f"- task-state next action: {value(task_state, 'next_action', 'summary')}",
+        "",
+        "## Stage gates",
+        "",
+        "| Gate | Status | Evidence / reason |",
+        "|---|---|---|",
+    ]
+    for gate in gates:
+        if isinstance(gate, dict):
+            lines.append(f"| `{gate.get('id', '')}` {gate.get('title', '')} | `{gate.get('status', '')}` | {evidence_text(gate)} |")
+
+    lines.extend(
+        [
+            "",
+            "## Multi-step execution",
+            "",
+            f"- current wave: `{execution.get('current_wave', '')}`",
+            f"- completed tasks: `{', '.join(map(str, execution.get('completed_tasks', []) or [])) or 'none'}`",
+            f"- blocked tasks: `{', '.join(map(str, execution.get('blocked_tasks', []) or [])) or 'none'}`",
+            f"- next task: `{value(execution, 'next_task', 'id')}` - {value(execution, 'next_task', 'action')}",
+            f"- final verification: `{value(execution, 'final_verification', 'status')}` {evidence_text(execution.get('final_verification', {}) if isinstance(execution.get('final_verification'), dict) else {})}",
+            f"- archive allowed: `{value(execution, 'archive_to_work_completed', 'allowed')}`; {value(execution, 'archive_to_work_completed', 'reason')}",
+            "",
+            "| Wave | Status | Tasks |",
+            "|---|---|---|",
+        ]
+    )
+    for wave in waves:
+        if not isinstance(wave, dict):
+            continue
+        tasks = []
+        for task in wave.get("tasks", []) or []:
+            if isinstance(task, dict):
+                tasks.append(f"`{task.get('id', '')}` `{task.get('status', '')}`")
+        lines.append(f"| `{wave.get('id', '')}` {wave.get('title', '')} | `{wave.get('status', '')}` | {', '.join(tasks) or 'none'} |")
+
+    lines.extend(
+        [
+            "",
+            "## Handoff / orchestration",
+            "",
+            f"- parent handoff: `{value(orchestration, 'parent_handoff', 'id') or cockpit_parent.get('id', '')}` `{value(orchestration, 'parent_handoff', 'status') or cockpit_parent.get('status', '')}`",
+            f"- selected profile/model/reasoning: `{orchestration.get('selected_profile') or cockpit_route.get('selected_profile', '')}` / `{orchestration.get('selected_model') or cockpit_route.get('selected_model', '')}` / `{orchestration.get('selected_reasoning_effort') or cockpit_route.get('selected_reasoning_effort', '')}`",
+            f"- route boundary: {orchestration.get('route_explanation_boundary', '')}",
+            "",
+            "## Release readiness",
+            "",
+            f"- version: `{release.get('version', '')}`",
+            f"- status: `{release.get('status', '')}`",
+            f"- verification: `{release.get('verification_state', '')}`",
+            f"- changelog/release notes/scorecard: `{release.get('changelog', '')}` / `{release.get('release_notes', '')}` / `{release.get('scorecard', '')}`",
+            f"- VERIFY_SUMMARY present: `{bool(context.get('verify_summary'))}`",
+            "",
+            "## Deploy / runtime",
+            "",
+            f"- status: `{runtime.get('status', '')}`",
+            f"- preset: `{runtime.get('preset', '')}`",
+            f"- operator source: `{runtime.get('operator_dashboard_source', '')}`",
+            f"- dry-run report present: `{bool(context.get('runtime_reports', {}).get('dry_run'))}`",
+            f"- deploy report present: `{bool(context.get('runtime_reports', {}).get('deploy'))}`",
+            f"- boundary: {runtime.get('boundary', '')}",
+            "",
+            "## Post-release improvement",
+            "",
+            f"- incidents: `{len(post_release.get('incidents', []) or [])}`",
+            f"- feedback: `{len(post_release.get('feedback', []) or [])}`",
+            f"- learning proposals: `{len(post_release.get('learning_proposals', []) or [])}`",
+            f"- backlog candidates: `{len(post_release.get('backlog_candidates', []) or [])}`",
+            "",
+            "## External actions ledger",
+            "",
+            bullet(data.get("external_actions_ledger", []) or [], empty="- внешних/manual действий сейчас нет"),
+            "",
+            "## Следующий шаг",
+            "",
+            f"- Recommended (`{recommended.get('owner_boundary', '')}`): {recommended.get('action', '')}",
+            f"- Fallback (`{fallback.get('owner_boundary', '')}`): {fallback.get('action', '')}",
+        ]
+    )
+    return "\n".join(lines).rstrip() + "\n"
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser(description="Рендерит repo-native Project Lifecycle Dashboard в Markdown.")
+    parser.add_argument("--root", default="", help="Project root. По умолчанию определяется автоматически.")
+    parser.add_argument("--input", default="", help="Dashboard YAML. По умолчанию `.chatgpt/project-lifecycle-dashboard.yaml` или template source.")
+    parser.add_argument("--output", default="reports/project-lifecycle-dashboard.md", help="Markdown output path.")
+    parser.add_argument("--stdout", action="store_true", help="Печатать Markdown в stdout вместо записи файла.")
+    args = parser.parse_args()
+
+    root = Path(args.root).resolve() if args.root else detect_repo_root()
+    input_path = Path(args.input).resolve() if args.input else default_dashboard_path(root)
+    data = load_yaml(input_path)
+    validator = load_validator()
+    errors = validator.validate_dashboard(data)
+    if errors:
+        print("PROJECT LIFECYCLE DASHBOARD НЕВАЛИДЕН")
+        for error in errors:
+            print(f"- {error}")
+        return 1
+
+    rendered = render(data, root, input_path)
+    if args.stdout:
+        print(rendered, end="")
+    else:
+        output = Path(args.output)
+        if not output.is_absolute():
+            output = root / output
+        output.parent.mkdir(parents=True, exist_ok=True)
+        output.write_text(rendered, encoding="utf-8")
+        print(f"lifecycle_dashboard={output}")
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

@@ -120,6 +120,9 @@
 - Parent orchestration plan normalization now has `template-repo/template/.chatgpt/parent-orchestration-plan.yaml.template` and `validate-parent-orchestration-plan.py`; future-boundary placeholders such as `future-user-action` are valid metadata and do not claim real downstream proof
 - Route explanation is deterministic keyword/rule-based and explicitly names evidence, selected profile/model/reasoning and live catalog validation boundary; it does not claim a semantic classifier or advisory auto-switch
 - Beginner full handoff UX scorecard validates one copy-paste block, no file-based handoff, no hidden second operator shell step, no fake auto-switch claim, user actions deferred to final closeout, owner boundaries, Russian human-readable layer and final continuation outcome
+- Plan №7 Project Lifecycle Dashboard / Control Tower реализован как repo-native слой: `.chatgpt/project-lifecycle-dashboard.yaml`, Markdown/CLI renderer, validator, operator guide и quick verify smoke связывают project identity, lifecycle phase, active change, stage gates, multi-step execution, handoff/orchestration, release readiness, deploy/runtime state и post-release improvement queue
+- Lifecycle dashboard агрегирует `task-state`, `stage-state`, `task-index`, `orchestration-cockpit`, `VERIFY_SUMMARY`, release/runtime reports при наличии; он не заменяет cockpit-lite или operator-dashboard и не добавляет web app, daemon, SQLite, Telegram stack или background-worker promise
+- Lifecycle dashboard validator блокирует false green claims без evidence/accepted reason, invalid owner boundaries, шумные internal rows в external actions ledger, secret-like content и false advisory auto-switch claims
 - curated/reference pack quality validator now checks usefulness, phase/profile fit, routing-critical docs, stale hot/cold duplicates, over-noisy packs and manifest file existence; `sources-profiles.yaml` includes the VPS Remote SSH orchestration runbook in core packs
 - verified sync fallback hardening now has release-facing evidence coverage for blocked push, remote drift, protected branch, branch ahead, dirty state and `FACTORY_SYNC_FALLBACK_PUSH_URL` instructions without rewriting stable sync logic
 - domain scenario acceptance template now extends novice acceptance beyond parity smoke with CRM and inventory examples while keeping real downstream field pilots as future external contour
@@ -149,14 +152,14 @@
 - gap register: `docs/releases/post-2.5-gap-register.md`
 - Plan №3 audit: `docs/releases/plan-3-aif-molyanov-audit.md`
 - текущая стадия: `release-followup -> internal-hardening`
-- текущий planning status: `Plan №6 implemented/verified for beginner-first orchestration productization; Plan №4 P4-S5/P4-S6 remains optional future external contour if real downstream/battle app inputs exist`
+- текущий planning status: `Plan №7 implemented/verified как repo-native Project Lifecycle Dashboard / Control Tower; Plan №4 P4-S5/P4-S6 remains optional future external contour if real downstream/battle app inputs exist`
 - `2.5.1` scope: downstream sync v3 stabilization, field pilot evidence discoverability, closeout/boundary guardrails, optional downstream sync adoption and release-facing docs.
 - `2.6` scope: completed for `factory-template` template/runtime proof: real production VPS deploy, backup restore, rollback drill, runtime/source-hygiene classification, expanded artifact eval, one real `feature-execution-lite` adoption, runtime QA boundary and reference runtime app.
 - completed proof: `2.5.0` repo-controlled GA evidence, `2.5.1-field-pilot` real project proof, downstream sync v3 synthetic multi-cycle proof.
 - optional future external proof: downstream/battle project application image deploy proof, only if validating a generated project with a real app. Infrastructure-level VPS deploy, backup restore and rollback drill passed on 2026-04-27 with local placeholder app image for `factory-template`; Plan №4 now provides the preparation docs/template/validator/eval contour for that future proof.
 - Plan №3 status: P3-S0 audit captured; P3-S1 task-state-lite, P3-S2 learning patch loop, P3-S3 expanded evals, P3-S4 real adoption, P3-S5 runtime QA boundary preparation and P3-S6 roadmap closeout implemented.
 - Plan №4 status: P4-S0 audit captured; P4-S1/P4-S2 downstream app proof scenario and novice scorecard validator implemented as preparation; P4-S3/P4-S4 handoff transcript eval and Project Knowledge reuse proof implemented as repo-local eval/checklist; P4-S5/P4-S6 blocked until a real downstream/battle project is selected.
-- Recommended next roadmap step after Plan №6: run P4-S5/P4-S6 only if a real downstream/battle app exists with real `APP_IMAGE`; fallback is no immediate internal follow-up unless a new internal gap is selected.
+- Recommended next roadmap step after Plan №7: использовать lifecycle dashboard как default current-state readout для будущей multi-stage work; запускать P4-S5/P4-S6 только если есть real downstream/battle app с real `APP_IMAGE`; fallback — нет немедленного internal follow-up, пока не выбран новый internal gap.
 - Router, done-closeout scenario and generated Codex task-pack checklist now require roadmap readouts with multiple branches to name the recommended branch and fallback branch.
 - `pavel-molyanov/molyanov-ai-dev` comparison recorded in `docs/releases/post-2.5-gap-register.md`; factory keeps useful spec/project-knowledge/eval ideas but does not import Claude-specific `.claude`, command or TeamCreate assumptions.
 
@@ -181,7 +184,7 @@
 - real downstream domain-scenario pilots beyond synthetic CRM/inventory acceptance examples
 - downstream/battle application image proof требует отдельного generated/battle project, application artifact, approved runtime run, secrets outside repo and sanitized transcript; текущий repo статус: `template-runtime-proof-passed`
 - Plan №4 real pilot requires external inputs: downstream repo path, real application image, approved VPS/staging target, secrets entered outside repo, deploy/restore/rollback approval and sanitized transcript.
-- If those Plan №4 external inputs are absent, there is no immediate internal Plan №7 by default; choose a new internal gap explicitly before opening another repo-local plan.
+- Если Plan №4 external inputs отсутствуют, немедленного external pilot action нет; используйте Plan №7 lifecycle dashboard как default readout перед выбором нового internal gap.
 
 ## Граница core
 Core включает фабрику, шаблон, versioning/documentation layer, `.chatgpt`, scenario-pack, examples и feedback loop.

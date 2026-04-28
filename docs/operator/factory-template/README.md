@@ -27,8 +27,9 @@
 4. `04-chatgpt-project-sources-factory-template-20-cap.md`
 5. `04-vps-remote-ssh-full-handoff-orchestration.md`
 6. `05-backlog-dorabotok-factory-template.md`
-7. `06-codex-config-factory-template.toml`
-8. `07-AGENTS-factory-template.md`
+7. `05-orchestration-cockpit-lite.md`
+8. `06-project-lifecycle-dashboard.md`
+9. `07-AGENTS-factory-template.md`
 
 ## Назначение
 

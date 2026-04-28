@@ -1,0 +1,57 @@
+schema: project-lifecycle-dashboard/v1
+project:
+  name: "Demo"
+  slug: "demo"
+  profile: "greenfield-product"
+  lifecycle_state: "greenfield-active"
+  current_mode: "greenfield"
+  factory_producer_owned_layer: false
+  owner_boundary: template-owned-generated-project-artifact
+lifecycle_phase:
+  current: verification
+  previous: execution
+  next: release
+  allowed: [idea, intake, spec, architecture, handoff, execution, verification, release, deploy, operate, improve]
+active_change:
+  id: chg-demo-001
+  title: "False green"
+  class: feature
+  priority: medium
+  status: in_progress
+  owner_boundary: internal-repo-follow-up
+stage_gates:
+  - {id: intake, title: "Intake", status: passed, evidence: [".chatgpt/intake.yaml"]}
+  - {id: classification, title: "Classification", status: passed, evidence: [".chatgpt/stage-state.yaml"]}
+  - {id: reuse_reality_check, title: "Reality", status: passed, evidence: [".chatgpt/reality-check.md"]}
+  - {id: spec, title: "Spec", status: passed, evidence: [".chatgpt/user-spec.md"]}
+  - {id: tech_spec, title: "Tech spec", status: passed, evidence: [".chatgpt/tech-spec.md"]}
+  - {id: handoff_allowed, title: "Handoff", status: passed, evidence: [".chatgpt/normalized-codex-handoff.md"]}
+  - {id: execution, title: "Execution", status: passed, evidence: ["work/features/demo/logs/checkpoint.yaml"]}
+  - {id: verification, title: "Verification", status: passed, evidence: []}
+  - {id: done, title: "Done", status: pending, evidence: []}
+multi_step_execution:
+  current_wave: 1
+  waves:
+    - id: wave-1
+      title: "Work"
+      status: in_progress
+      tasks: []
+  completed_tasks: []
+  blocked_tasks: []
+  next_task: {id: T-001, owner_boundary: internal-repo-follow-up, action: "Continue."}
+  final_verification: {status: pending, evidence: []}
+  archive_to_work_completed: {allowed: false, reason: "No final verification."}
+handoff_orchestration:
+  parent_handoff: {id: parent-demo, title: "Demo", status: executing}
+  child_tasks: []
+  selected_profile: deep
+  selected_model: gpt-5.5
+  selected_reasoning_effort: high
+  selected_plan_mode_reasoning_effort: high
+  route_explanation_boundary: "Advisory layer не переключает model/profile/reasoning внутри уже открытой Codex-сессии."
+release_readiness: {version: "0.1.0", status: pending, changelog: "", release_notes: "", scorecard: "", verification_state: pending, evidence: []}
+deploy_runtime: {status: pending, preset: starter, operator_dashboard_source: "template-repo/scripts/operator-dashboard.py", runtime_reports: [], evidence: [], boundary: "Dry-run не является proof."}
+post_release_improvement: {incidents: [], feedback: [], learning_proposals: [], backlog_candidates: []}
+external_actions_ledger: []
+recommended_next_step: {owner_boundary: internal-repo-follow-up, action: "Fix evidence.", evidence: []}
+fallback_next_step: {owner_boundary: internal-repo-follow-up, action: "Mark pending.", evidence: []}

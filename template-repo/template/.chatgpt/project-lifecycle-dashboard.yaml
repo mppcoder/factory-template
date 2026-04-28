@@ -1,0 +1,159 @@
+# Единая repo-native панель состояния проекта.
+# Английские ключи используются валидаторами; значения и operator-facing текст можно писать по-русски.
+schema: project-lifecycle-dashboard/v1
+
+project:
+  name: "{{PROJECT_NAME}}"
+  slug: "{{PROJECT_SLUG}}"
+  profile: "greenfield-product"
+  lifecycle_state: "{{LIFECYCLE_STATE}}"
+  current_mode: "{{PROJECT_MODE}}"
+  factory_producer_owned_layer: false
+  owner_boundary: template-owned-generated-project-artifact
+
+lifecycle_phase:
+  current: intake
+  previous: ""
+  next: spec
+  allowed:
+    - idea
+    - intake
+    - spec
+    - architecture
+    - handoff
+    - execution
+    - verification
+    - release
+    - deploy
+    - operate
+    - improve
+
+active_change:
+  id: ""
+  title: "Первое изменение проекта"
+  class: feature
+  priority: medium
+  status: draft
+  owner_boundary: internal-repo-follow-up
+  source_artifacts:
+    - ".chatgpt/task-index.yaml"
+
+stage_gates:
+  - id: intake
+    title: "Intake принят"
+    status: pending
+    evidence: []
+  - id: classification
+    title: "Маршрут и класс задачи выбраны"
+    status: pending
+    evidence: []
+  - id: reuse_reality_check
+    title: "Reuse/reality-check выполнен"
+    status: pending
+    evidence: []
+  - id: spec
+    title: "User spec готов"
+    status: pending
+    evidence: []
+  - id: tech_spec
+    title: "Tech spec готов"
+    status: pending
+    evidence: []
+  - id: handoff_allowed
+    title: "Handoff разрешен"
+    status: pending
+    evidence: []
+  - id: execution
+    title: "Execution завершен"
+    status: pending
+    evidence: []
+  - id: verification
+    title: "Verification завершена"
+    status: pending
+    evidence: []
+  - id: done
+    title: "Done/архивирование завершено"
+    status: pending
+    evidence: []
+
+multi_step_execution:
+  current_wave: 0
+  waves:
+    - id: wave-0
+      title: "Подготовка"
+      status: pending
+      tasks:
+        - id: T-001
+          title: "Зафиксировать intake и следующий шаг"
+          status: pending
+          owner_boundary: internal-repo-follow-up
+          evidence: []
+  completed_tasks: []
+  blocked_tasks: []
+  next_task:
+    id: T-001
+    owner_boundary: internal-repo-follow-up
+    action: "Заполнить `.chatgpt/task-index.yaml`, `.chatgpt/stage-state.yaml` и уточнить первый рабочий шаг."
+  final_verification:
+    status: pending
+    evidence: []
+  archive_to_work_completed:
+    allowed: false
+    reason: "Feature нельзя архивировать до `final_verification.status: passed` и evidence."
+
+handoff_orchestration:
+  parent_handoff:
+    id: ""
+    title: ""
+    status: not_started
+  child_tasks: []
+  selected_profile: ""
+  selected_model: ""
+  selected_reasoning_effort: ""
+  selected_plan_mode_reasoning_effort: ""
+  route_explanation_boundary: "Advisory layer показывает маршрут и handoff-текст, но не переключает model/profile/reasoning внутри уже открытой Codex-сессии; надежная executable boundary — новый task launch или ручной picker в новом чате."
+  source_artifacts:
+    - ".chatgpt/orchestration-cockpit.yaml"
+
+release_readiness:
+  version: ""
+  status: pending
+  changelog: ""
+  release_notes: ""
+  scorecard: ""
+  verification_state: pending
+  evidence: []
+
+deploy_runtime:
+  status: pending
+  preset: starter
+  operator_dashboard_source: "template-repo/scripts/operator-dashboard.py"
+  runtime_reports:
+    - ".factory-runtime/reports/deploy-dry-run-latest.txt"
+    - ".factory-runtime/reports/deploy-last-run.txt"
+  evidence: []
+  boundary: "Runtime evidence может подтягиваться из operator-dashboard reports; dry-run/report evidence не является real deploy proof."
+
+post_release_improvement:
+  incidents: []
+  feedback: []
+  learning_proposals: []
+  backlog_candidates: []
+
+external_actions_ledger: []
+
+recommended_next_step:
+  owner_boundary: internal-repo-follow-up
+  action: "Продолжить repo-first intake: обновить stage/task state и подготовить spec."
+  evidence: []
+
+fallback_next_step:
+  owner_boundary: internal-repo-follow-up
+  action: "Если scope пока неясен, открыть guided launcher continue path и зафиксировать один следующий шаг."
+  evidence: []
+
+source_artifacts:
+  - ".chatgpt/project-lifecycle-dashboard.yaml"
+  - ".chatgpt/task-state.yaml"
+  - ".chatgpt/stage-state.yaml"
+  - ".chatgpt/task-index.yaml"

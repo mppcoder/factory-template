@@ -306,6 +306,45 @@ run_plan6_productization_smoke() {
   rm -rf "$tmp_dir"
 }
 
+run_project_lifecycle_dashboard_smoke() {
+  local tmp_dir
+  tmp_dir="$(mktemp -d)"
+
+  python3 "$ROOT/template-repo/scripts/validate-project-lifecycle-dashboard.py" \
+    "$ROOT/template-repo/template/.chatgpt/project-lifecycle-dashboard.yaml"
+  python3 "$ROOT/template-repo/scripts/render-project-lifecycle-dashboard.py" \
+    --input "$ROOT/template-repo/template/.chatgpt/project-lifecycle-dashboard.yaml" \
+    --output "$tmp_dir/project-lifecycle-dashboard.md"
+  grep -q "Панель жизненного цикла проекта" "$tmp_dir/project-lifecycle-dashboard.md"
+  grep -q "Следующий шаг" "$tmp_dir/project-lifecycle-dashboard.md"
+
+  python3 "$ROOT/template-repo/scripts/validate-project-lifecycle-dashboard.py" \
+    "$ROOT/tests/project-lifecycle-dashboard/valid/project-lifecycle-dashboard.yaml"
+  if python3 "$ROOT/template-repo/scripts/validate-project-lifecycle-dashboard.py" \
+    "$ROOT/tests/project-lifecycle-dashboard/false-green/project-lifecycle-dashboard.yaml" \
+    >/tmp/project-lifecycle-dashboard-false-green.log 2>&1; then
+    echo "project lifecycle dashboard false-green fixture unexpectedly passed" >&2
+    cat /tmp/project-lifecycle-dashboard-false-green.log >&2
+    return 1
+  fi
+  if python3 "$ROOT/template-repo/scripts/validate-project-lifecycle-dashboard.py" \
+    "$ROOT/tests/project-lifecycle-dashboard/false-autoswitch/project-lifecycle-dashboard.yaml" \
+    >/tmp/project-lifecycle-dashboard-false-autoswitch.log 2>&1; then
+    echo "project lifecycle dashboard false-autoswitch fixture unexpectedly passed" >&2
+    cat /tmp/project-lifecycle-dashboard-false-autoswitch.log >&2
+    return 1
+  fi
+  if python3 "$ROOT/template-repo/scripts/validate-project-lifecycle-dashboard.py" \
+    "$ROOT/tests/project-lifecycle-dashboard/bad-boundary/project-lifecycle-dashboard.yaml" \
+    >/tmp/project-lifecycle-dashboard-bad-boundary.log 2>&1; then
+    echo "project lifecycle dashboard bad-boundary fixture unexpectedly passed" >&2
+    cat /tmp/project-lifecycle-dashboard-bad-boundary.log >&2
+    return 1
+  fi
+  rm -f /tmp/project-lifecycle-dashboard-false-green.log /tmp/project-lifecycle-dashboard-false-autoswitch.log /tmp/project-lifecycle-dashboard-bad-boundary.log
+  rm -rf "$tmp_dir"
+}
+
 run_curated_pack_quality_smoke() {
   python3 "$ROOT/template-repo/scripts/validate-curated-pack-quality.py" "$ROOT"
   python3 "$ROOT/template-repo/scripts/validate-curated-pack-quality.py" \
@@ -347,6 +386,7 @@ run_generated_project_quick() {
   run_step "validate-task-graph" python3 "$ROOT/scripts/validate-task-graph.py" "$ROOT"
   run_step "validate-stage" python3 "$ROOT/scripts/validate-stage.py" "$ROOT"
   run_step "validate-task-state-lite" python3 "$ROOT/scripts/validate-task-state-lite.py" "$ROOT"
+  run_step "validate-project-lifecycle-dashboard" python3 "$ROOT/scripts/validate-project-lifecycle-dashboard.py" "$ROOT/.chatgpt/project-lifecycle-dashboard.yaml"
   run_step "validate-feature-execution-lite" python3 "$ROOT/scripts/validate-feature-execution-lite.py" "$ROOT"
   run_step "validate-learning-patch-loop" python3 "$ROOT/scripts/validate-learning-patch-loop.py" "$ROOT"
   run_step "validate-versioning-layer" python3 "$ROOT/scripts/validate-versioning-layer.py" "$ROOT"
@@ -396,6 +436,7 @@ run_quick() {
   run_step "codex-orchestration-smoke" run_codex_orchestration_smoke
   run_step "codex-orchestration-runner-negative-smoke" run_codex_orchestration_runner_negative_smoke
   run_step "plan6-productization-smoke" run_plan6_productization_smoke
+  run_step "project-lifecycle-dashboard-smoke" run_project_lifecycle_dashboard_smoke
   run_step "curated-pack-quality-smoke" run_curated_pack_quality_smoke
   run_step "validate-verified-sync-fallback-evidence" python3 "$ROOT/template-repo/scripts/validate-verified-sync-fallback-evidence.py" "$ROOT/reports/release/verified-sync-fallback-evidence.md"
   run_step "project-knowledge-done-loop-smoke" run_project_knowledge_done_loop_smoke

@@ -7,6 +7,7 @@
 - `.chatgpt/stage-state.yaml`
 - `.chatgpt/task-index.yaml`
 - `.chatgpt/task-state.yaml`
+- `.chatgpt/project-lifecycle-dashboard.yaml`
 - `PROJECT_BRIEF.md`
 - `CURRENT_FUNCTIONAL_STATE.md`
 
@@ -22,3 +23,16 @@ Launcher-команда `./scripts/launch-codex-task.sh` для нового tas
 Model availability auto-check хранится в `codex-model-routing.yaml` и выполняется командой `./scripts/check-codex-model-catalog.py .`, если доступен `codex debug models`.
 Repo-configured mapping, live Codex catalog, manual UI picker selection и strict launcher profile selection — разные контуры.
 Если новый model ID появился в live catalog, сначала создайте proposal через `--write-proposal`; существующие profiles не продвигаются автоматически без ручного review.
+
+## Панель жизненного цикла проекта
+
+`.chatgpt/project-lifecycle-dashboard.yaml` — единый lightweight state artifact, который связывает идею, текущую доработку, stage gates, multi-step execution, handoff/orchestration, release readiness, deploy/runtime state и post-release improvement queue.
+
+Он не заменяет task/stage files, orchestration cockpit или operator dashboard. Он агрегирует их в один beginner-readable Markdown/CLI readout:
+
+```bash
+python3 scripts/validate-project-lifecycle-dashboard.py .chatgpt/project-lifecycle-dashboard.yaml
+python3 scripts/render-project-lifecycle-dashboard.py --output reports/project-lifecycle-dashboard.md
+```
+
+Completed/passed gates требуют evidence или accepted reason. Advisory route text не переключает model/profile/reasoning внутри уже открытой Codex-сессии.

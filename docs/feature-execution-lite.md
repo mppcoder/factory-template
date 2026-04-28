@@ -106,6 +106,21 @@ Feature можно архивировать в `work/completed/` только е
 
 Если live runtime remediation не входила в scope, она должна остаться отдельным runtime backlog, а не evidence overclaim.
 
+## Отображение в lifecycle dashboard
+
+Для сложной многоэтапной feature `project-lifecycle-dashboard` должен показывать состояние без чтения всех файлов workspace вручную:
+
+- `current_wave`;
+- completed tasks;
+- blocked tasks;
+- next task;
+- `final_verification.status`;
+- можно ли архивировать feature в `work/completed/`.
+
+Dashboard не заменяет `logs/checkpoint.yaml`, `execution-plan.md`, `decisions.md` и task files. Он агрегирует их как operator-facing summary. Если задача или wave отмечена `done/passed/completed`, у нее должен быть evidence artifact или accepted reason; иначе validator считает это false green.
+
+Если `final_verification.status` не `passed`, dashboard обязан показывать archive blocker, даже если отдельные задачи уже выполнены.
+
 ## Связанные файлы
 
 - `template-repo/template/work-templates/execution-plan.md.template`

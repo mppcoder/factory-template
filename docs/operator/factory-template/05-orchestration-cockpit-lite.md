@@ -15,12 +15,21 @@
 - next action;
 - финальный continuation outcome.
 
+Это не полный lifecycle dashboard проекта. Cockpit отвечает на вопрос “как идет этот parent handoff и его child tasks”. Верхний `project-lifecycle-dashboard` агрегирует cockpit вместе с task/stage state, feature waves, release readiness, runtime/deploy state и post-release improvement queue.
+
 ## Где лежат артефакты
 
 - Source template: `template-repo/template/.chatgpt/orchestration-cockpit.yaml`.
 - Markdown template: `reports/orchestration/orchestration-cockpit.md.template`.
 - Renderer: `template-repo/scripts/render-orchestration-cockpit.py`.
 - Validator: `template-repo/scripts/validate-orchestration-cockpit.py`.
+
+Связанный верхний слой:
+
+- `docs/operator/factory-template/06-project-lifecycle-dashboard.md`;
+- `template-repo/template/.chatgpt/project-lifecycle-dashboard.yaml`;
+- `template-repo/scripts/render-project-lifecycle-dashboard.py`;
+- `template-repo/scripts/validate-project-lifecycle-dashboard.py`.
 
 ## Beginner default / режим для новичка
 
@@ -50,6 +59,8 @@ Route receipt должен объяснять:
 Этот слой deterministic/keyword/rule-based. Он не обещает semantic classifier.
 
 Advisory handoff text does not switch model/profile/reasoning inside an already-open live session. Reliable executable routing requires a new task launch or manual picker selection in a new Codex chat/window.
+
+Lifecycle dashboard может показывать эти поля как status readout, но он наследует ту же boundary: advisory text не является auto-switch механизмом.
 
 ## Cockpit status model / модель статуса
 

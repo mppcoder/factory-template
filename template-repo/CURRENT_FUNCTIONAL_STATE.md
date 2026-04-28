@@ -3,6 +3,7 @@
 ## Что шаблон генерирует
 - README, VERSION, CHANGELOG, CURRENT_FUNCTIONAL_STATE
 - `.chatgpt` с state, presets и defect-flow
+- `.chatgpt/project-lifecycle-dashboard.yaml` как единая repo-native панель состояния проекта от intake до release/deploy/operate/improve
 - greenfield и brownfield каркас
 - reports и tasks для defect-aware работы
 
@@ -23,9 +24,11 @@
 - smoke и pre-release layer теперь прикрывают наличие этого visible direct-task response artifact
 - handoff/completion layer теперь выдает отдельный executable launch boundary и troubleshooting для sticky last-used route state
 - model availability auto-check сравнивает repo-configured mapping с live `codex debug models` и генерирует proposal без automatic profile promotion
+- рендерит и валидирует lifecycle dashboard через `render-project-lifecycle-dashboard.py` и `validate-project-lifecycle-dashboard.py`
 
 ## Что еще описано на уровне фабрики
 - единая визуальная архитектура шаблона и подробные workflows по запуску, развёртыванию и downstream-update contour
+- operator guide для Project Lifecycle Dashboard / Control Tower, который агрегирует task/stage state, feature waves, orchestration cockpit, release readiness, runtime/deploy state и improvement queue без heavy runtime
 
 ## Ограничения
 - содержательное наполнение versioning файлов после генерации выполняется пользователем или сценариями
