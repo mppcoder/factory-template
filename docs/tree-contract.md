@@ -67,6 +67,35 @@ factory-template/
 `/projects` на VPS содержит только project roots. Временные входящие материалы должны жить внутри конкретного project root, например `/projects/<project-root>/_incoming/`.
 Все temporary, intermediate, reconstructed и helper repos для intake/adoption/reconstruction должны находиться внутри repo целевого `greenfield-product`, например `/projects/<target-greenfield-project>/...`. Создавать такие промежуточные repo как соседние project roots прямо в `/projects` запрещено.
 
+## Контракт именования
+
+`project_name` и `project_slug` - разные поля:
+
+- `project_name` - человекочитаемое имя. Можно писать по-русски, по-английски, с пробелами и пунктуацией.
+- `project_slug` - технический идентификатор: lowercase Latin, цифры и дефис.
+
+Канонические правила slug:
+
+- regex: `^[a-z0-9][a-z0-9-]{1,62}$`;
+- максимум 63 символа;
+- без leading/trailing hyphen;
+- repeated hyphens схлопываются при генерации и запрещены в user-provided slug;
+- empty slug - blocker, silent fallback в `new-project` запрещен;
+- reserved/generic slugs (`new-project`, `project`, `test`, `demo`, `example`, `factory-template`, `template-repo`) требуют явного override marker.
+
+Примеры deterministic mapping:
+
+- `Краб — CRM для ремонта` -> `krab-crm-remonta`;
+- `AI Factory` -> `ai-factory`;
+- `Мой первый проект!!!` -> `moy-pervyy-proekt`.
+
+Локальный repo path в production VPS layout: `/projects/<project_slug>`. Если launcher запущен в выбранной parent directory, создается `./<project_slug>`.
+GitHub repo должен называться `<github_owner>/<project_slug>`. Local repo basename и GitHub repo name должны совпадать с `project_slug` exactly.
+
+Brownfield naming: final/canonical repo называется по target product slug, а не по transition stage. Launcher/validator не должны автоматически добавлять `-brownfield` или `-greenfield`; temporary, incoming, reconstructed и helper repos живут внутри `/projects/<project_slug>/...`.
+
+GitHub owner берется из `--github-owner` или config. Если owner не задан, допустимо использовать authenticated `gh`/GitHub connector user только когда это однозначно. Если owner ambiguous, это blocker. Default visibility для создаваемого GitHub repo - `private`.
+
 ## Базовый template skeleton
 
 `template-repo/template` — это scaffold, который materialize-ится в generated project:
@@ -236,5 +265,6 @@ Launcher и `apply-project-preset.py` читают compatibility aliases как 
 - отсутствие legacy/factory-only folders как active root paths;
 - размещение factory-producer-owned content только под `factory/producer/*`;
 - отсутствие `factory/producer/*` в generated/battle projects.
+- canonical naming: project path basename equals `project_slug`, origin repo name equals `project_slug`, slug matches policy, reserved slug has explicit override marker, brownfield/helper repos не создаются sibling roots под `/projects`.
 
 Validator не запрещает project-owned code внутри `src/` и других рабочих каталогов generated project. Контракт фиксирует factory-owned scaffold и границы core/optional/compatibility layers.

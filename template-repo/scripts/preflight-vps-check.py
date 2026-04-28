@@ -4,11 +4,12 @@ from __future__ import annotations
 import argparse
 import os
 import platform
-import re
 import shutil
 import sys
 from dataclasses import dataclass
 from pathlib import Path
+
+from project_naming import validate_project_slug
 
 
 @dataclass(frozen=True)
@@ -139,7 +140,8 @@ def _check_slug(project_root: Path, project_slug: str | None, project_base: Path
         ]
 
     results: list[CheckResult] = []
-    if re.fullmatch(r"[a-z0-9][a-z0-9-]{1,62}", project_slug):
+    validation = validate_project_slug(project_slug)
+    if validation.ok:
         results.append(
             CheckResult(
                 title="Формат slug",
@@ -151,11 +153,9 @@ def _check_slug(project_root: Path, project_slug: str | None, project_base: Path
         results.append(
             CheckResult(
                 title="Формат slug",
-                status="warn",
-                details=(
-                    f"Slug '{project_slug}' нестандартный. Это может затруднить работу с путями, CI и доменами."
-                ),
-                fix="Используйте lowercase slug в формате: letters/numbers/hyphen.",
+                status="fail",
+                details=f"Slug '{project_slug}' не соответствует canonical naming policy: {'; '.join(validation.errors)}.",
+                fix="Используйте lowercase latin slug: letters/numbers/hyphen, без reserved/generic значений.",
             )
         )
 

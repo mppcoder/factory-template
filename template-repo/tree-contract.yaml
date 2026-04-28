@@ -105,6 +105,44 @@ workspace_layout_policy:
     - "brownfield reconstruction repos outside the target greenfield-product repo"
 
 naming_policy:
+  project_name_role: "Human-readable free project name. May contain Russian, English, spaces and punctuation. Never use it directly as a repo path or GitHub repo name."
+  project_slug_role: "Canonical lowercase Latin technical identifier generated from project_name or entered explicitly by the operator."
+  project_slug_regex: "^[a-z0-9][a-z0-9-]{1,62}$"
+  project_slug_max_length: 63
+  project_slug_allowed_chars: "lowercase latin letters, digits and hyphen only"
+  project_slug_rules:
+    - "Generate project_slug with deterministic Russian transliteration."
+    - "Collapse repeated hyphens and reject user-provided repeated hyphens."
+    - "No leading or trailing hyphen."
+    - "Empty slug is a blocker; never silently fall back to new-project."
+    - "Local repo basename and GitHub repo name must match project_slug exactly."
+    - "Default GitHub repo visibility is private unless explicit release/public policy says otherwise."
+  transliteration_policy:
+    russian_examples:
+      "Краб — CRM для ремонта": krab-crm-remonta
+      "Мой первый проект!!!": moy-pervyy-proekt
+    english_examples:
+      "AI Factory": ai-factory
+    note: "Russian preposition `для` is omitted as slug noise; genitive words are transliterated as written, for example `ремонта` -> `remonta`."
+  reserved_generic_project_slugs:
+    - new-project
+    - project
+    - test
+    - demo
+    - example
+    - factory-template
+    - template-repo
+  reserved_override_rule: "Reserved/generic slugs are blockers unless an explicit reserved_slug_override marker is recorded."
+  local_repo_path_rule: "Production VPS path is /projects/<project_slug>; selected parent directory launches create ./<project_slug>."
+  github_repo_rule: "GitHub repo is <github_owner>/<project_slug>; never silently append -2, -copy, dates or random suffixes."
+  github_owner_resolution:
+    - "Use explicit --github-owner or config value when present."
+    - "Otherwise use authenticated gh/GitHub connector user only when unambiguous."
+    - "If owner is ambiguous, stop with a blocker and ask for owner."
+  brownfield_repo_naming:
+    - "Final battle/canonical repo is named after the target product slug, not the transition stage."
+    - "Do not auto-suffix final repo with -brownfield or -greenfield."
+    - "Temporary, incoming, reconstructed and helper repos must live inside /projects/<project_slug>/..., not as sibling project roots under /projects."
   canonical_project_presets:
     - greenfield-product
     - brownfield-without-repo

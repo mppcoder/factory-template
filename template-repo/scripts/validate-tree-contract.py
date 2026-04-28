@@ -8,6 +8,8 @@ from typing import Any
 
 import yaml
 
+from project_naming import validate_root_naming
+
 
 def rel(path: Path, root: Path) -> str:
     return path.relative_to(root).as_posix()
@@ -313,6 +315,7 @@ def validate_factory_root(root: Path, contract: dict[str, Any], errors: list[str
     validate_path_terms(root, contract, errors)
     validate_workspace_layout_policy(root, contract, errors)
     validate_lifecycle_and_ownership(contract, errors)
+    errors.extend(validate_root_naming(root))
 
 
 def main() -> int:
@@ -346,6 +349,7 @@ def main() -> int:
         else:
             validate_contour(root, contours[contour_name], contour_name, errors)
             validate_no_factory_producer_in_generated(root, contour_name, errors)
+            errors.extend(validate_root_naming(root))
             project_aliases = root / "project-presets.yaml"
             if project_aliases.exists() and "preset_aliases" in load_yaml(project_aliases):
                 errors.append("generated: project-presets.yaml не должен содержать preset_aliases")

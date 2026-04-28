@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import argparse
+import os
 import re
 import subprocess
 import sys
@@ -9,6 +10,8 @@ from dataclasses import dataclass
 from pathlib import Path
 
 import yaml
+
+from project_naming import project_slug_from_name, validate_project_slug
 
 
 @dataclass(frozen=True)
@@ -123,6 +126,28 @@ def _ask_text(prompt: str, default: str | None = None, pattern: str | None = Non
         return value
 
 
+def _ask_slug(prompt: str, default: str | None = None, allow_reserved: bool = False) -> tuple[str, bool]:
+    while True:
+        slug = _ask_text(
+            prompt,
+            default=default,
+            help_text="Например: moy-pervyy-proekt или ai-factory.",
+        )
+        result = validate_project_slug(slug, allow_reserved=allow_reserved)
+        if result.ok:
+            return slug, allow_reserved and bool(result.warnings)
+        print("  Slug не подходит:")
+        for error in result.errors:
+            print(f"  - {error}")
+        if any("reserved/generic" in error for error in result.errors):
+            if _ask_yes_no("  Это намеренный reserved/generic slug", default_yes=False):
+                override_result = validate_project_slug(slug, allow_reserved=True)
+                if override_result.ok:
+                    return slug, True
+        if default == slug:
+            default = None
+
+
 def _ask_yes_no(prompt: str, default_yes: bool = True) -> bool:
     suffix = "[Y/n]" if default_yes else "[y/N]"
     default_value = "y" if default_yes else "n"
@@ -150,15 +175,6 @@ def _ask_option(question: str, options: list[Option]) -> Option:
             if 1 <= index <= len(options):
                 return options[index - 1]
         print(f"  Введите число от 1 до {len(options)}.")
-
-
-def _slugify(name: str) -> str:
-    slug = name.lower()
-    slug = re.sub(r"[^a-z0-9а-яё]+", "-", slug)
-    slug = slug.replace("ё", "e")
-    slug = re.sub(r"-+", "-", slug).strip("-")
-    slug = re.sub(r"[^a-z0-9-]", "", slug)
-    return slug or "new-project"
 
 
 def _resolve_selection(asset_key: str, goal_key: str) -> str:
@@ -232,8 +248,10 @@ def _run_launcher(
     launch_cwd: Path,
     project_name: str,
     project_slug: str,
+    reserved_slug_override: bool,
     preset_name: str,
     preset: dict,
+    args: argparse.Namespace,
 ) -> int:
     if not launcher_file.exists():
         print(f"\nНе найден launcher: {launcher_file}")
@@ -256,11 +274,21 @@ def _run_launcher(
     ) + "\n"
 
     print("\nСоздаю проект через существующий launcher (guided wrapper)...")
+    env = {
+        **dict(os.environ),
+        "FACTORY_RESERVED_SLUG_OVERRIDE": "true" if reserved_slug_override else "false",
+        "FACTORY_ALLOW_RESERVED_SLUG": "true" if args.allow_reserved_slug or reserved_slug_override else "false",
+        "FACTORY_CREATE_GITHUB_REPO": "true" if args.create_github_repo else "false",
+        "FACTORY_GITHUB_OWNER": args.github_owner or "",
+        "FACTORY_GITHUB_VISIBILITY": args.github_visibility,
+        "FACTORY_GITHUB_REUSE_EXISTING": "true" if args.reuse_existing_github_repo else "false",
+    }
     process = subprocess.run(
         [str(launcher_file)],
         input=answers,
         text=True,
         cwd=launch_cwd,
+        env=env,
         check=False,
     )
     return process.returncode
@@ -290,6 +318,28 @@ def main() -> int:
         action="store_true",
         help="Только показать маршрут без запуска launcher.",
     )
+    parser.add_argument(
+        "--allow-reserved-slug",
+        action="store_true",
+        help="Разрешить reserved/generic slug после явного подтверждения маршрута.",
+    )
+    parser.add_argument(
+        "--create-github-repo",
+        action="store_true",
+        help="После локального создания проекта создать/подключить GitHub repo <owner>/<project_slug> и push.",
+    )
+    parser.add_argument("--github-owner", help="GitHub owner для создаваемого repo.")
+    parser.add_argument(
+        "--github-visibility",
+        choices=["private", "public"],
+        default="private",
+        help="Visibility создаваемого GitHub repo. По умолчанию private.",
+    )
+    parser.add_argument(
+        "--reuse-existing-github-repo",
+        action="store_true",
+        help="Разрешить использовать уже существующий GitHub repo, если он подтвержден как тот же проект.",
+    )
     args = parser.parse_args()
 
     repo_root, presets_file, launcher_file, preflight_file = _wizard_paths(args.template_repo_root)
@@ -300,12 +350,13 @@ def main() -> int:
     print("Отвечайте простыми словами: мастер сам выберет подходящий маршрут.")
 
     project_name = _ask_text("\nКак назвать проект")
-    default_slug = _slugify(project_name)
-    project_slug = _ask_text(
+    default_slug = project_slug_from_name(project_name)
+    if not default_slug:
+        print("  Не удалось получить slug из названия. Введите понятный lowercase Latin slug вручную.")
+    project_slug, reserved_slug_override = _ask_slug(
         "Slug проекта (папка и технический идентификатор)",
-        default=default_slug,
-        pattern=r"[a-z0-9][a-z0-9-]{1,62}",
-        help_text="Например: my-first-service",
+        default=default_slug or None,
+        allow_reserved=args.allow_reserved_slug,
     )
 
     asset = _ask_option("1) Что у вас уже есть?", ASSET_OPTIONS)
@@ -348,7 +399,16 @@ def main() -> int:
         print("Запуск отменен пользователем.")
         return 0
 
-    code = _run_launcher(launcher_file, launch_cwd, project_name, project_slug, preset_name, preset)
+    code = _run_launcher(
+        launcher_file,
+        launch_cwd,
+        project_name,
+        project_slug,
+        reserved_slug_override,
+        preset_name,
+        preset,
+        args,
+    )
     if code != 0:
         print("\nLauncher завершился с ошибкой.")
         return code

@@ -27,13 +27,13 @@ python3 template-repo/scripts/factory-launcher.py --guided
 ```bash
 python3 template-repo/scripts/factory-launcher.py \
   --mode greenfield \
-  --project-name "My First Service" \
-  --project-slug my-first-service \
+  --project-name "Мой первый проект!!!" \
   --guided
 ```
 
 Что происходит:
 - launcher выбирает `greenfield-product`;
+- генерирует `project_slug` `moy-pervyy-proekt` из human-readable `project_name`;
 - показывает рекомендацию следующего шага;
 - вызывает существующий `first-project-wizard.py`;
 - wizard запускает `preflight-vps-check.py`;
@@ -43,8 +43,16 @@ python3 template-repo/scripts/factory-launcher.py \
 Чтобы только посмотреть маршрут без создания проекта:
 
 ```bash
-python3 template-repo/scripts/factory-launcher.py --mode greenfield --project-name "My First Service" --project-slug my-first-service --route-only
+python3 template-repo/scripts/factory-launcher.py --mode greenfield --project-name "AI Factory" --route-only
 ```
+
+Naming examples:
+
+- `Краб — CRM для ремонта` -> `krab-crm-remonta`;
+- `AI Factory` -> `ai-factory`;
+- `Мой первый проект!!!` -> `moy-pervyy-proekt`.
+
+`project_name` остается свободным human-readable названием. `project_slug` используется для local repo path, GitHub repo name, registry, `project-origin` и технических идентификаторов. Empty slug и reserved/generic slugs блокируются без явного override.
 
 ## Brownfield start / старт brownfield
 
@@ -53,9 +61,25 @@ python3 template-repo/scripts/factory-launcher.py \
   --mode brownfield \
   --brownfield-kind modernize \
   --project-name "Legacy Service" \
-  --project-slug legacy-service \
   --guided
 ```
+
+Brownfield final repo naming follows the target product slug. Launcher не добавляет `-brownfield` или `-greenfield` автоматически; temporary/reconstructed/helper repos должны находиться внутри `/projects/<project_slug>/...`, а не sibling roots под `/projects`.
+
+## Создание GitHub repo
+
+Local repo basename и GitHub repo name должны совпадать с `project_slug` exactly.
+
+```bash
+python3 template-repo/scripts/factory-launcher.py \
+  --mode greenfield \
+  --project-name "AI Factory" \
+  --create-github-repo \
+  --github-owner mppcoder \
+  --guided
+```
+
+GitHub repo создается как `<github_owner>/<project_slug>` с default visibility `private`. Если `--github-owner` не задан, launcher может использовать authenticated `gh` user только когда owner однозначен. Existing repo можно использовать только после явного подтверждения через `--reuse-existing-github-repo` или interactive confirmation. Launcher не добавляет suffixes вроде `-2`, `-copy`, date или random string.
 
 Доступные `--brownfield-kind`:
 - `modernize` -> `brownfield-with-repo-modernization`;

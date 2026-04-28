@@ -404,6 +404,7 @@ run_generated_project_quick() {
   run_step "validate-defect-capture" python3 "$ROOT/scripts/validate-defect-capture.py" "$ROOT"
   run_step "validate-alignment" python3 "$ROOT/scripts/validate-alignment.py" "$ROOT"
   run_step "validate-tree-contract" python3 "$ROOT/scripts/validate-tree-contract.py" "$ROOT"
+  run_step "validate-project-naming" python3 "$ROOT/scripts/validate-project-naming.py" "$ROOT"
   run_step "validate-mode-parity" python3 "$ROOT/scripts/validate-mode-parity.py" "$ROOT"
   case "$(project_preset)" in
     brownfield-*)
@@ -431,6 +432,7 @@ run_quick() {
   run_step "validate-gpt55-prompt-contract" run_gpt55_prompt_contract_smoke
   run_step "validate-model-prompt-policy" run_model_prompt_policy_smoke
   run_step "validate-tree-contract" python3 "$ROOT/template-repo/scripts/validate-tree-contract.py" "$ROOT"
+  run_step "validate-project-naming" python3 "$ROOT/template-repo/scripts/validate-project-naming.py" "$ROOT"
   run_step "validate-mode-parity" python3 "$ROOT/template-repo/scripts/validate-mode-parity.py" "$ROOT"
   run_step "validate-brownfield-transition" python3 "$ROOT/template-repo/scripts/validate-brownfield-transition.py" "$ROOT"
   run_step "validate-greenfield-conversion" python3 "$ROOT/template-repo/scripts/validate-greenfield-conversion.py" "$ROOT"

@@ -41,9 +41,14 @@
 
 Если текущая задача создала локальный project repo и следующий естественный шаг — GitHub repo/remote creation:
 - сначала проверить `gh auth status` или доступный GitHub connector;
+- GitHub repo name должен exactly совпадать с canonical `project_slug`; local repo basename тоже должен совпадать с `project_slug`;
+- default visibility: `private`, если explicit release/public policy не говорит иначе;
+- owner брать из explicit `--github-owner` / config, иначе из authenticated `gh`/GitHub connector user только при однозначности;
 - если owner/name однозначны из project slug или task context, `gh` авторизован и repo не существует, Codex создает GitHub repo, добавляет `origin` и выполняет push сам;
 - если repo уже существует и доступен, Codex добавляет `origin` и выполняет push сам;
-- просьба пользователю "создай repo на GitHub и пришли URL" допустима только при конкретном blocker: нет авторизации, нет прав, неоднозначный owner/name, repo name conflict без безопасного решения или требуется человеческое security/release approval;
+- если repo уже существует, его можно reuse только когда подтверждено, что это тот же проект;
+- нельзя silently append `-2`, `-copy`, дату или random suffix;
+- просьба пользователю "создай repo на GitHub и пришли URL" допустима только при конкретном blocker: нет авторизации, нет прав, неоднозначный owner/name, repo name conflict без безопасного решения, local/GitHub naming mismatch или требуется человеческое security/release approval;
 - если blocker есть, `## Инструкция пользователю` должна назвать owner/repo, точный URL/команду, ожидаемый результат и что прислать обратно.
 
 Если `origin` настроен, verify green и canonical verified sync технически доступен, closeout без `VERIFIED_SYNC.sh` недопустим.

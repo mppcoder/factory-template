@@ -5,6 +5,28 @@ TEMPLATE_DIR="$SCRIPT_DIR/template"
 
 read -rp "Название проекта: " PROJECT_NAME
 read -rp "Slug проекта: " PROJECT_SLUG
+ALLOW_RESERVED_SLUG="${FACTORY_ALLOW_RESERVED_SLUG:-false}"
+RESERVED_SLUG_OVERRIDE="${FACTORY_RESERVED_SLUG_OVERRIDE:-false}"
+if python3 "$SCRIPT_DIR/scripts/project_naming.py" is-reserved "$PROJECT_SLUG"; then
+  if [ "$ALLOW_RESERVED_SLUG" != "true" ] && [ "$RESERVED_SLUG_OVERRIDE" != "true" ]; then
+    read -rp "Slug '$PROJECT_SLUG' reserved/generic. Подтверждаете намеренное использование? [y/N]: " RESERVED_CONFIRM
+    case "${RESERVED_CONFIRM,,}" in
+      y|yes|д|да)
+        RESERVED_SLUG_OVERRIDE="true"
+        ALLOW_RESERVED_SLUG="true"
+        ;;
+      *)
+        echo "Остановлено: выберите содержательный project_slug."
+        exit 1
+        ;;
+    esac
+  fi
+fi
+VALIDATE_SLUG_ARGS=("$SCRIPT_DIR/scripts/project_naming.py" validate "$PROJECT_SLUG")
+if [ "$ALLOW_RESERVED_SLUG" = "true" ] || [ "$RESERVED_SLUG_OVERRIDE" = "true" ]; then
+  VALIDATE_SLUG_ARGS+=("--allow-reserved")
+fi
+python3 "${VALIDATE_SLUG_ARGS[@]}"
 read -rp "Профиль проекта (greenfield-product/brownfield-with-repo-modernization/brownfield-with-repo-integration/brownfield-with-repo-audit/brownfield-without-repo) [greenfield-product]: " PROJECT_PRESET
 PROJECT_PRESET="${PROJECT_PRESET:-greenfield-product}"
 
@@ -120,7 +142,7 @@ PY
   ./scripts/apply-policy-preset.py .chatgpt/task-index.yaml policy-presets.yaml .chatgpt/policy-status.yaml
 )
 
-PROJECT_NAME="$PROJECT_NAME" PROJECT_SLUG="$PROJECT_SLUG" PROJECT_MODE="$PROJECT_MODE" PROJECT_PRESET="$PROJECT_PRESET" CHANGE_CLASS="$CHANGE_CLASS" EXEC_MODE="$EXEC_MODE" CHANGE_ID="$CHANGE_ID" DEST_DIR="$DEST_DIR" python3 - <<'PY'
+PROJECT_NAME="$PROJECT_NAME" PROJECT_SLUG="$PROJECT_SLUG" PROJECT_MODE="$PROJECT_MODE" PROJECT_PRESET="$PROJECT_PRESET" CHANGE_CLASS="$CHANGE_CLASS" EXEC_MODE="$EXEC_MODE" CHANGE_ID="$CHANGE_ID" DEST_DIR="$DEST_DIR" RESERVED_SLUG_OVERRIDE="$RESERVED_SLUG_OVERRIDE" python3 - <<'PY'
 import os, yaml, datetime
 from pathlib import Path
 
@@ -137,6 +159,12 @@ origin = f"""# Происхождение проекта
 
 ## Slug
 {os.environ['PROJECT_SLUG']}
+
+## project_slug
+{os.environ['PROJECT_SLUG']}
+
+## Reserved slug override
+{str(os.environ.get('RESERVED_SLUG_OVERRIDE') == 'true').lower()}
 
 ## Тип проекта
 {os.environ['PROJECT_MODE']}
@@ -303,8 +331,84 @@ if [ "$REGISTRY_MODE" != "skip" ] && [ -f "$REGISTRY_FILE" ] && [ -w "$REGISTRY_
     echo "  project_preset: $PROJECT_PRESET"
     echo "  change_class: $CHANGE_CLASS"
     echo "  execution_mode: $EXEC_MODE"
+    echo "  reserved_slug_override: $RESERVED_SLUG_OVERRIDE"
     echo "  примечание: создан через launcher"
   } >> "$REGISTRY_FILE"
+fi
+
+create_or_reuse_github_repo() {
+  local project_dir="$1"
+  local owner="${FACTORY_GITHUB_OWNER:-}"
+  local visibility="${FACTORY_GITHUB_VISIBILITY:-private}"
+  local reuse_existing="${FACTORY_GITHUB_REUSE_EXISTING:-false}"
+  local repo_full
+  local origin_url
+  local origin_name
+  if ! command -v gh >/dev/null 2>&1; then
+    echo "GitHub repo не создан: gh CLI не найден." >&2
+    return 1
+  fi
+  if ! gh auth status >/dev/null 2>&1; then
+    echo "GitHub repo не создан: gh CLI не авторизован." >&2
+    return 1
+  fi
+  if [ -z "$owner" ]; then
+    owner="$(gh api user --jq .login 2>/dev/null || true)"
+  fi
+  if [ -z "$owner" ]; then
+    echo "GitHub repo не создан: owner неоднозначен. Передайте --github-owner/FACTORY_GITHUB_OWNER." >&2
+    return 1
+  fi
+  if [ "$visibility" != "private" ] && [ "$visibility" != "public" ]; then
+    echo "GitHub repo не создан: visibility должен быть private или public." >&2
+    return 1
+  fi
+  repo_full="$owner/$PROJECT_SLUG"
+  if [ ! -d "$project_dir/.git" ]; then
+    git -C "$project_dir" init -b main
+  fi
+  if git -C "$project_dir" remote get-url origin >/dev/null 2>&1; then
+    origin_url="$(git -C "$project_dir" remote get-url origin)"
+    origin_name="$(PYTHONPATH="$SCRIPT_DIR/scripts" python3 - "$origin_url" <<'PY'
+import sys
+from project_naming import remote_repo_name
+print(remote_repo_name(sys.argv[1]))
+PY
+)"
+    if [ "$origin_name" != "$PROJECT_SLUG" ]; then
+      echo "GitHub repo не создан: origin repo '$origin_name' не совпадает с project_slug '$PROJECT_SLUG'." >&2
+      return 1
+    fi
+  fi
+  if gh repo view "$repo_full" >/dev/null 2>&1; then
+    if [ "$reuse_existing" != "true" ]; then
+      read -rp "GitHub repo '$repo_full' уже существует. Это тот же проект и его можно использовать? [y/N]: " REUSE_CONFIRM
+      case "${REUSE_CONFIRM,,}" in
+        y|yes|д|да) reuse_existing="true" ;;
+        *) echo "Остановлено: repo exists but reuse is not confirmed." >&2; return 1 ;;
+      esac
+    fi
+    if ! git -C "$project_dir" remote get-url origin >/dev/null 2>&1; then
+      git -C "$project_dir" remote add origin "https://github.com/$repo_full.git"
+    fi
+  fi
+  if ! git -C "$project_dir" rev-parse --verify HEAD >/dev/null 2>&1; then
+    git -C "$project_dir" add .
+    git -C "$project_dir" commit -m "Initial factory project scaffold"
+  fi
+  if gh repo view "$repo_full" >/dev/null 2>&1; then
+    git -C "$project_dir" push -u origin HEAD
+  else
+    local visibility_arg="--private"
+    if [ "$visibility" = "public" ]; then
+      visibility_arg="--public"
+    fi
+    gh repo create "$repo_full" "$visibility_arg" --source="$project_dir" --remote=origin --push
+  fi
+}
+
+if [ "${FACTORY_CREATE_GITHUB_REPO:-false}" = "true" ]; then
+  create_or_reuse_github_repo "$DEST_DIR"
 fi
 
 echo

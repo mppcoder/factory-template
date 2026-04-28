@@ -10,6 +10,8 @@ from pathlib import Path
 
 import yaml
 
+from project_naming import project_slug_from_name, validate_project_slug
+
 
 @dataclass(frozen=True)
 class RoutePlan:
@@ -65,6 +67,24 @@ def _ask_text(prompt: str, default: str | None = None, pattern: str | None = Non
         return value
 
 
+def _ask_slug(prompt: str, default: str | None = None, allow_reserved: bool = False) -> tuple[str, bool]:
+    while True:
+        slug = _ask_text(prompt, default=default)
+        result = validate_project_slug(slug, allow_reserved=allow_reserved)
+        if result.ok:
+            return slug, allow_reserved and bool(result.warnings)
+        print("  Slug не подходит:")
+        for error in result.errors:
+            print(f"  - {error}")
+        if any("reserved/generic" in error for error in result.errors):
+            if _ask_choice("Это намеренный reserved/generic slug?", [("yes", "Да"), ("no", "Нет")]) == "yes":
+                override_result = validate_project_slug(slug, allow_reserved=True)
+                if override_result.ok:
+                    return slug, True
+        if slug == default:
+            default = None
+
+
 def _ask_choice(question: str, options: list[tuple[str, str]]) -> str:
     print(f"\n{question}")
     for index, (_key, label) in enumerate(options, start=1):
@@ -76,15 +96,6 @@ def _ask_choice(question: str, options: list[tuple[str, str]]) -> str:
             if 1 <= index <= len(options):
                 return options[index - 1][0]
         print(f"  Введите число от 1 до {len(options)}.")
-
-
-def _slugify(name: str) -> str:
-    slug = name.lower()
-    slug = re.sub(r"[^a-z0-9а-яё]+", "-", slug)
-    slug = slug.replace("ё", "e")
-    slug = re.sub(r"-+", "-", slug).strip("-")
-    slug = re.sub(r"[^a-z0-9-]", "", slug)
-    return slug or "new-project"
 
 
 def _run(command: list[str], cwd: Path, input_text: str | None = None) -> int:
@@ -241,11 +252,35 @@ def _run_project_route(
     goal_choice: str,
 ) -> int:
     project_name = args.project_name or _ask_text("\nКак назвать проект")
-    project_slug = args.project_slug or _ask_text(
-        "Slug проекта",
-        default=_slugify(project_name),
-        pattern=r"[a-z0-9][a-z0-9-]{1,62}",
-    )
+    default_slug = project_slug_from_name(project_name)
+    if args.project_slug:
+        project_slug = args.project_slug
+        validation = validate_project_slug(project_slug, allow_reserved=args.allow_reserved_slug)
+        if not validation.ok:
+            for error in validation.errors:
+                print(f"Slug error: {error}", file=sys.stderr)
+            return 2
+        reserved_slug_override = args.allow_reserved_slug and bool(validation.warnings)
+    else:
+        if not default_slug:
+            print("  Не удалось получить slug из названия. Введите понятный lowercase Latin slug вручную.")
+            if args.project_name and not sys.stdin.isatty():
+                print("Slug error: empty generated project_slug; pass --project-slug explicitly.", file=sys.stderr)
+                return 2
+        default_validation = validate_project_slug(default_slug, allow_reserved=args.allow_reserved_slug)
+        if args.project_name and default_slug and default_validation.ok:
+            project_slug = default_slug
+            reserved_slug_override = args.allow_reserved_slug and bool(default_validation.warnings)
+        elif args.project_name and default_slug and not sys.stdin.isatty():
+            for error in default_validation.errors:
+                print(f"Slug error: {error}", file=sys.stderr)
+            return 2
+        else:
+            project_slug, reserved_slug_override = _ask_slug(
+                "Slug проекта",
+                default=default_slug or None,
+                allow_reserved=args.allow_reserved_slug,
+            )
     presets = _load_presets(template_root)
     plan = _project_plan(template_root, route, preset, project_slug)
     _print_plan(plan, presets)
@@ -261,6 +296,15 @@ def _run_project_route(
     command = [sys.executable, str(wizard), "--template-repo-root", str(template_root)]
     if args.skip_preflight:
         command.append("--skip-preflight")
+    if args.allow_reserved_slug or reserved_slug_override:
+        command.append("--allow-reserved-slug")
+    if args.create_github_repo:
+        command.append("--create-github-repo")
+    if args.github_owner:
+        command.extend(["--github-owner", args.github_owner])
+    command.extend(["--github-visibility", args.github_visibility])
+    if args.reuse_existing_github_repo:
+        command.append("--reuse-existing-github-repo")
     code = _run(
         command,
         cwd=Path.cwd().resolve(),
@@ -365,6 +409,28 @@ def main() -> int:
     )
     parser.add_argument("--project-name", help="Название проекта для greenfield/brownfield route.")
     parser.add_argument("--project-slug", help="Slug проекта для greenfield/brownfield route.")
+    parser.add_argument(
+        "--allow-reserved-slug",
+        action="store_true",
+        help="Разрешить reserved/generic slug после явного подтверждения.",
+    )
+    parser.add_argument(
+        "--create-github-repo",
+        action="store_true",
+        help="После локального создания проекта создать/подключить GitHub repo <owner>/<project_slug> и push.",
+    )
+    parser.add_argument("--github-owner", help="GitHub owner для создаваемого repo.")
+    parser.add_argument(
+        "--github-visibility",
+        choices=["private", "public"],
+        default="private",
+        help="Visibility создаваемого GitHub repo. По умолчанию private.",
+    )
+    parser.add_argument(
+        "--reuse-existing-github-repo",
+        action="store_true",
+        help="Разрешить использовать уже существующий GitHub repo, если он подтвержден как тот же проект.",
+    )
     parser.add_argument(
         "--brownfield-kind",
         choices=sorted(BROWNFIELD_PRESETS),

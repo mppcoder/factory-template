@@ -1,6 +1,6 @@
 # Onboarding Smoke Acceptance
 
-- Run timestamp (UTC): `2026-04-28T13:42:46Z`
+- Run timestamp (UTC): `2026-04-28T14:20:29Z`
 - Runner: `tests/onboarding-smoke/run-novice-e2e.sh`
 - Root: `/projects/factory-template`
 
@@ -27,7 +27,7 @@
 - expected preset: `brownfield-with-repo-modernization`
 - generated project: `/projects/factory-template/tests/onboarding-smoke/.tmp-run/brownfield-modernization-novice/novice-brownfield-modernization-smoke`
 - log: `/projects/factory-template/tests/onboarding-smoke/.tmp-run/brownfield-modernization-novice.txt`
-- duration_seconds: `2`
+- duration_seconds: `3`
 - manual_interventions: `0`
 
 4. `brownfield-integration-novice`
@@ -59,7 +59,7 @@
 - expected preset: `brownfield-without-repo`
 - generated project: `/projects/factory-template/tests/onboarding-smoke/.tmp-run/guided-launcher-brownfield-no-repo/guided-launcher-brownfield-no-repo-smoke`
 - log: `/projects/factory-template/tests/onboarding-smoke/.tmp-run/guided-launcher-brownfield-no-repo.txt`
-- duration_seconds: `3`
+- duration_seconds: `4`
 - manual_interventions: `0`
 
 8. `guided-launcher-brownfield-with-repo`
@@ -67,7 +67,7 @@
 - expected preset: `brownfield-with-repo-modernization`
 - generated project: `/projects/factory-template/tests/onboarding-smoke/.tmp-run/guided-launcher-brownfield-with-repo/guided-launcher-brownfield-with-repo-smoke`
 - log: `/projects/factory-template/tests/onboarding-smoke/.tmp-run/guided-launcher-brownfield-with-repo.txt`
-- duration_seconds: `2`
+- duration_seconds: `3`
 - manual_interventions: `0`
 
 9. `guided-launcher-continue-flow`
@@ -84,7 +84,7 @@
 - total scenarios: `9`
 - passed scenarios: `9`
 - completion_rate_percent: `100`
-- max_time_to_first_success_seconds: `3`
+- max_time_to_first_success_seconds: `4`
 - max_time_to_first_success_minutes_ceiling: `1`
 - total_manual_interventions: `0`
 - planned wizard answers are controlled scenario inputs, not support interventions.

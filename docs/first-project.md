@@ -27,9 +27,19 @@ Wizard задаст 3 понятных вопроса:
 
 После ответов wizard:
 - сам подбирает правильный режим (`greenfield` или `brownfield`) и нужный preset;
+- считает введенное название только human-readable `project_name`;
+- генерирует отдельный canonical `project_slug` для папки, GitHub repo, registry и `project-origin`;
 - показывает короткое объяснение выбора;
 - запускает VPS preflight в человекочитаемом виде;
 - создает проект через существующий launcher без ломки текущей архитектуры.
+
+Примеры naming:
+
+- `Краб — CRM для ремонта` -> `krab-crm-remonta`;
+- `AI Factory` -> `ai-factory`;
+- `Мой первый проект!!!` -> `moy-pervyy-proekt`.
+
+Если из имени невозможно получить slug, wizard остановится и попросит ввести его вручную. Silent fallback в `new-project` запрещен. Reserved/generic slugs вроде `new-project`, `project`, `test`, `demo`, `example`, `factory-template`, `template-repo` требуют явного подтверждения и marker в `project-origin`.
 
 Полный путь новичка лучше запускать через:
 

@@ -7,13 +7,14 @@
 Формат записи:
 - дата: 2026-04-14
   проект: Название проекта
-  slug: slug-project
+  slug: slug-project  # canonical project_slug: local repo basename and GitHub repo name must match exactly
   версия_фабрики: 2.3.6
   режим: greenfield|brownfield
   статус_записи: production|test
   project_preset: greenfield-product|brownfield-with-repo-modernization|brownfield-with-repo-integration|brownfield-with-repo-audit|brownfield-without-repo
   change_class: small-fix|feature|refactor|migration|brownfield-audit
   execution_mode: manual|hybrid|codex-led
+  reserved_slug_override: false
   примечание: свободный комментарий
 -->
 - дата: 2026-04-14
