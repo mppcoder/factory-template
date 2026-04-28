@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 ### Добавлено
+- Project-root boundary для intermediate repos: machine-readable `workspace_layout_policy`, validator coverage и Artifact Eval `project-root-boundary` закрепляют, что temporary/intermediate/reconstructed/helper repos живут внутри repo целевого `greenfield-product`, а не как siblings в `/projects`.
+- Defect/factory feedback для gap, где промежуточные brownfield/reconstruction repo могли трактоваться как отдельные project roots в плоском `/projects` дереве.
 - Связка model promotion и prompt policy update: `prompt_migration_policy` в `codex-model-routing.yaml`, prompt migration section в model-routing proposal, validator `validate-model-prompt-policy.py` и Artifact Eval spec/report `model-prompt-policy`.
 - Defect/factory feedback для gap, где новая model могла пройти через proposal только как `selected_model` update без prompt-policy migration по official OpenAI docs.
 - GPT-5.5 prompt migration contract: `validate-gpt55-prompt-contract.py`, Artifact Eval spec/report `gpt-5-5-prompt-contract`, prompt inventory и migration reports.
@@ -28,6 +30,7 @@
 - `docs/brownfield-to-greenfield-transition.md` описывает without-repo и with-repo transition paths, conversion gates и done rule.
 
 ### Изменено
+- Canonical VPS layout в active docs, scenario-pack и bootstrap guidance теперь явно требует размещать все intermediate repos внутри repo целевого `greenfield-product`.
 - `check-codex-model-catalog.py --write-proposal` теперь требует companion prompt migration review: fresh prompt baseline, affected prompt-like artifacts, validators/evals и official OpenAI source map до profile promotion.
 - Codex task-pack и normalized handoff generators теперь добавляют базовый prompt contract для GPT-5.5: fresh baseline, outcome, success criteria, constraints, evidence requirements, output shape и stop rules.
 - Template `.chatgpt/codex-input.md` переведен на русскоязычный outcome-first prompt shape; `quick` profile сохранен на `gpt-5.4-mini` без silent promotion.

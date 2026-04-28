@@ -1,101 +1,34 @@
 launch:
-  timestamp_utc: '2026-04-28T12:47:35+00:00'
+  timestamp_utc: '2026-04-28T00:00:00+00:00'
   launch_unit: new-task-launch
   launch_source: direct-task
   router_layer: executable
   task_class: build
-  task_class_reasons:
-  - 'явный override task_class: build'
-  - 'явный reasoning/model override совпал с default profile: build'
   selected_profile: build
   selected_model: gpt-5.5
   selected_reasoning_effort: medium
   selected_plan_mode_reasoning_effort: medium
   apply_mode: manual-ui
   strict_launch_mode: optional
-  project_profile: unknown-project-profile
-  selected_scenario: 00-master-router.md
-  pipeline_stage: verification
+  project_profile: factory-template self-improvement / tree-boundary policy
+  selected_scenario: template-repo/scenario-pack/00-master-router.md
+  pipeline_stage: defect-capture -> remediation -> verification -> closeout
   artifacts_to_update:
-  - .chatgpt/codex-input.md
-  - .chatgpt/codex-context.md
-  - .chatgpt/codex-task-pack.md
-  - .chatgpt/verification-report.md
-  - .chatgpt/done-report.md
-  handoff_allowed: yes (forbidden)
-  defect_capture_path: not-required-by-text-signal
-  task_summary: 'Предусмотреть, чтобы auto-check/proposal новых Codex/OpenAI моделей
-    обновлял не только model routing, но и prompt policy под новую model по official
-    OpenAI guidance: fresh prompt baseline, outcome-first contract, reasoning/verbosity/tool-us'
-  launch_boundary_rule: Выбор модели и reasoning mode считается надежным только на
-    новом запуске Codex для новой задачи.
-  interactive_default_rule: 'Для интерактивной работы в VS Code Codex extension основной
-    пользовательский путь: открыть новое окно/чат Codex, вручную выбрать model/reasoning
-    в picker и затем вставить handoff.'
-  executable_switch_rule: 'Строго воспроизводимое executable-переключение в live Codex
-    для этого repo: явный новый task launch через launcher и selected_profile.'
-  strict_launch_rule: Launcher-first path остается опциональным строгим режимом для
-    автоматизации, воспроизводимости, запуска из shell и scripted launch.
-  live_session_fallback_rule: Уже открытая live session не является надежным механизмом
-    автопереключения profile/model/reasoning и допустима только как неканонический
-    fallback.
-  model_expectation_rule: selected_model и selected_reasoning_effort фиксируют repo-configured
-    mapping выбранного executable profile; live availability подтверждается отдельной
-    проверкой `codex debug models`, а advisory handoff text сам по себе ничего не
-    переключает.
-  model_catalog_status: available
-  model_catalog_last_checked_utc: '2026-04-25T18:26:17Z'
-  model_catalog_validation_note: selected_model совпадает с последним сохраненным
-    snapshot repo catalog; перед внешними обещаниями повторите live catalog check
-  advisory_layers:
-  - AGENTS.md / AGENT.md
-  - ChatGPT Project instructions
-  - scenario-pack
-  - .chatgpt docs и handoff guidance
-  executable_layers:
-  - codex-model-routing.yaml
-  - scripts/resolve-codex-task-route.py
-  - scripts/bootstrap-codex-task.py
-  - scripts/check-codex-model-catalog.py
-  - scripts/launch-codex-task.sh
-  - scripts/orchestrate-codex-handoff.py
-  - scripts/validate-parent-orchestration-plan.py
-  - scripts/render-orchestration-cockpit.py
-  - scripts/validate-orchestration-cockpit.py
-  - scripts/explain-codex-route.py
-  - scripts/validate-route-explain.py
-  - scripts/validate-beginner-handoff-ux.py
-  - scripts/validate-codex-orchestration.py
-  - .codex/config.toml с именованными profiles
+    - .chatgpt/codex-input.md
+    - .chatgpt/codex-context.md
+    - .chatgpt/codex-task-pack.md
+    - .chatgpt/verification-report.md
+    - .chatgpt/done-report.md
+    - template-repo/tree-contract.yaml
+    - template-repo/scripts/validate-tree-contract.py
+    - tests/artifact-eval/specs/project-root-boundary.yaml
+    - tests/artifact-eval/reports/project-root-boundary.md
+  handoff_allowed: true
+  defect_capture_path: reports/bugs/2026-04-28-flat-project-tree-intermediate-repo-gap.md
+  task_summary: "Закрепить project-root boundary: все intermediate repos живут внутри repo целевого greenfield-product, не как siblings в /projects."
+  launch_boundary_rule: "Выбор модели и reasoning mode считается надежным только на новом запуске Codex для новой задачи."
   launch_artifact_path: .chatgpt/direct-task-source.md
-  launch_command: ./scripts/launch-codex-task.sh --launch-source direct-task --task-file
-    .chatgpt/direct-task-source.md --execute
+  launch_command: ./scripts/launch-codex-task.sh --launch-source direct-task --task-file .chatgpt/direct-task-source.md --execute
   codex_profile_command: codex --profile build
-  strict_launch_use_cases:
-  - автоматизация
-  - воспроизводимость
-  - запуск из shell
-  - scripted launch
-  troubleshooting:
-  - Если вы работаете через VS Code Codex extension интерактивно, используйте новый
-    чат/окно, вручную выставьте selected_model и selected_reasoning_effort в picker,
-    а затем вставьте handoff.
-  - Новый чат + вставка handoff и новый task launch через executable launcher — не
-    одно и то же; не выдавайте manual UI apply за auto-switch.
-  - 'Если handoff вставлен в уже открытую или случайную Codex chat-сессию без ручной
-    проверки picker, это неканонический путь: route может остаться устаревшим.'
-  - Если нужна строгая воспроизводимость, автоматизация или запуск из shell, используйте
-    optional strict launch_command.
-  - Если после launch или manual UI apply виден sticky last-used profile/model/reasoning,
-    закройте текущую сессию, откройте новую и при необходимости выполните launch_command,
-    затем проверьте именованный profile в local Codex config.
-  - Если selected_model отсутствует в live catalog, обновите codex-routing.yaml или
-    local profile mapping, прежде чем обещать этот model ID пользователю.
-  - Если новый model ID появился в live catalog, сначала создайте proposal через `scripts/check-codex-model-catalog.py
-    --write-proposal`; promotion profile mapping требует ручного review.
   direct_self_handoff_required: true
   direct_self_handoff_completed: true
-  requested_task_class: null
-  requested_selected_profile: null
-  requested_selected_model: null
-  requested_selected_reasoning_effort: null

@@ -58,6 +58,7 @@
 - согласованность README, release docs, scenario-pack guidance и фактической структуры repo
 - GPT-5.5 prompt contract: `validate-gpt55-prompt-contract.py`, Artifact Eval `gpt-5-5-prompt-contract`, official OpenAI source map и stale handoff drift checks
 - Model prompt policy: `validate-model-prompt-policy.py`, Artifact Eval `model-prompt-policy` и `reports/model-routing/model-routing-proposal.md` проверяют, что новая model требует companion prompt migration review до promotion
+- Project-root boundary: `validate-tree-contract.py` и Artifact Eval `project-root-boundary` проверяют, что intermediate repos для intake/adoption/reconstruction живут внутри repo целевого `greenfield-product`, не как siblings в `/projects`
 
 ## Известные остаточные ограничения
 

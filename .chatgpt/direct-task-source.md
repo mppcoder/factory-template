@@ -1,1 +1,1 @@
-Предусмотреть, чтобы auto-check/proposal новых Codex/OpenAI моделей обновлял не только model routing, но и prompt policy под новую model по official OpenAI guidance: fresh prompt baseline, outcome-first contract, reasoning/verbosity/tool-use guidance, validators/evals и reports/prompt-migration before profile promotion.
+Добавить к запрету плоского дерева repo в `/projects` правило: все temporary/intermediate/reconstructed/helper repos для intake/adoption/reconstruction должны находиться внутри repo целевого `greenfield-product`, а не как sibling project roots в `/projects`.

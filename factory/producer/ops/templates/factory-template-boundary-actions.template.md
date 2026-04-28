@@ -192,6 +192,7 @@ Internal repo follow-up, включая release-followup, source-pack refresh, e
 2. Не распаковывайте архив поверх `{{root_path}}` вручную.
 3. После загрузки пришлите точное имя файла.
 4. Не создавайте ради этого отдельную верхнеуровневую папку в `/projects`: в корне `/projects` должны оставаться только project roots.
+5. Если для intake/reconstruction нужен промежуточный repo, создавайте его только внутри repo целевого `greenfield-product`, не как sibling в `/projects`.
 
 Что прислать обратно:
 

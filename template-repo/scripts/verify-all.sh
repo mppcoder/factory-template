@@ -100,7 +100,8 @@ run_artifact_eval_smoke() {
     project-knowledge-reuse-proof \
     beginner-full-handoff-ux \
     gpt-5-5-prompt-contract \
-    model-prompt-policy
+    model-prompt-policy \
+    project-root-boundary
   do
     python3 "$ROOT/template-repo/scripts/eval-artifact.py" \
       "$specs_dir/$spec.yaml" \

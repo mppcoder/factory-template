@@ -11,7 +11,7 @@
 Рабочее правило:
 - live project shell lives in `/projects/<project-root>/`;
 - входящие архивы и install/input files при необходимости лежат в `/projects/<project-root>/_incoming/`;
-- temporary, intermediate и reconstructed repo создаются только внутри `/projects/<project-root>/...`, а не рядом в `/projects`.
+- temporary, intermediate, reconstructed и helper repo создаются только внутри repo целевого `greenfield-product`, например `/projects/<target-greenfield-project>/...`, а не рядом в `/projects`.
 
 Для brownfield without repo это требование безусловное: нельзя создавать временные и промежуточные repo прямо в `/projects`.
 

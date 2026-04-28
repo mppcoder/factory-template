@@ -29,7 +29,7 @@
 - `/projects` содержит только project roots;
 - у каждого проекта свой корень: `/projects/<project-root>/`;
 - `_incoming` допускается только как подпапка проекта;
-- brownfield temporary/intermediate/reconstructed repos должны жить только внутри соответствующего project root.
+- brownfield temporary/intermediate/reconstructed/helper repos должны жить только внутри repo целевого `greenfield-product`, например `/projects/<target-greenfield-project>/...`, а не соседями в `/projects`.
 
 ## 1. Новый проект с нуля
 

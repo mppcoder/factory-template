@@ -1,0 +1,43 @@
+schema: artifact-eval/v1
+id: project-root-boundary
+report_date: 2026-04-28
+target_artifact: docs/tree-contract.md
+artifact_type: policy-doc
+expected_output:
+  guided: "Tree contract forbids flat /projects staging and requires intermediate repos inside the target greenfield-product repo."
+thresholds:
+  min_case_pass_rate: 1.0
+  min_assertion_pass_rate: 1.0
+  max_false_positive_rate: 0.0
+expected_trigger:
+  cases:
+    - id: intermediate-repos-inside-target-greenfield
+      prompt: "Brownfield reconstruction needs temporary cloned or reconstructed repos on VPS."
+      expected: "Policy places every intermediate repo under the target greenfield-product repo root."
+      baseline_expected: fail
+      assertions:
+        - id: target-greenfield-root
+          category: compliance
+          must_contain:
+            - "Все temporary, intermediate, reconstructed и helper repos"
+            - "repo целевого `greenfield-product`"
+        - id: no-projects-siblings
+          category: compliance
+          must_contain:
+            - "Создавать такие промежуточные repo как соседние project roots прямо в `/projects` запрещено."
+non_trigger_cases:
+  - id: flat-projects-staging
+    prompt: "Create /projects/reconstructed-repo next to the final project root for convenience."
+    expected: "Policy forbids flat staging directly under /projects."
+    baseline_expected: pass
+    assertions:
+      - id: flat-staging-forbidden
+        category: compliance
+        must_contain:
+          - "`/projects` на VPS содержит только project roots."
+          - "соседние project roots прямо в `/projects` запрещено"
+compliance_assertions:
+  - id: incoming-inside-project-root
+    category: compliance
+    must_contain:
+      - "Временные входящие материалы должны жить внутри конкретного project root"

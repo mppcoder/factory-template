@@ -1,10 +1,10 @@
 # Task pack для Codex
 
 ## Идентификатор изменения
-chg-20260428-model-prompt-policy
+chg-20260428-project-root-boundary
 
 ## Заголовок
-Связать model updates с prompt policy migration
+Закрепить project-root boundary для intermediate repos
 
 ## Класс изменения
 fix
@@ -60,36 +60,46 @@ defect-capture -> remediation -> verification -> closeout
 true
 
 ## Маршрут defect-capture
-reports/bugs/2026-04-28-model-update-missing-prompt-policy-gap.md
+reports/bugs/2026-04-28-flat-project-tree-intermediate-repo-gap.md
 
 ## Приоритет правил repo
 При исполнении задачи приоритет у правил repo: `AGENTS`, runbook, scenario-pack, policy files и других канонических файлов этого репозитория.
 Общие рабочие инструкции применять только там, где они не конфликтуют с repo rules и старшими системными ограничениями среды.
 
 ## Целевой результат
-Model availability auto-check и proposal flow должны обновлять не только model routing, но и prompt policy под новую model по official OpenAI guidance.
+Canonical VPS layout должен явно запрещать размещение промежуточных repo как siblings в `/projects`; все temporary/intermediate/reconstructed/helper repos должны жить внутри repo целевого `greenfield-product`.
 
 ## Критерии успеха
-- `codex-model-routing.yaml` содержит `prompt_migration_policy`.
-- `check-codex-model-catalog.py --write-proposal` генерирует prompt migration section.
-- Validator/eval ловят отсутствие связки model promotion и prompt policy.
-- Docs объясняют, что новая model не является drop-in replacement.
+- Active docs и scenario-pack используют формулировку про целевой `greenfield-product`.
+- `tree-contract.yaml` содержит machine-readable `workspace_layout_policy`.
+- `validate-tree-contract.py` проверяет наличие правила в active source paths.
+- Artifact Eval `project-root-boundary` проходит и включен в `verify-all.sh`.
 
 ## Артефакты
-- `template-repo/codex-model-routing.yaml`
-- `template-repo/scripts/check-codex-model-catalog.py`
-- `template-repo/scripts/validate-model-prompt-policy.py`
-- `tests/artifact-eval/specs/model-prompt-policy.yaml`
-- `tests/artifact-eval/reports/model-prompt-policy.md`
-- `reports/model-routing/model-routing-proposal.md`
-- `reports/bugs/2026-04-28-model-update-missing-prompt-policy-gap.md`
-- `reports/factory-feedback/feedback-2026-04-28-model-update-missing-prompt-policy-gap.md`
+- `README.md`
+- `ENTRY_MODES.md`
+- `docs/tree-contract.md`
+- `docs/brownfield-to-greenfield-transition.md`
+- `docs/operator/factory-template/README.md`
+- `docs/operator/factory-template/01-runbook-dlya-polzovatelya-factory-template.md`
+- `template-repo/scenario-pack/01-global-rules.md`
+- `template-repo/scenario-pack/brownfield/00-brownfield-entry.md`
+- `template-repo/template/docs/codex-workflow.md`
+- `factory/producer/extensions/workspace-packs/vscode-codex-bootstrap/README.md`
+- `factory/producer/ops/templates/factory-template-boundary-actions.template.md`
+- `template-repo/tree-contract.yaml`
+- `template-repo/scripts/validate-tree-contract.py`
+- `tests/artifact-eval/specs/project-root-boundary.yaml`
+- `tests/artifact-eval/reports/project-root-boundary.md`
 
 ## Проверка
-- `python3 template-repo/scripts/validate-model-prompt-policy.py .`
-- `python3 template-repo/scripts/check-codex-model-catalog.py . --write-proposal`
-- `python3 template-repo/scripts/eval-artifact.py tests/artifact-eval/specs/model-prompt-policy.yaml --output tests/artifact-eval/reports/model-prompt-policy.md`
+- `git diff --check`
+- `python3 template-repo/scripts/validate-tree-contract.py .`
+- `python3 template-repo/scripts/eval-artifact.py tests/artifact-eval/specs/project-root-boundary.yaml --output tests/artifact-eval/reports/project-root-boundary.md`
+- `python3 template-repo/scripts/validate-artifact-eval-report.py tests/artifact-eval/reports/project-root-boundary.md`
+- `python3 template-repo/scripts/validate-codex-task-pack.py .`
+- `python3 template-repo/scripts/validate-human-language-layer.py .`
 - `bash template-repo/scripts/verify-all.sh quick`
 
 ## Входные данные handoff
-Direct task от пользователя: в проекте уже предусмотрено автообновление выбора моделей и режимов при выходе новой модели; дополнительно предусмотреть обновление политики промптов под новую модель в соответствии с рекомендациями OpenAI.
+Direct task от пользователя: добавить в запрет плоского дерева repo проектов в директории `projects` правило, что все промежуточные repo должны находиться внутри repo целевого greenfield проекта.

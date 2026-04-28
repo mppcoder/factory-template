@@ -75,6 +75,7 @@ Wizard в понятной форме:
 
 `_incoming` — это подпапка проекта, а не соседний верхнеуровневый каталог.
 В `/projects` нельзя держать `_release`, `_artifacts`, temporary repo, intermediate repo или reconstructed repo как отдельные соседние папки.
+Все промежуточные repo должны находиться внутри repo целевого `greenfield-product`, а не рядом с ним в `/projects`.
 Source of truth для проекта — только `factory-template`.
 
 ---

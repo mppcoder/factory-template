@@ -65,6 +65,7 @@ factory-template/
 ```
 
 `/projects` на VPS содержит только project roots. Временные входящие материалы должны жить внутри конкретного project root, например `/projects/<project-root>/_incoming/`.
+Все temporary, intermediate, reconstructed и helper repos для intake/adoption/reconstruction должны находиться внутри repo целевого `greenfield-product`, например `/projects/<target-greenfield-project>/...`. Создавать такие промежуточные repo как соседние project roots прямо в `/projects` запрещено.
 
 ## Базовый template skeleton
 

@@ -94,6 +94,16 @@ compatibility_layer:
     - PATCH_NOTES_codex_dogfood_p1.md
     - CONTROLLED_FIXES_AUDIT_2026-04-19.md
 
+workspace_layout_policy:
+  vps_projects_root: /projects
+  top_level_rule: "Only final project roots may live directly under /projects."
+  incoming_rule: "_incoming is allowed only inside a project root."
+  intermediate_repo_rule: "All temporary, intermediate, reconstructed and helper repos for intake/adoption/reconstruction must live inside the target greenfield-product repo root, for example /projects/<target-greenfield-project>/..."
+  forbidden:
+    - "top-level service or staging directories directly under /projects"
+    - "intermediate repos as sibling project roots under /projects"
+    - "brownfield reconstruction repos outside the target greenfield-product repo"
+
 naming_policy:
   canonical_project_presets:
     - greenfield-product

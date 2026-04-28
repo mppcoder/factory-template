@@ -67,9 +67,9 @@ Launcher ведет по трем маршрутам:
 - `/projects` содержит только project roots;
 - каждый проект живёт в `/projects/<project-root>/`;
 - `_incoming` допускается только как подпапка проекта: `/projects/<project-root>/_incoming/`;
-- temporary, intermediate и reconstructed repos допускаются только внутри соответствующего project root.
+- temporary, intermediate, reconstructed и helper repos для intake/adoption/reconstruction должны жить только внутри repo целевого `greenfield-product`: `/projects/<target-greenfield-project>/...`.
 
-Запрещена плоская раскладка вспомогательных repo и служебных каталогов прямо в `/projects`.
+Запрещена плоская раскладка вспомогательных repo и служебных каталогов прямо в `/projects`, включая создание промежуточных repo как соседних project roots.
 
 Канонический release-facing reference по архитектуре, дереву проекта и workflow собран в:
 

@@ -1,74 +1,62 @@
 change:
-  id: chg-20260428-model-prompt-policy
-  title: Связать model updates с prompt policy migration
-  class: fix
-  execution_mode: codex-led
-  type: factory-improvement
-  status: done
-  priority: high
-  summary: Добавить обязательный prompt-policy contour к model catalog/proposal flow для новых моделей.
-  outputs:
-    - reports/bugs/2026-04-28-model-update-missing-prompt-policy-gap.md
-    - reports/factory-feedback/feedback-2026-04-28-model-update-missing-prompt-policy-gap.md
-    - reports/model-routing/model-routing-proposal.md
-    - template-repo/codex-model-routing.yaml
-    - template-repo/scripts/check-codex-model-catalog.py
-    - template-repo/scripts/validate-model-prompt-policy.py
-    - template-repo/scripts/verify-all.sh
-    - template-repo/README.md
-    - template-repo/template/docs/codex-workflow.md
-    - template-repo/template/docs/integrations.md
-    - tests/artifact-eval/specs/model-prompt-policy.yaml
-    - tests/artifact-eval/reports/model-prompt-policy.md
-    - template-repo/scripts/create-codex-task-pack.py
-    - .chatgpt/verification-report.md
-    - .chatgpt/done-report.md
+  id: chg-20260428-project-root-boundary
+  title: Закрепить project-root boundary для intermediate repos
+  summary: "Уточнить canonical VPS layout: промежуточные repo живут внутри repo целевого greenfield-product, не как siblings в /projects."
+
 tasks:
   - id: T-001
-    title: Зафиксировать reusable gap model promotion без prompt policy
+    title: Зафиксировать reusable gap flat projects boundary
     type: analysis
     risk_level: low
     executor: developer
-    depends_on: []
+    status: done
     outputs:
-      - reports/bugs/2026-04-28-model-update-missing-prompt-policy-gap.md
-      - reports/factory-feedback/feedback-2026-04-28-model-update-missing-prompt-policy-gap.md
+      - reports/bugs/2026-04-28-flat-project-tree-intermediate-repo-gap.md
+      - reports/factory-feedback/feedback-2026-04-28-flat-project-tree-intermediate-repo-gap.md
     acceptance:
       - defect classified as reusable factory gap
   - id: T-002
-    title: Добавить prompt_migration_policy и proposal rendering
+    title: Обновить active docs и scenario-pack
     type: implementation
     risk_level: medium
     executor: developer
+    status: done
     depends_on:
       - T-001
     outputs:
-      - template-repo/codex-model-routing.yaml
-      - template-repo/scripts/check-codex-model-catalog.py
-      - reports/model-routing/model-routing-proposal.md
+      - README.md
+      - ENTRY_MODES.md
+      - docs/tree-contract.md
+      - docs/brownfield-to-greenfield-transition.md
+      - docs/operator/factory-template/README.md
+      - docs/operator/factory-template/01-runbook-dlya-polzovatelya-factory-template.md
+      - template-repo/scenario-pack/01-global-rules.md
+      - template-repo/scenario-pack/brownfield/00-brownfield-entry.md
+      - template-repo/template/docs/codex-workflow.md
     acceptance:
-      - model proposal contains prompt migration section
+      - docs require intermediate repos inside target greenfield-product repo
   - id: T-003
-    title: Добавить validator/eval и docs
+    title: Закрепить validator/eval coverage
     type: test
     risk_level: medium
     executor: developer
+    status: done
     depends_on:
       - T-002
     outputs:
-      - template-repo/scripts/validate-model-prompt-policy.py
-      - tests/artifact-eval/specs/model-prompt-policy.yaml
-      - tests/artifact-eval/reports/model-prompt-policy.md
-      - template-repo/README.md
-      - template-repo/template/docs/codex-workflow.md
-      - template-repo/template/docs/integrations.md
+      - template-repo/tree-contract.yaml
+      - template-repo/scripts/validate-tree-contract.py
+      - tests/artifact-eval/specs/project-root-boundary.yaml
+      - tests/artifact-eval/reports/project-root-boundary.md
+      - template-repo/scripts/verify-all.sh
     acceptance:
-      - missing prompt policy is caught automatically
+      - tree contract and Artifact Eval catch rule drift
   - id: T-004
     title: Verify and close out
     type: verification
     risk_level: medium
     executor: developer
+    status: done
     depends_on:
       - T-003
     outputs:

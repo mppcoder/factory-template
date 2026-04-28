@@ -16,11 +16,12 @@
 Каноническая структура:
 - `/projects/<project-root>/` — корень конкретного проекта;
 - `/projects/<project-root>/_incoming/` — необязательная подпапка для входящих архивов и установочных файлов;
-- любые temporary, intermediate, reconstructed и другие вспомогательные repo — только внутри `/projects/<project-root>/...`.
+- любые temporary, intermediate, reconstructed и другие вспомогательные repo — только внутри repo целевого `greenfield-product`: `/projects/<target-greenfield-project>/...`.
 
 Запрещено:
 - создавать в `/projects` служебные верхнеуровневые папки вроде `_incoming`, `_release`, `_artifacts`;
 - раскладывать brownfield temporary/intermediate/reconstructed repo как соседние project roots;
+- создавать промежуточные repo за пределами целевого `greenfield-product` repo;
 - использовать `/projects` как плоскую staging-зону.
 
 ## Правило фиксации дефектов

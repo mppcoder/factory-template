@@ -22,3 +22,19 @@ gates:
   spec_ready: true
   tech_spec_ready: true
   decomposition_complete: true
+change:
+  id: chg-20260428-project-root-boundary
+  title: Закрепить project-root boundary для intermediate repos
+  class: fix
+  execution_mode: codex-led
+  type: factory-improvement
+  status: done
+  priority: high
+  summary: "Уточнить canonical VPS layout: промежуточные repo живут внутри repo целевого greenfield-product, не как siblings в /projects."
+  outputs:
+    - reports/bugs/2026-04-28-flat-project-tree-intermediate-repo-gap.md
+    - reports/factory-feedback/feedback-2026-04-28-flat-project-tree-intermediate-repo-gap.md
+    - template-repo/tree-contract.yaml
+    - template-repo/scripts/validate-tree-contract.py
+    - tests/artifact-eval/specs/project-root-boundary.yaml
+    - tests/artifact-eval/reports/project-root-boundary.md

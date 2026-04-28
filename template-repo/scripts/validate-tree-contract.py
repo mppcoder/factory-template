@@ -192,6 +192,43 @@ def validate_compatibility_aliases(root: Path, contract: dict[str, Any], errors:
             errors.append("compatibility: preset_aliases нельзя держать в template-repo/project-presets.yaml")
 
 
+def validate_workspace_layout_policy(root: Path, contract: dict[str, Any], errors: list[str]) -> None:
+    policy = contract.get("workspace_layout_policy", {}) or {}
+    if not isinstance(policy, dict):
+        errors.append("workspace_layout_policy должен быть mapping")
+        return
+    required_fragments = [
+        "/projects",
+        "target greenfield-product",
+        "temporary, intermediate, reconstructed and helper repos",
+    ]
+    combined = "\n".join(str(value) for value in policy.values())
+    for fragment in required_fragments:
+        if fragment not in combined:
+            errors.append(f"workspace_layout_policy: отсутствует обязательный фрагмент: {fragment}")
+
+    scan_paths = [
+        "README.md",
+        "ENTRY_MODES.md",
+        "docs/tree-contract.md",
+        "docs/brownfield-to-greenfield-transition.md",
+        "template-repo/scenario-pack/01-global-rules.md",
+        "template-repo/scenario-pack/brownfield/00-brownfield-entry.md",
+        "template-repo/template/docs/codex-workflow.md",
+        "factory/producer/extensions/workspace-packs/vscode-codex-bootstrap/README.md",
+    ]
+    for rel_path in scan_paths:
+        path = root / rel_path
+        if not path.exists():
+            errors.append(f"workspace_layout_policy: отсутствует scan path: {rel_path}")
+            continue
+        text = path.read_text(encoding="utf-8")
+        if "целевого `greenfield-product`" not in text and "target `greenfield-product`" not in text:
+            errors.append(
+                f"workspace_layout_policy: {rel_path} не фиксирует размещение внутри целевого greenfield-product repo"
+            )
+
+
 def validate_contour(target_root: Path, contour: dict[str, Any], label: str, errors: list[str]) -> None:
     add_missing_paths(target_root, contour.get("root_markers", []) or [], label, errors)
     add_missing_paths(target_root, contour.get("required_paths", []) or [], label, errors)
@@ -274,6 +311,7 @@ def validate_factory_root(root: Path, contract: dict[str, Any], errors: list[str
     validate_compatibility_aliases(root, contract, errors)
     validate_active_ux_literals(root, contract, errors)
     validate_path_terms(root, contract, errors)
+    validate_workspace_layout_policy(root, contract, errors)
     validate_lifecycle_and_ownership(contract, errors)
 
 

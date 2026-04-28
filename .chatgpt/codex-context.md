@@ -4,13 +4,13 @@
 factory-template
 
 ## Классификация
-Direct task: reusable factory gap в связке model routing и prompt policy.
+Direct task: reusable factory gap в canonical VPS layout / project-root boundary.
 
 ## Текущий этап
 verification
 
 ## Идентификатор изменения
-chg-20260428-model-prompt-policy
+chg-20260428-project-root-boundary
 
 ## Краткое резюме
-Auto-check/proposal новых моделей теперь обязан включать prompt migration policy: official OpenAI source baseline, fresh prompt baseline, affected prompt-like artifacts, validators/evals и manual review boundary до profile promotion.
+Запрет плоского `/projects` дерева уточнен: все temporary/intermediate/reconstructed/helper repos для intake/adoption/reconstruction должны жить внутри repo целевого `greenfield-product`, а не как sibling project roots.

@@ -91,4 +91,5 @@ Model proposal также обязан обновлять prompt policy contour.
 ## Canonical VPS layout / каноническая VPS layout
 - `/projects` содержит только project roots;
 - `_incoming` допускается только как подпапка проекта: `/projects/<project-root>/_incoming/`;
-- brownfield temporary, intermediate и reconstructed repos нельзя раскладывать плоско рядом в `/projects`.
+- brownfield temporary, intermediate, reconstructed и helper repos должны жить внутри repo целевого `greenfield-product`;
+- такие промежуточные repo нельзя раскладывать плоско рядом в `/projects`.

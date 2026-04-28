@@ -29,11 +29,14 @@ Use this path when there is an existing system or files, but no normalized repo.
    `brownfield/reverse-engineering-plan.md`,
    `brownfield/reverse-engineering-summary.md`,
    `brownfield/decision-log.md`, temporary `reconstructed-repo/` or equivalent
-   inside the project root.
+   inside the target `greenfield-product` repo root.
 5. Move canonical product code into the final project layout, retire temporary
    reconstruction workspace from active paths, then run the with-repo audit/adoption
    cycle.
 6. Convert to `greenfield-product`.
+
+Temporary, intermediate, reconstructed and helper repos are never separate siblings in
+`/projects`; they are project-local workspaces under `/projects/<target-greenfield-project>/...`.
 
 Done requires conversion or an explicit blocker.
 

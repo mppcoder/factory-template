@@ -4,6 +4,7 @@
 - 3 canonical entry modes: новый проект с нуля, brownfield без репо, brownfield с репо
 - нейтральная canonical иерархия core vs optional/reference layers без product-specific naming в core
 - strict machine-readable tree contract для factory root, template base и generated project contours
+- project-root boundary для VPS layout: `/projects` содержит только конечные project roots, а intermediate repos живут внутри repo целевого `greenfield-product`
 - strict machine-readable mode parity contract для template base и всех generated presets
 - lifecycle state model отделен от project preset: greenfield-active, brownfield transitional states, brownfield-to-greenfield-conversion и greenfield-converted
 - ownership taxonomy отделяет project-core, template-owned zones, project-owned zones, brownfield evidence/audit/reconstruction, factory-producer-owned, archives и transient-generated

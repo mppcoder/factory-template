@@ -16,9 +16,9 @@
 3. Для brownfield without-repo создать отдельный project root, например `brownfield-without-repo-project`.
 4. Внутри него использовать project-local папки, например `_incoming`, `evidence/`, `reconstructed-repo/`.
 5. После старта работ открывать отдельные окна для `factory-template` и для нужных project roots.
-6. Если появляется reconstructed repo, он должен жить внутри соответствующего project root, а не соседом верхнего уровня в `/projects`.
+6. Если появляется reconstructed repo, он должен жить внутри repo целевого `greenfield-product`, а не соседом верхнего уровня в `/projects`.
 
 ## Canonical VPS layout / каноническая VPS layout
 - `/projects` содержит только project roots;
 - `_incoming` допускается только как `/projects/<project-root>/_incoming/`;
-- brownfield temporary, intermediate и reconstructed repo допускаются только внутри своего project root.
+- brownfield temporary, intermediate, reconstructed и helper repo допускаются только внутри repo целевого `greenfield-product`.

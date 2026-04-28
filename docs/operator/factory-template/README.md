@@ -17,7 +17,8 @@
 Правило верхнего уровня:
 - в `/projects` лежат только project roots;
 - `_incoming` допускается только внутри project root;
-- brownfield temporary/intermediate/reconstructed repos не должны появляться как соседи `factory-template` в `/projects`.
+- temporary/intermediate/reconstructed/helper repos должны жить внутри repo целевого `greenfield-product`;
+- такие промежуточные repo не должны появляться как соседи `factory-template` или других project roots в `/projects`.
 
 ## Состав
 
