@@ -214,6 +214,48 @@ run_codex_orchestration_smoke() {
   rm -rf "$tmp_dir"
 }
 
+run_codex_orchestration_runner_negative_smoke() {
+  local tmp_dir
+  tmp_dir="$(mktemp -d)"
+  local stdout_log="$tmp_dir/runner-negative.stdout"
+  local stderr_log="$tmp_dir/runner-negative.stderr"
+  local report_path="$tmp_dir/parent-orchestration-report.md"
+  local sessions_dir="$tmp_dir/sessions"
+
+  if python3 "$ROOT/template-repo/scripts/orchestrate-codex-handoff.py" \
+    --root "$ROOT" \
+    --plan "$ROOT/tests/codex-orchestration/fixtures/secret-like/parent-plan.yaml" \
+    --report "$report_path" \
+    >"$stdout_log" 2>"$stderr_log"; then
+    echo "FAIL: invalid orchestration plan unexpectedly passed runner validation" >&2
+    cat "$stdout_log" >&2
+    cat "$stderr_log" >&2
+    rm -rf "$tmp_dir"
+    return 1
+  fi
+
+  if find "$sessions_dir" -type f -name '*.md' 2>/dev/null | grep -q .; then
+    echo "FAIL: invalid orchestration plan wrote child session files before failing" >&2
+    find "$sessions_dir" -type f -name '*.md' -print >&2
+    rm -rf "$tmp_dir"
+    return 1
+  fi
+
+  if [[ -e "$sessions_dir/secret-child.md" ]]; then
+    echo "FAIL: invalid orchestration plan wrote child session files before failing" >&2
+    rm -rf "$tmp_dir"
+    return 1
+  fi
+
+  if grep -RE "API_KEY[[:space:]]*=" "$tmp_dir" >/dev/null 2>&1; then
+    echo "FAIL: invalid orchestration plan wrote secret-like prompt content to output artifacts" >&2
+    rm -rf "$tmp_dir"
+    return 1
+  fi
+
+  rm -rf "$tmp_dir"
+}
+
 run_curated_pack_quality_smoke() {
   python3 "$ROOT/template-repo/scripts/validate-curated-pack-quality.py" "$ROOT"
   python3 "$ROOT/template-repo/scripts/validate-curated-pack-quality.py" \
@@ -302,6 +344,7 @@ run_quick() {
   run_step "artifact-eval-smoke" run_artifact_eval_smoke
   run_step "downstream-application-proof-smoke" run_downstream_application_proof_smoke
   run_step "codex-orchestration-smoke" run_codex_orchestration_smoke
+  run_step "codex-orchestration-runner-negative-smoke" run_codex_orchestration_runner_negative_smoke
   run_step "curated-pack-quality-smoke" run_curated_pack_quality_smoke
   run_step "validate-verified-sync-fallback-evidence" python3 "$ROOT/template-repo/scripts/validate-verified-sync-fallback-evidence.py" "$ROOT/reports/release/verified-sync-fallback-evidence.md"
   run_step "project-knowledge-done-loop-smoke" run_project_knowledge_done_loop_smoke

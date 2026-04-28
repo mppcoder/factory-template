@@ -64,6 +64,7 @@ Plan №5 closes the recommended internal hardening contour after Plan №4 when
 | `P5-GAP-04` | Git sync fallback strategy had no release-facing coverage matrix. | `reports/release/verified-sync-fallback-evidence.md`; `validate-verified-sync-fallback-evidence.py`. | P5-S5 | implemented/verified without sync logic rewrite | repo evidence |
 | `P5-GAP-05` | Novice acceptance needed domain scenario examples beyond parity smoke. | `docs/domain-scenario-acceptance.md` with CRM and inventory examples. | P5-S6 | implemented as repo-local examples | repo / future downstream |
 | `P5-GAP-06` | Cloud/App default overclaim and child route inheritance needed orchestration-specific guardrails. | Orchestration validator rejects Cloud default wording, missing child routing, multi-block handoff and secret-like fixtures. | P5-S1/P5-S2 | implemented/verified | repo |
+| `P5-GAP-07` | Orchestration runner could write child session files before failing invalid/secret-like plans; verify lacked runner-level negative smoke. | `reports/bugs/2026-04-28-plan-5-orchestration-runner-write-before-fail.md`; `orchestrate-codex-handoff.py` fail-fast gate; `verify-all.sh` runner negative smoke. | P5-S2/P5-S7 integrity follow-up | remediated/verified after follow-up | executable runner / verify |
 
 ## `molyanov-ai-dev` adaptation register
 

@@ -316,10 +316,21 @@ def main() -> int:
     data = read_yaml_or_json(plan_path)
     report_path = Path(args.report).resolve() if args.report else root / "reports" / "orchestration" / "parent-orchestration-report.md"
     sessions_dir = Path(args.sessions_dir).resolve() if args.sessions_dir else report_path.parent / "sessions"
+
+    errors, warnings = validate_plan(data, root)
+    if errors:
+        print("ORCHESTRATION PLAN НЕВАЛИДЕН")
+        for error in errors:
+            print(f"- {error}")
+        if warnings:
+            print("ORCHESTRATION WARNINGS")
+            for warning in warnings:
+                print(f"- {warning}")
+        return 1
+
     sessions_dir.mkdir(parents=True, exist_ok=True)
     report_path.parent.mkdir(parents=True, exist_ok=True)
 
-    errors, warnings = validate_plan(data, root)
     rows: list[dict[str, str]] = []
     parent = data.get("parent", {}) if isinstance(data.get("parent"), dict) else {}
     live_note = "repo-configured; requires live validation" if warnings else "repo-configured; last catalog validation passed"
@@ -354,11 +365,6 @@ def main() -> int:
     for row in rows:
         print(f"- {row['id']}: {row['command']}")
     print(f"report={report_path}")
-    if errors:
-        print("ORCHESTRATION PLAN НЕВАЛИДЕН")
-        for error in errors:
-            print(f"- {error}")
-        return 1
     print("ORCHESTRATION PLAN ВАЛИДЕН")
     return 0
 

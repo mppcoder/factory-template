@@ -35,6 +35,17 @@ Plan №5 добавил internal hardening contour после Plan №4 без 
 
 Follow-up на `2026-04-28`: orchestration contract усилен правилом `user_actions_policy: defer-to-final-closeout`. Все user-required/external/runtime/downstream действия уходят в конец parent plan, internal child subtasks продолжают работу на safe temporary placeholders, а parent report выводит `deferred_user_actions` и `placeholder_replacements` как финальные напоминания о замене на real data.
 
+Integrity/security follow-up на `2026-04-28`: runner fail-fast исправлен после post-audit finding. Invalid/secret-like orchestration plans now fail before `sessions_dir`, child session files, prompt/session artifacts or parent reports are created.
+
+Дополнительные проверки:
+
+- Direct runner negative smoke against `tests/codex-orchestration/fixtures/secret-like/parent-plan.yaml` — pass, runner returns non-zero and does not create `sessions/secret-child.md`.
+- `template-repo/scripts/verify-all.sh quick` now includes `codex-orchestration-runner-negative-smoke` with regression message `FAIL: invalid orchestration plan wrote child session files before failing`.
+- `bash template-repo/scripts/verify-all.sh quick` — pass на `2026-04-28` after integrity follow-up.
+- `bash template-repo/scripts/verify-all.sh full` — pass на `2026-04-28` after integrity follow-up; onboarding acceptance evidence refreshed in `tests/onboarding-smoke/ACCEPTANCE_REPORT.md`.
+- Defect report: `reports/bugs/2026-04-28-plan-5-orchestration-runner-write-before-fail.md`.
+- Factory feedback: `reports/factory-feedback/feedback-040-plan-5-orchestration-runner-write-before-fail.md`.
+
 ## Проверка Plan №4 P4-S0/P4-S4 preparation
 
 Дата: `2026-04-27`.

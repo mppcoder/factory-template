@@ -37,6 +37,8 @@ Plan №5 не переоткрывает завершенный `2.6` template/
 
 ### P5-S0 — audit/source map/gap map after Plan №4
 
+Status: implemented/verified.
+
 Output:
 - this roadmap source map;
 - gap map;
@@ -47,6 +49,8 @@ Acceptance:
 - no claim that Plan №5 needs a real downstream app.
 
 ### P5-S1 — VPS Remote SSH-first orchestration contract
+
+Status: implemented/verified.
 
 Output:
 - `docs/operator/factory-template/04-vps-remote-ssh-full-handoff-orchestration.md`;
@@ -68,6 +72,8 @@ Guardrails:
 
 ### P5-S2 — repo-native orchestration runner
 
+Status: implemented/verified after post-audit integrity follow-up.
+
 Output:
 - dry-run safe script in `template-repo/scripts/`;
 - positive and negative fixtures under `tests/codex-orchestration/`;
@@ -85,8 +91,11 @@ Required behavior:
 - use safe temporary placeholders where possible and record `placeholder_replacements` for final replacement reminders;
 - detect stale/missing model mapping and report instead of silently falling back;
 - keep secrets outside repo.
+- post-audit integrity fix: invalid/secret-like plans now fail before `sessions_dir`, child session files or prompt/session artifacts are created.
 
 ### P5-S3 — operational reports polish
+
+Status: implemented/verified.
 
 Output:
 - parent orchestration report template/format;
@@ -101,6 +110,8 @@ Taxonomy must distinguish:
 - downstream/battle action.
 
 ### P5-S4 — curated/reference pack quality validator
+
+Status: implemented/verified.
 
 Output:
 - `validate-curated-pack-quality.py`;
@@ -117,6 +128,8 @@ Checks:
 
 ### P5-S5 — git sync fallback hardening and evidence
 
+Status: implemented/verified.
+
 Output:
 - inspect existing verified sync fallback strategy;
 - add docs/tests/fixtures only where gaps are real;
@@ -125,11 +138,15 @@ Output:
 
 ### P5-S6 — novice/domain acceptance expansion
 
+Status: implemented/verified.
+
 Output:
 - domain scenario acceptance template/examples that extend beyond parity smoke;
 - real downstream field pilots remain future external contour.
 
 ### P5-S7 — verification and release-facing closeout
+
+Status: implemented/verified after post-audit integrity follow-up.
 
 Output:
 - update `CURRENT_FUNCTIONAL_STATE.md`, `docs/releases/post-2.5-gap-register.md`, `TEST_REPORT.md` and release-facing docs as required;
@@ -139,6 +156,6 @@ Output:
 
 ## Статус
 
-Current stage: `P5-S0 -> P5-S7 implementation`.
+Current stage: `P5-S0 -> P5-S7 implemented/verified`.
 
-Release status is unchanged: this roadmap is internal hardening and does not declare a new release-ready state.
+Post-audit integrity/security closeout on 2026-04-28 closed the runner fail-fast gap and added runner-level negative smoke coverage for invalid/secret-like plans. Release status is unchanged: this roadmap is internal hardening and does not declare a new release-ready state.
