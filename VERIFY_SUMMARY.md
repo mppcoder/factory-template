@@ -6,7 +6,8 @@
 
 ## Текущий verify baseline
 
-- `bash template-repo/scripts/verify-all.sh ci`: PASS (`2026-04-28`)
+- `bash template-repo/scripts/verify-all.sh ci`: PASS (`2026-04-28`, local reproduction on commit `750ce6a787cf304d24af14ab856da34bb63221e0`)
+- GitHub Actions run `25054700529`: root cause was hosted runner acquisition failure before repo commands; failed job rerun attempted and hit the same acquisition blocker (`2026-04-28`)
 - `bash CLEAN_VERIFY_ARTIFACTS.sh`: PASS (`2026-04-26`)
 - `bash PRE_RELEASE_AUDIT.sh`: PASS (`2026-04-26`)
 - `bash RELEASE_BUILD.sh /tmp/factory-template-2.5.zip`: PASS (`2026-04-26`)
@@ -71,6 +72,7 @@
 - auto GitHub Release publication зависит от доступности `gh` и не должна считаться гарантированной без отдельной проверки auth/runtime
 - `quick` profile остается на `gpt-5.4-mini`; live catalog показал upgrade candidate на `gpt-5.5`, но repo policy требует отдельный manual review proposal для promotion
 - Любой future model promotion должен обновлять `reports/prompt-migration/` и prompt-contract validators/evals по official OpenAI docs; model slug update без prompt-policy contour считается неполным
+- GitHub-hosted runner acquisition can fail before repository commands start; classify that separately from `verify-all.sh` regressions and use local reproduction plus rerun evidence before changing validators.
 
 ## Использование оператором
 
