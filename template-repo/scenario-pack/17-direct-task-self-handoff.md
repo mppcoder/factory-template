@@ -2,6 +2,8 @@
 
 Если задача пришла в Codex напрямую, без handoff из ChatGPT Project, direct task не должен сразу переходить к коду.
 
+Этот сценарий не применяется к `launch_source: chatgpt-handoff`. Для готового ChatGPT handoff Codex исполняет входящий handoff, а в первом ответе может дать только `handoff receipt` / `route receipt` без создания нового self-handoff.
+
 ## Обязательный порядок
 1. Открыть `00-master-router.md`.
 2. Классифицировать задачу.
@@ -20,3 +22,5 @@ Self-handoff и profile selection должны быть привязаны к н
 ## Правило visible gate
 Для direct task self-handoff должен быть видим пользователю в первом substantive ответе Codex.
 Недостаточно только записать `.chatgpt/direct-task-self-handoff.md` или молча держать классификацию в памяти.
+
+Запрещено называть прием готового ChatGPT handoff self-handoff. Это route receipt, а не дублирование или замена handoff.

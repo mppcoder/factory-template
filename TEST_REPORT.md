@@ -46,6 +46,11 @@ Integrity/security follow-up на `2026-04-28`: runner fail-fast исправл�
 - Defect report: `reports/bugs/2026-04-28-plan-5-orchestration-runner-write-before-fail.md`.
 - Factory feedback: `reports/factory-feedback/feedback-040-plan-5-orchestration-runner-write-before-fail.md`.
 
+Handoff terminology follow-up на `2026-04-28`: исправлена ambiguity, при которой `chatgpt-handoff` acceptance мог называться `self-handoff`. Теперь `chatgpt-handoff` исполняет входящий handoff и допускает только `handoff receipt` / `route receipt`; `self-handoff` зарезервирован для `direct-task` и отдельного incidental defect task boundary.
+
+- Defect report: `reports/bugs/2026-04-28-chatgpt-handoff-self-handoff-duplication.md`.
+- Factory feedback: `reports/factory-feedback/feedback-041-chatgpt-handoff-self-handoff-duplication.md`.
+
 ## Проверка Plan №4 P4-S0/P4-S4 preparation
 
 Дата: `2026-04-27`.

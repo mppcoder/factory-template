@@ -113,6 +113,19 @@ User-only closeout допустим только если remaining next step д
 ## Правило выравнивания контуров
 Если найден defect, gap, regression, inconsistency или template flaw, сначала пройдите defect-capture path: bug report → classification → factory feedback при reusable issue → handoff / remediation / Codex.
 
+## Правило приема ChatGPT handoff
+Если Codex получает уже готовый handoff с `launch_source: chatgpt-handoff`, он исполняет именно этот входящий handoff.
+
+В первом содержательном ответе Codex может вывести только `handoff receipt` / `route receipt`: краткое подтверждение выбранного профиля проекта, сценария, pipeline stage, artifacts to update, `handoff_allowed`, `defect_capture_path` и routing fields.
+
+Такой receipt:
+- не является `self-handoff`;
+- не заменяет входящий handoff;
+- не создает новый task launch сам по себе;
+- не должен называться `self-handoff`.
+
+Если входящий ChatGPT handoff просит "visible self-handoff" при `launch_source: chatgpt-handoff`, нормализуй это как `handoff receipt` перед исполнением исходного handoff.
+
 ## Правило incidental / side bug
 Если во время исполнения основного handoff найден побочный defect, его нельзя silently drop, даже если основной scope закрывается успешно.
 
@@ -136,5 +149,7 @@ User-only closeout допустим только если remaining next step д
 
 Этот self-handoff должен быть не только внутренним артефактом, но и явным стартовым блоком в первом substantive ответе Codex.
 Нельзя пропускать его только потому, что "контекст уже понятен" или "задача очевидна".
+
+Это правило применяется только к `launch_source: direct-task` или к отдельному incidental defect task boundary. Оно не применяется к уже готовому `chatgpt-handoff`, где нужен `handoff receipt`, а не новый self-handoff.
 
 Только после этого допустим remediation / implementation.

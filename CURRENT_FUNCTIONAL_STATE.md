@@ -58,7 +58,8 @@
 - task-based profile/model selection для Codex теперь вынесен в executable launch layer: named profiles, router scripts и launch log на границе новой задачи
 - completion/handoff layer теперь выдает отдельный executable launch boundary и не подменяет новый task launch понятием "новый чат"
 - completion package теперь по умолчанию не требует обновлять `factory-template ChatGPT Project`, если canonical repo/path/entrypoint и короткая repo-first instruction text не менялись
-- direct task to Codex теперь проходит такой же нормализованный self-handoff, как и handoff из ChatGPT Project, включая `task_class`, `selected_profile`, `selected_model` и `defect_capture_path`
+- ChatGPT handoff и direct task разведены терминологически: `chatgpt-handoff` получает только `handoff receipt` / `route receipt` и исполняет входящий handoff, а `self-handoff` зарезервирован для `direct-task` и отдельного incidental defect task boundary
+- direct task to Codex теперь проходит нормализованный self-handoff, включая `task_class`, `selected_profile`, `selected_model` и `defect_capture_path`
 - direct task теперь дополнительно требует visible self-handoff block в первом substantive ответе, а не только artifact-level фиксацию
 - direct-task response теперь является publishable handoff package и содержит continuation guardrail: совместимый internal follow-up выполняется без ручного "продолжай", а финальный closeout обязан дать `## Инструкция пользователю` или явно сказать `Внешних действий не требуется.`
 - brownfield source-candidate map, reconstruction allowlist/denylist и change-map закреплены как internal Codex-eligible follow-up, а не пользовательский ручной шаг

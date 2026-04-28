@@ -11,6 +11,17 @@ thresholds:
   max_false_positive_rate: 0.0
 expected_trigger:
   cases:
+    - id: chatgpt-handoff-receipt
+      prompt: "Codex получил готовый handoff из ChatGPT и должен подтвердить маршрут перед исполнением."
+      expected: "Router требует route receipt, а не новый self-handoff."
+      baseline_expected: fail
+      assertions:
+        - id: receipt-not-self-handoff
+          category: compliance
+          must_contain:
+            - "## Правило приема ChatGPT handoff"
+            - "handoff receipt"
+            - "не является `self-handoff`"
     - id: direct-task-self-handoff
       prompt: "Codex получил прямую задачу без внешнего handoff и должен начать remediation."
       expected: "Сначала self-handoff по repo rules, затем implementation."
