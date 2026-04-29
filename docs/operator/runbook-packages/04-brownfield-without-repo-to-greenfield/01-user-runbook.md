@@ -7,7 +7,7 @@ Brownfield without repo — intake/reconstruction path, не финальный 
 ## Настройка только пользователем
 
 Маркер слоя: `USER-ONLY SETUP`.
-Пользователь собирает incoming materials в `_incoming`, дает access/approvals и открывает remote Codex context. Codex выполняет inventory/reconstruction/conversion.
+Пользователь собирает incoming materials в `_incoming`, дает access/approvals и открывает remote Codex context. Codex выполняет inventory/reconstruction/conversion. Intake работает в recommendation-first режиме: safe defaults объясняются и могут быть заменены.
 Если incoming материалы относятся к VPS/runtime, пользователь передает только безопасные сведения о выбранном Ubuntu/VPS image, runtime versions и policy approvals. Codex не делает automatic remediation или upgrade без отдельного user approval gate.
 Допустимые contours: `vscode-remote-ssh-codex-extension` или fallback `codex-app-remote-ssh`.
 
@@ -17,10 +17,26 @@ Brownfield without repo — intake/reconstruction path, не финальный 
 - Делает: Пользователь.
 - Зачем: Temporary/reconstructed/intermediate repos не должны быть siblings в `/projects`.
 - Что нужно до начала: Есть архив, папка, ссылка или другой набор исходных материалов; factory-template remote setup готов.
-- Где взять значения: `<project-slug>` придумать латиницей; `<incoming-source>` взять из локальной папки/архива/ссылки.
+- Где взять значения: `<project-slug>` придумать латиницей; `<incoming-source>` взять из локальной папки/архива/ссылки. Если пользователь не просит иначе, default-decision layer рекомендует `/projects/<target-slug>/_incoming` для материалов, все reconstructed/intermediate repos только внутри target project root, затем evidence inventory -> reconstruction -> with-repo adoption -> greenfield conversion.
 - Команды для копирования:
 
 ```text
+default_decision_mode: global-defaults | confirm-each-default | manual
+accepted_defaults:
+  - incoming materials live in /projects/<target-slug>/_incoming
+  - reconstructed/intermediate repos live only inside target project root
+  - evidence inventory before reconstruction
+  - reconstruction before with-repo adoption
+overridden_defaults: []
+default_source_basis:
+  - repo-policy
+  - best-practice
+uncertainty_notes:
+  - materials may need sanitized inventory before commit
+decisions_requiring_user_confirmation:
+  - secret/private data handling
+  - destructive cleanup approval
+
 entry_path: brownfield-without-repo-to-greenfield
 project_root: /projects/<project-slug>
 incoming_dir: /projects/<project-slug>/_incoming
@@ -31,7 +47,7 @@ done_rule: conversion или documented blocker
 ```
 
 - Куда вставить: В ChatGPT handoff или заметки.
-- Ожидаемый результат: Один target root определен; `_incoming` живет внутри него.
+- Ожидаемый результат: Один target root определен; `_incoming` живет внутри него; defaults accepted or overridden; custom overrides captured.
 - Если ошибка: Не создавайте `/projects/reconstructed-repo` или `/projects/temp-audit`.
 - Evidence: Target root и incoming source записаны без секретов.
 - Следующий шаг: `BWO-010`.

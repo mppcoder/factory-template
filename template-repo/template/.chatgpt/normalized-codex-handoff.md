@@ -42,6 +42,14 @@
 ## Разрешение handoff
 <!-- yes/no + policy -->
 
+## Состояние решений по умолчанию
+<!-- default_decision_mode: global-defaults | confirm-each-default | manual -->
+<!-- accepted_defaults -->
+<!-- overridden_defaults -->
+<!-- default_source_basis: repo-policy | official-docs | best-practice | project-scale | user-override -->
+<!-- uncertainty_notes -->
+<!-- decisions_requiring_user_confirmation -->
+
 ## Маршрут defect-capture
 <!-- reproduce -> evidence -> bug report -> classification -> feedback -> remediation -->
 

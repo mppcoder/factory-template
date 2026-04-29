@@ -4,10 +4,11 @@
 |---|---|---|---|---|---|---|---|---|
 | GF-000 | [ ] | Browser ChatGPT / VS Code / Codex app | Пользователь | Проверить стартовое состояние | Factory-template verified, contour готов | Пользователь в ChatGPT Project шаблона фабрики | Factory Project открыт | GF-005 |
 | GF-005 | [ ] | ChatGPT Project шаблона фабрики | Пользователь | Открыть новый чат | Project `factory-template` -> New chat | Новый чат открыт внутри factory-template Project | Видно имя Project | GF-010 |
-| GF-010 | [ ] | Новый чат factory-template Project | Пользователь | Ввести trigger command | `новый проект` | ChatGPT начинает scenario-pack опрос | Ответ с вопросами | GF-020 |
-| GF-020 | [ ] | Новый чат factory-template Project | Пользователь | Пройти опрос | Ответить: название, идея, тип, readiness, contour, blockers | Опрос завершен | Ответы в чате | GF-030 |
+| GF-010 | [ ] | Новый чат factory-template Project | Пользователь | Ввести trigger command | `новый проект` | ChatGPT начинает default-decision intake | Вопрос выбора режима | GF-015 |
+| GF-015 | [ ] | Новый чат factory-template Project | Пользователь | Выбрать default decision mode | global-defaults / confirm-each-default / manual | Default decision mode selected | `default_decision_mode` зафиксирован | GF-020 |
+| GF-020 | [ ] | Новый чат factory-template Project | Пользователь | Пройти recommendation-first опрос | Defaults accepted or overridden; custom overrides captured | Опрос завершен | Accepted defaults, overridden defaults, unresolved decisions | GF-030 |
 | GF-030 | [ ] | Factory ChatGPT Project / runbook | Пользователь + ChatGPT Project | Проверить readiness checklist | Сверить Codex/VPS/SSH/GitHub readiness | Ready или возврат в setup runbook | Readiness state | GF-040 |
-| GF-040 | [ ] | Factory ChatGPT Project | ChatGPT Project | Сформировать стартовый Codex handoff | One-block handoff после опроса | Handoff содержит project data, readiness, contour, boundary | Handoff block | GF-050 |
+| GF-040 | [ ] | Factory ChatGPT Project | ChatGPT Project | Сформировать стартовый Codex handoff | One-block handoff includes accepted defaults and overrides | Handoff содержит project data, readiness, contour, boundary, accepted defaults and overrides | Handoff block | GF-050 |
 | GF-050 | [ ] | Remote Codex chat/window | Пользователь | Вставить handoff в Codex | Новый Codex chat/window -> paste one block | Codex выводит handoff receipt | Handoff receipt | GF-060 |
 | GF-060 | [ ] | Remote Codex chat/window | Codex | Выполнить project automation | Codex создает repo/root/core/verify/sync | Automation green или blocker | Repo URL, verify, sync | GF-070 |
 | GF-070 | [ ] | Remote Codex chat/window | Codex | Вернуть repo-first instruction и UI-инструкцию | Финальный closeout Codex | Готовая instruction получена; Codex готовит repo-first instruction для боевого ChatGPT Project. Пользователь создает ChatGPT Project в UI и вставляет готовый текст. | Instruction block + UI steps | GF-080 |

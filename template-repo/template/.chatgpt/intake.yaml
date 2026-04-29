@@ -17,3 +17,18 @@ request:
 status:
   # phase — текущая фаза intake
   phase: "intake"
+default_decisions:
+  # default_decision_mode — режим recommendation-first опроса:
+  # global-defaults | confirm-each-default | manual
+  default_decision_mode: ""
+  # accepted_defaults — принятые рекомендуемые решения
+  accepted_defaults: []
+  # overridden_defaults — решения, где пользователь указал свой вариант
+  overridden_defaults: []
+  # default_source_basis — основания рекомендаций:
+  # repo-policy | official-docs | best-practice | project-scale | user-override
+  default_source_basis: []
+  # uncertainty_notes — где recommendation требует later review или fresh check
+  uncertainty_notes: []
+  # decisions_requiring_user_confirmation — только реальные внешние/рискованные решения
+  decisions_requiring_user_confirmation: []

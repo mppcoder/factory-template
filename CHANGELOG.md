@@ -2,6 +2,9 @@
 
 ## [Unreleased]
 ### Добавлено
+- Defect report `reports/bugs/2026-04-29-beginner-intake-missing-default-decisions.md` для beginner UX gap, где intake/questionnaire задавал expert-only blank questions вместо recommendation-first defaults.
+- Default-decision layer для intake/questionnaire flows: `global-defaults`, `confirm-each-default` и `manual`, accepted/overridden defaults, default source basis, uncertainty notes и explicit confirmation для risky/paid/destructive/security/privacy/legal/secret decisions.
+- Validator coverage в `validate-runbook-packages.py` и lifecycle dashboard validator для `default_decision_mode`, accepted/overridden defaults, unresolved decisions, override path и запрета forced/risky defaults.
 - Нормализованное поле `handoff_shape` для выбора между `single-agent-handoff` и `parent-orchestration-handoff`, включая hard triggers, soft scoring и запрет ложного parent/default выбора.
 - Shape-aware validator coverage для handoff UX: positive fixtures для single-agent и parent orchestration, negative fixtures для missing shape и очевидно неверного выбора shape.
 - Defect/factory feedback для drift, где beginner UX validator ошибочно требовал parent orchestration markers для любого handoff.
@@ -49,6 +52,9 @@
 - `docs/brownfield-to-greenfield-transition.md` описывает without-repo и with-repo transition paths, conversion gates и done rule.
 
 ### Изменено
+- Greenfield intake теперь идет как `новый проект` -> выбор default-decision mode -> recommendation-first опрос -> generated Codex handoff, где handoff содержит accepted defaults, overrides и unresolved decisions/blockers.
+- Brownfield with repo / without repo packages теперь применяют default-decision layer для canonical root, no-overwrite, evidence-first audit, `_incoming` и reconstruction-inside-target-root defaults.
+- Lifecycle dashboard `runbook_packages` показывает default decision mode, defaults/overrides/unresolved counters, next decision и readiness to generate handoff.
 - Scenario-pack, routing contract, route explanation и VPS Remote SSH orchestration runbook теперь явно фиксируют, что `single-agent-handoff` является default для цельных задач, а parent orchestration нужен только для больших/multi-agent задач.
 - Runbook packages теперь требуют фиксировать Ubuntu/VPS image release, later package update state, `unattended-upgrades`, package sources, Docker/Compose, Node/Python, GitHub Actions, base images/tags/digests, lockfiles и critical runtime dependencies без auto-upgrade.
 - Mode parity и project presets теперь считают software update governance core capability для всех generated greenfield/brownfield projects.

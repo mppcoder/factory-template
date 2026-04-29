@@ -5,7 +5,11 @@ Package layer должен содержать `USER-ONLY SETUP`, `CODEX-AUTOMATI
 User readiness до takeover:
 
 - existing repo URL и target root зафиксированы;
+- default decision mode selected;
+- defaults accepted or overridden: keep existing repo as canonical root, do not overwrite product-owned code, evidence-first audit before remediation;
+- custom overrides captured;
 - GitHub access/approval boundary известен;
+- risky migration/protected branch/security decisions требуют explicit user confirmation и не автопринимаются;
 - remote Codex context открыт;
 - Codex может выполнить remote shell/repo check.
 

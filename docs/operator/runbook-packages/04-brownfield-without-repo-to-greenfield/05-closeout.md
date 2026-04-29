@@ -3,6 +3,7 @@
 ## Критерии завершения
 
 - Brownfield without repo не остался финальным состоянием.
+- Default-decision state сохранен: mode selected, defaults accepted or overridden, overrides captured, secret/private/destructive confirmations explicit.
 - Canonical repo существует внутри target project root.
 - With-repo adoption/conversion выполнен или documented blocker создан.
 - Active project preset: `greenfield-product`.

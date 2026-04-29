@@ -3,6 +3,7 @@
 ## Критерии завершения
 
 - Brownfield path не оставлен финальным состоянием.
+- Default-decision state сохранен: mode selected, defaults accepted or overridden, overrides captured, risky/protected/security confirmations explicit.
 - Conversion выполнена в `greenfield-product` / `greenfield-converted` или есть explicit documented blocker.
 - `brownfield/` сохранен как historical evidence.
 - Transitional labels, temporary plans и adoption notes не путаются с active greenfield root.

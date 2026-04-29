@@ -2,6 +2,11 @@
 
 ## Не выпущено - runbook package layer
 
+- Intake UX стал recommendation-first: после команды `новый проект` пользователь выбирает `default_decision_mode`, затем ChatGPT Project предлагает safe defaults, объясняет их и дает override path.
+- Generated intake/handoff state теперь должен фиксировать `default_decision_mode`, accepted defaults, overrides, default source basis, uncertainty notes и decisions requiring explicit confirmation.
+- Greenfield path теперь явно выглядит так: `новый проект` -> выбор default-decision mode -> recommendation-first опрос -> generated Codex handoff.
+- Brownfield packages получили аналогичный default-decision layer: keep existing repo/no overwrite/evidence-first audit для with-repo и `_incoming` plus reconstruction inside target root для without-repo.
+- Validators блокируют отсутствие default-decision state, forced defaults без override path и silent default для risky/paid/destructive/security/privacy/legal/secret decisions.
 - Runbook packages теперь переписаны как beginner zero-to-Codex-ready flow: user-only setup заканчивается remote Codex takeover, а install/clone/bootstrap/verify/dashboard/sync выполняет Codex.
 - `factory-template` user-runbook получил copy-paste шаги `FT-000`..`FT-180`: ChatGPT, GitHub, VS Code, Codex app/CLI, Timeweb VPS Ubuntu 24.04, SSH key/config, `ssh factory-vps`, два Codex contours, `FT-170` one-block handoff takeover и `FT-180` диагностику.
 - Codex-runbook теперь явно автоматизирует VPS preflight, system packages, Node/npm/Codex CLI, GitHub CLI, `/projects/factory-template`, clone `mppcoder/factory-template`, targeted/quick verify, dashboard update и verified sync.

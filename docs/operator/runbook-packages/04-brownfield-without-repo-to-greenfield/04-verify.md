@@ -5,6 +5,10 @@ Package layer должен содержать `USER-ONLY SETUP`, `CODEX-AUTOMATI
 User readiness до takeover:
 
 - target root и `_incoming` определены;
+- default decision mode selected;
+- defaults accepted or overridden: `/projects/<target-slug>/_incoming`, reconstructed/intermediate repos inside target root, evidence inventory -> reconstruction -> with-repo adoption -> conversion;
+- custom overrides captured;
+- secret/private/destructive decisions требуют explicit user confirmation и не автопринимаются;
 - incoming materials загружены или blocker documented;
 - remote Codex context открыт в `/projects/<project-slug>`;
 - Codex может выполнить remote root check.

@@ -27,3 +27,7 @@
 ## Динамические поля задачи
 <!-- Task-specific payload: выбранный profile/model/reasoning, artifacts_to_update, blockers, external actions. -->
 -
+
+## Решения по умолчанию
+<!-- Для intake/handoff задач: default_decision_mode, accepted_defaults, overridden_defaults, default_source_basis, uncertainty_notes, decisions_requiring_user_confirmation. -->
+-

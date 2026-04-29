@@ -29,6 +29,13 @@
 - `USER-ONLY SETUP`: пользователь делает внешние действия: аккаунты, GitHub connector, VPS, SSH key, Remote SSH, Codex sign in, approvals и secrets.
 - `CODEX-AUTOMATION`: после remote Codex takeover Codex сам ставит packages, clone-ит repo, запускает bootstrap/verify, обновляет dashboard и делает verified sync при доступности.
 
+Intake/questionnaire в package layer должен быть recommendation-first:
+
+- сначала выбирается `default_decision_mode`;
+- safe defaults объясняются и могут быть заменены;
+- accepted defaults и overrides фиксируются в handoff/intake state;
+- risky, paid, destructive, security, privacy, legal и secret-related decisions требуют explicit user confirmation.
+
 Основные Codex contours:
 
 - `codex-app-remote-ssh`;

@@ -4,7 +4,7 @@
 
 | ID | Статус [ ] | Окно | Кто делает | Действие | Команда / UI path | Ожидаемый результат | Evidence | Следующий шаг |
 |---|---|---|---|---|---|---|---|---|
-| FT-000 | [ ] | Windows PC / Browser | Пользователь | Зафиксировать старт: есть ПК, браузер и интернет | `Старт: есть Windows PC, браузер и интернет.` | Понятна граница user setup / Codex automation | PowerShell и браузер открываются | FT-010 |
+| FT-000 | [ ] | Windows PC / Browser | Пользователь | Зафиксировать старт и setup defaults | `Старт: есть Windows PC, браузер и интернет.`; defaults accepted or overridden | Понятна граница user setup / Codex automation и default decisions | PowerShell, браузер, default decision state | FT-010 |
 | FT-010 | [ ] | Browser ChatGPT | Пользователь | Проверить ChatGPT plan с Codex access | ChatGPT -> account menu -> Settings / Plan | Codex access/sign in доступен | Plan status без секретов | FT-020 |
 | FT-020 | [ ] | Browser GitHub | Пользователь | Создать/проверить GitHub account | Открыть `https://github.com/mppcoder/factory-template` | Repo page доступна | `<GITHUB_USER>` известен | FT-030 |
 | FT-030 | [ ] | Browser ChatGPT / GitHub OAuth | Пользователь | Подключить GitHub к ChatGPT Project/connector | ChatGPT -> Settings -> Apps/Connectors -> GitHub -> Connect | ChatGPT видит `repo:mppcoder/factory-template` | Connector connected | FT-040 |

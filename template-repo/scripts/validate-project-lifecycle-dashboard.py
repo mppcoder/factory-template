@@ -99,6 +99,20 @@ RUNBOOK_PACKAGE_IDS = {
     "03-brownfield-with-repo-to-greenfield",
     "04-brownfield-without-repo-to-greenfield",
 }
+DEFAULT_DECISION_MODES = {
+    "not_selected",
+    "global-defaults",
+    "confirm-each-default",
+    "manual",
+}
+RUNBOOK_DEFAULT_DECISION_FIELDS = [
+    "default_decision_mode",
+    "defaults_count",
+    "overrides_count",
+    "unresolved_decisions_count",
+    "next_decision",
+    "readiness_to_generate_handoff",
+]
 PROJECT_OWNER_BOUNDARIES = {
     "template-owned-generated-project-artifact",
     "factory-template-root",
@@ -644,6 +658,18 @@ def validate_dashboard(data: dict[str, Any]) -> list[str]:
                 for field in ["path", "current_phase", "current_step", "active_contour", "checklist_path", "next_action", "owner_boundary"]:
                     if not str(package.get(field) or "").strip():
                         errors.append(f"runbook_packages[{package_id or index}].{field} обязателен")
+                for field in RUNBOOK_DEFAULT_DECISION_FIELDS:
+                    if field not in package:
+                        errors.append(f"runbook_packages[{package_id or index}].{field} обязателен")
+                if str(package.get("default_decision_mode") or "") not in DEFAULT_DECISION_MODES:
+                    errors.append(f"runbook_packages[{package_id or index}].default_decision_mode неизвестен")
+                for int_field in ["defaults_count", "overrides_count", "unresolved_decisions_count"]:
+                    if int_field in package and not isinstance(package.get(int_field), int):
+                        errors.append(f"runbook_packages[{package_id or index}].{int_field} должен быть integer")
+                if "readiness_to_generate_handoff" in package and not isinstance(package.get("readiness_to_generate_handoff"), bool):
+                    errors.append(f"runbook_packages[{package_id or index}].readiness_to_generate_handoff должен быть boolean")
+                if "next_decision" in package and not str(package.get("next_decision") or "").strip():
+                    errors.append(f"runbook_packages[{package_id or index}].next_decision обязателен")
                 if package_id == "02-greenfield-product":
                     for field in [
                         "intake_channel",

@@ -147,6 +147,9 @@
 - greenfield-product package теперь проводит строгую external boundary: пользователь выбирает название, создает ChatGPT Project и вставляет подготовленную Codex repo-first инструкцию; GitHub repo/origin/initial push/project root/wizard/verify/sync принадлежат Codex automation при доступном write path
 - greenfield-product package теперь стартует через factory-template ChatGPT Project intake: новый чат -> `новый проект` -> guided questionnaire -> readiness check -> generated Codex handoff; Codex не является первым каналом постановки задачи для новичка
 - greenfield-product package теперь явно запрещает считать Codex исполнителем ChatGPT Project UI: Codex готовит repo-first instruction и пошаговую UI-инструкцию, пользователь сам создает боевой ChatGPT Project, открывает Project settings/instructions, вставляет готовый текст и сохраняет настройки
+- intake/questionnaire UX теперь recommendation-first: `новый проект` -> выбор `default_decision_mode` -> safe defaults with explanation and override path -> generated Codex handoff с accepted defaults, overrides, uncertainty notes и unresolved decisions/blockers
+- default-decision layer распространяется на greenfield, brownfield with repo, brownfield without repo и factory-template setup; risky/paid/destructive/security/privacy/legal/secret decisions требуют explicit confirmation и не автопринимаются
+- lifecycle dashboard `runbook_packages` теперь показывает `default_decision_mode`, defaults/overrides/unresolved counters, next decision и readiness to generate handoff
 
 ## Программа 2.5 (release truth)
 - release truth source: `docs/releases/release-scorecard.yaml`

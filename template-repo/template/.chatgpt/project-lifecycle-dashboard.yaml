@@ -121,6 +121,12 @@ runbook_packages:
     path: "docs/operator/runbook-packages/01-factory-template"
     current_phase: execution
     current_step: FT-000
+    default_decision_mode: not_selected
+    defaults_count: 0
+    overrides_count: 0
+    unresolved_decisions_count: 0
+    next_decision: "Подтвердить setup defaults: Timeweb Ubuntu 24.04, ed25519 SSH, /projects/factory-template, VS Code Remote SSH + Codex extension."
+    readiness_to_generate_handoff: false
     active_contour: not_selected
     takeover_ready: false
     checklist_path: "docs/operator/runbook-packages/01-factory-template/03-checklist.md"
@@ -139,6 +145,12 @@ runbook_packages:
     current_step: GF-010
     intake_channel: factory-template-chatgpt-project
     trigger_command: "новый проект"
+    default_decision_mode: not_selected
+    defaults_count: 0
+    overrides_count: 0
+    unresolved_decisions_count: 0
+    next_decision: "Выбрать default-decision mode после команды `новый проект`."
+    readiness_to_generate_handoff: false
     handoff_ready: false
     codex_takeover_ready: false
     battle_chatgpt_project_created: false
@@ -155,13 +167,19 @@ runbook_packages:
       - verification
       - closeout
     blockers: []
-    next_action: "Для нового боевого проекта стартовать в ChatGPT Project шаблона фабрики: новый чат -> `новый проект` -> опрос -> generated Codex handoff."
+    next_action: "Для нового боевого проекта стартовать в ChatGPT Project шаблона фабрики: новый чат -> `новый проект` -> выбор default-decision mode -> recommendation-first опрос -> generated Codex handoff."
     owner_boundary: internal-repo-follow-up
   - id: 03-brownfield-with-repo-to-greenfield
     title: "Brownfield with repo conversion package"
     path: "docs/operator/runbook-packages/03-brownfield-with-repo-to-greenfield"
     current_phase: adoption
     current_step: BWR-000
+    default_decision_mode: not_selected
+    defaults_count: 0
+    overrides_count: 0
+    unresolved_decisions_count: 0
+    next_decision: "Подтвердить или переопределить defaults: keep existing repo, no overwrite, evidence-first audit."
+    readiness_to_generate_handoff: false
     active_contour: not_selected
     takeover_ready: false
     checklist_path: "docs/operator/runbook-packages/03-brownfield-with-repo-to-greenfield/03-checklist.md"
@@ -178,6 +196,12 @@ runbook_packages:
     path: "docs/operator/runbook-packages/04-brownfield-without-repo-to-greenfield"
     current_phase: reconstruction
     current_step: BWO-000
+    default_decision_mode: not_selected
+    defaults_count: 0
+    overrides_count: 0
+    unresolved_decisions_count: 0
+    next_decision: "Подтвердить или переопределить defaults: _incoming inside target root, reconstruction inside target root."
+    readiness_to_generate_handoff: false
     active_contour: not_selected
     takeover_ready: false
     checklist_path: "docs/operator/runbook-packages/04-brownfield-without-repo-to-greenfield/03-checklist.md"

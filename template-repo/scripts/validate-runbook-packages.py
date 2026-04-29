@@ -216,6 +216,7 @@ GREENFIELD_REQUIRED_USER_TOKENS = [
     "GF-000",
     "GF-005",
     "GF-010",
+    "GF-015",
     "GF-020",
     "GF-030",
     "GF-040",
@@ -228,6 +229,8 @@ GREENFIELD_REQUIRED_USER_TOKENS = [
     "ChatGPT Project шаблона фабрики",
     "новый проект",
     "опрос",
+    "default-decision",
+    "recommendation-first",
     "стартовый Codex handoff",
     "template-repo/scenario-pack/00-master-router.md",
     "Readiness checklist",
@@ -249,6 +252,7 @@ GREENFIELD_REQUIRED_CHECKLIST_IDS = [
     "GF-000",
     "GF-005",
     "GF-010",
+    "GF-015",
     "GF-020",
     "GF-030",
     "GF-040",
@@ -262,6 +266,9 @@ GREENFIELD_REQUIRED_CHECKLIST_IDS = [
 GREENFIELD_REQUIRED_CHECKLIST_TOKENS = [
     "ChatGPT Project шаблона фабрики",
     "`новый проект`",
+    "Default decision mode selected",
+    "Defaults accepted or overridden",
+    "custom overrides captured",
     "Опрос завершен",
     "Readiness state",
     "Handoff block",
@@ -292,6 +299,12 @@ GREENFIELD_REQUIRED_CODEX_TOKENS = [
 GREENFIELD_DASHBOARD_REQUIRED_FIELDS = [
     "intake_channel",
     "trigger_command",
+    "default_decision_mode",
+    "defaults_count",
+    "overrides_count",
+    "unresolved_decisions_count",
+    "next_decision",
+    "readiness_to_generate_handoff",
     "handoff_ready",
     "codex_takeover_ready",
     "battle_chatgpt_project_created",
@@ -299,6 +312,14 @@ GREENFIELD_DASHBOARD_REQUIRED_FIELDS = [
     "chatgpt_project_ui_owner",
     "repo_first_instruction_prepared_by",
     "repo_first_instruction_pasted_by",
+]
+DEFAULT_DECISION_DASHBOARD_FIELDS = [
+    "default_decision_mode",
+    "defaults_count",
+    "overrides_count",
+    "unresolved_decisions_count",
+    "next_decision",
+    "readiness_to_generate_handoff",
 ]
 SOFTWARE_UPDATE_GOVERNANCE_TOKENS = [
     "software-update-governance",
@@ -319,6 +340,25 @@ SOFTWARE_UPDATE_GOVERNANCE_TOKENS = [
     "auto-install без approval",
     "migration/upgrade project",
 ]
+DEFAULT_DECISION_CONTRACT_TOKENS = [
+    "Beginner questionnaires must be recommendation-first",
+    "Blank expert-only questions are forbidden if safe defaults exist",
+    "Every default must be explainable and overrideable",
+    "global-defaults mode",
+    "per-question-default mode",
+    "Risky, paid, destructive, security, privacy, legal, secret-related decisions still require explicit user confirmation",
+]
+DEFAULT_DECISION_STATE_TOKENS = [
+    "default_decision_mode",
+    "accepted_defaults",
+    "overridden_defaults",
+    "default_source_basis",
+    "uncertainty_notes",
+    "decisions_requiring_user_confirmation",
+]
+FORCED_DEFAULT_RE = re.compile(
+    r"(?i)(default|по умолчанию|recommended default|рекомендац).{0,160}(forced|без override|нельзя изменить|always|обязательно принимается|автоматически принимается)"
+)
 
 
 def read(path: Path) -> str:
@@ -372,6 +412,12 @@ def validate_package_files(root: Path, errors: list[str]) -> None:
     ]:
         if token not in contract:
             errors.append(f"package contract не содержит обязательный маркер `{token}`")
+    for token in DEFAULT_DECISION_CONTRACT_TOKENS:
+        if token not in contract:
+            errors.append(f"package contract не содержит default-decision contract marker `{token}`")
+    for token in DEFAULT_DECISION_STATE_TOKENS:
+        if token not in contract:
+            errors.append(f"package contract не содержит default-decision state marker `{token}`")
 
     for package, spec in PACKAGES.items():
         package_dir = base / package
@@ -458,6 +504,53 @@ def validate_checklist_mirror(user_path: Path, checklist_path: Path, user_text: 
             errors.append(f"`{checklist_path}` не содержит колонку `{column}`")
 
 
+def validate_default_decision_layer(package: str, package_dir: Path, combined: str, errors: list[str]) -> None:
+    for token in DEFAULT_DECISION_STATE_TOKENS:
+        if token not in combined:
+            errors.append(f"`{package}` не содержит default-decision state token `{token}`")
+    for token in ["recommendation-first", "defaults accepted or overridden"]:
+        if token not in combined.lower():
+            errors.append(f"`{package}` не содержит default-decision UX marker `{token}`")
+    if FORCED_DEFAULT_RE.search(combined) and not re.search(r"(?i)(override|overrideable|переопредел|свой вариант|можно заменить)", combined):
+        errors.append(f"`{package}` содержит forced default wording без override path")
+    risky_default = re.search(
+        r"(?i)(risky|paid|destructive|security|privacy|legal|secret).{0,120}(silently default|auto-accept|auto-accepted|автопринима|silently)",
+        combined,
+    )
+    if risky_default:
+        window = combined[max(0, risky_default.start() - 40) : risky_default.end() + 40].lower()
+        if not any(negation in window for negation in ["не ", "not ", "нельзя", "forbidden", "запрещ"]):
+            errors.append(f"`{package}` может silent-default risky/paid/destructive/security/privacy/legal/secret decision")
+
+    if package == "02-greenfield-product":
+        for token in [
+            "Рекомендация по умолчанию",
+            "Enter / \"по умолчанию\"",
+            "GitHub repo visibility default",
+            "VPS root path default",
+            "verification mode default",
+            "no hidden forced defaults for risky actions",
+        ]:
+            if token not in combined:
+                errors.append(f"`{package}` не содержит greenfield default-decision marker `{token}`")
+    if package == "03-brownfield-with-repo-to-greenfield":
+        for token in [
+            "keep existing repo as canonical root",
+            "do not overwrite product-owned code",
+            "evidence-first audit before remediation",
+        ]:
+            if token not in combined:
+                errors.append(f"`{package}` не содержит brownfield-with-repo default marker `{token}`")
+    if package == "04-brownfield-without-repo-to-greenfield":
+        for token in [
+            "/projects/<target-slug>/_incoming",
+            "reconstructed/intermediate repos live only inside target project root",
+            "evidence inventory",
+        ]:
+            if token not in combined:
+                errors.append(f"`{package}` не содержит brownfield-without-repo default marker `{token}`")
+
+
 def validate_beginner_flow(root: Path, errors: list[str]) -> None:
     base = root / PACKAGE_ROOT
     for package in PACKAGES:
@@ -469,6 +562,8 @@ def validate_beginner_flow(root: Path, errors: list[str]) -> None:
         user_text = read(user_path)
         codex_text = read(codex_path)
         checklist_text = read(checklist_path) if checklist_path.exists() else ""
+        package_combined = "\n".join([user_text, codex_text, checklist_text])
+        validate_default_decision_layer(package, base / package, package_combined, errors)
         for marker in ["USER-ONLY SETUP", "CODEX-AUTOMATION"]:
             if marker not in user_text:
                 errors.append(f"`{user_path}` не содержит beginner boundary `{marker}`")
@@ -603,12 +698,41 @@ def validate_dashboard(root: Path, errors: list[str]) -> None:
         ]:
             if key not in item:
                 errors.append(f"runbook_packages[{package_id or index}] не содержит `{key}`")
+        for key in DEFAULT_DECISION_DASHBOARD_FIELDS:
+            if key not in item:
+                errors.append(f"runbook_packages[{package_id or index}] не содержит default-decision field `{key}`")
+        if "default_decision_mode" in item and str(item.get("default_decision_mode") or "") not in {
+            "not_selected",
+            "global-defaults",
+            "confirm-each-default",
+            "manual",
+        }:
+            errors.append(f"runbook package `{package_id}` содержит неизвестный default_decision_mode")
+        for int_field in ["defaults_count", "overrides_count", "unresolved_decisions_count"]:
+            if int_field in item and not isinstance(item.get(int_field), int):
+                errors.append(f"runbook package `{package_id}` `{int_field}` должен быть integer")
+        if "readiness_to_generate_handoff" in item and not isinstance(item.get("readiness_to_generate_handoff"), bool):
+            errors.append(f"runbook package `{package_id}` readiness_to_generate_handoff должен быть boolean")
         if package_id and package_id not in PACKAGES:
             errors.append(f"dashboard содержит неизвестный runbook package `{package_id}`")
         if package_id == "02-greenfield-product":
             for field in GREENFIELD_DASHBOARD_REQUIRED_FIELDS:
                 if field not in item:
                     errors.append(f"dashboard runbook package `{package_id}` не содержит `{field}`")
+            if str(item.get("default_decision_mode") or "") not in {
+                "not_selected",
+                "global-defaults",
+                "confirm-each-default",
+                "manual",
+            }:
+                errors.append("greenfield dashboard default_decision_mode должен быть not_selected/global-defaults/confirm-each-default/manual")
+            for int_field in ["defaults_count", "overrides_count", "unresolved_decisions_count"]:
+                if not isinstance(item.get(int_field), int):
+                    errors.append(f"greenfield dashboard `{int_field}` должен быть integer")
+            if not str(item.get("next_decision") or "").strip():
+                errors.append("greenfield dashboard next_decision обязателен")
+            if not isinstance(item.get("readiness_to_generate_handoff"), bool):
+                errors.append("greenfield dashboard readiness_to_generate_handoff должен быть boolean")
             if str(item.get("intake_channel") or "") != "factory-template-chatgpt-project":
                 errors.append("greenfield dashboard intake_channel должен быть factory-template-chatgpt-project")
             if str(item.get("trigger_command") or "") != "новый проект":

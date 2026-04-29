@@ -9,6 +9,22 @@
 Пользователь делает только внешние действия: аккаунты, подписки, GitHub/ChatGPT/Codex sign in, Timeweb Cloud, VPS, SSH key, SSH config и выбор рабочего Codex contour.
 Для Ubuntu/VPS пользователь выбирает исходный OS image, но обновление ОС, runtime stack или критичных зависимостей не выполняется автоматически: Codex после takeover фиксирует baseline, проверяет `unattended-upgrades`, готовит watchlist/readiness и запрашивает approval только через отдельный upgrade proposal.
 
+Default-decision layer для setup использует recommendation-first режим:
+
+- `default_decision_mode`: `global-defaults`, `confirm-each-default` или `manual`;
+- `accepted_defaults`: список принятых setup defaults;
+- `overridden_defaults`: список замененных setup defaults;
+- `default_source_basis`: `repo-policy`, `official-docs`, `best-practice`, `project-scale` или `user-override`;
+- `uncertainty_notes`: где нужна later review или fresh check;
+- `decisions_requiring_user_confirmation`: платные, security, secret-related или destructive confirmations.
+- Timeweb Ubuntu 24.04 VPS как recommended default для beginner path;
+- SSH key `ed25519` как recommended default;
+- project root `/projects/factory-template` как repo-policy default;
+- `vscode-remote-ssh-codex-extension` как beginner-friendly default contour;
+- `codex-app-remote-ssh` как alternate/fallback, если уже настроен.
+
+Каждый default можно заменить своим вариантом; defaults accepted or overridden должны быть зафиксированы перед takeover. Платные, security, secret-related и destructive decisions требуют explicit user confirmation и не автопринимаются.
+
 ## Автоматизация Codex
 
 Маркер слоя: `CODEX-AUTOMATION`.

@@ -14,6 +14,8 @@ Package layer должен содержать `USER-ONLY SETUP`, `CODEX-AUTOMATI
 
 - ChatGPT Project сначала прочитал `template-repo/scenario-pack/00-master-router.md`;
 - handoff создан после опроса, а не из raw Codex prompt;
+- default decision mode selected до основного опроса: `global-defaults`, `confirm-each-default` или `manual`;
+- опрос recommendation-first: safe defaults explainable and overrideable, без blank expert-only questions там, где default должен существовать;
 - опрос собрал:
   - project name;
   - slug proposal или правило slug generation;
@@ -22,6 +24,12 @@ Package layer должен содержать `USER-ONLY SETUP`, `CODEX-AUTOMATI
   - readiness state;
   - выбранный Codex contour;
   - blockers.
+- handoff содержит:
+  - `default_decision_mode`;
+  - accepted defaults;
+  - overrides;
+  - unresolved decisions/blockers;
+  - no hidden forced defaults for risky actions.
 - handoff содержит boundary: GitHub repo/root/verify/sync делает Codex;
 - пользовательские external actions ограничены factory ChatGPT intake, вставкой handoff в Codex, созданием battle ChatGPT Project, открытием Project settings/instructions, вставкой готовой instruction и сохранением настроек.
 

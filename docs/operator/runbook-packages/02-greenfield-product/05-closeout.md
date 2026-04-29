@@ -4,7 +4,8 @@
 
 - Active profile: `greenfield-product`.
 - Active mode: `greenfield`.
-- Старт проекта прошел через ChatGPT Project шаблона фабрики: новый чат -> `новый проект` -> scenario-pack опрос -> generated Codex handoff.
+- Старт проекта прошел через ChatGPT Project шаблона фабрики: новый чат -> `новый проект` -> выбор default-decision mode -> recommendation-first опрос -> generated Codex handoff.
+- Handoff содержит `default_decision_mode`, accepted defaults, overrides, unresolved decisions/blockers и no hidden forced defaults for risky actions.
 - Codex создал и synced боевой repo или documented blocker.
 - Codex подготовил готовую repo-first instruction для ChatGPT Project боевого проекта.
 - Codex подготовил пошаговую инструкцию пользователю, куда вставить этот текст.
@@ -21,7 +22,7 @@
 
 Пользователь нужен только для:
 
-- команды `новый проект` и ответов на опрос в ChatGPT Project шаблона фабрики;
+- команды `новый проект`, выбора default-decision mode и ответов на recommendation-first опрос в ChatGPT Project шаблона фабрики;
 - вставки generated handoff в Codex;
 - создания ChatGPT Project боевого проекта в UI;
 - открытия Project settings/instructions, вставки готовой repo-first instruction и сохранения настроек;

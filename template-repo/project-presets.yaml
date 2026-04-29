@@ -76,6 +76,9 @@ project_presets:
     notes:
     - Подходит для продуктовой разработки, где ожидается реализация и последующая
       верификация.
+    - Beginner intake использует default-decision layer — `default_decision_mode`,
+      accepted/overridden defaults, source basis, uncertainty notes и explicit confirmation
+      для risky/paid/destructive/security/privacy/legal/secret decisions.
     - Core parity layer совпадает с остальными generated modes; отличия ограничены
       greenfield discovery artifacts.
     - Это steady-state preset для новых проектов и для проектов, успешно принятых
@@ -147,6 +150,8 @@ project_presets:
     - .chatgpt/conflict-report.md
     notes:
     - Начинайте с фиксации реальности и ограничений.
+    - Default-decision layer рекомендует keep existing repo as canonical root, no overwrite
+      product-owned code и evidence-first audit before remediation; overrides фиксируются явно.
     - Core parity layer совпадает с остальными generated modes; отличия ограничены
       evidence-first и modernization artifacts.
     - Это transitional adoption preset; после успешной модернизации active profile
@@ -369,6 +374,8 @@ project_presets:
     - brownfield/decision-log.md
     notes:
     - Стартуйте как hybrid до завершения evidence pack и reality-check.
+    - Default-decision layer рекомендует `_incoming` внутри target root, reconstruction
+      inside target root, evidence inventory -> reconstruction -> with-repo adoption -> conversion.
     - Переключение в codex-led допускается после brownfield-with-repo-audit цикла и фиксации safe
       zones.
     - Подходит для evidence-first запуска factory-template + brownfield shell + evidence

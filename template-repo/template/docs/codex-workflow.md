@@ -83,10 +83,19 @@ Model proposal также обязан обновлять prompt policy contour.
 
 ## Внешние boundary-действия
 Эти действия остаются за оператором:
-- создание новых GitHub repos;
+- создание новых GitHub repos только если connector/`gh` write path недоступен или repo owner/name не подтверждены; в greenfield handoff при доступном write path repo/root/origin/first push выполняет Codex;
 - подключение репозиториев и app sources в ChatGPT Projects;
 - загрузка архивов в `/projects/<project-root>/_incoming/`;
 - ввод секретов и работа с внешними UI.
+
+## Intake с решениями по умолчанию
+
+Для beginner intake используйте recommendation-first flow:
+
+1. После `новый проект` выбрать `default_decision_mode`: `global-defaults`, `confirm-each-default` или `manual`.
+2. Для каждого safe decision показать recommended default, basis и override path.
+3. В generated handoff записать `accepted_defaults`, `overridden_defaults`, `default_source_basis`, `uncertainty_notes` и `decisions_requiring_user_confirmation`.
+4. Risky, paid, destructive, security, privacy, legal и secret-related decisions требуют explicit confirmation и не автопринимаются.
 
 ## Canonical VPS layout / каноническая VPS layout
 - `/projects` содержит только project roots;

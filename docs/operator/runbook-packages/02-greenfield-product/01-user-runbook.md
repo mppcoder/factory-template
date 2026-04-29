@@ -80,34 +80,67 @@ ChatGPT UI path:
 ```
 
 - Куда вставить: В поле сообщения нового чата ChatGPT Project шаблона фабрики.
-- Ожидаемый результат: ChatGPT Project по repo-first instruction сначала читает `template-repo/scenario-pack/00-master-router.md` и начинает опрос.
+- Ожидаемый результат: ChatGPT Project по repo-first instruction сначала читает `template-repo/scenario-pack/00-master-router.md` и начинает default-decision intake.
 - Если ошибка: Если ChatGPT не начинает опрос, проверьте, что чат открыт внутри Project `factory-template`, а repo-first instruction активна.
-- Evidence: ChatGPT отвечает вопросами сценарного опроса.
+- Evidence: ChatGPT отвечает вопросом выбора default-decision mode.
+- Следующий шаг: `GF-015`.
+
+### GF-015. Выбрать режим default decisions
+
+- Окно: Новый чат в ChatGPT Project шаблона фабрики.
+- Делает: Пользователь.
+- Зачем: Чтобы новичку не приходилось принимать все решения с пустого листа, если фабрика может предложить безопасную рекомендацию.
+- Что нужно до начала: `GF-010`.
+- Где взять значения: Режим выбирает пользователь; beginner-friendly default — принять safe recommendations и спрашивать только реальные choices.
+- Команды для копирования:
+
+```text
+Использовать рекомендуемые решения по умолчанию на основе лучших доступных практик, концепции и масштаба проекта?
+
+Да, используй рекомендуемые решения по умолчанию; спрашивай меня только там, где реально нужен мой выбор.
+```
+
+- Куда вставить: Ответом в чат ChatGPT Project шаблона фабрики.
+- Ожидаемый результат: ChatGPT Project фиксирует `default_decision_mode: global-defaults`, `confirm-each-default` или `manual`.
+- Если ошибка: Если ChatGPT Project задает expert-only вопросы без recommendation/default/override path, попросите его продолжить в `per-question-default mode`.
+- Evidence: В чате зафиксирован выбранный `default_decision_mode`.
 - Следующий шаг: `GF-020`.
 
 ### GF-020. Пройти опрос ChatGPT Project
 
 - Окно: Новый чат в ChatGPT Project шаблона фабрики.
 - Делает: Пользователь.
-- Зачем: ChatGPT Project должен собрать данные до формирования Codex handoff.
-- Что нужно до начала: `GF-010`.
-- Где взять значения: Название и идею придумывает пользователь; readiness берется из factory-template runbook/checklist.
+- Зачем: ChatGPT Project должен собрать данные до формирования Codex handoff, но показывать safe defaults там, где фабрика может рекомендовать решение.
+- Что нужно до начала: `GF-015`.
+- Где взять значения: Название и идею придумывает пользователь; остальные решения ChatGPT Project предлагает recommendation-first на основе repo-policy, best-practice, project-scale и readiness из factory-template runbook/checklist.
 - Команды для копирования:
 
 ```text
-Ответить на опрос:
-- название проекта;
-- краткая идея;
-- тип проекта: новый greenfield / brownfield with repo / brownfield without repo;
-- готовность по runbook/checklist;
-- доступный Codex contour: Codex App Remote SSH или VS Code Remote SSH + Codex extension;
-- blockers: подписка, GitHub connection, VPS, SSH, Codex takeover.
+Опрос recommendation-first:
+- название проекта: пользовательское, без default кроме подсказки;
+- краткая идея: пользовательская;
+- slug/repo name default: slug из названия проекта по naming rules;
+- GitHub repo visibility default: private, если пользователь не просит public/open-source;
+- VPS root path default: /projects/<slug>;
+- starter preset default: starter/minimal production-ready baseline;
+- Codex contour default: VS Code Remote SSH + Codex extension, fallback Codex App Remote SSH если так настроено;
+- verification mode default: quick; full только для release/deploy/matrix contour;
+- ChatGPT Project instruction: Codex подготовит default text после automation;
+- blockers: подписка, GitHub connection, VPS, SSH, Codex takeover, paid/security/destructive confirmations.
+
+Формат каждого решения:
+Вопрос: Где создать репозиторий?
+Рекомендация по умолчанию: GitHub repo в аккаунте пользователя, slug из названия проекта.
+Почему: это соответствует repo-first flow фабрики и позволяет Codex создать repo/origin/first push.
+Ответ:
+- Enter / "по умолчанию" — принять рекомендацию;
+- или напишите свой вариант.
 ```
 
 - Куда вставить: Ответами в чат ChatGPT Project шаблона фабрики.
-- Ожидаемый результат: ChatGPT Project знает project name, project type, readiness state, Codex contour и blockers.
-- Если ошибка: Если есть blocker по подписке/GitHub/VPS/SSH/Codex takeover, не переходите к handoff; закройте blocker по factory-template setup runbook.
-- Evidence: В чате есть ответы на опрос.
+- Ожидаемый результат: ChatGPT Project знает project name, project type, readiness state, Codex contour, blockers, `accepted_defaults`, `overridden_defaults`, `default_source_basis`, `uncertainty_notes` и `decisions_requiring_user_confirmation`.
+- Если ошибка: Если есть blocker по подписке/GitHub/VPS/SSH/Codex takeover, не переходите к handoff; закройте blocker по factory-template setup runbook. Проверка handoff: no hidden forced defaults for risky actions.
+- Evidence: В чате есть ответы на опрос, принятые defaults и overrides.
 - Следующий шаг: `GF-030`.
 
 ### GF-030. Проверить readiness по runbook/checklist
@@ -150,6 +183,10 @@ Readiness checklist:
 - содержит project name;
 - содержит slug proposal;
 - содержит project type;
+- содержит default_decision_mode;
+- содержит accepted_defaults;
+- содержит overridden_defaults;
+- содержит uncertainty_notes и unresolved decisions/blockers;
 - содержит readiness state;
 - содержит выбранный Codex contour;
 - содержит boundary: GitHub repo/root/verify/sync делает Codex;

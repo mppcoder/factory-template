@@ -4,6 +4,9 @@
 
 Пользовательская готовность считается достаточной, если выполнены все пункты:
 
+- setup `default_decision_mode` выбран или documented as manual;
+- setup defaults accepted or overridden: Timeweb Ubuntu 24.04 VPS, SSH key ed25519, `/projects/factory-template`, VS Code Remote SSH + Codex extension или fallback Codex App Remote SSH;
+- paid/security/secret-related decisions explicitly confirmed and not auto-accepted;
 - `ssh factory-vps` в Windows PowerShell открывает prompt:
 
 ```text

@@ -145,7 +145,8 @@ factory-template/
 - `docs/operator/factory-template/`: operator/codex runbooks и boundary/completion guidance.
 - `docs/operator/runbook-packages/`: финальные пошаговые packages "с пустого ПК до Codex takeover и рабочего состояния" для factory-template, greenfield-product и двух brownfield-to-greenfield entry paths. Стартовая точка factory-template: `01-factory-template/01-user-runbook.md`, шаг `FT-000`; после `FT-170` пользовательский ранбук останавливается, а clone/setup/verify/dashboard/sync выполняет Codex-runbook.
 - Для `greenfield-product` пользователь не создает GitHub repo, не добавляет `origin`, не делает first push и не запускает launcher/verify. User-only boundary: сказать `новый проект` в ChatGPT Project шаблона фабрики, ответить на опрос, вставить generated handoff в Codex, затем создать battle ChatGPT Project, открыть Project settings/instructions, вставить готовую repo-first инструкцию, подготовленную Codex, и сохранить настройки.
-- Canonical start для нового боевого `greenfield-product`: ChatGPT Project шаблона фабрики `factory-template` -> новый чат -> команда `новый проект` -> scenario-pack guided questionnaire -> readiness check -> generated Codex handoff. Codex является executor после handoff, а не первым каналом постановки задачи для новичка.
+- Canonical start для нового боевого `greenfield-product`: ChatGPT Project шаблона фабрики `factory-template` -> новый чат -> команда `новый проект` -> выбор `default_decision_mode` -> scenario-pack recommendation-first questionnaire -> readiness check -> generated Codex handoff. Codex является executor после handoff, а не первым каналом постановки задачи для новичка.
+- Default-decision layer запрещает blank expert-only questions, если safe defaults существуют: ChatGPT Project показывает recommended default, коротко объясняет basis, фиксирует Enter/`по умолчанию` как принятие рекомендации и дает override path. Handoff/intake state содержит `default_decision_mode`, accepted defaults, overrides, source basis, uncertainty notes и decisions requiring explicit confirmation.
 - Codex не является ChatGPT Project UI actor: он готовит repo-first instruction для боевого ChatGPT Project и пошаговую инструкцию пользователю, куда вставить текст; создание Project, вставка instruction и сохранение настроек остаются ручной внешней границей пользователя.
 - `project-knowledge/factory/template-evolution/`: историческая knowledge-зона развития фабрики и release-facing meta notes; это не отдельный root workflow.
 - `factory/producer/packaging/sources/`: declarative source/export profiles.
@@ -242,8 +243,9 @@ flowchart TD
 2. Зафиксировать, что repo rules прочитаны из repo, а не из памяти.
 3. Классифицировать запрос: change, bug, audit, release-followup, direct task.
 4. Определить project profile и scenario route.
-5. Зафиксировать pipeline stage и обязательные артефакты.
-6. Отдельно определить, есть ли handoff boundary или direct self-handoff.
+5. Для intake/questionnaire выбрать `default_decision_mode`; safe defaults показывать recommendation-first, а risky/paid/destructive/security/privacy/legal/secret decisions оставлять только как explicit confirmation.
+6. Зафиксировать pipeline stage и обязательные артефакты.
+7. Отдельно определить, есть ли handoff boundary или direct self-handoff.
 
 ## 6. Workflow: scenario routing
 
