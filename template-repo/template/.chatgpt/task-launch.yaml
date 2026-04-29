@@ -4,7 +4,7 @@ launch:
   launch_unit: "new-task-launch"
   launch_source: "" # chatgpt-handoff / direct-task
   router_layer: "executable"
-  handoff_shape: "single-agent-handoff" # single-agent-handoff / parent-orchestration-handoff
+  handoff_shape: "codex-task-handoff" # neutral handoff; Codex decides actual execution_mode
   handoff_shape_reasons: []
   task_class: "" # quick / build / deep / review
   task_class_reasons: []

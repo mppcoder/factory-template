@@ -25,7 +25,11 @@ PARENT_REQUIRED_FRAGMENTS = [
 SINGLE_REQUIRED_FRAGMENTS = [
     "parent orchestration не требуется",
 ]
-ALLOWED_HANDOFF_SHAPES = {"single-agent-handoff", "parent-orchestration-handoff"}
+NEUTRAL_REQUIRED_FRAGMENTS = [
+    "Codex решает фактический режим исполнения",
+    "child/subagent count",
+]
+ALLOWED_HANDOFF_SHAPES = {"codex-task-handoff", "single-agent-handoff", "parent-orchestration-handoff"}
 PARENT_TRIGGER_PATTERNS = [
     re.compile(r"(?i)(?:2\+|two or more|две или больше|2 или больше).{0,80}(?:child|subtask|подзадач)"),
     re.compile(r"(?i)(?:different|разные).{0,80}(?:selected_profile|selected_model|reasoning|profile|model)"),
@@ -79,6 +83,10 @@ def validate_text(text: str) -> list[str]:
             if pattern.search(text):
                 errors.append("large or multi-child task must not use single-agent-handoff")
                 break
+    elif handoff_shape == "codex-task-handoff":
+        for fragment in NEUTRAL_REQUIRED_FRAGMENTS:
+            if fragment not in text:
+                errors.append(f"neutral handoff missing `{fragment}`")
     for pattern in FORBIDDEN_PATTERNS:
         match = pattern.search(text)
         if match:

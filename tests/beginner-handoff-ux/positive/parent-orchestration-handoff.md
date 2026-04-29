@@ -7,7 +7,7 @@
 CODEX HANDOFF
 
 launch_source: chatgpt-handoff
-handoff_shape: parent-orchestration-handoff
+handoff_shape: codex-task-handoff
 task_class: deep
 selected_profile: deep
 selected_model: gpt-5.5
@@ -17,8 +17,10 @@ apply_mode: manual-ui
 strict_launch_mode: optional
 selected_scenario: template-repo/scenario-pack/00-master-router.md -> template-repo/scenario-pack/15-handoff-to-codex.md
 
-Используй один цельный parent handoff block. уже открытая live session не является надежным auto-switch механизмом.
-parent plan expectations: parent Codex validates plan before child session files.
+Используй один цельный handoff block. уже открытая live session не является надежным auto-switch механизмом.
+Codex решает фактический режим исполнения после анализа task graph и в closeout указывает execution_mode и child/subagent count.
+Orchestration candidate signals: independent child subtasks, different route requirements, deferred_user_actions.
+parent plan expectations: если Codex выбирает orchestrated-child-sessions, parent Codex validates plan before child session files.
 child subtask boundaries: each child has explicit task_class/profile/model/reasoning/scenario.
 Parent plan uses user_actions_policy: defer-to-final-closeout.
 deferred_user_actions and placeholder_replacements must be listed in final parent closeout.

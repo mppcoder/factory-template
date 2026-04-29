@@ -22,7 +22,7 @@ REQUIRED_FIELDS = [
 ]
 
 
-def run_case(root: Path, task_text: str, expected_class: str, expected_shape: str = "single-agent-handoff") -> list[str]:
+def run_case(root: Path, task_text: str, expected_class: str, expected_shape: str = "codex-task-handoff") -> list[str]:
     proc = subprocess.run(
         [
             "python3",
@@ -62,14 +62,14 @@ def main() -> int:
     args = parser.parse_args()
     root = Path(args.root).resolve()
     cases = [
-        ("Проведи deep audit одного routing файла, задача цельная", "deep", "single-agent-handoff"),
-        ("Реализуй build remediation validator", "build", "single-agent-handoff"),
-        ("Запусти review verification pass", "review", "single-agent-handoff"),
-        ("Найди docs inventory для quick update", "quick", "single-agent-handoff"),
+        ("Проведи deep audit одного routing файла, задача цельная", "deep", "codex-task-handoff"),
+        ("Реализуй build remediation validator", "build", "codex-task-handoff"),
+        ("Запусти review verification pass", "review", "codex-task-handoff"),
+        ("Найди docs inventory для quick update", "quick", "codex-task-handoff"),
         (
             "Нужен parent orchestration: child subtasks для audit/deep, implementation/build и validators/tests",
             "review",
-            "parent-orchestration-handoff",
+            "codex-task-handoff",
         ),
     ]
     errors: list[str] = []

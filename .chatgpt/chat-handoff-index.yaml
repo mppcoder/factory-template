@@ -1,6 +1,6 @@
 schema: chat-handoff-index/v1
 project_code: FT
-next_chat_number: 6
+next_chat_number: 7
 title_policy:
   canonical_format: <PROJECT_CODE>-CH-<NNNN> <task-slug>
   include_status_in_title: false
@@ -136,5 +136,29 @@ items:
   - python3 template-repo/scripts/validate-codex-routing.py .
   - bash template-repo/scripts/verify-all.sh quick
   - bash template-repo/scripts/verify-all.sh
-  next_action: No further implementation action; stable self-handoff identity is
-    verified in repo state.
+  next_action: No further implementation action; stable self-handoff identity is verified
+    in repo state.
+- chat_id: FT-CH-0006
+  chat_number: 6
+  chat_title: FT-CH-0006 handoff-execution-mode-ownership
+  task_slug: handoff-execution-mode-ownership
+  kind: self_handoff
+  state: verified
+  created_utc: '2026-04-29T12:56:50Z'
+  updated_utc: '2026-04-29T13:05:30Z'
+  source_type: direct-task
+  handoff_group: handoff-execution-mode-ownership
+  handoff_revision: 1
+  handoff_register_item_id: HIR-005
+  status_chain:
+  - codex_self_handoff
+  - codex_accepted
+  - codex_completed
+  evidence:
+  - 'Allocated for current direct-task remediation: make handoff neutral and let Codex
+    decide actual execution mode.'
+  - 'Implemented neutral handoff default and runtime execution_mode ownership in
+    router, scenarios, orchestration validators and fixtures.'
+  - bash template-repo/scripts/verify-all.sh quick
+  - bash template-repo/scripts/verify-all.sh
+  next_action: No further implementation action; neutral handoff contract is verified.

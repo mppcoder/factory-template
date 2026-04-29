@@ -21,7 +21,7 @@ expected_trigger:
           must_contain:
             - "Язык ответа Codex: русский"
             - "один цельный"
-            - "handoff_shape: parent-orchestration-handoff"
+            - "handoff_shape: codex-task-handoff"
     - id: deferred-actions
       prompt: "Большой handoff содержит future external values."
       expected: "User actions are deferred to final parent closeout."

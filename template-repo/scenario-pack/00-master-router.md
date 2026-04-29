@@ -25,17 +25,24 @@
 Отдельно фиксируй, что "новый чат + вставка handoff" и "new task launch через executable launcher" — не одно и то же.
 Нельзя выдавать manual UI apply за авто-переключение profile/model/reasoning внутри уже открытой live session.
 
-## Gate выбора вида handoff / handoff_shape selection
+## Gate handoff и runtime execution mode
 
-Перед выдачей handoff обязательно выбери и зафиксируй нормализованное поле `handoff_shape`.
+Перед выдачей handoff обязательно зафиксируй нормализованное поле `handoff_shape`.
 
-Допустимые значения:
+Preferred значение:
+- `codex-task-handoff`.
+
+Backward-compatible legacy значения допускаются только при чтении старых артефактов:
 - `single-agent-handoff`;
 - `parent-orchestration-handoff`.
 
-По умолчанию выбирай `single-agent-handoff`, если задача цельная, выполняется одним route/profile, затрагивает один основной слой или небольшое число тесно связанных файлов, не требует параллельных child subtasks, не требует разных task_class/profile/model/reasoning для отдельных частей, не нуждается в orchestration cockpit / parent status tracking и не содержит длинной цепочки независимых доработок.
+Новый user-facing contract: handoff всегда один и нейтральный. ChatGPT/handoff layer не должен заранее называть handoff "оркестровым". Codex после route receipt и анализа task graph сам выбирает фактический `execution_mode`:
+- `single-session execution`;
+- `orchestrated-child-sessions`.
 
-Выбирай `parent-orchestration-handoff`, если сработал хотя бы один hard trigger:
+Фиксируй orchestration candidate signals, но не подменяй ими факт исполнения.
+
+Orchestration candidate hard triggers:
 - задача явно большая, многоэтапная или roadmap-like;
 - есть две или больше независимые подзадачи, которые можно или нужно выполнять отдельными child sessions;
 - разные части задачи требуют разных `task_class`, `selected_profile`, `selected_model` или `selected_reasoning_effort`;
@@ -45,7 +52,7 @@
 - есть `deferred_user_actions`, `placeholder_replacements`, runtime/downstream boundaries или `external-user-action`, которые нужно перенести в final closeout через `defer-to-final-closeout`;
 - пользователь явно просит parent handoff, orchestrator, оркестр агентов или full orchestration.
 
-Если hard trigger не сработал, но есть три или больше soft signals, выбирай `parent-orchestration-handoff`:
+Если hard trigger не сработал, но есть три или больше soft signals, пометь задачу как orchestration candidate, но `handoff_shape` остается `codex-task-handoff`:
 - больше трех артефактов к обновлению;
 - требуется обновление scenario-pack + scripts + tests/validators;
 - ожидается больше одного verification contour;
@@ -54,13 +61,14 @@
 - есть несколько вариантов реализации и требуется route explanation.
 
 Запрещено:
-- выдавать `parent-orchestration-handoff` только потому, что задача важная, если она реально цельная и один deep/build агент достаточен;
-- выдавать `single-agent-handoff` для большой задачи с независимыми child subtasks и разными профилями;
+- называть handoff оркестровым только потому, что задача важная;
+- заранее утверждать фактический `orchestrated-child-sessions`, пока Codex не решил запускать child/subagent sessions;
+- скрывать orchestration candidate signals для большой задачи с независимыми child subtasks и разными профилями;
 - в closeout называть фактическое выполнение "оркестром агентов", если child/subagent sessions не запускались; в таком случае пиши `single-session execution`, `child/subagent count: 0` и фиксируй это как correction, если ранее был заявлен parent orchestration;
 - утверждать, что parent handoff сам переключает model/profile/reasoning в уже открытой live session;
 - смешивать advisory/policy layer с executable routing layer.
 
-Выбор `single-agent-handoff` vs `parent-orchestration-handoff` делается до выдачи handoff, а не после него.
+Выбор фактического execution mode делает Codex после анализа задачи, а не ChatGPT/handoff layer до исполнения. В финальном closeout обязательно укажи actual execution mode и фактический child/subagent count.
 
 ## Правило inline handoff
 Если handoff в Codex уже разрешен и задача достаточно определена, выдай готовый Codex handoff в том же ответе. Не останавливайся на одной аналитике.

@@ -41,9 +41,7 @@ def match_task_class(text: str, routing: dict[str, Any], explicit: str | None) -
 
 
 def select_handoff_shape(text: str, explicit: str | None = None) -> tuple[str, list[str]]:
-    if explicit:
-        return explicit, [f"explicit handoff_shape field `{explicit}`"]
-
+    handoff_shape = "codex-task-handoff"
     lowered = text.lower()
     hard_triggers = [
         ("roadmap-like or multi-stage", ["roadmap", "многоэтап", "большая задача", "large task"]),
@@ -56,12 +54,14 @@ def select_handoff_shape(text: str, explicit: str | None = None) -> tuple[str, l
         ("explicit parent orchestration request", ["parent handoff", "parent orchestration", "orchestrator", "full orchestration", "оркестр агентов", "оркестра"]),
     ]
     evidence: list[str] = []
+    if explicit:
+        if explicit == handoff_shape:
+            evidence.append(f"explicit neutral handoff_shape field `{explicit}`")
+        else:
+            evidence.append(f"legacy handoff_shape field `{explicit}` normalized to `{handoff_shape}`")
     for label, needles in hard_triggers:
         if any(needle in lowered for needle in needles):
-            evidence.append(f"hard trigger: {label}")
-
-    if evidence:
-        return "parent-orchestration-handoff", evidence
+            evidence.append(f"orchestration candidate hard trigger: {label}")
 
     soft_signals = [
         ("more than 3 artifacts", ["больше 3 артеф", "more than 3 artifacts", "много артефакт"]),
@@ -74,9 +74,11 @@ def select_handoff_shape(text: str, explicit: str | None = None) -> tuple[str, l
     for label, needles in soft_signals:
         if any(needle in lowered for needle in needles):
             evidence.append(f"soft signal: {label}")
-    if len(evidence) >= 3:
-        return "parent-orchestration-handoff", evidence
-    return "single-agent-handoff", ["default: single route/profile is sufficient unless parent triggers match"]
+    if not evidence:
+        evidence.append("default neutral handoff: Codex decides actual execution_mode after analysis")
+    else:
+        evidence.append("handoff stays neutral; orchestration is actual execution only if Codex launches child/subagent sessions")
+    return handoff_shape, evidence
 
 
 def explain(
@@ -144,7 +146,7 @@ def main() -> int:
     parser.add_argument("--root", default=".")
     parser.add_argument("--task-text", default="")
     parser.add_argument("--task-class", choices=["quick", "build", "deep", "review"])
-    parser.add_argument("--handoff-shape", choices=["single-agent-handoff", "parent-orchestration-handoff"])
+    parser.add_argument("--handoff-shape", choices=["codex-task-handoff", "single-agent-handoff", "parent-orchestration-handoff"])
     parser.add_argument("--json", action="store_true")
     args = parser.parse_args()
 

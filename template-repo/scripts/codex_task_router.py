@@ -471,11 +471,9 @@ def codex_profile_command(profile_name: str) -> str:
 
 def infer_handoff_shape(spec: dict, text: str, explicit_shape: str | None = None) -> tuple[str, list[str]]:
     allowed = set(((spec.get("routing_contract", {}) or {}).get("handoff_shape", {}) or {}).get("allowed_values", []))
-    default_shape = str(((spec.get("routing_contract", {}) or {}).get("handoff_shape", {}) or {}).get("default") or "single-agent-handoff")
-    if explicit_shape:
-        if explicit_shape not in allowed:
-            raise ValueError(f"Неизвестный handoff_shape: {explicit_shape}")
-        return explicit_shape, [f"явный override handoff_shape: {explicit_shape}"]
+    default_shape = str(((spec.get("routing_contract", {}) or {}).get("handoff_shape", {}) or {}).get("default") or "codex-task-handoff")
+    if default_shape not in allowed:
+        default_shape = "codex-task-handoff"
 
     normalized = _normalize(text)
     parent_hard_triggers = [
@@ -487,13 +485,22 @@ def infer_handoff_shape(spec: dict, text: str, explicit_shape: str | None = None
         ("explicit parent orchestration request", ["parent handoff", "parent orchestration", "orchestrator", "full orchestration", "оркестр агентов", "оркестра"]),
     ]
     reasons: list[str] = []
+    if explicit_shape:
+        if explicit_shape not in allowed:
+            raise ValueError(f"Неизвестный handoff_shape: {explicit_shape}")
+        if explicit_shape != default_shape:
+            reasons.append(f"legacy requested handoff_shape `{explicit_shape}` normalized to `{default_shape}`")
+        else:
+            reasons.append(f"explicit neutral handoff_shape: {explicit_shape}")
     for label, needles in parent_hard_triggers:
         if any(needle in normalized for needle in needles):
-            reasons.append(f"hard trigger: {label}")
-    if reasons:
-        return "parent-orchestration-handoff", reasons
+            reasons.append(f"orchestration candidate hard trigger: {label}")
 
-    return default_shape, [f"default handoff_shape: {default_shape}"]
+    if not reasons:
+        reasons.append("default neutral handoff: Codex decides actual execution_mode after analysis")
+    else:
+        reasons.append("handoff remains neutral; actual orchestration requires Codex to launch child/subagent sessions")
+    return default_shape, reasons
 
 
 def build_launch_record(
@@ -640,6 +647,12 @@ def render_normalized_handoff(record: dict, task_text: str, title: str) -> str:
 
 ## Вид handoff
 {launch.get('handoff_shape', '')}
+
+## Решение о фактическом execution mode
+- owner: Codex после route receipt и анализа task graph.
+- allowed modes: `single-session execution` или `orchestrated-child-sessions`.
+- closeout обязателен: назвать actual execution mode и `child/subagent count`.
+- rule: handoff остается одним `codex-task-handoff`; orchestration candidate signals не равны фактическому запуску child/subagent sessions.
 
 ## Стабильная identity чата и handoff
 - chat_id: `{launch.get('chat_id', '')}`
@@ -810,6 +823,8 @@ Repo rules:
 Routing:
 - launch_source: {launch.get('launch_source', '')}
 - handoff_shape: {launch.get('handoff_shape', '')}
+- execution_mode_decision_owner: Codex runtime after task graph analysis
+- execution_mode_closeout_required: actual execution mode plus child/subagent count
 - task_class: {launch.get('task_class', '')}
 - selected_profile: {launch.get('selected_profile', '')}
 - selected_model: {launch.get('selected_model', '')}

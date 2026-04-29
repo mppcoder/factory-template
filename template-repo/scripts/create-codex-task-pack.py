@@ -414,7 +414,7 @@ Compact default:
 Приоритет: сначала правила repo (`AGENTS`, runbook, scenario-pack, policy files), затем общие инструкции без конфликта с ними.
 Точка входа: {entrypoint}
 Источник запуска: {launch.get('launch_source', 'chatgpt-handoff')}
-Вид handoff: {launch.get('handoff_shape', 'single-agent-handoff')}
+Вид handoff: {launch.get('handoff_shape', 'codex-task-handoff')}
 Класс задачи: {launch.get('task_class', 'build')}
 Выбранный профиль: {launch.get('selected_profile', 'build')}
 Выбранная модель: {launch.get('selected_model', 'gpt-5.5')}
@@ -434,8 +434,8 @@ chat_index_path: {launch.get('chat_index_path', '')}
 Прямая команда Codex за launcher: {launch.get('codex_profile_command', 'codex --profile build')}
 Правило маршрутизации: advisory/handoff text не равен executable profile switch; надежная единица маршрутизации — только новый task launch.
 Правило приема ChatGPT handoff: если launch_source = chatgpt-handoff, Codex исполняет этот входящий handoff; первый ответ может содержать только handoff receipt / route receipt и не должен называть его self-handoff.
-Правило handoff_shape: `single-agent-handoff` является default для цельной задачи; `parent-orchestration-handoff` нужен только для больших/multi-agent задач с child subtasks, разными route requirements или deferred user actions.
-Правило full orchestration: если handoff содержит parent orchestration plan, пользовательское действие заканчивается после вставки; parent Codex сам запускает repo-native orchestrator с validation gate и `--execute`, а ручная shell-команда пользователя является только troubleshooting/strict fallback.
+Правило handoff_shape: новый default — один нейтральный `codex-task-handoff`; ChatGPT/handoff layer не должен заранее называть handoff оркестровым.
+Правило execution mode: Codex после route receipt и анализа task graph сам выбирает `single-session execution` или `orchestrated-child-sessions`; в closeout обязательно указывает actual execution mode и `child/subagent count`.
 Правило ручного UI: для VS Code Codex extension откройте новый чат/окно, вручную выберите model/reasoning в picker, затем вставьте этот handoff.
 Правило live session: уже открытая live session = non-canonical fallback; не обещать auto-switch.
 Этап pipeline: {launch.get('pipeline_stage', 'unknown-stage')}

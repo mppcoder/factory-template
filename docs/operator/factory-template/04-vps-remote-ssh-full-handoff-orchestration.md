@@ -2,7 +2,7 @@
 
 ## Назначение
 
-Этот runbook описывает путь для большой или multi-agent задачи, где выбран `handoff_shape: parent-orchestration-handoff`.
+Этот runbook описывает путь для большой или multi-agent задачи, где внешний handoff остается `handoff_shape: codex-task-handoff`, а Codex после анализа выбирает фактический `execution_mode: orchestrated-child-sessions`.
 
 1. Browser ChatGPT Project готовит один большой Codex handoff.
 2. Operator открывает VS Code Remote SSH window, connected to VPS.
@@ -12,9 +12,9 @@
 6. Отдельные Codex CLI sessions запускаются на VPS/repo context.
 7. Parent orchestration report собирает результаты, blockers и финальный closeout.
 
-## Default path для parent orchestration
+## Default path для runtime orchestration
 
-Для `handoff_shape: parent-orchestration-handoff` default user-facing path: `VPS Remote SSH-first`.
+Для большого `codex-task-handoff`, где Codex выбирает фактический `orchestrated-child-sessions`, default user-facing path: `VPS Remote SSH-first`.
 Beginner zero-to-Codex-ready setup описан в `docs/operator/runbook-packages/01-factory-template/01-user-runbook.md`.
 Этот orchestration runbook начинается после той же takeover-точки: у оператора уже есть remote Codex context на VPS через `codex-app-remote-ssh` или `vscode-remote-ssh-codex-extension`.
 
@@ -34,7 +34,7 @@ Beginner zero-to-Codex-ready setup описан в `docs/operator/runbook-packag
 - выводит `handoff receipt` / `route receipt`;
 - materializes or reads the parent orchestration plan from the pasted handoff;
 - validates the plan before any session files are written;
-- runs the repo-native orchestrator with explicit execution when the handoff is marked as full orchestration;
+- runs the repo-native orchestrator with explicit execution when Codex decides the task needs actual child/subagent sessions;
 - collects the parent orchestration report and child results;
 - performs repo-local verification, commit and push when allowed by repo closeout rules.
 
@@ -61,9 +61,9 @@ python3 template-repo/scripts/orchestrate-codex-handoff.py \
 
 Dry-run writes the parent report and per-subtask handoff files without starting child Codex CLI sessions. Real child sessions start only when parent Codex uses explicit `--execute` from the parent handoff instructions.
 
-## Когда выбирать parent orchestration
+## Когда Codex выбирает orchestrated-child-sessions
 
-Выбирай `handoff_shape: parent-orchestration-handoff`, если сработал хотя бы один hard trigger:
+Внешний handoff не называется оркестровым заранее. Codex выбирает actual `orchestrated-child-sessions`, если после route receipt сработал хотя бы один hard trigger:
 - задача явно большая, многоэтапная или roadmap-like;
 - есть две или больше независимые подзадачи, которые можно или нужно выполнять отдельными child sessions;
 - разные части требуют разных `task_class`, `selected_profile`, `selected_model` или `selected_reasoning_effort`;
@@ -73,7 +73,7 @@ Dry-run writes the parent report and per-subtask handoff files without starting 
 - есть `deferred_user_actions`, `placeholder_replacements`, runtime/downstream boundaries или `external-user-action`, которые нужно перенести в final closeout через `defer-to-final-closeout`;
 - пользователь явно просит parent handoff, orchestrator, оркестр агентов или full orchestration.
 
-Если hard trigger не сработал, но есть три или больше soft signals, тоже выбирай parent orchestration:
+Если hard trigger не сработал, но есть три или больше soft signals, пометь задачу как orchestration candidate и реши после task graph analysis:
 - больше трех артефактов к обновлению;
 - требуется обновление scenario-pack + scripts + tests/validators;
 - ожидается больше одного verification contour;
@@ -81,13 +81,13 @@ Dry-run writes the parent report and per-subtask handoff files without starting 
 - нужно синхронизировать template-facing и downstream-facing wording;
 - есть несколько вариантов реализации и требуется route explanation.
 
-## Когда НЕ выбирать parent orchestration
+## Когда НЕ запускать child/subagent sessions
 
 Full orchestration не является default для любой задачи.
 
-Выбирай `handoff_shape: single-agent-handoff`, если задача цельная, выполняется одним route/profile, затрагивает один основной слой или небольшое число тесно связанных файлов, не требует независимых child subtasks, разных профилей/моделей/reasoning для отдельных частей, orchestration cockpit или внешних/deferred user actions.
+Оставляй actual execution mode `single-session execution`, если задача цельная, выполняется одним route/profile, затрагивает один основной слой или небольшое число тесно связанных файлов, не требует независимых child subtasks, разных профилей/моделей/reasoning для отдельных частей, orchestration cockpit или внешних/deferred user actions.
 
-Запрещено выбирать parent orchestration только потому, что задача важная. Если один deep/build агент может надежно выполнить scope без разделения на child sessions, нужен обычный single-agent handoff с явным объяснением, почему parent orchestration не требуется.
+Запрещено запускать orchestration только потому, что задача важная. Если один deep/build route может надежно выполнить scope без разделения на child sessions, нужен `single-session execution` и финальный closeout с `child/subagent count: 0`.
 
 ## Опциональные альтернативы
 
@@ -143,7 +143,7 @@ Security boundary: no secrets in handoff, reports, fixtures, transcripts or repo
 
 ## Правило user actions last
 
-Для большого handoff оркестр агентов работает по правилу `defer-to-final-closeout`.
+Если Codex выбрал actual `orchestrated-child-sessions`, child/subagent execution работает по правилу `defer-to-final-closeout`.
 
 Это значит:
 - все действия, где нужен пользователь, внешний UI, secret entry, real VPS approval, real downstream repo или real application artifact, переносятся в конец parent plan;
@@ -183,7 +183,8 @@ parent:
   id: p5-example-parent
   title: VPS Remote SSH-first orchestration example
   launch_source: chatgpt-handoff
-  handoff_shape: parent-orchestration-handoff
+  handoff_shape: codex-task-handoff
+  execution_mode: orchestrated-child-sessions
   selected_scenario: template-repo/scenario-pack/00-master-router.md -> template-repo/scenario-pack/15-handoff-to-codex.md
   apply_mode: manual-ui
   strict_launch_mode: optional

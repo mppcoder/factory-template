@@ -173,7 +173,7 @@ items:
     chat_id: FT-CH-0005
     chat_title: "FT-CH-0005 chat-counter-closeout-drift"
     task_slug: chat-counter-closeout-drift
-    chat_state: implemented
+    chat_state: verified
     chat_index_item_id: FT-CH-0005
     handoff_group: "factory-template-chat-counter-closeout-drift"
     handoff_revision: 1
@@ -225,3 +225,62 @@ items:
     next_action: "No further implementation action for this HIR item."
     created_at: "2026-04-29T12:37:45Z"
     updated_at: "2026-04-29T12:45:51Z"
+  - id: HIR-005
+    title: "Neutral handoff shape and runtime execution-mode ownership"
+    chat_id: FT-CH-0006
+    chat_title: "FT-CH-0006 handoff-execution-mode-ownership"
+    task_slug: handoff-execution-mode-ownership
+    chat_state: verified
+    chat_index_item_id: FT-CH-0006
+    handoff_group: "factory-template-handoff-execution-mode-ownership"
+    handoff_revision: 1
+    source_type: direct-task
+    source_chat: "current Codex chat, 2026-04-29"
+    source_handoff_path: ""
+    task_class: deep
+    selected_profile: deep
+    selected_model: gpt-5.5
+    selected_reasoning_effort: high
+    selected_plan_mode_reasoning_effort: high
+    status: verified
+    priority: high
+    calculated_priority: high
+    depends_on: []
+    blocks: []
+    replaces: []
+    superseded_by: ""
+    replacement_reason: ""
+    owner_boundary: internal-repo-follow-up
+    artifacts_to_update:
+      - "template-repo/codex-routing.yaml"
+      - "template-repo/scenario-pack/00-master-router.md"
+      - "template-repo/scenario-pack/15-handoff-to-codex.md"
+      - "template-repo/scripts/codex_task_router.py"
+      - "template-repo/scripts/explain-codex-route.py"
+      - "template-repo/scripts/validate-route-explain.py"
+      - "template-repo/scripts/validate-beginner-handoff-ux.py"
+      - "template-repo/scripts/orchestrate-codex-handoff.py"
+      - "template-repo/scripts/validate-parent-orchestration-plan.py"
+      - "template-repo/scripts/validate-orchestration-cockpit.py"
+      - "template-repo/template/.chatgpt/parent-orchestration-plan.yaml.template"
+      - "template-repo/template/.chatgpt/orchestration-cockpit.yaml"
+      - "tests/beginner-handoff-ux/positive/handoff.md"
+      - "tests/codex-orchestration/fixtures/"
+      - "docs/operator/factory-template/04-vps-remote-ssh-full-handoff-orchestration.md"
+      - "reports/bugs/2026-04-29-orchestration-handoff-shape-overclaim.md"
+      - "reports/factory-feedback/feedback-046-orchestration-handoff-shape-overclaim.md"
+    evidence:
+      - "defect-capture: reports/bugs/2026-04-29-orchestration-handoff-shape-overclaim.md"
+      - "python3 template-repo/scripts/validate-route-explain.py ."
+      - "python3 template-repo/scripts/validate-beginner-handoff-ux.py tests/beginner-handoff-ux/positive/handoff.md"
+      - "python3 template-repo/scripts/validate-codex-routing.py ."
+      - "python3 template-repo/scripts/validate-parent-orchestration-plan.py --root . --plan tests/codex-orchestration/fixtures/valid/parent-plan.yaml"
+      - "python3 template-repo/scripts/validate-orchestration-cockpit.py template-repo/template/.chatgpt/orchestration-cockpit.yaml"
+      - "python3 template-repo/scripts/validate-codex-orchestration.py ."
+      - "bash template-repo/scripts/verify-all.sh quick"
+      - "bash template-repo/scripts/verify-all.sh"
+    closeout_reason: "User-facing handoff is now neutral (`codex-task-handoff`), while actual single-session vs orchestrated child/subagent execution is chosen by Codex after task graph analysis and reported in closeout."
+    deactivation_handoff_required: false
+    next_action: "No further implementation action for this HIR item."
+    created_at: "2026-04-29T13:00:32Z"
+    updated_at: "2026-04-29T13:05:30Z"

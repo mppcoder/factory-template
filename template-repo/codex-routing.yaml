@@ -8,12 +8,16 @@ routing_contract:
   model_expectation_rule: "selected_model и selected_reasoning_effort фиксируют repo-configured mapping выбранного executable profile; live availability подтверждается отдельной проверкой `codex debug models`, а advisory handoff text сам по себе ничего не переключает."
   handoff_shape:
     allowed_values:
+      - "codex-task-handoff"
       - "single-agent-handoff"
       - "parent-orchestration-handoff"
-    default: "single-agent-handoff"
-    selection_rule: "Выбор single-agent vs parent-orchestration делается до выдачи handoff."
-    single_agent_rule: "Выбирать для цельной задачи, которая выполняется одним route/profile, не требует child subtasks, разных профилей, orchestration cockpit или deferred user actions."
-    parent_hard_triggers:
+    default: "codex-task-handoff"
+    selection_rule: "Внешний handoff остается единым codex-task-handoff; Codex выбирает фактический execution_mode после анализа задачи, а не ChatGPT заранее называет handoff оркестровым."
+    execution_mode_owner: "Codex runtime после route receipt / task graph analysis."
+    execution_modes:
+      - "single-session execution"
+      - "orchestrated-child-sessions"
+    orchestration_candidate_triggers:
       - "большая, многоэтапная или roadmap-like задача"
       - "две или больше независимые подзадачи для child sessions"
       - "разные части требуют разных task_class/profile/model/reasoning"
@@ -22,8 +26,8 @@ routing_contract:
       - "нужен orchestration cockpit/dashboard"
       - "есть deferred_user_actions, placeholder_replacements, runtime/downstream boundaries или external-user-action"
       - "пользователь явно просит parent handoff/orchestrator/оркестр агентов/full orchestration"
-    parent_soft_rule: "Если hard trigger не сработал, но есть 3+ soft signals, выбирать parent-orchestration-handoff."
-    parent_soft_signals:
+    orchestration_soft_rule: "Если hard trigger не сработал, но есть 3+ soft signals, пометить задачу как orchestration candidate; handoff_shape все равно остается codex-task-handoff."
+    orchestration_soft_signals:
       - "больше 3 артефактов к обновлению"
       - "требуется обновление scenario-pack + scripts + tests/validators"
       - "ожидается больше одного verification contour"
@@ -32,8 +36,8 @@ routing_contract:
       - "есть несколько вариантов реализации и требуется route explanation"
     forbidden_claims:
       - "parent handoff не переключает model/profile/reasoning в уже открытой live session"
-      - "parent orchestration не является default только из-за важности задачи"
-      - "single-agent нельзя выбирать для большой multi-child задачи с разными профилями"
+      - "handoff нельзя называть оркестровым только из-за важности задачи"
+      - "нельзя утверждать фактический orchestrated execution, если child/subagent sessions не запускались"
   advisory_layers:
     - "AGENTS.md / AGENT.md"
     - "ChatGPT Project instructions"

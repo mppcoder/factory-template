@@ -53,12 +53,16 @@ def validate_cockpit(data: dict[str, Any]) -> list[str]:
     for field in ["id", "title", "launch_source", "handoff_shape", "selected_scenario", "apply_mode", "strict_launch_mode"]:
         if not str(parent.get(field) or "").strip():
             errors.append(f"parent.{field} обязателен")
-    if str(parent.get("handoff_shape") or "") != "parent-orchestration-handoff":
-        errors.append("parent.handoff_shape должен быть parent-orchestration-handoff")
+    if str(parent.get("handoff_shape") or "") != "codex-task-handoff":
+        errors.append("parent.handoff_shape должен быть codex-task-handoff")
+    if str(parent.get("execution_mode") or "") != "orchestrated-child-sessions":
+        errors.append("parent.execution_mode должен быть orchestrated-child-sessions")
 
     route = nonempty_mapping(data, "route_receipt", errors)
-    if str(route.get("handoff_shape") or "") != "parent-orchestration-handoff":
-        errors.append("route_receipt.handoff_shape должен быть parent-orchestration-handoff")
+    if str(route.get("handoff_shape") or "") != "codex-task-handoff":
+        errors.append("route_receipt.handoff_shape должен быть codex-task-handoff")
+    if str(route.get("execution_mode") or "") != "orchestrated-child-sessions":
+        errors.append("route_receipt.execution_mode должен быть orchestrated-child-sessions")
     task_class = str(route.get("task_class") or "")
     if task_class not in TASK_CLASSES:
         errors.append("route_receipt.task_class должен быть quick/build/deep/review")
