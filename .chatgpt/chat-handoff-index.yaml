@@ -1,6 +1,6 @@
 schema: chat-handoff-index/v1
 project_code: FT
-next_chat_number: 8
+next_chat_number: 9
 title_policy:
   canonical_format: <PROJECT_CODE>-CH-<NNNN> <task-slug>
   include_status_in_title: false
@@ -187,3 +187,28 @@ items:
   - bash template-repo/scripts/verify-all.sh
   next_action: No further implementation action; final closeout project-card requirement
     is verified.
+- chat_id: FT-CH-0008
+  chat_number: 8
+  chat_title: FT-CH-0008 compact-card-active-only
+  task_slug: compact-card-active-only
+  kind: self_handoff
+  state: verified
+  created_utc: '2026-04-29T15:12:21Z'
+  updated_utc: '2026-04-29T15:16:32Z'
+  source_type: direct-task
+  handoff_group: compact-card-active-only
+  handoff_revision: 1
+  handoff_register_item_id: HIR-007
+  status_chain:
+  - codex_self_handoff
+  - codex_accepted
+  - codex_completed
+  evidence:
+  - 'Allocated for direct-task remediation: compact project card should show only
+    current and not-closed tasks.'
+  - 'Implemented compact card filter: current/latest task plus not-closed handoff
+    tasks only; closed history remains in full dashboard.'
+  - bash template-repo/scripts/verify-all.sh quick
+  - bash template-repo/scripts/verify-all.sh
+  next_action: No further implementation action; compact card active-only filtering is
+    verified.

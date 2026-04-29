@@ -177,6 +177,7 @@ Codex closeout behavior:
 - если задача неактуальна, не удалять ее, а выполнить deactivation path: `status: not_applicable`, `closeout_reason`, evidence или `accepted_reason`;
 - обновить `reports/project-lifecycle-dashboard.md`.
 - вставить свежую compact project card в финальный ответ пользователю в разделе `Карточка проекта`; карточка должна быть получена через `render-project-lifecycle-dashboard.py --format chatgpt-card --stdout` и содержать lifecycle chain, `Модули:` и `В работе:`.
+- compact card не является историческим журналом: раздел `В работе:` показывает текущую chat/self-handoff задачу и незакрытые задачи; verified/archived/superseded старые задачи остаются в полном `reports/project-lifecycle-dashboard.md`, но не шумят в compact card.
 
 Replacement identity:
 

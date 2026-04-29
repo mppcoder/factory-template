@@ -254,16 +254,39 @@ def active_handoff_lines_text(index: dict[str, Any]) -> str:
     items = index.get("items", []) if isinstance(index, dict) else []
     if not isinstance(items, list):
         items = []
+    current_number = max(
+        [int(item.get("chat_number") or 0) for item in items if isinstance(item, dict)] or [0]
+    )
     active = [
         item
         for item in items
-        if isinstance(item, dict) and str(item.get("state") or "") not in {"superseded", "not_applicable", "archived"}
+        if isinstance(item, dict)
+        and (
+            str(item.get("state") or "") not in TERMINAL_CHAT_STATES
+            or int(item.get("chat_number") or 0) == current_number
+        )
     ]
     if not active:
-        return "🕒 Нет активных handoff-задач"
+        return "🕒 Нет текущих или незакрытых handoff-задач"
     active.sort(key=lambda item: int(item.get("chat_number") or 0))
     lines = []
     for item in active:
+        state = str(item.get("state") or "open")
+        title = str(item.get("chat_title") or item.get("chat_id") or "unknown")
+        lines.append(f"{handoff_line_icon(state)} {title}: {handoff_status_chain_text(item)}")
+    return "\n".join(lines)
+
+
+def handoff_history_lines_text(index: dict[str, Any]) -> str:
+    items = index.get("items", []) if isinstance(index, dict) else []
+    if not isinstance(items, list):
+        items = []
+    history = [item for item in items if isinstance(item, dict)]
+    if not history:
+        return "🕒 Нет handoff-задач в истории"
+    history.sort(key=lambda item: int(item.get("chat_number") or 0))
+    lines = []
+    for item in history:
         state = str(item.get("state") or "open")
         title = str(item.get("chat_title") or item.get("chat_id") or "unknown")
         lines.append(f"{handoff_line_icon(state)} {title}: {handoff_status_chain_text(item)}")
@@ -694,6 +717,10 @@ def render(data: dict[str, Any], root: Path, dashboard_path: Path) -> str:
             "### Активные ChatGPT handoff-задачи",
             "",
             active_handoff_lines_text(context.get("chat_handoff_index", {})),
+            "",
+            "### История ChatGPT handoff-задач",
+            "",
+            handoff_history_lines_text(context.get("chat_handoff_index", {})),
             "",
             "## Передача и оркестрация",
             "",

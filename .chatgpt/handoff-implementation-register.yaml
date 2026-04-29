@@ -334,3 +334,49 @@ items:
     next_action: "No further implementation action for this HIR item."
     created_at: "2026-04-29T15:03:40Z"
     updated_at: "2026-04-29T15:07:55Z"
+  - id: HIR-007
+    title: "Compact project card shows only current and not-closed tasks"
+    chat_id: FT-CH-0008
+    chat_title: "FT-CH-0008 compact-card-active-only"
+    task_slug: compact-card-active-only
+    chat_state: verified
+    chat_index_item_id: FT-CH-0008
+    handoff_group: "factory-template-compact-card-active-only"
+    handoff_revision: 1
+    source_type: direct-task
+    source_chat: "current Codex chat, 2026-04-29"
+    source_handoff_path: ""
+    task_class: deep
+    selected_profile: deep
+    selected_model: gpt-5.5
+    selected_reasoning_effort: high
+    selected_plan_mode_reasoning_effort: high
+    status: verified
+    priority: high
+    calculated_priority: high
+    depends_on: []
+    blocks: []
+    replaces: []
+    superseded_by: ""
+    replacement_reason: ""
+    owner_boundary: internal-repo-follow-up
+    artifacts_to_update:
+      - "template-repo/scripts/render-project-lifecycle-dashboard.py"
+      - "docs/operator/factory-template/06-project-lifecycle-dashboard.md"
+      - "docs/operator/factory-template/07-beginner-visual-dashboard-ux.md"
+      - "reports/project-lifecycle-dashboard.md"
+      - "reports/bugs/2026-04-29-compact-card-shows-closed-tasks.md"
+      - "reports/factory-feedback/feedback-048-compact-card-active-only.md"
+    evidence:
+      - "defect-capture: reports/bugs/2026-04-29-compact-card-shows-closed-tasks.md"
+      - "python3 template-repo/scripts/render-project-lifecycle-dashboard.py --input template-repo/template/.chatgpt/project-lifecycle-dashboard.yaml --format chatgpt-card --stdout"
+      - "python3 template-repo/scripts/validate-chat-handoff-index.py .chatgpt/chat-handoff-index.yaml"
+      - "python3 template-repo/scripts/validate-handoff-implementation-register.py .chatgpt/handoff-implementation-register.yaml"
+      - "python3 template-repo/scripts/validate-project-lifecycle-dashboard.py template-repo/template/.chatgpt/project-lifecycle-dashboard.yaml"
+      - "bash template-repo/scripts/verify-all.sh quick"
+      - "bash template-repo/scripts/verify-all.sh"
+    closeout_reason: "Compact project card now shows the current/latest task plus not-closed handoff tasks; closed history remains in the full dashboard."
+    deactivation_handoff_required: false
+    next_action: "No further implementation action for this HIR item."
+    created_at: "2026-04-29T15:13:08Z"
+    updated_at: "2026-04-29T15:16:32Z"
