@@ -143,6 +143,9 @@ runbook_packages:
     codex_takeover_ready: false
     battle_chatgpt_project_created: false
     battle_repo_created_by: codex
+    chatgpt_project_ui_owner: user
+    repo_first_instruction_prepared_by: codex
+    repo_first_instruction_pasted_by: user
     active_contour: not_selected
     takeover_ready: false
     checklist_path: "docs/operator/runbook-packages/02-greenfield-product/03-checklist.md"

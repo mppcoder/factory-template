@@ -9,11 +9,13 @@
 - Чеклист factory-template теперь является таблицей-зеркалом user-runbook и не содержит process/meta checks; dashboard показывает `current_step`, `active_contour`, `takeover_ready` и `checklist_path`.
 - Greenfield package boundary исправлен: пользователь больше не создает GitHub repo, не добавляет `origin`, не делает first push и не запускает launcher/verify. Codex делает это сам и готовит текст repo-first инструкции для ChatGPT Project.
 - Greenfield package теперь не стартует напрямую в Codex: новый боевой проект начинается в ChatGPT Project шаблона фабрики командой `новый проект`; после scenario-pack опроса ChatGPT Project формирует стартовый Codex handoff.
+- Greenfield ChatGPT Project boundary уточнен: Codex готовит repo-first instruction и пошаговую UI-инструкцию, а пользователь сам создает боевой ChatGPT Project, открывает Project settings/instructions, вставляет готовый текст и сохраняет настройки.
 - Добавлен полный слой `docs/operator/runbook-packages/` для четырех входов: сам `factory-template`, чистый `greenfield-product`, brownfield with repo -> greenfield и brownfield without repo -> greenfield.
 - Каждый package разделяет Browser ChatGPT Project, VS Code Remote SSH, Codex chat, terminal fallback, GitHub/external UI, secrets и approvals.
 - Brownfield packages закрепляют продуктовую логику: brownfield является только transitional path, а done требует conversion в `greenfield-product` / `greenfield-converted` или explicit documented blocker.
 - Добавлен validator `validate-runbook-packages.py` и quick verify coverage для package existence, command/path lint, dashboard contract, archive/cleanup wording, handoff language contract и запрета fake auto-switch claims.
 - Lifecycle dashboard получил `runbook_packages` readout с phase, gates, blockers и next action без добавления web app/daemon/SQLite/Telegram stack.
+- Lifecycle dashboard для `02-greenfield-product` теперь фиксирует `chatgpt_project_ui_owner: user`, `repo_first_instruction_prepared_by: codex` и `repo_first_instruction_pasted_by: user`.
 - Source manifest получил отдельный `sources-pack-runbook-packages` для полного package export.
 
 ## Не выпущено - Plan №6 orchestration productization

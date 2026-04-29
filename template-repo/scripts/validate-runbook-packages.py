@@ -197,6 +197,21 @@ GREENFIELD_FORBIDDEN_USER_PHRASES = [
     "Сообщить Codex название",
     "сообщить Codex название",
 ]
+GREENFIELD_FORBIDDEN_CHATGPT_UI_AUTOMATION_CLAIMS = [
+    "Codex создает ChatGPT Project",
+    "Codex создаёт ChatGPT Project",
+    "Codex создает battle ChatGPT Project",
+    "Codex создаёт battle ChatGPT Project",
+    "Codex создает боевой ChatGPT Project",
+    "Codex создаёт боевой ChatGPT Project",
+    "Codex вставляет instruction",
+    "Codex вставляет repo-first instruction",
+    "Codex сохраняет настройки",
+    "Codex opens Project settings",
+    "Codex inserts ChatGPT Project instructions",
+    "Codex saves ChatGPT Project instructions",
+    "Codex creates ChatGPT Project",
+]
 GREENFIELD_REQUIRED_USER_TOKENS = [
     "GF-000",
     "GF-005",
@@ -222,6 +237,9 @@ GREENFIELD_REQUIRED_USER_TOKENS = [
     "не выбирает slug/repo name вручную",
     "не создает VPS project root",
     "не запускает launcher/wizard",
+    "открывает Project settings/instructions",
+    "сохраняет настройки",
+    "Codex готовит repo-first instruction для боевого ChatGPT Project. Пользователь создает ChatGPT Project в UI и вставляет готовый текст.",
 ]
 GREENFIELD_LEGACY_USER_TOKENS = [
     "создает ChatGPT Project",
@@ -250,6 +268,8 @@ GREENFIELD_REQUIRED_CHECKLIST_TOKENS = [
     "Handoff receipt",
     "Repo URL, verify, sync",
     "Saved instruction",
+    "Project settings/instructions",
+    "создан пользователем",
 ]
 GREENFIELD_REQUIRED_CODEX_TOKENS = [
     "ChatGPT-generated handoff",
@@ -265,6 +285,9 @@ GREENFIELD_REQUIRED_CODEX_TOKENS = [
     "bash scripts/verify-all.sh quick",
     "verified sync",
     "готовую repo-first instruction",
+    "готовый текст repo-first instruction",
+    "пошаговую инструкцию пользователю",
+    "Пользователь создает ChatGPT Project в UI и вставляет готовый текст",
 ]
 GREENFIELD_DASHBOARD_REQUIRED_FIELDS = [
     "intake_channel",
@@ -273,6 +296,9 @@ GREENFIELD_DASHBOARD_REQUIRED_FIELDS = [
     "codex_takeover_ready",
     "battle_chatgpt_project_created",
     "battle_repo_created_by",
+    "chatgpt_project_ui_owner",
+    "repo_first_instruction_prepared_by",
+    "repo_first_instruction_pasted_by",
 ]
 
 
@@ -463,6 +489,7 @@ def validate_beginner_flow(root: Path, errors: list[str]) -> None:
                 if token not in user_text + "\n" + codex_text:
                     errors.append(f"`{package}` не содержит beginner setup token `{token}`")
         if package == "02-greenfield-product":
+            greenfield_combined = "\n".join([user_text, codex_text, checklist_text])
             for token in GREENFIELD_REQUIRED_USER_TOKENS:
                 if token not in user_text:
                     errors.append(f"`{user_path}` не содержит greenfield user-boundary token `{token}`")
@@ -488,6 +515,20 @@ def validate_beginner_flow(root: Path, errors: list[str]) -> None:
             for phrase in GREENFIELD_FORBIDDEN_USER_PHRASES:
                 if phrase in user_text or phrase in checklist_text:
                     errors.append(f"`{package}` user-facing файлы содержат запрещенную greenfield boundary phrase `{phrase}`")
+            for phrase in GREENFIELD_FORBIDDEN_CHATGPT_UI_AUTOMATION_CLAIMS:
+                if phrase in greenfield_combined:
+                    errors.append(f"`{package}` содержит запрещенный claim о ChatGPT Project UI automation: `{phrase}`")
+            for token in [
+                "Codex готовит repo-first instruction для боевого ChatGPT Project. Пользователь создает ChatGPT Project в UI и вставляет готовый текст.",
+                "Открыть Project settings/instructions",
+                "Сохранить настройки",
+                "GitHub repo creation",
+                "initial commit/push",
+                "VPS project root",
+                "verified sync",
+            ]:
+                if token not in greenfield_combined:
+                    errors.append(f"`{package}` не содержит greenfield ChatGPT UI boundary token `{token}`")
 
 
 def validate_command_lint(root: Path, errors: list[str]) -> None:
@@ -549,6 +590,12 @@ def validate_dashboard(root: Path, errors: list[str]) -> None:
                 errors.append("greenfield dashboard trigger_command должен быть `новый проект`")
             if str(item.get("battle_repo_created_by") or "") != "codex":
                 errors.append("greenfield dashboard battle_repo_created_by должен быть codex")
+            if str(item.get("chatgpt_project_ui_owner") or "") != "user":
+                errors.append("greenfield dashboard chatgpt_project_ui_owner должен быть user")
+            if str(item.get("repo_first_instruction_prepared_by") or "") != "codex":
+                errors.append("greenfield dashboard repo_first_instruction_prepared_by должен быть codex")
+            if str(item.get("repo_first_instruction_pasted_by") or "") != "user":
+                errors.append("greenfield dashboard repo_first_instruction_pasted_by должен быть user")
             for bool_field in ["handoff_ready", "codex_takeover_ready", "battle_chatgpt_project_created"]:
                 if not isinstance(item.get(bool_field), bool):
                     errors.append(f"greenfield dashboard `{bool_field}` должен быть boolean")

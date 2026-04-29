@@ -138,6 +138,7 @@
 - lifecycle dashboard `runbook_packages` теперь дополнительно показывает `current_step`, `active_contour`, `takeover_ready` и `checklist_path`
 - greenfield-product package теперь проводит строгую external boundary: пользователь выбирает название, создает ChatGPT Project и вставляет подготовленную Codex repo-first инструкцию; GitHub repo/origin/initial push/project root/wizard/verify/sync принадлежат Codex automation при доступном write path
 - greenfield-product package теперь стартует через factory-template ChatGPT Project intake: новый чат -> `новый проект` -> guided questionnaire -> readiness check -> generated Codex handoff; Codex не является первым каналом постановки задачи для новичка
+- greenfield-product package теперь явно запрещает считать Codex исполнителем ChatGPT Project UI: Codex готовит repo-first instruction и пошаговую UI-инструкцию, пользователь сам создает боевой ChatGPT Project, открывает Project settings/instructions, вставляет готовый текст и сохраняет настройки
 
 ## Программа 2.5 (release truth)
 - release truth source: `docs/releases/release-scorecard.yaml`

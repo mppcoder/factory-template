@@ -10,7 +10,7 @@
 | GF-040 | [ ] | Factory ChatGPT Project | ChatGPT Project | Сформировать стартовый Codex handoff | One-block handoff после опроса | Handoff содержит project data, readiness, contour, boundary | Handoff block | GF-050 |
 | GF-050 | [ ] | Remote Codex chat/window | Пользователь | Вставить handoff в Codex | Новый Codex chat/window -> paste one block | Codex выводит handoff receipt | Handoff receipt | GF-060 |
 | GF-060 | [ ] | Remote Codex chat/window | Codex | Выполнить project automation | Codex создает repo/root/core/verify/sync | Automation green или blocker | Repo URL, verify, sync | GF-070 |
-| GF-070 | [ ] | Remote Codex chat/window | Codex | Вернуть repo-first instruction | Финальный closeout Codex | Готовая instruction получена | Instruction block | GF-080 |
-| GF-080 | [ ] | Browser ChatGPT | Пользователь | Создать ChatGPT Project боевого проекта | ChatGPT -> Projects -> New project | Боевой Project создан | Project exists | GF-090 |
-| GF-090 | [ ] | Battle ChatGPT Project settings | Пользователь | Вставить repo-first instruction | Paste instruction from Codex | Instruction сохранена | Saved instruction | GF-100 |
+| GF-070 | [ ] | Remote Codex chat/window | Codex | Вернуть repo-first instruction и UI-инструкцию | Финальный closeout Codex | Готовая instruction получена; Codex готовит repo-first instruction для боевого ChatGPT Project. Пользователь создает ChatGPT Project в UI и вставляет готовый текст. | Instruction block + UI steps | GF-080 |
+| GF-080 | [ ] | Browser ChatGPT | Пользователь | Создать ChatGPT Project боевого проекта | ChatGPT -> Projects -> New project | Боевой Project создан пользователем | Project exists | GF-090 |
+| GF-090 | [ ] | Battle ChatGPT Project settings | Пользователь | Открыть Project settings/instructions, вставить repo-first instruction и сохранить настройки | Paste instruction from Codex -> Save | Instruction сохранена пользователем | Saved instruction | GF-100 |
 | GF-100 | [ ] | Battle ChatGPT Project | Пользователь | Начать дальнейшую работу в боевом Project | Новый чат в battle Project | Project следует repo-first правилам | First repo-first response | STOP |

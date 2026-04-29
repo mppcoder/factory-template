@@ -23,7 +23,7 @@ Package layer должен содержать `USER-ONLY SETUP`, `CODEX-AUTOMATI
   - выбранный Codex contour;
   - blockers.
 - handoff содержит boundary: GitHub repo/root/verify/sync делает Codex;
-- пользовательские external actions ограничены factory ChatGPT intake, вставкой handoff в Codex, созданием battle ChatGPT Project и вставкой готовой instruction.
+- пользовательские external actions ограничены factory ChatGPT intake, вставкой handoff в Codex, созданием battle ChatGPT Project, открытием Project settings/instructions, вставкой готовой instruction и сохранением настроек.
 
 ## Проверка Codex automation после handoff
 
@@ -37,12 +37,17 @@ Package layer должен содержать `USER-ONLY SETUP`, `CODEX-AUTOMATI
 - `.chatgpt`, `AGENTS`, scenario-pack, dashboard, project-knowledge созданы/обновлены;
 - bootstrap/verify выполнены;
 - initial commit/push/verified sync выполнены или blocker documented;
-- Codex подготовил готовую repo-first instruction для battle ChatGPT Project.
+- Codex подготовил готовый текст repo-first instruction для battle ChatGPT Project;
+- Codex подготовил пошаговую инструкцию пользователю, куда вставить этот текст в ChatGPT UI;
+- Codex не создавал ChatGPT Project, не вставлял instruction и не сохранял настройки через browser/desktop UI automation.
 
 ## Проверка battle ChatGPT Project
 
 - пользователь создал ChatGPT Project боевого проекта;
+- пользователь открыл Project settings/instructions;
 - пользователь вставил готовую repo-first instruction;
+- пользователь сохранил настройки;
+- проверочная формулировка соблюдена: Codex готовит repo-first instruction для боевого ChatGPT Project. Пользователь создает ChatGPT Project в UI и вставляет готовый текст.
 - дальнейшие задачи идут через боевой Project, а не через factory-template Project.
 
 ## Проверка package layer из factory-template root

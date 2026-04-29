@@ -155,3 +155,4 @@ profiles:
       - docs/operator/runbook-packages/04-brownfield-without-repo-to-greenfield/04-verify.md
       - docs/operator/runbook-packages/04-brownfield-without-repo-to-greenfield/05-closeout.md
       - reports/bugs/2026-04-29-greenfield-runbook-bypasses-factory-chatgpt-intake.md
+      - reports/bugs/2026-04-29-codex-cannot-create-chatgpt-project-boundary.md

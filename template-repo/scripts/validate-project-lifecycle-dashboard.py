@@ -282,7 +282,14 @@ def validate_dashboard(data: dict[str, Any]) -> list[str]:
                     if not str(package.get(field) or "").strip():
                         errors.append(f"runbook_packages[{package_id or index}].{field} обязателен")
                 if package_id == "02-greenfield-product":
-                    for field in ["intake_channel", "trigger_command", "battle_repo_created_by"]:
+                    for field in [
+                        "intake_channel",
+                        "trigger_command",
+                        "battle_repo_created_by",
+                        "chatgpt_project_ui_owner",
+                        "repo_first_instruction_prepared_by",
+                        "repo_first_instruction_pasted_by",
+                    ]:
                         if not str(package.get(field) or "").strip():
                             errors.append(f"runbook_packages[{package_id}].{field} обязателен")
                     if str(package.get("intake_channel") or "") != "factory-template-chatgpt-project":
@@ -291,6 +298,12 @@ def validate_dashboard(data: dict[str, Any]) -> list[str]:
                         errors.append("runbook_packages[02-greenfield-product].trigger_command должен быть `новый проект`")
                     if str(package.get("battle_repo_created_by") or "") != "codex":
                         errors.append("runbook_packages[02-greenfield-product].battle_repo_created_by должен быть codex")
+                    if str(package.get("chatgpt_project_ui_owner") or "") != "user":
+                        errors.append("runbook_packages[02-greenfield-product].chatgpt_project_ui_owner должен быть user")
+                    if str(package.get("repo_first_instruction_prepared_by") or "") != "codex":
+                        errors.append("runbook_packages[02-greenfield-product].repo_first_instruction_prepared_by должен быть codex")
+                    if str(package.get("repo_first_instruction_pasted_by") or "") != "user":
+                        errors.append("runbook_packages[02-greenfield-product].repo_first_instruction_pasted_by должен быть user")
                     for bool_field in ["handoff_ready", "codex_takeover_ready", "battle_chatgpt_project_created"]:
                         if not isinstance(package.get(bool_field), bool):
                             errors.append(f"runbook_packages[02-greenfield-product].{bool_field} должен быть boolean")

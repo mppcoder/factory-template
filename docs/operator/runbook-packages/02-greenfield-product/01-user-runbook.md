@@ -7,14 +7,17 @@
 ## Настройка только пользователем
 
 Маркер слоя: `USER-ONLY SETUP`.
-Пользователь делает только внешние действия: запускает factory-template ChatGPT intake, отвечает на опрос, вставляет стартовый Codex handoff, а после Codex automation создает ChatGPT Project боевого проекта и вставляет готовую repo-first instruction.
+Пользователь делает только внешние действия: запускает factory-template ChatGPT intake, отвечает на опрос, вставляет стартовый Codex handoff, а после Codex automation создает ChatGPT Project боевого проекта, открывает Project settings/instructions, вставляет готовую repo-first instruction и сохраняет настройки.
 
 Пользователь не создает GitHub repo, не выбирает slug/repo name вручную, не clone-ит repo, не добавляет `origin`, не делает initial commit/push, не создает VPS project root, не запускает launcher/wizard, не materialize-ит repo-first core, не запускает verify и sync.
 
 ## Автоматизация Codex
 
 Маркер слоя: `CODEX-AUTOMATION`.
-Codex получает стартовый handoff, сформированный ChatGPT Project шаблона фабрики после опроса. Codex нормализует slug/repo name, создает GitHub repo, готовит VPS project root, запускает factory launcher/wizard, materializes repo-first core, создает `.chatgpt`, `AGENTS`, scenario-pack, dashboard, project-knowledge, выполняет bootstrap/verify, делает initial commit/push/verified sync и готовит repo-first instruction для боевого ChatGPT Project.
+Codex получает стартовый handoff, сформированный ChatGPT Project шаблона фабрики после опроса. Codex нормализует slug/repo name, создает GitHub repo, готовит VPS project root, запускает factory launcher/wizard, materializes repo-first core, создает `.chatgpt`, `AGENTS`, scenario-pack, dashboard, project-knowledge, выполняет bootstrap/verify, делает initial commit/push/verified sync, готовит готовый текст repo-first instruction для боевого ChatGPT Project и готовит пошаговую инструкцию пользователю, куда этот текст вставить.
+
+Codex готовит repo-first instruction для боевого ChatGPT Project. Пользователь создает ChatGPT Project в UI и вставляет готовый текст.
+Codex не создает ChatGPT Project боевого проекта, не открывает Project settings/instructions, не вставляет instruction и не сохраняет настройки через browser/desktop UI automation как canonical path для новичка.
 
 Допустимые contours: `vscode-remote-ssh-codex-extension` через `Codex extension / Codex chat` в VS Code Remote SSH или fallback `codex-app-remote-ssh`.
 
@@ -201,29 +204,30 @@ Codex выполняет:
 ```
 
 - Куда вставить: Не вставлять; это контроль ожидания.
-- Ожидаемый результат: Codex сообщает адрес созданного repo, project root, verify result, commit/push status.
+- Ожидаемый результат: Codex сообщает адрес созданного repo, project root, verify result, commit/push status и готовит пошаговую инструкцию пользователю для ChatGPT Project UI.
 - Если ошибка: Если Codex фиксирует blocker, выполнить только названное внешнее действие: permission, approval, secret, paid/dangerous confirmation или ChatGPT Project UI.
 - Evidence: Codex closeout с адресом созданного repo, project root, verify result и sync status.
 - Следующий шаг: `GF-070`.
 
-### GF-070. Получить готовую repo-first instruction
+### GF-070. Получить готовую repo-first instruction и UI-инструкцию
 
 - Окно: Codex chat/window.
 - Делает: Codex; пользователь копирует результат.
-- Зачем: Боевой ChatGPT Project должен получить точную instruction под созданный repo.
+- Зачем: Боевой ChatGPT Project должен получить точную instruction под созданный repo, а ChatGPT Project UI остается действием пользователя.
 - Что нужно до начала: `GF-060` green или documented blocker снят.
 - Где взять значения: Codex final closeout.
 - Команды для копирования:
 
 ```text
 Скопировать готовую repo-first instruction из финального ответа Codex.
+Скопировать пошаговую инструкцию Codex: где в ChatGPT Project UI открыть settings/instructions, куда вставить текст и как сохранить.
 Не редактировать адрес repo, project root, scenario entrypoint и language contract вручную.
 ```
 
 - Куда вставить: Пока не вставлять; сохранить для `GF-090`.
-- Ожидаемый результат: Готовый instruction block скопирован.
+- Ожидаемый результат: Готовый instruction block и UI-инструкция скопированы.
 - Если ошибка: Если instruction отсутствует, попросите Codex выдать готовый блок для ChatGPT Project боевого проекта.
-- Evidence: Готовый repo-first instruction block.
+- Evidence: Готовый repo-first instruction block и пошаговая UI-инструкция.
 - Следующий шаг: `GF-080`.
 
 ### GF-080. Создать ChatGPT Project боевого проекта
@@ -241,6 +245,7 @@ ChatGPT UI path:
 2. Projects -> New project.
 3. Название: имя боевого проекта из опроса.
 4. Создать project.
+5. Не передавать создание Project в Codex: это ручное действие в ChatGPT UI.
 ```
 
 - Куда вставить: Не в терминал; выполнить в Browser ChatGPT UI.
@@ -249,7 +254,7 @@ ChatGPT UI path:
 - Evidence: Новый ChatGPT Project боевого проекта существует.
 - Следующий шаг: `GF-090`.
 
-### GF-090. Вставить готовую repo-first instruction
+### GF-090. Вставить готовую repo-first instruction и сохранить настройки
 
 - Окно: Browser ChatGPT Project settings/instructions.
 - Делает: Пользователь.
@@ -259,6 +264,8 @@ ChatGPT UI path:
 - Команды для копирования:
 
 ```text
+Открыть ChatGPT Project боевого проекта.
+Открыть Project settings/instructions.
 Вставить в ChatGPT Project боевого проекта ровно готовую repo-first instruction, которую подготовил Codex.
 Сохранить настройки.
 ```

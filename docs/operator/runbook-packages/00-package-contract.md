@@ -59,6 +59,8 @@ Codex-runbook обязан начинаться с проверки remote conte
 
 Codex не является первым каналом постановки задачи для новичка. Codex является executor после handoff: создает repo/root/core, запускает wizard/verify/sync и готовит repo-first instruction для боевого ChatGPT Project.
 
+Граница ChatGPT Project UI является внешней пользовательской границей. Codex готовит repo-first instruction для боевого ChatGPT Project. Пользователь создает ChatGPT Project в UI и вставляет готовый текст. Codex также готовит пошаговую инструкцию пользователю, куда вставить этот текст, но не создает ChatGPT Project, не открывает Project settings/instructions, не вставляет instruction и не сохраняет настройки через browser/desktop UI automation как canonical path для новичка.
+
 ## Источники истины
 
 Executable routing остается в:
