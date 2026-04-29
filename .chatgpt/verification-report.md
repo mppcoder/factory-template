@@ -26,6 +26,7 @@
 - CI #5 `24839481282` rerun reproduced old fixed bug snapshot on commit `02fb8b7dfb5a74be13e1ba0211f24ac0fc1e0a82`.
 - No hosted-runner acquisition blocker occurred in these five reruns.
 - Current verification gap found separately: GitHub runner lacked `rg`, masking pre-release audit scan behavior; fixed by removing `rg` dependency and normalizing scan paths.
+- Post-fix GitHub CI #96 (`25101530394`) failed because the stricter scan also matched quoted legacy evidence inside the new bug report; follow-up allowlist treats `reports/bugs/*` as historical defect-capture evidence.
 
 ## Команды проверки
 
@@ -39,6 +40,7 @@
 - `gh run rerun <RUN_ID> --repo mppcoder/factory-template --failed`: attempted for CI #1-#5.
 - `gh run watch <RUN_ID> --repo mppcoder/factory-template --exit-status`: all five reruns completed red on old snapshot/stale PR verify step.
 - `bash template-repo/scripts/verify-all.sh ci` from clean worktree with the fix-set applied: PASS.
+- `gh run watch 25101530394 --repo mppcoder/factory-template --exit-status`: FAIL, expected follow-up evidence for bug-report allowlist adjustment.
 - `git diff --check`: PASS.
 - `python3 template-repo/scripts/validate-codex-task-pack.py .`: PASS.
 - `python3 template-repo/scripts/validate-human-language-layer.py .`: PASS, active findings `0`.

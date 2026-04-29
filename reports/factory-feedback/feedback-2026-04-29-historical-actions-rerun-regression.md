@@ -27,3 +27,4 @@ Release and CI gate scripts should not depend on optional developer tools unless
 - `PRE_RELEASE_AUDIT.sh` now uses `grep -Eq` for the single-file legacy check.
 - `VERSION_SYNC_CHECK.sh` now uses `find` + `grep` with repo-relative allowlist matching.
 - Active template `project-origin.md` now carries the current `2.5.0` factory identity instead of the old versioning-layer label.
+- Defect-capture reports under `reports/bugs/*` are treated as allowed historical evidence for legacy-reference scans.

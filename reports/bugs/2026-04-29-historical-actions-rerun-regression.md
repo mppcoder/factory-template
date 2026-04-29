@@ -24,6 +24,7 @@
 - After making the scan portable, the same gate also exposed active template leftovers:
   - `template-repo/template/.chatgpt/project-origin.md:13:factory-2.4.0-versioning-layer`
   - `template-repo/template/.chatgpt/project-origin.md:16:2.4.0-versioning-layer`
+- Post-fix GitHub CI run `25101530394` failed because the stricter scan also matched the legacy evidence quoted inside this bug report. Defect-capture reports are historical evidence and must be allowed history for this scan.
 
 ## Expected
 
@@ -48,10 +49,12 @@ Verification scripts should behave consistently in GitHub Actions and local clea
   - searches from `ROOT`;
   - preserves the existing allowed historical files.
 - Updated active template `project-origin.md` to `factory-v2.5.0` / `2.5.0`; historical registry entries remain allowed history.
+- Added `reports/bugs/*` to the legacy-reference allowed history so defect-capture evidence can quote old IDs without breaking release audit.
 
 ## Verification
 
-- `bash template-repo/scripts/verify-all.sh ci` from a clean worktree with only this fix-set applied: PASS.
+- GitHub CI run `25101530394`: FAIL, scan matched this bug report's quoted historical evidence.
+- `bash template-repo/scripts/verify-all.sh ci` from a clean worktree with the follow-up allowlist fix applied: PASS.
 - `git diff --check`: PASS.
 - `python3 template-repo/scripts/validate-codex-task-pack.py .`: PASS.
 - `python3 template-repo/scripts/validate-human-language-layer.py .`: PASS, active findings `0`.

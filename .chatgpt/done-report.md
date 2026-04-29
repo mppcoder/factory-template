@@ -14,6 +14,7 @@
 - PR #1/#2/#3 runs классифицированы как historical superseded.
 - CI #1 и CI #5 классифицированы как old fixed bug snapshots.
 - При current-main verification closeout найден отдельный verification portability defect и исправлен минимальным patch.
+- Post-fix CI #96 выявил, что defect-capture bug report quotes тоже должны быть allowed history для legacy scan; добавлен follow-up allowlist для `reports/bugs/*`.
 
 ## Какие артефакты обновлены
 
@@ -28,6 +29,7 @@
 - `PRE_RELEASE_AUDIT.sh`: single-file legacy check no longer depends on `rg`.
 - `VERSION_SYNC_CHECK.sh`: repo-wide legacy scan now uses `find` + `grep` from repo root with repo-relative allowlist matching.
 - `template-repo/template/.chatgpt/project-origin.md`: active template factory identity updated to `factory-v2.5.0` / `2.5.0`.
+- `VERSION_SYNC_CHECK.sh`: `reports/bugs/*` allowed as defect-capture history for quoted legacy evidence.
 
 ## Итог закрытия
 

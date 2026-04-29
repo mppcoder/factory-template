@@ -39,6 +39,7 @@ LEGACY_REF_MATCHES="$(
         factory/producer/registry/release-history.md|\
         factory/producer/registry/factory-versions.md|\
         factory/producer/registry/projects-created.md|\
+        reports/bugs/*|\
         CHANGELOG.md|\
         VERSION.md|\
         docs/releases/factory-template-release-notes.md)
