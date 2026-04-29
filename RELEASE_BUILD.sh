@@ -6,7 +6,7 @@ ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 VERSION="$(awk 'f{gsub(/^[[:space:]]+|[[:space:]]+$/, ""); print; exit} /^## Текущая версия$/{f=1}' "$ROOT/VERSION.md")"
 REL_NAME="factory-v${VERSION}"
 STAGE="$ROOT/.release-stage/$REL_NAME"
-OUT_ZIP="${1:-$ROOT/../$REL_NAME.zip}"
+OUT_ZIP="${1:-$ROOT/_incoming/$REL_NAME.zip}"
 OUT_DIR_RAW="$(dirname "$OUT_ZIP")"
 mkdir -p "$OUT_DIR_RAW"
 OUT_DIR="$(cd "$OUT_DIR_RAW" && pwd)"
@@ -61,7 +61,7 @@ excluded_transient_paths:
 required_first_run_commands:
   - cd $REL_NAME
   - bash POST_UNZIP_SETUP.sh
-  - python3 template-repo/scripts/validate-release-package.py ../$OUT_BASE --checksum ../$OUT_BASE.sha256
+  - python3 template-repo/scripts/validate-release-package.py /projects/factory-template/_incoming/$OUT_BASE --checksum /projects/factory-template/_incoming/$OUT_BASE.sha256 --manifest /projects/factory-template/_incoming/${OUT_BASE%.zip}.manifest.yaml
   - bash template-repo/scripts/verify-all.sh quick
 verification_status:
   stage_version_sync: pending

@@ -162,10 +162,10 @@ Internal workflow:
 
 ```bash
 bash RELEASE_BUILD.sh
-archive="/projects/factory-v2.5.1.zip"
-checksum="/projects/factory-v2.5.1.zip.sha256"
-manifest="/projects/factory-v2.5.1.manifest.yaml"
-(cd /projects && sha256sum -c factory-v2.5.1.zip.sha256)
+archive="/projects/factory-template/_incoming/factory-v2.5.1.zip"
+checksum="/projects/factory-template/_incoming/factory-v2.5.1.zip.sha256"
+manifest="/projects/factory-template/_incoming/factory-v2.5.1.manifest.yaml"
+(cd /projects/factory-template/_incoming && sha256sum -c factory-v2.5.1.zip.sha256)
 python3 /projects/factory-template/template-repo/scripts/validate-release-package.py "$archive" --checksum "$checksum" --manifest "$manifest"
 tmp_dir="$(mktemp -d)"
 unzip -q "$archive" -d "$tmp_dir"

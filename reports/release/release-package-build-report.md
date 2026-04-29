@@ -27,23 +27,24 @@
 
 ## Артефакты
 
-- archive: `/projects/factory-v2.5.1.zip`
-- manifest: `/projects/factory-v2.5.1.manifest.yaml`
-- checksum: `/projects/factory-v2.5.1.zip.sha256`
+- archive: `/projects/factory-template/_incoming/factory-v2.5.1.zip`
+- manifest: `/projects/factory-template/_incoming/factory-v2.5.1.manifest.yaml`
+- checksum: `/projects/factory-template/_incoming/factory-v2.5.1.zip.sha256`
 - archive root: `factory-v2.5.1/`
-- SHA256 value: recorded in `/projects/factory-v2.5.1.zip.sha256`.
+- SHA256 value: recorded in `/projects/factory-template/_incoming/factory-v2.5.1.zip.sha256`.
 
 ## Проверка
 
 - `bash VERSION_SYNC_CHECK.sh` — passed.
 - `bash PRE_RELEASE_AUDIT.sh` — passed after cleanup.
 - `bash RELEASE_BUILD.sh` — passed and produced archive, manifest and checksum.
-- `(cd /projects && sha256sum -c factory-v2.5.1.zip.sha256)` — passed.
-- `python3 template-repo/scripts/validate-release-package.py /projects/factory-v2.5.1.zip --checksum /projects/factory-v2.5.1.zip.sha256 --manifest /projects/factory-v2.5.1.manifest.yaml` — passed.
-- Temp unpack root: `/tmp/tmp.uBnftPUVea/factory-v2.5.1`.
+- `(cd /projects/factory-template/_incoming && sha256sum -c factory-v2.5.1.zip.sha256)` — passed.
+- `python3 template-repo/scripts/validate-release-package.py /projects/factory-template/_incoming/factory-v2.5.1.zip --checksum /projects/factory-template/_incoming/factory-v2.5.1.zip.sha256 --manifest /projects/factory-template/_incoming/factory-v2.5.1.manifest.yaml` — passed.
+- Temp unpack root: `/tmp/tmp.01hagnB4VR/factory-v2.5.1`.
 - Temp unpack `bash POST_UNZIP_SETUP.sh` — passed.
 - Temp unpack `bash template-repo/scripts/verify-all.sh quick` — passed.
 - Working repo `bash CLEAN_VERIFY_ARTIFACTS.sh && bash template-repo/scripts/verify-all.sh quick` — passed.
+- Layout correction: flat `/projects/factory-v2.5.1.*` artifacts were removed; `/projects` contains only project roots.
 
 ## Известные ограничения
 

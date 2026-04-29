@@ -389,6 +389,7 @@ contours:
       - deploy
       - docs
       - factory
+      - _incoming
       - factory-config.yaml
       - factory-template-ops-policy.yaml
       - factory-template.code-workspace
@@ -418,6 +419,7 @@ contours:
       - __pycache__
       - _artifacts
       - _boundary-actions
+      - _incoming
       - _factory-sync-export
       - _sources-export
       - audit-smoke-project

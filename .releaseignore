@@ -14,6 +14,7 @@ __pycache__/
 _sources-export/
 _boundary-actions/
 _factory-sync-export/
+_incoming/
 .release-stage/
 .matrix-test/
 .pytest_cache/

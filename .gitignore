@@ -10,5 +10,6 @@ deploy/.env
 .release-stage/
 _boundary-actions/
 _sources-export/
+_incoming/
 .factory-runtime/
 _artifacts/

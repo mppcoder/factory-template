@@ -142,8 +142,9 @@ items:
   evidence:
   - 'route receipt: launch_source=chatgpt-handoff, handoff_shape=codex-task-handoff, selected_profile=deep, selected_model=gpt-5.5, reasoning=high'
   - 'bash RELEASE_BUILD.sh'
-  - 'sha256sum -c /projects/factory-v2.5.1.zip.sha256'
-  - 'python3 template-repo/scripts/validate-release-package.py /projects/factory-v2.5.1.zip --checksum /projects/factory-v2.5.1.zip.sha256 --manifest /projects/factory-v2.5.1.manifest.yaml'
+  - 'sha256sum -c /projects/factory-template/_incoming/factory-v2.5.1.zip.sha256'
+  - 'python3 template-repo/scripts/validate-release-package.py /projects/factory-template/_incoming/factory-v2.5.1.zip --checksum /projects/factory-template/_incoming/factory-v2.5.1.zip.sha256 --manifest /projects/factory-template/_incoming/factory-v2.5.1.manifest.yaml'
   - 'bash template-repo/scripts/verify-all.sh quick in unpacked /tmp root'
   - 'bash template-repo/scripts/verify-all.sh quick in working repo'
+  - 'layout correction: release artifacts moved under /projects/factory-template/_incoming'
   next_action: No further implementation action; release package is verified and sync gate remains.
