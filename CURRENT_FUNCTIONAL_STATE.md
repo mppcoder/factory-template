@@ -136,6 +136,7 @@
 - factory-template user checklist стал таблицей-зеркалом пользовательских шагов, а verify layer разделен на user readiness до takeover и Codex automation после takeover
 - lifecycle dashboard теперь показывает `runbook_packages` с current phase, gates, blockers, next action и owner boundary для четырех entry paths без добавления web app/daemon/SQLite/Telegram stack
 - lifecycle dashboard `runbook_packages` теперь дополнительно показывает `current_step`, `active_contour`, `takeover_ready` и `checklist_path`
+- greenfield-product package теперь проводит строгую external boundary: пользователь выбирает название, создает ChatGPT Project и вставляет подготовленную Codex repo-first инструкцию; GitHub repo/origin/initial push/project root/wizard/verify/sync принадлежат Codex automation при доступном write path
 
 ## Программа 2.5 (release truth)
 - release truth source: `docs/releases/release-scorecard.yaml`

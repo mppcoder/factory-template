@@ -184,6 +184,45 @@ FORBIDDEN_USER_CHECKLIST_PHRASES = [
     "Dashboard отражает",
     "обновлены только релевантные docs",
 ]
+GREENFIELD_FORBIDDEN_USER_PHRASES = [
+    "GitHub repo создан",
+    "repo URL",
+    "Repo URL",
+    "GitHub repo/access",
+    "<repo-owner>",
+    "<repo-name>",
+    "пользователь должен сам создать GitHub repo",
+    "сам создать GitHub repo",
+    "сам клонировать",
+    "сам добавлять origin",
+    "first push",
+    "пользователь делает initial commit/push",
+]
+GREENFIELD_REQUIRED_USER_TOKENS = [
+    "GF-000",
+    "GF-010",
+    "GF-020",
+    "GF-030",
+    "Название проекта: <PROJECT_NAME>",
+    "создает ChatGPT Project",
+    "вставляет готовую repo-first инструкцию",
+    "Пользователь не создает GitHub repo",
+    "не добавляет `origin`",
+    "не делает initial commit/push",
+    "не запускает launcher/wizard/verify",
+]
+GREENFIELD_REQUIRED_CODEX_TOKENS = [
+    "Нормализуй project slug",
+    "создай GitHub repo сам",
+    "Создай project root на VPS",
+    "first-project-wizard.py",
+    "Materialize repo-first core",
+    "Добавь `origin`",
+    "initial commit/push",
+    "bash scripts/verify-all.sh quick",
+    "verified sync",
+    "готовый repo-first instruction text",
+]
 
 
 def read(path: Path) -> str:
@@ -372,6 +411,16 @@ def validate_beginner_flow(root: Path, errors: list[str]) -> None:
             ]:
                 if token not in user_text + "\n" + codex_text:
                     errors.append(f"`{package}` не содержит beginner setup token `{token}`")
+        if package == "02-greenfield-product":
+            for token in GREENFIELD_REQUIRED_USER_TOKENS:
+                if token not in user_text:
+                    errors.append(f"`{user_path}` не содержит greenfield user-boundary token `{token}`")
+            for token in GREENFIELD_REQUIRED_CODEX_TOKENS:
+                if token not in codex_text:
+                    errors.append(f"`{codex_path}` не содержит greenfield Codex automation token `{token}`")
+            for phrase in GREENFIELD_FORBIDDEN_USER_PHRASES:
+                if phrase in user_text or phrase in checklist_text:
+                    errors.append(f"`{package}` user-facing файлы содержат запрещенную greenfield boundary phrase `{phrase}`")
 
 
 def validate_command_lint(root: Path, errors: list[str]) -> None:

@@ -4,14 +4,22 @@ Package layer должен содержать `USER-ONLY SETUP`, `CODEX-AUTOMATI
 
 User readiness до takeover:
 
-- project slug и GitHub repo/access определены;
-- ChatGPT Project подключен к GitHub;
+- пользователь выбрал `<PROJECT_NAME>`;
+- пользователь сообщил Codex название и optional идею;
+- factory-template установлен и verified;
 - remote Codex context открыт;
 - Codex может выполнить remote shell command.
+- пользователь создал ChatGPT Project в UI;
+- пользователь вставил готовую repo-first инструкцию, подготовленную Codex.
 
 Codex automation после takeover:
 
+- Codex нормализовал project slug/repo name;
+- Codex создал GitHub repo или documented blocker;
+- Codex добавил `origin`, сделал initial commit/push или documented blocker;
 - `/projects/<project-slug>` создан;
+- wizard/launcher выполнен Codex;
+- repo-first core materialized;
 - greenfield docs заполнены;
 - dashboard validates;
 - generated quick verify green;

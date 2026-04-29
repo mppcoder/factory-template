@@ -7,6 +7,7 @@
 - Codex-runbook теперь явно автоматизирует VPS preflight, system packages, Node/npm/Codex CLI, GitHub CLI, `/projects/factory-template`, clone `mppcoder/factory-template`, targeted/quick verify, dashboard update и verified sync.
 - Validator `validate-runbook-packages.py` теперь ловит abstract-only package regressions: отсутствие `USER-ONLY SETUP`, `CODEX-AUTOMATION`, takeover point, beginner step cards и обязательных factory setup steps.
 - Чеклист factory-template теперь является таблицей-зеркалом user-runbook и не содержит process/meta checks; dashboard показывает `current_step`, `active_contour`, `takeover_ready` и `checklist_path`.
+- Greenfield package boundary исправлен: пользователь больше не создает GitHub repo, не добавляет `origin`, не делает first push и не запускает launcher/verify. Codex делает это сам и готовит текст repo-first инструкции для ChatGPT Project.
 - Добавлен полный слой `docs/operator/runbook-packages/` для четырех входов: сам `factory-template`, чистый `greenfield-product`, brownfield with repo -> greenfield и brownfield without repo -> greenfield.
 - Каждый package разделяет Browser ChatGPT Project, VS Code Remote SSH, Codex chat, terminal fallback, GitHub/external UI, secrets и approvals.
 - Brownfield packages закрепляют продуктовую логику: brownfield является только transitional path, а done требует conversion в `greenfield-product` / `greenfield-converted` или explicit documented blocker.

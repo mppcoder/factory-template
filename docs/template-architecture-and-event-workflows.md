@@ -144,6 +144,7 @@ factory-template/
 - `docs/`: канонические обзорные reference-docs без дублирования сценарного слоя.
 - `docs/operator/factory-template/`: operator/codex runbooks и boundary/completion guidance.
 - `docs/operator/runbook-packages/`: финальные пошаговые packages "с пустого ПК до Codex takeover и рабочего состояния" для factory-template, greenfield-product и двух brownfield-to-greenfield entry paths. Стартовая точка factory-template: `01-factory-template/01-user-runbook.md`, шаг `FT-000`; после `FT-170` пользовательский ранбук останавливается, а clone/setup/verify/dashboard/sync выполняет Codex-runbook.
+- Для `greenfield-product` пользователь не создает GitHub repo, не добавляет `origin`, не делает first push и не запускает launcher/verify. User-only boundary: выбрать название, сообщить его Codex, создать ChatGPT Project в UI и вставить готовую repo-first инструкцию, подготовленную Codex.
 - `project-knowledge/factory/template-evolution/`: историческая knowledge-зона развития фабрики и release-facing meta notes; это не отдельный root workflow.
 - `factory/producer/packaging/sources/`: declarative source/export profiles.
 - `factory/producer/registry/`: release history, versions, projects created.

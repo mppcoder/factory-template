@@ -146,7 +146,7 @@ runbook_packages:
       - verification
       - closeout
     blockers: []
-    next_action: "Для нового боевого проекта пройти user-only setup, открыть remote Codex context и передать scaffold/materialization Codex-runbook."
+    next_action: "Для нового боевого проекта пользователь выбирает название и создает ChatGPT Project; GitHub repo/root/wizard/verify/sync и готовую repo-first инструкцию подготавливает Codex."
     owner_boundary: internal-repo-follow-up
   - id: 03-brownfield-with-repo-to-greenfield
     title: "Brownfield with repo conversion package"
