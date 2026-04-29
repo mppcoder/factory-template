@@ -3,12 +3,12 @@
 ## Scope / область
 
 - Repo: `factory-template`
-- Current release line: `2.5.0`
-- Current working section in changelog: `2.5.0`
+- Current release line: `2.5.1`
+- Current working section in changelog: `2.5.1`
 - Next planned release program line: `none`
 - Release truth source: `docs/releases/release-scorecard.yaml`
-- Current 2.5 stage: `release-decision (GA passed)`
-- Status: `2.5.0 GA Ready`
+- Current 2.5 stage: `updated release preparation / release package assembly`
+- Status: `2.5.1 Package Ready`
 - GA-ready: `true`
 
 ## Intent signals / сигналы намерения
@@ -48,6 +48,9 @@
 - [x] `bash MATRIX_TEST.sh`
 - [x] `bash CLEAN_VERIFY_ARTIFACTS.sh`
 - [x] `bash PRE_RELEASE_AUDIT.sh`
+- [x] `bash RELEASE_BUILD.sh`
+- [x] `sha256sum -c factory-v2.5.1.zip.sha256`
+- [x] `python3 template-repo/scripts/validate-release-package.py <archive> --checksum <sha256> --manifest <manifest>`
 - [x] `python3 factory/producer/extensions/workspace-packs/factory-ops/upgrade-report.py <factory-root> <downstream-root> --format markdown --output UPGRADE_SUMMARY.md`
 - [x] `bash factory/producer/extensions/workspace-packs/factory-ops/apply-template-patch.sh <downstream-root>/_factory-sync-export --apply-safe-zones`
 - [x] `bash factory/producer/extensions/workspace-packs/factory-ops/apply-template-patch.sh <downstream-root>/_factory-sync-export --apply-safe-zones --with-project-snapshot`
@@ -69,6 +72,9 @@
 ## Проверки release layer
 
 - [x] `VERSION.md`, `FACTORY_MANIFEST.yaml` и `template-repo/TEMPLATE_MANIFEST.yaml` согласованы
+- [x] `bash RELEASE_BUILD.sh` создает `factory-v2.5.1.zip`, `factory-v2.5.1.manifest.yaml` и `factory-v2.5.1.zip.sha256`
+- [x] archive распакован в temp и содержит один root `factory-v2.5.1/`
+- [x] в распакованном root проходят `bash POST_UNZIP_SETUP.sh` и targeted package verification
 - [x] `factory-template-ops-policy.yaml` валиден
 - [x] curated export/reference packs собираются
 - [x] boundary-actions guide генерируется
@@ -83,8 +89,8 @@
 
 ## Go / no-go решение
 
-- [x] release bundle можно собирать
-- [x] явно зафиксирован `release` для `2.5.0`
+- [x] release bundle можно собирать с manifest/checksum evidence
+- [x] явно зафиксирован patch release package для `2.5.1`
 
 ## 2.5 program framing gate (closed)
 

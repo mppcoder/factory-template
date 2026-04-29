@@ -224,6 +224,60 @@ mkdir -p /projects/factory-template/_incoming
 
 Загрузите в `/projects/factory-template/_incoming` архив фабрики и дополнительные входящие артефакты.
 
+Canonical install-from-scratch path:
+
+- если доступен GitHub, используйте clone/download repo `mppcoder/factory-template` или опубликованный release artifact;
+- если GitHub command path недоступен, используйте fallback archive upload;
+- npm path для установки фабрики не поддерживается, потому что в repo нет `package.json` и npm packaging contract.
+
+Fallback archive upload:
+
+1. В Browser/GitHub скачайте или получите файлы:
+   - `factory-v2.5.1.zip`;
+   - `factory-v2.5.1.manifest.yaml`;
+   - `factory-v2.5.1.zip.sha256`.
+2. В VS Code Remote SSH или через SCP загрузите все три файла в:
+
+```text
+/projects/factory-template/_incoming
+```
+
+3. Если ставите поверх старой распаковки, удаляется только прежний распакованный каталог конкретной версии, например:
+
+```bash
+rm -rf /projects/factory-template/factory-v2.5.1
+```
+
+Не удаляйте `/projects/factory-template/_incoming`, пока checksum и распаковка не проверены.
+
+4. В VPS shell или Codex chat выполняется проверка:
+
+```bash
+cd /projects/factory-template/_incoming
+sha256sum -c factory-v2.5.1.zip.sha256
+unzip -q factory-v2.5.1.zip -d /projects/factory-template
+cd /projects/factory-template/factory-v2.5.1
+bash POST_UNZIP_SETUP.sh
+python3 template-repo/scripts/validate-release-package.py ../_incoming/factory-v2.5.1.zip --checksum ../_incoming/factory-v2.5.1.zip.sha256 --manifest ../_incoming/factory-v2.5.1.manifest.yaml
+bash template-repo/scripts/verify-all.sh quick
+```
+
+Expected result:
+
+- checksum verification reports `OK`;
+- zip распакован в один root folder `factory-v2.5.1/`;
+- `POST_UNZIP_SETUP.sh` проходит без ошибок;
+- package validator печатает `RELEASE PACKAGE ВАЛИДЕН`;
+- quick verify завершается `VERIFY-ALL ПРОЙДЕН (quick)`.
+
+Что прислать обратно Codex/ChatGPT при ручной загрузке:
+
+- имя загруженного archive;
+- вывод `sha256sum -c`;
+- путь распакованного root;
+- вывод package validator;
+- результат quick verify.
+
 После распаковки и первого `bash POST_UNZIP_SETUP.sh` дополнительных действий по внешнему staging-контуру больше не требуется.
 
 После распаковки можно запустить preflight-проверку:

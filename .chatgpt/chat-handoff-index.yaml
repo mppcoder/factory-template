@@ -1,6 +1,6 @@
 schema: chat-handoff-index/v1
 project_code: FT
-next_chat_number: 10
+next_chat_number: 11
 title_policy:
   canonical_format: <PROJECT_CODE>-CH-<NNNN> <task-slug>
   include_status_in_title: false
@@ -123,3 +123,27 @@ items:
   accepted_reason: Stale seed/index entry without a matching handoff implementation
     register item; not an active blocked task.
   next_action: No active action; keep only as historical index record.
+- chat_id: FT-CH-0010
+  chat_number: 10
+  chat_title: FT-CH-0010 release-package-updated-bootstrap
+  task_slug: release-package-updated-bootstrap
+  kind: handoff
+  state: verified
+  created_utc: '2026-04-29T00:00:00Z'
+  updated_utc: '2026-04-29T19:35:00Z'
+  source_type: chatgpt-handoff
+  handoff_group: release-package-updated-bootstrap
+  handoff_revision: 1
+  handoff_register_item_id: HIR-011
+  status_chain:
+  - chatgpt_handoff
+  - codex_accepted
+  - codex_completed
+  evidence:
+  - 'route receipt: launch_source=chatgpt-handoff, handoff_shape=codex-task-handoff, selected_profile=deep, selected_model=gpt-5.5, reasoning=high'
+  - 'bash RELEASE_BUILD.sh'
+  - 'sha256sum -c /projects/factory-v2.5.1.zip.sha256'
+  - 'python3 template-repo/scripts/validate-release-package.py /projects/factory-v2.5.1.zip --checksum /projects/factory-v2.5.1.zip.sha256 --manifest /projects/factory-v2.5.1.manifest.yaml'
+  - 'bash template-repo/scripts/verify-all.sh quick in unpacked /tmp root'
+  - 'bash template-repo/scripts/verify-all.sh quick in working repo'
+  next_action: No further implementation action; release package is verified and sync gate remains.

@@ -1,5 +1,6 @@
 # Версии фабрики
 
+- 2.5.1 — patch-релиз: install-from-scratch release package with manifest, SHA256 checksum and fallback archive verification
 - 2.5.0 — GA-релиз: full-KPI evidence для `G25-GA`, beginner-first measurements и downstream safe-sync validation
 - 2.4.4 — patch-релиз: semantic cleanup canonical hierarchy, neutral preset naming и optional domain reference contour
 - 2.4.3 — patch-релиз: полный release-facing пакет, canonical `RELEASE_NOTES.md` и расширенный architecture/workflow reference layer

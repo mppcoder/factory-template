@@ -1,4 +1,4 @@
-# Русское ядро фабрики проектов v2.5.0
+# Русское ядро фабрики проектов v2.5.1
 
 Это стабилизационный релиз фабрики проектов для связки:
 
@@ -9,8 +9,8 @@
 Следующая линия `2.5` уже оформлена как отдельная release-программа: не только hardening процесса, но и beginner-first productization с UI-friendly контуром и безопасной эволюцией downstream-репозиториев.
 
 Release truth source: `docs/releases/release-scorecard.yaml`.
-Current 2.5 stage: `release-decision (GA passed)`.
-Status: `2.5.0 GA Ready`.
+Current 2.5 stage: `updated release preparation / release package assembly`.
+Status: `2.5.1 Package Ready`.
 GA-ready: `true`.
 
 ## Канонические entry modes
@@ -78,10 +78,32 @@ Launcher ведет по трем маршрутам:
 - `docs/releases/2.5-roadmap.md`
 - `docs/releases/2.5-success-metrics.md`
 
+## Установка с нуля и fallback archive
+
+Canonical path для установки с нуля — GitHub clone/download или опубликованный release artifact `factory-v2.5.1.zip`.
+Npm path не поддерживается: в repo нет `package.json` и npm packaging contract.
+
+Fallback для ручной загрузки:
+
+```bash
+mkdir -p /projects/factory-template/_incoming
+# загрузите factory-v2.5.1.zip, factory-v2.5.1.manifest.yaml и factory-v2.5.1.zip.sha256 в _incoming
+cd /projects/factory-template/_incoming
+sha256sum -c factory-v2.5.1.zip.sha256
+rm -rf /projects/factory-template/factory-v2.5.1
+unzip -q factory-v2.5.1.zip -d /projects/factory-template
+cd /projects/factory-template/factory-v2.5.1
+bash POST_UNZIP_SETUP.sh
+python3 template-repo/scripts/validate-release-package.py ../_incoming/factory-v2.5.1.zip --checksum ../_incoming/factory-v2.5.1.zip.sha256 --manifest ../_incoming/factory-v2.5.1.manifest.yaml
+bash template-repo/scripts/verify-all.sh quick
+```
+
+Archive contract: внутри zip должен быть один root `factory-v2.5.1/`; sidecar manifest `factory-v2.5.1.manifest.yaml` и checksum `factory-v2.5.1.zip.sha256` лежат рядом с archive.
+
 ## Подготовка после распаковки
 
 ```bash
-cd factory-v2.5.0
+cd factory-v2.5.1
 bash POST_UNZIP_SETUP.sh
 bash tests/onboarding-smoke/run-novice-e2e.sh
 bash MATRIX_TEST.sh
@@ -356,6 +378,12 @@ bash PHASE_DETECTION_TEST.sh
 - временные каталоги smoke/matrix прогонов;
 - логи и служебные следы локальной сборки.
 
+## Что нового в релизе 2.5.1
+- release package assembly теперь создает archive, sidecar manifest и SHA256 checksum;
+- install-from-scratch runbooks описывают canonical GitHub/release artifact path и fallback manual upload через `/projects/factory-template/_incoming`;
+- package validator проверяет single root folder, forbidden paths, manifest, checksum и required files;
+- npm path явно не заявляется, потому что repo не содержит `package.json`.
+
 ## Что нового в релизе 2.5.0
 - `G25-GA` закрыт как passed на основании измеримых `M25-*` evidence;
 - novice onboarding smoke теперь фиксирует duration и manual intervention count по каждому сценарию;
@@ -365,8 +393,8 @@ bash PHASE_DETECTION_TEST.sh
 
 ## Программа релиза 2.5 (release truth)
 - Release truth source: `docs/releases/release-scorecard.yaml`;
-- Current 2.5 stage: `release-decision (GA passed)`;
-- Status: `2.5.0 GA Ready`;
+- Current 2.5 stage: `updated release preparation / release package assembly`;
+- Status: `2.5.1 Package Ready`;
 - GA-ready: `true`;
 - канонический план зафиксирован в `docs/releases/2.5-roadmap.md`;
 - success metrics и пороги MVP/full 2.5 зафиксированы в `docs/releases/2.5-success-metrics.md`;
@@ -379,7 +407,7 @@ bash PHASE_DETECTION_TEST.sh
 
 Начинайте с `docs/releases/release-scorecard.yaml`. Это machine-readable release state, который используют pre-release и CI gates. Roadmap/current-state/README/checklist объясняют то же состояние для человека; `TEST_REPORT.md` фиксирует verification evidence и не должен считаться отдельным release-status source.
 
-## Базовый функционал ветки 2.5.0
+## Базовый функционал ветки 2.5
 - `factory-template` поддерживает greenfield, brownfield без repo и brownfield с repo в одном repo-first контуре;
 - advisory/policy layer и executable routing layer остаются явным образом разделены;
 - defect-capture, handoff, self-handoff, verification, release-followup и completion package описаны как обязательные контуры;

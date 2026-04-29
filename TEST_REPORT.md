@@ -1,7 +1,7 @@
-# Отчет TEST REPORT v2.5.0 GA
+# Отчет TEST REPORT v2.5.1 package-ready
 
 Status source of truth: `docs/releases/release-scorecard.yaml`.
-Current scorecard state: `2.5.0 GA Ready`.
+Current scorecard state: `2.5.1 Package Ready`.
 TEST_REPORT.md is verification evidence, not the canonical release-status source.
 
 ## Проверка beginner visual dashboard UX
@@ -369,7 +369,7 @@ Runtime defects remediated:
 - `docs/releases/post-2.5-gap-register.md` расширен gap'ами `P3-GAP-01`..`P3-GAP-07`.
 - `CURRENT_FUNCTIONAL_STATE.md` обновлен так, чтобы Plan №3 P3-S0 был виден как planning/audit status, а completed FP-01..FP-05 не выглядели pending.
 - Этот stage не добавлял task-state artifact, learning/evolve validator, новые Artifact Eval specs или real `feature-execution-lite` adoption workspace.
-- Новый release-ready status не объявлен; scorecard `2.5.0 GA Ready` не изменялся.
+- Новый release-ready status для этого historical stage не объявлялся; актуальный scorecard позже переведен в `2.5.1 Package Ready`.
 
 Проверки:
 
@@ -387,7 +387,7 @@ Runtime defects remediated:
 - `docs/releases/post-2.5-gap-register.md` разделяет completed repo-controlled/synthetic/template-infrastructure proof и optional downstream/battle application proof.
 - `reports/bugs/2026-04-27-post-25-release-planning-gap.md` фиксирует release-followup planning gap как remediated in current scope.
 - Сравнение с `pavel-molyanov/molyanov-ai-dev` записано как adaptation register: already adapted, useful but not yet adapted, intentionally not adapted.
-- Новый release-ready status не объявлен; scorecard `2.5.0 GA Ready` не изменялся.
+- Новый release-ready status для этого historical stage не объявлялся; актуальный scorecard позже переведен в `2.5.1 Package Ready`.
 
 Проверки:
 
@@ -698,6 +698,12 @@ Evidence / quality / DoD до смыслового наполнения арте
 - Defect-capture по утечке английского текста в downstream sync v3 зафиксирован и исправлен in-scope: `reports/bugs/2026-04-26-downstream-sync-v3-language-leak.md`.
 - Defect-capture по пропуску автозавершения closeout sync зафиксирован и исправлен in-scope: `reports/bugs/2026-04-26-autocloseout-sync-skip.md`.
 - 2.6 runtime proof follow-up исправил лишнее требование к пользователю принести `APP_IMAGE`: добавлен local placeholder application image builder `template-repo/scripts/build-placeholder-app-image.py`; live VPS использует `factory-template-placeholder-app:local` для template proof. Реальный application image нужен только в отдельном downstream/battle project proof.
+
+## Что вошло в релиз 2.5.1
+- install-from-scratch release package contract: manifest, SHA256 checksum and zip validator;
+- fallback manual upload path through `/projects/factory-template/_incoming`;
+- explicit npm support status: npm path is not supported without `package.json`;
+- template/meta/root versioning and release package metadata synchronized under `2.5.1`.
 
 ## Что вошло в релиз 2.5.0
 - full-KPI evidence layer для `G25-GA`;

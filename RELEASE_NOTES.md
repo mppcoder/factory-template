@@ -1,5 +1,25 @@
 # Release notes / заметки релиза
 
+## 2.5.1 - 2026-04-29
+
+### О чём этот релиз
+
+Patch release для проверяемой установки `factory-template` с нуля. Изменение release-facing: пакет теперь собирается как archive + manifest + SHA256 и имеет отдельный validator для уже собранного zip.
+
+### Что вошло
+
+- `RELEASE_BUILD.sh` расширен без замены builder path: собирает `factory-v2.5.1.zip`, `factory-v2.5.1.manifest.yaml` и `factory-v2.5.1.zip.sha256`.
+- Добавлен `template-repo/scripts/validate-release-package.py` для проверки single root folder, forbidden/transient paths, embedded/sidecar manifest, checksum и required files.
+- User/Codex install-from-scratch runbooks описывают canonical GitHub clone/download или release artifact path и fallback manual upload через `/projects/factory-template/_incoming`.
+- Npm path явно не заявляется: в repo нет `package.json` и npm packaging contract.
+
+### Что проверять
+
+- `bash RELEASE_BUILD.sh`
+- `sha256sum -c factory-v2.5.1.zip.sha256`
+- `python3 template-repo/scripts/validate-release-package.py <archive> --checksum <sha256> --manifest <manifest>`
+- Распаковка в temp, `bash POST_UNZIP_SETUP.sh`, targeted package validation и `bash template-repo/scripts/verify-all.sh quick`.
+
 ## Не выпущено - handoff implementation control
 
 - Добавлен repo-native register `.chatgpt/handoff-implementation-register.yaml` для ChatGPT handoff / Codex self-handoff задач, которые нельзя терять между чатами.

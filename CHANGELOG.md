@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 ### Добавлено
+- Release package updated bootstrap for `2.5.1`: `RELEASE_BUILD.sh` теперь выпускает canonical zip, sidecar manifest и SHA256 checksum, а `validate-release-package.py` проверяет single root folder, forbidden paths, manifest, checksum и required files.
+- Defect report `reports/bugs/2026-04-29-release-package-updated-bootstrap-gaps.md` для package/install-from-scratch gaps: отсутствовали manifest/checksum gate, fallback archive verification и явное npm support status.
 - Handoff implementation control layer: template-owned `.chatgpt/handoff-implementation-register.yaml`, validator `validate-handoff-implementation-register.py`, deterministic dependency/priority calculation и lifecycle dashboard cards для queued/ready, blocked, blockers, in-progress, implemented-not-verified, stale и closed handoff/self-handoff задач.
 - Replacement/write-off policy для handoff implementation register: `superseded`, `handoff_group`, `handoff_revision`, `replaces`, `superseded_by`, `replacement_reason` и validator coverage для нескольких active handoff в одной группе.
 - Defect report `reports/bugs/2026-04-29-superseded-handoff-not-written-off.md` для gap, где replacement handoff мог оставить старый handoff активным.
@@ -58,6 +60,8 @@
 - `docs/brownfield-to-greenfield-transition.md` описывает without-repo и with-repo transition paths, conversion gates и done rule.
 
 ### Изменено
+- Versioning layer, manifests, release checklist, install-from-scratch runbooks and release truth markers synchronized under patch release `2.5.1`.
+- User and Codex runbooks now document GitHub clone/download or release artifact as canonical path, manual archive upload to `/projects/factory-template/_incoming` as fallback, and npm path as unsupported without `package.json`.
 - Greenfield intake теперь идет как `новый проект` -> выбор default-decision mode -> recommendation-first опрос -> generated Codex handoff, где handoff содержит accepted defaults, overrides и unresolved decisions/blockers.
 - Brownfield with repo / without repo packages теперь применяют default-decision layer для canonical root, no-overwrite, evidence-first audit, `_incoming` и reconstruction-inside-target-root defaults.
 - Lifecycle dashboard `runbook_packages` показывает default decision mode, defaults/overrides/unresolved counters, next decision и readiness to generate handoff.

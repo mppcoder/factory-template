@@ -1,5 +1,10 @@
 # Общая история изменений фабрики
 
+## 2.5.1
+- release package assembly выпускает `factory-v2.5.1.zip`, sidecar manifest и SHA256 checksum
+- install-from-scratch docs фиксируют GitHub/release artifact path и fallback upload в `/projects/factory-template/_incoming`
+- package validator проверяет zip root, forbidden paths, manifest, checksum и required files
+
 ## 2.5.0
 - `G25-GA` закрыт как passed после добавления измеримых evidence для всех `M25-*`
 - novice onboarding smoke фиксирует duration и manual intervention count

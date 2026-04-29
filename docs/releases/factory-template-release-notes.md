@@ -3,6 +3,11 @@
 ## Не выпущено
 - physical root normalization: legacy/factory-only top-level folders moved under project core, `tests/`, `docs/operator/`, `project-knowledge/` or bounded `factory/producer/*`; tree contract now rejects old active root folders.
 
+## 2.5.1
+- release package assembly now produces canonical zip, sidecar manifest and SHA256 checksum for install-from-scratch verification.
+- fallback manual upload path is documented through `/projects/factory-template/_incoming`.
+- npm install/download path is explicitly unsupported until a real `package.json` packaging contract exists.
+
 ## 2.5.0
 - `G25-GA` закрыт как passed на основании full-KPI evidence.
 - release docs, manifests, launcher metadata и closeout artifacts синхронизированы под `factory-v2.5.0`.

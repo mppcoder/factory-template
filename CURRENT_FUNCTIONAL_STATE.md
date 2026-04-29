@@ -1,5 +1,10 @@
 # Текущее функциональное состояние фабрики
 
+Release truth source: `docs/releases/release-scorecard.yaml`.
+текущая стадия: `updated release preparation / release package assembly`.
+статус: `2.5.1 Package Ready`.
+GA-ready: `true`.
+
 ## Что уже реализовано
 - 3 canonical entry modes: новый проект с нуля, brownfield без репо, brownfield с репо
 - нейтральная canonical иерархия core vs optional/reference layers без product-specific naming в core
@@ -153,8 +158,8 @@
 
 ## Программа 2.5 (release truth)
 - release truth source: `docs/releases/release-scorecard.yaml`
-- текущая стадия: `release-decision (GA passed)`
-- статус: `2.5.0 GA Ready`
+- текущая стадия: `updated release preparation / release package assembly`
+- статус: `2.5.1 Package Ready`
 - GA-ready: `true`
 - канонический roadmap: `docs/releases/2.5-roadmap.md`
 - канонические метрики: `docs/releases/2.5-success-metrics.md`
@@ -165,7 +170,7 @@
 - downstream upgrade UX closeout зафиксирован в `UPGRADE_SUMMARY.md`
 - `G25-GA` прошел на `2026-04-26`: full-KPI evidence зафиксирован для всех `M25-*`
 - consolidated evidence: `docs/releases/2.5-ga-kpi-evidence.md`
-- граница evidence: `2.5.0 GA Ready` означает repo-controlled GA evidence; post-GA field proof для real GitHub-backed projects завершен отдельно и не переписывает исходный scorecard gate
+- граница evidence: `2.5.1 Package Ready` означает, что repo-controlled GA evidence линии `2.5` сохраняется, а patch release добавляет проверяемый install-from-scratch package contract
 - post-GA field pilot roadmap: `docs/releases/2.5.1-field-pilot-roadmap.md`
 - field pilot evidence register: `reports/release/2.5-field-pilot-evidence.md`
 - текущий field evidence status: `completed-field-evidence` (`FP-01`..`FP-05` passed, `5/5`)

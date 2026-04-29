@@ -144,6 +144,60 @@ bash PRE_RELEASE_AUDIT.sh
 - обновлять AGENTS / `.chatgpt/` / codex pack.
 - закрывать внутренний release-followup, closeout-sync и release-facing consistency work внутри repo без перевода этого хвоста в user-only closeout.
 
+## 3.1. Release package install-from-scratch workflow
+
+Для обновленного релизного пакета Codex берет на себя внутреннюю проверку package. Пользователю нельзя перекладывать build/manifest/checksum команды, если repo уже доступен.
+
+Входы:
+
+- repo state в `/projects/factory-template`; или
+- archive bundle в `/projects/factory-template/_incoming`: `factory-v2.5.1.zip`, `factory-v2.5.1.manifest.yaml`, `factory-v2.5.1.zip.sha256`.
+
+Canonical path:
+
+- GitHub clone/download или release artifact;
+- npm path не поддерживается, пока нет `package.json` и npm packaging contract.
+
+Internal workflow:
+
+```bash
+bash RELEASE_BUILD.sh
+archive="/projects/factory-v2.5.1.zip"
+checksum="/projects/factory-v2.5.1.zip.sha256"
+manifest="/projects/factory-v2.5.1.manifest.yaml"
+(cd /projects && sha256sum -c factory-v2.5.1.zip.sha256)
+python3 /projects/factory-template/template-repo/scripts/validate-release-package.py "$archive" --checksum "$checksum" --manifest "$manifest"
+tmp_dir="$(mktemp -d)"
+unzip -q "$archive" -d "$tmp_dir"
+test -d "$tmp_dir/factory-v2.5.1"
+cd "$tmp_dir/factory-v2.5.1"
+bash POST_UNZIP_SETUP.sh
+python3 template-repo/scripts/validate-release-package.py "$archive" --checksum "$checksum" --manifest "$manifest"
+bash template-repo/scripts/verify-all.sh quick
+```
+
+Если archive принят от пользователя через `_incoming`, сначала выполнить:
+
+```bash
+cd /projects/factory-template/_incoming
+sha256sum -c factory-v2.5.1.zip.sha256
+python3 /projects/factory-template/template-repo/scripts/validate-release-package.py factory-v2.5.1.zip --checksum factory-v2.5.1.zip.sha256 --manifest factory-v2.5.1.manifest.yaml
+```
+
+Затем распаковать в temp, проверить single root folder, выполнить `bash POST_UNZIP_SETUP.sh`, targeted package validation и `bash template-repo/scripts/verify-all.sh quick`.
+
+Build report должен фиксировать:
+
+- archive path;
+- manifest path;
+- SHA256 path;
+- source commit;
+- checksum result;
+- unpack temp path;
+- package validator result;
+- quick/full verify result;
+- known limitations, включая `npm_path_supported: false`.
+
 ---
 
 ## 4. Что не делать без явного решения

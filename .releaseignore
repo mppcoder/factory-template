@@ -2,6 +2,13 @@
 audit-smoke-project/
 .git/
 *.log
+.env
+.env.local
+.env.production
+.env.development
+*.pem
+*.key
+*.token
 __pycache__/
 .pytest_cache__/
 _sources-export/
@@ -12,3 +19,4 @@ _factory-sync-export/
 .pytest_cache/
 .bugflow-test/
 .factory-runtime/
+_artifacts/
