@@ -1,6 +1,6 @@
 # Панель жизненного цикла проекта / `project-lifecycle-dashboard`
 
-Generated UTC: `2026-04-29T13:06:02+00:00`
+Generated UTC: `2026-04-29T15:08:30+00:00`
 Source: `/projects/factory-template/template-repo/template/.chatgpt/project-lifecycle-dashboard.yaml`
 
 ## Сейчас
@@ -66,6 +66,7 @@ Source: `/projects/factory-template/template-repo/template/.chatgpt/project-life
 🔴 FT-CH-0004 model-routing: ✅ GPT-HO → ✅ Codex OK → 🔴 Blocked
 ✅ FT-CH-0005 chat-counter-closeout-drift: ✅ Codex-SHO → ✅ Codex OK → ✅ Done
 ✅ FT-CH-0006 handoff-execution-mode-ownership: ✅ Codex-SHO → ✅ Codex OK → ✅ Done
+✅ FT-CH-0007 closeout-project-card: ✅ Codex-SHO → ✅ Codex OK → ✅ Done
 
 ## Передача и оркестрация
 

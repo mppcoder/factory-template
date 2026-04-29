@@ -176,6 +176,7 @@ Codex closeout behavior:
 - если создается новый handoff по той же задаче в текущем чате, проверить `handoff_group`, списать старые active items как `superseded`, заполнить `superseded_by`, `replacement_reason`, evidence, а у нового item заполнить `replaces`;
 - если задача неактуальна, не удалять ее, а выполнить deactivation path: `status: not_applicable`, `closeout_reason`, evidence или `accepted_reason`;
 - обновить `reports/project-lifecycle-dashboard.md`.
+- вставить свежую compact project card в финальный ответ пользователю в разделе `Карточка проекта`; карточка должна быть получена через `render-project-lifecycle-dashboard.py --format chatgpt-card --stdout` и содержать lifecycle chain, `Модули:` и `В работе:`.
 
 Replacement identity:
 

@@ -56,6 +56,8 @@ Routing:
 - .chatgpt verification/done closeout
 
 Completion rule:
+Перед финальным ответом сгенерируй compact project card: python3 template-repo/scripts/render-project-lifecycle-dashboard.py --input template-repo/template/.chatgpt/project-lifecycle-dashboard.yaml --format chatgpt-card --stdout
+Финальный ответ содержит раздел Карточка проекта со строками project name, lifecycle chain, Модули: и В работе:.
 Если внешних действий нет, финальный ответ обязан явно сказать: Внешних действий не требуется.
 Если в конце остается следующий пользовательский или внешний шаг, финальный ответ обязан завершаться разделом ## Инструкция пользователю.
 Следующий пользовательский шаг отсутствует; задачи текущего scope выполнены полностью.

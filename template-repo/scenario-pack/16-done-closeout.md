@@ -12,6 +12,27 @@
 Но такой closeout все равно обязан явно содержать формулировку, что внешних действий больше нет: например `Внешних действий не требуется.` или эквивалентную недвусмысленную фразу.
 Кроме этого, closeout обязан явно зафиксировать continuation outcome: `Следующий пользовательский шаг отсутствует; задачи текущего scope выполнены полностью.` или эквивалентную недвусмысленную формулировку.
 
+## Project card в финальном ответе
+
+Для `factory-template` финальный closeout по repo change обязан включать свежую compact project card из repo renderer. Это отдельный обязательный readout перед коротким summary или рядом с ним.
+
+Перед финальным ответом Codex должен выполнить или уже иметь свежий результат:
+
+```bash
+python3 template-repo/scripts/render-project-lifecycle-dashboard.py \
+  --input template-repo/template/.chatgpt/project-lifecycle-dashboard.yaml \
+  --format chatgpt-card \
+  --stdout
+```
+
+В финальном ответе должен быть раздел `Карточка проекта` и в нем должны присутствовать compact card строки:
+- project name / `🏭`;
+- lifecycle chain;
+- `Модули:`;
+- `В работе:`.
+
+Если renderer недоступен или dashboard невалиден, closeout нельзя считать fully done: нужно назвать blocker и не заменять карточку свободным пересказом. Если renderer green, не проси пользователя запускать команду вручную.
+
 Для full handoff orchestration closeout дополнительно проверь beginner UX scorecard:
 - один цельный copy-paste handoff block;
 - нет file-based handoff вместо inline block;

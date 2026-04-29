@@ -13,9 +13,16 @@ expected_trigger:
   cases:
     - id: compact-no-external-actions
       prompt: "Repo change завершен, внешних действий нет."
-      expected: "Artifact требует короткую фразу без audit table."
+      expected: "Artifact требует project card и короткую фразу без audit table."
       baseline_expected: fail
       assertions:
+        - id: project-card-required
+          category: outcome
+          must_contain:
+            - "Карточка проекта"
+            - "--format chatgpt-card"
+            - "Модули:"
+            - "В работе:"
         - id: no-action-phrase
           category: outcome
           must_contain:
@@ -74,3 +81,10 @@ compliance_assertions:
     must_contain:
       - "Нельзя писать только `Следующий пользовательский шаг отсутствует`"
       - "next-roadmap recommendation"
+  - id: project-card-closeout
+    category: outcome
+    must_contain:
+      - "раздел `Карточка проекта`"
+      - "lifecycle chain"
+      - "`Модули:`"
+      - "`В работе:`"

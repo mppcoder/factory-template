@@ -285,6 +285,9 @@ def main() -> int:
                 errors.append("direct-task response не содержит обязательную формулу для closeout без внешних действий")
             if "Следующий пользовательский шаг отсутствует; задачи текущего scope выполнены полностью." not in direct_response_text:
                 errors.append("direct-task response не содержит обязательный continuation outcome для fully done closeout")
+            for fragment in ["Карточка проекта", "--format chatgpt-card", "Модули:", "В работе:"]:
+                if fragment not in direct_response_text:
+                    errors.append(f"direct-task response не содержит project card closeout rule `{fragment}`")
 
     normalized = root / ".chatgpt" / "normalized-codex-handoff.md"
     if not normalized.exists():

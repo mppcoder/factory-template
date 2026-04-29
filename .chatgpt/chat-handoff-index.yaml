@@ -1,6 +1,6 @@
 schema: chat-handoff-index/v1
 project_code: FT
-next_chat_number: 7
+next_chat_number: 8
 title_policy:
   canonical_format: <PROJECT_CODE>-CH-<NNNN> <task-slug>
   include_status_in_title: false
@@ -157,8 +157,33 @@ items:
   evidence:
   - 'Allocated for current direct-task remediation: make handoff neutral and let Codex
     decide actual execution mode.'
-  - 'Implemented neutral handoff default and runtime execution_mode ownership in
-    router, scenarios, orchestration validators and fixtures.'
+  - Implemented neutral handoff default and runtime execution_mode ownership in router,
+    scenarios, orchestration validators and fixtures.
   - bash template-repo/scripts/verify-all.sh quick
   - bash template-repo/scripts/verify-all.sh
   next_action: No further implementation action; neutral handoff contract is verified.
+- chat_id: FT-CH-0007
+  chat_number: 7
+  chat_title: FT-CH-0007 closeout-project-card
+  task_slug: closeout-project-card
+  kind: self_handoff
+  state: verified
+  created_utc: '2026-04-29T15:01:56Z'
+  updated_utc: '2026-04-29T15:07:55Z'
+  source_type: direct-task
+  handoff_group: closeout-project-card
+  handoff_revision: 1
+  handoff_register_item_id: HIR-006
+  status_chain:
+  - codex_self_handoff
+  - codex_accepted
+  - codex_completed
+  evidence:
+  - 'Allocated for direct-task remediation: final closeout must include compact project
+    card.'
+  - Implemented closeout requirement for final project card in scenario, docs, generated
+    task checklist and direct-task routing validator.
+  - bash template-repo/scripts/verify-all.sh quick
+  - bash template-repo/scripts/verify-all.sh
+  next_action: No further implementation action; final closeout project-card requirement
+    is verified.

@@ -66,6 +66,8 @@ external:
 
 Во время длинной задачи Codex обновляет progress card по wave/task/checkpoint. В closeout он должен назвать verify/sync status: какие validators прошли, выполнен ли quick verify, есть ли commit/push или явный blocker.
 
+Финальный ответ Codex по repo change обязан включать раздел `Карточка проекта` со свежим `chatgpt-card` readout из renderer. Минимальная карточка содержит project name, lifecycle chain, `Модули:` и `В работе:`. Если карточка не может быть сгенерирована, Codex должен назвать blocker, а не закрывать задачу как fully done.
+
 Если Codex пишет `executed`, `completed`, `passed`, `done` или другой зеленый статус, рядом должна быть evidence или accepted reason. Без evidence статус остается `pending` или `in_progress`.
 
 ## Что видно в Markdown dashboard
