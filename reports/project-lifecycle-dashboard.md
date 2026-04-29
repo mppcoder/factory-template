@@ -1,6 +1,6 @@
 # Панель жизненного цикла проекта / `project-lifecycle-dashboard`
 
-Generated UTC: `2026-04-29T15:40:00+00:00`
+Generated UTC: `2026-04-29T15:54:23+00:00`
 Source: `/projects/factory-template/template-repo/template/.chatgpt/project-lifecycle-dashboard.yaml`
 
 ## Сейчас
@@ -63,7 +63,8 @@ Source: `/projects/factory-template/template-repo/template/.chatgpt/project-life
 
 ### Активные ChatGPT handoff-задачи
 
-✅ FT-CX-0006 card-wrap-codex-numbering: ✅ Codex-WORK → ✅ Codex OK → ✅ Done
+✅ FT-CX-0007 chatgpt-first-answer-card-title: ✅ Codex-WORK → ✅ Codex OK →
+  ✅ Done
 
 ### История ChatGPT handoff-задач
 
@@ -82,6 +83,8 @@ Source: `/projects/factory-template/template-repo/template/.chatgpt/project-life
 ✅ FT-CX-0004 compact-card-active-only: ✅ Codex-WORK → ✅ Codex OK → ✅ Done
 ✅ FT-CX-0005 stale-compact-card-tasks: ✅ Codex-WORK → ✅ Codex OK → ✅ Done
 ✅ FT-CX-0006 card-wrap-codex-numbering: ✅ Codex-WORK → ✅ Codex OK → ✅ Done
+✅ FT-CX-0007 chatgpt-first-answer-card-title: ✅ Codex-WORK → ✅ Codex OK →
+  ✅ Done
 
 ## Передача и оркестрация
 

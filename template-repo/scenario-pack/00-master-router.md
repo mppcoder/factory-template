@@ -10,6 +10,25 @@
 - разрешен ли handoff в Codex.
 - `handoff_shape`, если handoff в Codex разрешен, готовится или обсуждается.
 
+## Контракт первого ответа ChatGPT
+
+Первый substantive ответ ChatGPT в новом project task chat обязан начинаться с двух видимых блоков до route receipt, анализа или handoff:
+
+```text
+## Название чата для копирования
+<PROJECT_CODE>-CH-<NNNN> <task-slug>
+
+## Карточка проекта
+<compact project status card>
+```
+
+Правила:
+- `Название чата для копирования` берется только из repo `.chatgpt/chat-handoff-index.yaml` / allocator. Если точный номер неизвестен или ChatGPT не может надежно прочитать repo state, не выдумывай номер; выведи ровно: `Нужно выделить номер через repo chat-handoff-index / allocator.`
+- Название содержит только stable `FT-CH-....` и slug; status/kind tokens запрещены.
+- `Карточка проекта` должна соответствовать repo renderer output: `python3 template-repo/scripts/render-project-lifecycle-dashboard.py --format chatgpt-card --stdout`. Если ChatGPT не может выполнить команду, он должен прочитать свежий `reports/project-status-card.md` или компактный card block из `reports/project-lifecycle-dashboard.md`; если карточка недоступна, это blocker, который надо назвать явно.
+- Project Instructions могут предложить название и показать карточку, но не могут гарантировать auto-rename ChatGPT UI, global chat scan или write в repo index.
+- Этот contract действует и когда ответ продолжает route receipt / готовит handoff: title + card не заменяют handoff и не отменяют repo-first чтение router.
+
 ## Контракт маршрутизации
 Всегда разделяй:
 - advisory/policy layer: `AGENTS`, ChatGPT Project instructions, scenario-pack, runbooks, `.chatgpt` guidance;

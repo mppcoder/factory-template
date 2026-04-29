@@ -70,6 +70,18 @@ FT-CH-0011 completion-report
 
 Project Instructions могут только предложить пользователю стабильный title для нового чата. Они не могут надежно auto-rename ChatGPT UI, просканировать все названия чатов проекта или гарантировать следующий свободный номер. Переименование ChatGPT UI остается one-time manual action при создании чата, если нет отдельного поддержанного API/tool.
 
+Первый substantive ответ ChatGPT в новом task-чате должен начинаться с:
+
+```text
+## Название чата для копирования
+<stable chat title или allocator blocker>
+
+## Карточка проекта
+<compact project card>
+```
+
+`Карточка проекта` берется из `python3 template-repo/scripts/render-project-lifecycle-dashboard.py --format chatgpt-card --stdout`, `reports/project-status-card.md` или compact block в `reports/project-lifecycle-dashboard.md`. Этот блок обязателен для ChatGPT-ответов так же, как для Codex closeout.
+
 Рекомендуемый snippet для Project Instructions:
 
 ```text
@@ -78,6 +90,7 @@ At the beginning of a new project task chat, propose a stable chat title in this
 Do not include HO, OPEN, CODEX, DONE, BLOCKED, VERIFIED, BUG, DECISION or other status/kind tokens in the title.
 If the next number is unknown, do not invent it. Say: 'Нужно выделить номер через repo chat-handoff-index / allocator.'
 Statuses must be shown only in the project card and repo dashboard.
+In the first substantive answer, show sections exactly named 'Название чата для копирования' and 'Карточка проекта' before route receipt or handoff.
 ```
 
 При первом substantive ответе в новом task chat handoff обязан получить номер из repo counter и ссылаться на него:

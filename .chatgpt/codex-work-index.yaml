@@ -1,6 +1,6 @@
 schema: codex-work-index/v1
 project_code: FT
-next_codex_work_number: 7
+next_codex_work_number: 8
 id_policy:
   canonical_format: <PROJECT_CODE>-CX-<NNNN> <task-slug>
   independent_from_chat_handoff_index: true
@@ -133,10 +133,35 @@ items:
   - codex_accepted
   - codex_completed
   evidence:
-  - 'User report: compact card has extra blank space, lacks wrapping, and Codex
-    remediation numbering overlaps ChatGPT numbering.'
+  - 'User report: compact card has extra blank space, lacks wrapping, and Codex remediation
+    numbering overlaps ChatGPT numbering.'
   - Implemented separate Codex work index namespace FT-CX independent from FT-CH.
   - bash template-repo/scripts/verify-all.sh quick
   - bash template-repo/scripts/verify-all.sh
-  next_action: No further implementation action; compact card wrapping and Codex
-    work numbering split are verified.
+  next_action: No further implementation action; compact card wrapping and Codex work
+    numbering split are verified.
+- codex_work_id: FT-CX-0007
+  work_number: 7
+  work_title: FT-CX-0007 chatgpt-first-answer-card-title
+  task_slug: chatgpt-first-answer-card-title
+  kind: self_handoff
+  state: verified
+  created_utc: '2026-04-29T15:48:13Z'
+  updated_utc: '2026-04-29T15:54:03Z'
+  source_type: direct-task
+  handoff_group: chatgpt-first-answer-card-title
+  handoff_revision: 1
+  handoff_register_item_id: HIR-010
+  status_chain:
+  - codex_self_handoff
+  - codex_accepted
+  - codex_completed
+  evidence:
+  - 'User report: ChatGPT answers forget to output copyable chat title and project
+    status card in the first answer.'
+  - Implemented ChatGPT first-answer contract in router, handoff guidance, Project
+    Instructions snippets and validator/smoke coverage.
+  - bash template-repo/scripts/verify-all.sh quick
+  - bash template-repo/scripts/verify-all.sh
+  next_action: No further implementation action; ChatGPT first-answer title/card
+    contract is verified.

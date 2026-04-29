@@ -338,6 +338,7 @@ run_plan6_productization_smoke() {
 
 run_gpt55_prompt_contract_smoke() {
   python3 "$ROOT/template-repo/scripts/validate-gpt55-prompt-contract.py" "$ROOT"
+  python3 "$ROOT/template-repo/scripts/validate-chatgpt-first-answer-contract.py" "$ROOT"
 }
 
 run_model_prompt_policy_smoke() {
@@ -411,6 +412,7 @@ run_project_lifecycle_dashboard_smoke() {
     return 1
   fi
   awk 'length($0) > 82 { print "too long: " $0; bad=1 } END { exit bad }' "$tmp_dir/chatgpt-card.md"
+  python3 "$ROOT/template-repo/scripts/validate-chatgpt-first-answer-contract.py" "$ROOT"
   python3 "$ROOT/template-repo/scripts/render-project-lifecycle-dashboard.py" \
     --input "$ROOT/tests/project-lifecycle-dashboard/valid/project-lifecycle-dashboard.yaml" \
     --format codex-card \
