@@ -21,3 +21,4 @@ _incoming/
 .bugflow-test/
 .factory-runtime/
 _artifacts/
+.tmp-run/

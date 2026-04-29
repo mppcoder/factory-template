@@ -84,6 +84,7 @@ archive_filename: "$OUT_BASE"
 archive_root: "$REL_NAME/"
 npm_path_supported: false
 filename_compatibility: ascii-only archive paths
+max_archive_path_length: 180
 canonical_install_paths:
   - GitHub clone/download
   - release artifact archive
@@ -109,6 +110,7 @@ excluded_transient_paths:
   - _boundary-actions/
   - _factory-sync-export/
   - _sources-export/
+  - .tmp-run/
   - logs and *.log
 required_first_run_commands:
   - cd $REL_NAME

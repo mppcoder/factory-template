@@ -44,6 +44,8 @@ MANIFEST_MARKERS = {
     "verification_status:",
 }
 
+MAX_ARCHIVE_PATH_LENGTH = 180
+
 
 def fail(message: str) -> int:
     print("RELEASE PACKAGE НЕВАЛИДЕН")
@@ -108,6 +110,11 @@ def validate_zip(archive: Path) -> tuple[str, str]:
         for name in names:
             if any(ord(char) > 127 for char in name):
                 raise ValueError(f"archive содержит non-ASCII path, несовместимый с portable install zip: {name}")
+            if len(name) > MAX_ARCHIVE_PATH_LENGTH:
+                raise ValueError(
+                    f"archive содержит слишком длинный portable path ({len(name)} > "
+                    f"{MAX_ARCHIVE_PATH_LENGTH}): {name}"
+                )
             parts = set(Path(name).parts)
             forbidden = sorted(parts & FORBIDDEN_PARTS)
             if forbidden:

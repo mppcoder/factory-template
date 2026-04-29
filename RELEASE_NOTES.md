@@ -11,6 +11,7 @@ Patch release для проверяемой установки `factory-template
 - `RELEASE_BUILD.sh` расширен без замены builder path: собирает `factory-v2.5.1.zip`, `factory-v2.5.1.manifest.yaml` и `factory-v2.5.1.zip.sha256`.
 - Добавлен `template-repo/scripts/validate-release-package.py` для проверки single root folder, forbidden/transient paths, embedded/sidecar manifest, checksum и required files.
 - Release artifact refresh: install ZIP теперь содержит ASCII-only archive paths; `bootstrap/*.md` нормализуются внутри staging archive, чтобы обычные GUI/Windows archive tools не падали на filename encoding.
+- Release artifact refresh: install ZIP больше не включает transient `.tmp-run/` smoke trees и проходит portable path-length gate (`max_archive_path_length: 180`).
 - User/Codex install-from-scratch runbooks описывают canonical GitHub clone/download или release artifact path и fallback manual upload через `/projects/factory-template/_incoming`.
 - Npm path явно не заявляется: в repo нет `package.json` и npm packaging contract.
 
@@ -20,6 +21,7 @@ Patch release для проверяемой установки `factory-template
 - `sha256sum -c factory-v2.5.1.zip.sha256`
 - `python3 template-repo/scripts/validate-release-package.py <archive> --checksum <sha256> --manifest <manifest>`
 - `python3` zip inspection: `NON_ASCII_COUNT=0`
+- `python3` zip inspection: `TMP_RUN_COUNT=0`, `MAX_PATH_LEN <= 180`
 - Распаковка в temp, `bash POST_UNZIP_SETUP.sh`, targeted package validation и `bash template-repo/scripts/verify-all.sh quick`.
 
 ## Не выпущено - handoff implementation control

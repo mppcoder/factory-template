@@ -2,6 +2,7 @@
 
 ## [Unreleased]
 ### Добавлено
+- Release package artifact refresh for `2.5.1`: install ZIP теперь исключает transient `.tmp-run/` smoke trees и проходит portable path-length gate (`max_archive_path_length: 180`).
 - Release package artifact refresh for `2.5.1`: install ZIP теперь собирается с ASCII-only archive paths для GUI/Windows-compatible распаковки; `bootstrap/*.md` нормализуются только в staging archive, source repo filenames не меняются в этом fix.
 - `validate-release-package.py` теперь отклоняет release archives с non-ASCII paths, чтобы не выпускать ZIP, который может открываться в Linux CLI, но ломаться в пользовательских archive tools.
 - Release package updated bootstrap for `2.5.1`: `RELEASE_BUILD.sh` теперь выпускает canonical zip, sidecar manifest и SHA256 checksum, а `validate-release-package.py` проверяет single root folder, forbidden paths, manifest, checksum и required files.
