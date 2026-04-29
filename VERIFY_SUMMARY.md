@@ -7,7 +7,7 @@
 ## Текущий verify baseline
 
 - `bash template-repo/scripts/verify-all.sh ci`: PASS (`2026-04-28`, local reproduction on commit `750ce6a787cf304d24af14ab856da34bb63221e0`)
-- GitHub Actions run `25054700529`: root cause was hosted runner acquisition failure before repo commands; failed job rerun attempted and hit the same acquisition blocker (`2026-04-28`)
+- GitHub Actions runner acquisition incident: runs `25054700529`, `25057090187`, `25058477360`, `25059862780` were rerun successfully (`2026-04-29`); no repo-side CI regression found.
 - `bash CLEAN_VERIFY_ARTIFACTS.sh`: PASS (`2026-04-26`)
 - `bash PRE_RELEASE_AUDIT.sh`: PASS (`2026-04-26`)
 - `bash RELEASE_BUILD.sh /tmp/factory-template-2.5.zip`: PASS (`2026-04-26`)
