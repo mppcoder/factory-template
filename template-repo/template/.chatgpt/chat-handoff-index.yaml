@@ -9,11 +9,13 @@ title_policy:
   status_source_of_truth: ".chatgpt/chat-handoff-index.yaml"
   manual_rename_required_on_status_change: false
 allocation_policy:
-  shared_counter_for_all_kinds: true
+  shared_counter_for_all_kinds: false
   first_chat_response_allocates_handoff_id: true
-  codex_self_handoff_uses_same_counter: true
+  codex_self_handoff_uses_same_counter: false
   handoff_must_reference_chat_id: true
-  self_handoff_must_reference_chat_id: true
+  self_handoff_must_reference_chat_id: false
+  codex_self_handoff_uses_codex_work_index: true
+  codex_work_index_path: ".chatgpt/codex-work-index.yaml"
 allowed_kinds:
   - handoff
   - self_handoff

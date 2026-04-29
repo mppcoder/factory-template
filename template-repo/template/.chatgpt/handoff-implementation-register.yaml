@@ -24,6 +24,10 @@ chat_link_policy:
     - task_slug
     - chat_state
     - chat_index_item_id
+    - codex_work_id
+    - codex_work_title
+    - codex_work_state
+    - codex_work_index_item_id
 statuses:
   allowed:
     - captured

@@ -252,11 +252,11 @@ def main() -> int:
                 )
 
     if launch.get("launch_source") == "direct-task":
-        for field in ["chat_id", "chat_title", "task_slug", "chat_kind", "chat_state", "chat_index_path"]:
+        for field in ["codex_work_id", "codex_work_title", "task_slug", "codex_work_kind", "codex_work_state", "codex_work_index_path"]:
             if not str(launch.get(field) or "").strip():
-                errors.append(f"Для direct-task отсутствует stable chat/self-handoff field launch.{field}")
-        if str(launch.get("chat_kind") or "") != "self_handoff":
-            errors.append("Для direct-task launch.chat_kind должен быть self_handoff")
+                errors.append(f"Для direct-task отсутствует stable Codex work field launch.{field}")
+        if str(launch.get("codex_work_kind") or "") != "self_handoff":
+            errors.append("Для direct-task launch.codex_work_kind должен быть self_handoff")
         self_handoff = root / ".chatgpt" / "direct-task-self-handoff.md"
         if not self_handoff.exists():
             errors.append("Для direct-task отсутствует .chatgpt/direct-task-self-handoff.md")

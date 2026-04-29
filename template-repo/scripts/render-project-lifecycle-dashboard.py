@@ -4,6 +4,7 @@ from __future__ import annotations
 import argparse
 import importlib.util
 import re
+import textwrap
 from pathlib import Path
 from typing import Any
 
@@ -25,6 +26,7 @@ from handoff_implementation_common import (
 
 GREEN_STATUSES = {"passed", "completed", "done", "ready", "archived", "executed"}
 TERMINAL_CHAT_STATES = {"verified", "superseded", "not_applicable", "archived"}
+CARD_WRAP_WIDTH = 74
 LIFECYCLE_CARD_PHASES = [
     ("idea", "Идея"),
     ("intake", "Intake"),
@@ -170,6 +172,29 @@ def chain_item(label: str, status: str) -> str:
     return f"{status_icon(status)} {label}"
 
 
+def wrap_chain(parts: list[str], width: int = CARD_WRAP_WIDTH) -> str:
+    if not parts:
+        return ""
+    lines: list[str] = []
+    current = parts[0]
+    for part in parts[1:]:
+        candidate = f"{current} → {part}"
+        if len(candidate) <= width:
+            current = candidate
+        else:
+            lines.append(current)
+            current = f"→ {part}"
+    lines.append(current)
+    return "\n".join(lines)
+
+
+def wrap_card_line(line: str, width: int = CARD_WRAP_WIDTH) -> str:
+    clean = re.sub(r"[ \t]+", " ", line).strip()
+    if len(clean) <= width:
+        return clean
+    return textwrap.fill(clean, width=width, subsequent_indent="  ", break_long_words=False, break_on_hyphens=False)
+
+
 def lifecycle_chain_text(data: dict[str, Any]) -> str:
     lifecycle = data.get("lifecycle_phase", {}) if isinstance(data.get("lifecycle_phase"), dict) else {}
     explicit = lifecycle.get("compact_chain")
@@ -179,7 +204,7 @@ def lifecycle_chain_text(data: dict[str, Any]) -> str:
             if isinstance(entry, dict):
                 parts.append(chain_item(str(entry.get("label") or entry.get("id") or ""), str(entry.get("status") or "pending")))
         if parts:
-            return " → ".join(parts)
+            return wrap_chain(parts)
 
     current = str(lifecycle.get("current") or "intake")
     try:
@@ -197,7 +222,7 @@ def lifecycle_chain_text(data: dict[str, Any]) -> str:
         else:
             status = "pending"
         parts.append(chain_item(label, status))
-    return " → ".join(parts)
+    return wrap_chain(parts)
 
 
 def module_items(data: dict[str, Any]) -> list[dict[str, Any]]:
@@ -214,7 +239,7 @@ def module_readiness_chain_text(data: dict[str, Any]) -> str:
         label = str(module.get("label") or module_id)
         status = str(module.get("status") or "pending")
         parts.append(chain_item(label, status))
-    return " → ".join(parts)
+    return wrap_chain(parts)
 
 
 def read_chat_handoff_index(root: Path, dashboard_path: Path) -> dict[str, Any]:
@@ -223,6 +248,18 @@ def read_chat_handoff_index(root: Path, dashboard_path: Path) -> dict[str, Any]:
     if isinstance(local_items, list) and local_items:
         return local
     root_index = read_yaml(root / ".chatgpt" / "chat-handoff-index.yaml")
+    root_items = root_index.get("items") if isinstance(root_index, dict) else []
+    if isinstance(root_items, list) and root_items:
+        return root_index
+    return local if isinstance(local, dict) else {}
+
+
+def read_codex_work_index(root: Path, dashboard_path: Path) -> dict[str, Any]:
+    local = read_yaml(dashboard_path.parent / "codex-work-index.yaml")
+    local_items = local.get("items") if isinstance(local, dict) else []
+    if isinstance(local_items, list) and local_items:
+        return local
+    root_index = read_yaml(root / ".chatgpt" / "codex-work-index.yaml")
     root_items = root_index.get("items") if isinstance(root_index, dict) else []
     if isinstance(root_items, list) and root_items:
         return root_index
@@ -261,10 +298,8 @@ def active_handoff_lines_text(index: dict[str, Any]) -> str:
         item
         for item in items
         if isinstance(item, dict)
-        and (
-            str(item.get("handoff_register_item_id") or "").strip()
-            or int(item.get("chat_number") or 0) == current_number
-        )
+        and str(item.get("kind") or "") != "self_handoff"
+        and str(item.get("handoff_register_item_id") or "").strip()
         and (
             str(item.get("state") or "") not in TERMINAL_CHAT_STATES
             or int(item.get("chat_number") or 0) == current_number
@@ -277,15 +312,65 @@ def active_handoff_lines_text(index: dict[str, Any]) -> str:
     for item in active:
         state = str(item.get("state") or "open")
         title = str(item.get("chat_title") or item.get("chat_id") or "unknown")
-        lines.append(f"{handoff_line_icon(state)} {title}: {handoff_status_chain_text(item)}")
+        lines.append(wrap_card_line(f"{handoff_line_icon(state)} {title}: {handoff_status_chain_text(item)}"))
     return "\n".join(lines)
+
+
+def codex_work_status_chain_text(item: dict[str, Any]) -> str:
+    state = str(item.get("state") or "open")
+    codex = "✅ Codex OK" if state in {"codex_accepted", "in_progress", "implemented", "verified", "blocked", "archived"} else "🕒 Codex OK"
+    if state in {"verified", "archived"}:
+        done = "✅ Done"
+    elif state == "blocked":
+        done = "🔴 Blocked"
+    elif state == "not_applicable":
+        done = "⏸ Done"
+    elif state == "superseded":
+        done = "⏸ Superseded"
+    else:
+        done = "🕒 Done"
+    return f"✅ Codex-WORK → {codex} → {done}"
+
+
+def active_codex_work_lines_text(index: dict[str, Any]) -> str:
+    items = index.get("items", []) if isinstance(index, dict) else []
+    if not isinstance(items, list):
+        items = []
+    current_number = max(
+        [int(item.get("work_number") or 0) for item in items if isinstance(item, dict)] or [0]
+    )
+    active = [
+        item
+        for item in items
+        if isinstance(item, dict)
+        and (
+            str(item.get("state") or "") not in TERMINAL_CHAT_STATES
+            or int(item.get("work_number") or 0) == current_number
+        )
+    ]
+    active.sort(key=lambda item: int(item.get("work_number") or 0))
+    lines = []
+    for item in active:
+        state = str(item.get("state") or "open")
+        title = str(item.get("work_title") or item.get("codex_work_id") or "unknown")
+        lines.append(wrap_card_line(f"{status_icon(state)} {title}: {codex_work_status_chain_text(item)}"))
+    return "\n".join(lines)
+
+
+def active_work_lines_text(chat_index: dict[str, Any], codex_index: dict[str, Any]) -> str:
+    lines = [
+        text
+        for text in [active_handoff_lines_text(chat_index), active_codex_work_lines_text(codex_index)]
+        if text and "Нет текущих" not in text
+    ]
+    return "\n".join(lines) if lines else "🕒 Нет текущих или незакрытых задач"
 
 
 def handoff_history_lines_text(index: dict[str, Any]) -> str:
     items = index.get("items", []) if isinstance(index, dict) else []
     if not isinstance(items, list):
         items = []
-    history = [item for item in items if isinstance(item, dict)]
+    history = [item for item in items if isinstance(item, dict) and str(item.get("kind") or "") != "self_handoff"]
     if not history:
         return "🕒 Нет handoff-задач в истории"
     history.sort(key=lambda item: int(item.get("chat_number") or 0))
@@ -293,7 +378,23 @@ def handoff_history_lines_text(index: dict[str, Any]) -> str:
     for item in history:
         state = str(item.get("state") or "open")
         title = str(item.get("chat_title") or item.get("chat_id") or "unknown")
-        lines.append(f"{handoff_line_icon(state)} {title}: {handoff_status_chain_text(item)}")
+        lines.append(wrap_card_line(f"{handoff_line_icon(state)} {title}: {handoff_status_chain_text(item)}"))
+    return "\n".join(lines)
+
+
+def codex_work_history_lines_text(index: dict[str, Any]) -> str:
+    items = index.get("items", []) if isinstance(index, dict) else []
+    if not isinstance(items, list):
+        items = []
+    history = [item for item in items if isinstance(item, dict)]
+    if not history:
+        return "🕒 Нет Codex-доработок в истории"
+    history.sort(key=lambda item: int(item.get("work_number") or 0))
+    lines = []
+    for item in history:
+        state = str(item.get("state") or "open")
+        title = str(item.get("work_title") or item.get("codex_work_id") or "unknown")
+        lines.append(wrap_card_line(f"{status_icon(state)} {title}: {codex_work_status_chain_text(item)}"))
     return "\n".join(lines)
 
 
@@ -313,7 +414,16 @@ def apply_template(template: str, values: dict[str, str]) -> str:
     for key, value in values.items():
         rendered = rendered.replace("{{" + key + "}}", value)
     rendered = re.sub(r"\{\{[A-Z0-9_]+\}\}", "unknown", rendered)
-    return rendered.rstrip() + "\n"
+    lines = [line.rstrip() for line in rendered.splitlines()]
+    compacted: list[str] = []
+    previous_blank = False
+    for line in lines:
+        blank = not line.strip()
+        if blank and previous_blank:
+            continue
+        compacted.append(line)
+        previous_blank = blank
+    return "\n".join(compacted).strip() + "\n"
 
 
 def task_items(execution: dict[str, Any]) -> list[dict[str, Any]]:
@@ -398,7 +508,10 @@ def render_chatgpt_card(data: dict[str, Any], root: Path, dashboard_path: Path) 
         "PROJECT_NAME": project["name"] or "unknown",
         "LIFECYCLE_CHAIN": lifecycle_chain_text(data),
         "MODULE_READINESS_CHAIN": module_readiness_chain_text(data),
-        "ACTIVE_HANDOFF_LINES": active_handoff_lines_text(context.get("chat_handoff_index", {})),
+        "ACTIVE_HANDOFF_LINES": active_work_lines_text(
+            context.get("chat_handoff_index", {}),
+            context.get("codex_work_index", {}),
+        ),
     }
     path = template_path(root, dashboard_path, "visual-status-card.md.template")
     template = path.read_text(encoding="utf-8") if path else "\n".join(
@@ -486,6 +599,7 @@ def optional_context(root: Path, dashboard_path: Path) -> dict[str, Any]:
     if not handoff_implementation_register:
         handoff_implementation_register = read_yaml(root_chatgpt / "handoff-implementation-register.yaml")
     chat_handoff_index = read_chat_handoff_index(root, dashboard_path)
+    codex_work_index = read_codex_work_index(root, dashboard_path)
     verify_summary = read_text(root / "VERIFY_SUMMARY.md")
     current_state = read_text(root / "CURRENT_FUNCTIONAL_STATE.md")
     runtime_reports = {
@@ -500,6 +614,7 @@ def optional_context(root: Path, dashboard_path: Path) -> dict[str, Any]:
         "cockpit": cockpit,
         "handoff_implementation_register": handoff_implementation_register,
         "chat_handoff_index": chat_handoff_index,
+        "codex_work_index": codex_work_index,
         "verify_summary": verify_summary,
         "current_state_present": bool(current_state.strip()),
         "runtime_reports": runtime_reports,
@@ -720,11 +835,15 @@ def render(data: dict[str, Any], root: Path, dashboard_path: Path) -> str:
             "",
             "### Активные ChatGPT handoff-задачи",
             "",
-            active_handoff_lines_text(context.get("chat_handoff_index", {})),
+            active_work_lines_text(context.get("chat_handoff_index", {}), context.get("codex_work_index", {})),
             "",
             "### История ChatGPT handoff-задач",
             "",
             handoff_history_lines_text(context.get("chat_handoff_index", {})),
+            "",
+            "### История Codex-доработок",
+            "",
+            codex_work_history_lines_text(context.get("codex_work_index", {})),
             "",
             "## Передача и оркестрация",
             "",

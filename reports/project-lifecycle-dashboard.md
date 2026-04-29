@@ -1,6 +1,6 @@
 # Панель жизненного цикла проекта / `project-lifecycle-dashboard`
 
-Generated UTC: `2026-04-29T15:25:54+00:00`
+Generated UTC: `2026-04-29T15:40:00+00:00`
 Source: `/projects/factory-template/template-repo/template/.chatgpt/project-lifecycle-dashboard.yaml`
 
 ## Сейчас
@@ -56,12 +56,14 @@ Source: `/projects/factory-template/template-repo/template/.chatgpt/project-life
 - Codex execution card template: `.chatgpt/codex-execution-card.md.template`
 - Markdown dashboard output: `reports/project-lifecycle-dashboard.md`
 - heavy UI boundary: Default is ChatGPT mini card, Codex execution card and Markdown dashboard only; web app, daemon, SQLite, Telegram notifications, websocket/live-refresh and background worker are not default promises.
-- compact lifecycle chain: ✅ Идея → ✅ Intake → ✅ Спека → ✅ Архитектура → ✅ Handoff → 🟡 Исполнение → 🕒 Проверка → 🕒 Release → 🕒 Deploy → 🕒 Сопровождение
-- compact module readiness chain: ✅ Lifecycle → 🟡 Core → 🟡 Security → 🕒 UI/A11y → 🕒 Quality → 🕒 WebSec → 🕒 Ops → ⏸ AI
+- compact lifecycle chain: ✅ Идея → ✅ Intake → ✅ Спека → ✅ Архитектура → ✅ Handoff → 🟡 Исполнение
+→ 🕒 Проверка → 🕒 Release → 🕒 Deploy → 🕒 Сопровождение
+- compact module readiness chain: ✅ Lifecycle → 🟡 Core → 🟡 Security → 🕒 UI/A11y → 🕒 Quality → 🕒 WebSec
+→ 🕒 Ops → ⏸ AI
 
 ### Активные ChatGPT handoff-задачи
 
-✅ FT-CH-0009 stale-compact-card-tasks: ✅ Codex-SHO → ✅ Codex OK → ✅ Done
+✅ FT-CX-0006 card-wrap-codex-numbering: ✅ Codex-WORK → ✅ Codex OK → ✅ Done
 
 ### История ChatGPT handoff-задач
 
@@ -69,11 +71,17 @@ Source: `/projects/factory-template/template-repo/template/.chatgpt/project-life
 ⏸ FT-CH-0002 completion-report: ✅ GPT-HO → 🕒 Codex OK → ⏸ Done
 ⏸ FT-CH-0003 updates-monitor: ✅ GPT-HO → 🕒 Codex OK → ⏸ Superseded
 ⏸ FT-CH-0004 model-routing: ✅ GPT-HO → 🕒 Codex OK → ⏸ Done
-✅ FT-CH-0005 chat-counter-closeout-drift: ✅ Codex-SHO → ✅ Codex OK → ✅ Done
-✅ FT-CH-0006 handoff-execution-mode-ownership: ✅ Codex-SHO → ✅ Codex OK → ✅ Done
-✅ FT-CH-0007 closeout-project-card: ✅ Codex-SHO → ✅ Codex OK → ✅ Done
-✅ FT-CH-0008 compact-card-active-only: ✅ Codex-SHO → ✅ Codex OK → ✅ Done
-✅ FT-CH-0009 stale-compact-card-tasks: ✅ Codex-SHO → ✅ Codex OK → ✅ Done
+
+### История Codex-доработок
+
+✅ FT-CX-0001 chat-counter-closeout-drift: ✅ Codex-WORK → ✅ Codex OK → ✅
+  Done
+✅ FT-CX-0002 handoff-execution-mode-ownership: ✅ Codex-WORK → ✅ Codex OK →
+  ✅ Done
+✅ FT-CX-0003 closeout-project-card: ✅ Codex-WORK → ✅ Codex OK → ✅ Done
+✅ FT-CX-0004 compact-card-active-only: ✅ Codex-WORK → ✅ Codex OK → ✅ Done
+✅ FT-CX-0005 stale-compact-card-tasks: ✅ Codex-WORK → ✅ Codex OK → ✅ Done
+✅ FT-CX-0006 card-wrap-codex-numbering: ✅ Codex-WORK → ✅ Codex OK → ✅ Done
 
 ## Передача и оркестрация
 

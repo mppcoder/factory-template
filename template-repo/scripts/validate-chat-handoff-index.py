@@ -65,14 +65,16 @@ def validate_policy(data: dict[str, Any], errors: list[str]) -> None:
         errors.append("allocation_policy должен быть mapping")
         return
     allocation_expected = {
-        "shared_counter_for_all_kinds": True,
+        "shared_counter_for_all_kinds": False,
         "first_chat_response_allocates_handoff_id": True,
-        "codex_self_handoff_uses_same_counter": True,
+        "codex_self_handoff_uses_same_counter": False,
         "handoff_must_reference_chat_id": True,
-        "self_handoff_must_reference_chat_id": True,
+        "self_handoff_must_reference_chat_id": False,
+        "codex_self_handoff_uses_codex_work_index": True,
+        "codex_work_index_path": ".chatgpt/codex-work-index.yaml",
     }
     for key, value in allocation_expected.items():
-        if allocation_policy.get(key) is not value:
+        if allocation_policy.get(key) != value:
             errors.append(f"allocation_policy.{key} должен быть `{value}`")
 
 

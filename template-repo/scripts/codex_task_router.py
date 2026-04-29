@@ -175,6 +175,13 @@ def default_chat_index_path(root: Path) -> Path:
     return root / "template-repo" / "template" / ".chatgpt" / "chat-handoff-index.yaml"
 
 
+def default_codex_work_index_path(root: Path) -> Path:
+    direct = root / ".chatgpt" / "codex-work-index.yaml"
+    if direct.exists() or (root / ".chatgpt").exists():
+        return direct
+    return root / "template-repo" / "template" / ".chatgpt" / "codex-work-index.yaml"
+
+
 def ensure_chat_index(data: dict[str, Any], project_code: str) -> dict[str, Any]:
     if not data:
         data = {}
@@ -195,14 +202,36 @@ def ensure_chat_index(data: dict[str, Any], project_code: str) -> dict[str, Any]
     data.setdefault(
         "allocation_policy",
         {
-            "shared_counter_for_all_kinds": True,
+            "shared_counter_for_all_kinds": False,
             "first_chat_response_allocates_handoff_id": True,
-            "codex_self_handoff_uses_same_counter": True,
+            "codex_self_handoff_uses_same_counter": False,
             "handoff_must_reference_chat_id": True,
-            "self_handoff_must_reference_chat_id": True,
+            "self_handoff_must_reference_chat_id": False,
+            "codex_self_handoff_uses_codex_work_index": True,
+            "codex_work_index_path": ".chatgpt/codex-work-index.yaml",
         },
     )
     data.setdefault("allowed_kinds", DEFAULT_CHAT_KINDS)
+    data.setdefault("allowed_states", DEFAULT_CHAT_STATES)
+    data.setdefault("items", [])
+    return data
+
+
+def ensure_codex_work_index(data: dict[str, Any], project_code: str) -> dict[str, Any]:
+    if not data:
+        data = {}
+    data.setdefault("schema", "codex-work-index/v1")
+    data.setdefault("project_code", project_code)
+    data.setdefault("next_codex_work_number", 1)
+    data.setdefault(
+        "id_policy",
+        {
+            "canonical_format": "<PROJECT_CODE>-CX-<NNNN> <task-slug>",
+            "independent_from_chat_handoff_index": True,
+            "status_source_of_truth": ".chatgpt/codex-work-index.yaml",
+        },
+    )
+    data.setdefault("allowed_kinds", ["self_handoff", "direct_task", "remediation", "validation_followup"])
     data.setdefault("allowed_states", DEFAULT_CHAT_STATES)
     data.setdefault("items", [])
     return data
@@ -222,7 +251,16 @@ def chat_identity_overrides(task_text: str) -> dict[str, str]:
     if not isinstance(data, dict):
         return {}
     result: dict[str, str] = {}
-    for key in ["chat_id", "chat_title", "task_slug", "chat_kind", "chat_state"]:
+    for key in [
+        "chat_id",
+        "chat_title",
+        "task_slug",
+        "chat_kind",
+        "chat_state",
+        "codex_work_id",
+        "codex_work_title",
+        "codex_work_state",
+    ]:
         value = data.get(key)
         if value not in (None, ""):
             result[key] = str(value)
@@ -232,6 +270,50 @@ def chat_identity_overrides(task_text: str) -> dict[str, str]:
 def allocate_chat_identity(root: Path, record: dict, task_text: str) -> dict:
     launch = record.get("launch", {})
     overrides = chat_identity_overrides(task_text)
+    if launch.get("launch_source") == "direct-task":
+        if overrides.get("codex_work_id"):
+            launch["codex_work_id"] = overrides.get("codex_work_id", "")
+            launch["codex_work_title"] = overrides.get("codex_work_title", "")
+            launch["task_slug"] = overrides.get("task_slug", "")
+            launch["codex_work_kind"] = "self_handoff"
+            launch["codex_work_state"] = overrides.get("codex_work_state", "open")
+            launch["codex_work_index_path"] = ".chatgpt/codex-work-index.yaml"
+            return record
+        work_index_path = default_codex_work_index_path(root)
+        data = ensure_codex_work_index(read_yaml(work_index_path), project_code_from_root(root))
+        next_number = int(data.get("next_codex_work_number") or 1)
+        project_code = str(data.get("project_code") or project_code_from_root(root))
+        task_slug = slugify_chat_task(str(launch.get("task_summary") or task_text.splitlines()[0] if task_text.strip() else "task"))
+        work_id = f"{project_code}-CX-{next_number:04d}"
+        work_title = f"{work_id} {task_slug}"
+        now = now_utc().replace("+00:00", "Z")
+        item = {
+            "codex_work_id": work_id,
+            "work_number": next_number,
+            "work_title": work_title,
+            "task_slug": task_slug,
+            "kind": "self_handoff",
+            "state": "open",
+            "created_utc": now,
+            "updated_utc": now,
+            "source_type": "direct-task",
+            "handoff_group": task_slug,
+            "handoff_revision": 1,
+            "handoff_register_item_id": "",
+            "status_chain": SELF_HANDOFF_CHAIN,
+            "evidence": ["Allocated during direct-task bootstrap before first substantive response."],
+            "next_action": "Use this Codex work id in the self-handoff; do not consume ChatGPT chat numbers.",
+        }
+        data.setdefault("items", []).append(item)
+        data["next_codex_work_number"] = next_number + 1
+        write_yaml(work_index_path, data)
+        launch["codex_work_id"] = work_id
+        launch["codex_work_title"] = work_title
+        launch["task_slug"] = task_slug
+        launch["codex_work_kind"] = "self_handoff"
+        launch["codex_work_state"] = "open"
+        launch["codex_work_index_path"] = str(work_index_path.relative_to(root)) if work_index_path.is_relative_to(root) else str(work_index_path)
+        return record
     if overrides.get("chat_id"):
         launch["chat_id"] = overrides.get("chat_id", "")
         launch["chat_title"] = overrides.get("chat_title", "")
@@ -241,7 +323,7 @@ def allocate_chat_identity(root: Path, record: dict, task_text: str) -> dict:
         launch["chat_index_path"] = ".chatgpt/chat-handoff-index.yaml"
         return record
 
-    kind = "self_handoff" if launch.get("launch_source") == "direct-task" else "handoff"
+    kind = "handoff"
     state = "open"
     index_path = default_chat_index_path(root)
     data = ensure_chat_index(read_yaml(index_path), project_code_from_root(root))
@@ -843,6 +925,11 @@ Routing:
 - chat_kind: {launch.get('chat_kind', '')}
 - chat_state: {launch.get('chat_state', '')}
 - chat_index_path: {launch.get('chat_index_path', '')}
+- codex_work_id: {launch.get('codex_work_id', '')}
+- codex_work_title: {launch.get('codex_work_title', '')}
+- codex_work_kind: {launch.get('codex_work_kind', '')}
+- codex_work_state: {launch.get('codex_work_state', '')}
+- codex_work_index_path: {launch.get('codex_work_index_path', '')}
 
 Артефакты для обновления:
 {artifacts_lines}

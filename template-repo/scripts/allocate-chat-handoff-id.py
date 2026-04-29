@@ -69,11 +69,13 @@ def ensure_index(data: dict[str, Any], project_code: str) -> dict[str, Any]:
                 "manual_rename_required_on_status_change": False,
             },
             "allocation_policy": {
-                "shared_counter_for_all_kinds": True,
+                "shared_counter_for_all_kinds": False,
                 "first_chat_response_allocates_handoff_id": True,
-                "codex_self_handoff_uses_same_counter": True,
+                "codex_self_handoff_uses_same_counter": False,
                 "handoff_must_reference_chat_id": True,
-                "self_handoff_must_reference_chat_id": True,
+                "self_handoff_must_reference_chat_id": False,
+                "codex_self_handoff_uses_codex_work_index": True,
+                "codex_work_index_path": ".chatgpt/codex-work-index.yaml",
             },
             "allowed_kinds": DEFAULT_ALLOWED_KINDS,
             "allowed_states": DEFAULT_ALLOWED_STATES,
@@ -99,11 +101,13 @@ def ensure_index(data: dict[str, Any], project_code: str) -> dict[str, Any]:
     data.setdefault(
         "allocation_policy",
         {
-            "shared_counter_for_all_kinds": True,
+            "shared_counter_for_all_kinds": False,
             "first_chat_response_allocates_handoff_id": True,
-            "codex_self_handoff_uses_same_counter": True,
+            "codex_self_handoff_uses_same_counter": False,
             "handoff_must_reference_chat_id": True,
-            "self_handoff_must_reference_chat_id": True,
+            "self_handoff_must_reference_chat_id": False,
+            "codex_self_handoff_uses_codex_work_index": True,
+            "codex_work_index_path": ".chatgpt/codex-work-index.yaml",
         },
     )
     return data
@@ -134,6 +138,12 @@ def main() -> int:
     parser.add_argument("--evidence", action="append", default=[])
     parser.add_argument("--dry-run", action="store_true", help="Print allocation without writing the index.")
     args = parser.parse_args()
+
+    if args.kind == "self_handoff":
+        print("CHAT HANDOFF ALLOCATION FAILED")
+        print("- Codex self-handoff не должен расходовать ChatGPT chat counter.")
+        print("- Используйте: python3 template-repo/scripts/allocate-codex-work-id.py --description \"...\"")
+        return 1
 
     root = Path(args.root).resolve()
     index_path = Path(args.index).resolve() if args.index else default_index_path(root)

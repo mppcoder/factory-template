@@ -1,0 +1,23 @@
+schema: codex-work-index/v1
+project_code: FT
+next_codex_work_number: 1
+id_policy:
+  canonical_format: "<PROJECT_CODE>-CX-<NNNN> <task-slug>"
+  independent_from_chat_handoff_index: true
+  status_source_of_truth: ".chatgpt/codex-work-index.yaml"
+allowed_kinds:
+  - self_handoff
+  - direct_task
+  - remediation
+  - validation_followup
+allowed_states:
+  - open
+  - codex_accepted
+  - in_progress
+  - implemented
+  - verified
+  - blocked
+  - superseded
+  - not_applicable
+  - archived
+items: []

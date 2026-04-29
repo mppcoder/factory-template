@@ -1,8 +1,6 @@
 🏭 {{PROJECT_NAME}}
 {{LIFECYCLE_CHAIN}}
-
 Модули:
 {{MODULE_READINESS_CHAIN}}
-
 В работе:
 {{ACTIVE_HANDOFF_LINES}}

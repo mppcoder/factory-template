@@ -30,6 +30,7 @@ from handoff_implementation_common import (
 
 
 CHAT_ID_RE = re.compile(r"^[A-Z][A-Z0-9]*-CH-[0-9]{4}$")
+CODEX_WORK_ID_RE = re.compile(r"^[A-Z][A-Z0-9]*-CX-[0-9]{4}$")
 TASK_SLUG_RE = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
 CHAT_STATES = {
     "open",
@@ -69,7 +70,7 @@ def validate_optional_chat_link(item: dict[str, Any], item_id: str, errors: list
     task_slug = str(item.get("task_slug") or "").strip()
     chat_state = str(item.get("chat_state") or "").strip()
     chat_index_item_id = str(item.get("chat_index_item_id") or "").strip()
-    if not any([chat_id, chat_title, task_slug, chat_state, chat_index_item_id]):
+    if not any([chat_id, chat_title, chat_state, chat_index_item_id]):
         return
     if not chat_id:
         errors.append(f"items[{item_id}].chat_id обязателен, если заполнены chat_* поля")
@@ -90,6 +91,28 @@ def validate_optional_chat_link(item: dict[str, Any], item_id: str, errors: list
             errors.append(f"items[{item_id}].chat_title содержит kind token `{kind_token}`")
     if chat_state and chat_state not in CHAT_STATES:
         errors.append(f"items[{item_id}].chat_state неизвестен: `{chat_state}`")
+
+
+def validate_optional_codex_work_link(item: dict[str, Any], item_id: str, errors: list[str]) -> None:
+    work_id = str(item.get("codex_work_id") or "").strip()
+    work_title = str(item.get("codex_work_title") or "").strip()
+    task_slug = str(item.get("task_slug") or "").strip()
+    work_state = str(item.get("codex_work_state") or "").strip()
+    index_item_id = str(item.get("codex_work_index_item_id") or "").strip()
+    if not any([work_id, work_title, work_state, index_item_id]):
+        return
+    if not work_id:
+        errors.append(f"items[{item_id}].codex_work_id обязателен, если заполнены codex_work_* поля")
+    elif not CODEX_WORK_ID_RE.match(work_id):
+        errors.append(f"items[{item_id}].codex_work_id должен соответствовать PROJECT-CX-0001")
+    if not task_slug:
+        errors.append(f"items[{item_id}].task_slug обязателен, если заполнены codex_work_* поля")
+    elif not TASK_SLUG_RE.match(task_slug):
+        errors.append(f"items[{item_id}].task_slug должен быть lowercase kebab-case")
+    if work_id and task_slug and work_title != f"{work_id} {task_slug}":
+        errors.append(f'items[{item_id}].codex_work_title должен быть ровно "{work_id} {task_slug}"')
+    if work_state and work_state not in CHAT_STATES:
+        errors.append(f"items[{item_id}].codex_work_state неизвестен: `{work_state}`")
 
 
 def validate_register(data: dict[str, Any]) -> list[str]:
@@ -190,6 +213,7 @@ def validate_register(data: dict[str, Any]) -> list[str]:
         if str(item.get("owner_boundary") or "") not in OWNER_BOUNDARIES:
             errors.append(f"items[{item_id}].owner_boundary неизвестен")
         validate_optional_chat_link(item, item_id, errors)
+        validate_optional_codex_work_link(item, item_id, errors)
 
         depends_on = validate_list(item.get("depends_on"), f"items[{item_id}].depends_on", errors)
         blocks = validate_list(item.get("blocks"), f"items[{item_id}].blocks", errors)

@@ -56,8 +56,8 @@ ChatGPT chat title должен быть стабильным на весь life
 Примеры:
 
 ```text
-FT-CH-0007 dashboard-card-ui
-FT-CH-0008 completion-report
+FT-CH-0010 dashboard-card-ui
+FT-CH-0011 completion-report
 ```
 
 В title нельзя добавлять `HO`, `OPEN`, `CODEX`, `DONE`, `BLOCKED`, `VERIFIED`, `BUG`, `DECISION`, `RESEARCH` или другие status/kind tokens. Статусы живут только в repo state: `.chatgpt/chat-handoff-index.yaml`, handoff register и dashboard/card. Поэтому переход `open -> in_progress -> verified` не требует ручного переименования ChatGPT-чата.
@@ -89,20 +89,20 @@ python3 template-repo/scripts/allocate-chat-handoff-id.py \
   --description "short task name"
 ```
 
-Codex self-handoff использует тот же counter:
+Codex self-handoff использует отдельный counter и не расходует ChatGPT `FT-CH` номера:
 
 ```bash
-python3 template-repo/scripts/allocate-chat-handoff-id.py \
-  --index .chatgpt/chat-handoff-index.yaml \
+python3 template-repo/scripts/allocate-codex-work-id.py \
+  --index .chatgpt/codex-work-index.yaml \
   --kind self_handoff \
   --description "short self handoff task"
 ```
 
-В executable path `bootstrap-codex-task.py` записывает `kind: handoff` для `chatgpt-handoff` и `kind: self_handoff` для `direct-task` до генерации видимого handoff/self-handoff. Поэтому следующий `FT-CH-....` не зависит от того, кто породил задачу: ChatGPT handoff или Codex self-handoff.
+В executable path `bootstrap-codex-task.py` записывает `kind: handoff` в `.chatgpt/chat-handoff-index.yaml` только для `chatgpt-handoff`. Для `direct-task` он записывает `kind: self_handoff` в `.chatgpt/codex-work-index.yaml`. Поэтому `FT-CH-....` означает ChatGPT task chat, а `FT-CX-....` означает Codex remediation/direct work.
 
 Поиск:
 
-- по номеру: `FT-CH-0007`;
+- по номеру: `FT-CH-0010`;
 - по slug: `dashboard-card-ui`;
 - незавершенная работа ищется в dashboard/card, а не по status token в title.
 
@@ -179,6 +179,7 @@ Codex closeout behavior:
 - вставить свежую compact project card в финальный ответ пользователю в разделе `Карточка проекта`; карточка должна быть получена через `render-project-lifecycle-dashboard.py --format chatgpt-card --stdout` и содержать lifecycle chain, `Модули:` и `В работе:`.
 - compact card не является историческим журналом: раздел `В работе:` показывает текущую chat/self-handoff задачу и незакрытые задачи; verified/archived/superseded старые задачи остаются в полном `reports/project-lifecycle-dashboard.md`, но не шумят в compact card.
 - compact card не должен превращать stale/unregistered index seeds в активную очередь: незакрытая строка без `handoff_register_item_id` скрывается из compact `В работе:`, если это не текущая/latest задача; такие записи нужно списывать в `not_applicable`/`superseded` с evidence или accepted reason.
+- compact card выводится без лишних пустых строк. Длинные lifecycle/module/task строки должны переноситься renderer-ом на читаемых границах, чтобы карточка оставалась удобной в ChatGPT answer pane.
 
 Replacement identity:
 

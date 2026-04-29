@@ -1,0 +1,142 @@
+schema: codex-work-index/v1
+project_code: FT
+next_codex_work_number: 7
+id_policy:
+  canonical_format: <PROJECT_CODE>-CX-<NNNN> <task-slug>
+  independent_from_chat_handoff_index: true
+  status_source_of_truth: .chatgpt/codex-work-index.yaml
+allowed_kinds:
+- self_handoff
+- direct_task
+- remediation
+- validation_followup
+allowed_states:
+- open
+- codex_accepted
+- in_progress
+- implemented
+- verified
+- blocked
+- superseded
+- not_applicable
+- archived
+items:
+- codex_work_id: FT-CX-0001
+  work_number: 1
+  work_title: FT-CX-0001 chat-counter-closeout-drift
+  task_slug: chat-counter-closeout-drift
+  kind: self_handoff
+  state: verified
+  created_utc: '2026-04-29T12:36:25Z'
+  updated_utc: '2026-04-29T12:45:51Z'
+  source_type: direct-task
+  handoff_group: chat-counter-closeout-drift
+  handoff_revision: 1
+  handoff_register_item_id: HIR-004
+  status_chain:
+  - codex_self_handoff
+  - codex_accepted
+  - codex_completed
+  evidence:
+  - Migrated legacy Codex self-handoff identity out of ChatGPT chat numbering.
+  next_action: No active action.
+- codex_work_id: FT-CX-0002
+  work_number: 2
+  work_title: FT-CX-0002 handoff-execution-mode-ownership
+  task_slug: handoff-execution-mode-ownership
+  kind: self_handoff
+  state: verified
+  created_utc: '2026-04-29T12:56:58Z'
+  updated_utc: '2026-04-29T12:58:59Z'
+  source_type: direct-task
+  handoff_group: handoff-execution-mode-ownership
+  handoff_revision: 1
+  handoff_register_item_id: HIR-005
+  status_chain:
+  - codex_self_handoff
+  - codex_accepted
+  - codex_completed
+  evidence:
+  - Migrated legacy Codex self-handoff identity out of ChatGPT chat numbering.
+  next_action: No active action.
+- codex_work_id: FT-CX-0003
+  work_number: 3
+  work_title: FT-CX-0003 closeout-project-card
+  task_slug: closeout-project-card
+  kind: self_handoff
+  state: verified
+  created_utc: '2026-04-29T15:03:40Z'
+  updated_utc: '2026-04-29T15:07:55Z'
+  source_type: direct-task
+  handoff_group: closeout-project-card
+  handoff_revision: 1
+  handoff_register_item_id: HIR-006
+  status_chain:
+  - codex_self_handoff
+  - codex_accepted
+  - codex_completed
+  evidence:
+  - Migrated legacy Codex self-handoff identity out of ChatGPT chat numbering.
+  next_action: No active action.
+- codex_work_id: FT-CX-0004
+  work_number: 4
+  work_title: FT-CX-0004 compact-card-active-only
+  task_slug: compact-card-active-only
+  kind: self_handoff
+  state: verified
+  created_utc: '2026-04-29T15:12:21Z'
+  updated_utc: '2026-04-29T15:16:32Z'
+  source_type: direct-task
+  handoff_group: compact-card-active-only
+  handoff_revision: 1
+  handoff_register_item_id: HIR-007
+  status_chain:
+  - codex_self_handoff
+  - codex_accepted
+  - codex_completed
+  evidence:
+  - Migrated legacy Codex self-handoff identity out of ChatGPT chat numbering.
+  next_action: No active action.
+- codex_work_id: FT-CX-0005
+  work_number: 5
+  work_title: FT-CX-0005 stale-compact-card-tasks
+  task_slug: stale-compact-card-tasks
+  kind: self_handoff
+  state: verified
+  created_utc: '2026-04-29T15:22:06Z'
+  updated_utc: '2026-04-29T15:25:32Z'
+  source_type: direct-task
+  handoff_group: stale-compact-card-tasks
+  handoff_revision: 1
+  handoff_register_item_id: HIR-008
+  status_chain:
+  - codex_self_handoff
+  - codex_accepted
+  - codex_completed
+  evidence:
+  - Migrated legacy Codex self-handoff identity out of ChatGPT chat numbering.
+  next_action: No active action.
+- codex_work_id: FT-CX-0006
+  work_number: 6
+  work_title: FT-CX-0006 card-wrap-codex-numbering
+  task_slug: card-wrap-codex-numbering
+  kind: self_handoff
+  state: verified
+  created_utc: '2026-04-29T15:32:32Z'
+  updated_utc: '2026-04-29T15:39:38Z'
+  source_type: direct-task
+  handoff_group: card-wrap-codex-numbering
+  handoff_revision: 1
+  handoff_register_item_id: HIR-009
+  status_chain:
+  - codex_self_handoff
+  - codex_accepted
+  - codex_completed
+  evidence:
+  - 'User report: compact card has extra blank space, lacks wrapping, and Codex
+    remediation numbering overlaps ChatGPT numbering.'
+  - Implemented separate Codex work index namespace FT-CX independent from FT-CH.
+  - bash template-repo/scripts/verify-all.sh quick
+  - bash template-repo/scripts/verify-all.sh
+  next_action: No further implementation action; compact card wrapping and Codex
+    work numbering split are verified.

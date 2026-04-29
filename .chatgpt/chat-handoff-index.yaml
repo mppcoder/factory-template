@@ -9,11 +9,13 @@ title_policy:
   status_source_of_truth: .chatgpt/chat-handoff-index.yaml
   manual_rename_required_on_status_change: false
 allocation_policy:
-  shared_counter_for_all_kinds: true
+  shared_counter_for_all_kinds: false
   first_chat_response_allocates_handoff_id: true
-  codex_self_handoff_uses_same_counter: true
+  codex_self_handoff_uses_same_counter: false
   handoff_must_reference_chat_id: true
-  self_handoff_must_reference_chat_id: true
+  self_handoff_must_reference_chat_id: false
+  codex_self_handoff_uses_codex_work_index: true
+  codex_work_index_path: .chatgpt/codex-work-index.yaml
 allowed_kinds:
 - handoff
 - self_handoff
@@ -121,128 +123,3 @@ items:
   accepted_reason: Stale seed/index entry without a matching handoff implementation
     register item; not an active blocked task.
   next_action: No active action; keep only as historical index record.
-- chat_id: FT-CH-0005
-  chat_number: 5
-  chat_title: FT-CH-0005 chat-counter-closeout-drift
-  task_slug: chat-counter-closeout-drift
-  kind: self_handoff
-  state: verified
-  created_utc: '2026-04-29T12:36:25Z'
-  updated_utc: '2026-04-29T12:45:51Z'
-  source_type: direct-task
-  handoff_group: chat-counter-closeout-drift
-  handoff_revision: 1
-  handoff_register_item_id: HIR-004
-  status_chain:
-  - codex_self_handoff
-  - codex_accepted
-  - codex_completed
-  evidence:
-  - Allocated for current Codex direct-task self-handoff remediation from the shared
-    repo counter.
-  - python3 template-repo/scripts/validate-chat-handoff-index.py .chatgpt/chat-handoff-index.yaml
-  - python3 template-repo/scripts/validate-codex-routing.py .
-  - bash template-repo/scripts/verify-all.sh quick
-  - bash template-repo/scripts/verify-all.sh
-  next_action: No further implementation action; stable self-handoff identity is verified
-    in repo state.
-- chat_id: FT-CH-0006
-  chat_number: 6
-  chat_title: FT-CH-0006 handoff-execution-mode-ownership
-  task_slug: handoff-execution-mode-ownership
-  kind: self_handoff
-  state: verified
-  created_utc: '2026-04-29T12:56:50Z'
-  updated_utc: '2026-04-29T13:05:30Z'
-  source_type: direct-task
-  handoff_group: handoff-execution-mode-ownership
-  handoff_revision: 1
-  handoff_register_item_id: HIR-005
-  status_chain:
-  - codex_self_handoff
-  - codex_accepted
-  - codex_completed
-  evidence:
-  - 'Allocated for current direct-task remediation: make handoff neutral and let Codex
-    decide actual execution mode.'
-  - Implemented neutral handoff default and runtime execution_mode ownership in router,
-    scenarios, orchestration validators and fixtures.
-  - bash template-repo/scripts/verify-all.sh quick
-  - bash template-repo/scripts/verify-all.sh
-  next_action: No further implementation action; neutral handoff contract is verified.
-- chat_id: FT-CH-0007
-  chat_number: 7
-  chat_title: FT-CH-0007 closeout-project-card
-  task_slug: closeout-project-card
-  kind: self_handoff
-  state: verified
-  created_utc: '2026-04-29T15:01:56Z'
-  updated_utc: '2026-04-29T15:07:55Z'
-  source_type: direct-task
-  handoff_group: closeout-project-card
-  handoff_revision: 1
-  handoff_register_item_id: HIR-006
-  status_chain:
-  - codex_self_handoff
-  - codex_accepted
-  - codex_completed
-  evidence:
-  - 'Allocated for direct-task remediation: final closeout must include compact project
-    card.'
-  - Implemented closeout requirement for final project card in scenario, docs, generated
-    task checklist and direct-task routing validator.
-  - bash template-repo/scripts/verify-all.sh quick
-  - bash template-repo/scripts/verify-all.sh
-  next_action: No further implementation action; final closeout project-card requirement
-    is verified.
-- chat_id: FT-CH-0008
-  chat_number: 8
-  chat_title: FT-CH-0008 compact-card-active-only
-  task_slug: compact-card-active-only
-  kind: self_handoff
-  state: verified
-  created_utc: '2026-04-29T15:12:21Z'
-  updated_utc: '2026-04-29T15:16:32Z'
-  source_type: direct-task
-  handoff_group: compact-card-active-only
-  handoff_revision: 1
-  handoff_register_item_id: HIR-007
-  status_chain:
-  - codex_self_handoff
-  - codex_accepted
-  - codex_completed
-  evidence:
-  - 'Allocated for direct-task remediation: compact project card should show only
-    current and not-closed tasks.'
-  - 'Implemented compact card filter: current/latest task plus not-closed handoff
-    tasks only; closed history remains in full dashboard.'
-  - bash template-repo/scripts/verify-all.sh quick
-  - bash template-repo/scripts/verify-all.sh
-  next_action: No further implementation action; compact card active-only filtering
-    is verified.
-- chat_id: FT-CH-0009
-  chat_number: 9
-  chat_title: FT-CH-0009 stale-compact-card-tasks
-  task_slug: stale-compact-card-tasks
-  kind: self_handoff
-  state: verified
-  created_utc: '2026-04-29T15:22:06Z'
-  updated_utc: '2026-04-29T15:25:32Z'
-  source_type: direct-task
-  handoff_group: stale-compact-card-tasks
-  handoff_revision: 1
-  handoff_register_item_id: HIR-008
-  status_chain:
-  - codex_self_handoff
-  - codex_accepted
-  - codex_completed
-  evidence:
-  - 'Allocated for direct-task remediation: stale unregistered chat index items appeared
-    as active compact-card tasks.'
-  - 'Implemented remediation: stale unregistered FT-CH-0002/FT-CH-0004 entries
-    are not active tasks, and compact card filtering ignores unregistered non-current
-    entries.'
-  - bash template-repo/scripts/verify-all.sh quick
-  - bash template-repo/scripts/verify-all.sh
-  next_action: No further implementation action; stale unregistered compact-card
-    task filtering is verified.

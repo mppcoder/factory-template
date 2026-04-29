@@ -352,22 +352,28 @@ run_project_lifecycle_dashboard_smoke() {
     "$ROOT/template-repo/template/.chatgpt/handoff-implementation-register.yaml"
   python3 "$ROOT/template-repo/scripts/validate-chat-handoff-index.py" \
     "$ROOT/template-repo/template/.chatgpt/chat-handoff-index.yaml"
+  python3 "$ROOT/template-repo/scripts/validate-codex-work-index.py" \
+    "$ROOT/template-repo/template/.chatgpt/codex-work-index.yaml"
   python3 "$ROOT/template-repo/scripts/validate-chat-handoff-index.py" \
     "$ROOT/.chatgpt/chat-handoff-index.yaml"
+  python3 "$ROOT/template-repo/scripts/validate-codex-work-index.py" \
+    "$ROOT/.chatgpt/codex-work-index.yaml"
   cp "$ROOT/template-repo/template/.chatgpt/chat-handoff-index.yaml" "$tmp_dir/chat-handoff-index-allocation.yaml"
+  cp "$ROOT/template-repo/template/.chatgpt/codex-work-index.yaml" "$tmp_dir/codex-work-index-allocation.yaml"
   python3 "$ROOT/template-repo/scripts/allocate-chat-handoff-id.py" \
     --index "$tmp_dir/chat-handoff-index-allocation.yaml" \
     --project-code FT \
     --kind handoff \
     --description "dashboard card ui" > "$tmp_dir/allocated-chat-title-1.txt"
-  python3 "$ROOT/template-repo/scripts/allocate-chat-handoff-id.py" \
-    --index "$tmp_dir/chat-handoff-index-allocation.yaml" \
+  python3 "$ROOT/template-repo/scripts/allocate-codex-work-id.py" \
+    --index "$tmp_dir/codex-work-index-allocation.yaml" \
     --project-code FT \
     --kind self_handoff \
     --description "self handoff" > "$tmp_dir/allocated-chat-title-2.txt"
   grep -q "FT-CH-0001 dashboard-card-ui" "$tmp_dir/allocated-chat-title-1.txt"
-  grep -q "FT-CH-0002 self-handoff" "$tmp_dir/allocated-chat-title-2.txt"
+  grep -q "FT-CX-0001 self-handoff" "$tmp_dir/allocated-chat-title-2.txt"
   python3 "$ROOT/template-repo/scripts/validate-chat-handoff-index.py" "$tmp_dir/chat-handoff-index-allocation.yaml"
+  python3 "$ROOT/template-repo/scripts/validate-codex-work-index.py" "$tmp_dir/codex-work-index-allocation.yaml"
   grep -q "kind: self_handoff" "$tmp_dir/allocated-chat-title-2.txt"
   python3 "$ROOT/template-repo/scripts/validate-handoff-implementation-register.py" \
     "$ROOT/tests/handoff-implementation-register/valid/handoff-implementation-register.yaml"
@@ -400,6 +406,11 @@ run_project_lifecycle_dashboard_smoke() {
     --stdout > "$tmp_dir/chatgpt-card.md"
   grep -q "Модули:" "$tmp_dir/chatgpt-card.md"
   grep -q "В работе:" "$tmp_dir/chatgpt-card.md"
+  if grep -q "^$" "$tmp_dir/chatgpt-card.md"; then
+    echo "chatgpt-card не должен содержать пустые строки" >&2
+    return 1
+  fi
+  awk 'length($0) > 82 { print "too long: " $0; bad=1 } END { exit bad }' "$tmp_dir/chatgpt-card.md"
   python3 "$ROOT/template-repo/scripts/render-project-lifecycle-dashboard.py" \
     --input "$ROOT/tests/project-lifecycle-dashboard/valid/project-lifecycle-dashboard.yaml" \
     --format codex-card \
