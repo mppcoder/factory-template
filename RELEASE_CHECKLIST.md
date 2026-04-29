@@ -74,6 +74,7 @@
 - [x] `VERSION.md`, `FACTORY_MANIFEST.yaml` и `template-repo/TEMPLATE_MANIFEST.yaml` согласованы
 - [x] `bash RELEASE_BUILD.sh` создает `factory-v2.5.1.zip`, `factory-v2.5.1.manifest.yaml` и `factory-v2.5.1.zip.sha256`
 - [x] archive распакован в temp и содержит один root `factory-v2.5.1/`
+- [x] release archive содержит только ASCII paths (`NON_ASCII_COUNT=0`) для portable GUI/Windows unzip compatibility
 - [x] в распакованном root проходят `bash POST_UNZIP_SETUP.sh` и targeted package verification
 - [x] `factory-template-ops-policy.yaml` валиден
 - [x] curated export/reference packs собираются

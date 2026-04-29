@@ -106,6 +106,8 @@ def validate_zip(archive: Path) -> tuple[str, str]:
             raise ValueError(f"archive root должен начинаться с factory-v, найдено: {root}")
 
         for name in names:
+            if any(ord(char) > 127 for char in name):
+                raise ValueError(f"archive содержит non-ASCII path, несовместимый с portable install zip: {name}")
             parts = set(Path(name).parts)
             forbidden = sorted(parts & FORBIDDEN_PARTS)
             if forbidden:

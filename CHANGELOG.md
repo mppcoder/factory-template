@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 ### Добавлено
+- Release package artifact refresh for `2.5.1`: install ZIP теперь собирается с ASCII-only archive paths для GUI/Windows-compatible распаковки; `bootstrap/*.md` нормализуются только в staging archive, source repo filenames не меняются в этом fix.
+- `validate-release-package.py` теперь отклоняет release archives с non-ASCII paths, чтобы не выпускать ZIP, который может открываться в Linux CLI, но ломаться в пользовательских archive tools.
 - Release package updated bootstrap for `2.5.1`: `RELEASE_BUILD.sh` теперь выпускает canonical zip, sidecar manifest и SHA256 checksum, а `validate-release-package.py` проверяет single root folder, forbidden paths, manifest, checksum и required files.
 - Defect report `reports/bugs/2026-04-29-release-package-updated-bootstrap-gaps.md` для package/install-from-scratch gaps: отсутствовали manifest/checksum gate, fallback archive verification и явное npm support status.
 - Handoff implementation control layer: template-owned `.chatgpt/handoff-implementation-register.yaml`, validator `validate-handoff-implementation-register.py`, deterministic dependency/priority calculation и lifecycle dashboard cards для queued/ready, blocked, blockers, in-progress, implemented-not-verified, stale и closed handoff/self-handoff задач.

@@ -23,6 +23,57 @@ mkdir -p "$STAGE" "$OUT_DIR"
 rsync -a --delete --exclude-from="$ROOT/.releaseignore" "$ROOT/" "$STAGE/"
 find "$STAGE" -name '*.sh' -exec chmod +x {} +
 find "$STAGE" -name '*.py' -exec chmod +x {} + || true
+python3 - "$STAGE/bootstrap" <<'PY'
+from __future__ import annotations
+
+import re
+import sys
+from pathlib import Path
+
+bootstrap = Path(sys.argv[1])
+if not bootstrap.exists():
+    raise SystemExit(0)
+
+slug_by_number = {
+    "01": "what-is-factory-core",
+    "02": "how-to-create-working-project",
+    "03": "connect-sources-in-chatgpt-project",
+    "04": "stage-pipeline",
+    "05": "handoff-to-codex",
+    "06": "brownfield-mode",
+    "07": "update-template-repo-through-meta-template",
+    "08": "change-id-and-task-graph",
+    "09": "change-classes-and-modes",
+    "10": "policy-presets",
+    "11": "project-presets",
+    "12": "good-artifact-examples",
+    "13": "verify-result-and-fill-brownfield-core",
+    "14": "change-from-intake-to-done",
+    "15": "small-fix-and-brownfield-audit-examples",
+    "16": "artifact-quality-check",
+    "17": "registry-and-project-origin",
+    "18": "feedback-drift-and-codex-task-pack",
+    "19": "factory-improvement-loop",
+    "20": "matrix-test-and-controlled-back-sync",
+    "21": "mandatory-defect-capture",
+    "22": "alignment-layer",
+}
+
+for path in sorted(bootstrap.glob("*.md")):
+    match = re.match(r"^(\d{2})-", path.name)
+    if not match:
+        continue
+    number = match.group(1)
+    slug = slug_by_number.get(number)
+    if not slug:
+        continue
+    target = path.with_name(f"{number}-{slug}.md")
+    if path == target:
+        continue
+    if target.exists():
+        raise SystemExit(f"bootstrap filename normalization collision: {target}")
+    path.rename(target)
+PY
 mkdir -p "$(dirname "$MANIFEST_STAGE")"
 cat > "$MANIFEST_STAGE" <<EOF
 schema: factory-release-package/v1
@@ -32,6 +83,7 @@ build_timestamp_utc: "$BUILD_TIMESTAMP_UTC"
 archive_filename: "$OUT_BASE"
 archive_root: "$REL_NAME/"
 npm_path_supported: false
+filename_compatibility: ascii-only archive paths
 canonical_install_paths:
   - GitHub clone/download
   - release artifact archive
