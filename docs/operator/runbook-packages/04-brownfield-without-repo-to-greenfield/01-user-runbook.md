@@ -8,6 +8,7 @@ Brownfield without repo — intake/reconstruction path, не финальный 
 
 Маркер слоя: `USER-ONLY SETUP`.
 Пользователь собирает incoming materials в `_incoming`, дает access/approvals и открывает remote Codex context. Codex выполняет inventory/reconstruction/conversion.
+Если incoming материалы относятся к VPS/runtime, пользователь передает только безопасные сведения о выбранном Ubuntu/VPS image, runtime versions и policy approvals. Codex не делает automatic remediation или upgrade без отдельного user approval gate.
 Допустимые contours: `vscode-remote-ssh-codex-extension` или fallback `codex-app-remote-ssh`.
 
 ### BWO-000. Зафиксировать target root и incoming boundary

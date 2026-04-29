@@ -45,9 +45,13 @@ project_presets:
     - .chatgpt/done-checklist.md
     - .chatgpt/verification-report.md
     - .chatgpt/done-report.md
+    - .chatgpt/software-inventory.yaml
+    - .chatgpt/software-update-watchlist.yaml
+    - .chatgpt/software-update-readiness.yaml
     - tasks/codex/codex-task-mandatory-bug-capture.block.md
     - reports/bugs
     - reports/learnings
+    - reports/software-updates
     - meta-feedback/factory-bug-report.md
     - VERSION.md
     - CHANGELOG.md
@@ -110,9 +114,13 @@ project_presets:
     - .chatgpt/done-checklist.md
     - .chatgpt/verification-report.md
     - .chatgpt/done-report.md
+    - .chatgpt/software-inventory.yaml
+    - .chatgpt/software-update-watchlist.yaml
+    - .chatgpt/software-update-readiness.yaml
     - tasks/codex/codex-task-mandatory-bug-capture.block.md
     - reports/bugs
     - reports/learnings
+    - reports/software-updates
     - meta-feedback/factory-bug-report.md
     - VERSION.md
     - CHANGELOG.md
@@ -179,9 +187,13 @@ project_presets:
     - .chatgpt/done-checklist.md
     - .chatgpt/verification-report.md
     - .chatgpt/done-report.md
+    - .chatgpt/software-inventory.yaml
+    - .chatgpt/software-update-watchlist.yaml
+    - .chatgpt/software-update-readiness.yaml
     - tasks/codex/codex-task-mandatory-bug-capture.block.md
     - reports/bugs
     - reports/learnings
+    - reports/software-updates
     - meta-feedback/factory-bug-report.md
     - VERSION.md
     - CHANGELOG.md
@@ -247,9 +259,13 @@ project_presets:
     - .chatgpt/done-checklist.md
     - .chatgpt/verification-report.md
     - .chatgpt/done-report.md
+    - .chatgpt/software-inventory.yaml
+    - .chatgpt/software-update-watchlist.yaml
+    - .chatgpt/software-update-readiness.yaml
     - tasks/codex/codex-task-mandatory-bug-capture.block.md
     - reports/bugs
     - reports/learnings
+    - reports/software-updates
     - meta-feedback/factory-bug-report.md
     - VERSION.md
     - CHANGELOG.md
@@ -272,6 +288,10 @@ project_presets:
     - .chatgpt/evidence-register.md
     - .chatgpt/reality-check.md
     - .chatgpt/done-report.md
+    - .chatgpt/software-inventory.yaml
+    - .chatgpt/software-update-watchlist.yaml
+    - .chatgpt/software-update-readiness.yaml
+    - reports/software-updates
     notes:
     - Используйте, когда задача — описать и оценить систему без обязательного handoff
       в Codex.
@@ -316,9 +336,13 @@ project_presets:
     - .chatgpt/done-checklist.md
     - .chatgpt/verification-report.md
     - .chatgpt/done-report.md
+    - .chatgpt/software-inventory.yaml
+    - .chatgpt/software-update-watchlist.yaml
+    - .chatgpt/software-update-readiness.yaml
     - tasks/codex/codex-task-mandatory-bug-capture.block.md
     - reports/bugs
     - reports/learnings
+    - reports/software-updates
     - meta-feedback/factory-bug-report.md
     - VERSION.md
     - CHANGELOG.md

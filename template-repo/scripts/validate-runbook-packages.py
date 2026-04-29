@@ -300,6 +300,25 @@ GREENFIELD_DASHBOARD_REQUIRED_FIELDS = [
     "repo_first_instruction_prepared_by",
     "repo_first_instruction_pasted_by",
 ]
+SOFTWARE_UPDATE_GOVERNANCE_TOKENS = [
+    "software-update-governance",
+    "software-inventory.yaml",
+    "software-update-watchlist.yaml",
+    "software-update-readiness.yaml",
+    "reports/software-updates/README.md",
+    "manual-approved-upgrade",
+    "unattended-upgrades",
+    "Ubuntu LTS",
+    "provider image id",
+    "later package update state",
+    "Docker/Compose",
+    "Node/Python",
+    "GitHub Actions",
+    "base Docker images/tags/digests",
+    "critical runtime dependencies",
+    "auto-install без approval",
+    "migration/upgrade project",
+]
 
 
 def read(path: Path) -> str:
@@ -347,6 +366,9 @@ def validate_package_files(root: Path, errors: list[str]) -> None:
         "greenfield-product",
         "Brownfield",
         "conversion",
+        "Контролируемые обновления ПО",
+        "manual-approved-upgrade",
+        "unattended-upgrades",
     ]:
         if token not in contract:
             errors.append(f"package contract не содержит обязательный маркер `{token}`")
@@ -371,6 +393,9 @@ def validate_package_files(root: Path, errors: list[str]) -> None:
         for token in spec["final"]:
             if token not in combined:
                 errors.append(f"`{package}` не фиксирует final-state marker `{token}`")
+        for token in SOFTWARE_UPDATE_GOVERNANCE_TOKENS:
+            if token not in combined:
+                errors.append(f"`{package}` не содержит software update governance marker `{token}`")
         if "02-codex-runbook.md" in PACKAGE_FILES:
             codex_path = package_dir / "02-codex-runbook.md"
             if codex_path.exists():

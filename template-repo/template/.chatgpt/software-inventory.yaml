@@ -1,0 +1,42 @@
+schema: software-inventory/v1
+auto_update_policy: manual-approved-upgrade
+auto_install_without_approval: forbidden
+strict_controlled_mode: true
+
+baseline:
+  status: pending
+  recorded_at: ""
+  evidence: []
+  os:
+    distro_name: ""
+    version: ""
+    codename: ""
+    provider_image_id: ""
+    kernel: ""
+    selected_ubuntu_lts_release: ""
+    later_package_update_state: ""
+  package_manager:
+    manager: apt
+    sources: []
+    unattended_upgrades:
+      installed: unknown
+      enabled: unknown
+      apt_timers: []
+      policy_exception: ""
+  runtime_stack:
+    docker_version: ""
+    docker_compose_version: ""
+    node_version: ""
+    python_version: ""
+  github_actions:
+    actions: []
+  docker_images:
+    base_images: []
+  package_lockfiles: []
+  critical_runtime_dependencies: []
+
+policy_exceptions: []
+
+notes:
+  - "Ubuntu LTS image release and later package update state are tracked separately."
+  - "Ubuntu LTS migration is a separate migration/upgrade project, not silent maintenance."

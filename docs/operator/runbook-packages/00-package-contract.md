@@ -43,8 +43,25 @@ Codex-runbook обязан начинаться с проверки remote conte
 - bootstrap/setup;
 - targeted/quick verify;
 - drift remediation;
+- controlled software update governance: Ubuntu/VPS image release, `unattended-upgrades`, baseline inventory, watchlist и readiness без auto-upgrade;
 - dashboard update;
 - verified sync, если доступен `origin` и verify green.
+
+## Контролируемые обновления ПО
+
+Каждый package обязан явно фиксировать:
+
+- selected Ubuntu LTS release / VPS image release;
+- OS image release отдельно от later package update state;
+- состояние `unattended-upgrades` и apt timers;
+- package manager sources;
+- Docker/Compose, Node/Python, GitHub Actions, base Docker images/tags/digests, lockfiles и critical runtime dependencies;
+- `auto_update_policy: manual-approved-upgrade`;
+- запрет auto-install без explicit approval пользователя;
+- watchlist и update readiness в `.chatgpt`;
+- lifecycle dashboard block `software_update_governance`.
+
+Переход на новую Ubuntu LTS — отдельный migration/upgrade project, а не silent maintenance step.
 
 ## Канонический старт нового боевого проекта
 

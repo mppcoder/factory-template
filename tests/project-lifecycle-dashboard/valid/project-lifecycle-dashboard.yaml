@@ -118,6 +118,26 @@ deploy_runtime:
   runtime_reports: [".factory-runtime/reports/deploy-dry-run-latest.txt"]
   evidence: []
   boundary: "Dry-run не является real deploy proof."
+software_update_governance:
+  baseline_status: pending
+  auto_update_policy: manual-approved-upgrade
+  last_update_intelligence_check: ""
+  relevant_findings_count: 0
+  upgrade_proposal_status: not_started
+  next_safe_action:
+    owner_boundary: internal-repo-follow-up
+    action: "Заполнить software inventory."
+    evidence: []
+  fallback_action:
+    owner_boundary: internal-repo-follow-up
+    action: "Заблокировать upgrade proposal до baseline evidence."
+    evidence: []
+  blockers: []
+  source_artifacts:
+    - ".chatgpt/software-inventory.yaml"
+    - ".chatgpt/software-update-watchlist.yaml"
+    - ".chatgpt/software-update-readiness.yaml"
+    - "reports/software-updates/README.md"
 post_release_improvement:
   incidents: []
   feedback: []

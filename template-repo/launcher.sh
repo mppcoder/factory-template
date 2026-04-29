@@ -284,6 +284,7 @@ changelog_md = f'''# Журнал изменений проекта
 ## [0.1.0] - {today}
 ### Добавлено
 - первичная генерация проекта из фабрики 2.5.0
+- controlled software update governance artifacts: `.chatgpt/software-inventory.yaml`, `.chatgpt/software-update-watchlist.yaml`, `.chatgpt/software-update-readiness.yaml`, `reports/software-updates/README.md`
 
 ### Изменено
 - 
@@ -299,9 +300,11 @@ current_state_md = '''# Текущее функциональное состоя
 - базовый каркас проекта
 - `.chatgpt` и presets
 - defect-capture и versioning layer
+- controlled software update governance artifacts: inventory, watchlist, readiness и reports/software-updates
 
 ## Что работает стабильно
 - launcher и базовые structural validators
+- software update governance validator после materialization scripts
 
 ## Что работает частично
 - содержательное наполнение артефактов требует сценарного слоя
@@ -314,6 +317,7 @@ current_state_md = '''# Текущее функциональное состоя
 
 ## Следующий приоритетный шаг
 - заполнить reality-check, user-spec и task-index
+- заполнить `.chatgpt/software-inventory.yaml`, проверить `unattended-upgrades` и обновить watchlist/readiness перед deploy/operate
 '''
 (root / 'CURRENT_FUNCTIONAL_STATE.md').write_text(current_state_md, encoding='utf-8')
 PY

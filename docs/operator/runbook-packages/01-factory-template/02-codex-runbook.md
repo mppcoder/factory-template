@@ -153,6 +153,45 @@ bash template-repo/scripts/verify-all.sh quick
 
 Если verify failed: пройти defect-capture -> remediation -> verify again. Для нового defect создать report в `reports/bugs/`, классифицировать layer и исправить repo-owned drift.
 
+### CX-085. Зафиксировать controlled software update baseline
+
+Codex выполняет report-only шаги и не устанавливает обновления без approval:
+
+```bash
+set -euo pipefail
+cd /projects/factory-template
+lsb_release -a || cat /etc/os-release
+uname -a
+apt-cache policy | sed -n '1,120p'
+systemctl is-enabled unattended-upgrades || true
+systemctl status unattended-upgrades --no-pager || true
+systemctl list-timers 'apt*' --no-pager || true
+docker --version || true
+docker compose version || true
+node --version || true
+python3 --version || true
+python3 template-repo/scripts/render-software-update-readiness.py --root . --output reports/software-updates/readiness-latest.md
+python3 template-repo/scripts/validate-software-update-governance.py .
+```
+
+Source artifacts для generated и template-owned baseline:
+
+- `.chatgpt/software-inventory.yaml`;
+- `.chatgpt/software-update-watchlist.yaml`;
+- `.chatgpt/software-update-readiness.yaml`;
+- `reports/software-updates/README.md`.
+
+Обязательно различай:
+
+- selected Ubuntu LTS release / VPS image release;
+- provider image id, если доступен;
+- later package update state;
+- `unattended-upgrades` installed/enabled state;
+- package manager sources;
+- Docker/Compose, Node/Python, GitHub Actions, base Docker images/tags/digests, lockfiles и critical runtime dependencies.
+
+Default policy: `manual-approved-upgrade`; auto-install без approval запрещен. Переход на новую Ubuntu LTS — отдельный migration/upgrade project, а не silent maintenance step.
+
 ### CX-090. Обновить dashboard/readout
 
 Обнови dashboard/readout только внутри repo-owned artifacts:
@@ -163,6 +202,7 @@ bash template-repo/scripts/verify-all.sh quick
 - `docs/template-architecture-and-event-workflows.md`, если workflow wording изменился.
 
 Dashboard должен фиксировать `current_step`, `active_contour`, `takeover_ready`, `checklist_path`, blockers и next action для runbook packages.
+Dashboard также должен фиксировать `software_update_governance`: baseline status, auto-update policy, last update intelligence check, findings count, upgrade proposal status, next safe action, fallback и blockers.
 
 ### CX-100. Выполнить verified sync
 

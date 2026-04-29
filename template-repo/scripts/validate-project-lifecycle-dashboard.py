@@ -80,6 +80,7 @@ REQUIRED_TOP_LEVEL = [
     "handoff_orchestration",
     "release_readiness",
     "deploy_runtime",
+    "software_update_governance",
     "post_release_improvement",
     "external_actions_ledger",
     "recommended_next_step",
@@ -92,6 +93,24 @@ POSITIVE_AUTOSWITCH_RE = re.compile(
 RU_POSITIVE_AUTOSWITCH_RE = re.compile(
     r"(?i)(advisory|handoff|сценари|инструкц|project).{0,100}(автоматически переключает|сам переключает|переключает model|переключает profile|переключает reasoning)"
 )
+SOFTWARE_UPDATE_POLICIES = {"manual-approved-upgrade"}
+SOFTWARE_PROPOSAL_STATUSES = {
+    "not_started",
+    "draft",
+    "pending",
+    "blocked",
+    "ready",
+    "approved",
+    "rejected",
+    "completed",
+}
+SOFTWARE_BOUNDARIES = {
+    "internal-repo-follow-up",
+    "external-user-action",
+    "runtime-action",
+    "downstream-battle-action",
+    "secret-boundary-blocker",
+}
 
 
 def load_yaml(path: Path) -> dict[str, Any]:
@@ -143,6 +162,18 @@ def validate_green_evidence(item: dict[str, Any], path: str, errors: list[str]) 
     status = status_of(item)
     if status in GREEN_STATUSES and not has_evidence(item):
         errors.append(f"{path} отмечен `{status}`, но не содержит evidence или accepted_reason")
+
+
+def validate_software_action(item: Any, path: str, errors: list[str]) -> None:
+    if not isinstance(item, dict):
+        errors.append(f"{path} должен быть mapping")
+        return
+    boundary = str(item.get("owner_boundary") or "")
+    if boundary not in SOFTWARE_BOUNDARIES:
+        errors.append(f"{path}.owner_boundary должен быть одним из: {', '.join(sorted(SOFTWARE_BOUNDARIES))}")
+    if not str(item.get("action") or "").strip():
+        errors.append(f"{path}.action обязателен")
+    validate_green_evidence(item, path, errors)
 
 
 def validate_dashboard(data: dict[str, Any]) -> list[str]:
@@ -333,6 +364,40 @@ def validate_dashboard(data: dict[str, Any]) -> list[str]:
     runtime = as_mapping(data, "deploy_runtime", errors)
     validate_status(status_of(runtime), "deploy_runtime.status", errors)
     validate_green_evidence(runtime, "deploy_runtime", errors)
+
+    software = as_mapping(data, "software_update_governance", errors)
+    baseline_status = str(software.get("baseline_status") or "")
+    validate_status(baseline_status, "software_update_governance.baseline_status", errors)
+    if baseline_status in GREEN_STATUSES and not has_evidence(software):
+        errors.append("software_update_governance baseline отмечен green, но не содержит evidence или accepted_reason")
+    policy = str(software.get("auto_update_policy") or "")
+    if policy not in SOFTWARE_UPDATE_POLICIES:
+        errors.append("software_update_governance.auto_update_policy должен быть manual-approved-upgrade")
+    proposal_status = str(software.get("upgrade_proposal_status") or "")
+    if proposal_status not in SOFTWARE_PROPOSAL_STATUSES:
+        errors.append("software_update_governance.upgrade_proposal_status имеет неизвестное значение")
+    findings = software.get("relevant_findings_count")
+    if not isinstance(findings, int) or findings < 0:
+        errors.append("software_update_governance.relevant_findings_count должен быть non-negative integer")
+    if "last_update_intelligence_check" not in software:
+        errors.append("software_update_governance.last_update_intelligence_check обязателен")
+    validate_software_action(software.get("next_safe_action"), "software_update_governance.next_safe_action", errors)
+    validate_software_action(software.get("fallback_action"), "software_update_governance.fallback_action", errors)
+    if not isinstance(software.get("blockers", []), list):
+        errors.append("software_update_governance.blockers должен быть list")
+    source_artifacts = software.get("source_artifacts", [])
+    if not isinstance(source_artifacts, list):
+        errors.append("software_update_governance.source_artifacts должен быть list")
+    else:
+        required_sources = {
+            ".chatgpt/software-inventory.yaml",
+            ".chatgpt/software-update-watchlist.yaml",
+            ".chatgpt/software-update-readiness.yaml",
+            "reports/software-updates/README.md",
+        }
+        missing_sources = sorted(required_sources - {str(item) for item in source_artifacts})
+        if missing_sources:
+            errors.append("software_update_governance.source_artifacts не содержит: " + ", ".join(missing_sources))
 
     post_release = as_mapping(data, "post_release_improvement", errors)
     for key in ["incidents", "feedback", "learning_proposals", "backlog_candidates"]:

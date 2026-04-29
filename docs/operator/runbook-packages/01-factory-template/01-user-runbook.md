@@ -7,6 +7,7 @@
 
 Маркер слоя: `USER-ONLY SETUP`.
 Пользователь делает только внешние действия: аккаунты, подписки, GitHub/ChatGPT/Codex sign in, Timeweb Cloud, VPS, SSH key, SSH config и выбор рабочего Codex contour.
+Для Ubuntu/VPS пользователь выбирает исходный OS image, но обновление ОС, runtime stack или критичных зависимостей не выполняется автоматически: Codex после takeover фиксирует baseline, проверяет `unattended-upgrades`, готовит watchlist/readiness и запрашивает approval только через отдельный upgrade proposal.
 
 ## Автоматизация Codex
 

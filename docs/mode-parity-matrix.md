@@ -19,6 +19,7 @@ YAML-манифест остается machine-readable контрактом; д
 | `project_knowledge_layer` | yes | yes | yes | yes |
 | `work_features_and_completed` | yes | yes | yes | yes |
 | `verify_done_checklist` | yes | yes | yes | yes |
+| `software_update_governance` | yes | yes | yes | yes |
 | `downstream_sync_metadata` | yes | yes | yes | yes |
 
 ## Обязательные core artifacts
@@ -33,6 +34,7 @@ YAML-манифест остается machine-readable контрактом; д
 - project knowledge: `project-knowledge/README.md` and topic files
 - work lifecycle: `work/features`, `work/completed`, `work-templates/*`
 - verify/done: `.chatgpt/verification-report.md`, `.chatgpt/done-checklist.md`, `.chatgpt/done-report.md`
+- software update governance: `.chatgpt/software-inventory.yaml`, `.chatgpt/software-update-watchlist.yaml`, `.chatgpt/software-update-readiness.yaml`, `reports/software-updates`
 - downstream sync metadata: `project-presets.yaml`, `policy-presets.yaml`, `compatibility-aliases.yaml`, `codex-routing.yaml`, `codex-model-routing.yaml`, `template-repo/tree-contract.yaml`, `template-repo/mode-parity.yaml`
 
 ## Допустимые отличия

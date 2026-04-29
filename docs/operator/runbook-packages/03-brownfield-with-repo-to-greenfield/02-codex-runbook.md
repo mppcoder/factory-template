@@ -32,14 +32,21 @@ Target lifecycle: `greenfield-converted`.
    - `brownfield/risks-and-constraints.md`;
    - `.chatgpt/reality-check.md`;
    - `.chatgpt/conflict-report.md`.
-5. Защити project-owned zones и нормализуй только safe structural drift.
-6. Выполни conversion:
+5. Зафиксируй controlled software update baseline:
+   - `.chatgpt/software-inventory.yaml`;
+   - `.chatgpt/software-update-watchlist.yaml`;
+   - `.chatgpt/software-update-readiness.yaml`;
+   - `reports/software-updates/README.md`.
+6. Для VPS обязательно записать selected Ubuntu LTS release / provider image id если доступен, OS image release отдельно от later package update state, kernel, package manager sources, `unattended-upgrades`, Docker/Compose, Node/Python, GitHub Actions, base Docker images/tags/digests, lockfiles и critical runtime dependencies.
+7. Запретить auto-install без approval: policy `manual-approved-upgrade`; update readiness может готовить proposal, но не выполняет upgrade/remediation. Переход на новую Ubuntu LTS — отдельный migration/upgrade project.
+8. Защити project-owned zones и нормализуй только safe structural drift.
+9. Выполни conversion:
    - `.chatgpt/project-profile.yaml` содержит `project_preset: greenfield-product`;
    - recommended mode стал `greenfield`;
    - `.chatgpt/stage-state.yaml` фиксирует `lifecycle_state: greenfield-converted`;
    - brownfield evidence архивировано или явно referenced как history.
-7. Если conversion невозможна, создай explicit `brownfield/conversion-blocker.md` или `.chatgpt/conversion-blocker.md`.
-8. Запусти validators и verified sync при доступности.
+10. Если conversion невозможна, создай explicit `brownfield/conversion-blocker.md` или `.chatgpt/conversion-blocker.md`.
+11. Запусти validators, `python3 scripts/validate-software-update-governance.py .` и verified sync при доступности.
 
 ## Правило завершения
 

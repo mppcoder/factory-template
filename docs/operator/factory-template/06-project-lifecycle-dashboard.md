@@ -29,6 +29,7 @@
 - handoff/orchestration: parent handoff, child tasks, selected profile/model/reasoning и route boundary;
 - release readiness: version, changelog, release notes, scorecard, verification state;
 - deploy/runtime: signal из operator dashboard reports, если они есть;
+- software update governance: baseline, auto-update policy, update intelligence, findings, upgrade proposal status, next safe action, fallback и blockers;
 - post-release improvement: incidents, feedback, learning proposals, backlog candidates;
 - runbook packages: current phase, gates, blockers и next action для четырех entry paths;
 - external actions ledger: только реальные user/manual/runtime/downstream действия;
@@ -56,6 +57,17 @@
 `operator-dashboard.py` остается runtime/deploy панелью: env, preset, dry-run, deploy reports, Docker Compose и next deploy step.
 
 Lifecycle dashboard не выполняет deploy и не обещает runtime automation. Он только показывает runtime/deploy state и evidence boundary. Dry-run/report evidence не считается real production proof.
+
+## Связь с software update governance
+
+`software_update_governance` показывает controlled update state, а не выполняет обновления. Source artifacts:
+
+- `.chatgpt/software-inventory.yaml`;
+- `.chatgpt/software-update-watchlist.yaml`;
+- `.chatgpt/software-update-readiness.yaml`;
+- `reports/software-updates/README.md`.
+
+Блок обязан различать Ubuntu/VPS image release, later package update state, runtime stack и production-critical dependency state. Default policy: `manual-approved-upgrade`; auto-install без approval запрещен. Переход на новую Ubuntu LTS является отдельным migration/upgrade project, а не silent maintenance step.
 
 ## Связь с runbook packages
 

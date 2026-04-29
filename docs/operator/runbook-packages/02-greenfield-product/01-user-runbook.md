@@ -8,6 +8,7 @@
 
 Маркер слоя: `USER-ONLY SETUP`.
 Пользователь делает только внешние действия: запускает factory-template ChatGPT intake, отвечает на опрос, вставляет стартовый Codex handoff, а после Codex automation создает ChatGPT Project боевого проекта, открывает Project settings/instructions, вставляет готовую repo-first instruction и сохраняет настройки.
+Если проект идет на VPS, пользователь выбирает/подтверждает исходный Ubuntu LTS image как внешний setup-факт. Codex не устанавливает обновления автоматически: он фиксирует baseline, policy `manual-approved-upgrade`, watchlist/readiness и выносит любые upgrade decisions в отдельный approval gate.
 
 Пользователь не создает GitHub repo, не выбирает slug/repo name вручную, не clone-ит repo, не добавляет `origin`, не делает initial commit/push, не создает VPS project root, не запускает launcher/wizard, не materialize-ит repo-first core, не запускает verify и sync.
 

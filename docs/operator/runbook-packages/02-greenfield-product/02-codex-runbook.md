@@ -32,13 +32,17 @@ Codex готовит repo-first instruction для боевого ChatGPT Projec
 7. Создать/подготовить VPS project root: `/projects/<project-slug>`.
 8. Запустить `python3 template-repo/scripts/first-project-wizard.py` или repo-native launcher/wizard path.
 9. Materialize repo-first core: `.chatgpt`, `AGENTS.md`, scenario-pack, dashboard, project-knowledge и базовые project docs.
-10. Добавить `origin`, сделать initial commit/push и проверить remote.
-11. Создать/обновить `greenfield/vision.md`, `greenfield/problem-statement.md`, `greenfield/scope-v1.md`, `greenfield/architecture-options.md`, `greenfield/initial-task-list.md`.
-12. Запустить bootstrap/setup по generated repo rules.
-13. Запустить validators и `bash scripts/verify-all.sh quick`.
-14. Выполнить verified sync при green verify и доступном `origin`.
-15. Подготовить готовый текст repo-first instruction для ChatGPT Project боевого проекта.
-16. Подготовить пошаговую инструкцию пользователю, куда этот текст вставить в ChatGPT UI: создать Project, открыть Project settings/instructions, вставить текст, сохранить настройки.
+10. Materialize controlled software update governance artifacts: `.chatgpt/software-inventory.yaml`, `.chatgpt/software-update-watchlist.yaml`, `.chatgpt/software-update-readiness.yaml`, `reports/software-updates/README.md`.
+11. Зафиксировать Ubuntu/VPS baseline: selected Ubuntu LTS release, provider image id если доступен, OS image release отдельно от later package update state, kernel, package manager sources, `unattended-upgrades`, Docker/Compose, Node/Python, GitHub Actions, base Docker images/tags/digests, lockfiles и critical runtime dependencies.
+12. Проверить `unattended-upgrades`; auto-install без approval запрещен. Записать policy `manual-approved-upgrade` и readiness без выполнения upgrade.
+13. Создать watchlist и update readiness; переход на новую Ubuntu LTS оформить только как отдельный migration/upgrade project.
+14. Добавить `origin`, сделать initial commit/push и проверить remote.
+15. Создать/обновить `greenfield/vision.md`, `greenfield/problem-statement.md`, `greenfield/scope-v1.md`, `greenfield/architecture-options.md`, `greenfield/initial-task-list.md`.
+16. Запустить bootstrap/setup по generated repo rules.
+17. Запустить validators и `bash scripts/verify-all.sh quick`, включая `python3 scripts/validate-software-update-governance.py .`.
+18. Выполнить verified sync при green verify и доступном `origin`.
+19. Подготовить готовый текст repo-first instruction для ChatGPT Project боевого проекта.
+20. Подготовить пошаговую инструкцию пользователю, куда этот текст вставить в ChatGPT UI: создать Project, открыть Project settings/instructions, вставить текст, сохранить настройки.
 
 ## Блокеры
 
@@ -48,6 +52,7 @@ Codex готовит repo-first instruction для боевого ChatGPT Projec
 - требуется ручной security approval;
 - GitHub UI требует действие, недоступное через tools;
 - нужно ввести secret;
+- нужно approve upgrade proposal или OS/runtime migration;
 - нужно подтвердить платное/опасное внешнее действие;
 - нужно создать или изменить ChatGPT Project, потому что это внешний UI, который выполняет пользователь.
 

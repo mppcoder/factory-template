@@ -398,6 +398,7 @@ run_generated_project_quick() {
   run_step "validate-stage" python3 "$ROOT/scripts/validate-stage.py" "$ROOT"
   run_step "validate-task-state-lite" python3 "$ROOT/scripts/validate-task-state-lite.py" "$ROOT"
   run_step "validate-project-lifecycle-dashboard" python3 "$ROOT/scripts/validate-project-lifecycle-dashboard.py" "$ROOT/.chatgpt/project-lifecycle-dashboard.yaml"
+  run_step "validate-software-update-governance" python3 "$ROOT/scripts/validate-software-update-governance.py" "$ROOT"
   run_step "validate-feature-execution-lite" python3 "$ROOT/scripts/validate-feature-execution-lite.py" "$ROOT"
   run_step "validate-learning-patch-loop" python3 "$ROOT/scripts/validate-learning-patch-loop.py" "$ROOT"
   run_step "validate-versioning-layer" python3 "$ROOT/scripts/validate-versioning-layer.py" "$ROOT"
@@ -430,6 +431,7 @@ run_quick() {
   run_step "validate-codex-task-pack" python3 "$ROOT/template-repo/scripts/validate-codex-task-pack.py" "$ROOT"
   run_step "validate-codex-routing" python3 "$ROOT/template-repo/scripts/validate-codex-routing.py" "$ROOT"
   run_step "validate-runbook-packages" python3 "$ROOT/template-repo/scripts/validate-runbook-packages.py" "$ROOT"
+  run_step "validate-software-update-governance" python3 "$ROOT/template-repo/scripts/validate-software-update-governance.py" "$ROOT/template-repo/template"
   run_step "validate-gpt55-prompt-contract" run_gpt55_prompt_contract_smoke
   run_step "validate-model-prompt-policy" run_model_prompt_policy_smoke
   run_step "validate-tree-contract" python3 "$ROOT/template-repo/scripts/validate-tree-contract.py" "$ROOT"

@@ -209,6 +209,27 @@ deploy_runtime:
   evidence: []
   boundary: "Runtime evidence может подтягиваться из operator-dashboard reports; dry-run/report evidence не является real deploy proof."
 
+software_update_governance:
+  baseline_status: pending
+  auto_update_policy: manual-approved-upgrade
+  last_update_intelligence_check: ""
+  relevant_findings_count: 0
+  upgrade_proposal_status: not_started
+  next_safe_action:
+    owner_boundary: internal-repo-follow-up
+    action: "Заполнить `.chatgpt/software-inventory.yaml`, проверить unattended upgrades и обновить watchlist без установки обновлений."
+    evidence: []
+  fallback_action:
+    owner_boundary: internal-repo-follow-up
+    action: "Если baseline неполный, заблокировать upgrade proposal до записи OS/runtime/package evidence."
+    evidence: []
+  blockers: []
+  source_artifacts:
+    - ".chatgpt/software-inventory.yaml"
+    - ".chatgpt/software-update-watchlist.yaml"
+    - ".chatgpt/software-update-readiness.yaml"
+    - "reports/software-updates/README.md"
+
 post_release_improvement:
   incidents: []
   feedback: []

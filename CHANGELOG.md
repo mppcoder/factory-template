@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 ### Добавлено
+- Controlled software update governance layer: policy/spec `docs/operator/software-update-governance.md`, generated artifacts `.chatgpt/software-inventory.yaml`, `.chatgpt/software-update-watchlist.yaml`, `.chatgpt/software-update-readiness.yaml` и `reports/software-updates/README.md`.
+- Report-only helpers `validate-software-update-governance.py` и `render-software-update-readiness.py`, подключенные к quick/generated verify.
+- Lifecycle dashboard block `software_update_governance` для baseline status, auto-update policy, update intelligence freshness, findings count, upgrade proposal status, next safe action, fallback и blockers.
+- Reusable factory feedback `reports/factory-feedback/feedback-043-controlled-software-update-governance-gap.md` для отсутствующего governance contour.
 - Defect report `reports/bugs/2026-04-28-runbook-packages-missing-beginner-copy-paste-flow.md` для gap, где package layer был abstract routing/checklist, а не beginner zero-to-Codex-ready flow.
 - Beginner-first runbook contract: packages теперь обязаны разделять `USER-ONLY SETUP` и `CODEX-AUTOMATION`, фиксировать Codex takeover point и использовать copy-paste step cards с окном, командами, expected result и диагностикой.
 - Validator coverage для beginner runbook flow: обязательные factory steps `FT-000`..`FT-180`, contours `codex-app-remote-ssh` / `vscode-remote-ssh-codex-extension`, Timeweb/VPS/SSH/Codex setup tokens и automation boundary.
@@ -42,6 +46,8 @@
 - `docs/brownfield-to-greenfield-transition.md` описывает without-repo и with-repo transition paths, conversion gates и done rule.
 
 ### Изменено
+- Runbook packages теперь требуют фиксировать Ubuntu/VPS image release, later package update state, `unattended-upgrades`, package sources, Docker/Compose, Node/Python, GitHub Actions, base images/tags/digests, lockfiles и critical runtime dependencies без auto-upgrade.
+- Mode parity и project presets теперь считают software update governance core capability для всех generated greenfield/brownfield projects.
 - `01-factory-template/01-user-runbook.md` переписан как novice runbook от Windows PC до remote Codex takeover; `02-codex-runbook.md` теперь явно берет на себя VPS preflight, package install, clone, bootstrap, verify, dashboard update и verified sync.
 - `01-factory-template/03-checklist.md` теперь является таблицей-зеркалом пользовательских шагов и не содержит process/meta checks; process checks перенесены в Codex/verify слой.
 - `01-factory-template/04-verify.md` разделен на user readiness verify до takeover и Codex automation verify после takeover.

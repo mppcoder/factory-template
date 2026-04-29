@@ -26,15 +26,23 @@
    - `brownfield/gap-register.md`;
    - `.chatgpt/evidence-register.md`;
    - `.chatgpt/reality-check.md`.
-5. Составь:
+5. Зафиксируй software/runtime baseline, если incoming materials или recovered system связаны с VPS:
+   - selected Ubuntu LTS release / provider image id если доступен;
+   - OS image release отдельно от later package update state;
+   - kernel, package manager sources и `unattended-upgrades`;
+   - Docker/Compose, Node/Python, GitHub Actions, base Docker images/tags/digests, lockfiles и critical runtime dependencies.
+6. Создай `.chatgpt/software-inventory.yaml`, `.chatgpt/software-update-watchlist.yaml`, `.chatgpt/software-update-readiness.yaml` и `reports/software-updates/README.md`; policy `manual-approved-upgrade`, auto-install без approval запрещен.
+7. Составь:
    - `brownfield/reverse-engineering-plan.md`;
    - `brownfield/reverse-engineering-summary.md`;
    - `brownfield/decision-log.md`.
-6. Реконструируй canonical repo только внутри target root, например `/projects/<project-slug>/reconstructed-repo`.
-7. После reconstruction перейди к with-repo adoption cycle.
-8. Выполни conversion в `greenfield-product` / `greenfield-converted` или создай explicit documented blocker.
-9. Transitional materials после conversion должны быть archived/renamed/moved out of active path.
-10. Запусти validators и verified sync при доступности.
+8. Реконструируй canonical repo только внутри target root, например `/projects/<project-slug>/reconstructed-repo`.
+9. После reconstruction перейди к with-repo adoption cycle.
+10. Выполни conversion в `greenfield-product` / `greenfield-converted` или создай explicit documented blocker.
+11. Transitional materials после conversion должны быть archived/renamed/moved out of active path.
+12. Запусти validators, `python3 scripts/validate-software-update-governance.py .` и verified sync при доступности.
+
+Ubuntu LTS migration всегда оформляется как отдельный migration/upgrade project, а не silent maintenance step.
 
 ## Правило завершения
 

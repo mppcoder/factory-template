@@ -1,0 +1,80 @@
+schema: software-update-watchlist/v1
+check_cadence: monthly
+last_checked_at: ""
+relevant_findings_count: 0
+
+impact_classifications:
+  - not_relevant
+  - monitor_only
+  - security_relevant
+  - feature_relevant
+  - breaking_change_risk
+  - runtime_conflict_risk
+  - upgrade_candidate
+  - blocked
+
+watched_components:
+  - id: ubuntu-lts
+    name: "Ubuntu LTS"
+    current_version: ""
+    official_docs_source:
+      name: "Ubuntu Server documentation"
+      url: "https://documentation.ubuntu.com/server/"
+    release_notes_source:
+      name: "Ubuntu release notes"
+      url: "https://discourse.ubuntu.com/c/release/48"
+    security_advisory_source:
+      name: "Ubuntu Security Notices"
+      url: "https://ubuntu.com/security/notices"
+    issue_tracker_source:
+      name: "Launchpad Ubuntu"
+      url: "https://bugs.launchpad.net/ubuntu"
+    secondary_signals:
+      - name: "Ubuntu Discourse"
+        url: "https://discourse.ubuntu.com/"
+    check_cadence: monthly
+    last_checked_at: ""
+    last_relevant_finding: ""
+    project_impact_classification: monitor_only
+  - id: docker-compose
+    name: "Docker / Docker Compose"
+    current_version: ""
+    official_docs_source:
+      name: "Docker docs"
+      url: "https://docs.docker.com/"
+    release_notes_source:
+      name: "Docker release notes"
+      url: "https://docs.docker.com/engine/release-notes/"
+    security_advisory_source:
+      name: "Docker security announcements"
+      url: "https://docs.docker.com/security/"
+    issue_tracker_source:
+      name: "Docker GitHub issues"
+      url: "https://github.com/docker/for-linux/issues"
+    secondary_signals: []
+    check_cadence: monthly
+    last_checked_at: ""
+    last_relevant_finding: ""
+    project_impact_classification: monitor_only
+  - id: node-python
+    name: "Node.js / Python runtimes"
+    current_version: ""
+    official_docs_source:
+      name: "Node.js and Python docs"
+      url: "https://nodejs.org/en/about/previous-releases"
+    release_notes_source:
+      name: "Runtime release notes"
+      url: "https://www.python.org/downloads/"
+    security_advisory_source:
+      name: "Runtime security advisories"
+      url: "https://nodejs.org/en/blog/vulnerability"
+    issue_tracker_source:
+      name: "Runtime issue trackers"
+      url: "https://github.com/nodejs/node/issues"
+    secondary_signals: []
+    check_cadence: monthly
+    last_checked_at: ""
+    last_relevant_finding: ""
+    project_impact_classification: monitor_only
+
+findings: []

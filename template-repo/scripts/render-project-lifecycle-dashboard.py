@@ -147,6 +147,7 @@ def render(data: dict[str, Any], root: Path, dashboard_path: Path) -> str:
     orchestration = data.get("handoff_orchestration", {}) if isinstance(data.get("handoff_orchestration"), dict) else {}
     release = data.get("release_readiness", {}) if isinstance(data.get("release_readiness"), dict) else {}
     runtime = data.get("deploy_runtime", {}) if isinstance(data.get("deploy_runtime"), dict) else {}
+    software_updates = data.get("software_update_governance", {}) if isinstance(data.get("software_update_governance"), dict) else {}
     post_release = data.get("post_release_improvement", {}) if isinstance(data.get("post_release_improvement"), dict) else {}
     runbook_packages = data.get("runbook_packages", []) if isinstance(data.get("runbook_packages"), list) else []
     recommended = data.get("recommended_next_step", {}) if isinstance(data.get("recommended_next_step"), dict) else {}
@@ -259,6 +260,17 @@ def render(data: dict[str, Any], root: Path, dashboard_path: Path) -> str:
             f"- dry-run report present: `{bool(context.get('runtime_reports', {}).get('dry_run'))}`",
             f"- deploy report present: `{bool(context.get('runtime_reports', {}).get('deploy'))}`",
             f"- boundary: {runtime.get('boundary', '')}",
+            "",
+            "## Software update governance",
+            "",
+            f"- baseline status: `{software_updates.get('baseline_status', '')}`",
+            f"- auto-update policy: `{software_updates.get('auto_update_policy', '')}`",
+            f"- last intelligence check: `{software_updates.get('last_update_intelligence_check', '') or 'not recorded'}`",
+            f"- relevant findings: `{software_updates.get('relevant_findings_count', 0)}`",
+            f"- upgrade proposal: `{software_updates.get('upgrade_proposal_status', '')}`",
+            f"- blockers: `{', '.join(map(str, software_updates.get('blockers', []) or [])) or 'none'}`",
+            f"- next safe action: {value(software_updates, 'next_safe_action', 'action')}",
+            f"- fallback action: {value(software_updates, 'fallback_action', 'action')}",
             "",
             "## Post-release improvement",
             "",

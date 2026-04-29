@@ -53,6 +53,7 @@ core_capability_ids: &core_capability_ids
   - project_knowledge_layer
   - work_features_and_completed
   - verify_done_checklist
+  - software_update_governance
   - downstream_sync_metadata
 
 all_presets_required_artifacts: &all_presets_required_artifacts
@@ -72,9 +73,13 @@ all_presets_required_artifacts: &all_presets_required_artifacts
   - .chatgpt/done-checklist.md
   - .chatgpt/verification-report.md
   - .chatgpt/done-report.md
+  - .chatgpt/software-inventory.yaml
+  - .chatgpt/software-update-watchlist.yaml
+  - .chatgpt/software-update-readiness.yaml
   - tasks/codex/codex-task-mandatory-bug-capture.block.md
   - reports/bugs
   - reports/learnings
+  - reports/software-updates
   - meta-feedback/factory-bug-report.md
   - VERSION.md
   - CHANGELOG.md
@@ -280,6 +285,24 @@ core_capabilities:
       - template-repo/scripts/validate-evidence.py
       - template-repo/scripts/validate-quality.py
       - template-repo/scripts/check-dod.py
+  software_update_governance:
+    title: Controlled software update governance
+    justification: "All modes must record OS/runtime/package baseline, update intelligence and approval-gated upgrade readiness before deploy/operate work."
+    generated_paths:
+      - .chatgpt/software-inventory.yaml
+      - .chatgpt/software-update-watchlist.yaml
+      - .chatgpt/software-update-readiness.yaml
+      - reports/software-updates
+      - scripts/validate-software-update-governance.py
+      - scripts/render-software-update-readiness.py
+    source_paths:
+      - docs/operator/software-update-governance.md
+      - template-repo/template/.chatgpt/software-inventory.yaml
+      - template-repo/template/.chatgpt/software-update-watchlist.yaml
+      - template-repo/template/.chatgpt/software-update-readiness.yaml
+      - template-repo/template/reports/software-updates/README.md
+      - template-repo/scripts/validate-software-update-governance.py
+      - template-repo/scripts/render-software-update-readiness.py
   downstream_sync_metadata:
     title: Downstream sync metadata
     justification: "All generated projects must carry source version, preset and sync metadata where downstream sync applies."
@@ -377,9 +400,13 @@ modes:
       - .chatgpt/active-scenarios.yaml
       - .chatgpt/codex-input.md
       - .chatgpt/done-checklist.md
+      - .chatgpt/software-inventory.yaml
+      - .chatgpt/software-update-watchlist.yaml
+      - .chatgpt/software-update-readiness.yaml
       - brownfield/system-inventory.md
       - greenfield/vision.md
       - project-knowledge/README.md
+      - reports/software-updates
       - work/features
       - work/completed
   greenfield:
