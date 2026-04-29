@@ -51,6 +51,7 @@ def main() -> int:
     print(f"task_launch={launch_path}")
     print(f"launch_input={launch_input_path}")
     print(f"normalized_handoff={handoff_path}")
+    print(f"handoff_shape={launch['handoff_shape']}")
     print(f"selected_profile={launch['selected_profile']}")
     print(f"selected_model={launch['selected_model']}")
     print(f"selected_reasoning_effort={launch['selected_reasoning_effort']}")

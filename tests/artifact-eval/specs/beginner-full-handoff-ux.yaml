@@ -4,7 +4,7 @@ report_date: 2026-04-28
 target_artifact: tests/beginner-handoff-ux/positive/handoff.md
 artifact_type: handoff-fixture
 expected_output:
-  guided: "Beginner full handoff UX fixture keeps one copy-paste block, no file-based handoff, no fake auto-switch, user actions deferred to final closeout, owner boundaries visible and Russian human-readable layer present."
+  guided: "Beginner full handoff UX fixture keeps one copy-paste block, explicit handoff_shape, no file-based handoff, no fake auto-switch, parent-only user actions deferred to final closeout, owner boundaries visible and Russian human-readable layer present."
 thresholds:
   min_case_pass_rate: 1.0
   min_assertion_pass_rate: 1.0
@@ -21,6 +21,7 @@ expected_trigger:
           must_contain:
             - "Язык ответа Codex: русский"
             - "один цельный"
+            - "handoff_shape: parent-orchestration-handoff"
     - id: deferred-actions
       prompt: "Большой handoff содержит future external values."
       expected: "User actions are deferred to final parent closeout."

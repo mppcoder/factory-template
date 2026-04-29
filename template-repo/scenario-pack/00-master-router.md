@@ -8,6 +8,7 @@
 - текущий этап pipeline;
 - какие артефакты нужно обновить;
 - разрешен ли handoff в Codex.
+- `handoff_shape`, если handoff в Codex разрешен, готовится или обсуждается.
 
 ## Контракт маршрутизации
 Всегда разделяй:
@@ -23,6 +24,42 @@
 
 Отдельно фиксируй, что "новый чат + вставка handoff" и "new task launch через executable launcher" — не одно и то же.
 Нельзя выдавать manual UI apply за авто-переключение profile/model/reasoning внутри уже открытой live session.
+
+## Gate выбора вида handoff / handoff_shape selection
+
+Перед выдачей handoff обязательно выбери и зафиксируй нормализованное поле `handoff_shape`.
+
+Допустимые значения:
+- `single-agent-handoff`;
+- `parent-orchestration-handoff`.
+
+По умолчанию выбирай `single-agent-handoff`, если задача цельная, выполняется одним route/profile, затрагивает один основной слой или небольшое число тесно связанных файлов, не требует параллельных child subtasks, не требует разных task_class/profile/model/reasoning для отдельных частей, не нуждается в orchestration cockpit / parent status tracking и не содержит длинной цепочки независимых доработок.
+
+Выбирай `parent-orchestration-handoff`, если сработал хотя бы один hard trigger:
+- задача явно большая, многоэтапная или roadmap-like;
+- есть две или больше независимые подзадачи, которые можно или нужно выполнять отдельными child sessions;
+- разные части задачи требуют разных `task_class`, `selected_profile`, `selected_model` или `selected_reasoning_effort`;
+- одновременно нужны audit/deep analysis, implementation/build, docs normalization, validators/tests и final review как отдельные workstreams;
+- есть dependency queue между доработками, где одни задачи должны быть выше других в очереди реализации;
+- нужен визуальный контроль статуса в orchestration cockpit/dashboard;
+- есть `deferred_user_actions`, `placeholder_replacements`, runtime/downstream boundaries или `external-user-action`, которые нужно перенести в final closeout через `defer-to-final-closeout`;
+- пользователь явно просит parent handoff, orchestrator, оркестр агентов или full orchestration.
+
+Если hard trigger не сработал, но есть три или больше soft signals, выбирай `parent-orchestration-handoff`:
+- больше трех артефактов к обновлению;
+- требуется обновление scenario-pack + scripts + tests/validators;
+- ожидается больше одного verification contour;
+- есть высокий риск архитектурного drift;
+- нужно синхронизировать template-facing и downstream-facing wording;
+- есть несколько вариантов реализации и требуется route explanation.
+
+Запрещено:
+- выдавать `parent-orchestration-handoff` только потому, что задача важная, если она реально цельная и один deep/build агент достаточен;
+- выдавать `single-agent-handoff` для большой задачи с независимыми child subtasks и разными профилями;
+- утверждать, что parent handoff сам переключает model/profile/reasoning в уже открытой live session;
+- смешивать advisory/policy layer с executable routing layer.
+
+Выбор `single-agent-handoff` vs `parent-orchestration-handoff` делается до выдачи handoff, а не после него.
 
 ## Правило inline handoff
 Если handoff в Codex уже разрешен и задача достаточно определена, выдай готовый Codex handoff в том же ответе. Не останавливайся на одной аналитике.

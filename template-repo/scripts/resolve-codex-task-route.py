@@ -32,6 +32,7 @@ def main() -> int:
     launch = record["launch"]
     print("CODEX TASK ROUTE RESOLVED")
     print(f"launch_source={launch['launch_source']}")
+    print(f"handoff_shape={launch['handoff_shape']}")
     print(f"task_class={launch['task_class']}")
     print(f"selected_profile={launch['selected_profile']}")
     print(f"selected_model={launch['selected_model']}")

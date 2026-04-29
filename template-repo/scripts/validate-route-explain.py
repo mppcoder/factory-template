@@ -13,6 +13,8 @@ REQUIRED_FIELDS = [
     "selected_model",
     "selected_reasoning_effort",
     "selected_plan_mode_reasoning_effort",
+    "handoff_shape",
+    "handoff_shape_evidence",
     "evidence",
     "method",
     "live_catalog_boundary",
@@ -20,7 +22,7 @@ REQUIRED_FIELDS = [
 ]
 
 
-def run_case(root: Path, task_text: str, expected_class: str) -> list[str]:
+def run_case(root: Path, task_text: str, expected_class: str, expected_shape: str = "single-agent-handoff") -> list[str]:
     proc = subprocess.run(
         [
             "python3",
@@ -44,6 +46,8 @@ def run_case(root: Path, task_text: str, expected_class: str) -> list[str]:
             errors.append(f"missing `{field}`")
     if payload.get("task_class") != expected_class:
         errors.append(f"expected task_class `{expected_class}`, got `{payload.get('task_class')}`")
+    if payload.get("handoff_shape") != expected_shape:
+        errors.append(f"expected handoff_shape `{expected_shape}`, got `{payload.get('handoff_shape')}`")
     method = str(payload.get("method", "")).lower()
     if "semantic classifier" in method and "not a semantic classifier" not in method:
         errors.append("route explain falsely claims semantic classifier")
@@ -58,14 +62,19 @@ def main() -> int:
     args = parser.parse_args()
     root = Path(args.root).resolve()
     cases = [
-        ("Проведи deep audit orchestration после Plan №5", "deep"),
-        ("Реализуй build remediation validator", "build"),
-        ("Запусти review verification pass", "review"),
-        ("Найди docs inventory для quick update", "quick"),
+        ("Проведи deep audit одного routing файла, задача цельная", "deep", "single-agent-handoff"),
+        ("Реализуй build remediation validator", "build", "single-agent-handoff"),
+        ("Запусти review verification pass", "review", "single-agent-handoff"),
+        ("Найди docs inventory для quick update", "quick", "single-agent-handoff"),
+        (
+            "Нужен parent orchestration: child subtasks для audit/deep, implementation/build и validators/tests",
+            "review",
+            "parent-orchestration-handoff",
+        ),
     ]
     errors: list[str] = []
-    for text, expected in cases:
-        for error in run_case(root, text, expected):
+    for text, expected, expected_shape in cases:
+        for error in run_case(root, text, expected, expected_shape):
             errors.append(f"{expected}: {error}")
     if errors:
         print("ROUTE EXPLAIN НЕВАЛИДЕН")

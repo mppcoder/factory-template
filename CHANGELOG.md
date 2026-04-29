@@ -2,6 +2,9 @@
 
 ## [Unreleased]
 ### Добавлено
+- Нормализованное поле `handoff_shape` для выбора между `single-agent-handoff` и `parent-orchestration-handoff`, включая hard triggers, soft scoring и запрет ложного parent/default выбора.
+- Shape-aware validator coverage для handoff UX: positive fixtures для single-agent и parent orchestration, negative fixtures для missing shape и очевидно неверного выбора shape.
+- Defect/factory feedback для drift, где beginner UX validator ошибочно требовал parent orchestration markers для любого handoff.
 - Controlled software update governance layer: policy/spec `docs/operator/software-update-governance.md`, generated artifacts `.chatgpt/software-inventory.yaml`, `.chatgpt/software-update-watchlist.yaml`, `.chatgpt/software-update-readiness.yaml` и `reports/software-updates/README.md`.
 - Report-only helpers `validate-software-update-governance.py` и `render-software-update-readiness.py`, подключенные к quick/generated verify.
 - Lifecycle dashboard block `software_update_governance` для baseline status, auto-update policy, update intelligence freshness, findings count, upgrade proposal status, next safe action, fallback и blockers.
@@ -46,6 +49,7 @@
 - `docs/brownfield-to-greenfield-transition.md` описывает without-repo и with-repo transition paths, conversion gates и done rule.
 
 ### Изменено
+- Scenario-pack, routing contract, route explanation и VPS Remote SSH orchestration runbook теперь явно фиксируют, что `single-agent-handoff` является default для цельных задач, а parent orchestration нужен только для больших/multi-agent задач.
 - Runbook packages теперь требуют фиксировать Ubuntu/VPS image release, later package update state, `unattended-upgrades`, package sources, Docker/Compose, Node/Python, GitHub Actions, base images/tags/digests, lockfiles и critical runtime dependencies без auto-upgrade.
 - Mode parity и project presets теперь считают software update governance core capability для всех generated greenfield/brownfield projects.
 - `01-factory-template/01-user-runbook.md` переписан как novice runbook от Windows PC до remote Codex takeover; `02-codex-runbook.md` теперь явно берет на себя VPS preflight, package install, clone, bootstrap, verify, dashboard update и verified sync.

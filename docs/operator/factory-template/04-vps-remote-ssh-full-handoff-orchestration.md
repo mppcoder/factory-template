@@ -2,7 +2,7 @@
 
 ## Назначение
 
-Этот runbook описывает default путь для большой задачи:
+Этот runbook описывает путь для большой или multi-agent задачи, где выбран `handoff_shape: parent-orchestration-handoff`.
 
 1. Browser ChatGPT Project готовит один большой Codex handoff.
 2. Operator открывает VS Code Remote SSH window, connected to VPS.
@@ -12,9 +12,9 @@
 6. Отдельные Codex CLI sessions запускаются на VPS/repo context.
 7. Parent orchestration report собирает результаты, blockers и финальный closeout.
 
-## Default path по умолчанию
+## Default path для parent orchestration
 
-Default user-facing path: `VPS Remote SSH-first`.
+Для `handoff_shape: parent-orchestration-handoff` default user-facing path: `VPS Remote SSH-first`.
 Beginner zero-to-Codex-ready setup описан в `docs/operator/runbook-packages/01-factory-template/01-user-runbook.md`.
 Этот orchestration runbook начинается после той же takeover-точки: у оператора уже есть remote Codex context на VPS через `codex-app-remote-ssh` или `vscode-remote-ssh-codex-extension`.
 
@@ -60,6 +60,34 @@ python3 template-repo/scripts/orchestrate-codex-handoff.py \
 ```
 
 Dry-run writes the parent report and per-subtask handoff files without starting child Codex CLI sessions. Real child sessions start only when parent Codex uses explicit `--execute` from the parent handoff instructions.
+
+## Когда выбирать parent orchestration
+
+Выбирай `handoff_shape: parent-orchestration-handoff`, если сработал хотя бы один hard trigger:
+- задача явно большая, многоэтапная или roadmap-like;
+- есть две или больше независимые подзадачи, которые можно или нужно выполнять отдельными child sessions;
+- разные части требуют разных `task_class`, `selected_profile`, `selected_model` или `selected_reasoning_effort`;
+- одновременно нужны audit/deep analysis, implementation/build, docs normalization, validators/tests и final review как отдельные workstreams;
+- есть dependency queue между независимыми доработками;
+- нужен cockpit/dashboard для визуального контроля parent/child status;
+- есть `deferred_user_actions`, `placeholder_replacements`, runtime/downstream boundaries или `external-user-action`, которые нужно перенести в final closeout через `defer-to-final-closeout`;
+- пользователь явно просит parent handoff, orchestrator, оркестр агентов или full orchestration.
+
+Если hard trigger не сработал, но есть три или больше soft signals, тоже выбирай parent orchestration:
+- больше трех артефактов к обновлению;
+- требуется обновление scenario-pack + scripts + tests/validators;
+- ожидается больше одного verification contour;
+- есть высокий риск архитектурного drift;
+- нужно синхронизировать template-facing и downstream-facing wording;
+- есть несколько вариантов реализации и требуется route explanation.
+
+## Когда НЕ выбирать parent orchestration
+
+Full orchestration не является default для любой задачи.
+
+Выбирай `handoff_shape: single-agent-handoff`, если задача цельная, выполняется одним route/profile, затрагивает один основной слой или небольшое число тесно связанных файлов, не требует независимых child subtasks, разных профилей/моделей/reasoning для отдельных частей, orchestration cockpit или внешних/deferred user actions.
+
+Запрещено выбирать parent orchestration только потому, что задача важная. Если один deep/build агент может надежно выполнить scope без разделения на child sessions, нужен обычный single-agent handoff с явным объяснением, почему parent orchestration не требуется.
 
 ## Опциональные альтернативы
 
@@ -155,6 +183,7 @@ parent:
   id: p5-example-parent
   title: VPS Remote SSH-first orchestration example
   launch_source: chatgpt-handoff
+  handoff_shape: parent-orchestration-handoff
   selected_scenario: template-repo/scenario-pack/00-master-router.md -> template-repo/scenario-pack/15-handoff-to-codex.md
   apply_mode: manual-ui
   strict_launch_mode: optional

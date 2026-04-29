@@ -1,4 +1,4 @@
-# Beginner full handoff UX fixture / позитивный пример
+# Parent orchestration handoff UX fixture / позитивный пример
 
 ```text
 Язык ответа Codex: русский
@@ -17,7 +17,7 @@ apply_mode: manual-ui
 strict_launch_mode: optional
 selected_scenario: template-repo/scenario-pack/00-master-router.md -> template-repo/scenario-pack/15-handoff-to-codex.md
 
-Используй один цельный parent handoff block. Уже открытая live session не является надежным auto-switch механизмом; уже открытая live session не является надежным auto-switch механизмом.
+Используй один цельный parent handoff block. уже открытая live session не является надежным auto-switch механизмом.
 parent plan expectations: parent Codex validates plan before child session files.
 child subtask boundaries: each child has explicit task_class/profile/model/reasoning/scenario.
 Parent plan uses user_actions_policy: defer-to-final-closeout.

@@ -6,6 +6,34 @@ routing_contract:
   strict_launch_rule: "Launcher-first path остается опциональным строгим режимом для автоматизации, воспроизводимости, запуска из shell и scripted launch."
   live_session_fallback_rule: "Уже открытая live session не является надежным механизмом автопереключения profile/model/reasoning и допустима только как неканонический fallback."
   model_expectation_rule: "selected_model и selected_reasoning_effort фиксируют repo-configured mapping выбранного executable profile; live availability подтверждается отдельной проверкой `codex debug models`, а advisory handoff text сам по себе ничего не переключает."
+  handoff_shape:
+    allowed_values:
+      - "single-agent-handoff"
+      - "parent-orchestration-handoff"
+    default: "single-agent-handoff"
+    selection_rule: "Выбор single-agent vs parent-orchestration делается до выдачи handoff."
+    single_agent_rule: "Выбирать для цельной задачи, которая выполняется одним route/profile, не требует child subtasks, разных профилей, orchestration cockpit или deferred user actions."
+    parent_hard_triggers:
+      - "большая, многоэтапная или roadmap-like задача"
+      - "две или больше независимые подзадачи для child sessions"
+      - "разные части требуют разных task_class/profile/model/reasoning"
+      - "audit/deep analysis, implementation/build, docs normalization, validators/tests и final review нужны как отдельные workstreams"
+      - "dependency queue между независимыми доработками"
+      - "нужен orchestration cockpit/dashboard"
+      - "есть deferred_user_actions, placeholder_replacements, runtime/downstream boundaries или external-user-action"
+      - "пользователь явно просит parent handoff/orchestrator/оркестр агентов/full orchestration"
+    parent_soft_rule: "Если hard trigger не сработал, но есть 3+ soft signals, выбирать parent-orchestration-handoff."
+    parent_soft_signals:
+      - "больше 3 артефактов к обновлению"
+      - "требуется обновление scenario-pack + scripts + tests/validators"
+      - "ожидается больше одного verification contour"
+      - "есть высокий риск архитектурного drift"
+      - "нужно синхронизировать template-facing и downstream-facing wording"
+      - "есть несколько вариантов реализации и требуется route explanation"
+    forbidden_claims:
+      - "parent handoff не переключает model/profile/reasoning в уже открытой live session"
+      - "parent orchestration не является default только из-за важности задачи"
+      - "single-agent нельзя выбирать для большой multi-child задачи с разными профилями"
   advisory_layers:
     - "AGENTS.md / AGENT.md"
     - "ChatGPT Project instructions"
@@ -31,6 +59,7 @@ routing_contract:
     - "direct-task"
   required_handoff_fields:
     - "launch_source"
+    - "handoff_shape"
     - "task_class"
     - "selected_profile"
     - "selected_model"

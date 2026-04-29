@@ -26,6 +26,8 @@ def validate_template(path: Path) -> list[str]:
             errors.append(f"template не содержит placeholder `{marker}`")
     if "schema: codex-orchestration/v1" not in text:
         errors.append("template не содержит `schema: codex-orchestration/v1`")
+    if "handoff_shape: parent-orchestration-handoff" not in text:
+        errors.append("template не содержит `handoff_shape: parent-orchestration-handoff`")
     if "user_actions_policy: defer-to-final-closeout" not in text:
         errors.append("template не содержит defer-to-final-closeout")
     if "future-user-action" not in text:

@@ -48,6 +48,7 @@ def render(data: dict[str, Any]) -> str:
         "",
         "## Route receipt / подтверждение маршрута",
         "",
+        f"- handoff_shape: `{route.get('handoff_shape', '')}`",
         f"- task_class: `{route.get('task_class', '')}`",
         f"- selected_profile: `{route.get('selected_profile', '')}`",
         f"- selected_model: `{route.get('selected_model', '')}`",

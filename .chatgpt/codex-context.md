@@ -4,13 +4,13 @@
 factory-template
 
 ## Классификация
-Direct task: reusable factory gap в canonical VPS layout / project-root boundary.
+Классификация еще не заполнена.
 
 ## Текущий этап
-verification
+done
 
 ## Идентификатор изменения
 chg-20260428-project-root-boundary
 
 ## Краткое резюме
-Запрет плоского `/projects` дерева уточнен: все temporary/intermediate/reconstructed/helper repos для intake/adoption/reconstruction должны жить внутри repo целевого `greenfield-product`, а не как sibling project roots.
+Уточнить canonical VPS layout: промежуточные repo живут внутри repo целевого greenfield-product, не как siblings в /projects.

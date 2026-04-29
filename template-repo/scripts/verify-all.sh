@@ -291,6 +291,10 @@ run_plan6_productization_smoke() {
   python3 "$ROOT/template-repo/scripts/validate-route-explain.py" "$ROOT"
   python3 "$ROOT/template-repo/scripts/validate-beginner-handoff-ux.py" \
     "$ROOT/tests/beginner-handoff-ux/positive/handoff.md"
+  python3 "$ROOT/template-repo/scripts/validate-beginner-handoff-ux.py" \
+    "$ROOT/tests/beginner-handoff-ux/positive/single-agent-handoff.md"
+  python3 "$ROOT/template-repo/scripts/validate-beginner-handoff-ux.py" \
+    "$ROOT/tests/beginner-handoff-ux/positive/parent-orchestration-handoff.md"
   if python3 "$ROOT/template-repo/scripts/validate-beginner-handoff-ux.py" \
     "$ROOT/tests/beginner-handoff-ux/multi-block/handoff.md" \
     >/tmp/beginner-handoff-ux-multi-block.log 2>&1; then
@@ -305,7 +309,30 @@ run_plan6_productization_smoke() {
     cat /tmp/beginner-handoff-ux-hidden-shell.log >&2
     return 1
   fi
-  rm -f /tmp/beginner-handoff-ux-multi-block.log /tmp/beginner-handoff-ux-hidden-shell.log
+  if python3 "$ROOT/template-repo/scripts/validate-beginner-handoff-ux.py" \
+    "$ROOT/tests/beginner-handoff-ux/missing-shape/handoff.md" \
+    >/tmp/beginner-handoff-ux-missing-shape.log 2>&1; then
+    echo "beginner handoff UX missing-shape negative fixture unexpectedly passed" >&2
+    cat /tmp/beginner-handoff-ux-missing-shape.log >&2
+    return 1
+  fi
+  if python3 "$ROOT/template-repo/scripts/validate-beginner-handoff-ux.py" \
+    "$ROOT/tests/beginner-handoff-ux/wrong-single-large/handoff.md" \
+    >/tmp/beginner-handoff-ux-wrong-single-large.log 2>&1; then
+    echo "beginner handoff UX wrong-single-large negative fixture unexpectedly passed" >&2
+    cat /tmp/beginner-handoff-ux-wrong-single-large.log >&2
+    return 1
+  fi
+  if python3 "$ROOT/template-repo/scripts/validate-beginner-handoff-ux.py" \
+    "$ROOT/tests/beginner-handoff-ux/wrong-parent-small/handoff.md" \
+    >/tmp/beginner-handoff-ux-wrong-parent-small.log 2>&1; then
+    echo "beginner handoff UX wrong-parent-small negative fixture unexpectedly passed" >&2
+    cat /tmp/beginner-handoff-ux-wrong-parent-small.log >&2
+    return 1
+  fi
+  rm -f /tmp/beginner-handoff-ux-multi-block.log /tmp/beginner-handoff-ux-hidden-shell.log \
+    /tmp/beginner-handoff-ux-missing-shape.log /tmp/beginner-handoff-ux-wrong-single-large.log \
+    /tmp/beginner-handoff-ux-wrong-parent-small.log
   rm -rf "$tmp_dir"
 }
 

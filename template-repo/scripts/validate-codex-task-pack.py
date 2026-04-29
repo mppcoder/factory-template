@@ -265,6 +265,7 @@ def main() -> int:
     launch = launch_yaml.get("launch", {})
     for key in [
         "launch_source",
+        "handoff_shape",
         "task_class",
         "selected_profile",
         "selected_model",
@@ -295,6 +296,7 @@ def main() -> int:
     ensure_contains(normalized_handoff, "# Нормализованный handoff для Codex", errors, "normalized-codex-handoff.md")
     for section in [
         "## Источник запуска",
+        "## Вид handoff",
         "## Класс задачи",
         "## Выбранный профиль",
         "## Выбранная модель",

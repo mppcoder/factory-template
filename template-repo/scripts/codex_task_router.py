@@ -163,6 +163,7 @@ def explicit_routing_overrides(text: str) -> dict:
         "artifacts_to_update",
         "handoff_allowed",
         "defect_capture_path",
+        "handoff_shape",
     ]:
         value = data.get(key)
         if value not in (None, "", []):
@@ -332,6 +333,33 @@ def codex_profile_command(profile_name: str) -> str:
     return f"codex --profile {profile_name}"
 
 
+def infer_handoff_shape(spec: dict, text: str, explicit_shape: str | None = None) -> tuple[str, list[str]]:
+    allowed = set(((spec.get("routing_contract", {}) or {}).get("handoff_shape", {}) or {}).get("allowed_values", []))
+    default_shape = str(((spec.get("routing_contract", {}) or {}).get("handoff_shape", {}) or {}).get("default") or "single-agent-handoff")
+    if explicit_shape:
+        if explicit_shape not in allowed:
+            raise ValueError(f"Неизвестный handoff_shape: {explicit_shape}")
+        return explicit_shape, [f"явный override handoff_shape: {explicit_shape}"]
+
+    normalized = _normalize(text)
+    parent_hard_triggers = [
+        ("large or roadmap-like task", ["roadmap", "многоэтап", "большая задача", "large task"]),
+        ("independent child subtasks", ["child subtask", "child session", "subtasks", "подзадач", "дочерн"]),
+        ("different route requirements", ["different profile", "разных профил", "разные task_class", "разные selected_profile"]),
+        ("orchestration cockpit/dashboard", ["cockpit", "dashboard", "parent status tracking"]),
+        ("deferred external actions", ["deferred_user_actions", "placeholder_replacements", "external-user-action", "runtime/downstream", "defer-to-final-closeout"]),
+        ("explicit parent orchestration request", ["parent handoff", "parent orchestration", "orchestrator", "full orchestration", "оркестр агентов", "оркестра"]),
+    ]
+    reasons: list[str] = []
+    for label, needles in parent_hard_triggers:
+        if any(needle in normalized for needle in needles):
+            reasons.append(f"hard trigger: {label}")
+    if reasons:
+        return "parent-orchestration-handoff", reasons
+
+    return default_shape, [f"default handoff_shape: {default_shape}"]
+
+
 def build_launch_record(
     root: Path,
     launch_source: str,
@@ -346,6 +374,11 @@ def build_launch_record(
         task_class_override = requested_task_class
 
     task_class, reasons = infer_task_class(spec, task_text, task_class_override)
+    handoff_shape, handoff_shape_reasons = infer_handoff_shape(
+        spec,
+        task_text,
+        stringify_override(overrides.get("handoff_shape")) or None,
+    )
     explicit_profile = choose_profile_from_overrides(spec, task_class, overrides)
     if explicit_profile is not None:
         profile_name, profile, profile_reasons = explicit_profile
@@ -378,6 +411,8 @@ def build_launch_record(
             "launch_unit": spec.get("routing_contract", {}).get("launch_unit", "new-task-launch"),
             "launch_source": launch_source,
             "router_layer": "executable",
+            "handoff_shape": handoff_shape,
+            "handoff_shape_reasons": handoff_shape_reasons,
             "task_class": task_class,
             "task_class_reasons": reasons,
             "selected_profile": profile_name,
@@ -416,6 +451,7 @@ def build_launch_record(
             "direct_self_handoff_required": launch_source == "direct-task",
             "direct_self_handoff_completed": False,
             "requested_task_class": requested_task_class or None,
+            "requested_handoff_shape": stringify_override(overrides.get("handoff_shape")) or None,
             "requested_selected_profile": stringify_override(overrides.get("selected_profile")) or None,
             "requested_selected_model": stringify_override(overrides.get("selected_model")) or None,
             "requested_selected_reasoning_effort": stringify_override(overrides.get("selected_reasoning_effort")) or None,
@@ -435,6 +471,8 @@ def render_normalized_handoff(record: dict, task_text: str, title: str) -> str:
     artifacts_lines = "\n".join(f"- {item}" for item in artifacts) if artifacts else "- none"
     reasons = launch.get("task_class_reasons", [])
     reason_lines = "\n".join(f"- {item}" for item in reasons) if reasons else "- none"
+    handoff_shape_reasons = launch.get("handoff_shape_reasons", [])
+    handoff_shape_reason_lines = "\n".join(f"- {item}" for item in handoff_shape_reasons) if handoff_shape_reasons else "- none"
     manual_ui_lines = "\n".join(
         [
             "- Откройте новый чат/окно Codex в VS Code extension.",
@@ -463,6 +501,12 @@ def render_normalized_handoff(record: dict, task_text: str, title: str) -> str:
 
 ## Источник запуска
 {launch.get('launch_source', '')}
+
+## Вид handoff
+{launch.get('handoff_shape', '')}
+
+## Evidence для вида handoff
+{handoff_shape_reason_lines}
 
 ## Класс задачи
 {launch.get('task_class', '')}
@@ -620,6 +664,7 @@ Repo rules:
 
 Routing:
 - launch_source: {launch.get('launch_source', '')}
+- handoff_shape: {launch.get('handoff_shape', '')}
 - task_class: {launch.get('task_class', '')}
 - selected_profile: {launch.get('selected_profile', '')}
 - selected_model: {launch.get('selected_model', '')}

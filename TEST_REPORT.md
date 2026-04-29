@@ -4,6 +4,34 @@ Status source of truth: `docs/releases/release-scorecard.yaml`.
 Current scorecard state: `2.5.0 GA Ready`.
 TEST_REPORT.md is verification evidence, not the canonical release-status source.
 
+## Проверка handoff_shape routing UX
+
+Дата: `2026-04-29`.
+
+Добавлен обязательный выбор вида handoff для новой задачи: `single-agent-handoff` как default для цельных задач и `parent-orchestration-handoff` для больших/multi-agent задач с hard triggers или 3+ soft signals.
+
+- Scenario policy: `template-repo/scenario-pack/00-master-router.md`, `template-repo/scenario-pack/15-handoff-to-codex.md`.
+- Routing contract and explanation: `template-repo/codex-routing.yaml`, `template-repo/scripts/explain-codex-route.py`, `template-repo/scripts/validate-route-explain.py`.
+- UX validation: `template-repo/scripts/validate-beginner-handoff-ux.py`, `tests/beginner-handoff-ux/`.
+- Parent orchestration contract: `template-repo/scripts/orchestrate-codex-handoff.py`, `template-repo/template/.chatgpt/parent-orchestration-plan.yaml.template`, `docs/operator/factory-template/04-vps-remote-ssh-full-handoff-orchestration.md`.
+- Defect capture: `reports/bugs/2026-04-29-handoff-shape-validator-drift.md`, `reports/factory-feedback/feedback-044-handoff-shape-validator-drift.md`.
+
+Проверки:
+
+- `python3 -m py_compile ...` для измененных routing/validator/generator scripts — pass.
+- `python3 template-repo/scripts/validate-beginner-handoff-ux.py` — pass.
+- Positive fixtures `positive/handoff.md`, `positive/single-agent-handoff.md`, `positive/parent-orchestration-handoff.md` — pass.
+- Negative fixtures `multi-block`, `hidden-shell`, `missing-shape`, `wrong-single-large`, `wrong-parent-small` — validators return non-zero as expected.
+- `python3 template-repo/scripts/validate-parent-orchestration-plan.py --root . --plan tests/codex-orchestration/fixtures/valid/parent-plan.yaml` — pass.
+- `python3 template-repo/scripts/validate-route-explain.py .` — pass.
+- `python3 template-repo/scripts/validate-codex-orchestration.py . --plan tests/codex-orchestration/fixtures/valid/parent-plan.yaml` — pass.
+- `python3 template-repo/scripts/validate-codex-task-pack.py . && python3 template-repo/scripts/validate-codex-routing.py . && python3 template-repo/scripts/validate-gpt55-prompt-contract.py .` — pass.
+- `python3 template-repo/scripts/eval-artifact.py tests/artifact-eval/specs/beginner-full-handoff-ux.yaml --output tests/artifact-eval/reports/beginner-full-handoff-ux.md --json` — pass.
+- `git diff --check` — pass.
+- `bash template-repo/scripts/verify-all.sh quick` — pass на финальном состоянии.
+
+Full verify decision: не запускался, потому что change затрагивает scenario/routing/docs/validators/fixtures and generated `.chatgpt` handoff artifacts без runtime, package matrix или onboarding E2E changes; quick verify покрывает affected smoke contours.
+
 ## Проверка P9 lifecycle standards navigator
 
 Дата: `2026-04-29`.

@@ -71,6 +71,8 @@ def validate_plan(data: dict[str, Any], root: Path) -> tuple[list[str], list[str
     if not isinstance(parent, dict):
         errors.append("parent должен быть mapping")
         parent = {}
+    if parent.get("handoff_shape") != "parent-orchestration-handoff":
+        errors.append("parent.handoff_shape должен быть `parent-orchestration-handoff`")
     if parent.get("user_actions_policy") != "defer-to-final-closeout":
         errors.append("parent.user_actions_policy должен быть `defer-to-final-closeout`")
     dumped = yaml.safe_dump(data, allow_unicode=True)

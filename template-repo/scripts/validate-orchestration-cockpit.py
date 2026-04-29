@@ -50,11 +50,15 @@ def validate_cockpit(data: dict[str, Any]) -> list[str]:
     parent_status = str(parent.get("status") or "")
     if parent_status not in PARENT_STATUSES:
         errors.append("parent.status должен быть одним из " + ", ".join(sorted(PARENT_STATUSES)))
-    for field in ["id", "title", "launch_source", "selected_scenario", "apply_mode", "strict_launch_mode"]:
+    for field in ["id", "title", "launch_source", "handoff_shape", "selected_scenario", "apply_mode", "strict_launch_mode"]:
         if not str(parent.get(field) or "").strip():
             errors.append(f"parent.{field} обязателен")
+    if str(parent.get("handoff_shape") or "") != "parent-orchestration-handoff":
+        errors.append("parent.handoff_shape должен быть parent-orchestration-handoff")
 
     route = nonempty_mapping(data, "route_receipt", errors)
+    if str(route.get("handoff_shape") or "") != "parent-orchestration-handoff":
+        errors.append("route_receipt.handoff_shape должен быть parent-orchestration-handoff")
     task_class = str(route.get("task_class") or "")
     if task_class not in TASK_CLASSES:
         errors.append("route_receipt.task_class должен быть quick/build/deep/review")

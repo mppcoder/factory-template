@@ -1,6 +1,6 @@
 ## Применение в Codex UI
 
-- `apply_mode: manual-ui (default) (default)`
+- `apply_mode: manual-ui (default)`
 - Для VS Code Codex extension откройте новый чат/окно Codex.
 - Вручную выберите model `gpt-5.5` и reasoning `high` в picker.
 - Только после этого вставьте handoff-блок ниже.
@@ -32,6 +32,7 @@
 Приоритет: сначала правила repo (`AGENTS`, runbook, scenario-pack, policy files), затем общие инструкции без конфликта с ними.
 Точка входа: 00-master-router.md
 Источник запуска: chatgpt-handoff
+Вид handoff: single-agent-handoff
 Класс задачи: deep
 Выбранный профиль: deep
 Выбранная модель: gpt-5.5
@@ -39,16 +40,17 @@
 Выбранное plan mode reasoning effort: high
 Статус model catalog: available
 Примечание по live availability: selected_model совпадает с последним сохраненным snapshot repo catalog; перед внешними обещаниями повторите live catalog check
-Режим применения: manual-ui (default) (default)
+Режим применения: manual-ui (default)
 Строгий режим запуска: optional
 Опциональная команда строгого запуска: ./scripts/launch-codex-task.sh --launch-source chatgpt-handoff --task-file .chatgpt/codex-input.md --execute
 Прямая команда Codex за launcher: codex --profile deep
 Правило маршрутизации: advisory/handoff text не равен executable profile switch; надежная единица маршрутизации — только новый task launch.
 Правило приема ChatGPT handoff: если launch_source = chatgpt-handoff, Codex исполняет этот входящий handoff; первый ответ может содержать только handoff receipt / route receipt и не должен называть его self-handoff.
+Правило handoff_shape: `single-agent-handoff` является default для цельной задачи; `parent-orchestration-handoff` нужен только для больших/multi-agent задач с child subtasks, разными route requirements или deferred user actions.
 Правило full orchestration: если handoff содержит parent orchestration plan, пользовательское действие заканчивается после вставки; parent Codex сам запускает repo-native orchestrator с validation gate и `--execute`, а ручная shell-команда пользователя является только troubleshooting/strict fallback.
 Правило ручного UI: для VS Code Codex extension откройте новый чат/окно, вручную выберите model/reasoning в picker, затем вставьте этот handoff.
 Правило live session: уже открытая live session = non-canonical fallback; не обещать auto-switch.
-Этап pipeline: source-map -> prompt-inventory -> migration-plan -> remediation -> verification -> closeout
+Этап pipeline: handoff policy modernization -> routing UX -> validation -> closeout
 Разрешение handoff: yes
 Область работы: работать только в пределах этого repo и связанных project artifacts.
 Проверка: использовать актуальные validators, verification-report.md и done-report.md.

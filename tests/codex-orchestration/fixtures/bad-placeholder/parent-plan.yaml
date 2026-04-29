@@ -3,6 +3,7 @@ parent:
   id: p5-negative-bad-placeholder
   title: Bad placeholder metadata
   launch_source: chatgpt-handoff
+  handoff_shape: parent-orchestration-handoff
   selected_scenario: template-repo/scenario-pack/00-master-router.md
   apply_mode: manual-ui
   strict_launch_mode: optional

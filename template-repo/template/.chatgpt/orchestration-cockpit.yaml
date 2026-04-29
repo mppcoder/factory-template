@@ -3,11 +3,13 @@ parent:
   id: p9-lifecycle-standards-navigator
   title: Standards-based lifecycle navigator/control layer
   launch_source: chatgpt-handoff
+  handoff_shape: parent-orchestration-handoff
   status: completed
   selected_scenario: template-repo/scenario-pack/00-master-router.md -> template-repo/scenario-pack/15-handoff-to-codex.md
   apply_mode: manual-ui
   strict_launch_mode: optional
 route_receipt:
+  handoff_shape: parent-orchestration-handoff
   task_class: deep
   selected_profile: deep
   selected_model: gpt-5.5

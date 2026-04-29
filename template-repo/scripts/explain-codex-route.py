@@ -40,9 +40,54 @@ def match_task_class(text: str, routing: dict[str, Any], explicit: str | None) -
     return default_class, ["default route"]
 
 
-def explain(root: Path, task_text: str, explicit_task_class: str | None = None) -> dict[str, Any]:
+def select_handoff_shape(text: str, explicit: str | None = None) -> tuple[str, list[str]]:
+    if explicit:
+        return explicit, [f"explicit handoff_shape field `{explicit}`"]
+
+    lowered = text.lower()
+    hard_triggers = [
+        ("roadmap-like or multi-stage", ["roadmap", "многоэтап", "большая задача", "large task"]),
+        ("independent child subtasks", ["child subtask", "child session", "subtasks", "подзадач", "дочерн"]),
+        ("different routing requirements", ["different profile", "разных профил", "разные task_class", "разные selected_profile"]),
+        ("separate workstreams", ["workstreams", "audit/deep", "implementation/build", "final review"]),
+        ("dependency queue", ["dependency queue", "очеред", "зависимост"]),
+        ("orchestration cockpit/dashboard", ["cockpit", "dashboard", "статус", "status tracking"]),
+        ("deferred external actions", ["deferred_user_actions", "placeholder_replacements", "external-user-action", "runtime/downstream", "defer-to-final-closeout"]),
+        ("explicit parent orchestration request", ["parent handoff", "parent orchestration", "orchestrator", "full orchestration", "оркестр агентов", "оркестра"]),
+    ]
+    evidence: list[str] = []
+    for label, needles in hard_triggers:
+        if any(needle in lowered for needle in needles):
+            evidence.append(f"hard trigger: {label}")
+
+    if evidence:
+        return "parent-orchestration-handoff", evidence
+
+    soft_signals = [
+        ("more than 3 artifacts", ["больше 3 артеф", "more than 3 artifacts", "много артефакт"]),
+        ("scenario-pack + scripts + tests/validators", ["scenario-pack + scripts + tests", "scripts + tests/validators", "validators/tests"]),
+        ("multiple verification contours", ["verification contour", "несколько провер", "больше одного verification"]),
+        ("architectural drift risk", ["architectural drift", "архитектурного drift", "drift"]),
+        ("template/downstream wording sync", ["template-facing", "downstream-facing", "downstream wording"]),
+        ("multiple implementation variants", ["несколько вариантов", "route explanation", "варианты реализации"]),
+    ]
+    for label, needles in soft_signals:
+        if any(needle in lowered for needle in needles):
+            evidence.append(f"soft signal: {label}")
+    if len(evidence) >= 3:
+        return "parent-orchestration-handoff", evidence
+    return "single-agent-handoff", ["default: single route/profile is sufficient unless parent triggers match"]
+
+
+def explain(
+    root: Path,
+    task_text: str,
+    explicit_task_class: str | None = None,
+    explicit_handoff_shape: str | None = None,
+) -> dict[str, Any]:
     routing, model_routing = load_routing(root)
     task_class, evidence = match_task_class(task_text, routing, explicit_task_class)
+    handoff_shape, handoff_shape_evidence = select_handoff_shape(task_text, explicit_handoff_shape)
     task_routes = routing.get("task_classes", {}) or {}
     profile = str((task_routes.get(task_class, {}) or {}).get("profile") or task_class)
     profiles = model_routing.get("profile_routes", {}) or {}
@@ -57,6 +102,8 @@ def explain(root: Path, task_text: str, explicit_task_class: str | None = None) 
         "selected_reasoning_effort": route.get("selected_reasoning_effort", ""),
         "selected_plan_mode_reasoning_effort": route.get("selected_plan_mode_reasoning_effort", ""),
         "evidence": evidence,
+        "handoff_shape": handoff_shape,
+        "handoff_shape_evidence": handoff_shape_evidence,
         "method": "deterministic keyword/rule-based routing; not a semantic classifier",
         "live_catalog_boundary": live_boundary,
         "advisory_boundary": "advisory handoff text does not switch an already-open live session",
@@ -74,10 +121,15 @@ def render_markdown(payload: dict[str, Any]) -> str:
 - selected_model: `{payload['selected_model']}`
 - selected_reasoning_effort: `{payload['selected_reasoning_effort']}`
 - selected_plan_mode_reasoning_effort: `{payload['selected_plan_mode_reasoning_effort']}`
+- handoff_shape: `{payload['handoff_shape']}`
 
 ## Evidence / evidence маршрута
 
 {evidence}
+
+## Handoff shape / выбор вида handoff
+
+{chr(10).join(f"- {item}" for item in payload["handoff_shape_evidence"])}
 
 ## Boundary / граница
 
@@ -92,10 +144,11 @@ def main() -> int:
     parser.add_argument("--root", default=".")
     parser.add_argument("--task-text", default="")
     parser.add_argument("--task-class", choices=["quick", "build", "deep", "review"])
+    parser.add_argument("--handoff-shape", choices=["single-agent-handoff", "parent-orchestration-handoff"])
     parser.add_argument("--json", action="store_true")
     args = parser.parse_args()
 
-    payload = explain(Path(args.root).resolve(), args.task_text, args.task_class)
+    payload = explain(Path(args.root).resolve(), args.task_text, args.task_class, args.handoff_shape)
     if args.json:
         print(json.dumps(payload, ensure_ascii=False, indent=2))
     else:

@@ -3,6 +3,7 @@ parent:
   id: p5-fixture-parent
   title: VPS Remote SSH-first orchestration fixture
   launch_source: chatgpt-handoff
+  handoff_shape: parent-orchestration-handoff
   selected_scenario: template-repo/scenario-pack/00-master-router.md -> template-repo/scenario-pack/15-handoff-to-codex.md
   apply_mode: manual-ui
   strict_launch_mode: optional

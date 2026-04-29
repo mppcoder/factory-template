@@ -18,6 +18,7 @@ from codex_model_catalog import (
 
 REQUIRED_FIELDS = [
     "launch_source",
+    "handoff_shape",
     "task_class",
     "selected_profile",
     "selected_model",
@@ -283,6 +284,12 @@ def main() -> int:
     normalized = root / ".chatgpt" / "normalized-codex-handoff.md"
     if not normalized.exists():
         errors.append("Отсутствует .chatgpt/normalized-codex-handoff.md")
+
+    handoff_shape_spec = ((spec.get("routing_contract", {}) or {}).get("handoff_shape", {}) or {})
+    allowed_handoff_shapes = set(handoff_shape_spec.get("allowed_values", []) or [])
+    handoff_shape = str(launch.get("handoff_shape") or "")
+    if handoff_shape and handoff_shape not in allowed_handoff_shapes:
+        errors.append(f"handoff_shape `{handoff_shape}` отсутствует в allowed_values")
 
     profile = str(launch.get("selected_profile", ""))
     launch_command = str(launch.get("launch_command", ""))
