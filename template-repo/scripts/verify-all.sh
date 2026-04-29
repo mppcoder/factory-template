@@ -350,6 +350,17 @@ run_project_lifecycle_dashboard_smoke() {
 
   python3 "$ROOT/template-repo/scripts/validate-handoff-implementation-register.py" \
     "$ROOT/template-repo/template/.chatgpt/handoff-implementation-register.yaml"
+  python3 "$ROOT/template-repo/scripts/validate-chat-handoff-index.py" \
+    "$ROOT/template-repo/template/.chatgpt/chat-handoff-index.yaml"
+  python3 "$ROOT/template-repo/scripts/validate-chat-handoff-index.py" \
+    "$ROOT/.chatgpt/chat-handoff-index.yaml"
+  python3 "$ROOT/template-repo/scripts/allocate-chat-handoff-id.py" \
+    --index "$ROOT/template-repo/template/.chatgpt/chat-handoff-index.yaml" \
+    --project-code FT \
+    --kind handoff \
+    --description "dashboard card ui" \
+    --dry-run > "$tmp_dir/allocated-chat-title.txt"
+  grep -q "FT-CH-0001 dashboard-card-ui" "$tmp_dir/allocated-chat-title.txt"
   python3 "$ROOT/template-repo/scripts/validate-handoff-implementation-register.py" \
     "$ROOT/tests/handoff-implementation-register/valid/handoff-implementation-register.yaml"
   python3 "$ROOT/template-repo/scripts/validate-project-lifecycle-dashboard.py" \
@@ -362,6 +373,7 @@ run_project_lifecycle_dashboard_smoke() {
   grep -q "Следующий шаг" "$tmp_dir/project-lifecycle-dashboard.md"
   grep -q "Визуальные поверхности для новичка" "$tmp_dir/project-lifecycle-dashboard.md"
   grep -q "Handoff implementation control" "$tmp_dir/project-lifecycle-dashboard.md"
+  grep -q "Готовность модулей" "$tmp_dir/project-lifecycle-dashboard.md"
   mkdir -p "$tmp_dir/dashboard-with-handoff/.chatgpt"
   cp "$ROOT/template-repo/template/.chatgpt/project-lifecycle-dashboard.yaml" \
     "$tmp_dir/dashboard-with-handoff/.chatgpt/project-lifecycle-dashboard.yaml"
@@ -378,8 +390,8 @@ run_project_lifecycle_dashboard_smoke() {
     --input "$ROOT/tests/project-lifecycle-dashboard/valid/project-lifecycle-dashboard.yaml" \
     --format chatgpt-card \
     --stdout > "$tmp_dir/chatgpt-card.md"
-  grep -q "От пользователя требуется" "$tmp_dir/chatgpt-card.md"
-  grep -q "Одобрить runtime deploy" "$tmp_dir/chatgpt-card.md"
+  grep -q "Модули:" "$tmp_dir/chatgpt-card.md"
+  grep -q "В работе:" "$tmp_dir/chatgpt-card.md"
   python3 "$ROOT/template-repo/scripts/render-project-lifecycle-dashboard.py" \
     --input "$ROOT/tests/project-lifecycle-dashboard/valid/project-lifecycle-dashboard.yaml" \
     --format codex-card \
@@ -463,6 +475,38 @@ PY
       return 1
     fi
     rm -f "/tmp/handoff-implementation-$fixture.log"
+  done
+
+  python3 - "$ROOT/.chatgpt/chat-handoff-index.yaml" "$tmp_dir" <<'PY'
+from pathlib import Path
+import sys
+import yaml
+
+source = Path(sys.argv[1])
+target_dir = Path(sys.argv[2])
+base = yaml.safe_load(source.read_text(encoding="utf-8"))
+
+def write_case(name, mutate):
+    data = yaml.safe_load(yaml.safe_dump(base, allow_unicode=True))
+    mutate(data)
+    path = target_dir / f"chat-handoff-index-{name}.yaml"
+    path.write_text(yaml.safe_dump(data, allow_unicode=True, sort_keys=False), encoding="utf-8")
+
+write_case("status-token-title", lambda data: data["items"][0].update({"chat_title": "FT-CH-0001 HO OPEN dashboard-card-ui"}))
+write_case("duplicate-number", lambda data: data["items"][1].update({"chat_number": data["items"][0]["chat_number"]}))
+write_case("verified-no-evidence", lambda data: data["items"][0].update({"state": "verified", "evidence": []}))
+write_case("next-number-stale", lambda data: data.update({"next_chat_number": 1}))
+PY
+
+  for fixture in status-token-title duplicate-number verified-no-evidence next-number-stale; do
+    if python3 "$ROOT/template-repo/scripts/validate-chat-handoff-index.py" \
+      "$tmp_dir/chat-handoff-index-$fixture.yaml" \
+      >"/tmp/chat-handoff-index-$fixture.log" 2>&1; then
+      echo "chat handoff index negative fixture unexpectedly passed: $fixture" >&2
+      cat "/tmp/chat-handoff-index-$fixture.log" >&2
+      return 1
+    fi
+    rm -f "/tmp/chat-handoff-index-$fixture.log"
   done
 
   python3 - "$ROOT/tests/project-lifecycle-dashboard/valid/project-lifecycle-dashboard.yaml" "$tmp_dir" <<'PY'
@@ -592,6 +636,9 @@ run_generated_project_quick() {
   run_step "validate-project-lifecycle-dashboard" python3 "$ROOT/scripts/validate-project-lifecycle-dashboard.py" "$ROOT/.chatgpt/project-lifecycle-dashboard.yaml"
   if [[ -f "$ROOT/.chatgpt/handoff-implementation-register.yaml" ]]; then
     run_step "validate-handoff-implementation-register" python3 "$ROOT/scripts/validate-handoff-implementation-register.py" "$ROOT/.chatgpt/handoff-implementation-register.yaml"
+  fi
+  if [[ -f "$ROOT/.chatgpt/chat-handoff-index.yaml" ]]; then
+    run_step "validate-chat-handoff-index" python3 "$ROOT/scripts/validate-chat-handoff-index.py" "$ROOT/.chatgpt/chat-handoff-index.yaml"
   fi
   run_step "validate-standards-gates" python3 "$ROOT/scripts/validate-standards-gates.py" "$ROOT"
   run_step "validate-software-update-governance" python3 "$ROOT/scripts/validate-software-update-governance.py" "$ROOT"

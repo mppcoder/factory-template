@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import argparse
+import re
 from pathlib import Path
 from typing import Any
 
@@ -28,6 +29,23 @@ from handoff_implementation_common import (
 )
 
 
+CHAT_ID_RE = re.compile(r"^[A-Z][A-Z0-9]*-CH-[0-9]{4}$")
+TASK_SLUG_RE = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
+CHAT_STATES = {
+    "open",
+    "codex_accepted",
+    "in_progress",
+    "implemented",
+    "verified",
+    "blocked",
+    "superseded",
+    "not_applicable",
+    "archived",
+}
+CHAT_STATUS_TOKENS = {"OPEN", "CODEX", "DONE", "BLOCKED", "SUPERSEDED", "VOID", "VERIFIED", "ARCHIVED"}
+CHAT_KIND_TOKENS = {"HO", "SELFHO", "BUG", "DECISION", "RESEARCH"}
+
+
 def validate_list(value: Any, path: str, errors: list[str]) -> list[Any]:
     if value is None:
         return []
@@ -35,6 +53,43 @@ def validate_list(value: Any, path: str, errors: list[str]) -> list[Any]:
         errors.append(f"{path} должен быть list")
         return []
     return value
+
+
+def title_has_token(title: str, tokens: set[str]) -> str:
+    title_tokens = {part.upper() for part in re.split(r"[^A-Za-z0-9]+", title) if part}
+    for token in sorted(tokens):
+        if token in title_tokens:
+            return token
+    return ""
+
+
+def validate_optional_chat_link(item: dict[str, Any], item_id: str, errors: list[str]) -> None:
+    chat_id = str(item.get("chat_id") or "").strip()
+    chat_title = str(item.get("chat_title") or "").strip()
+    task_slug = str(item.get("task_slug") or "").strip()
+    chat_state = str(item.get("chat_state") or "").strip()
+    chat_index_item_id = str(item.get("chat_index_item_id") or "").strip()
+    if not any([chat_id, chat_title, task_slug, chat_state, chat_index_item_id]):
+        return
+    if not chat_id:
+        errors.append(f"items[{item_id}].chat_id обязателен, если заполнены chat_* поля")
+    elif not CHAT_ID_RE.match(chat_id):
+        errors.append(f"items[{item_id}].chat_id должен соответствовать стабильному формату PROJECT-CH-0001")
+    if not task_slug:
+        errors.append(f"items[{item_id}].task_slug обязателен, если заполнены chat_* поля")
+    elif not TASK_SLUG_RE.match(task_slug):
+        errors.append(f"items[{item_id}].task_slug должен быть lowercase kebab-case")
+    if chat_id and task_slug and chat_title != f"{chat_id} {task_slug}":
+        errors.append(f'items[{item_id}].chat_title должен быть ровно "{chat_id} {task_slug}"')
+    if chat_title:
+        status_token = title_has_token(chat_title, CHAT_STATUS_TOKENS)
+        if status_token:
+            errors.append(f"items[{item_id}].chat_title содержит status token `{status_token}`")
+        kind_token = title_has_token(chat_title, CHAT_KIND_TOKENS)
+        if kind_token:
+            errors.append(f"items[{item_id}].chat_title содержит kind token `{kind_token}`")
+    if chat_state and chat_state not in CHAT_STATES:
+        errors.append(f"items[{item_id}].chat_state неизвестен: `{chat_state}`")
 
 
 def validate_register(data: dict[str, Any]) -> list[str]:
@@ -134,6 +189,7 @@ def validate_register(data: dict[str, Any]) -> list[str]:
             )
         if str(item.get("owner_boundary") or "") not in OWNER_BOUNDARIES:
             errors.append(f"items[{item_id}].owner_boundary неизвестен")
+        validate_optional_chat_link(item, item_id, errors)
 
         depends_on = validate_list(item.get("depends_on"), f"items[{item_id}].depends_on", errors)
         blocks = validate_list(item.get("blocks"), f"items[{item_id}].blocks", errors)

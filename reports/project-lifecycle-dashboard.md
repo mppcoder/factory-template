@@ -1,16 +1,16 @@
 # Панель жизненного цикла проекта / `project-lifecycle-dashboard`
 
-Generated UTC: `2026-04-29T11:21:01+00:00`
+Generated UTC: `2026-04-29T12:27:21+00:00`
 Source: `/projects/factory-template/template-repo/template/.chatgpt/project-lifecycle-dashboard.yaml`
 
 ## Сейчас
 
-- Проект: `{{PROJECT_NAME}}` (`{{PROJECT_SLUG}}`)
+- Проект: `factory-template` (`factory-template`)
 - Профиль: `greenfield-product`
 - Lifecycle state: `{{LIFECYCLE_STATE}}`
-- Текущий mode: `{{PROJECT_MODE}}`
+- Текущий mode: ``
 - Factory producer layer: `False`
-- Фаза: `intake` -> next `spec`
+- Фаза: `execution` -> next `verification`
 - Stage file говорит: current `intake`, next `classification`
 
 ## Активное изменение
@@ -56,6 +56,14 @@ Source: `/projects/factory-template/template-repo/template/.chatgpt/project-life
 - Codex execution card template: `.chatgpt/codex-execution-card.md.template`
 - Markdown dashboard output: `reports/project-lifecycle-dashboard.md`
 - heavy UI boundary: Default is ChatGPT mini card, Codex execution card and Markdown dashboard only; web app, daemon, SQLite, Telegram notifications, websocket/live-refresh and background worker are not default promises.
+- compact lifecycle chain: ✅ Идея → ✅ Intake → ✅ Спека → ✅ Архитектура → ✅ Handoff → 🟡 Исполнение → 🕒 Проверка → 🕒 Release → 🕒 Deploy → 🕒 Сопровождение
+- compact module readiness chain: ✅ Lifecycle → 🟡 Core → 🟡 Security → 🕒 UI/A11y → 🕒 Quality → 🕒 WebSec → 🕒 Ops → ⏸ AI
+
+### Активные ChatGPT handoff-задачи
+
+🟡 FT-CH-0001 dashboard-card-ui: ✅ GPT-HO → ✅ Codex OK → 🕒 Done
+🟡 FT-CH-0002 completion-report: ✅ GPT-HO → 🕒 Codex OK → 🕒 Done
+🔴 FT-CH-0004 model-routing: ✅ GPT-HO → ✅ Codex OK → 🔴 Blocked
 
 ## Передача и оркестрация
 
@@ -121,7 +129,7 @@ Source: `/projects/factory-template/template-repo/template/.chatgpt/project-life
 - status: `pending`
 - preset: `starter`
 - operator source: `template-repo/scripts/operator-dashboard.py`
-- dry-run report present: `True`
+- dry-run report present: `False`
 - deploy report present: `False`
 - boundary: Runtime evidence может подтягиваться из operator-dashboard reports; dry-run/report evidence не является real deploy proof.
 
@@ -136,6 +144,19 @@ Source: `/projects/factory-template/template-repo/template/.chatgpt/project-life
 - monitoring: `current`; proposal_required `False`
 - allowed to advance phase: `False`
 - boundary: Standards navigator is a lifecycle/evidence control layer, not ISO/NIST/OWASP/WCAG/DORA/OpenAI certification.
+
+### Готовность модулей / standards-inspired readiness
+
+| Module | Status | Standards | Gates | Sources | Evidence / reason |
+|---|---|---|---|---|---|
+| `lifecycle` Lifecycle | `completed` | `iso_12207` | `lifecycle_intent_recorded`, `product_requirements_recorded` | none | `.chatgpt/project-lifecycle-dashboard.yaml`, `.chatgpt/stage-state.yaml` |
+| `core` Core | `in_progress` | none | none | `active_change`, `stage_gates`, `multi_step_execution`, `final_verification` |  |
+| `security` Security | `in_progress` | `nist_ssdf` | `security_minimum_checked` | none |  |
+| `ui_a11y` UI/A11y | `pending` | `wcag_22` | `accessibility_minimum_checked` | none |  |
+| `quality` Quality | `pending` | `iso_25010` | `quality_minimum_checked` | none |  |
+| `websec` WebSec | `pending` | `owasp_asvs` | `web_security_checked` | none |  |
+| `ops` Ops | `pending` | `dora_metrics` | `operations_health_baseline` | `deploy_runtime`, `software_update_governance` |  |
+| `ai` AI | `not_applicable` | `openai_ai_safety_overlay` | `ai_safety_gate` | none | Project has not declared AI model, agent or AI-output behavior. |
 
 ## Управление обновлениями
 

@@ -1,0 +1,106 @@
+schema: chat-handoff-index/v1
+project_code: FT
+next_chat_number: 5
+title_policy:
+  canonical_format: "<PROJECT_CODE>-CH-<NNNN> <task-slug>"
+  include_status_in_title: false
+  include_kind_in_title: false
+  title_is_stable: true
+  status_source_of_truth: ".chatgpt/chat-handoff-index.yaml"
+  manual_rename_required_on_status_change: false
+allowed_kinds:
+  - handoff
+  - self_handoff
+  - bug
+  - decision
+  - research
+  - completion_followup
+allowed_states:
+  - open
+  - codex_accepted
+  - in_progress
+  - implemented
+  - verified
+  - blocked
+  - superseded
+  - not_applicable
+  - archived
+items:
+  - chat_id: FT-CH-0001
+    chat_number: 1
+    chat_title: "FT-CH-0001 dashboard-card-ui"
+    task_slug: dashboard-card-ui
+    kind: handoff
+    state: implemented
+    created_utc: "2026-04-29T00:00:00Z"
+    updated_utc: "2026-04-29T00:00:00Z"
+    source_type: chatgpt-handoff
+    handoff_group: dashboard-card-ui
+    handoff_revision: 1
+    handoff_register_item_id: ""
+    status_chain:
+      - chatgpt_handoff
+      - codex_accepted
+      - codex_completed
+    evidence:
+      - "Current dashboard/card work accepted by Codex; final done evidence pending."
+    next_action: "Run final validation and closeout."
+  - chat_id: FT-CH-0002
+    chat_number: 2
+    chat_title: "FT-CH-0002 completion-report"
+    task_slug: completion-report
+    kind: handoff
+    state: open
+    created_utc: "2026-04-29T00:00:00Z"
+    updated_utc: "2026-04-29T00:00:00Z"
+    source_type: chatgpt-handoff
+    handoff_group: completion-report
+    handoff_revision: 1
+    handoff_register_item_id: ""
+    status_chain:
+      - chatgpt_handoff
+      - codex_accepted
+      - codex_completed
+    evidence:
+      - "ChatGPT handoff captured; Codex acceptance pending."
+    next_action: "Accept or supersede in repo register before implementation."
+  - chat_id: FT-CH-0003
+    chat_number: 3
+    chat_title: "FT-CH-0003 updates-monitor"
+    task_slug: updates-monitor
+    kind: research
+    state: superseded
+    created_utc: "2026-04-29T00:00:00Z"
+    updated_utc: "2026-04-29T00:00:00Z"
+    source_type: chatgpt-handoff
+    handoff_group: updates-monitor
+    handoff_revision: 1
+    handoff_register_item_id: ""
+    status_chain:
+      - chatgpt_handoff
+      - codex_accepted
+      - codex_completed
+    evidence:
+      - "Superseded by controlled software update governance work."
+    replacement_chat_id: ""
+    accepted_reason: "Covered by software_update_governance dashboard/readiness layer."
+    next_action: "No active action."
+  - chat_id: FT-CH-0004
+    chat_number: 4
+    chat_title: "FT-CH-0004 model-routing"
+    task_slug: model-routing
+    kind: bug
+    state: blocked
+    created_utc: "2026-04-29T00:00:00Z"
+    updated_utc: "2026-04-29T00:00:00Z"
+    source_type: chatgpt-handoff
+    handoff_group: model-routing
+    handoff_revision: 1
+    handoff_register_item_id: ""
+    status_chain:
+      - chatgpt_handoff
+      - codex_accepted
+      - codex_completed
+    evidence:
+      - "Blocked until executable routing/manual picker boundary is clarified."
+    next_action: "Keep status in repo card; do not rename ChatGPT title."

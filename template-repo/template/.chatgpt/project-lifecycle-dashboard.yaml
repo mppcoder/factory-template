@@ -12,9 +12,9 @@ project:
   owner_boundary: template-owned-generated-project-artifact
 
 lifecycle_phase:
-  current: intake
-  previous: ""
-  next: spec
+  current: execution
+  previous: handoff
+  next: verification
   allowed:
     - idea
     - intake
@@ -27,6 +27,52 @@ lifecycle_phase:
     - deploy
     - operate
     - improve
+  compact_chain:
+    - id: idea
+      label: "Идея"
+      status: completed
+      evidence:
+        - ".chatgpt/intake.yaml"
+    - id: intake
+      label: "Intake"
+      status: completed
+      evidence:
+        - ".chatgpt/intake.yaml"
+    - id: spec
+      label: "Спека"
+      status: completed
+      evidence:
+        - ".chatgpt/user-spec.md"
+    - id: architecture
+      label: "Архитектура"
+      status: completed
+      evidence:
+        - ".chatgpt/tech-spec.md"
+    - id: handoff
+      label: "Handoff"
+      status: completed
+      evidence:
+        - ".chatgpt/normalized-codex-handoff.md"
+    - id: execution
+      label: "Исполнение"
+      status: in_progress
+      evidence: []
+    - id: verification
+      label: "Проверка"
+      status: pending
+      evidence: []
+    - id: release
+      label: "Release"
+      status: pending
+      evidence: []
+    - id: deploy
+      label: "Deploy"
+      status: pending
+      evidence: []
+    - id: operate
+      label: "Сопровождение"
+      status: pending
+      evidence: []
 
 active_change:
   id: ""
@@ -127,6 +173,87 @@ handoff_implementation_control:
     stale_items_without_recent_evidence: 0
   route_boundary: "Dashboard показывает handoff route/model/reasoning как readout; handoff/register не переключают model/profile/reasoning внутри уже открытой Codex-сессии."
   closeout_policy: "Codex при завершении задачи обновляет matching item: status, evidence, новые self-handoff items, superseded replacement links или explicit not_applicable closeout без silent deletion."
+
+module_readiness:
+  selected_profile: solo_lightweight
+  source_artifact: ".chatgpt/project-lifecycle-dashboard.yaml"
+  false_green_policy: "Green module statuses require evidence or accepted_reason; this is standards-inspired readiness, not compliance or certification."
+  required_modules:
+    - lifecycle
+    - core
+    - security
+    - ui_a11y
+    - quality
+    - websec
+    - ops
+    - ai
+  modules:
+    - id: lifecycle
+      label: "Lifecycle"
+      status: completed
+      standard_refs: [iso_12207]
+      gate_refs: [lifecycle_intent_recorded, product_requirements_recorded]
+      source_refs: []
+      evidence:
+        - ".chatgpt/project-lifecycle-dashboard.yaml"
+        - ".chatgpt/stage-state.yaml"
+      accepted_reason: ""
+    - id: core
+      label: "Core"
+      status: in_progress
+      standard_refs: []
+      gate_refs: []
+      source_refs: [active_change, stage_gates, multi_step_execution, final_verification]
+      evidence: []
+      accepted_reason: ""
+    - id: security
+      label: "Security"
+      status: in_progress
+      standard_refs: [nist_ssdf]
+      gate_refs: [security_minimum_checked]
+      source_refs: []
+      evidence: []
+      accepted_reason: ""
+    - id: ui_a11y
+      label: "UI/A11y"
+      status: pending
+      standard_refs: [wcag_22]
+      gate_refs: [accessibility_minimum_checked]
+      source_refs: []
+      evidence: []
+      accepted_reason: ""
+    - id: quality
+      label: "Quality"
+      status: pending
+      standard_refs: [iso_25010]
+      gate_refs: [quality_minimum_checked]
+      source_refs: []
+      evidence: []
+      accepted_reason: ""
+    - id: websec
+      label: "WebSec"
+      status: pending
+      standard_refs: [owasp_asvs]
+      gate_refs: [web_security_checked]
+      source_refs: []
+      evidence: []
+      accepted_reason: ""
+    - id: ops
+      label: "Ops"
+      status: pending
+      standard_refs: [dora_metrics]
+      gate_refs: [operations_health_baseline]
+      source_refs: [deploy_runtime, software_update_governance]
+      evidence: []
+      accepted_reason: ""
+    - id: ai
+      label: "AI"
+      status: not_applicable
+      standard_refs: [openai_ai_safety_overlay]
+      gate_refs: [ai_safety_gate]
+      source_refs: []
+      evidence: []
+      accepted_reason: "Project has not declared AI model, agent or AI-output behavior."
 
 runbook_packages:
   - id: 01-factory-template
@@ -258,13 +385,9 @@ beginner_visual_surfaces:
     user_action_required: derive_from_external_actions_ledger
     required_fields:
       - project
-      - phase
-      - active_task
-      - status
-      - completed
-      - blockers
-      - user_action_required
-      - next_safe_action
+      - lifecycle_chain
+      - module_readiness_chain
+      - active_handoff_lines
   codex_execution_card:
     enabled: true
     template: ".chatgpt/codex-execution-card.md.template"
@@ -442,6 +565,7 @@ fallback_next_step:
 source_artifacts:
   - ".chatgpt/project-lifecycle-dashboard.yaml"
   - ".chatgpt/handoff-implementation-register.yaml"
+  - ".chatgpt/chat-handoff-index.yaml"
   - ".chatgpt/visual-status-card.md.template"
   - ".chatgpt/codex-execution-card.md.template"
   - ".chatgpt/task-state.yaml"

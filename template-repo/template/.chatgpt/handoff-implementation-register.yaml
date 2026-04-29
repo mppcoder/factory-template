@@ -14,6 +14,16 @@ replacement_policy:
   same_chat_same_task_single_active: true
   superseded_requires_replacement_link: true
   replacement_reason_required: true
+chat_link_policy:
+  chat_title_is_stable: true
+  chat_title_is_not_status_source: true
+  status_updates_do_not_require_chat_rename: true
+  optional_item_fields:
+    - chat_id
+    - chat_title
+    - task_slug
+    - chat_state
+    - chat_index_item_id
 statuses:
   allowed:
     - captured

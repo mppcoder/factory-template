@@ -1,0 +1,28 @@
+schema: chat-handoff-index/v1
+project_code: FT
+next_chat_number: 1
+title_policy:
+  canonical_format: "<PROJECT_CODE>-CH-<NNNN> <task-slug>"
+  include_status_in_title: false
+  include_kind_in_title: false
+  title_is_stable: true
+  status_source_of_truth: ".chatgpt/chat-handoff-index.yaml"
+  manual_rename_required_on_status_change: false
+allowed_kinds:
+  - handoff
+  - self_handoff
+  - bug
+  - decision
+  - research
+  - completion_followup
+allowed_states:
+  - open
+  - codex_accepted
+  - in_progress
+  - implemented
+  - verified
+  - blocked
+  - superseded
+  - not_applicable
+  - archived
+items: []

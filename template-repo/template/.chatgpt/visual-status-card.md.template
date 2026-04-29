@@ -1,8 +1,8 @@
-📍 Проект: {{PROJECT_NAME}}
-🧭 Фаза: {{CURRENT_PHASE}} → {{NEXT_PHASE}}
-🧩 Активная задача: {{ACTIVE_CHANGE_TITLE}}
-🟡 Статус: {{ACTIVE_STATUS}}
-✅ Готово: {{COMPLETED_STEPS}}/{{TOTAL_STEPS}}
-⛔ Блокеры: {{BLOCKERS}}
-👤 От пользователя требуется: {{USER_ACTION_REQUIRED}}
-➡️ Следующий шаг: {{NEXT_SAFE_ACTION}}
+🏭 {{PROJECT_NAME}}
+{{LIFECYCLE_CHAIN}}
+
+Модули:
+{{MODULE_READINESS_CHAIN}}
+
+В работе:
+{{ACTIVE_HANDOFF_LINES}}

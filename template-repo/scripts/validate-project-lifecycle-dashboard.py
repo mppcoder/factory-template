@@ -65,13 +65,9 @@ VISUAL_SURFACES = {
 }
 VISUAL_CARD_FIELDS = {
     "project",
-    "phase",
-    "active_task",
-    "status",
-    "completed",
-    "blockers",
-    "user_action_required",
-    "next_safe_action",
+    "lifecycle_chain",
+    "module_readiness_chain",
+    "active_handoff_lines",
 }
 CODEX_CARD_SECTIONS = {"route_receipt", "progress", "blockers", "next", "external"}
 ORCHESTRATION_PARENT_STATUSES = {
@@ -138,6 +134,7 @@ REQUIRED_TOP_LEVEL = [
     "stage_gates",
     "multi_step_execution",
     "handoff_orchestration",
+    "module_readiness",
     "beginner_visual_surfaces",
     "release_readiness",
     "deploy_runtime",
@@ -189,6 +186,19 @@ STANDARDS_VERSION_CURRENT = {
 }
 STANDARDS_VERSION_STALE = {"stale", "unknown", "needs_review", "revision_pending", "current_with_revision_pending"}
 HANDOFF_IMPLEMENTATION_ARTIFACT = ".chatgpt/handoff-implementation-register.yaml"
+CHAT_HANDOFF_INDEX_ARTIFACT = ".chatgpt/chat-handoff-index.yaml"
+MODULE_STATUSES = {"completed", "passed", "verified", "in_progress", "pending", "blocked", "failed", "not_applicable"}
+MODULE_GREEN_STATUSES = {"completed", "passed", "verified"}
+REQUIRED_MODULE_IDS = {"lifecycle", "core", "security", "ui_a11y", "quality", "websec", "ops", "ai"}
+MODULE_SOURCE_REFS = {
+    "active_change",
+    "stage_gates",
+    "multi_step_execution",
+    "final_verification",
+    "deploy_runtime",
+    "software_update_governance",
+}
+FALSE_COMPLIANCE_RE = re.compile(r"(?i)\b(certified|certification|compliant|compliance)\b")
 
 
 def load_yaml(path: Path) -> dict[str, Any]:
@@ -219,6 +229,27 @@ def resolve_source_artifact(dashboard_path: Path, artifact: str) -> Path | None:
         if candidate.exists():
             return candidate
     return None
+
+
+def registry_standard_ids(data: dict[str, Any], dashboard_path: Path | None) -> set[str]:
+    standards = data.get("standards_navigator", {}) if isinstance(data.get("standards_navigator"), dict) else {}
+    registry_ref = str(standards.get("standards_registry") or "")
+    if not dashboard_path or not registry_ref:
+        return set()
+    registry_path = resolve_source_artifact(dashboard_path, registry_ref)
+    if registry_path is None:
+        return set()
+    registry = load_yaml(registry_path)
+    standards_map = registry.get("standards", {})
+    if not isinstance(standards_map, dict):
+        return set()
+    return {str(key) for key in standards_map}
+
+
+def standards_gate_ids(data: dict[str, Any]) -> set[str]:
+    standards = data.get("standards_navigator", {}) if isinstance(data.get("standards_navigator"), dict) else {}
+    gates = standards.get("gates", []) if isinstance(standards, dict) else []
+    return {str(gate.get("id")) for gate in gates if isinstance(gate, dict) and str(gate.get("id") or "").strip()}
 
 
 def as_mapping(data: dict[str, Any], key: str, errors: list[str]) -> dict[str, Any]:
@@ -483,6 +514,92 @@ def validate_handoff_implementation_control(item: Any, data: dict[str, Any], das
                 errors.append(f"handoff_implementation_control register invalid: {register_error}")
 
 
+def validate_module_readiness(item: Any, data: dict[str, Any], dashboard_path: Path | None, errors: list[str]) -> None:
+    visual = data.get("beginner_visual_surfaces", {}) if isinstance(data.get("beginner_visual_surfaces"), dict) else {}
+    chatgpt_card = visual.get("chatgpt_mini_card", {}) if isinstance(visual.get("chatgpt_mini_card"), dict) else {}
+    if not isinstance(item, dict):
+        if chatgpt_card.get("enabled") is True:
+            errors.append("module_readiness обязателен, когда включена beginner ChatGPT visual card")
+        return
+
+    if str(item.get("selected_profile") or "") not in STANDARDS_PROFILES:
+        errors.append("module_readiness.selected_profile должен быть solo_lightweight/commercial_production/custom")
+    policy = str(item.get("false_green_policy") or "")
+    if not policy:
+        errors.append("module_readiness.false_green_policy обязателен")
+    lowered_policy = policy.lower()
+    if "not compliance" not in lowered_policy and "not certification" not in lowered_policy and "не compliance" not in lowered_policy and "не certification" not in lowered_policy:
+        errors.append("module_readiness.false_green_policy должен запрещать compliance/certification overclaim")
+
+    required_modules = item.get("required_modules", [])
+    if not isinstance(required_modules, list):
+        errors.append("module_readiness.required_modules должен быть list")
+        required_modules = []
+    required_set = {str(module_id) for module_id in required_modules}
+    missing_required = sorted(REQUIRED_MODULE_IDS - required_set)
+    if missing_required:
+        errors.append("module_readiness.required_modules не содержит: " + ", ".join(missing_required))
+
+    modules = item.get("modules", [])
+    if not isinstance(modules, list):
+        errors.append("module_readiness.modules должен быть list")
+        modules = []
+    registry_ids = registry_standard_ids(data, dashboard_path)
+    gate_ids = standards_gate_ids(data)
+    seen: set[str] = set()
+    for index, module in enumerate(modules, 1):
+        if not isinstance(module, dict):
+            errors.append(f"module_readiness.modules[{index}] должен быть mapping")
+            continue
+        module_id = str(module.get("id") or "")
+        if not module_id:
+            errors.append(f"module_readiness.modules[{index}].id обязателен")
+        if module_id in seen:
+            errors.append(f"module_readiness.modules содержит повторяющийся id `{module_id}`")
+        seen.add(module_id)
+        if not str(module.get("label") or "").strip():
+            errors.append(f"module_readiness.modules[{module_id}].label обязателен")
+        status = str(module.get("status") or "")
+        if status not in MODULE_STATUSES:
+            errors.append(f"module_readiness.modules[{module_id}].status неизвестен: `{status}`")
+        if status in MODULE_GREEN_STATUSES and not has_evidence(module):
+            errors.append(f"module_readiness.modules[{module_id}] green status `{status}` требует evidence или accepted_reason")
+        if module_id == "ai" and status == "not_applicable" and not str(module.get("accepted_reason") or "").strip():
+            errors.append("module_readiness.modules[ai] not_applicable требует accepted_reason")
+
+        standard_refs = module.get("standard_refs", [])
+        if not isinstance(standard_refs, list):
+            errors.append(f"module_readiness.modules[{module_id}].standard_refs должен быть list")
+            standard_refs = []
+        for standard_ref in standard_refs:
+            if registry_ids and str(standard_ref) not in registry_ids:
+                errors.append(f"module_readiness.modules[{module_id}].standard_refs содержит неизвестный standard_ref `{standard_ref}`")
+
+        gate_refs = module.get("gate_refs", [])
+        if not isinstance(gate_refs, list):
+            errors.append(f"module_readiness.modules[{module_id}].gate_refs должен быть list")
+            gate_refs = []
+        for gate_ref in gate_refs:
+            if gate_ids and str(gate_ref) not in gate_ids:
+                errors.append(f"module_readiness.modules[{module_id}].gate_refs содержит неизвестный gate_ref `{gate_ref}`")
+
+        source_refs = module.get("source_refs", [])
+        if not isinstance(source_refs, list):
+            errors.append(f"module_readiness.modules[{module_id}].source_refs должен быть list")
+            source_refs = []
+        for source_ref in source_refs:
+            if str(source_ref) not in MODULE_SOURCE_REFS:
+                errors.append(f"module_readiness.modules[{module_id}].source_refs содержит неизвестный source_ref `{source_ref}`")
+
+        claim = str(module.get("claim") or "")
+        if claim and FALSE_COMPLIANCE_RE.search(claim):
+            errors.append(f"module_readiness.modules[{module_id}].claim содержит false compliance/certification wording")
+
+    missing_modules = sorted(REQUIRED_MODULE_IDS - seen)
+    if missing_modules:
+        errors.append("module_readiness.modules не содержит: " + ", ".join(missing_modules))
+
+
 def validate_beginner_visual_surfaces(item: Any, data: dict[str, Any], errors: list[str]) -> None:
     if not isinstance(item, dict):
         errors.append("beginner_visual_surfaces должен быть mapping")
@@ -708,6 +825,10 @@ def validate_dashboard(data: dict[str, Any], dashboard_path: Path | None = None)
         errors.append("handoff_orchestration.route_explanation_boundary должен явно запрещать advisory auto-switch claim")
     validate_orchestration_execution_claims(orchestration, errors)
     validate_handoff_implementation_control(data.get("handoff_implementation_control"), data, dashboard_path, errors)
+    validate_module_readiness(data.get("module_readiness"), data, dashboard_path, errors)
+    source_artifacts = data.get("source_artifacts", [])
+    if isinstance(source_artifacts, list) and CHAT_HANDOFF_INDEX_ARTIFACT not in {str(source) for source in source_artifacts}:
+        errors.append("source_artifacts должен содержать .chatgpt/chat-handoff-index.yaml")
 
     validate_beginner_visual_surfaces(data.get("beginner_visual_surfaces"), data, errors)
 

@@ -24,6 +24,40 @@ from handoff_implementation_common import (
 
 
 GREEN_STATUSES = {"passed", "completed", "done", "ready", "archived", "executed"}
+TERMINAL_CHAT_STATES = {"verified", "superseded", "not_applicable", "archived"}
+LIFECYCLE_CARD_PHASES = [
+    ("idea", "Идея"),
+    ("intake", "Intake"),
+    ("spec", "Спека"),
+    ("architecture", "Архитектура"),
+    ("handoff", "Handoff"),
+    ("execution", "Исполнение"),
+    ("verification", "Проверка"),
+    ("release", "Release"),
+    ("deploy", "Deploy"),
+    ("operate", "Сопровождение"),
+]
+MODULE_CARD_ORDER = ["lifecycle", "core", "security", "ui_a11y", "quality", "websec", "ops", "ai"]
+STATUS_ICON = {
+    "passed": "✅",
+    "completed": "✅",
+    "done": "✅",
+    "ready": "✅",
+    "verified": "✅",
+    "executed": "✅",
+    "archived": "✅",
+    "in_progress": "🟡",
+    "codex_accepted": "🟡",
+    "implemented": "🟡",
+    "open": "🟡",
+    "pending": "🕒",
+    "not_started": "🕒",
+    "draft": "🕒",
+    "blocked": "🔴",
+    "failed": "🔴",
+    "superseded": "⏸",
+    "not_applicable": "⏸",
+}
 STATUS_MAP = {
     "not_started": "pending",
     "draft": "pending",
@@ -75,7 +109,10 @@ def value(data: dict[str, Any], *keys: str, default: str = "") -> str:
         current = current.get(key)
     if current is None:
         return default
-    return str(current)
+    text = str(current)
+    if re.fullmatch(r"\{\{[A-Z0-9_]+\}\}", text):
+        return default
+    return text
 
 
 def list_value(data: dict[str, Any], *keys: str) -> list[Any]:
@@ -116,6 +153,121 @@ def evidence_text(item: dict[str, Any]) -> str:
 def display_status(status: str) -> str:
     clean = (status or "").strip()
     return STATUS_MAP.get(clean, clean or "unknown")
+
+
+def clean_placeholder(value: Any) -> str:
+    text = str(value or "")
+    if re.fullmatch(r"\{\{[A-Z0-9_]+\}\}", text):
+        return ""
+    return text
+
+
+def status_icon(status: str) -> str:
+    return STATUS_ICON.get((status or "").strip(), "🕒")
+
+
+def chain_item(label: str, status: str) -> str:
+    return f"{status_icon(status)} {label}"
+
+
+def lifecycle_chain_text(data: dict[str, Any]) -> str:
+    lifecycle = data.get("lifecycle_phase", {}) if isinstance(data.get("lifecycle_phase"), dict) else {}
+    explicit = lifecycle.get("compact_chain")
+    if isinstance(explicit, list) and explicit:
+        parts = []
+        for entry in explicit:
+            if isinstance(entry, dict):
+                parts.append(chain_item(str(entry.get("label") or entry.get("id") or ""), str(entry.get("status") or "pending")))
+        if parts:
+            return " → ".join(parts)
+
+    current = str(lifecycle.get("current") or "intake")
+    try:
+        current_index = [phase for phase, _ in LIFECYCLE_CARD_PHASES].index(current)
+    except ValueError:
+        current_index = -1
+    parts = []
+    for index, (phase, label) in enumerate(LIFECYCLE_CARD_PHASES):
+        if current_index < 0:
+            status = "pending"
+        elif index < current_index:
+            status = "completed"
+        elif index == current_index:
+            status = "in_progress"
+        else:
+            status = "pending"
+        parts.append(chain_item(label, status))
+    return " → ".join(parts)
+
+
+def module_items(data: dict[str, Any]) -> list[dict[str, Any]]:
+    readiness = data.get("module_readiness", {}) if isinstance(data.get("module_readiness"), dict) else {}
+    modules = readiness.get("modules", [])
+    return [module for module in modules if isinstance(module, dict)] if isinstance(modules, list) else []
+
+
+def module_readiness_chain_text(data: dict[str, Any]) -> str:
+    by_id = {str(module.get("id") or ""): module for module in module_items(data)}
+    parts: list[str] = []
+    for module_id in MODULE_CARD_ORDER:
+        module = by_id.get(module_id, {})
+        label = str(module.get("label") or module_id)
+        status = str(module.get("status") or "pending")
+        parts.append(chain_item(label, status))
+    return " → ".join(parts)
+
+
+def read_chat_handoff_index(root: Path, dashboard_path: Path) -> dict[str, Any]:
+    local = read_yaml(dashboard_path.parent / "chat-handoff-index.yaml")
+    local_items = local.get("items") if isinstance(local, dict) else []
+    if isinstance(local_items, list) and local_items:
+        return local
+    root_index = read_yaml(root / ".chatgpt" / "chat-handoff-index.yaml")
+    root_items = root_index.get("items") if isinstance(root_index, dict) else []
+    if isinstance(root_items, list) and root_items:
+        return root_index
+    return local if isinstance(local, dict) else {}
+
+
+def handoff_line_icon(state: str) -> str:
+    return status_icon(state)
+
+
+def handoff_status_chain_text(item: dict[str, Any]) -> str:
+    state = str(item.get("state") or "open")
+    chatgpt = "✅ GPT-HO"
+    codex = "✅ Codex OK" if state in {"codex_accepted", "in_progress", "implemented", "verified", "blocked", "archived"} else "🕒 Codex OK"
+    if state in {"verified", "archived"}:
+        done = "✅ Done"
+    elif state == "blocked":
+        done = "🔴 Blocked"
+    elif state == "not_applicable":
+        done = "⏸ Done"
+    elif state == "superseded":
+        done = "⏸ Superseded"
+    else:
+        done = "🕒 Done"
+    return f"{chatgpt} → {codex} → {done}"
+
+
+def active_handoff_lines_text(index: dict[str, Any]) -> str:
+    items = index.get("items", []) if isinstance(index, dict) else []
+    if not isinstance(items, list):
+        items = []
+    active = [
+        item
+        for item in items
+        if isinstance(item, dict) and str(item.get("state") or "") not in {"superseded", "not_applicable", "archived"}
+    ]
+    if not active:
+        return "🕒 Нет активных handoff-задач"
+    active.sort(key=lambda item: int(item.get("chat_number") or 0))
+    lines = []
+    for item in active:
+        state = str(item.get("state") or "open")
+        title = str(item.get("chat_title") or item.get("chat_id") or "unknown")
+        lines.append(f"{handoff_line_icon(state)} {title}: {handoff_status_chain_text(item)}")
+    return "\n".join(lines)
 
 
 def template_path(root: Path, dashboard_path: Path, name: str) -> Path | None:
@@ -215,20 +367,11 @@ def remaining_steps_text(data: dict[str, Any]) -> str:
 def render_chatgpt_card(data: dict[str, Any], root: Path, dashboard_path: Path) -> str:
     context = optional_context(root, dashboard_path)
     project = resolved_project(data, context)
-    change = resolved_change(data, context)
-    lifecycle = data.get("lifecycle_phase", {}) if isinstance(data.get("lifecycle_phase"), dict) else {}
-    completed, total = completion_counts(data)
     values = {
         "PROJECT_NAME": project["name"] or "unknown",
-        "CURRENT_PHASE": str(lifecycle.get("current") or "unknown"),
-        "NEXT_PHASE": str(lifecycle.get("next") or "unknown"),
-        "ACTIVE_CHANGE_TITLE": change["title"] or "unknown",
-        "ACTIVE_STATUS": display_status(change["status"]),
-        "COMPLETED_STEPS": str(completed),
-        "TOTAL_STEPS": str(total),
-        "BLOCKERS": blockers_text(data),
-        "USER_ACTION_REQUIRED": user_action_text(data),
-        "NEXT_SAFE_ACTION": next_safe_action(data),
+        "LIFECYCLE_CHAIN": lifecycle_chain_text(data),
+        "MODULE_READINESS_CHAIN": module_readiness_chain_text(data),
+        "ACTIVE_HANDOFF_LINES": active_handoff_lines_text(context.get("chat_handoff_index", {})),
     }
     path = template_path(root, dashboard_path, "visual-status-card.md.template")
     template = path.read_text(encoding="utf-8") if path else "\n".join(
@@ -303,6 +446,19 @@ def optional_context(root: Path, dashboard_path: Path) -> dict[str, Any]:
     task_index = read_yaml(chatgpt_dir / "task-index.yaml")
     cockpit = read_yaml(chatgpt_dir / "orchestration-cockpit.yaml")
     handoff_implementation_register = read_yaml(chatgpt_dir / "handoff-implementation-register.yaml")
+    root_chatgpt = root / ".chatgpt"
+    root_stage_state = read_yaml(root_chatgpt / "stage-state.yaml")
+    if not task_state:
+        task_state = read_yaml(root_chatgpt / "task-state.yaml")
+    if not stage_state:
+        stage_state = read_yaml(root_chatgpt / "stage-state.yaml")
+    if not task_index:
+        task_index = read_yaml(root_chatgpt / "task-index.yaml")
+    if not cockpit:
+        cockpit = read_yaml(root_chatgpt / "orchestration-cockpit.yaml")
+    if not handoff_implementation_register:
+        handoff_implementation_register = read_yaml(root_chatgpt / "handoff-implementation-register.yaml")
+    chat_handoff_index = read_chat_handoff_index(root, dashboard_path)
     verify_summary = read_text(root / "VERIFY_SUMMARY.md")
     current_state = read_text(root / "CURRENT_FUNCTIONAL_STATE.md")
     runtime_reports = {
@@ -312,9 +468,11 @@ def optional_context(root: Path, dashboard_path: Path) -> dict[str, Any]:
     return {
         "task_state": task_state,
         "stage_state": stage_state,
+        "root_stage_state": root_stage_state,
         "task_index": task_index,
         "cockpit": cockpit,
         "handoff_implementation_register": handoff_implementation_register,
+        "chat_handoff_index": chat_handoff_index,
         "verify_summary": verify_summary,
         "current_state_present": bool(current_state.strip()),
         "runtime_reports": runtime_reports,
@@ -324,12 +482,13 @@ def optional_context(root: Path, dashboard_path: Path) -> dict[str, Any]:
 def resolved_project(data: dict[str, Any], context: dict[str, Any]) -> dict[str, str]:
     stage_project = context.get("stage_state", {}).get("project", {}) if isinstance(context.get("stage_state"), dict) else {}
     stage_lifecycle = context.get("stage_state", {}).get("lifecycle", {}) if isinstance(context.get("stage_state"), dict) else {}
+    root_project = context.get("root_stage_state", {}).get("project", {}) if isinstance(context.get("root_stage_state"), dict) else {}
     return {
-        "name": value(data, "project", "name") or str(stage_project.get("name") or ""),
-        "slug": value(data, "project", "slug") or str(stage_project.get("slug") or ""),
+        "name": clean_placeholder(stage_project.get("name")) or clean_placeholder(root_project.get("name")) or value(data, "project", "name"),
+        "slug": clean_placeholder(stage_project.get("slug")) or clean_placeholder(root_project.get("slug")) or value(data, "project", "slug"),
         "profile": value(data, "project", "profile"),
         "lifecycle_state": value(data, "project", "lifecycle_state") or str(stage_lifecycle.get("lifecycle_state") or ""),
-        "current_mode": value(data, "project", "current_mode") or str(stage_project.get("mode") or ""),
+        "current_mode": value(data, "project", "current_mode") or clean_placeholder(stage_project.get("mode")),
         "factory_producer_owned_layer": value(data, "project", "factory_producer_owned_layer"),
     }
 
@@ -447,6 +606,7 @@ def render(data: dict[str, Any], root: Path, dashboard_path: Path) -> str:
     release = data.get("release_readiness", {}) if isinstance(data.get("release_readiness"), dict) else {}
     runtime = data.get("deploy_runtime", {}) if isinstance(data.get("deploy_runtime"), dict) else {}
     standards = data.get("standards_navigator", {}) if isinstance(data.get("standards_navigator"), dict) else {}
+    modules = module_items(data)
     software_updates = data.get("software_update_governance", {}) if isinstance(data.get("software_update_governance"), dict) else {}
     post_release = data.get("post_release_improvement", {}) if isinstance(data.get("post_release_improvement"), dict) else {}
     runbook_packages = data.get("runbook_packages", []) if isinstance(data.get("runbook_packages"), list) else []
@@ -528,6 +688,12 @@ def render(data: dict[str, Any], root: Path, dashboard_path: Path) -> str:
             f"- Codex execution card template: `{value(visual, 'codex_execution_card', 'template')}`",
             f"- Markdown dashboard output: `{value(visual, 'markdown_dashboard', 'output')}`",
             f"- heavy UI boundary: {visual.get('heavy_ui_boundary', '')}",
+            f"- compact lifecycle chain: {lifecycle_chain_text(data)}",
+            f"- compact module readiness chain: {module_readiness_chain_text(data)}",
+            "",
+            "### Активные ChatGPT handoff-задачи",
+            "",
+            active_handoff_lines_text(context.get("chat_handoff_index", {})),
             "",
             "## Передача и оркестрация",
             "",
@@ -583,6 +749,23 @@ def render(data: dict[str, Any], root: Path, dashboard_path: Path) -> str:
             f"- monitoring: `{value(standards, 'monitoring_status', 'status')}`; proposal_required `{value(standards, 'monitoring_status', 'proposal_required')}`",
             f"- allowed to advance phase: `{standards.get('allowed_to_advance_phase', '')}`",
             f"- boundary: {standards.get('false_compliance_boundary', '')}",
+            "",
+            "### Готовность модулей / standards-inspired readiness",
+            "",
+            "| Module | Status | Standards | Gates | Sources | Evidence / reason |",
+            "|---|---|---|---|---|---|",
+        ]
+    )
+    for module in modules:
+        standard_refs = ", ".join(f"`{ref}`" for ref in module.get("standard_refs", []) or []) or "none"
+        gate_refs = ", ".join(f"`{ref}`" for ref in module.get("gate_refs", []) or []) or "none"
+        source_refs = ", ".join(f"`{ref}`" for ref in module.get("source_refs", []) or []) or "none"
+        lines.append(
+            f"| `{module.get('id', '')}` {module.get('label', '')} | `{module.get('status', '')}` | "
+            f"{standard_refs} | {gate_refs} | {source_refs} | {evidence_text(module)} |"
+        )
+    lines.extend(
+        [
             "",
             "## Управление обновлениями",
             "",

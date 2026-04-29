@@ -14,9 +14,12 @@
 
 - Canonical state: `template-repo/template/.chatgpt/project-lifecycle-dashboard.yaml`.
 - Handoff implementation register: `template-repo/template/.chatgpt/handoff-implementation-register.yaml`.
+- Chat handoff index: `template-repo/template/.chatgpt/chat-handoff-index.yaml`.
 - Renderer: `template-repo/scripts/render-project-lifecycle-dashboard.py`.
 - Validator: `template-repo/scripts/validate-project-lifecycle-dashboard.py`.
 - Register validator: `template-repo/scripts/validate-handoff-implementation-register.py`.
+- Chat index validator: `template-repo/scripts/validate-chat-handoff-index.py`.
+- Chat id allocator: `template-repo/scripts/allocate-chat-handoff-id.py`.
 - Markdown output по умолчанию: `reports/project-lifecycle-dashboard.md`.
 - ChatGPT mini card template: `template-repo/template/.chatgpt/visual-status-card.md.template`.
 - Codex execution card template: `template-repo/template/.chatgpt/codex-execution-card.md.template`.
@@ -32,6 +35,7 @@
 - multi-step progress: текущая wave, completed tasks, blocked tasks, next task, final verification, archive readiness;
 - handoff/orchestration: parent handoff, child tasks, selected profile/model/reasoning и route boundary;
 - handoff implementation control: межчатовые ChatGPT handoff / Codex self-handoff задачи, их status, dependencies, blockers, stale evidence и closeout state;
+- chat handoff index: стабильные номера и названия ChatGPT-чатов, где `kind` и `state` живут отдельно от UI title;
 - release readiness: version, changelog, release notes, scorecard, verification state;
 - deploy/runtime: signal из operator dashboard reports, если они есть;
 - standards navigator: selected standards profile, lifecycle backbone version/status, standards gate summary, missing standards evidence, next safe standards action, monitoring status и `allowed_to_advance_phase`;
@@ -41,11 +45,52 @@
 - external actions ledger: только реальные user/manual/runtime/downstream действия;
 - recommended next step и fallback next step.
 
+## Stable ChatGPT Chat Titles
+
+ChatGPT chat title должен быть стабильным на весь lifecycle задачи:
+
+```text
+<PROJECT_CODE>-CH-<NNNN> <task-slug>
+```
+
+Примеры:
+
+```text
+FT-CH-0007 dashboard-card-ui
+FT-CH-0008 completion-report
+```
+
+В title нельзя добавлять `HO`, `OPEN`, `CODEX`, `DONE`, `BLOCKED`, `VERIFIED`, `BUG`, `DECISION`, `RESEARCH` или другие status/kind tokens. Статусы живут только в repo state: `.chatgpt/chat-handoff-index.yaml`, handoff register и dashboard/card. Поэтому переход `open -> in_progress -> verified` не требует ручного переименования ChatGPT-чата.
+
+Номер выделяется repo-first через index/allocator. Если следующий номер неизвестен, его нельзя придумывать; нужно сказать:
+
+```text
+Нужно выделить номер через repo chat-handoff-index / allocator.
+```
+
+Project Instructions могут только предложить пользователю стабильный title для нового чата. Они не могут надежно auto-rename ChatGPT UI, просканировать все названия чатов проекта или гарантировать следующий свободный номер. Переименование ChatGPT UI остается one-time manual action при создании чата, если нет отдельного поддержанного API/tool.
+
+Рекомендуемый snippet для Project Instructions:
+
+```text
+At the beginning of a new project task chat, propose a stable chat title in this format:
+<PROJECT_CODE>-CH-<NNNN> <task-slug>.
+Do not include HO, OPEN, CODEX, DONE, BLOCKED, VERIFIED, BUG, DECISION or other status/kind tokens in the title.
+If the next number is unknown, do not invent it. Say: 'Нужно выделить номер через repo chat-handoff-index / allocator.'
+Statuses must be shown only in the project card and repo dashboard.
+```
+
+Поиск:
+
+- по номеру: `FT-CH-0007`;
+- по slug: `dashboard-card-ui`;
+- незавершенная работа ищется в dashboard/card, а не по status token в title.
+
 ## Beginner visual surfaces / визуальные поверхности для новичка
 
 Для новичка dashboard проявляется в трех местах:
 
-- `ChatGPT mini card` — короткий readout в ChatGPT Project: проект, фаза, активная задача, статус, готово, блокеры, требуется ли действие пользователя и следующий безопасный шаг.
+- `ChatGPT mini card` — короткий readout в ChatGPT Project: проект, compact lifecycle chain, module readiness chain и активные handoff/task status lines.
 - `Codex execution card` — короткий readout в Codex App / VS Code Codex extension: route receipt, выбранный профиль/model/reasoning, текущая wave/task, completed/remaining steps, blockers, next internal action и external action boundary.
 - `reports/project-lifecycle-dashboard.md` — полная Markdown доска состояния, которую можно открыть в VS Code Markdown Preview или GitHub preview.
 
@@ -57,7 +102,7 @@
 - `orchestration-cockpit-lite` — detailed artifact для parent handoff и child tasks;
 - `operator-dashboard` — runtime/deploy detail.
 
-Карточки не являются отдельным state. Renderer выводит их из того же dashboard YAML. Если данных не хватает, карточка показывает `unknown` или `pending`, а не зеленый статус.
+Карточки не являются отдельным state. Renderer выводит их из dashboard YAML и repo index. Если данных не хватает, карточка показывает `unknown` или `pending`, а не зеленый статус.
 
 Если `external_actions_ledger` не пуст, ChatGPT card не может писать “от пользователя требуется: ничего”. Если Codex card пишет `executed`, `completed`, `passed` или `done`, у этого claim должна быть execution evidence или accepted reason.
 
@@ -122,6 +167,16 @@ Replacement identity:
 
 Dashboard может показывать `selected_profile`, `selected_model` и reasoning как readout из handoff/register. Это не auto-switch: уже открытая Codex-сессия не меняет route/model/reasoning из-за YAML или advisory text.
 
+Register item может ссылаться на stable chat identity:
+
+- `chat_id`;
+- `chat_title`;
+- `task_slug`;
+- `chat_state`;
+- `chat_index_item_id`.
+
+`chat_title` остается стабильным и не является источником статуса. `chat_state`/status chain читаются из repo state, а не из названия ChatGPT-чата.
+
 ## Связь с operator-dashboard
 
 `operator-dashboard.py` остается runtime/deploy панелью: env, preset, dry-run, deploy reports, Docker Compose и next deploy step.
@@ -142,6 +197,25 @@ Lifecycle dashboard не выполняет deploy и не обещает runtim
 Dashboard validator блокирует production/commercial claim с одним `solo_lightweight`, security/accessibility/quality green без evidence, AI readiness без `ai_safety_gate`, stale standard overclaim и certification/compliance claim без evidence.
 
 Это не formal certification. Dashboard может говорить, что проект использует standards-inspired gates или mapped evidence, но не должен заявлять ISO/NIST/OWASP/WCAG/DORA/OpenAI compliance/certification.
+
+## Module Readiness Line
+
+Compact card показывает standards-inspired readiness по модулям:
+
+```text
+Модули:
+✅ Lifecycle → 🟡 Core → 🟡 Security → 🕒 UI/A11y → 🕒 Quality → 🕒 WebSec → 🕒 Ops → ⏸ AI
+```
+
+Это readout готовности evidence gates, а не заявление о compliance/certification. Значки:
+
+- `✅` — passed/completed/verified только с evidence или accepted_reason;
+- `🟡` — in progress или частично готово;
+- `🕒` — required, но pending/not started;
+- `🔴` — blocked/failed или missing required evidence;
+- `⏸` — not applicable только с accepted_reason.
+
+Security, UI/A11y, Quality, WebSec, Ops и AI нельзя показывать зелеными без evidence или accepted_reason. AI может быть `⏸`, если проект не использует AI behavior и причина записана в repo.
 
 ## Связь с software update governance
 
@@ -180,6 +254,9 @@ python3 template-repo/scripts/validate-project-lifecycle-dashboard.py \
 python3 template-repo/scripts/validate-handoff-implementation-register.py \
   template-repo/template/.chatgpt/handoff-implementation-register.yaml
 
+python3 template-repo/scripts/validate-chat-handoff-index.py \
+  template-repo/template/.chatgpt/chat-handoff-index.yaml
+
 python3 template-repo/scripts/validate-standards-gates.py \
   template-repo/template/.chatgpt/standards-gates.yaml
 
@@ -195,6 +272,12 @@ python3 template-repo/scripts/render-project-lifecycle-dashboard.py \
   --format chatgpt-card \
   --stdout
 
+python3 template-repo/scripts/allocate-chat-handoff-id.py \
+  --index template-repo/template/.chatgpt/chat-handoff-index.yaml \
+  --project-code FT \
+  --kind handoff \
+  --description "dashboard card ui"
+
 python3 template-repo/scripts/render-project-lifecycle-dashboard.py \
   --input template-repo/template/.chatgpt/project-lifecycle-dashboard.yaml \
   --format codex-card \
@@ -206,6 +289,7 @@ python3 template-repo/scripts/render-project-lifecycle-dashboard.py \
 ```bash
 python3 scripts/validate-project-lifecycle-dashboard.py .chatgpt/project-lifecycle-dashboard.yaml
 python3 scripts/validate-handoff-implementation-register.py .chatgpt/handoff-implementation-register.yaml
+python3 scripts/validate-chat-handoff-index.py .chatgpt/chat-handoff-index.yaml
 python3 scripts/render-project-lifecycle-dashboard.py --format markdown-full --output reports/project-lifecycle-dashboard.md
 python3 scripts/render-project-lifecycle-dashboard.py --format chatgpt-card --stdout
 python3 scripts/render-project-lifecycle-dashboard.py --format codex-card --stdout
