@@ -1,6 +1,6 @@
 # Панель жизненного цикла проекта / `project-lifecycle-dashboard`
 
-Generated UTC: `2026-04-29T11:11:16+00:00`
+Generated UTC: `2026-04-29T11:21:01+00:00`
 Source: `/projects/factory-template/template-repo/template/.chatgpt/project-lifecycle-dashboard.yaml`
 
 ## Сейчас
@@ -91,9 +91,9 @@ Source: `/projects/factory-template/template-repo/template/.chatgpt/project-life
 
 - нет implemented-but-not-verified задач
 
-### Снято или archived
+### Снято, superseded или archived
 
-- нет снятых или archived задач
+- нет снятых, superseded или archived задач
 
 ### Stale items без свежего evidence
 
@@ -121,7 +121,7 @@ Source: `/projects/factory-template/template-repo/template/.chatgpt/project-life
 - status: `pending`
 - preset: `starter`
 - operator source: `template-repo/scripts/operator-dashboard.py`
-- dry-run report present: `False`
+- dry-run report present: `True`
 - deploy report present: `False`
 - boundary: Runtime evidence может подтягиваться из operator-dashboard reports; dry-run/report evidence не является real deploy proof.
 

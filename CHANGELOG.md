@@ -3,6 +3,8 @@
 ## [Unreleased]
 ### Добавлено
 - Handoff implementation control layer: template-owned `.chatgpt/handoff-implementation-register.yaml`, validator `validate-handoff-implementation-register.py`, deterministic dependency/priority calculation и lifecycle dashboard cards для queued/ready, blocked, blockers, in-progress, implemented-not-verified, stale и closed handoff/self-handoff задач.
+- Replacement/write-off policy для handoff implementation register: `superseded`, `handoff_group`, `handoff_revision`, `replaces`, `superseded_by`, `replacement_reason` и validator coverage для нескольких active handoff в одной группе.
+- Defect report `reports/bugs/2026-04-29-superseded-handoff-not-written-off.md` для gap, где replacement handoff мог оставить старый handoff активным.
 - Lifecycle dashboard integration теперь читает handoff implementation register как отдельный source artifact и не смешивает его с `.chatgpt/handoff-rework-register.yaml`.
 - Scenario guidance теперь требует Codex closeout обновлять matching handoff implementation item, добавлять evidence, материализовать новые self-handoff items и снимать задачи только через explicit `not_applicable`/archive path.
 - Defect report `reports/bugs/2026-04-29-clean-verify-misses-artifacts.md` для cleanup gap, где ignored `_artifacts` ломал `PRE_RELEASE_AUDIT`.

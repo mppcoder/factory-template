@@ -246,9 +246,12 @@ Orchestration guardrails:
 - обновить `status` без false green;
 - добавить `evidence` для `implemented`, `verified`, `not_applicable` или `archived`;
 - если выполнение породило новый self-handoff, добавить новый item, а не оставлять его только в чате;
+- если создается новый handoff по той же задаче в текущем чате, сначала проверить старые items этой `handoff_group`; старые active handoff нужно списать как `superseded` или `not_applicable`, заполнить `superseded_by`, `replacement_reason`, evidence, а новый item должен заполнить `replaces`;
 - если задача больше не актуальна, не удалять item, а выполнить deactivation path: `status: not_applicable`, `closeout_reason`, evidence или `accepted_reason`;
 - если item зависит от незакрытых dependencies, он остается visible `blocked`, а не `ready`;
 - после изменения register обновить dashboard render output.
+
+Replacement/write-off path нужен для случаев, когда предыдущий handoff в этом же чате был заменен: развалился единый copy-paste block, пользователь уточнил scope, ChatGPT/Codex переработал handoff или был создан новый более точный вариант. В одной `handoff_group` допустим только один active handoff; остальные должны быть `superseded`, `not_applicable` или `archived`.
 
 Этот register не заменяет `.chatgpt/handoff-rework-register.yaml`: rework register остается KPI по rework loops, а implementation register хранит жизненный цикл handoff/self-handoff задач до verified closeout, deactivation или archive.
 

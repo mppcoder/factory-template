@@ -447,9 +447,14 @@ write_case("not-applicable-no-reason", lambda data: data["items"][3].update({"ev
 write_case("unknown-dependency", lambda data: data["items"][1].update({"depends_on": ["HIR-999"]}))
 write_case("blocked-ready", lambda data: data["items"][1].update({"status": "ready"}))
 write_case("secret-like", lambda data: data["items"][0].update({"next_action": "Do not store API_KEY=abc123"}))
+def duplicate_active_handoff_group(data):
+    data["items"][4].update({"status": "queued", "superseded_by": "", "replacement_reason": "", "closeout_reason": ""})
+    data["items"][5].update({"status": "ready", "replaces": []})
+write_case("duplicate-active-handoff-group", duplicate_active_handoff_group)
+write_case("superseded-no-link", lambda data: data["items"][4].update({"superseded_by": "", "replacement_reason": ""}))
 PY
 
-  for fixture in green-no-evidence not-applicable-no-reason unknown-dependency blocked-ready secret-like; do
+  for fixture in green-no-evidence not-applicable-no-reason unknown-dependency blocked-ready secret-like duplicate-active-handoff-group superseded-no-link; do
     if python3 "$ROOT/template-repo/scripts/validate-handoff-implementation-register.py" \
       "$tmp_dir/handoff-implementation-$fixture.yaml" \
       >"/tmp/handoff-implementation-$fixture.log" 2>&1; then

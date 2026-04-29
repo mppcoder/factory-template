@@ -7,6 +7,10 @@ queue_policy:
   blockers_raise_priority: true
   stale_visible_cards: true
   silent_drop_forbidden: true
+replacement_policy:
+  same_chat_same_task_single_active: true
+  superseded_requires_replacement_link: true
+  replacement_reason_required: true
 statuses:
   allowed:
     - captured
@@ -19,10 +23,13 @@ statuses:
     - verified
     - blocked
     - not_applicable
+    - superseded
     - archived
 items:
   - id: HIR-001
     title: "Prerequisite implementation task"
+    handoff_group: "fixture-prerequisite"
+    handoff_revision: 1
     source_type: chatgpt-handoff
     source_chat: "fixture"
     source_handoff_path: ".chatgpt/codex-input.md"
@@ -36,6 +43,9 @@ items:
     calculated_priority: critical
     depends_on: []
     blocks: [HIR-002, HIR-003]
+    replaces: []
+    superseded_by: ""
+    replacement_reason: ""
     owner_boundary: internal-repo-follow-up
     artifacts_to_update: ["src/prerequisite.py"]
     evidence:
@@ -47,6 +57,8 @@ items:
     updated_at: "2026-04-28T00:00:00Z"
   - id: HIR-002
     title: "Dependent blocked task"
+    handoff_group: "fixture-dependent"
+    handoff_revision: 1
     source_type: codex-self-handoff
     source_chat: "fixture"
     source_handoff_path: ".chatgpt/self-handoff.md"
@@ -60,6 +72,9 @@ items:
     calculated_priority: medium
     depends_on: [HIR-001]
     blocks: []
+    replaces: []
+    superseded_by: ""
+    replacement_reason: ""
     owner_boundary: internal-repo-follow-up
     artifacts_to_update: ["src/dependent.py"]
     evidence: []
@@ -70,6 +85,8 @@ items:
     updated_at: "2026-04-20T00:00:00Z"
   - id: HIR-003
     title: "Implemented but not verified task"
+    handoff_group: "fixture-implemented"
+    handoff_revision: 1
     source_type: chatgpt-handoff
     source_chat: "fixture"
     source_handoff_path: ".chatgpt/codex-input.md"
@@ -83,6 +100,9 @@ items:
     calculated_priority: low
     depends_on: []
     blocks: []
+    replaces: []
+    superseded_by: ""
+    replacement_reason: ""
     owner_boundary: internal-repo-follow-up
     artifacts_to_update: ["src/implemented.py"]
     evidence:
@@ -94,6 +114,8 @@ items:
     updated_at: "2026-04-28T00:00:00Z"
   - id: HIR-004
     title: "Archived no longer relevant task"
+    handoff_group: "fixture-archived"
+    handoff_revision: 1
     source_type: manual-entry
     source_chat: "fixture"
     source_handoff_path: ""
@@ -107,6 +129,9 @@ items:
     calculated_priority: low
     depends_on: []
     blocks: []
+    replaces: []
+    superseded_by: ""
+    replacement_reason: ""
     owner_boundary: internal-repo-follow-up
     artifacts_to_update: []
     evidence:
@@ -116,4 +141,61 @@ items:
     next_action: "No action."
     created_at: "2026-04-20T00:00:00Z"
     updated_at: "2026-04-28T00:00:00Z"
-
+  - id: HIR-005
+    title: "Superseded malformed handoff"
+    handoff_group: "fixture-same-chat-task"
+    handoff_revision: 1
+    source_type: chatgpt-handoff
+    source_chat: "fixture-chat-1"
+    source_handoff_path: ".chatgpt/old-handoff.md"
+    task_class: build
+    selected_profile: build
+    selected_model: gpt-5.5
+    selected_reasoning_effort: medium
+    selected_plan_mode_reasoning_effort: medium
+    status: superseded
+    priority: medium
+    calculated_priority: medium
+    depends_on: []
+    blocks: []
+    replaces: []
+    superseded_by: HIR-006
+    replacement_reason: "Original handoff had a broken single-block shape and was replaced in the same chat."
+    owner_boundary: internal-repo-follow-up
+    artifacts_to_update: []
+    evidence:
+      - "Replacement accepted in fixture chat."
+    closeout_reason: "Superseded by HIR-006."
+    deactivation_handoff_required: false
+    next_action: "No action; use HIR-006."
+    created_at: "2026-04-20T00:00:00Z"
+    updated_at: "2026-04-28T00:00:00Z"
+  - id: HIR-006
+    title: "Replacement handoff after clarification"
+    handoff_group: "fixture-same-chat-task"
+    handoff_revision: 2
+    source_type: chatgpt-handoff
+    source_chat: "fixture-chat-1"
+    source_handoff_path: ".chatgpt/new-handoff.md"
+    task_class: build
+    selected_profile: build
+    selected_model: gpt-5.5
+    selected_reasoning_effort: medium
+    selected_plan_mode_reasoning_effort: medium
+    status: queued
+    priority: medium
+    calculated_priority: medium
+    depends_on: []
+    blocks: []
+    replaces: [HIR-005]
+    superseded_by: ""
+    replacement_reason: ""
+    owner_boundary: internal-repo-follow-up
+    artifacts_to_update: []
+    evidence:
+      - "Replacement handoff captured in fixture chat."
+    closeout_reason: ""
+    deactivation_handoff_required: false
+    next_action: "Implement replacement handoff."
+    created_at: "2026-04-20T00:00:00Z"
+    updated_at: "2026-04-28T00:00:00Z"

@@ -351,7 +351,8 @@ def handoff_item_row(item: dict[str, Any], by_id: dict[str, dict[str, Any]]) -> 
     blocks_count = blocker_count(item, by_id)
     evidence = evidence_text(item) or "none"
     return (
-        f"| `{item_id}` | {item.get('title', '')} | `{status_of(item)}` / effective `{effective_status(item, by_id)}` | "
+        f"| `{item_id}` | `{item.get('handoff_group', '')}` rev `{item.get('handoff_revision', '')}` | "
+        f"{item.get('title', '')} | `{status_of(item)}` / effective `{effective_status(item, by_id)}` | "
         f"`{item.get('priority', '')}` -> `{calculated_priority(item, by_id)}` | "
         f"{dependency_text} | `{blocks_count}` | {item.get('next_action', '')} | {evidence} |"
     )
@@ -361,8 +362,8 @@ def handoff_item_table(items: list[dict[str, Any]], by_id: dict[str, dict[str, A
     if not items:
         return [empty]
     lines = [
-        "| Item | Title | Status | Priority | Unresolved deps | Blocks | Next action | Evidence / reason |",
-        "|---|---|---|---|---|---|---|---|",
+        "| Item | Group | Title | Status | Priority | Unresolved deps | Blocks | Next action | Evidence / reason |",
+        "|---|---|---|---|---|---|---|---|---|",
     ]
     lines.extend(handoff_item_row(item, by_id) for item in items)
     return lines
@@ -383,17 +384,16 @@ def render_handoff_implementation_control(data: dict[str, Any], context: dict[st
     by_id = item_map(items)
     sorted_items = sorted_queue_items(items)
 
-    queued_ready = [
-        item for item in sorted_items if effective_status(item, by_id) in {"queued", "ready"} and status_of(item) not in {"verified", "not_applicable", "archived"}
-    ]
+    terminal = {"verified", "not_applicable", "superseded", "archived"}
+    queued_ready = [item for item in sorted_items if effective_status(item, by_id) in {"queued", "ready"} and status_of(item) not in terminal]
     blocked = [item for item in sorted_items if effective_status(item, by_id) == "blocked"]
-    blockers = [item for item in sorted_items if blocker_count(item, by_id) > 0 and status_of(item) not in {"verified", "not_applicable", "archived"}]
+    blockers = [item for item in sorted_items if blocker_count(item, by_id) > 0 and status_of(item) not in terminal]
     in_progress = [item for item in sorted_items if status_of(item) == "in_progress"]
     implemented = [item for item in sorted_items if status_of(item) == "implemented"]
-    closed = [item for item in sorted_items if status_of(item) in {"not_applicable", "archived"}]
+    closed = [item for item in sorted_items if status_of(item) in {"not_applicable", "superseded", "archived"}]
     stale = [item for item in sorted_items if is_stale(item)]
 
-    open_count = len([item for item in items if status_of(item) not in {"verified", "not_applicable", "archived"}])
+    open_count = len([item for item in items if status_of(item) not in terminal])
     lines = [
         "## Контроль реализации handoff / Handoff implementation control",
         "",
@@ -423,9 +423,9 @@ def render_handoff_implementation_control(data: dict[str, Any], context: dict[st
         "",
         *handoff_item_table(implemented, by_id, "- нет implemented-but-not-verified задач"),
         "",
-        "### Снято или archived",
+        "### Снято, superseded или archived",
         "",
-        *handoff_item_table(closed, by_id, "- нет снятых или archived задач"),
+        *handoff_item_table(closed, by_id, "- нет снятых, superseded или archived задач"),
         "",
         "### Stale items без свежего evidence",
         "",

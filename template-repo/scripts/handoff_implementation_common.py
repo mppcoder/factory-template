@@ -10,8 +10,8 @@ import yaml
 
 
 SCHEMA = "handoff-implementation-register/v1"
-TERMINAL_STATUSES = {"verified", "not_applicable", "archived"}
-EVIDENCE_REQUIRED_STATUSES = {"implemented", "verified", "not_applicable", "archived"}
+TERMINAL_STATUSES = {"verified", "not_applicable", "superseded", "archived"}
+EVIDENCE_REQUIRED_STATUSES = {"implemented", "verified", "not_applicable", "superseded", "archived"}
 ACTIVE_STATUSES = {"captured", "handoff_issued", "self_handoff_created", "queued", "ready", "in_progress", "blocked"}
 DEFAULT_ALLOWED_STATUSES = {
     "captured",
@@ -24,6 +24,7 @@ DEFAULT_ALLOWED_STATUSES = {
     "verified",
     "blocked",
     "not_applicable",
+    "superseded",
     "archived",
 }
 PRIORITIES = ["low", "medium", "high", "critical"]
@@ -162,4 +163,3 @@ def sorted_queue_items(items: list[dict[str, Any]]) -> list[dict[str, Any]]:
             str(item.get("id") or ""),
         ),
     )
-

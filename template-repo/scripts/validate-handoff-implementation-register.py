@@ -50,10 +50,19 @@ def validate_register(data: dict[str, Any]) -> list[str]:
     if not isinstance(scope, dict):
         errors.append("scope должен быть mapping")
         scope = {}
-    if not str(scope.get("project") or "").strip():
-        errors.append("scope.project обязателен")
-    if str(scope.get("owner_boundary") or "") != "template-owned-generated-project-artifact":
-        errors.append("scope.owner_boundary должен быть template-owned-generated-project-artifact")
+        if not str(scope.get("project") or "").strip():
+            errors.append("scope.project обязателен")
+        if str(scope.get("owner_boundary") or "") != "template-owned-generated-project-artifact":
+            errors.append("scope.owner_boundary должен быть template-owned-generated-project-artifact")
+
+    replacement_policy = data.get("replacement_policy")
+    if replacement_policy is not None:
+        if not isinstance(replacement_policy, dict):
+            errors.append("replacement_policy должен быть mapping")
+            replacement_policy = {}
+        for key in ["same_chat_same_task_single_active", "superseded_requires_replacement_link", "replacement_reason_required"]:
+            if replacement_policy.get(key) is not True:
+                errors.append(f"replacement_policy.{key} должен быть true")
 
     queue_policy = data.get("queue_policy")
     if not isinstance(queue_policy, dict):
@@ -90,9 +99,22 @@ def validate_register(data: dict[str, Any]) -> list[str]:
             errors.append(f"items[{index}] должен быть mapping")
             continue
         item_id = str(item.get("id") or f"#{index}")
-        for field in ["id", "title", "source_type", "task_class", "status", "priority", "calculated_priority", "owner_boundary", "next_action"]:
+        for field in [
+            "id",
+            "title",
+            "handoff_group",
+            "source_type",
+            "task_class",
+            "status",
+            "priority",
+            "calculated_priority",
+            "owner_boundary",
+            "next_action",
+        ]:
             if not str(item.get(field) or "").strip():
                 errors.append(f"items[{item_id}].{field} обязателен")
+        if not isinstance(item.get("handoff_revision"), int) or item.get("handoff_revision", 0) < 1:
+            errors.append(f"items[{item_id}].handoff_revision должен быть positive integer")
         if str(item.get("source_type") or "") not in SOURCE_TYPES:
             errors.append(f"items[{item_id}].source_type неизвестен")
         if str(item.get("task_class") or "") not in TASK_CLASSES:
@@ -115,6 +137,7 @@ def validate_register(data: dict[str, Any]) -> list[str]:
 
         depends_on = validate_list(item.get("depends_on"), f"items[{item_id}].depends_on", errors)
         blocks = validate_list(item.get("blocks"), f"items[{item_id}].blocks", errors)
+        replaces = validate_list(item.get("replaces"), f"items[{item_id}].replaces", errors)
         validate_list(item.get("artifacts_to_update"), f"items[{item_id}].artifacts_to_update", errors)
         validate_list(item.get("evidence"), f"items[{item_id}].evidence", errors)
         for dep_id in depends_on:
@@ -123,6 +146,15 @@ def validate_register(data: dict[str, Any]) -> list[str]:
         for blocked_id in blocks:
             if str(blocked_id) not in by_id:
                 errors.append(f"items[{item_id}].blocks содержит неизвестный id `{blocked_id}`")
+        for replaced_id in replaces:
+            replaced = by_id.get(str(replaced_id))
+            if replaced is None:
+                errors.append(f"items[{item_id}].replaces содержит неизвестный id `{replaced_id}`")
+                continue
+            if status_of(replaced) not in {"superseded", "not_applicable", "archived"}:
+                errors.append(f"items[{item_id}].replaces указывает на `{replaced_id}`, но замененный item не списан")
+            if str(replaced.get("superseded_by") or "") != item_id:
+                errors.append(f"items[{replaced_id}].superseded_by должен ссылаться на `{item_id}`")
 
         unresolved = unresolved_dependencies(item, by_id)
         if unresolved and status not in {"blocked", "verified", "not_applicable", "archived"}:
@@ -140,8 +172,35 @@ def validate_register(data: dict[str, Any]) -> list[str]:
                 errors.append(f"items[{item_id}] отмечен not_applicable без closeout_reason или accepted_reason")
             if not (has_evidence(item) or str(item.get("accepted_reason") or "").strip()):
                 errors.append(f"items[{item_id}] отмечен not_applicable без evidence или accepted_reason")
+        if status == "superseded":
+            if not str(item.get("superseded_by") or "").strip():
+                errors.append(f"items[{item_id}] отмечен superseded без superseded_by")
+            elif str(item.get("superseded_by")) not in by_id:
+                errors.append(f"items[{item_id}].superseded_by содержит неизвестный id `{item.get('superseded_by')}`")
+            else:
+                replacement = by_id[str(item.get("superseded_by"))]
+                replacement_replaces = {str(replaced_id) for replaced_id in replacement.get("replaces", []) or []}
+                if item_id not in replacement_replaces:
+                    errors.append(f"items[{item_id}].superseded_by указывает на replacement, который не содержит `{item_id}` в replaces")
+            if not str(item.get("replacement_reason") or item.get("closeout_reason") or "").strip():
+                errors.append(f"items[{item_id}] отмечен superseded без replacement_reason или closeout_reason")
+            if not has_evidence(item):
+                errors.append(f"items[{item_id}] отмечен superseded без evidence")
         if status == "archived" and not has_evidence(item):
             errors.append(f"items[{item_id}] archived требует evidence после verified/not_applicable closeout")
+
+    groups: dict[str, list[str]] = {}
+    for item in items:
+        group = str(item.get("handoff_group") or "").strip()
+        if not group or status_of(item) in {"verified", "not_applicable", "superseded", "archived"}:
+            continue
+        groups.setdefault(group, []).append(str(item.get("id") or ""))
+    for group, active_ids in sorted(groups.items()):
+        if len(active_ids) > 1:
+            errors.append(
+                f"handoff_group `{group}` содержит несколько активных handoff items: {', '.join(active_ids)}; "
+                "старые handoff нужно списать как superseded/not_applicable"
+            )
 
     return errors
 

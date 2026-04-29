@@ -5,6 +5,7 @@
 - `.chatgpt` с state, presets и defect-flow
 - `.chatgpt/project-lifecycle-dashboard.yaml` как единая repo-native панель состояния проекта от intake до release/deploy/operate/improve
 - `.chatgpt/handoff-implementation-register.yaml` как lifecycle register для ChatGPT handoff / Codex self-handoff задач до verified, deactivation или archive closeout
+- handoff replacement/write-off policy: старые handoff той же задачи в одном чате списываются через `superseded`/`replaces`/`superseded_by`, а не остаются активными
 - greenfield и brownfield каркас
 - reports и tasks для defect-aware работы
 
@@ -27,6 +28,7 @@
 - model availability auto-check сравнивает repo-configured mapping с live `codex debug models` и генерирует proposal без automatic profile promotion
 - рендерит и валидирует lifecycle dashboard через `render-project-lifecycle-dashboard.py` и `validate-project-lifecycle-dashboard.py`
 - валидирует handoff implementation register через `validate-handoff-implementation-register.py` и выводит его карточки в lifecycle dashboard
+- проверяет, что в одной `handoff_group` нет нескольких активных handoff после уточнения или переработки handoff в том же чате
 
 ## Что еще описано на уровне фабрики
 - единая визуальная архитектура шаблона и подробные workflows по запуску, развёртыванию и downstream-update contour

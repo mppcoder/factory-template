@@ -126,7 +126,7 @@ handoff_implementation_control:
     implemented_not_verified: 0
     stale_items_without_recent_evidence: 0
   route_boundary: "Dashboard показывает handoff route/model/reasoning как readout; handoff/register не переключают model/profile/reasoning внутри уже открытой Codex-сессии."
-  closeout_policy: "Codex при завершении задачи обновляет matching item: status, evidence, новые self-handoff items или explicit not_applicable closeout без silent deletion."
+  closeout_policy: "Codex при завершении задачи обновляет matching item: status, evidence, новые self-handoff items, superseded replacement links или explicit not_applicable closeout без silent deletion."
 
 runbook_packages:
   - id: 01-factory-template

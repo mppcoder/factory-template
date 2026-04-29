@@ -10,6 +10,10 @@ queue_policy:
   blockers_raise_priority: true
   stale_visible_cards: true
   silent_drop_forbidden: true
+replacement_policy:
+  same_chat_same_task_single_active: true
+  superseded_requires_replacement_link: true
+  replacement_reason_required: true
 statuses:
   allowed:
     - captured
@@ -22,6 +26,6 @@ statuses:
     - verified
     - blocked
     - not_applicable
+    - superseded
     - archived
 items: []
-

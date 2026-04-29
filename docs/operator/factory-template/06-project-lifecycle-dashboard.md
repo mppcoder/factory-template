@@ -86,8 +86,9 @@
 
 - задача может родиться в отдельном ChatGPT-чате и иначе потеряться между сессиями;
 - пользователь должен видеть, что handoff уже выдан, но реализация еще не закрыта;
-- blocked, снятые, implemented-but-not-verified и stale задачи должны оставаться видимыми до closeout;
-- silent deletion запрещен: неактуальные задачи закрываются как `not_applicable` или `archived` с reason/evidence.
+- blocked, replaced/superseded, снятые, implemented-but-not-verified и stale задачи должны оставаться видимыми до closeout;
+- silent deletion запрещен: неактуальные задачи закрываются как `not_applicable`, `superseded` или `archived` с reason/evidence.
+- если в одном ChatGPT-чате по той же задаче создан новый handoff, старый handoff списывается через replacement path, а не остается активным.
 
 Dashboard рендерит раздел `## Handoff implementation control`:
 
@@ -96,7 +97,7 @@ Dashboard рендерит раздел `## Handoff implementation control`:
 - `Blockers / prerequisite tasks` — задачи, которые разблокируют другие items;
 - `In progress` — текущие работы;
 - `Implemented but not verified` — код/доки сделаны, но verification evidence еще нет;
-- `Not applicable / archived` — явно снятые или архивированные задачи;
+- `Not applicable / superseded / archived` — явно снятые, замененные или архивированные задачи;
 - `Stale items without recent evidence` — открытые items без свежего evidence/update.
 
 Priority считается детерминированно: base priority `critical > high > medium > low`, затем +1 level если item блокирует хотя бы одну незакрытую задачу и еще +1 level если блокирует несколько. Blocked item не должен отображаться как ready.
@@ -107,8 +108,17 @@ Codex closeout behavior:
 - обновить `status`;
 - добавить `evidence`;
 - если задача породила новый self-handoff, добавить новый item;
+- если создается новый handoff по той же задаче в текущем чате, проверить `handoff_group`, списать старые active items как `superseded`, заполнить `superseded_by`, `replacement_reason`, evidence, а у нового item заполнить `replaces`;
 - если задача неактуальна, не удалять ее, а выполнить deactivation path: `status: not_applicable`, `closeout_reason`, evidence или `accepted_reason`;
 - обновить `reports/project-lifecycle-dashboard.md`.
+
+Replacement identity:
+
+- `handoff_group` — стабильный идентификатор задачи внутри чата/цепочки handoff;
+- `handoff_revision` — номер версии handoff в этой группе;
+- `replaces` — какие старые handoff items заменяет новый handoff;
+- `superseded_by` — каким новым item списан старый handoff;
+- `replacement_reason` — почему старый handoff заменен, например broken single-block shape, уточнение scope или переработка после вопроса пользователя.
 
 Dashboard может показывать `selected_profile`, `selected_model` и reasoning как readout из handoff/register. Это не auto-switch: уже открытая Codex-сессия не меняет route/model/reasoning из-за YAML или advisory text.
 
