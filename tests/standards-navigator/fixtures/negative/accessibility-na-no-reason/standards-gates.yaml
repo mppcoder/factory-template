@@ -1,0 +1,13 @@
+schema: standards-gates/v1
+selected_profile: solo_lightweight
+project_claims:
+  production_target: false
+  commercial_claim: false
+  ai_app: false
+  ai_ready_for_users: false
+  formal_certification_claim: false
+  compliance_claim: false
+  claim_evidence: []
+false_compliance_boundary: "No certification claim."
+gates:
+  - {id: accessibility_minimum_checked, status: not_applicable, standard_refs: [wcag_22], required_for_profile: [solo_lightweight], evidence: [], owner_boundary: internal-repo-follow-up}

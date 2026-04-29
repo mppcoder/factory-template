@@ -1,0 +1,176 @@
+schema: lifecycle-stage-map/v1
+standards_registry: template-repo/standards/lifecycle-standards-registry.yaml
+default_profile: solo_lightweight
+false_compliance_boundary: "Stage gates provide evidence control only; they do not certify compliance."
+
+phases:
+  - id: idea
+    purpose: "Capture product intent, users, risk class and whether AI/user data/production use may apply."
+    required_artifacts: [".chatgpt/task-index.yaml"]
+    gates: [lifecycle_intent_recorded]
+    applied_standards: [iso_12207, scrum_guide_2020]
+    solo_profile_checks: ["one clear outcome", "risk class noted"]
+    commercial_profile_checks: ["business owner and production intent recorded"]
+    evidence_required: [".chatgpt/task-index.yaml"]
+    dashboard_mapping: "lifecycle_phase.current=idea; standards_navigator.current_phase_required_standards"
+    owner_boundary: internal-repo-follow-up
+  - id: discovery_intake
+    purpose: "Normalize intake, project profile, stakeholders, constraints and route."
+    required_artifacts: [".chatgpt/stage-state.yaml", ".chatgpt/task-state.yaml"]
+    gates: [intake_complete, classification_complete]
+    applied_standards: [iso_12207, scrum_guide_2020]
+    solo_profile_checks: ["scope is small enough for one next step", "owner boundary separated"]
+    commercial_profile_checks: ["production/commercial claim classified"]
+    evidence_required: [".chatgpt/stage-state.yaml"]
+    dashboard_mapping: "stage_gates.intake, stage_gates.classification"
+    owner_boundary: internal-repo-follow-up
+  - id: feasibility_reality_check
+    purpose: "Check reuse, reality, constraints, brownfield risk and whether standards profile must escalate."
+    required_artifacts: [".chatgpt/reality-check.md"]
+    gates: [reuse_reality_check]
+    applied_standards: [iso_12207, iso_25010, nist_ssdf]
+    solo_profile_checks: ["reuse/reality-check done", "security and data risk noted"]
+    commercial_profile_checks: ["production security/accessibility/operations implications recorded"]
+    evidence_required: [".chatgpt/reality-check.md"]
+    dashboard_mapping: "stage_gates.reuse_reality_check"
+    owner_boundary: internal-repo-follow-up
+  - id: product_requirements
+    purpose: "Define user-visible behavior, acceptance criteria and non-goals."
+    required_artifacts: [".chatgpt/user-spec.md"]
+    gates: [product_requirements_recorded]
+    applied_standards: [iso_12207, scrum_guide_2020]
+    solo_profile_checks: ["user outcome and acceptance criteria recorded"]
+    commercial_profile_checks: ["commercial readiness and support expectations recorded"]
+    evidence_required: [".chatgpt/user-spec.md"]
+    dashboard_mapping: "stage_gates.spec"
+    owner_boundary: internal-repo-follow-up
+  - id: quality_requirements
+    purpose: "Record product quality expectations and quality tradeoffs."
+    required_artifacts: [".chatgpt/tech-spec.md", ".chatgpt/standards-gates.yaml"]
+    gates: [quality_minimum_checked]
+    applied_standards: [iso_25010]
+    solo_profile_checks: ["quality characteristics selected or accepted as not applicable"]
+    commercial_profile_checks: ["quality acceptance evidence required for release"]
+    evidence_required: [".chatgpt/tech-spec.md", ".chatgpt/standards-gates.yaml"]
+    dashboard_mapping: "standards_navigator.gates.quality_minimum_checked"
+    owner_boundary: internal-repo-follow-up
+  - id: architecture_design
+    purpose: "Choose architecture, data boundaries, security posture and accessibility approach."
+    required_artifacts: [".chatgpt/tech-spec.md", "docs/decisions/"]
+    gates: [architecture_decision_recorded, security_design_minimum_checked]
+    applied_standards: [iso_12207, iso_25010, nist_ssdf, owasp_asvs, wcag_22]
+    solo_profile_checks: ["main decisions and risks captured"]
+    commercial_profile_checks: ["threat model and accessibility approach captured"]
+    evidence_required: [".chatgpt/tech-spec.md"]
+    dashboard_mapping: "stage_gates.tech_spec; standards_navigator.gates"
+    owner_boundary: internal-repo-follow-up
+  - id: implementation
+    purpose: "Implement scoped work with traceable task state and secure development evidence."
+    required_artifacts: ["work/features/", ".chatgpt/task-state.yaml"]
+    gates: [implementation_traceable, secure_sdlc_minimum_checked]
+    applied_standards: [iso_12207, nist_ssdf, scrum_guide_2020]
+    solo_profile_checks: ["task evidence and verification command recorded"]
+    commercial_profile_checks: ["dependency/secrets/security evidence recorded"]
+    evidence_required: ["work/features/*/tasks/", "work/features/*/logs/checkpoint.yaml"]
+    dashboard_mapping: "multi_step_execution"
+    owner_boundary: internal-repo-follow-up
+  - id: security_review
+    purpose: "Verify relevant security controls before release or production claim."
+    required_artifacts: [".chatgpt/standards-gates.yaml", "VERIFY_SUMMARY.md"]
+    gates: [security_minimum_checked, web_security_checked]
+    applied_standards: [nist_ssdf, owasp_asvs]
+    solo_profile_checks: ["minimum security evidence or accepted reason"]
+    commercial_profile_checks: ["ASVS-relevant evidence and security review required"]
+    evidence_required: [".chatgpt/standards-gates.yaml", "VERIFY_SUMMARY.md"]
+    dashboard_mapping: "standards_navigator.missing_standards_evidence"
+    owner_boundary: internal-repo-follow-up
+  - id: accessibility_ux_review
+    purpose: "Check user-facing accessibility and beginner UX baseline."
+    required_artifacts: [".chatgpt/standards-gates.yaml"]
+    gates: [accessibility_minimum_checked]
+    applied_standards: [wcag_22]
+    solo_profile_checks: ["UI not applicable requires reason; otherwise basic accessibility evidence"]
+    commercial_profile_checks: ["WCAG 2.2 scoped review evidence"]
+    evidence_required: [".chatgpt/standards-gates.yaml"]
+    dashboard_mapping: "standards_navigator.gates.accessibility_minimum_checked"
+    owner_boundary: internal-repo-follow-up
+  - id: testing_verification
+    purpose: "Run targeted and quick verification, capture false-green blockers."
+    required_artifacts: ["TEST_REPORT.md", "VERIFY_SUMMARY.md"]
+    gates: [verification_complete, standards_evidence_complete]
+    applied_standards: [iso_25010, nist_ssdf, owasp_asvs, wcag_22]
+    solo_profile_checks: ["targeted verify covers changed layer"]
+    commercial_profile_checks: ["release-facing verify covers production gates"]
+    evidence_required: ["TEST_REPORT.md", "VERIFY_SUMMARY.md"]
+    dashboard_mapping: "stage_gates.verification; standards_navigator.allowed_to_advance_phase"
+    owner_boundary: internal-repo-follow-up
+  - id: release_readiness
+    purpose: "Decide release readiness without false compliance or production overclaim."
+    required_artifacts: ["RELEASE_NOTES.md", "VERIFY_SUMMARY.md", ".chatgpt/standards-gates.yaml"]
+    gates: [release_readiness_checked, false_compliance_checked]
+    applied_standards: [iso_12207, iso_25010, nist_ssdf, owasp_asvs, wcag_22, dora_metrics]
+    solo_profile_checks: ["release notes and verification evidence"]
+    commercial_profile_checks: ["commercial production gates passed"]
+    evidence_required: ["VERIFY_SUMMARY.md"]
+    dashboard_mapping: "release_readiness; standards_navigator.claims"
+    owner_boundary: internal-repo-follow-up
+  - id: deployment
+    purpose: "Deploy only with runtime boundary, approved secrets handling and rollback path."
+    required_artifacts: ["reports/release/", ".factory-runtime/reports/"]
+    gates: [deployment_ready, rollback_path_checked]
+    applied_standards: [iso_12207, nist_ssdf, dora_metrics]
+    solo_profile_checks: ["deploy evidence boundary clear"]
+    commercial_profile_checks: ["rollback, backup and runtime approval evidence"]
+    evidence_required: ["reports/release/", ".factory-runtime/reports/"]
+    dashboard_mapping: "deploy_runtime"
+    owner_boundary: runtime-action
+  - id: operate_monitor
+    purpose: "Monitor delivery/operations health and incident readiness."
+    required_artifacts: ["reports/software-updates/README.md", "reports/standards/README.md"]
+    gates: [operations_health_baseline, standards_monitoring_fresh]
+    applied_standards: [dora_metrics, nist_ssdf]
+    solo_profile_checks: ["manual health/readiness notes"]
+    commercial_profile_checks: ["DORA metrics or accepted measurement reason"]
+    evidence_required: ["reports/software-updates/README.md", "reports/standards/README.md"]
+    dashboard_mapping: "software_update_governance; standards_navigator.monitoring_status"
+    owner_boundary: internal-repo-follow-up
+  - id: maintenance_updates
+    purpose: "Handle software and standards updates through proposal-first governance."
+    required_artifacts: ["template-repo/standards/standards-watchlist.yaml"]
+    gates: [standards_watchlist_checked, update_proposal_policy_checked]
+    applied_standards: [iso_12207, dora_metrics]
+    solo_profile_checks: ["stale watchlist emits proposal-needed warning"]
+    commercial_profile_checks: ["impact classification before update"]
+    evidence_required: ["reports/standards/README.md"]
+    dashboard_mapping: "standards_navigator.monitoring_status"
+    owner_boundary: internal-repo-follow-up
+  - id: growth_monetization_readiness
+    purpose: "Escalate profile when product becomes commercial, paid or production-critical."
+    required_artifacts: [".chatgpt/standards-gates.yaml"]
+    gates: [commercial_profile_decision]
+    applied_standards: [iso_25010, nist_ssdf, owasp_asvs, wcag_22, dora_metrics]
+    solo_profile_checks: ["commercial trigger absent or accepted as future boundary"]
+    commercial_profile_checks: ["commercial_production profile selected and gates required"]
+    evidence_required: [".chatgpt/standards-gates.yaml"]
+    dashboard_mapping: "standards_navigator.claims"
+    owner_boundary: external-user-action
+  - id: incident_response
+    purpose: "Record incidents, fixes, recovery evidence and learning proposals."
+    required_artifacts: ["reports/bugs/", "reports/factory-feedback/"]
+    gates: [incident_recorded, recovery_evidence_recorded]
+    applied_standards: [nist_ssdf, dora_metrics, iso_12207]
+    solo_profile_checks: ["bug report and verification evidence"]
+    commercial_profile_checks: ["incident response and recovery metrics evidence"]
+    evidence_required: ["reports/bugs/", "VERIFY_SUMMARY.md"]
+    dashboard_mapping: "post_release_improvement; standards_navigator.gates"
+    owner_boundary: internal-repo-follow-up
+  - id: deprecation_retirement
+    purpose: "Retire safely: user notice, data/export boundary, archive and rollback documentation."
+    required_artifacts: ["docs/decisions/", "reports/release/"]
+    gates: [retirement_plan_recorded]
+    applied_standards: [iso_12207, nist_ssdf, wcag_22]
+    solo_profile_checks: ["archive and user/data boundary recorded"]
+    commercial_profile_checks: ["support/commercial obligations resolved"]
+    evidence_required: ["docs/decisions/"]
+    dashboard_mapping: "lifecycle_phase.current=improve or operate with retirement decision"
+    owner_boundary: internal-repo-follow-up

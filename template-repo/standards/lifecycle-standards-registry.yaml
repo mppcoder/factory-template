@@ -1,0 +1,153 @@
+schema: lifecycle-standards-registry/v1
+last_reviewed_utc: "2026-04-29T00:00:00Z"
+default_profile: solo_lightweight
+false_compliance_boundary: "This registry maps project work to standards-inspired evidence gates. It is not certification, accreditation, audit attestation or legal compliance proof."
+
+profiles:
+  solo_lightweight:
+    description: "Default solo/small-company profile. Minimal evidence, no false green, no formal certification claim."
+    required_standards:
+      - iso_12207
+      - scrum_guide_2020
+      - iso_25010
+      - nist_ssdf
+      - owasp_asvs
+      - wcag_22
+      - dora_metrics
+    conditional_standards:
+      - openai_ai_safety_overlay
+    escalation_triggers:
+      - "commercial or paid production use"
+      - "user data, payments, health, finance, legal, employment, education or other high-impact domain"
+      - "public launch with availability promise"
+      - "AI outputs that can materially affect users"
+  commercial_production:
+    description: "Production/commercial profile. Requires stronger quality, security, accessibility, delivery and operations evidence."
+    required_standards:
+      - iso_12207
+      - scrum_guide_2020
+      - iso_25010
+      - nist_ssdf
+      - owasp_asvs
+      - wcag_22
+      - dora_metrics
+    conditional_standards:
+      - openai_ai_safety_overlay
+    extra_gates:
+      - commercial_release_readiness
+      - production_security_review
+      - production_accessibility_review
+      - operations_health_baseline
+      - incident_response_ready
+  custom:
+    description: "Explicitly documented deviations for regulated, unusual or operator-approved cases."
+    required_artifacts:
+      - ".chatgpt/standards-gates.yaml"
+      - "docs/standards/custom-profile-decision.md"
+    rule: "Custom profile must list included/excluded standards, accepted reasons and owner boundary."
+
+standards:
+  iso_12207:
+    title: "ISO/IEC/IEEE 12207"
+    role: lifecycle_backbone
+    selected_version: "2017"
+    fallback_version: "2017"
+    source_url: "https://www.iso.org/standard/63712.html"
+    source_verification_status: current_with_revision_pending
+    source_checked_utc: "2026-04-29T00:00:00Z"
+    update_monitoring: manual_watchlist
+    applicability: "Use as lifecycle process backbone from idea/intake through operation, maintenance and retirement."
+    false_compliance_boundary: "Do not claim ISO certification or formal ISO conformance from repo evidence."
+    verify_current_gate: true
+    notes:
+      - "ISO source shows ISO/IEC/IEEE 12207:2017 as published/current and also expected to be revised."
+  scrum_guide_2020:
+    title: "The Scrum Guide"
+    role: solo_execution_rhythm
+    selected_version: "2020-11"
+    fallback_version: "2020-11"
+    source_url: "https://scrumguides.org/docs/scrumguide/v2020/2020-Scrum-Guide-US.pdf"
+    source_verification_status: current_practice_baseline
+    source_checked_utc: "2026-04-29T00:00:00Z"
+    update_monitoring: manual_watchlist
+    applicability: "Use lightly for product goal, sprint-sized work and inspection/adaptation; combine with Kanban-lite flow for solo work."
+    false_compliance_boundary: "Do not require enterprise Scrum roles/events for solo projects."
+  iso_25010:
+    title: "ISO/IEC 25010"
+    role: product_quality_model
+    selected_version: "2023"
+    fallback_version: "2011"
+    source_url: "https://www.iso.org/standard/78176.html"
+    source_verification_status: current_published
+    source_checked_utc: "2026-04-29T00:00:00Z"
+    update_monitoring: manual_watchlist
+    applicability: "Use for quality requirements, architecture tradeoffs, testing objectives and acceptance criteria."
+    false_compliance_boundary: "Do not claim ISO 25010 certification; record quality evidence only."
+  nist_ssdf:
+    title: "NIST SP 800-218 Secure Software Development Framework"
+    role: secure_sdlc
+    selected_version: "1.1"
+    fallback_version: "1.1"
+    source_url: "https://csrc.nist.gov/pubs/sp/800/218/final"
+    source_verification_status: current_final
+    source_checked_utc: "2026-04-29T00:00:00Z"
+    update_monitoring: manual_watchlist
+    applicability: "Use as secure SDLC practice vocabulary and evidence map."
+    false_compliance_boundary: "Do not claim NIST certification or government compliance from template gates."
+  owasp_asvs:
+    title: "OWASP Application Security Verification Standard"
+    role: web_security_verification
+    selected_version: "5.0.0"
+    fallback_version: "4.0.3"
+    source_url: "https://github.com/OWASP/ASVS/releases"
+    source_verification_status: current_stable_release
+    source_checked_utc: "2026-04-29T00:00:00Z"
+    update_monitoring: manual_watchlist
+    applicability: "Use as web application security verification checklist; pick relevant level and controls."
+    false_compliance_boundary: "Do not claim OWASP certification; ASVS evidence is project verification evidence."
+  wcag_22:
+    title: "Web Content Accessibility Guidelines"
+    role: accessibility_ui_baseline
+    selected_version: "2.2"
+    fallback_version: "2.1"
+    source_url: "https://www.w3.org/TR/WCAG22/"
+    source_verification_status: current_w3c_recommendation
+    source_checked_utc: "2026-04-29T00:00:00Z"
+    update_monitoring: manual_watchlist
+    applicability: "Use as UI/accessibility baseline for web/user-facing work."
+    false_compliance_boundary: "Do not claim WCAG conformance without project-specific audit evidence and scoped conformance statement."
+  dora_metrics:
+    title: "DORA software delivery performance metrics"
+    role: delivery_operations_health
+    selected_version: "current-five-metric-model"
+    fallback_version: "legacy-four-key-metrics"
+    source_url: "https://dora.dev/guides/dora-metrics/"
+    source_verification_status: current_dora_guidance
+    source_checked_utc: "2026-04-29T00:00:00Z"
+    update_monitoring: manual_watchlist
+    applicability: "Use for release/operate health: change lead time, deployment frequency, failed deployment recovery time, change fail rate and deployment rework rate where measurable."
+    false_compliance_boundary: "Do not turn DORA into a vanity score or certification claim."
+  openai_ai_safety_overlay:
+    title: "OpenAI safety/model-spec-inspired AI application guardrails"
+    role: ai_specific_overlay
+    selected_version: "living-guidance-2026-04"
+    fallback_version: "manual-review-required"
+    source_url:
+      - "https://developers.openai.com/api/docs/guides/agent-builder-safety"
+      - "https://openai.com/index/prompt-injections/"
+      - "https://platform.openai.com/docs/guides/moderation"
+    source_verification_status: living_guidance_manual_monitoring
+    source_checked_utc: "2026-04-29T00:00:00Z"
+    update_monitoring: manual_watchlist
+    applicability: "Apply when the product uses AI model calls, agents, tool use, moderation, user-generated content or high-impact AI outputs."
+    false_compliance_boundary: "This is an application safety overlay, not OpenAI certification or a guarantee that prompt injection is solved."
+
+standard_drift_policy:
+  default_action: proposal_required
+  required_flow:
+    - standards-update-proposal
+    - impact-classification
+    - user-approval
+    - template-update
+    - validator-fixture-refresh
+  quick_verify_network_access: forbidden

@@ -178,6 +178,18 @@ python3 template-repo/scripts/check-codex-model-catalog.py . --write-proposal
 
 Dashboard агрегирует task/stage state, feature execution progress, orchestration cockpit, release readiness и runtime signals. Он не заменяет cockpit или operator dashboard и не добавляет heavy runtime. Advisory route text может быть показан как readout, но не считается auto-switch mechanism для уже открытой Codex-сессии.
 
+## Standards navigator / контроль жизненного цикла по стандартам
+
+Поверх lifecycle dashboard добавлен lightweight standards navigator:
+
+- registry: `template-repo/standards/lifecycle-standards-registry.yaml`;
+- phase map: `template-repo/standards/lifecycle-stage-map.yaml`;
+- generated gates: `template-repo/template/.chatgpt/standards-gates.yaml`;
+- validator: `template-repo/scripts/validate-standards-gates.py`;
+- offline watchlist: `template-repo/scripts/check-standards-watchlist.py`.
+
+Default profile для одного разработчика: `solo_lightweight`. Для commercial/production-critical проекта профиль эскалируется до `commercial_production`. Слой использует ISO/IEC/IEEE 12207, Scrum Guide/Kanban-lite, ISO 25010, NIST SSDF, OWASP ASVS, WCAG, DORA и AI safety overlay как evidence map, но не заявляет formal certification/compliance.
+
 ## Optional skills quality loop для skills
 
 Для развития самого `factory-template` доступен облегченный advanced-контур для skills и prompt-like artifacts:

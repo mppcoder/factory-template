@@ -1,0 +1,24 @@
+schema: standards-gates/v1
+selected_profile: commercial_production
+standards_registry: template-repo/standards/lifecycle-standards-registry.yaml
+stage_map: template-repo/standards/lifecycle-stage-map.yaml
+project_claims:
+  production_target: true
+  commercial_claim: true
+  ai_app: false
+  ai_ready_for_users: false
+  formal_certification_claim: false
+  compliance_claim: false
+  claim_evidence: ["docs/decisions/commercial-profile.md"]
+false_green_policy: "green gates need evidence or accepted_reason"
+false_compliance_boundary: "No certification claim."
+standard_versions:
+  - {standard_ref: iso_25010, selected_version: "2023", version_status: current_published, dashboard_current_claim: true}
+  - {standard_ref: owasp_asvs, selected_version: "5.0.0", version_status: current_stable_release, dashboard_current_claim: true}
+gates:
+  - {id: security_minimum_checked, status: passed, standard_refs: [nist_ssdf], required_for_profile: [solo_lightweight, commercial_production], evidence: ["reports/security/ssdf-review.md"], owner_boundary: internal-repo-follow-up}
+  - {id: web_security_checked, status: passed, standard_refs: [owasp_asvs], required_for_profile: [commercial_production], evidence: ["reports/security/asvs-review.md"], owner_boundary: internal-repo-follow-up}
+  - {id: accessibility_minimum_checked, status: passed, standard_refs: [wcag_22], required_for_profile: [solo_lightweight, commercial_production], evidence: ["reports/accessibility/wcag-22-review.md"], owner_boundary: internal-repo-follow-up}
+  - {id: operations_health_baseline, status: passed, standard_refs: [dora_metrics], required_for_profile: [commercial_production], evidence: ["reports/operations/dora-baseline.md"], owner_boundary: internal-repo-follow-up}
+  - {id: false_compliance_checked, status: passed, standard_refs: [iso_12207, iso_25010, nist_ssdf, owasp_asvs, wcag_22, dora_metrics], required_for_profile: [solo_lightweight, commercial_production], evidence: ["VERIFY_SUMMARY.md"], owner_boundary: internal-repo-follow-up}
+  - {id: ai_safety_gate, status: not_applicable, standard_refs: [openai_ai_safety_overlay], required_for_profile: [solo_lightweight, commercial_production], evidence: [], accepted_reason: "Commercial app does not use AI.", owner_boundary: internal-repo-follow-up}

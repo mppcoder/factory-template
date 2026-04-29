@@ -1,9 +1,9 @@
 schema: orchestration-cockpit/v1
 parent:
-  id: plan-6-orchestration-productization
-  title: Plan №6 beginner-first full handoff UX
+  id: p9-lifecycle-standards-navigator
+  title: Standards-based lifecycle navigator/control layer
   launch_source: chatgpt-handoff
-  status: planned
+  status: completed
   selected_scenario: template-repo/scenario-pack/00-master-router.md -> template-repo/scenario-pack/15-handoff-to-codex.md
   apply_mode: manual-ui
   strict_launch_mode: optional
@@ -13,40 +13,92 @@ route_receipt:
   selected_model: gpt-5.5
   selected_reasoning_effort: high
   selected_plan_mode_reasoning_effort: high
-  route_explanation: "deterministic keywords: deep, audit, orchestration, verification; repo-configured mapping requires live catalog validation when catalog is stale or unavailable"
+  route_explanation: "deterministic keyword/rule-based evidence: incoming chatgpt-handoff, task_class deep, parent orchestration, standards lifecycle navigator; repo-configured mapping uses gpt-5.5/high and live catalog validation boundary remains separate; advisory handoff text does not auto-switch an already-open Codex session"
 child_tasks:
-  - id: p6-s0-audit-roadmap
-    title: Зафиксировать Plan №6 source map, gap map и roadmap после Plan №5
+  - id: p9-s0-gap-source-map
+    title: Gap capture and source map for standards lifecycle navigator
     task_class: deep
     selected_profile: deep
     selected_model: gpt-5.5
     selected_reasoning_effort: high
-    status: planned
+    status: executed
     owner_boundary: internal-repo-follow-up
-  - id: p6-s1-cockpit-lite
-    title: Добавить operator-cockpit-lite для beginner-readable orchestration status
+  - id: p9-s1-standards-registry
+    title: Add machine-readable lifecycle standards registry
     task_class: build
     selected_profile: build
     selected_model: gpt-5.5
     selected_reasoning_effort: medium
-    status: planned
+    status: executed
+    owner_boundary: internal-repo-follow-up
+  - id: p9-s2-stage-map-and-gates
+    title: Add lifecycle phase map and standards gates template
+    task_class: build
+    selected_profile: build
+    selected_model: gpt-5.5
+    selected_reasoning_effort: medium
+    status: executed
+    owner_boundary: internal-repo-follow-up
+  - id: p9-s3-dashboard-integration
+    title: Integrate standards navigator into lifecycle dashboard
+    task_class: build
+    selected_profile: build
+    selected_model: gpt-5.5
+    selected_reasoning_effort: medium
+    status: executed
+    owner_boundary: internal-repo-follow-up
+  - id: p9-s4-standards-monitoring
+    title: Add lightweight standards monitoring and proposal mechanism
+    task_class: build
+    selected_profile: build
+    selected_model: gpt-5.5
+    selected_reasoning_effort: medium
+    status: executed
+    owner_boundary: internal-repo-follow-up
+  - id: p9-s5-docs-beginner-ux
+    title: Document standards navigator and beginner UX
+    task_class: quick
+    selected_profile: quick
+    selected_model: gpt-5.4-mini
+    selected_reasoning_effort: low
+    status: executed
+    owner_boundary: internal-repo-follow-up
+  - id: p9-s6-validators-fixtures
+    title: Add validators and fixtures for standards navigator
+    task_class: review
+    selected_profile: review
+    selected_model: gpt-5.5
+    selected_reasoning_effort: high
+    status: executed
+    owner_boundary: internal-repo-follow-up
+  - id: p9-s7-final-review-sync-closeout
+    title: Final review, verify, release-facing consistency and sync
+    task_class: review
+    selected_profile: review
+    selected_model: gpt-5.5
+    selected_reasoning_effort: high
+    status: executed
     owner_boundary: internal-repo-follow-up
 blockers: []
 deferred_user_actions:
-  - id: real-downstream-app-proof
-    action: "P4-S5/P4-S6 real downstream/battle app proof запускать только при real downstream repo, real APP_IMAGE, approved VPS/staging target, secrets outside repo and sanitized transcript."
+  - id: approve-future-standards-version-change
+    action: "В будущем подтвердить или отклонить standards-update-proposal, если мониторинг обнаружит новую версию стандарта или изменение применимости gates."
     timing: future-boundary
-    owner_boundary: downstream-battle-action
+    owner_boundary: external-user-action
+  - id: select-commercial-production-profile
+    action: "Для конкретного боевого проекта подтвердить переход с solo_lightweight на commercial_production profile, если проект становится коммерческим/production-critical."
+    timing: future-boundary
+    owner_boundary: external-user-action
 placeholder_replacements:
-  - placeholder: __REAL_DOWNSTREAM_REPO__
-    description: "Настоящий downstream/battle repo path для будущего P4-S5/P4-S6."
+  - placeholder: __OFFICIAL_STANDARDS_SOURCE_URLS__
+    description: "Точные официальные ссылки/версии стандартов для manual/live standards research proposal, если repo не содержит актуального source map."
     final_value_owner: operator
     replacement_timing: future-user-action
-  - placeholder: __REAL_APP_IMAGE__
-    description: "Настоящий application image для future real downstream app proof."
+  - placeholder: __BATTLE_PROJECT_STANDARDS_PROFILE__
+    description: "Выбранный профиль конкретного боевого проекта: solo_lightweight, commercial_production или custom."
     final_value_owner: operator
-    replacement_timing: future-user-action
+    replacement_timing: final-user-action
 next_action:
   owner_boundary: internal-repo-follow-up
-  action: "Validate parent plan, run orchestration runner, render cockpit, run targeted validators."
-continuation_outcome: "Текущий internal scope продолжается в parent Codex; внешних действий до финального closeout нет."
+  action: "Зафиксировать verified sync closeout и future standards proposal boundary."
+continuation_outcome: "P9 internal scope verified; внешних действий сейчас нет, future standards/version decisions deferred."

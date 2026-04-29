@@ -352,8 +352,85 @@ run_project_lifecycle_dashboard_smoke() {
     cat /tmp/project-lifecycle-dashboard-bad-boundary.log >&2
     return 1
   fi
+
+  python3 - "$ROOT/tests/project-lifecycle-dashboard/valid/project-lifecycle-dashboard.yaml" "$tmp_dir" <<'PY'
+from pathlib import Path
+import sys
+import yaml
+
+source = Path(sys.argv[1])
+target_dir = Path(sys.argv[2])
+base = yaml.safe_load(source.read_text(encoding="utf-8"))
+
+def write_case(name, mutate):
+    data = yaml.safe_load(yaml.safe_dump(base, allow_unicode=True))
+    mutate(data)
+    path = target_dir / f"{name}.yaml"
+    path.write_text(yaml.safe_dump(data, allow_unicode=True, sort_keys=False), encoding="utf-8")
+
+write_case("production-solo", lambda data: data["standards_navigator"]["claims"].update({"production_target": True}))
+
+def ai_without_gate(data):
+    data["standards_navigator"]["claims"].update({"ai_app": True, "ai_ready_for_users": True})
+    data["standards_navigator"]["gates"] = [
+        gate for gate in data["standards_navigator"]["gates"] if gate.get("id") != "ai_safety_gate"
+    ]
+write_case("ai-without-gate", ai_without_gate)
+
+def stale_overclaim(data):
+    data["standards_navigator"]["lifecycle_backbone"]["version_status"] = "stale"
+    data["standards_navigator"]["lifecycle_backbone"]["source_verification_status"] = "current_published"
+write_case("stale-overclaim", stale_overclaim)
+
+def compliance_without_evidence(data):
+    data["standards_navigator"]["claims"].update({
+        "formal_certification_claim": True,
+        "compliance_claim": True,
+        "claim_evidence": [],
+    })
+write_case("compliance-without-evidence", compliance_without_evidence)
+PY
+
+  for fixture in production-solo ai-without-gate stale-overclaim compliance-without-evidence; do
+    if python3 "$ROOT/template-repo/scripts/validate-project-lifecycle-dashboard.py" \
+      "$tmp_dir/$fixture.yaml" \
+      >"/tmp/project-lifecycle-dashboard-$fixture.log" 2>&1; then
+      echo "project lifecycle dashboard standards negative fixture unexpectedly passed: $fixture" >&2
+      cat "/tmp/project-lifecycle-dashboard-$fixture.log" >&2
+      return 1
+    fi
+    rm -f "/tmp/project-lifecycle-dashboard-$fixture.log"
+  done
+
   rm -f /tmp/project-lifecycle-dashboard-false-green.log /tmp/project-lifecycle-dashboard-false-autoswitch.log /tmp/project-lifecycle-dashboard-bad-boundary.log
   rm -rf "$tmp_dir"
+}
+
+run_standards_navigator_smoke() {
+  python3 "$ROOT/template-repo/scripts/validate-standards-gates.py" \
+    "$ROOT/template-repo/template/.chatgpt/standards-gates.yaml"
+  python3 "$ROOT/template-repo/scripts/check-standards-watchlist.py" --root "$ROOT"
+  python3 "$ROOT/template-repo/scripts/validate-standards-gates.py" \
+    "$ROOT/tests/standards-navigator/fixtures/positive/solo-intake/standards-gates.yaml"
+  python3 "$ROOT/template-repo/scripts/validate-standards-gates.py" \
+    "$ROOT/tests/standards-navigator/fixtures/positive/commercial-production/standards-gates.yaml"
+  for fixture in \
+    production-claim-solo \
+    security-no-evidence \
+    accessibility-na-no-reason \
+    ai-no-safety \
+    stale-overclaim \
+    compliance-claim-no-evidence
+  do
+    if python3 "$ROOT/template-repo/scripts/validate-standards-gates.py" \
+      "$ROOT/tests/standards-navigator/fixtures/negative/$fixture/standards-gates.yaml" \
+      >"/tmp/standards-navigator-$fixture.log" 2>&1; then
+      echo "standards navigator negative fixture unexpectedly passed: $fixture" >&2
+      cat "/tmp/standards-navigator-$fixture.log" >&2
+      return 1
+    fi
+    rm -f "/tmp/standards-navigator-$fixture.log"
+  done
 }
 
 run_curated_pack_quality_smoke() {
@@ -398,6 +475,7 @@ run_generated_project_quick() {
   run_step "validate-stage" python3 "$ROOT/scripts/validate-stage.py" "$ROOT"
   run_step "validate-task-state-lite" python3 "$ROOT/scripts/validate-task-state-lite.py" "$ROOT"
   run_step "validate-project-lifecycle-dashboard" python3 "$ROOT/scripts/validate-project-lifecycle-dashboard.py" "$ROOT/.chatgpt/project-lifecycle-dashboard.yaml"
+  run_step "validate-standards-gates" python3 "$ROOT/scripts/validate-standards-gates.py" "$ROOT"
   run_step "validate-software-update-governance" python3 "$ROOT/scripts/validate-software-update-governance.py" "$ROOT"
   run_step "validate-feature-execution-lite" python3 "$ROOT/scripts/validate-feature-execution-lite.py" "$ROOT"
   run_step "validate-learning-patch-loop" python3 "$ROOT/scripts/validate-learning-patch-loop.py" "$ROOT"
@@ -455,6 +533,7 @@ run_quick() {
   run_step "codex-orchestration-runner-negative-smoke" run_codex_orchestration_runner_negative_smoke
   run_step "plan6-productization-smoke" run_plan6_productization_smoke
   run_step "project-lifecycle-dashboard-smoke" run_project_lifecycle_dashboard_smoke
+  run_step "standards-navigator-smoke" run_standards_navigator_smoke
   run_step "curated-pack-quality-smoke" run_curated_pack_quality_smoke
   run_step "validate-verified-sync-fallback-evidence" python3 "$ROOT/template-repo/scripts/validate-verified-sync-fallback-evidence.py" "$ROOT/reports/release/verified-sync-fallback-evidence.md"
   run_step "project-knowledge-done-loop-smoke" run_project_knowledge_done_loop_smoke

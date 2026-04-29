@@ -147,6 +147,7 @@ def render(data: dict[str, Any], root: Path, dashboard_path: Path) -> str:
     orchestration = data.get("handoff_orchestration", {}) if isinstance(data.get("handoff_orchestration"), dict) else {}
     release = data.get("release_readiness", {}) if isinstance(data.get("release_readiness"), dict) else {}
     runtime = data.get("deploy_runtime", {}) if isinstance(data.get("deploy_runtime"), dict) else {}
+    standards = data.get("standards_navigator", {}) if isinstance(data.get("standards_navigator"), dict) else {}
     software_updates = data.get("software_update_governance", {}) if isinstance(data.get("software_update_governance"), dict) else {}
     post_release = data.get("post_release_improvement", {}) if isinstance(data.get("post_release_improvement"), dict) else {}
     runbook_packages = data.get("runbook_packages", []) if isinstance(data.get("runbook_packages"), list) else []
@@ -183,7 +184,7 @@ def render(data: dict[str, Any], root: Path, dashboard_path: Path) -> str:
         f"- boundary: `{change['owner_boundary']}`",
         f"- task-state next action: {value(task_state, 'next_action', 'summary')}",
         "",
-        "## Stage gates",
+            "## Гейты этапов",
         "",
         "| Gate | Status | Evidence / reason |",
         "|---|---|---|",
@@ -195,7 +196,7 @@ def render(data: dict[str, Any], root: Path, dashboard_path: Path) -> str:
     lines.extend(
         [
             "",
-            "## Multi-step execution",
+            "## Многошаговое выполнение",
             "",
             f"- current wave: `{execution.get('current_wave', '')}`",
             f"- completed tasks: `{', '.join(map(str, execution.get('completed_tasks', []) or [])) or 'none'}`",
@@ -220,13 +221,13 @@ def render(data: dict[str, Any], root: Path, dashboard_path: Path) -> str:
     lines.extend(
         [
             "",
-            "## Handoff / orchestration",
+            "## Передача и оркестрация",
             "",
             f"- parent handoff: `{value(orchestration, 'parent_handoff', 'id') or cockpit_parent.get('id', '')}` `{value(orchestration, 'parent_handoff', 'status') or cockpit_parent.get('status', '')}`",
             f"- selected profile/model/reasoning: `{orchestration.get('selected_profile') or cockpit_route.get('selected_profile', '')}` / `{orchestration.get('selected_model') or cockpit_route.get('selected_model', '')}` / `{orchestration.get('selected_reasoning_effort') or cockpit_route.get('selected_reasoning_effort', '')}`",
             f"- route boundary: {orchestration.get('route_explanation_boundary', '')}",
             "",
-            "## Runbook packages",
+            "## Пакеты операторских сценариев",
             "",
             "| Package | Phase | Gates | Blockers | Next action |",
             "|---|---|---|---|---|",
@@ -244,7 +245,7 @@ def render(data: dict[str, Any], root: Path, dashboard_path: Path) -> str:
     lines.extend(
         [
             "",
-            "## Release readiness",
+            "## Готовность релиза",
             "",
             f"- version: `{release.get('version', '')}`",
             f"- status: `{release.get('status', '')}`",
@@ -252,7 +253,7 @@ def render(data: dict[str, Any], root: Path, dashboard_path: Path) -> str:
             f"- changelog/release notes/scorecard: `{release.get('changelog', '')}` / `{release.get('release_notes', '')}` / `{release.get('scorecard', '')}`",
             f"- VERIFY_SUMMARY present: `{bool(context.get('verify_summary'))}`",
             "",
-            "## Deploy / runtime",
+            "## Развертывание и выполнение",
             "",
             f"- status: `{runtime.get('status', '')}`",
             f"- preset: `{runtime.get('preset', '')}`",
@@ -261,7 +262,19 @@ def render(data: dict[str, Any], root: Path, dashboard_path: Path) -> str:
             f"- deploy report present: `{bool(context.get('runtime_reports', {}).get('deploy'))}`",
             f"- boundary: {runtime.get('boundary', '')}",
             "",
-            "## Software update governance",
+            "## Навигатор стандартов",
+            "",
+            f"- profile: `{standards.get('selected_profile', '')}`",
+            f"- lifecycle backbone: `{value(standards, 'lifecycle_backbone', 'standard_ref')}` `{value(standards, 'lifecycle_backbone', 'selected_version')}` (`{value(standards, 'lifecycle_backbone', 'version_status')}`)",
+            f"- gate summary: `{value(standards, 'gate_summary', 'passed')}/{value(standards, 'gate_summary', 'total')}` passed; missing `{value(standards, 'gate_summary', 'missing')}`; blocking `{value(standards, 'gate_summary', 'blocking')}`",
+            f"- current phase standards: `{value(standards, 'current_phase_required_standards', 'phase')}` -> {', '.join(map(str, list_value(standards, 'current_phase_required_standards', 'standard_refs'))) or 'none'}",
+            f"- missing evidence: `{', '.join(map(str, standards.get('missing_standards_evidence', []) or [])) or 'none'}`",
+            f"- next standards action: {value(standards, 'next_safe_standards_action', 'action')}",
+            f"- monitoring: `{value(standards, 'monitoring_status', 'status')}`; proposal_required `{value(standards, 'monitoring_status', 'proposal_required')}`",
+            f"- allowed to advance phase: `{standards.get('allowed_to_advance_phase', '')}`",
+            f"- boundary: {standards.get('false_compliance_boundary', '')}",
+            "",
+            "## Управление обновлениями",
             "",
             f"- baseline status: `{software_updates.get('baseline_status', '')}`",
             f"- auto-update policy: `{software_updates.get('auto_update_policy', '')}`",
@@ -272,14 +285,14 @@ def render(data: dict[str, Any], root: Path, dashboard_path: Path) -> str:
             f"- next safe action: {value(software_updates, 'next_safe_action', 'action')}",
             f"- fallback action: {value(software_updates, 'fallback_action', 'action')}",
             "",
-            "## Post-release improvement",
+            "## Улучшения после релиза",
             "",
             f"- incidents: `{len(post_release.get('incidents', []) or [])}`",
             f"- feedback: `{len(post_release.get('feedback', []) or [])}`",
             f"- learning proposals: `{len(post_release.get('learning_proposals', []) or [])}`",
             f"- backlog candidates: `{len(post_release.get('backlog_candidates', []) or [])}`",
             "",
-            "## External actions ledger",
+            "## Реестр внешних действий",
             "",
             bullet(data.get("external_actions_ledger", []) or [], empty="- внешних/manual действий сейчас нет"),
             "",

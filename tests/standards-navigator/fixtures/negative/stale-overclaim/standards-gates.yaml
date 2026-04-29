@@ -1,0 +1,15 @@
+schema: standards-gates/v1
+selected_profile: solo_lightweight
+project_claims:
+  production_target: false
+  commercial_claim: false
+  ai_app: false
+  ai_ready_for_users: false
+  formal_certification_claim: false
+  compliance_claim: false
+  claim_evidence: []
+false_compliance_boundary: "No certification claim."
+standard_versions:
+  - {standard_ref: iso_12207, selected_version: "2017", version_status: stale, dashboard_current_claim: true}
+gates:
+  - {id: lifecycle_intent_recorded, status: passed, standard_refs: [iso_12207], required_for_profile: [solo_lightweight], evidence: [".chatgpt/task-index.yaml"], owner_boundary: internal-repo-follow-up}

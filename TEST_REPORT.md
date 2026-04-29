@@ -4,6 +4,35 @@ Status source of truth: `docs/releases/release-scorecard.yaml`.
 Current scorecard state: `2.5.0 GA Ready`.
 TEST_REPORT.md is verification evidence, not the canonical release-status source.
 
+## Проверка P9 lifecycle standards navigator
+
+Дата: `2026-04-29`.
+
+P9 добавил standards-based lifecycle navigator/control layer для самого `factory-template` и generated projects без web UI, daemon, background worker или formal certification claim.
+
+- Gap capture: `reports/gaps/lifecycle-standards-navigator-gap.md`.
+- ADR: `docs/decisions/lifecycle-standards-stack.md`.
+- Registry/watchlist/stage map: `template-repo/standards/lifecycle-standards-registry.yaml`, `template-repo/standards/standards-watchlist.yaml`, `template-repo/standards/lifecycle-stage-map.yaml`.
+- Generated gates: `template-repo/template/.chatgpt/standards-gates.yaml`.
+- Dashboard integration: `template-repo/template/.chatgpt/project-lifecycle-dashboard.yaml`, `template-repo/scripts/render-project-lifecycle-dashboard.py`, `template-repo/scripts/validate-project-lifecycle-dashboard.py`.
+- Validators/monitoring: `template-repo/scripts/validate-standards-gates.py`, `template-repo/scripts/check-standards-watchlist.py`.
+- Docs/beginner UX: `docs/standards/lifecycle-standards-navigator.md`, `docs/operator/factory-template/07-beginner-visual-dashboard-ux.md`.
+- Parent orchestration: `reports/orchestration/p9-lifecycle-standards-navigator-parent-plan.yaml`, `reports/orchestration/p9-lifecycle-standards-navigator-report.md`, `reports/orchestration/p9-sessions/`.
+
+Проверки:
+
+- `python3 template-repo/scripts/validate-parent-orchestration-plan.py --root . --plan reports/orchestration/p9-lifecycle-standards-navigator-parent-plan.yaml` — pass.
+- `python3 template-repo/scripts/validate-standards-gates.py template-repo/template/.chatgpt/standards-gates.yaml` — pass.
+- `python3 template-repo/scripts/check-standards-watchlist.py --root .` — pass.
+- Positive standards fixtures `solo-intake` and `commercial-production` — pass.
+- Negative standards fixtures `production-claim-solo`, `security-no-evidence`, `accessibility-na-no-reason`, `ai-no-safety`, `stale-overclaim`, `compliance-claim-no-evidence` — validators return non-zero as expected.
+- `python3 template-repo/scripts/validate-project-lifecycle-dashboard.py template-repo/template/.chatgpt/project-lifecycle-dashboard.yaml` — pass.
+- `python3 template-repo/scripts/validate-orchestration-cockpit.py template-repo/template/.chatgpt/orchestration-cockpit.yaml` — pass.
+- `python3 template-repo/scripts/validate-human-language-layer.py .` — pass, active findings `0`.
+- `bash template-repo/scripts/verify-all.sh quick` — pass on `2026-04-29`; includes `standards-navigator-smoke` and extended lifecycle dashboard negative smoke.
+
+Full verify decision: не запускался, потому что change затрагивает docs/templates/validators/fixtures/dashboard reports без изменения launcher/runtime/scaffold matrix. Quick verify покрывает targeted validator layer and release-facing guardrails.
+
 ## Проверка Plan №6 orchestration productization
 
 Дата: `2026-04-28`.

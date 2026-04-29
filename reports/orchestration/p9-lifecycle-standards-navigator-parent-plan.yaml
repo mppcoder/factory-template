@@ -1,0 +1,142 @@
+schema: codex-orchestration/v1
+parent:
+  id: p9-lifecycle-standards-navigator
+  title: "Standards-based lifecycle navigator/control layer for factory-template"
+  launch_source: chatgpt-handoff
+  selected_scenario: template-repo/scenario-pack/00-master-router.md -> template-repo/scenario-pack/15-handoff-to-codex.md
+  apply_mode: manual-ui
+  strict_launch_mode: optional
+  default_context: VPS Remote SSH repo context
+  user_actions_policy: defer-to-final-closeout
+subtasks:
+  - id: p9-s0-gap-source-map
+    title: "Gap capture and source map for standards lifecycle navigator"
+    task_class: deep
+    selected_profile: deep
+    selected_model: gpt-5.5
+    selected_reasoning_effort: high
+    selected_plan_mode_reasoning_effort: high
+    selected_scenario: template-repo/scenario-pack/00-master-router.md
+    owner_boundary: internal-repo-follow-up
+    artifacts_to_update:
+      - reports/gaps/lifecycle-standards-navigator-gap.md
+      - docs/decisions/lifecycle-standards-stack.md
+    prompt: "Прочитать repo-router и lifecycle/dashboard/control artifacts. Зафиксировать gap: есть dashboard/task-state/cockpit/operator-dashboard, но нет standards-based lifecycle navigator. Создать gap report и ADR. В ADR обосновать lightweight standards stack для solo/small-company проекта: ISO/IEC/IEEE 12207 as lifecycle backbone, Scrum/Kanban-lite as rhythm, ISO 25010, NIST SSDF, OWASP ASVS, WCAG, DORA, AI-specific OpenAI safety overlay. Не заявлять certification. Если версия стандарта не подтверждена repo/current official source, зафиксировать verify-current gate."
+  - id: p9-s1-standards-registry
+    title: "Add machine-readable lifecycle standards registry"
+    task_class: build
+    selected_profile: build
+    selected_model: gpt-5.5
+    selected_reasoning_effort: medium
+    selected_plan_mode_reasoning_effort: medium
+    selected_scenario: template-repo/scenario-pack/15-handoff-to-codex.md
+    owner_boundary: internal-repo-follow-up
+    artifacts_to_update:
+      - template-repo/standards/lifecycle-standards-registry.yaml
+      - template-repo/standards/standards-watchlist.yaml
+    prompt: "Добавить machine-readable standards registry. Включить profiles: solo_lightweight, commercial_production, custom. Для каждого standard указать role, selected_version, fallback_version where needed, update_monitoring, source verification status, applicability and false-compliance boundary. Добавить standards-watchlist для offline/manual monitoring. Не вводить network-dependent quick verify."
+  - id: p9-s2-stage-map-and-gates
+    title: "Add lifecycle phase map and standards gates template"
+    task_class: build
+    selected_profile: build
+    selected_model: gpt-5.5
+    selected_reasoning_effort: medium
+    selected_plan_mode_reasoning_effort: medium
+    selected_scenario: template-repo/scenario-pack/15-handoff-to-codex.md
+    owner_boundary: internal-repo-follow-up
+    artifacts_to_update:
+      - template-repo/standards/lifecycle-stage-map.yaml
+      - template-repo/template/.chatgpt/standards-gates.yaml
+    prompt: "Добавить lifecycle-stage-map.yaml, связывающий phases idea, discovery/intake, feasibility/reality-check, product requirements, quality requirements, architecture/design, implementation, security review, accessibility/UX review, testing/verification, release readiness, deployment, operate/monitor, maintenance/updates, growth/monetization readiness if applicable, incident response, deprecation/retirement. Для каждой phase указать purpose, required artifacts, gates, applied standards, solo profile checks, commercial profile checks, evidence required, dashboard mapping, owner_boundary. Добавить standards-gates.yaml template for generated projects: gate status, standard_refs, required_for_profile, evidence, accepted_reason, owner_boundary, false_green_policy."
+  - id: p9-s3-dashboard-integration
+    title: "Integrate standards navigator into lifecycle dashboard"
+    task_class: build
+    selected_profile: build
+    selected_model: gpt-5.5
+    selected_reasoning_effort: medium
+    selected_plan_mode_reasoning_effort: medium
+    selected_scenario: template-repo/scenario-pack/15-handoff-to-codex.md
+    owner_boundary: internal-repo-follow-up
+    artifacts_to_update:
+      - template-repo/template/.chatgpt/project-lifecycle-dashboard.yaml
+      - template-repo/scripts/render-project-lifecycle-dashboard.py
+      - template-repo/scripts/validate-project-lifecycle-dashboard.py
+    prompt: "Расширить lifecycle dashboard: показывать selected standards profile, lifecycle backbone version/status, standards gate summary, current phase required standards, missing standards evidence, next safe standards action, standards monitoring status, allowed_to_advance_phase. Validator должен падать на: phase advanced without gates, production/commercial claim without production profile gates, security/accessibility/quality passed without evidence or accepted_reason, AI app ready without AI safety gate, stale standard_version but dashboard says current, compliance/certification claim without evidence."
+  - id: p9-s4-standards-monitoring
+    title: "Add lightweight standards monitoring and proposal mechanism"
+    task_class: build
+    selected_profile: build
+    selected_model: gpt-5.5
+    selected_reasoning_effort: medium
+    selected_plan_mode_reasoning_effort: medium
+    selected_scenario: template-repo/scenario-pack/15-handoff-to-codex.md
+    owner_boundary: internal-repo-follow-up
+    artifacts_to_update:
+      - template-repo/scripts/check-standards-watchlist.py
+      - reports/standards/README.md
+    prompt: "Добавить lightweight offline-first standards monitoring. check-standards-watchlist.py должен проверять registry/watchlist freshness без обязательного web/network access. Если last_checked stale, выдавать warning/proposal-needed, но не менять gates. Предусмотреть future manual/live research path через standards-update-proposal. Любое изменение версии стандарта: proposal -> impact classification -> user approval -> template update."
+  - id: p9-s5-docs-beginner-ux
+    title: "Document standards navigator and beginner UX"
+    task_class: quick
+    selected_profile: quick
+    selected_model: gpt-5.4-mini
+    selected_reasoning_effort: low
+    selected_plan_mode_reasoning_effort: medium
+    selected_scenario: template-repo/scenario-pack/14-docs-normalization.md
+    owner_boundary: internal-repo-follow-up
+    artifacts_to_update:
+      - docs/standards/lifecycle-standards-navigator.md
+      - docs/operator/factory-template/06-project-lifecycle-dashboard.md
+      - docs/operator/factory-template/07-beginner-visual-dashboard-ux.md
+      - docs/feature-execution-lite.md
+      - README.md
+      - CURRENT_FUNCTIONAL_STATE.md
+    prompt: "Добавить русскоязычную документацию. Объяснить, что standards navigator — обязательный навигатор/контролер жизненного цикла, а не сертификационный слой. Показать, как solo_lightweight profile используется одним разработчиком и как эскалировать до commercial_production. Обновить beginner visual cards: добавить строку standards progress, например: 'Стандарты: solo_lightweight, gates 5/8 passed; не хватает security_minimum_checked'. Обновить README кратко, CURRENT_FUNCTIONAL_STATE после фактической реализации."
+  - id: p9-s6-validators-fixtures
+    title: "Add validators and fixtures for standards navigator"
+    task_class: review
+    selected_profile: review
+    selected_model: gpt-5.5
+    selected_reasoning_effort: high
+    selected_plan_mode_reasoning_effort: high
+    selected_scenario: template-repo/scenario-pack/16-done-closeout.md
+    owner_boundary: internal-repo-follow-up
+    artifacts_to_update:
+      - tests/
+      - TEST_REPORT.md
+      - VERIFY_SUMMARY.md
+    prompt: "Добавить или расширить fixtures/tests. Positive: solo_lightweight passes intake/spec with minimal gates and evidence; commercial_production requires extra gates. Negative: production claim with solo profile only; security passed without evidence; accessibility not_applicable without accepted_reason; AI app without ai_safety gate; stale standard version but dashboard says current; compliance/certification claim without evidence. Подключить validators к quick/audit verify безопасно, без network-dependent tests. Запустить targeted verify и, если возможно, quick verify."
+  - id: p9-s7-final-review-sync-closeout
+    title: "Final review, verify, release-facing consistency and sync"
+    task_class: review
+    selected_profile: review
+    selected_model: gpt-5.5
+    selected_reasoning_effort: high
+    selected_plan_mode_reasoning_effort: high
+    selected_scenario: template-repo/scenario-pack/16-done-closeout.md
+    owner_boundary: internal-repo-follow-up
+    artifacts_to_update:
+      - CURRENT_FUNCTIONAL_STATE.md
+      - TEST_REPORT.md
+      - VERIFY_SUMMARY.md
+      - reports/orchestration/
+      - reports/project-lifecycle-dashboard.md
+    prompt: "Провести финальный review: связность стандартов, dashboard, validators, docs, generated project safety, no heavy web default, no false compliance, no false auto-switch. Обновить reports/orchestration/cockpit и reports/project-lifecycle-dashboard.md если repo flow поддерживает. Запустить git status --short --branch. Если verify green и origin/write path доступен, выполнить canonical verified sync. Финальный closeout обязан назвать commit hash/sync status или explicit blocker. Если есть внешние действия — только actionable Инструкция пользователю. Если внешних действий нет — явно сказать, что внешних действий не требуется, и назвать next boundary."
+deferred_user_actions:
+  - id: approve-future-standards-version-change
+    action: "В будущем подтвердить или отклонить standards-update-proposal, если мониторинг обнаружит новую версию стандарта или изменение применимости gates."
+    timing: future-boundary
+    owner_boundary: external-user-action
+  - id: select-commercial-production-profile
+    action: "Для конкретного боевого проекта подтвердить переход с solo_lightweight на commercial_production profile, если проект становится коммерческим/production-critical."
+    timing: future-boundary
+    owner_boundary: external-user-action
+placeholder_replacements:
+  - placeholder: __OFFICIAL_STANDARDS_SOURCE_URLS__
+    description: "Точные официальные ссылки/версии стандартов для manual/live standards research proposal, если repo не содержит актуального source map."
+    final_value_owner: operator
+    replacement_timing: future-user-action
+  - placeholder: __BATTLE_PROJECT_STANDARDS_PROFILE__
+    description: "Выбранный профиль конкретного боевого проекта: solo_lightweight, commercial_production или custom."
+    final_value_owner: operator
+    replacement_timing: final-user-action

@@ -1,0 +1,43 @@
+schema: standards-gates/v1
+selected_profile: solo_lightweight
+standards_registry: template-repo/standards/lifecycle-standards-registry.yaml
+stage_map: template-repo/standards/lifecycle-stage-map.yaml
+project_claims:
+  production_target: false
+  commercial_claim: false
+  ai_app: false
+  ai_ready_for_users: false
+  formal_certification_claim: false
+  compliance_claim: false
+  claim_evidence: []
+false_green_policy: "green gates need evidence or accepted_reason"
+false_compliance_boundary: "No certification claim."
+standard_versions:
+  - {standard_ref: iso_12207, selected_version: "2017", version_status: current_with_revision_pending, dashboard_current_claim: false}
+gates:
+  - id: lifecycle_intent_recorded
+    status: passed
+    standard_refs: [iso_12207]
+    required_for_profile: [solo_lightweight, commercial_production]
+    evidence: [".chatgpt/task-index.yaml"]
+    owner_boundary: internal-repo-follow-up
+  - id: product_requirements_recorded
+    status: passed
+    standard_refs: [iso_12207, scrum_guide_2020]
+    required_for_profile: [solo_lightweight, commercial_production]
+    evidence: [".chatgpt/user-spec.md"]
+    owner_boundary: internal-repo-follow-up
+  - id: accessibility_minimum_checked
+    status: not_applicable
+    standard_refs: [wcag_22]
+    required_for_profile: [solo_lightweight, commercial_production]
+    evidence: []
+    accepted_reason: "No user-facing UI in this intake/spec fixture."
+    owner_boundary: internal-repo-follow-up
+  - id: ai_safety_gate
+    status: not_applicable
+    standard_refs: [openai_ai_safety_overlay]
+    required_for_profile: [solo_lightweight, commercial_production]
+    evidence: []
+    accepted_reason: "No AI behavior."
+    owner_boundary: internal-repo-follow-up

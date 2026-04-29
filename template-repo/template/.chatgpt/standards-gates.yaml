@@ -1,0 +1,114 @@
+schema: standards-gates/v1
+selected_profile: solo_lightweight
+standards_registry: "template-repo/standards/lifecycle-standards-registry.yaml"
+stage_map: "template-repo/standards/lifecycle-stage-map.yaml"
+project_claims:
+  production_target: false
+  commercial_claim: false
+  ai_app: false
+  ai_ready_for_users: false
+  formal_certification_claim: false
+  compliance_claim: false
+  claim_evidence: []
+false_green_policy: "A gate marked passed/completed/done/ready must include evidence or accepted_reason. not_applicable also requires accepted_reason."
+false_compliance_boundary: "Do not claim ISO, NIST, OWASP, WCAG, DORA or OpenAI certification/compliance from this template gate file."
+
+standard_versions:
+  - standard_ref: iso_12207
+    selected_version: "2017"
+    version_status: current_with_revision_pending
+    dashboard_current_claim: false
+  - standard_ref: iso_25010
+    selected_version: "2023"
+    version_status: current_published
+    dashboard_current_claim: true
+  - standard_ref: nist_ssdf
+    selected_version: "1.1"
+    version_status: current_final
+    dashboard_current_claim: true
+  - standard_ref: owasp_asvs
+    selected_version: "5.0.0"
+    version_status: current_stable_release
+    dashboard_current_claim: true
+  - standard_ref: wcag_22
+    selected_version: "2.2"
+    version_status: current_w3c_recommendation
+    dashboard_current_claim: true
+  - standard_ref: dora_metrics
+    selected_version: current-five-metric-model
+    version_status: current_dora_guidance
+    dashboard_current_claim: true
+
+gates:
+  - id: lifecycle_intent_recorded
+    title: "Lifecycle intent recorded"
+    status: pending
+    standard_refs: [iso_12207]
+    required_for_profile: [solo_lightweight, commercial_production]
+    evidence: []
+    accepted_reason: ""
+    owner_boundary: internal-repo-follow-up
+  - id: product_requirements_recorded
+    title: "Product requirements recorded"
+    status: pending
+    standard_refs: [iso_12207, scrum_guide_2020]
+    required_for_profile: [solo_lightweight, commercial_production]
+    evidence: []
+    accepted_reason: ""
+    owner_boundary: internal-repo-follow-up
+  - id: quality_minimum_checked
+    title: "Product quality minimum checked"
+    status: pending
+    standard_refs: [iso_25010]
+    required_for_profile: [solo_lightweight, commercial_production]
+    evidence: []
+    accepted_reason: ""
+    owner_boundary: internal-repo-follow-up
+  - id: security_minimum_checked
+    title: "Secure SDLC minimum checked"
+    status: pending
+    standard_refs: [nist_ssdf]
+    required_for_profile: [solo_lightweight, commercial_production]
+    evidence: []
+    accepted_reason: ""
+    owner_boundary: internal-repo-follow-up
+  - id: web_security_checked
+    title: "Web security verification checked"
+    status: pending
+    standard_refs: [owasp_asvs]
+    required_for_profile: [commercial_production]
+    evidence: []
+    accepted_reason: ""
+    owner_boundary: internal-repo-follow-up
+  - id: accessibility_minimum_checked
+    title: "Accessibility/UI baseline checked"
+    status: pending
+    standard_refs: [wcag_22]
+    required_for_profile: [solo_lightweight, commercial_production]
+    evidence: []
+    accepted_reason: ""
+    owner_boundary: internal-repo-follow-up
+  - id: ai_safety_gate
+    title: "AI safety overlay checked when applicable"
+    status: not_applicable
+    standard_refs: [openai_ai_safety_overlay]
+    required_for_profile: [solo_lightweight, commercial_production]
+    evidence: []
+    accepted_reason: "Project has not declared AI model, agent or AI-output behavior."
+    owner_boundary: internal-repo-follow-up
+  - id: operations_health_baseline
+    title: "Delivery/operations health baseline"
+    status: pending
+    standard_refs: [dora_metrics]
+    required_for_profile: [commercial_production]
+    evidence: []
+    accepted_reason: ""
+    owner_boundary: internal-repo-follow-up
+  - id: false_compliance_checked
+    title: "No false certification/compliance claim"
+    status: pending
+    standard_refs: [iso_12207, iso_25010, nist_ssdf, owasp_asvs, wcag_22, dora_metrics, openai_ai_safety_overlay]
+    required_for_profile: [solo_lightweight, commercial_production]
+    evidence: []
+    accepted_reason: ""
+    owner_boundary: internal-repo-follow-up

@@ -6,6 +6,7 @@
 
 ## Текущий verify baseline
 
+- `bash template-repo/scripts/verify-all.sh quick`: PASS (`2026-04-29`, P9 lifecycle standards navigator targeted verification)
 - `bash template-repo/scripts/verify-all.sh ci`: PASS (`2026-04-28`, local reproduction on commit `750ce6a787cf304d24af14ab856da34bb63221e0`)
 - GitHub Actions runner acquisition incident: runs `25054700529`, `25057090187`, `25058477360`, `25059862780` were rerun successfully (`2026-04-29`); no repo-side CI regression found.
 - `bash CLEAN_VERIFY_ARTIFACTS.sh`: PASS (`2026-04-26`)
@@ -60,6 +61,7 @@
 - GPT-5.5 prompt contract: `validate-gpt55-prompt-contract.py`, Artifact Eval `gpt-5-5-prompt-contract`, official OpenAI source map и stale handoff drift checks
 - Model prompt policy: `validate-model-prompt-policy.py`, Artifact Eval `model-prompt-policy` и `reports/model-routing/model-routing-proposal.md` проверяют, что новая model требует companion prompt migration review до promotion
 - Project-root boundary: `validate-tree-contract.py` и Artifact Eval `project-root-boundary` проверяют, что intermediate repos для intake/adoption/reconstruction живут внутри repo целевого `greenfield-product`, не как siblings в `/projects`
+- Lifecycle standards navigator: `validate-standards-gates.py`, `check-standards-watchlist.py`, extended `validate-project-lifecycle-dashboard.py`, positive/negative fixtures and quick smoke проверяют standards profile/gates/watchlist, false green, false compliance, stale overclaim, AI safety gate and production/commercial profile boundary
 
 ## Известные остаточные ограничения
 
@@ -73,6 +75,7 @@
 - `quick` profile остается на `gpt-5.4-mini`; live catalog показал upgrade candidate на `gpt-5.5`, но repo policy требует отдельный manual review proposal для promotion
 - Любой future model promotion должен обновлять `reports/prompt-migration/` и prompt-contract validators/evals по official OpenAI docs; model slug update без prompt-policy contour считается неполным
 - GitHub-hosted runner acquisition can fail before repository commands start; classify that separately from `verify-all.sh` regressions and use local reproduction plus rerun evidence before changing validators.
+- Standards watchlist is offline/manual-first: quick verify checks metadata freshness and proposal-needed warnings, but live standards research/version promotion remains future proposal plus approval boundary.
 
 ## Использование оператором
 

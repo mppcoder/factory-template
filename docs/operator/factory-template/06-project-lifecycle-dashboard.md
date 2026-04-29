@@ -29,6 +29,7 @@
 - handoff/orchestration: parent handoff, child tasks, selected profile/model/reasoning и route boundary;
 - release readiness: version, changelog, release notes, scorecard, verification state;
 - deploy/runtime: signal из operator dashboard reports, если они есть;
+- standards navigator: selected standards profile, lifecycle backbone version/status, standards gate summary, missing standards evidence, next safe standards action, monitoring status и `allowed_to_advance_phase`;
 - software update governance: baseline, auto-update policy, update intelligence, findings, upgrade proposal status, next safe action, fallback и blockers;
 - post-release improvement: incidents, feedback, learning proposals, backlog candidates;
 - runbook packages: current phase, gates, blockers и next action для четырех entry paths;
@@ -57,6 +58,21 @@
 `operator-dashboard.py` остается runtime/deploy панелью: env, preset, dry-run, deploy reports, Docker Compose и next deploy step.
 
 Lifecycle dashboard не выполняет deploy и не обещает runtime automation. Он только показывает runtime/deploy state и evidence boundary. Dry-run/report evidence не считается real production proof.
+
+## Связь со standards navigator
+
+`standards_navigator` — обязательный readout/control block для lifecycle standards gates. Он не заменяет dashboard, а добавляет к нему нормативную карту:
+
+- какой standards profile выбран: `solo_lightweight`, `commercial_production` или `custom`;
+- какая lifecycle backbone version используется;
+- какие standards обязательны для текущей фазы;
+- какие gates passed/pending/missing/blocking;
+- какая evidence отсутствует;
+- можно ли продвигать фазу без false green.
+
+Dashboard validator блокирует production/commercial claim с одним `solo_lightweight`, security/accessibility/quality green без evidence, AI readiness без `ai_safety_gate`, stale standard overclaim и certification/compliance claim без evidence.
+
+Это не formal certification. Dashboard может говорить, что проект использует standards-inspired gates или mapped evidence, но не должен заявлять ISO/NIST/OWASP/WCAG/DORA/OpenAI compliance/certification.
 
 ## Связь с software update governance
 
@@ -91,6 +107,11 @@ Advisory layer (`AGENTS`, scenario-pack, handoff text, docs) не переклю
 ```bash
 python3 template-repo/scripts/validate-project-lifecycle-dashboard.py \
   template-repo/template/.chatgpt/project-lifecycle-dashboard.yaml
+
+python3 template-repo/scripts/validate-standards-gates.py \
+  template-repo/template/.chatgpt/standards-gates.yaml
+
+python3 template-repo/scripts/check-standards-watchlist.py --root .
 
 python3 template-repo/scripts/render-project-lifecycle-dashboard.py \
   --input template-repo/template/.chatgpt/project-lifecycle-dashboard.yaml \

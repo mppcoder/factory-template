@@ -1,0 +1,57 @@
+schema: standards-watchlist/v1
+last_checked_utc: "2026-04-29T00:00:00Z"
+freshness_days: 90
+offline_first: true
+network_required_for_quick_verify: false
+proposal_path: "reports/standards/standards-update-proposal.md"
+rule: "If a watched standard is stale, emit warning/proposal-needed. Do not change selected versions, gates or dashboard claims automatically."
+
+watch:
+  - standard_ref: iso_12207
+    source_url: "https://www.iso.org/standard/63712.html"
+    selected_version: "2017"
+    last_checked_utc: "2026-04-29T00:00:00Z"
+    known_status: current_with_revision_pending
+    drift_action: proposal_required
+  - standard_ref: scrum_guide_2020
+    source_url: "https://scrumguides.org/docs/scrumguide/v2020/2020-Scrum-Guide-US.pdf"
+    selected_version: "2020-11"
+    last_checked_utc: "2026-04-29T00:00:00Z"
+    known_status: current_practice_baseline
+    drift_action: proposal_required
+  - standard_ref: iso_25010
+    source_url: "https://www.iso.org/standard/78176.html"
+    selected_version: "2023"
+    last_checked_utc: "2026-04-29T00:00:00Z"
+    known_status: current_published
+    drift_action: proposal_required
+  - standard_ref: nist_ssdf
+    source_url: "https://csrc.nist.gov/pubs/sp/800/218/final"
+    selected_version: "1.1"
+    last_checked_utc: "2026-04-29T00:00:00Z"
+    known_status: current_final
+    drift_action: proposal_required
+  - standard_ref: owasp_asvs
+    source_url: "https://github.com/OWASP/ASVS/releases"
+    selected_version: "5.0.0"
+    last_checked_utc: "2026-04-29T00:00:00Z"
+    known_status: current_stable_release
+    drift_action: proposal_required
+  - standard_ref: wcag_22
+    source_url: "https://www.w3.org/TR/WCAG22/"
+    selected_version: "2.2"
+    last_checked_utc: "2026-04-29T00:00:00Z"
+    known_status: current_w3c_recommendation
+    drift_action: proposal_required
+  - standard_ref: dora_metrics
+    source_url: "https://dora.dev/guides/dora-metrics/"
+    selected_version: "current-five-metric-model"
+    last_checked_utc: "2026-04-29T00:00:00Z"
+    known_status: current_dora_guidance
+    drift_action: proposal_required
+  - standard_ref: openai_ai_safety_overlay
+    source_url: "https://developers.openai.com/api/docs/guides/agent-builder-safety"
+    selected_version: "living-guidance-2026-04"
+    last_checked_utc: "2026-04-29T00:00:00Z"
+    known_status: living_guidance_manual_monitoring
+    drift_action: proposal_required

@@ -121,6 +121,17 @@ Dashboard не заменяет `logs/checkpoint.yaml`, `execution-plan.md`, `de
 
 Если `final_verification.status` не `passed`, dashboard обязан показывать archive blocker, даже если отдельные задачи уже выполнены.
 
+## Связь со standards navigator
+
+Для больших фич `feature-execution-lite` должен обновлять не только task/wave state, но и standards evidence:
+
+- если фича меняет user-facing UI, обновить `accessibility_minimum_checked`;
+- если фича меняет auth, payments, data, deploy или network boundary, обновить `security_minimum_checked` и при web app scope `web_security_checked`;
+- если фича добавляет AI model calls, agents, tool use или high-impact AI outputs, включить `ai_safety_gate`;
+- если фича готовит commercial/production release, перейти с `solo_lightweight` на `commercial_production` или записать future-boundary blocker.
+
+Закрытие feature как `done` без final verification и без актуального standards gate evidence считается false green.
+
 ## Связанные файлы
 
 - `template-repo/template/work-templates/execution-plan.md.template`

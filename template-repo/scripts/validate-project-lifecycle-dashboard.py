@@ -80,6 +80,7 @@ REQUIRED_TOP_LEVEL = [
     "handoff_orchestration",
     "release_readiness",
     "deploy_runtime",
+    "standards_navigator",
     "software_update_governance",
     "post_release_improvement",
     "external_actions_ledger",
@@ -111,6 +112,17 @@ SOFTWARE_BOUNDARIES = {
     "downstream-battle-action",
     "secret-boundary-blocker",
 }
+STANDARDS_PROFILES = {"solo_lightweight", "commercial_production", "custom"}
+STANDARDS_GREEN_STATUSES = GREEN_STATUSES
+STANDARDS_VERSION_CURRENT = {
+    "current_published",
+    "current_final",
+    "current_stable_release",
+    "current_w3c_recommendation",
+    "current_dora_guidance",
+    "current_practice_baseline",
+}
+STANDARDS_VERSION_STALE = {"stale", "unknown", "needs_review", "revision_pending", "current_with_revision_pending"}
 
 
 def load_yaml(path: Path) -> dict[str, Any]:
@@ -174,6 +186,137 @@ def validate_software_action(item: Any, path: str, errors: list[str]) -> None:
     if not str(item.get("action") or "").strip():
         errors.append(f"{path}.action обязателен")
     validate_green_evidence(item, path, errors)
+
+
+def validate_standards_navigator(item: Any, errors: list[str]) -> None:
+    if not isinstance(item, dict):
+        errors.append("standards_navigator должен быть mapping")
+        return
+    profile = str(item.get("selected_profile") or "")
+    if profile not in STANDARDS_PROFILES:
+        errors.append("standards_navigator.selected_profile должен быть solo_lightweight/commercial_production/custom")
+    for field in ["standards_registry", "stage_map", "gates_source", "false_compliance_boundary"]:
+        if not str(item.get(field) or "").strip():
+            errors.append(f"standards_navigator.{field} обязателен")
+    boundary = str(item.get("false_compliance_boundary") or "").lower()
+    if "certification" not in boundary and "сертифика" not in boundary:
+        errors.append("standards_navigator.false_compliance_boundary должен явно запрещать certification/compliance overclaim")
+
+    backbone = item.get("lifecycle_backbone")
+    if not isinstance(backbone, dict):
+        errors.append("standards_navigator.lifecycle_backbone должен быть mapping")
+        backbone = {}
+    if str(backbone.get("standard_ref") or "") != "iso_12207":
+        errors.append("standards_navigator.lifecycle_backbone.standard_ref должен быть iso_12207")
+    version_status = str(backbone.get("version_status") or "")
+    source_status = str(backbone.get("source_verification_status") or "")
+    if version_status in STANDARDS_VERSION_STALE and source_status in STANDARDS_VERSION_CURRENT:
+        errors.append("standards_navigator.lifecycle_backbone stale/revision-pending version cannot claim current source status")
+    if version_status == "current_with_revision_pending" and backbone.get("verify_current_gate") is not True:
+        errors.append("standards_navigator.lifecycle_backbone current_with_revision_pending требует verify_current_gate=true")
+
+    phase_req = item.get("current_phase_required_standards")
+    if not isinstance(phase_req, dict):
+        errors.append("standards_navigator.current_phase_required_standards должен быть mapping")
+        phase_req = {}
+    for field in ["phase", "standard_refs", "required_gates"]:
+        if field not in phase_req:
+            errors.append(f"standards_navigator.current_phase_required_standards.{field} обязателен")
+    if not isinstance(phase_req.get("standard_refs", []), list) or not phase_req.get("standard_refs", []):
+        errors.append("standards_navigator.current_phase_required_standards.standard_refs должен быть непустым list")
+    if not isinstance(phase_req.get("required_gates", []), list) or not phase_req.get("required_gates", []):
+        errors.append("standards_navigator.current_phase_required_standards.required_gates должен быть непустым list")
+
+    summary = item.get("gate_summary")
+    if not isinstance(summary, dict):
+        errors.append("standards_navigator.gate_summary должен быть mapping")
+        summary = {}
+    for field in ["total", "passed", "missing", "blocking"]:
+        if not isinstance(summary.get(field), int) or summary.get(field) < 0:
+            errors.append(f"standards_navigator.gate_summary.{field} должен быть non-negative integer")
+
+    gates = item.get("gates", [])
+    if not isinstance(gates, list) or not gates:
+        errors.append("standards_navigator.gates должен быть непустым list")
+        gates = []
+    gate_ids: set[str] = set()
+    for index, gate in enumerate(gates, 1):
+        if not isinstance(gate, dict):
+            errors.append(f"standards_navigator.gates[{index}] должен быть mapping")
+            continue
+        gate_id = str(gate.get("id") or "")
+        gate_ids.add(gate_id)
+        if not gate_id:
+            errors.append(f"standards_navigator.gates[{index}].id обязателен")
+        status = status_of(gate)
+        validate_status(status, f"standards_navigator.gates[{gate_id}].status", errors)
+        if status in STANDARDS_GREEN_STATUSES and not has_evidence(gate):
+            errors.append(f"standards_navigator.gates[{gate_id}] отмечен `{status}`, но не содержит evidence или accepted_reason")
+        if status == "not_applicable" and not str(gate.get("accepted_reason") or "").strip():
+            errors.append(f"standards_navigator.gates[{gate_id}] отмечен not_applicable без accepted_reason")
+        if not isinstance(gate.get("standard_refs"), list) or not gate.get("standard_refs"):
+            errors.append(f"standards_navigator.gates[{gate_id}].standard_refs должен быть непустым list")
+    for required_gate in phase_req.get("required_gates", []) if isinstance(phase_req.get("required_gates"), list) else []:
+        if str(required_gate) not in gate_ids:
+            errors.append(f"standards_navigator.current phase requires missing gate `{required_gate}`")
+
+    missing = item.get("missing_standards_evidence", [])
+    if not isinstance(missing, list):
+        errors.append("standards_navigator.missing_standards_evidence должен быть list")
+        missing = []
+    allowed_to_advance = item.get("allowed_to_advance_phase")
+    if not isinstance(allowed_to_advance, bool):
+        errors.append("standards_navigator.allowed_to_advance_phase должен быть boolean")
+    if allowed_to_advance and (missing or int(summary.get("blocking") or 0) > 0):
+        errors.append("standards_navigator.allowed_to_advance_phase=true при missing/blocking standards evidence")
+
+    action = item.get("next_safe_standards_action")
+    if not isinstance(action, dict):
+        errors.append("standards_navigator.next_safe_standards_action должен быть mapping")
+    else:
+        validate_software_action(action, "standards_navigator.next_safe_standards_action", errors)
+
+    monitoring = item.get("monitoring_status")
+    if not isinstance(monitoring, dict):
+        errors.append("standards_navigator.monitoring_status должен быть mapping")
+        monitoring = {}
+    if not str(monitoring.get("watchlist") or "").strip():
+        errors.append("standards_navigator.monitoring_status.watchlist обязателен")
+    if str(monitoring.get("status") or "") not in {"current", "stale", "proposal-needed", "unknown"}:
+        errors.append("standards_navigator.monitoring_status.status неизвестен")
+    if monitoring.get("proposal_required") is not None and not isinstance(monitoring.get("proposal_required"), bool):
+        errors.append("standards_navigator.monitoring_status.proposal_required должен быть boolean")
+    if str(monitoring.get("status") or "") == "stale" and monitoring.get("proposal_required") is not True:
+        errors.append("stale standards monitoring requires proposal_required=true")
+
+    claims = item.get("claims")
+    if not isinstance(claims, dict):
+        errors.append("standards_navigator.claims должен быть mapping")
+        claims = {}
+    for field in [
+        "production_target",
+        "commercial_claim",
+        "ai_app",
+        "ai_ready_for_users",
+        "formal_certification_claim",
+        "compliance_claim",
+    ]:
+        if field not in claims or not isinstance(claims.get(field), bool):
+            errors.append(f"standards_navigator.claims.{field} должен быть boolean")
+    claim_evidence = claims.get("claim_evidence", [])
+    if not isinstance(claim_evidence, list):
+        errors.append("standards_navigator.claims.claim_evidence должен быть list")
+        claim_evidence = []
+    if (claims.get("production_target") or claims.get("commercial_claim")) and profile == "solo_lightweight":
+        errors.append("standards_navigator production/commercial claim requires commercial_production or custom profile")
+    if (claims.get("formal_certification_claim") or claims.get("compliance_claim")) and not claim_evidence:
+        errors.append("standards_navigator certification/compliance claim requires evidence")
+    if claims.get("ai_ready_for_users"):
+        ai_gate = next((gate for gate in gates if isinstance(gate, dict) and gate.get("id") == "ai_safety_gate"), None)
+        if not ai_gate:
+            errors.append("standards_navigator AI app ready requires ai_safety_gate")
+        elif status_of(ai_gate) not in STANDARDS_GREEN_STATUSES:
+            errors.append("standards_navigator AI app ready requires passed ai_safety_gate")
 
 
 def validate_dashboard(data: dict[str, Any]) -> list[str]:
@@ -364,6 +507,8 @@ def validate_dashboard(data: dict[str, Any]) -> list[str]:
     runtime = as_mapping(data, "deploy_runtime", errors)
     validate_status(status_of(runtime), "deploy_runtime.status", errors)
     validate_green_evidence(runtime, "deploy_runtime", errors)
+
+    validate_standards_navigator(data.get("standards_navigator"), errors)
 
     software = as_mapping(data, "software_update_governance", errors)
     baseline_status = str(software.get("baseline_status") or "")

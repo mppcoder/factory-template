@@ -209,6 +209,105 @@ deploy_runtime:
   evidence: []
   boundary: "Runtime evidence может подтягиваться из operator-dashboard reports; dry-run/report evidence не является real deploy proof."
 
+standards_navigator:
+  selected_profile: solo_lightweight
+  standards_registry: "template-repo/standards/lifecycle-standards-registry.yaml"
+  stage_map: "template-repo/standards/lifecycle-stage-map.yaml"
+  gates_source: ".chatgpt/standards-gates.yaml"
+  lifecycle_backbone:
+    standard_ref: iso_12207
+    selected_version: "2017"
+    version_status: current_with_revision_pending
+    source_verification_status: current_with_revision_pending
+    verify_current_gate: true
+  current_phase_required_standards:
+    phase: intake
+    standard_refs:
+      - iso_12207
+      - scrum_guide_2020
+    required_gates:
+      - lifecycle_intent_recorded
+      - product_requirements_recorded
+  gate_summary:
+    total: 9
+    passed: 0
+    missing: 9
+    blocking: 0
+  gates:
+    - id: lifecycle_intent_recorded
+      status: pending
+      standard_refs: [iso_12207]
+      evidence: []
+      accepted_reason: ""
+    - id: product_requirements_recorded
+      status: pending
+      standard_refs: [iso_12207, scrum_guide_2020]
+      evidence: []
+      accepted_reason: ""
+    - id: quality_minimum_checked
+      status: pending
+      standard_refs: [iso_25010]
+      evidence: []
+      accepted_reason: ""
+    - id: security_minimum_checked
+      status: pending
+      standard_refs: [nist_ssdf]
+      evidence: []
+      accepted_reason: ""
+    - id: web_security_checked
+      status: pending
+      standard_refs: [owasp_asvs]
+      evidence: []
+      accepted_reason: ""
+    - id: accessibility_minimum_checked
+      status: pending
+      standard_refs: [wcag_22]
+      evidence: []
+      accepted_reason: ""
+    - id: ai_safety_gate
+      status: not_applicable
+      standard_refs: [openai_ai_safety_overlay]
+      evidence: []
+      accepted_reason: "Project has not declared AI model, agent or AI-output behavior."
+    - id: operations_health_baseline
+      status: pending
+      standard_refs: [dora_metrics]
+      evidence: []
+      accepted_reason: ""
+    - id: false_compliance_checked
+      status: pending
+      standard_refs: [iso_12207, iso_25010, nist_ssdf, owasp_asvs, wcag_22, dora_metrics, openai_ai_safety_overlay]
+      evidence: []
+      accepted_reason: ""
+  missing_standards_evidence:
+    - lifecycle_intent_recorded
+    - product_requirements_recorded
+    - quality_minimum_checked
+    - security_minimum_checked
+    - web_security_checked
+    - accessibility_minimum_checked
+    - operations_health_baseline
+    - false_compliance_checked
+  next_safe_standards_action:
+    owner_boundary: internal-repo-follow-up
+    action: "Заполнить `.chatgpt/standards-gates.yaml` для текущей фазы и приложить evidence или accepted_reason."
+    evidence: []
+  monitoring_status:
+    watchlist: "template-repo/standards/standards-watchlist.yaml"
+    last_checked_utc: "2026-04-29T00:00:00Z"
+    status: current
+    proposal_required: false
+  claims:
+    production_target: false
+    commercial_claim: false
+    ai_app: false
+    ai_ready_for_users: false
+    formal_certification_claim: false
+    compliance_claim: false
+    claim_evidence: []
+  allowed_to_advance_phase: false
+  false_compliance_boundary: "Standards navigator is a lifecycle/evidence control layer, not ISO/NIST/OWASP/WCAG/DORA/OpenAI certification."
+
 software_update_governance:
   baseline_status: pending
   auto_update_policy: manual-approved-upgrade

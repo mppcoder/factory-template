@@ -1,0 +1,13 @@
+schema: standards-gates/v1
+selected_profile: solo_lightweight
+project_claims:
+  production_target: false
+  commercial_claim: false
+  ai_app: true
+  ai_ready_for_users: true
+  formal_certification_claim: false
+  compliance_claim: false
+  claim_evidence: []
+false_compliance_boundary: "No certification claim."
+gates:
+  - {id: security_minimum_checked, status: pending, standard_refs: [nist_ssdf], required_for_profile: [solo_lightweight], evidence: [], owner_boundary: internal-repo-follow-up}
