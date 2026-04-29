@@ -2,36 +2,56 @@
 
 Package layer должен содержать `USER-ONLY SETUP`, `CODEX-AUTOMATION`, takeover point и beginner step cards.
 
-User readiness до takeover:
+## Проверка ChatGPT intake
 
-- пользователь выбрал `<PROJECT_NAME>`;
-- пользователь сообщил Codex название и optional идею;
-- factory-template установлен и verified;
-- remote Codex context открыт;
-- Codex может выполнить remote shell command.
-- пользователь создал ChatGPT Project в UI;
-- пользователь вставил готовую repo-first инструкцию, подготовленную Codex.
+- старт был в ChatGPT Project шаблона фабрики `factory-template`;
+- пользователь открыл новый чат внутри этого Project;
+- пользователь ввел команду:
 
-Codex automation после takeover:
+```text
+новый проект
+```
 
+- ChatGPT Project сначала прочитал `template-repo/scenario-pack/00-master-router.md`;
+- handoff создан после опроса, а не из raw Codex prompt;
+- опрос собрал:
+  - project name;
+  - slug proposal или правило slug generation;
+  - краткую идею;
+  - тип проекта;
+  - readiness state;
+  - выбранный Codex contour;
+  - blockers.
+- handoff содержит boundary: GitHub repo/root/verify/sync делает Codex;
+- пользовательские external actions ограничены factory ChatGPT intake, вставкой handoff в Codex, созданием battle ChatGPT Project и вставкой готовой instruction.
+
+## Проверка Codex automation после handoff
+
+- Codex получил ChatGPT-generated handoff и вывел handoff receipt;
+- Codex не проводил заново весь пользовательский опрос, если handoff уже содержит ответы;
 - Codex нормализовал project slug/repo name;
 - Codex создал GitHub repo или documented blocker;
-- Codex добавил `origin`, сделал initial commit/push или documented blocker;
-- `/projects/<project-slug>` создан;
-- wizard/launcher выполнен Codex;
+- Codex создал/подготовил `/projects/<project-slug>`;
+- Codex запустил wizard/launcher;
 - repo-first core materialized;
-- greenfield docs заполнены;
-- dashboard validates;
-- generated quick verify green;
-- sync clean или blocker documented.
+- `.chatgpt`, `AGENTS`, scenario-pack, dashboard, project-knowledge созданы/обновлены;
+- bootstrap/verify выполнены;
+- initial commit/push/verified sync выполнены или blocker documented;
+- Codex подготовил готовую repo-first instruction для battle ChatGPT Project.
 
-Из factory-template root для проверки package layer:
+## Проверка battle ChatGPT Project
+
+- пользователь создал ChatGPT Project боевого проекта;
+- пользователь вставил готовую repo-first instruction;
+- дальнейшие задачи идут через боевой Project, а не через factory-template Project.
+
+## Проверка package layer из factory-template root
 
 ```bash
 python3 template-repo/scripts/validate-runbook-packages.py .
 ```
 
-Из generated project root после materialization:
+## Проверка generated project root после materialization
 
 ```bash
 python3 scripts/validate-project-preset.py .
@@ -39,10 +59,4 @@ python3 scripts/validate-greenfield-conversion.py .
 python3 scripts/validate-codex-routing.py .
 python3 scripts/validate-project-lifecycle-dashboard.py .chatgpt/project-lifecycle-dashboard.yaml
 bash scripts/verify-all.sh quick
-```
-
-Если проект был converted из brownfield, добавьте:
-
-```bash
-python3 scripts/validate-greenfield-conversion.py . --require-converted
 ```

@@ -8,6 +8,7 @@
 - Второй remediation pass закрепил точный beginner flow `FT-000`..`FT-180`, включая `FT-150A` для Codex App Remote SSH, `FT-150B` для VS Code Remote SSH + Codex extension, `FT-170` takeover checkpoint и `FT-180` диагностику неудачного запуска.
 - Dashboard `runbook_packages` получил поля `current_step`, `active_contour`, `takeover_ready` и `checklist_path`.
 - Defect report `reports/bugs/2026-04-29-greenfield-runbook-wrong-user-github-boundary.md` для gap, где greenfield package ошибочно относил GitHub repo/access к user-only действиям.
+- Defect report `reports/bugs/2026-04-29-greenfield-runbook-bypasses-factory-chatgpt-intake.md` для gap, где greenfield package bypass-ил factory-template ChatGPT Project intake и начинался напрямую в Codex.
 - Финальный слой `docs/operator/runbook-packages/` с package contract и четырьмя complete runbook-checklist packages: `factory-template`, `greenfield-product`, `brownfield-with-repo-to-greenfield`, `brownfield-without-repo-to-greenfield`.
 - Validator `validate-runbook-packages.py`, подключенный к quick verify: проверяет existence, command/path lint, brownfield conversion gates, greenfield final state, dashboard integration, archive/cleanup wording и handoff language/routing boundary.
 - Dashboard contract `runbook_packages` для current phase, gates, blockers, next action и owner boundary по каждому package.
@@ -45,6 +46,7 @@
 - `01-factory-template/04-verify.md` разделен на user readiness verify до takeover и Codex automation verify после takeover.
 - Greenfield и оба brownfield packages выровнены под ту же user-only/Codex-automation архитектуру, чтобы external setup не смешивался с internal repo follow-up.
 - `02-greenfield-product` теперь фиксирует правильную boundary: пользователь выбирает название, сообщает его Codex, создает ChatGPT Project и вставляет готовую repo-first инструкцию; GitHub repo/origin/initial push/project root/wizard/verify/sync выполняет Codex при отсутствии blocker.
+- `02-greenfield-product` теперь стартует канонически: ChatGPT Project шаблона фабрики -> новый чат -> `новый проект` -> scenario-pack опрос -> readiness check -> generated Codex handoff. Codex получает handoff, а не raw project name.
 - Release-facing workflow map, lifecycle dashboard doc и source manifest теперь знают про runbook package layer; отдельный export profile `sources-pack-runbook-packages` включает полный набор package files.
 - Canonical VPS layout в active docs, scenario-pack и bootstrap guidance теперь явно требует размещать все intermediate repos внутри repo целевого `greenfield-product`.
 - `check-codex-model-catalog.py --write-proposal` теперь требует companion prompt migration review: fresh prompt baseline, affected prompt-like artifacts, validators/evals и official OpenAI source map до profile promotion.

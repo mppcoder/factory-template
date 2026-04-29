@@ -136,7 +136,13 @@ runbook_packages:
     title: "Greenfield product package"
     path: "docs/operator/runbook-packages/02-greenfield-product"
     current_phase: intake
-    current_step: GF-000
+    current_step: GF-010
+    intake_channel: factory-template-chatgpt-project
+    trigger_command: "новый проект"
+    handoff_ready: false
+    codex_takeover_ready: false
+    battle_chatgpt_project_created: false
+    battle_repo_created_by: codex
     active_contour: not_selected
     takeover_ready: false
     checklist_path: "docs/operator/runbook-packages/02-greenfield-product/03-checklist.md"
@@ -146,7 +152,7 @@ runbook_packages:
       - verification
       - closeout
     blockers: []
-    next_action: "Для нового боевого проекта пользователь выбирает название и создает ChatGPT Project; GitHub repo/root/wizard/verify/sync и готовую repo-first инструкцию подготавливает Codex."
+    next_action: "Для нового боевого проекта стартовать в ChatGPT Project шаблона фабрики: новый чат -> `новый проект` -> опрос -> generated Codex handoff."
     owner_boundary: internal-repo-follow-up
   - id: 03-brownfield-with-repo-to-greenfield
     title: "Brownfield with repo conversion package"

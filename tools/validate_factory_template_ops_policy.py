@@ -125,7 +125,7 @@ def validate_profile(name: str, profile: dict, errors: list[str]) -> None:
     if name == "core_cold_archive":
         expected_count = 5
     if name == "runbook_packages_archive":
-        expected_count = 22
+        expected_count = 23
     if len(files) != expected_count:
         fail(f"{name}: ожидается ровно {expected_count} файлов, сейчас {len(files)}", errors)
     seen: set[str] = set()

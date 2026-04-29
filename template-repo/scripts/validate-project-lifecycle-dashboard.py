@@ -281,6 +281,19 @@ def validate_dashboard(data: dict[str, Any]) -> list[str]:
                 for field in ["path", "current_phase", "current_step", "active_contour", "checklist_path", "next_action", "owner_boundary"]:
                     if not str(package.get(field) or "").strip():
                         errors.append(f"runbook_packages[{package_id or index}].{field} обязателен")
+                if package_id == "02-greenfield-product":
+                    for field in ["intake_channel", "trigger_command", "battle_repo_created_by"]:
+                        if not str(package.get(field) or "").strip():
+                            errors.append(f"runbook_packages[{package_id}].{field} обязателен")
+                    if str(package.get("intake_channel") or "") != "factory-template-chatgpt-project":
+                        errors.append("runbook_packages[02-greenfield-product].intake_channel должен быть factory-template-chatgpt-project")
+                    if str(package.get("trigger_command") or "") != "новый проект":
+                        errors.append("runbook_packages[02-greenfield-product].trigger_command должен быть `новый проект`")
+                    if str(package.get("battle_repo_created_by") or "") != "codex":
+                        errors.append("runbook_packages[02-greenfield-product].battle_repo_created_by должен быть codex")
+                    for bool_field in ["handoff_ready", "codex_takeover_ready", "battle_chatgpt_project_created"]:
+                        if not isinstance(package.get(bool_field), bool):
+                            errors.append(f"runbook_packages[02-greenfield-product].{bool_field} должен быть boolean")
                 if str(package.get("active_contour") or "") not in {
                     "not_selected",
                     "codex-app-remote-ssh",

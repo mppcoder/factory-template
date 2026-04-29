@@ -46,6 +46,19 @@ Codex-runbook обязан начинаться с проверки remote conte
 - dashboard update;
 - verified sync, если доступен `origin` и verify green.
 
+## Канонический старт нового боевого проекта
+
+Для любого нового боевого проекта canonical start channel — ChatGPT Project шаблона фабрики `factory-template`.
+Пользователь открывает новый чат в этом Project и пишет команду:
+
+```text
+новый проект
+```
+
+После этого ChatGPT Project по repo-first instruction сначала читает `template-repo/scenario-pack/00-master-router.md`, проводит scenario-pack guided questionnaire, проверяет readiness по runbook/checklist и только затем формирует один стартовый Codex handoff.
+
+Codex не является первым каналом постановки задачи для новичка. Codex является executor после handoff: создает repo/root/core, запускает wizard/verify/sync и готовит repo-first instruction для боевого ChatGPT Project.
+
 ## Источники истины
 
 Executable routing остается в:

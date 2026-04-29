@@ -137,6 +137,7 @@
 - lifecycle dashboard теперь показывает `runbook_packages` с current phase, gates, blockers, next action и owner boundary для четырех entry paths без добавления web app/daemon/SQLite/Telegram stack
 - lifecycle dashboard `runbook_packages` теперь дополнительно показывает `current_step`, `active_contour`, `takeover_ready` и `checklist_path`
 - greenfield-product package теперь проводит строгую external boundary: пользователь выбирает название, создает ChatGPT Project и вставляет подготовленную Codex repo-first инструкцию; GitHub repo/origin/initial push/project root/wizard/verify/sync принадлежат Codex automation при доступном write path
+- greenfield-product package теперь стартует через factory-template ChatGPT Project intake: новый чат -> `новый проект` -> guided questionnaire -> readiness check -> generated Codex handoff; Codex не является первым каналом постановки задачи для новичка
 
 ## Программа 2.5 (release truth)
 - release truth source: `docs/releases/release-scorecard.yaml`

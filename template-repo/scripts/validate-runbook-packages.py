@@ -186,8 +186,6 @@ FORBIDDEN_USER_CHECKLIST_PHRASES = [
 ]
 GREENFIELD_FORBIDDEN_USER_PHRASES = [
     "GitHub repo создан",
-    "repo URL",
-    "Repo URL",
     "GitHub repo/access",
     "<repo-owner>",
     "<repo-name>",
@@ -195,33 +193,86 @@ GREENFIELD_FORBIDDEN_USER_PHRASES = [
     "сам создать GitHub repo",
     "сам клонировать",
     "сам добавлять origin",
-    "first push",
     "пользователь делает initial commit/push",
+    "Сообщить Codex название",
+    "сообщить Codex название",
 ]
 GREENFIELD_REQUIRED_USER_TOKENS = [
     "GF-000",
+    "GF-005",
     "GF-010",
     "GF-020",
     "GF-030",
-    "Название проекта: <PROJECT_NAME>",
-    "создает ChatGPT Project",
-    "вставляет готовую repo-first инструкцию",
+    "GF-040",
+    "GF-050",
+    "GF-060",
+    "GF-070",
+    "GF-080",
+    "GF-090",
+    "GF-100",
+    "ChatGPT Project шаблона фабрики",
+    "новый проект",
+    "опрос",
+    "стартовый Codex handoff",
+    "template-repo/scenario-pack/00-master-router.md",
+    "Readiness checklist",
+    "боевого ChatGPT Project",
+    "Factory-template ChatGPT Project остается",
     "Пользователь не создает GitHub repo",
-    "не добавляет `origin`",
-    "не делает initial commit/push",
-    "не запускает launcher/wizard/verify",
+    "не выбирает slug/repo name вручную",
+    "не создает VPS project root",
+    "не запускает launcher/wizard",
+]
+GREENFIELD_LEGACY_USER_TOKENS = [
+    "создает ChatGPT Project",
+    "вставляет готовую repo-first instruction",
+]
+GREENFIELD_REQUIRED_CHECKLIST_IDS = [
+    "GF-000",
+    "GF-005",
+    "GF-010",
+    "GF-020",
+    "GF-030",
+    "GF-040",
+    "GF-050",
+    "GF-060",
+    "GF-070",
+    "GF-080",
+    "GF-090",
+    "GF-100",
+]
+GREENFIELD_REQUIRED_CHECKLIST_TOKENS = [
+    "ChatGPT Project шаблона фабрики",
+    "`новый проект`",
+    "Опрос завершен",
+    "Readiness state",
+    "Handoff block",
+    "Handoff receipt",
+    "Repo URL, verify, sync",
+    "Saved instruction",
 ]
 GREENFIELD_REQUIRED_CODEX_TOKENS = [
-    "Нормализуй project slug",
-    "создай GitHub repo сам",
-    "Создай project root на VPS",
+    "ChatGPT-generated handoff",
+    "не голое название проекта",
+    "не проводить заново весь пользовательский опрос",
+    "Нормализовать project slug",
+    "создать GitHub repo",
+    "Создать/подготовить VPS project root",
     "first-project-wizard.py",
     "Materialize repo-first core",
-    "Добавь `origin`",
+    "Добавить `origin`",
     "initial commit/push",
     "bash scripts/verify-all.sh quick",
     "verified sync",
-    "готовый repo-first instruction text",
+    "готовую repo-first instruction",
+]
+GREENFIELD_DASHBOARD_REQUIRED_FIELDS = [
+    "intake_channel",
+    "trigger_command",
+    "handoff_ready",
+    "codex_takeover_ready",
+    "battle_chatgpt_project_created",
+    "battle_repo_created_by",
 ]
 
 
@@ -415,9 +466,25 @@ def validate_beginner_flow(root: Path, errors: list[str]) -> None:
             for token in GREENFIELD_REQUIRED_USER_TOKENS:
                 if token not in user_text:
                     errors.append(f"`{user_path}` не содержит greenfield user-boundary token `{token}`")
+            for token in GREENFIELD_LEGACY_USER_TOKENS:
+                if token not in user_text:
+                    errors.append(f"`{user_path}` не содержит greenfield external UI token `{token}`")
             for token in GREENFIELD_REQUIRED_CODEX_TOKENS:
                 if token not in codex_text:
                     errors.append(f"`{codex_path}` не содержит greenfield Codex automation token `{token}`")
+            checklist_ids = extract_checklist_ids(checklist_text)
+            missing_greenfield_ids = sorted(set(GREENFIELD_REQUIRED_CHECKLIST_IDS) - checklist_ids)
+            extra_greenfield_ids = sorted(checklist_ids - set(GREENFIELD_REQUIRED_CHECKLIST_IDS))
+            if missing_greenfield_ids:
+                errors.append(f"`{checklist_path}` не содержит greenfield checklist IDs: {', '.join(missing_greenfield_ids)}")
+            if extra_greenfield_ids:
+                errors.append(f"`{checklist_path}` содержит лишние greenfield checklist IDs: {', '.join(extra_greenfield_ids)}")
+            ordered_ids = [match.group(1) for match in CHECKLIST_ID_RE.finditer(checklist_text) if match.group(1) != "ID"]
+            if ordered_ids and ordered_ids != GREENFIELD_REQUIRED_CHECKLIST_IDS:
+                errors.append(f"`{checklist_path}` содержит неверный порядок greenfield шагов: {', '.join(ordered_ids)}")
+            for token in GREENFIELD_REQUIRED_CHECKLIST_TOKENS:
+                if token not in checklist_text:
+                    errors.append(f"`{checklist_path}` не содержит greenfield checklist token `{token}`")
             for phrase in GREENFIELD_FORBIDDEN_USER_PHRASES:
                 if phrase in user_text or phrase in checklist_text:
                     errors.append(f"`{package}` user-facing файлы содержат запрещенную greenfield boundary phrase `{phrase}`")
@@ -472,6 +539,19 @@ def validate_dashboard(root: Path, errors: list[str]) -> None:
                 errors.append(f"runbook_packages[{package_id or index}] не содержит `{key}`")
         if package_id and package_id not in PACKAGES:
             errors.append(f"dashboard содержит неизвестный runbook package `{package_id}`")
+        if package_id == "02-greenfield-product":
+            for field in GREENFIELD_DASHBOARD_REQUIRED_FIELDS:
+                if field not in item:
+                    errors.append(f"dashboard runbook package `{package_id}` не содержит `{field}`")
+            if str(item.get("intake_channel") or "") != "factory-template-chatgpt-project":
+                errors.append("greenfield dashboard intake_channel должен быть factory-template-chatgpt-project")
+            if str(item.get("trigger_command") or "") != "новый проект":
+                errors.append("greenfield dashboard trigger_command должен быть `новый проект`")
+            if str(item.get("battle_repo_created_by") or "") != "codex":
+                errors.append("greenfield dashboard battle_repo_created_by должен быть codex")
+            for bool_field in ["handoff_ready", "codex_takeover_ready", "battle_chatgpt_project_created"]:
+                if not isinstance(item.get(bool_field), bool):
+                    errors.append(f"greenfield dashboard `{bool_field}` должен быть boolean")
         if str(item.get("owner_boundary") or "") != "internal-repo-follow-up":
             errors.append(f"runbook package `{package_id}` должен иметь owner_boundary internal-repo-follow-up")
         if not isinstance(item.get("gates"), list) or not item.get("gates"):
