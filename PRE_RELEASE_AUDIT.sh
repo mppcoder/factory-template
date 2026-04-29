@@ -5,7 +5,7 @@ export PYTHONDONTWRITEBYTECODE=1
 FAILS=0
 check_absent(){ local pattern="$1"; if find "$ROOT" -path "$ROOT/.release-stage" -prune -o -name "$pattern" -print | grep -q .; then echo "ОШИБКА: найден запрещённый артефакт: $pattern"; FAILS=$((FAILS+1)); fi; }
 check_exists(){ local file="$1"; [ -e "$ROOT/$file" ] || { echo "ОШИБКА: отсутствует обязательный файл: $file"; FAILS=$((FAILS+1)); }; }
-for p in '.smoke-test' '.bugflow-test' 'audit-smoke-project' '*.log' '__pycache__' '.pytest_cache' '_sources-export' '_factory-sync-export' '_boundary-actions' '.matrix-test' '.factory-runtime'; do check_absent "$p"; done
+for p in '.smoke-test' '.bugflow-test' 'audit-smoke-project' '*.log' '__pycache__' '.pytest_cache' '_sources-export' '_factory-sync-export' '_boundary-actions' '_artifacts' '.matrix-test' '.factory-runtime'; do check_absent "$p"; done
 if [ "${ALLOW_GIT_DIR:-1}" = "0" ]; then
   check_absent '.git'
 fi

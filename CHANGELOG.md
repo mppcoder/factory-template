@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 ### Добавлено
+- Handoff implementation control layer: template-owned `.chatgpt/handoff-implementation-register.yaml`, validator `validate-handoff-implementation-register.py`, deterministic dependency/priority calculation и lifecycle dashboard cards для queued/ready, blocked, blockers, in-progress, implemented-not-verified, stale и closed handoff/self-handoff задач.
+- Lifecycle dashboard integration теперь читает handoff implementation register как отдельный source artifact и не смешивает его с `.chatgpt/handoff-rework-register.yaml`.
+- Scenario guidance теперь требует Codex closeout обновлять matching handoff implementation item, добавлять evidence, материализовать новые self-handoff items и снимать задачи только через explicit `not_applicable`/archive path.
+- Defect report `reports/bugs/2026-04-29-clean-verify-misses-artifacts.md` для cleanup gap, где ignored `_artifacts` ломал `PRE_RELEASE_AUDIT`.
 - Defect report `reports/bugs/2026-04-29-beginner-intake-missing-default-decisions.md` для beginner UX gap, где intake/questionnaire задавал expert-only blank questions вместо recommendation-first defaults.
 - Default-decision layer для intake/questionnaire flows: `global-defaults`, `confirm-each-default` и `manual`, accepted/overridden defaults, default source basis, uncertainty notes и explicit confirmation для risky/paid/destructive/security/privacy/legal/secret decisions.
 - Validator coverage в `validate-runbook-packages.py` и lifecycle dashboard validator для `default_decision_mode`, accepted/overridden defaults, unresolved decisions, override path и запрета forced/risky defaults.
@@ -87,6 +91,7 @@
 - Downstream sync model теперь явно исключает `factory-producer-owned` paths и защищает brownfield historical evidence.
 
 ### Исправлено
+- `CLEAN_VERIFY_ARTIFACTS.sh` и `PRE_RELEASE_AUDIT.sh` теперь учитывают `_artifacts`, чтобы release audit не сканировал stale generated release/source packs.
 - зафиксирован и исправлен reusable closeout UX defect: отсутствие внешних действий больше не разворачивается в длинный completion package с no-op строками.
 - `create-codex-task-pack.py`, `codex_task_router.py`, `validate-handoff-response-format.py`, `validate-handoff-language.py` теперь блокируют англоязычные labels `Repo:`, `Goal:`, `Entry point:`, `Scope:` и требуют прямую инструкцию Codex отвечать по-русски.
 - зафиксирован и исправлен reusable architecture defect: brownfield adoption больше не может считаться финальным project class без conversion или blocker.

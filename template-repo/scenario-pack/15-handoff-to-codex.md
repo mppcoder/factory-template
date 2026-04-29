@@ -237,6 +237,21 @@ Orchestration guardrails:
 
 Если handoff выдается в ответ пользователю, это должен быть ровно один блок. Все дополнительные пояснения по внешним шагам допускаются только после него в `## Инструкция пользователю`, но не в виде второго handoff-блока.
 
+## Закрытие handoff implementation register
+
+При завершении Codex-задачи, которая пришла из ChatGPT handoff или породила Codex self-handoff, Codex должен обновить `.chatgpt/handoff-implementation-register.yaml`, если artifact существует в проекте или задача относится к межчатовой очереди.
+
+Обязательный closeout path:
+- найти matching item по `id`, title/source_handoff_path или route receipt;
+- обновить `status` без false green;
+- добавить `evidence` для `implemented`, `verified`, `not_applicable` или `archived`;
+- если выполнение породило новый self-handoff, добавить новый item, а не оставлять его только в чате;
+- если задача больше не актуальна, не удалять item, а выполнить deactivation path: `status: not_applicable`, `closeout_reason`, evidence или `accepted_reason`;
+- если item зависит от незакрытых dependencies, он остается visible `blocked`, а не `ready`;
+- после изменения register обновить dashboard render output.
+
+Этот register не заменяет `.chatgpt/handoff-rework-register.yaml`: rework register остается KPI по rework loops, а implementation register хранит жизненный цикл handoff/self-handoff задач до verified closeout, deactivation или archive.
+
 Сразу после handoff, если дальше нужен внешний шаг пользователя, возврат в ChatGPT Project, внешнее действие или ожидание внешнего артефакта, добавь финальный раздел `## Инструкция пользователю`.
 
 Если внешний шаг связан с обновлением repo-first инструкций или downstream sync flows, `## Инструкция пользователю` должен содержать completion package со следующими блоками:

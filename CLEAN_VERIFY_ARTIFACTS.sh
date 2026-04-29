@@ -10,6 +10,7 @@ TARGETS=(
   "_sources-export"
   "_factory-sync-export"
   "_boundary-actions"
+  "_artifacts"
   ".release-stage"
   ".factory-runtime"
 )

@@ -13,8 +13,10 @@
 ## Где лежат артефакты
 
 - Canonical state: `template-repo/template/.chatgpt/project-lifecycle-dashboard.yaml`.
+- Handoff implementation register: `template-repo/template/.chatgpt/handoff-implementation-register.yaml`.
 - Renderer: `template-repo/scripts/render-project-lifecycle-dashboard.py`.
 - Validator: `template-repo/scripts/validate-project-lifecycle-dashboard.py`.
+- Register validator: `template-repo/scripts/validate-handoff-implementation-register.py`.
 - Markdown output по умолчанию: `reports/project-lifecycle-dashboard.md`.
 - ChatGPT mini card template: `template-repo/template/.chatgpt/visual-status-card.md.template`.
 - Codex execution card template: `template-repo/template/.chatgpt/codex-execution-card.md.template`.
@@ -29,6 +31,7 @@
 - stage gates: intake, classification, reuse/reality-check, spec, tech-spec, handoff, execution, verification, done;
 - multi-step progress: текущая wave, completed tasks, blocked tasks, next task, final verification, archive readiness;
 - handoff/orchestration: parent handoff, child tasks, selected profile/model/reasoning и route boundary;
+- handoff implementation control: межчатовые ChatGPT handoff / Codex self-handoff задачи, их status, dependencies, blockers, stale evidence и closeout state;
 - release readiness: version, changelog, release notes, scorecard, verification state;
 - deploy/runtime: signal из operator dashboard reports, если они есть;
 - standards navigator: selected standards profile, lifecycle backbone version/status, standards gate summary, missing standards evidence, next safe standards action, monitoring status и `allowed_to_advance_phase`;
@@ -74,6 +77,40 @@
 
 - cockpit отвечает “как идет этот parent handoff”;
 - lifecycle dashboard отвечает “где сейчас проект от идеи до release/deploy/operate/improve”.
+
+## Контроль реализации handoff / Handoff implementation control
+
+`.chatgpt/handoff-implementation-register.yaml` фиксирует doработка/bug задачи, которые появились в ChatGPT handoff или были созданы Codex как self-handoff. Это отдельный lifecycle register, а не KPI: `.chatgpt/handoff-rework-register.yaml` остается только счетчиком rework loops.
+
+Зачем нужен register:
+
+- задача может родиться в отдельном ChatGPT-чате и иначе потеряться между сессиями;
+- пользователь должен видеть, что handoff уже выдан, но реализация еще не закрыта;
+- blocked, снятые, implemented-but-not-verified и stale задачи должны оставаться видимыми до closeout;
+- silent deletion запрещен: неактуальные задачи закрываются как `not_applicable` или `archived` с reason/evidence.
+
+Dashboard рендерит раздел `## Handoff implementation control`:
+
+- `Queued / ready` — очередь реализации; prerequisite/blocker tasks поднимаются выше обычных ready tasks;
+- `Blocked by dependencies` — задачи, которые имеют незакрытые `depends_on`;
+- `Blockers / prerequisite tasks` — задачи, которые разблокируют другие items;
+- `In progress` — текущие работы;
+- `Implemented but not verified` — код/доки сделаны, но verification evidence еще нет;
+- `Not applicable / archived` — явно снятые или архивированные задачи;
+- `Stale items without recent evidence` — открытые items без свежего evidence/update.
+
+Priority считается детерминированно: base priority `critical > high > medium > low`, затем +1 level если item блокирует хотя бы одну незакрытую задачу и еще +1 level если блокирует несколько. Blocked item не должен отображаться как ready.
+
+Codex closeout behavior:
+
+- найти соответствующий item в `.chatgpt/handoff-implementation-register.yaml`;
+- обновить `status`;
+- добавить `evidence`;
+- если задача породила новый self-handoff, добавить новый item;
+- если задача неактуальна, не удалять ее, а выполнить deactivation path: `status: not_applicable`, `closeout_reason`, evidence или `accepted_reason`;
+- обновить `reports/project-lifecycle-dashboard.md`.
+
+Dashboard может показывать `selected_profile`, `selected_model` и reasoning как readout из handoff/register. Это не auto-switch: уже открытая Codex-сессия не меняет route/model/reasoning из-за YAML или advisory text.
 
 ## Связь с operator-dashboard
 
@@ -130,6 +167,9 @@ Advisory layer (`AGENTS`, scenario-pack, handoff text, docs) не переклю
 python3 template-repo/scripts/validate-project-lifecycle-dashboard.py \
   template-repo/template/.chatgpt/project-lifecycle-dashboard.yaml
 
+python3 template-repo/scripts/validate-handoff-implementation-register.py \
+  template-repo/template/.chatgpt/handoff-implementation-register.yaml
+
 python3 template-repo/scripts/validate-standards-gates.py \
   template-repo/template/.chatgpt/standards-gates.yaml
 
@@ -155,6 +195,7 @@ python3 template-repo/scripts/render-project-lifecycle-dashboard.py \
 
 ```bash
 python3 scripts/validate-project-lifecycle-dashboard.py .chatgpt/project-lifecycle-dashboard.yaml
+python3 scripts/validate-handoff-implementation-register.py .chatgpt/handoff-implementation-register.yaml
 python3 scripts/render-project-lifecycle-dashboard.py --format markdown-full --output reports/project-lifecycle-dashboard.md
 python3 scripts/render-project-lifecycle-dashboard.py --format chatgpt-card --stdout
 python3 scripts/render-project-lifecycle-dashboard.py --format codex-card --stdout

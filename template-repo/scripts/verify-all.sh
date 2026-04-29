@@ -348,6 +348,10 @@ run_project_lifecycle_dashboard_smoke() {
   local tmp_dir
   tmp_dir="$(mktemp -d)"
 
+  python3 "$ROOT/template-repo/scripts/validate-handoff-implementation-register.py" \
+    "$ROOT/template-repo/template/.chatgpt/handoff-implementation-register.yaml"
+  python3 "$ROOT/template-repo/scripts/validate-handoff-implementation-register.py" \
+    "$ROOT/tests/handoff-implementation-register/valid/handoff-implementation-register.yaml"
   python3 "$ROOT/template-repo/scripts/validate-project-lifecycle-dashboard.py" \
     "$ROOT/template-repo/template/.chatgpt/project-lifecycle-dashboard.yaml"
   python3 "$ROOT/template-repo/scripts/render-project-lifecycle-dashboard.py" \
@@ -357,6 +361,19 @@ run_project_lifecycle_dashboard_smoke() {
   grep -q "Панель жизненного цикла проекта" "$tmp_dir/project-lifecycle-dashboard.md"
   grep -q "Следующий шаг" "$tmp_dir/project-lifecycle-dashboard.md"
   grep -q "Визуальные поверхности для новичка" "$tmp_dir/project-lifecycle-dashboard.md"
+  grep -q "Handoff implementation control" "$tmp_dir/project-lifecycle-dashboard.md"
+  mkdir -p "$tmp_dir/dashboard-with-handoff/.chatgpt"
+  cp "$ROOT/template-repo/template/.chatgpt/project-lifecycle-dashboard.yaml" \
+    "$tmp_dir/dashboard-with-handoff/.chatgpt/project-lifecycle-dashboard.yaml"
+  cp "$ROOT/tests/handoff-implementation-register/valid/handoff-implementation-register.yaml" \
+    "$tmp_dir/dashboard-with-handoff/.chatgpt/handoff-implementation-register.yaml"
+  python3 "$ROOT/template-repo/scripts/render-project-lifecycle-dashboard.py" \
+    --input "$tmp_dir/dashboard-with-handoff/.chatgpt/project-lifecycle-dashboard.yaml" \
+    --format markdown-full \
+    --output "$tmp_dir/project-lifecycle-dashboard-with-handoff.md"
+  grep -q "HIR-001" "$tmp_dir/project-lifecycle-dashboard-with-handoff.md"
+  grep -q "HIR-002" "$tmp_dir/project-lifecycle-dashboard-with-handoff.md"
+  grep -q "Реализовано, но не verified" "$tmp_dir/project-lifecycle-dashboard-with-handoff.md"
   python3 "$ROOT/template-repo/scripts/render-project-lifecycle-dashboard.py" \
     --input "$ROOT/tests/project-lifecycle-dashboard/valid/project-lifecycle-dashboard.yaml" \
     --format chatgpt-card \
@@ -409,6 +426,39 @@ run_project_lifecycle_dashboard_smoke() {
     return 1
   fi
   grep -Eq "completed/executed|execution evidence" /tmp/project-lifecycle-dashboard-codex-completed-no-evidence.log
+
+  python3 - "$ROOT/tests/handoff-implementation-register/valid/handoff-implementation-register.yaml" "$tmp_dir" <<'PY'
+from pathlib import Path
+import sys
+import yaml
+
+source = Path(sys.argv[1])
+target_dir = Path(sys.argv[2])
+base = yaml.safe_load(source.read_text(encoding="utf-8"))
+
+def write_case(name, mutate):
+    data = yaml.safe_load(yaml.safe_dump(base, allow_unicode=True))
+    mutate(data)
+    path = target_dir / f"handoff-implementation-{name}.yaml"
+    path.write_text(yaml.safe_dump(data, allow_unicode=True, sort_keys=False), encoding="utf-8")
+
+write_case("green-no-evidence", lambda data: data["items"][2].update({"evidence": [], "closeout_reason": ""}))
+write_case("not-applicable-no-reason", lambda data: data["items"][3].update({"evidence": [], "closeout_reason": "", "accepted_reason": ""}))
+write_case("unknown-dependency", lambda data: data["items"][1].update({"depends_on": ["HIR-999"]}))
+write_case("blocked-ready", lambda data: data["items"][1].update({"status": "ready"}))
+write_case("secret-like", lambda data: data["items"][0].update({"next_action": "Do not store API_KEY=abc123"}))
+PY
+
+  for fixture in green-no-evidence not-applicable-no-reason unknown-dependency blocked-ready secret-like; do
+    if python3 "$ROOT/template-repo/scripts/validate-handoff-implementation-register.py" \
+      "$tmp_dir/handoff-implementation-$fixture.yaml" \
+      >"/tmp/handoff-implementation-$fixture.log" 2>&1; then
+      echo "handoff implementation register negative fixture unexpectedly passed: $fixture" >&2
+      cat "/tmp/handoff-implementation-$fixture.log" >&2
+      return 1
+    fi
+    rm -f "/tmp/handoff-implementation-$fixture.log"
+  done
 
   python3 - "$ROOT/tests/project-lifecycle-dashboard/valid/project-lifecycle-dashboard.yaml" "$tmp_dir" <<'PY'
 from pathlib import Path
@@ -535,6 +585,9 @@ run_generated_project_quick() {
   run_step "validate-stage" python3 "$ROOT/scripts/validate-stage.py" "$ROOT"
   run_step "validate-task-state-lite" python3 "$ROOT/scripts/validate-task-state-lite.py" "$ROOT"
   run_step "validate-project-lifecycle-dashboard" python3 "$ROOT/scripts/validate-project-lifecycle-dashboard.py" "$ROOT/.chatgpt/project-lifecycle-dashboard.yaml"
+  if [[ -f "$ROOT/.chatgpt/handoff-implementation-register.yaml" ]]; then
+    run_step "validate-handoff-implementation-register" python3 "$ROOT/scripts/validate-handoff-implementation-register.py" "$ROOT/.chatgpt/handoff-implementation-register.yaml"
+  fi
   run_step "validate-standards-gates" python3 "$ROOT/scripts/validate-standards-gates.py" "$ROOT"
   run_step "validate-software-update-governance" python3 "$ROOT/scripts/validate-software-update-governance.py" "$ROOT"
   run_step "validate-feature-execution-lite" python3 "$ROOT/scripts/validate-feature-execution-lite.py" "$ROOT"
@@ -593,6 +646,9 @@ run_quick() {
   run_step "codex-orchestration-runner-negative-smoke" run_codex_orchestration_runner_negative_smoke
   run_step "plan6-productization-smoke" run_plan6_productization_smoke
   run_step "project-lifecycle-dashboard-smoke" run_project_lifecycle_dashboard_smoke
+  if [[ -f "$ROOT/.chatgpt/handoff-implementation-register.yaml" ]]; then
+    run_step "validate-root-handoff-implementation-register" python3 "$ROOT/template-repo/scripts/validate-handoff-implementation-register.py" "$ROOT/.chatgpt/handoff-implementation-register.yaml"
+  fi
   run_step "standards-navigator-smoke" run_standards_navigator_smoke
   run_step "curated-pack-quality-smoke" run_curated_pack_quality_smoke
   run_step "validate-verified-sync-fallback-evidence" python3 "$ROOT/template-repo/scripts/validate-verified-sync-fallback-evidence.py" "$ROOT/reports/release/verified-sync-fallback-evidence.md"

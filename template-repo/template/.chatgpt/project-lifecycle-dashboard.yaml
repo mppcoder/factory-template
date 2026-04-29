@@ -115,6 +115,19 @@ handoff_orchestration:
   source_artifacts:
     - ".chatgpt/orchestration-cockpit.yaml"
 
+handoff_implementation_control:
+  enabled: true
+  source_artifact: ".chatgpt/handoff-implementation-register.yaml"
+  dashboard_section: "Handoff implementation control"
+  queue_policy: deterministic_dependency_priority_calculation
+  summary:
+    open_items: 0
+    blocked_items: 0
+    implemented_not_verified: 0
+    stale_items_without_recent_evidence: 0
+  route_boundary: "Dashboard показывает handoff route/model/reasoning как readout; handoff/register не переключают model/profile/reasoning внутри уже открытой Codex-сессии."
+  closeout_policy: "Codex при завершении задачи обновляет matching item: status, evidence, новые self-handoff items или explicit not_applicable closeout без silent deletion."
+
 runbook_packages:
   - id: 01-factory-template
     title: "Factory-template package"
@@ -428,6 +441,7 @@ fallback_next_step:
 
 source_artifacts:
   - ".chatgpt/project-lifecycle-dashboard.yaml"
+  - ".chatgpt/handoff-implementation-register.yaml"
   - ".chatgpt/visual-status-card.md.template"
   - ".chatgpt/codex-execution-card.md.template"
   - ".chatgpt/task-state.yaml"

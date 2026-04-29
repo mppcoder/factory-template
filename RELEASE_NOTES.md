@@ -1,5 +1,14 @@
 # Release notes / заметки релиза
 
+## Не выпущено - handoff implementation control
+
+- Добавлен repo-native register `.chatgpt/handoff-implementation-register.yaml` для ChatGPT handoff / Codex self-handoff задач, которые нельзя терять между чатами.
+- Project Lifecycle Dashboard теперь показывает handoff implementation control cards: queued/ready, blocked by dependencies, prerequisite blockers, in progress, implemented but not verified, stale без свежего evidence и closed/not applicable.
+- Validator `validate-handoff-implementation-register.py` ловит green status без evidence, `not_applicable` без reason/evidence, unknown dependencies, blocked item ошибочно показанный как ready и secret-like content.
+- Register не заменяет `.chatgpt/handoff-rework-register.yaml`: rework register остается KPI по rework loops, новый register отвечает за lifecycle реализации handoff/self-handoff задач.
+- Handoff route/model/reasoning остаются readout: dashboard/register не обещают auto-switch внутри уже открытой Codex-сессии.
+- Cleanup fix: `_artifacts` теперь очищается перед release audit, чтобы stale generated release/source packs не ломали `PRE_RELEASE_AUDIT`.
+
 ## Не выпущено - runbook package layer
 
 - Intake UX стал recommendation-first: после команды `новый проект` пользователь выбирает `default_decision_mode`, затем ChatGPT Project предлагает safe defaults, объясняет их и дает override path.

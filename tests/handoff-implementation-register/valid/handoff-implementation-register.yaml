@@ -1,0 +1,119 @@
+schema: handoff-implementation-register/v1
+scope:
+  project: "fixture-project"
+  owner_boundary: template-owned-generated-project-artifact
+queue_policy:
+  dependency_first: true
+  blockers_raise_priority: true
+  stale_visible_cards: true
+  silent_drop_forbidden: true
+statuses:
+  allowed:
+    - captured
+    - handoff_issued
+    - self_handoff_created
+    - queued
+    - ready
+    - in_progress
+    - implemented
+    - verified
+    - blocked
+    - not_applicable
+    - archived
+items:
+  - id: HIR-001
+    title: "Prerequisite implementation task"
+    source_type: chatgpt-handoff
+    source_chat: "fixture"
+    source_handoff_path: ".chatgpt/codex-input.md"
+    task_class: build
+    selected_profile: build
+    selected_model: gpt-5.5
+    selected_reasoning_effort: medium
+    selected_plan_mode_reasoning_effort: medium
+    status: ready
+    priority: medium
+    calculated_priority: critical
+    depends_on: []
+    blocks: [HIR-002, HIR-003]
+    owner_boundary: internal-repo-follow-up
+    artifacts_to_update: ["src/prerequisite.py"]
+    evidence:
+      - "Captured from fixture handoff."
+    closeout_reason: ""
+    deactivation_handoff_required: false
+    next_action: "Implement prerequisite first."
+    created_at: "2026-04-20T00:00:00Z"
+    updated_at: "2026-04-28T00:00:00Z"
+  - id: HIR-002
+    title: "Dependent blocked task"
+    source_type: codex-self-handoff
+    source_chat: "fixture"
+    source_handoff_path: ".chatgpt/self-handoff.md"
+    task_class: build
+    selected_profile: build
+    selected_model: gpt-5.5
+    selected_reasoning_effort: medium
+    selected_plan_mode_reasoning_effort: medium
+    status: blocked
+    priority: medium
+    calculated_priority: medium
+    depends_on: [HIR-001]
+    blocks: []
+    owner_boundary: internal-repo-follow-up
+    artifacts_to_update: ["src/dependent.py"]
+    evidence: []
+    closeout_reason: ""
+    deactivation_handoff_required: false
+    next_action: "Wait for HIR-001."
+    created_at: "2026-04-20T00:00:00Z"
+    updated_at: "2026-04-20T00:00:00Z"
+  - id: HIR-003
+    title: "Implemented but not verified task"
+    source_type: chatgpt-handoff
+    source_chat: "fixture"
+    source_handoff_path: ".chatgpt/codex-input.md"
+    task_class: build
+    selected_profile: build
+    selected_model: gpt-5.5
+    selected_reasoning_effort: medium
+    selected_plan_mode_reasoning_effort: medium
+    status: implemented
+    priority: low
+    calculated_priority: low
+    depends_on: []
+    blocks: []
+    owner_boundary: internal-repo-follow-up
+    artifacts_to_update: ["src/implemented.py"]
+    evidence:
+      - "Unit test fixture passed."
+    closeout_reason: ""
+    deactivation_handoff_required: false
+    next_action: "Run verification."
+    created_at: "2026-04-20T00:00:00Z"
+    updated_at: "2026-04-28T00:00:00Z"
+  - id: HIR-004
+    title: "Archived no longer relevant task"
+    source_type: manual-entry
+    source_chat: "fixture"
+    source_handoff_path: ""
+    task_class: quick
+    selected_profile: quick
+    selected_model: gpt-5.5
+    selected_reasoning_effort: low
+    selected_plan_mode_reasoning_effort: medium
+    status: not_applicable
+    priority: low
+    calculated_priority: low
+    depends_on: []
+    blocks: []
+    owner_boundary: internal-repo-follow-up
+    artifacts_to_update: []
+    evidence:
+      - "Operator accepted deactivation in fixture."
+    closeout_reason: "Superseded by HIR-003."
+    deactivation_handoff_required: false
+    next_action: "No action."
+    created_at: "2026-04-20T00:00:00Z"
+    updated_at: "2026-04-28T00:00:00Z"
+

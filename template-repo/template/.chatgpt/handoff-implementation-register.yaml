@@ -1,0 +1,27 @@
+# Реестр жизненного цикла ChatGPT handoff / Codex self-handoff задач.
+# Этот artifact template-owned. В generated project он materializes как
+# `.chatgpt/handoff-implementation-register.yaml`.
+schema: handoff-implementation-register/v1
+scope:
+  project: "{{PROJECT_NAME}}"
+  owner_boundary: template-owned-generated-project-artifact
+queue_policy:
+  dependency_first: true
+  blockers_raise_priority: true
+  stale_visible_cards: true
+  silent_drop_forbidden: true
+statuses:
+  allowed:
+    - captured
+    - handoff_issued
+    - self_handoff_created
+    - queued
+    - ready
+    - in_progress
+    - implemented
+    - verified
+    - blocked
+    - not_applicable
+    - archived
+items: []
+

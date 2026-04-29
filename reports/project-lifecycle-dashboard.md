@@ -1,6 +1,6 @@
 # Панель жизненного цикла проекта / `project-lifecycle-dashboard`
 
-Generated UTC: `2026-04-29T10:21:42+00:00`
+Generated UTC: `2026-04-29T11:11:16+00:00`
 Source: `/projects/factory-template/template-repo/template/.chatgpt/project-lifecycle-dashboard.yaml`
 
 ## Сейчас
@@ -63,12 +63,48 @@ Source: `/projects/factory-template/template-repo/template/.chatgpt/project-life
 - selected profile/model/reasoning: `deep` / `gpt-5.5` / `high`
 - route boundary: Advisory layer показывает маршрут и handoff-текст, но не переключает model/profile/reasoning внутри уже открытой Codex-сессии; надежная executable boundary — новый task launch или ручной picker в новом чате.
 
+## Контроль реализации handoff / Handoff implementation control
+
+- source artifact: `.chatgpt/handoff-implementation-register.yaml`
+- schema: `handoff-implementation-register/v1`
+- queue policy: `deterministic_dependency_priority_calculation`
+- open/blocked/implemented-not-verified/stale: `0` / `0` / `0` / `0`
+- route boundary: Dashboard показывает handoff route/model/reasoning как readout; handoff/register не переключают model/profile/reasoning внутри уже открытой Codex-сессии.
+
+### Очередь queued / ready
+
+- нет queued/ready задач
+
+### Заблокировано dependencies
+
+- нет blocked задач
+
+### Блокеры и prerequisite tasks
+
+- нет prerequisite/blocker задач
+
+### В работе
+
+- нет in-progress задач
+
+### Реализовано, но не verified
+
+- нет implemented-but-not-verified задач
+
+### Снято или archived
+
+- нет снятых или archived задач
+
+### Stale items без свежего evidence
+
+- stale задач без свежего evidence нет
+
 ## Пакеты операторских сценариев
 
 | Package | Phase | Gates | Blockers | Next action |
 |---|---|---|---|---|
 | `01-factory-template` | `execution` | `route-receipt`, `implementation`, `verification`, `verified-sync` | none | Для задач самого шаблона пройти beginner user-only setup до Codex takeover point, затем передать automation Codex-runbook. |
-| `02-greenfield-product` | `intake` | `scaffold`, `greenfield-docs`, `verification`, `closeout` | none | Для нового боевого проекта стартовать в ChatGPT Project шаблона фабрики: новый чат -> `новый проект` -> опрос -> generated Codex handoff. |
+| `02-greenfield-product` | `intake` | `scaffold`, `greenfield-docs`, `verification`, `closeout` | none | Для нового боевого проекта стартовать в ChatGPT Project шаблона фабрики: новый чат -> `новый проект` -> выбор default-decision mode -> recommendation-first опрос -> generated Codex handoff. |
 | `03-brownfield-with-repo-to-greenfield` | `adoption` | `audit`, `adoption`, `conversion`, `verification` | none | Для существующего repo дать Codex remote access к canonical root; audit/adoption/conversion выполняет Codex-runbook. |
 | `04-brownfield-without-repo-to-greenfield` | `reconstruction` | `intake`, `reconstruction`, `with-repo-adoption`, `conversion` | none | Для материалов без repo загрузить их в target root/_incoming; reconstruction/adoption/conversion выполняет Codex-runbook. |
 
@@ -85,7 +121,7 @@ Source: `/projects/factory-template/template-repo/template/.chatgpt/project-life
 - status: `pending`
 - preset: `starter`
 - operator source: `template-repo/scripts/operator-dashboard.py`
-- dry-run report present: `True`
+- dry-run report present: `False`
 - deploy report present: `False`
 - boundary: Runtime evidence может подтягиваться из operator-dashboard reports; dry-run/report evidence не является real deploy proof.
 

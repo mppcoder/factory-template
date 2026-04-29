@@ -21,6 +21,12 @@
 
 Cockpit остается detailed orchestration artifact для parent handoff: он хранит child task table, deferred user actions, placeholder replacements и continuation outcome. Execution card не заменяет cockpit, а показывает пользователю короткую версию хода исполнения прямо в Codex App / VS Code Codex chat.
 
+Важно разделять parent orchestration и межчатовую очередь handoff/self-handoff задач:
+
+- `orchestration-cockpit-lite` показывает один parent handoff и его child tasks;
+- `.chatgpt/handoff-implementation-register.yaml` фиксирует задачи, которые могли появиться в другом ChatGPT-чате или как Codex self-handoff и должны быть реализованы, заблокированы, сняты или verified;
+- `project-lifecycle-dashboard` показывает оба слоя рядом, чтобы handoff-задача не исчезла после закрытия чата.
+
 ## Где лежат артефакты
 
 - Source template: `template-repo/template/.chatgpt/orchestration-cockpit.yaml`.

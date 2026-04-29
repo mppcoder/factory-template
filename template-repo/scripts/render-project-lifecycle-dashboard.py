@@ -10,6 +10,17 @@ from typing import Any
 import yaml
 
 from factory_automation_common import now_utc, read_text, read_yaml
+from handoff_implementation_common import (
+    calculated_priority,
+    blocker_count,
+    effective_status,
+    is_stale,
+    item_map,
+    normalized_items,
+    sorted_queue_items,
+    status_of,
+    unresolved_dependencies,
+)
 
 
 GREEN_STATUSES = {"passed", "completed", "done", "ready", "archived", "executed"}
@@ -291,6 +302,7 @@ def optional_context(root: Path, dashboard_path: Path) -> dict[str, Any]:
     stage_state = read_yaml(chatgpt_dir / "stage-state.yaml")
     task_index = read_yaml(chatgpt_dir / "task-index.yaml")
     cockpit = read_yaml(chatgpt_dir / "orchestration-cockpit.yaml")
+    handoff_implementation_register = read_yaml(chatgpt_dir / "handoff-implementation-register.yaml")
     verify_summary = read_text(root / "VERIFY_SUMMARY.md")
     current_state = read_text(root / "CURRENT_FUNCTIONAL_STATE.md")
     runtime_reports = {
@@ -302,6 +314,7 @@ def optional_context(root: Path, dashboard_path: Path) -> dict[str, Any]:
         "stage_state": stage_state,
         "task_index": task_index,
         "cockpit": cockpit,
+        "handoff_implementation_register": handoff_implementation_register,
         "verify_summary": verify_summary,
         "current_state_present": bool(current_state.strip()),
         "runtime_reports": runtime_reports,
@@ -329,6 +342,96 @@ def resolved_change(data: dict[str, Any], context: dict[str, Any]) -> dict[str, 
         result[key] = str(dashboard_change.get(key) or task_change.get(key) or "")
     result["owner_boundary"] = str(dashboard_change.get("owner_boundary") or "internal-repo-follow-up")
     return result
+
+
+def handoff_item_row(item: dict[str, Any], by_id: dict[str, dict[str, Any]]) -> str:
+    item_id = str(item.get("id") or "")
+    dependencies = unresolved_dependencies(item, by_id)
+    dependency_text = ", ".join(f"`{dep}`" for dep in dependencies) or "none"
+    blocks_count = blocker_count(item, by_id)
+    evidence = evidence_text(item) or "none"
+    return (
+        f"| `{item_id}` | {item.get('title', '')} | `{status_of(item)}` / effective `{effective_status(item, by_id)}` | "
+        f"`{item.get('priority', '')}` -> `{calculated_priority(item, by_id)}` | "
+        f"{dependency_text} | `{blocks_count}` | {item.get('next_action', '')} | {evidence} |"
+    )
+
+
+def handoff_item_table(items: list[dict[str, Any]], by_id: dict[str, dict[str, Any]], empty: str) -> list[str]:
+    if not items:
+        return [empty]
+    lines = [
+        "| Item | Title | Status | Priority | Unresolved deps | Blocks | Next action | Evidence / reason |",
+        "|---|---|---|---|---|---|---|---|",
+    ]
+    lines.extend(handoff_item_row(item, by_id) for item in items)
+    return lines
+
+
+def render_handoff_implementation_control(data: dict[str, Any], context: dict[str, Any]) -> list[str]:
+    config = data.get("handoff_implementation_control", {})
+    if not isinstance(config, dict) or config.get("enabled") is not True:
+        return [
+            "## Контроль реализации handoff / Handoff implementation control",
+            "",
+            "- disabled or not configured",
+        ]
+
+    register = context.get("handoff_implementation_register", {})
+    register = register if isinstance(register, dict) else {}
+    items = normalized_items(register)
+    by_id = item_map(items)
+    sorted_items = sorted_queue_items(items)
+
+    queued_ready = [
+        item for item in sorted_items if effective_status(item, by_id) in {"queued", "ready"} and status_of(item) not in {"verified", "not_applicable", "archived"}
+    ]
+    blocked = [item for item in sorted_items if effective_status(item, by_id) == "blocked"]
+    blockers = [item for item in sorted_items if blocker_count(item, by_id) > 0 and status_of(item) not in {"verified", "not_applicable", "archived"}]
+    in_progress = [item for item in sorted_items if status_of(item) == "in_progress"]
+    implemented = [item for item in sorted_items if status_of(item) == "implemented"]
+    closed = [item for item in sorted_items if status_of(item) in {"not_applicable", "archived"}]
+    stale = [item for item in sorted_items if is_stale(item)]
+
+    open_count = len([item for item in items if status_of(item) not in {"verified", "not_applicable", "archived"}])
+    lines = [
+        "## Контроль реализации handoff / Handoff implementation control",
+        "",
+        f"- source artifact: `{config.get('source_artifact', '.chatgpt/handoff-implementation-register.yaml')}`",
+        f"- schema: `{register.get('schema', 'missing')}`",
+        f"- queue policy: `{config.get('queue_policy', '')}`",
+        f"- open/blocked/implemented-not-verified/stale: `{open_count}` / `{len(blocked)}` / `{len(implemented)}` / `{len(stale)}`",
+        f"- route boundary: {config.get('route_boundary', '')}",
+        "",
+        "### Очередь queued / ready",
+        "",
+        *handoff_item_table(queued_ready, by_id, "- нет queued/ready задач"),
+        "",
+        "### Заблокировано dependencies",
+        "",
+        *handoff_item_table(blocked, by_id, "- нет blocked задач"),
+        "",
+        "### Блокеры и prerequisite tasks",
+        "",
+        *handoff_item_table(blockers, by_id, "- нет prerequisite/blocker задач"),
+        "",
+        "### В работе",
+        "",
+        *handoff_item_table(in_progress, by_id, "- нет in-progress задач"),
+        "",
+        "### Реализовано, но не verified",
+        "",
+        *handoff_item_table(implemented, by_id, "- нет implemented-but-not-verified задач"),
+        "",
+        "### Снято или archived",
+        "",
+        *handoff_item_table(closed, by_id, "- нет снятых или archived задач"),
+        "",
+        "### Stale items без свежего evidence",
+        "",
+        *handoff_item_table(stale, by_id, "- stale задач без свежего evidence нет"),
+    ]
+    return lines
 
 
 def render(data: dict[str, Any], root: Path, dashboard_path: Path) -> str:
@@ -432,6 +535,8 @@ def render(data: dict[str, Any], root: Path, dashboard_path: Path) -> str:
             f"- selected profile/model/reasoning: `{orchestration.get('selected_profile') or cockpit_route.get('selected_profile', '')}` / `{orchestration.get('selected_model') or cockpit_route.get('selected_model', '')}` / `{orchestration.get('selected_reasoning_effort') or cockpit_route.get('selected_reasoning_effort', '')}`",
             f"- route boundary: {orchestration.get('route_explanation_boundary', '')}",
             "",
+            *render_handoff_implementation_control(data, context),
+            "",
             "## Пакеты операторских сценариев",
             "",
             "| Package | Phase | Gates | Blockers | Next action |",
@@ -528,7 +633,7 @@ def main() -> int:
     input_path = Path(args.input).resolve() if args.input else default_dashboard_path(root)
     data = load_yaml(input_path)
     validator = load_validator()
-    errors = validator.validate_dashboard(data)
+    errors = validator.validate_dashboard(data, input_path)
     if errors:
         print("PROJECT LIFECYCLE DASHBOARD НЕВАЛИДЕН")
         for error in errors:

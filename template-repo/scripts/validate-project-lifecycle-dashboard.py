@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import argparse
+import importlib.util
 import re
 from pathlib import Path
 from typing import Any
@@ -187,11 +188,37 @@ STANDARDS_VERSION_CURRENT = {
     "current_practice_baseline",
 }
 STANDARDS_VERSION_STALE = {"stale", "unknown", "needs_review", "revision_pending", "current_with_revision_pending"}
+HANDOFF_IMPLEMENTATION_ARTIFACT = ".chatgpt/handoff-implementation-register.yaml"
 
 
 def load_yaml(path: Path) -> dict[str, Any]:
     data = yaml.safe_load(path.read_text(encoding="utf-8")) or {}
     return data if isinstance(data, dict) else {}
+
+
+def load_handoff_implementation_validator():
+    script = Path(__file__).resolve().with_name("validate-handoff-implementation-register.py")
+    spec = importlib.util.spec_from_file_location("validate_handoff_implementation_register", script)
+    if spec is None or spec.loader is None:
+        raise RuntimeError("Не удалось загрузить validate-handoff-implementation-register.py")
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
+
+
+def resolve_source_artifact(dashboard_path: Path, artifact: str) -> Path | None:
+    candidates: list[Path] = []
+    artifact_path = Path(artifact)
+    if artifact.startswith(".chatgpt/"):
+        candidates.append(dashboard_path.parent / artifact.removeprefix(".chatgpt/"))
+    candidates.append(dashboard_path.parent / artifact_path)
+    for parent in dashboard_path.resolve().parents:
+        candidates.append(parent / artifact_path)
+        candidates.append(parent / "template-repo" / "template" / artifact_path)
+    for candidate in candidates:
+        if candidate.exists():
+            return candidate
+    return None
 
 
 def as_mapping(data: dict[str, Any], key: str, errors: list[str]) -> dict[str, Any]:
@@ -414,6 +441,48 @@ def validate_orchestration_execution_claims(item: Any, errors: list[str]) -> Non
             errors.append(f"handoff_orchestration.child_tasks[{child_id}] отмечен `{child_status}`, но не содержит execution evidence или accepted_reason")
 
 
+def validate_handoff_implementation_control(item: Any, data: dict[str, Any], dashboard_path: Path | None, errors: list[str]) -> None:
+    source_artifacts = data.get("source_artifacts", [])
+    source_set = {str(source) for source in source_artifacts} if isinstance(source_artifacts, list) else set()
+    references_register = HANDOFF_IMPLEMENTATION_ARTIFACT in source_set
+    if item is None and not references_register:
+        return
+    if not isinstance(item, dict):
+        errors.append("handoff_implementation_control должен быть mapping")
+        return
+    if item.get("enabled") is not True:
+        errors.append("handoff_implementation_control.enabled должен быть true")
+    source_artifact = str(item.get("source_artifact") or "")
+    if source_artifact != HANDOFF_IMPLEMENTATION_ARTIFACT:
+        errors.append("handoff_implementation_control.source_artifact должен ссылаться на .chatgpt/handoff-implementation-register.yaml")
+    if HANDOFF_IMPLEMENTATION_ARTIFACT not in source_set:
+        errors.append("source_artifacts должен содержать .chatgpt/handoff-implementation-register.yaml")
+    if str(item.get("queue_policy") or "") != "deterministic_dependency_priority_calculation":
+        errors.append("handoff_implementation_control.queue_policy должен быть deterministic_dependency_priority_calculation")
+    route_boundary = str(item.get("route_boundary") or "").lower()
+    if "не переключ" not in route_boundary and "does not" not in route_boundary:
+        errors.append("handoff_implementation_control.route_boundary должен явно запрещать handoff/register auto-switch claim")
+    closeout_policy = str(item.get("closeout_policy") or "").lower()
+    if "silent" not in closeout_policy and "не удал" not in closeout_policy:
+        errors.append("handoff_implementation_control.closeout_policy должен запрещать silent deletion/drop")
+    summary = item.get("summary")
+    if not isinstance(summary, dict):
+        errors.append("handoff_implementation_control.summary должен быть mapping")
+    else:
+        for key in ["open_items", "blocked_items", "implemented_not_verified", "stale_items_without_recent_evidence"]:
+            if key not in summary or not isinstance(summary.get(key), int) or summary.get(key) < 0:
+                errors.append(f"handoff_implementation_control.summary.{key} должен быть non-negative integer")
+
+    if dashboard_path is not None and source_artifact:
+        register_path = resolve_source_artifact(dashboard_path, source_artifact)
+        if register_path is None:
+            errors.append(f"handoff_implementation_control source artifact не найден: `{source_artifact}`")
+        else:
+            validator = load_handoff_implementation_validator()
+            for register_error in validator.validate_register(load_yaml(register_path)):
+                errors.append(f"handoff_implementation_control register invalid: {register_error}")
+
+
 def validate_beginner_visual_surfaces(item: Any, data: dict[str, Any], errors: list[str]) -> None:
     if not isinstance(item, dict):
         errors.append("beginner_visual_surfaces должен быть mapping")
@@ -519,7 +588,7 @@ def validate_beginner_visual_surfaces(item: Any, data: dict[str, Any], errors: l
         errors.append("beginner_visual_surfaces.markdown_dashboard.output должен быть reports/project-lifecycle-dashboard.md")
 
 
-def validate_dashboard(data: dict[str, Any]) -> list[str]:
+def validate_dashboard(data: dict[str, Any], dashboard_path: Path | None = None) -> list[str]:
     errors: list[str] = []
     if data.get("schema") != SCHEMA:
         errors.append(f"schema должен быть `{SCHEMA}`")
@@ -638,6 +707,7 @@ def validate_dashboard(data: dict[str, Any]) -> list[str]:
     if "не переключ" not in boundary_text and "does not" not in boundary_text:
         errors.append("handoff_orchestration.route_explanation_boundary должен явно запрещать advisory auto-switch claim")
     validate_orchestration_execution_claims(orchestration, errors)
+    validate_handoff_implementation_control(data.get("handoff_implementation_control"), data, dashboard_path, errors)
 
     validate_beginner_visual_surfaces(data.get("beginner_visual_surfaces"), data, errors)
 
@@ -790,7 +860,7 @@ def main() -> int:
     args = parser.parse_args()
 
     path = Path(args.path)
-    errors = validate_dashboard(load_yaml(path))
+    errors = validate_dashboard(load_yaml(path), path)
     if errors:
         print("PROJECT LIFECYCLE DASHBOARD НЕВАЛИДЕН")
         for error in errors:

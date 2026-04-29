@@ -174,10 +174,12 @@ python3 template-repo/scripts/check-codex-model-catalog.py . --write-proposal
 - `docs/operator/factory-template/06-project-lifecycle-dashboard.md` — как читать “что происходит сейчас”, blockers, next action, release/deploy/runtime state и improvement queue;
 - `docs/operator/factory-template/07-beginner-visual-dashboard-ux.md` — beginner-first объяснение трех визуальных поверхностей;
 - `template-repo/template/.chatgpt/project-lifecycle-dashboard.yaml` — canonical state artifact для generated проектов;
+- `template-repo/template/.chatgpt/handoff-implementation-register.yaml` — register незакрытых ChatGPT handoff / Codex self-handoff задач с dependencies, evidence и closeout status;
 - `template-repo/scripts/render-project-lifecycle-dashboard.py` — Markdown/CLI renderer;
 - `template-repo/scripts/validate-project-lifecycle-dashboard.py` — schema/status/evidence/boundary validator.
+- `template-repo/scripts/validate-handoff-implementation-register.py` — validator register, который ловит false green, неизвестные dependencies, blocked-as-ready и secret-like content.
 
-Dashboard агрегирует task/stage state, feature execution progress, orchestration cockpit, release readiness и runtime signals. Он не заменяет cockpit или operator dashboard и не добавляет heavy runtime. Advisory route text может быть показан как readout, но не считается auto-switch mechanism для уже открытой Codex-сессии.
+Dashboard агрегирует task/stage state, feature execution progress, orchestration cockpit, handoff implementation register, release readiness и runtime signals. Он не заменяет cockpit или operator dashboard и не добавляет heavy runtime. Advisory route text может быть показан как readout, но не считается auto-switch mechanism для уже открытой Codex-сессии.
 
 Для новичка есть 3 визуальные поверхности:
 - ChatGPT mini card — коротко показывает проект, фазу, активную задачу, статус, готово, блокеры, действие пользователя и следующий шаг;
