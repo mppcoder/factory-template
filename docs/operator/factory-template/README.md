@@ -30,7 +30,8 @@
 6. `05-backlog-dorabotok-factory-template.md`
 7. `05-orchestration-cockpit-lite.md`
 8. `06-project-lifecycle-dashboard.md`
-9. `07-AGENTS-factory-template.md`
+9. `07-beginner-visual-dashboard-ux.md`
+10. `07-AGENTS-factory-template.md`
 
 ## Назначение
 

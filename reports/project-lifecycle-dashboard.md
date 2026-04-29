@@ -1,6 +1,6 @@
 # Панель жизненного цикла проекта / `project-lifecycle-dashboard`
 
-Generated UTC: `2026-04-29T09:25:35+00:00`
+Generated UTC: `2026-04-29T10:21:42+00:00`
 Source: `/projects/factory-template/template-repo/template/.chatgpt/project-lifecycle-dashboard.yaml`
 
 ## Сейчас
@@ -47,6 +47,15 @@ Source: `/projects/factory-template/template-repo/template/.chatgpt/project-life
 | Wave | Status | Tasks |
 |---|---|---|
 | `wave-0` Подготовка | `pending` | `T-001` `pending` |
+
+## Визуальные поверхности для новичка
+
+- default surfaces: `chatgpt-mini-card, codex-execution-card, markdown-dashboard`
+- source of truth: `.chatgpt/project-lifecycle-dashboard.yaml`
+- ChatGPT mini card template: `.chatgpt/visual-status-card.md.template`
+- Codex execution card template: `.chatgpt/codex-execution-card.md.template`
+- Markdown dashboard output: `reports/project-lifecycle-dashboard.md`
+- heavy UI boundary: Default is ChatGPT mini card, Codex execution card and Markdown dashboard only; web app, daemon, SQLite, Telegram notifications, websocket/live-refresh and background worker are not default promises.
 
 ## Передача и оркестрация
 

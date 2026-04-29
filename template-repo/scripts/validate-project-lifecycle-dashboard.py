@@ -40,6 +40,15 @@ STATUSES = {
     "archived",
 }
 GREEN_STATUSES = {"passed", "completed", "done", "ready", "archived"}
+BEGINNER_STATUSES = {
+    "pending",
+    "in_progress",
+    "blocked",
+    "passed",
+    "failed",
+    "completed",
+    "not_applicable",
+}
 OWNER_BOUNDARIES = {
     "internal-repo-follow-up",
     "external-user-action",
@@ -48,6 +57,42 @@ OWNER_BOUNDARIES = {
     "model-mapping-blocker",
     "secret-boundary-blocker",
 }
+VISUAL_SURFACES = {
+    "chatgpt-mini-card",
+    "codex-execution-card",
+    "markdown-dashboard",
+}
+VISUAL_CARD_FIELDS = {
+    "project",
+    "phase",
+    "active_task",
+    "status",
+    "completed",
+    "blockers",
+    "user_action_required",
+    "next_safe_action",
+}
+CODEX_CARD_SECTIONS = {"route_receipt", "progress", "blockers", "next", "external"}
+ORCHESTRATION_PARENT_STATUSES = {
+    "not_started",
+    "planned",
+    "validated",
+    "dry-run",
+    "executing",
+    "completed",
+    "blocked",
+    "failed",
+}
+ORCHESTRATION_CHILD_STATUSES = {
+    "planned",
+    "session-file-written",
+    "executed",
+    "blocked",
+    "skipped",
+    "completed",
+    "failed",
+}
+ORCHESTRATION_GREEN_STATUSES = {"executed", "completed", "passed", "done"}
 RUNBOOK_PACKAGE_IDS = {
     "01-factory-template",
     "02-greenfield-product",
@@ -78,6 +123,7 @@ REQUIRED_TOP_LEVEL = [
     "stage_gates",
     "multi_step_execution",
     "handoff_orchestration",
+    "beginner_visual_surfaces",
     "release_readiness",
     "deploy_runtime",
     "standards_navigator",
@@ -93,6 +139,10 @@ POSITIVE_AUTOSWITCH_RE = re.compile(
 )
 RU_POSITIVE_AUTOSWITCH_RE = re.compile(
     r"(?i)(advisory|handoff|сценари|инструкц|project).{0,100}(автоматически переключает|сам переключает|переключает model|переключает profile|переключает reasoning)"
+)
+NO_USER_ACTION_RE = re.compile(r"(?i)^\s*(ничего|не требуется|нет|none|not required|no user action required)\s*$")
+HEAVY_DEFAULT_UI_RE = re.compile(
+    r"(?i)(default|по умолчанию|обязательн).{0,100}(web app|daemon|sqlite|telegram|websocket|live[- ]?refresh|background worker)"
 )
 SOFTWARE_UPDATE_POLICIES = {"manual-approved-upgrade"}
 SOFTWARE_PROPOSAL_STATUSES = {
@@ -319,6 +369,142 @@ def validate_standards_navigator(item: Any, errors: list[str]) -> None:
             errors.append("standards_navigator AI app ready requires passed ai_safety_gate")
 
 
+def validate_orchestration_execution_claims(item: Any, errors: list[str]) -> None:
+    if not isinstance(item, dict):
+        return
+    parent = item.get("parent_handoff")
+    if isinstance(parent, dict):
+        parent_status = str(parent.get("status") or "")
+        if parent_status and parent_status not in ORCHESTRATION_PARENT_STATUSES:
+            errors.append("handoff_orchestration.parent_handoff.status неизвестен")
+        if parent_status in ORCHESTRATION_GREEN_STATUSES and not has_evidence(parent):
+            errors.append("handoff_orchestration.parent_handoff отмечен completed/executed без execution evidence или accepted_reason")
+
+    children = item.get("child_tasks", [])
+    if children is None:
+        return
+    if not isinstance(children, list):
+        errors.append("handoff_orchestration.child_tasks должен быть list")
+        return
+    for index, child in enumerate(children, 1):
+        if not isinstance(child, dict):
+            errors.append(f"handoff_orchestration.child_tasks[{index}] должен быть mapping")
+            continue
+        child_id = str(child.get("id") or index)
+        child_status = str(child.get("status") or "")
+        if child_status and child_status not in ORCHESTRATION_CHILD_STATUSES:
+            errors.append(f"handoff_orchestration.child_tasks[{child_id}].status неизвестен")
+        if str(child.get("owner_boundary") or ""):
+            validate_boundary(str(child.get("owner_boundary") or ""), f"handoff_orchestration.child_tasks[{child_id}].owner_boundary", errors)
+        if child_status in ORCHESTRATION_GREEN_STATUSES and not has_evidence(child):
+            errors.append(f"handoff_orchestration.child_tasks[{child_id}] отмечен `{child_status}`, но не содержит execution evidence или accepted_reason")
+
+
+def validate_beginner_visual_surfaces(item: Any, data: dict[str, Any], errors: list[str]) -> None:
+    if not isinstance(item, dict):
+        errors.append("beginner_visual_surfaces должен быть mapping")
+        return
+
+    if item.get("no_heavy_default_ui") is not True:
+        errors.append("beginner_visual_surfaces.no_heavy_default_ui должен быть true")
+    default_surfaces = item.get("default_surfaces", [])
+    if not isinstance(default_surfaces, list):
+        errors.append("beginner_visual_surfaces.default_surfaces должен быть list")
+        default_surfaces = []
+    default_set = {str(surface) for surface in default_surfaces}
+    missing_surfaces = sorted(VISUAL_SURFACES - default_set)
+    if missing_surfaces:
+        errors.append("beginner_visual_surfaces.default_surfaces не содержит: " + ", ".join(missing_surfaces))
+    heavy_surfaces = [
+        surface
+        for surface in default_set
+        if re.search(r"(?i)(web|daemon|sqlite|telegram|websocket|worker|background|live)", surface)
+    ]
+    if heavy_surfaces:
+        errors.append("beginner_visual_surfaces.default_surfaces содержит heavy default UI promise: " + ", ".join(sorted(heavy_surfaces)))
+    boundary = str(item.get("heavy_ui_boundary") or "")
+    if not boundary:
+        errors.append("beginner_visual_surfaces.heavy_ui_boundary обязателен")
+    if HEAVY_DEFAULT_UI_RE.search(boundary) and not re.search(r"(?i)(not default|not default promises|не является default|не по умолчанию|не default)", boundary):
+        errors.append("beginner_visual_surfaces.heavy_ui_boundary содержит heavy default UI promise")
+    if "project-lifecycle-dashboard.yaml" not in str(item.get("source_of_truth") or ""):
+        errors.append("beginner_visual_surfaces.source_of_truth должен ссылаться на project-lifecycle-dashboard.yaml")
+
+    statuses = item.get("status_vocabulary", [])
+    if not isinstance(statuses, list):
+        errors.append("beginner_visual_surfaces.status_vocabulary должен быть list")
+        statuses = []
+    status_set = {str(status) for status in statuses}
+    missing_statuses = sorted(BEGINNER_STATUSES - status_set)
+    if missing_statuses:
+        errors.append("beginner_visual_surfaces.status_vocabulary не содержит: " + ", ".join(missing_statuses))
+
+    boundaries = item.get("owner_boundaries", [])
+    if not isinstance(boundaries, list):
+        errors.append("beginner_visual_surfaces.owner_boundaries должен быть list")
+        boundaries = []
+    boundary_set = {str(boundary) for boundary in boundaries}
+    missing_boundaries = sorted(OWNER_BOUNDARIES - boundary_set)
+    if missing_boundaries:
+        errors.append("beginner_visual_surfaces.owner_boundaries не содержит: " + ", ".join(missing_boundaries))
+
+    chatgpt_card = item.get("chatgpt_mini_card")
+    if not isinstance(chatgpt_card, dict):
+        errors.append("beginner_visual_surfaces.chatgpt_mini_card должен быть mapping")
+        chatgpt_card = {}
+    if chatgpt_card.get("enabled") is not True:
+        errors.append("beginner_visual_surfaces.chatgpt_mini_card.enabled должен быть true")
+    if chatgpt_card.get("renders_from_dashboard_yaml") is not True:
+        errors.append("beginner_visual_surfaces.chatgpt_mini_card должен рендериться из dashboard YAML")
+    if not str(chatgpt_card.get("template") or "").endswith("visual-status-card.md.template"):
+        errors.append("beginner_visual_surfaces.chatgpt_mini_card.template должен ссылаться на visual-status-card.md.template")
+    if str(chatgpt_card.get("user_action_policy") or "") != "derive_from_external_actions_ledger":
+        errors.append("beginner_visual_surfaces.chatgpt_mini_card.user_action_policy должен быть derive_from_external_actions_ledger")
+    fields = chatgpt_card.get("required_fields", [])
+    if not isinstance(fields, list):
+        errors.append("beginner_visual_surfaces.chatgpt_mini_card.required_fields должен быть list")
+        fields = []
+    missing_fields = sorted(VISUAL_CARD_FIELDS - {str(field) for field in fields})
+    if missing_fields:
+        errors.append("beginner_visual_surfaces.chatgpt_mini_card.required_fields не содержит: " + ", ".join(missing_fields))
+    external_actions = data.get("external_actions_ledger", [])
+    if isinstance(external_actions, list) and external_actions:
+        user_action_value = str(chatgpt_card.get("user_action_required") or "")
+        if NO_USER_ACTION_RE.match(user_action_value):
+            errors.append("chatgpt mini card не может говорить, что пользователю ничего не требуется, если external_actions_ledger не пуст")
+
+    codex_card = item.get("codex_execution_card")
+    if not isinstance(codex_card, dict):
+        errors.append("beginner_visual_surfaces.codex_execution_card должен быть mapping")
+        codex_card = {}
+    if codex_card.get("enabled") is not True:
+        errors.append("beginner_visual_surfaces.codex_execution_card.enabled должен быть true")
+    if codex_card.get("renders_from_dashboard_yaml") is not True:
+        errors.append("beginner_visual_surfaces.codex_execution_card должен рендериться из dashboard YAML")
+    if not str(codex_card.get("template") or "").endswith("codex-execution-card.md.template"):
+        errors.append("beginner_visual_surfaces.codex_execution_card.template должен ссылаться на codex-execution-card.md.template")
+    if str(codex_card.get("execution_evidence_policy") or "") != "green_status_requires_evidence_or_accepted_reason":
+        errors.append("beginner_visual_surfaces.codex_execution_card.execution_evidence_policy должен требовать evidence для green status")
+    sections = codex_card.get("required_sections", [])
+    if not isinstance(sections, list):
+        errors.append("beginner_visual_surfaces.codex_execution_card.required_sections должен быть list")
+        sections = []
+    missing_sections = sorted(CODEX_CARD_SECTIONS - {str(section) for section in sections})
+    if missing_sections:
+        errors.append("beginner_visual_surfaces.codex_execution_card.required_sections не содержит: " + ", ".join(missing_sections))
+
+    markdown_dashboard = item.get("markdown_dashboard")
+    if not isinstance(markdown_dashboard, dict):
+        errors.append("beginner_visual_surfaces.markdown_dashboard должен быть mapping")
+        markdown_dashboard = {}
+    if markdown_dashboard.get("enabled") is not True:
+        errors.append("beginner_visual_surfaces.markdown_dashboard.enabled должен быть true")
+    if markdown_dashboard.get("renders_from_dashboard_yaml") is not True:
+        errors.append("beginner_visual_surfaces.markdown_dashboard должен рендериться из dashboard YAML")
+    if str(markdown_dashboard.get("output") or "") != "reports/project-lifecycle-dashboard.md":
+        errors.append("beginner_visual_surfaces.markdown_dashboard.output должен быть reports/project-lifecycle-dashboard.md")
+
+
 def validate_dashboard(data: dict[str, Any]) -> list[str]:
     errors: list[str] = []
     if data.get("schema") != SCHEMA:
@@ -437,6 +623,9 @@ def validate_dashboard(data: dict[str, Any]) -> list[str]:
         errors.append("handoff_orchestration.route_explanation_boundary обязателен")
     if "не переключ" not in boundary_text and "does not" not in boundary_text:
         errors.append("handoff_orchestration.route_explanation_boundary должен явно запрещать advisory auto-switch claim")
+    validate_orchestration_execution_claims(orchestration, errors)
+
+    validate_beginner_visual_surfaces(data.get("beginner_visual_surfaces"), data, errors)
 
     runbook_packages = data.get("runbook_packages")
     if runbook_packages is not None:

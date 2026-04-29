@@ -352,9 +352,23 @@ run_project_lifecycle_dashboard_smoke() {
     "$ROOT/template-repo/template/.chatgpt/project-lifecycle-dashboard.yaml"
   python3 "$ROOT/template-repo/scripts/render-project-lifecycle-dashboard.py" \
     --input "$ROOT/template-repo/template/.chatgpt/project-lifecycle-dashboard.yaml" \
+    --format markdown-full \
     --output "$tmp_dir/project-lifecycle-dashboard.md"
   grep -q "Панель жизненного цикла проекта" "$tmp_dir/project-lifecycle-dashboard.md"
   grep -q "Следующий шаг" "$tmp_dir/project-lifecycle-dashboard.md"
+  grep -q "Визуальные поверхности для новичка" "$tmp_dir/project-lifecycle-dashboard.md"
+  python3 "$ROOT/template-repo/scripts/render-project-lifecycle-dashboard.py" \
+    --input "$ROOT/tests/project-lifecycle-dashboard/valid/project-lifecycle-dashboard.yaml" \
+    --format chatgpt-card \
+    --stdout > "$tmp_dir/chatgpt-card.md"
+  grep -q "От пользователя требуется" "$tmp_dir/chatgpt-card.md"
+  grep -q "Одобрить runtime deploy" "$tmp_dir/chatgpt-card.md"
+  python3 "$ROOT/template-repo/scripts/render-project-lifecycle-dashboard.py" \
+    --input "$ROOT/tests/project-lifecycle-dashboard/valid/project-lifecycle-dashboard.yaml" \
+    --format codex-card \
+    --stdout > "$tmp_dir/codex-card.md"
+  grep -q "route receipt" "$tmp_dir/codex-card.md"
+  grep -q "selected_model: gpt-5.5" "$tmp_dir/codex-card.md"
 
   python3 "$ROOT/template-repo/scripts/validate-project-lifecycle-dashboard.py" \
     "$ROOT/tests/project-lifecycle-dashboard/valid/project-lifecycle-dashboard.yaml"
@@ -379,6 +393,22 @@ run_project_lifecycle_dashboard_smoke() {
     cat /tmp/project-lifecycle-dashboard-bad-boundary.log >&2
     return 1
   fi
+  if python3 "$ROOT/template-repo/scripts/validate-project-lifecycle-dashboard.py" \
+    "$ROOT/tests/project-lifecycle-dashboard/external-action-no-user-required/project-lifecycle-dashboard.yaml" \
+    >/tmp/project-lifecycle-dashboard-external-action-no-user-required.log 2>&1; then
+    echo "project lifecycle dashboard external-action no-user-required fixture unexpectedly passed" >&2
+    cat /tmp/project-lifecycle-dashboard-external-action-no-user-required.log >&2
+    return 1
+  fi
+  grep -q "external_actions_ledger" /tmp/project-lifecycle-dashboard-external-action-no-user-required.log
+  if python3 "$ROOT/template-repo/scripts/validate-project-lifecycle-dashboard.py" \
+    "$ROOT/tests/project-lifecycle-dashboard/codex-completed-no-evidence/project-lifecycle-dashboard.yaml" \
+    >/tmp/project-lifecycle-dashboard-codex-completed-no-evidence.log 2>&1; then
+    echo "project lifecycle dashboard codex completed-no-evidence fixture unexpectedly passed" >&2
+    cat /tmp/project-lifecycle-dashboard-codex-completed-no-evidence.log >&2
+    return 1
+  fi
+  grep -Eq "completed/executed|execution evidence" /tmp/project-lifecycle-dashboard-codex-completed-no-evidence.log
 
   python3 - "$ROOT/tests/project-lifecycle-dashboard/valid/project-lifecycle-dashboard.yaml" "$tmp_dir" <<'PY'
 from pathlib import Path
@@ -429,7 +459,10 @@ PY
     rm -f "/tmp/project-lifecycle-dashboard-$fixture.log"
   done
 
-  rm -f /tmp/project-lifecycle-dashboard-false-green.log /tmp/project-lifecycle-dashboard-false-autoswitch.log /tmp/project-lifecycle-dashboard-bad-boundary.log
+  rm -f /tmp/project-lifecycle-dashboard-false-green.log /tmp/project-lifecycle-dashboard-false-autoswitch.log \
+    /tmp/project-lifecycle-dashboard-bad-boundary.log \
+    /tmp/project-lifecycle-dashboard-external-action-no-user-required.log \
+    /tmp/project-lifecycle-dashboard-codex-completed-no-evidence.log
   rm -rf "$tmp_dir"
 }
 

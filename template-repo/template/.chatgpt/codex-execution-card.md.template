@@ -1,0 +1,20 @@
+route receipt:
+- task_class: {{TASK_CLASS}}
+- selected_profile: {{SELECTED_PROFILE}}
+- selected_model: {{SELECTED_MODEL}}
+- selected_reasoning_effort: {{SELECTED_REASONING_EFFORT}}
+- scenario: {{SCENARIO}}
+
+progress:
+✅ completed steps: {{COMPLETED_STEPS}}
+🟡 active step / wave: {{ACTIVE_STEP}}
+⬜ remaining steps: {{REMAINING_STEPS}}
+
+blockers:
+{{BLOCKERS}}
+
+next:
+- {{NEXT_INTERNAL_ACTION}}
+
+external:
+- {{EXTERNAL_ACTION}}

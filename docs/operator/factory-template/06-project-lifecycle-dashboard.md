@@ -16,6 +16,8 @@
 - Renderer: `template-repo/scripts/render-project-lifecycle-dashboard.py`.
 - Validator: `template-repo/scripts/validate-project-lifecycle-dashboard.py`.
 - Markdown output по умолчанию: `reports/project-lifecycle-dashboard.md`.
+- ChatGPT mini card template: `template-repo/template/.chatgpt/visual-status-card.md.template`.
+- Codex execution card template: `template-repo/template/.chatgpt/codex-execution-card.md.template`.
 
 В generated/battle project canonical state живет в `.chatgpt/project-lifecycle-dashboard.yaml`. Он template-owned и безопасен для materialization downstream. Factory producer paths вроде `factory/producer/*` не должны попадать в root боевого проекта.
 
@@ -35,6 +37,26 @@
 - runbook packages: current phase, gates, blockers и next action для четырех entry paths;
 - external actions ledger: только реальные user/manual/runtime/downstream действия;
 - recommended next step и fallback next step.
+
+## Beginner visual surfaces / визуальные поверхности для новичка
+
+Для новичка dashboard проявляется в трех местах:
+
+- `ChatGPT mini card` — короткий readout в ChatGPT Project: проект, фаза, активная задача, статус, готово, блокеры, требуется ли действие пользователя и следующий безопасный шаг.
+- `Codex execution card` — короткий readout в Codex App / VS Code Codex extension: route receipt, выбранный профиль/model/reasoning, текущая wave/task, completed/remaining steps, blockers, next internal action и external action boundary.
+- `reports/project-lifecycle-dashboard.md` — полная Markdown доска состояния, которую можно открыть в VS Code Markdown Preview или GitHub preview.
+
+Связь слоев:
+
+- `project-lifecycle-dashboard` — source/full board;
+- `ChatGPT mini card` — короткий readout для пульта управления;
+- `Codex execution card` — ход исполнения для пульта исполнения;
+- `orchestration-cockpit-lite` — detailed artifact для parent handoff и child tasks;
+- `operator-dashboard` — runtime/deploy detail.
+
+Карточки не являются отдельным state. Renderer выводит их из того же dashboard YAML. Если данных не хватает, карточка показывает `unknown` или `pending`, а не зеленый статус.
+
+Если `external_actions_ledger` не пуст, ChatGPT card не может писать “от пользователя требуется: ничего”. Если Codex card пишет `executed`, `completed`, `passed` или `done`, у этого claim должна быть execution evidence или accepted reason.
 
 ## Как читать “что происходит сейчас”
 
@@ -115,14 +137,27 @@ python3 template-repo/scripts/check-standards-watchlist.py --root .
 
 python3 template-repo/scripts/render-project-lifecycle-dashboard.py \
   --input template-repo/template/.chatgpt/project-lifecycle-dashboard.yaml \
+  --format markdown-full \
   --output reports/project-lifecycle-dashboard.md
+
+python3 template-repo/scripts/render-project-lifecycle-dashboard.py \
+  --input template-repo/template/.chatgpt/project-lifecycle-dashboard.yaml \
+  --format chatgpt-card \
+  --stdout
+
+python3 template-repo/scripts/render-project-lifecycle-dashboard.py \
+  --input template-repo/template/.chatgpt/project-lifecycle-dashboard.yaml \
+  --format codex-card \
+  --stdout
 ```
 
 Для generated project из его root:
 
 ```bash
 python3 scripts/validate-project-lifecycle-dashboard.py .chatgpt/project-lifecycle-dashboard.yaml
-python3 scripts/render-project-lifecycle-dashboard.py --output reports/project-lifecycle-dashboard.md
+python3 scripts/render-project-lifecycle-dashboard.py --format markdown-full --output reports/project-lifecycle-dashboard.md
+python3 scripts/render-project-lifecycle-dashboard.py --format chatgpt-card --stdout
+python3 scripts/render-project-lifecycle-dashboard.py --format codex-card --stdout
 ```
 
 Обычный пользователь не обязан запускать эти команды вручную в one-paste flow: это внутренняя работа Codex при closeout/verify.

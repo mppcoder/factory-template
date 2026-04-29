@@ -9,6 +9,7 @@
 - Historical Actions rerun cleanup (`2026-04-29`): CI #1 `24839250094`, CI #2 `24839291045`, CI #3 `24839294182`, CI #4 `24839297068`, CI #5 `24839481282` rerun and classified. CI #1/#5 are old fixed bug snapshots; CI #2/#3/#4 are historical superseded Dependabot PR checks. Clean-worktree `bash template-repo/scripts/verify-all.sh ci` passed after fixing pre-release/version scan portability.
 - GitHub Actions current main before fix commit: run `25101111513` green on `7e6b63c350c4cfff1a8ebe113a722ef46fd40d3f`.
 - GitHub Actions fix commit run `25101530394` exposed a follow-up allowlist gap: legacy scan matched defect-capture report evidence. Clean-worktree `verify-all.sh ci` passes after adding `reports/bugs/*` as allowed historical evidence.
+- `bash template-repo/scripts/verify-all.sh quick`: PASS (`2026-04-29`, beginner visual dashboard UX: ChatGPT/Codex cards + Markdown dashboard renderer/validator/fixtures)
 - `bash template-repo/scripts/verify-all.sh quick`: PASS (`2026-04-29`, P9 lifecycle standards navigator targeted verification)
 - `bash template-repo/scripts/verify-all.sh ci`: PASS (`2026-04-28`, local reproduction on commit `750ce6a787cf304d24af14ab856da34bb63221e0`)
 - GitHub Actions runner acquisition incident: runs `25054700529`, `25057090187`, `25058477360`, `25059862780` were rerun successfully (`2026-04-29`); no repo-side CI regression found.
@@ -65,6 +66,7 @@
 - Model prompt policy: `validate-model-prompt-policy.py`, Artifact Eval `model-prompt-policy` и `reports/model-routing/model-routing-proposal.md` проверяют, что новая model требует companion prompt migration review до promotion
 - Project-root boundary: `validate-tree-contract.py` и Artifact Eval `project-root-boundary` проверяют, что intermediate repos для intake/adoption/reconstruction живут внутри repo целевого `greenfield-product`, не как siblings в `/projects`
 - Lifecycle standards navigator: `validate-standards-gates.py`, `check-standards-watchlist.py`, extended `validate-project-lifecycle-dashboard.py`, positive/negative fixtures and quick smoke проверяют standards profile/gates/watchlist, false green, false compliance, stale overclaim, AI safety gate and production/commercial profile boundary
+- Beginner visual dashboard UX: `render-project-lifecycle-dashboard.py --format markdown-full/chatgpt-card/codex-card`, `visual-status-card.md.template`, `codex-execution-card.md.template`, extended `validate-project-lifecycle-dashboard.py` and quick smoke проверяют единый source-of-truth, false no-user-action при external ledger, Codex completed/executed без evidence, false auto-switch и no-heavy-default boundary
 
 ## Известные остаточные ограничения
 

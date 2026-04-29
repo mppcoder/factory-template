@@ -4,6 +4,33 @@ Status source of truth: `docs/releases/release-scorecard.yaml`.
 Current scorecard state: `2.5.0 GA Ready`.
 TEST_REPORT.md is verification evidence, not the canonical release-status source.
 
+## Проверка beginner visual dashboard UX
+
+Дата: `2026-04-29`.
+
+Добавлен beginner-first визуальный слой поверх repo-native Project Lifecycle Dashboard без web app, daemon, SQLite, Telegram layer, websocket/live-refresh или background worker default.
+
+- Gap capture: `reports/gaps/beginner-visual-dashboard-ux-gap.md`.
+- Operator docs: `docs/operator/factory-template/07-beginner-visual-dashboard-ux.md`, `docs/operator/factory-template/06-project-lifecycle-dashboard.md`, `docs/operator/factory-template/05-orchestration-cockpit-lite.md`.
+- Templates: `template-repo/template/.chatgpt/visual-status-card.md.template`, `template-repo/template/.chatgpt/codex-execution-card.md.template`.
+- Dashboard contract: `template-repo/template/.chatgpt/project-lifecycle-dashboard.yaml`.
+- Renderer/validator: `template-repo/scripts/render-project-lifecycle-dashboard.py`, `template-repo/scripts/validate-project-lifecycle-dashboard.py`.
+- Fixtures: `tests/project-lifecycle-dashboard/valid/`, `tests/project-lifecycle-dashboard/external-action-no-user-required/`, `tests/project-lifecycle-dashboard/codex-completed-no-evidence/`, existing false-green and false-autoswitch fixtures.
+
+Проверки:
+
+- `python3 template-repo/scripts/validate-project-lifecycle-dashboard.py template-repo/template/.chatgpt/project-lifecycle-dashboard.yaml` — pass.
+- `python3 template-repo/scripts/validate-project-lifecycle-dashboard.py tests/project-lifecycle-dashboard/valid/project-lifecycle-dashboard.yaml` — pass.
+- `python3 template-repo/scripts/render-project-lifecycle-dashboard.py --format markdown-full --output reports/project-lifecycle-dashboard.md` — pass.
+- `python3 template-repo/scripts/render-project-lifecycle-dashboard.py --input tests/project-lifecycle-dashboard/valid/project-lifecycle-dashboard.yaml --format chatgpt-card --stdout` — pass; карточка показывает external action вместо “ничего”.
+- `python3 template-repo/scripts/render-project-lifecycle-dashboard.py --input tests/project-lifecycle-dashboard/valid/project-lifecycle-dashboard.yaml --format codex-card --stdout` — pass; карточка показывает route receipt и `selected_model: gpt-5.5`.
+- Negative fixture `external-action-no-user-required` — validator returns non-zero as expected.
+- Negative fixture `codex-completed-no-evidence` — validator returns non-zero as expected.
+- Existing negative fixture `false-autoswitch` — validator returns non-zero as expected.
+- `bash template-repo/scripts/verify-all.sh quick` — pass on `2026-04-29`; includes visual dashboard card render smoke and targeted negative fixtures.
+
+Full verify decision: не запускался, потому что change затрагивает docs/templates/dashboard renderer/validator/fixtures и не меняет launcher/runtime/scaffold matrix. Quick verify покрывает affected contours.
+
 ## Проверка handoff_shape routing UX
 
 Дата: `2026-04-29`.

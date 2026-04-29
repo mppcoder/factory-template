@@ -172,11 +172,17 @@ python3 template-repo/scripts/check-codex-model-catalog.py . --write-proposal
 Для общего состояния проекта добавлен repo-native lifecycle dashboard:
 
 - `docs/operator/factory-template/06-project-lifecycle-dashboard.md` — как читать “что происходит сейчас”, blockers, next action, release/deploy/runtime state и improvement queue;
+- `docs/operator/factory-template/07-beginner-visual-dashboard-ux.md` — beginner-first объяснение трех визуальных поверхностей;
 - `template-repo/template/.chatgpt/project-lifecycle-dashboard.yaml` — canonical state artifact для generated проектов;
 - `template-repo/scripts/render-project-lifecycle-dashboard.py` — Markdown/CLI renderer;
 - `template-repo/scripts/validate-project-lifecycle-dashboard.py` — schema/status/evidence/boundary validator.
 
 Dashboard агрегирует task/stage state, feature execution progress, orchestration cockpit, release readiness и runtime signals. Он не заменяет cockpit или operator dashboard и не добавляет heavy runtime. Advisory route text может быть показан как readout, но не считается auto-switch mechanism для уже открытой Codex-сессии.
+
+Для новичка есть 3 визуальные поверхности:
+- ChatGPT mini card — коротко показывает проект, фазу, активную задачу, статус, готово, блокеры, действие пользователя и следующий шаг;
+- Codex execution card — показывает route receipt, текущую wave/task, progress, blockers, next internal action и verify/sync boundary;
+- Markdown dashboard — полный отчет `reports/project-lifecycle-dashboard.md`.
 
 ## Standards navigator / контроль жизненного цикла по стандартам
 

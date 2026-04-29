@@ -3,12 +3,24 @@ from __future__ import annotations
 
 import argparse
 import importlib.util
+import re
 from pathlib import Path
 from typing import Any
 
 import yaml
 
 from factory_automation_common import now_utc, read_text, read_yaml
+
+
+GREEN_STATUSES = {"passed", "completed", "done", "ready", "archived", "executed"}
+STATUS_MAP = {
+    "not_started": "pending",
+    "draft": "pending",
+    "ready": "completed",
+    "done": "completed",
+    "archived": "completed",
+    "skipped": "not_applicable",
+}
 
 
 def detect_repo_root() -> Path:
@@ -90,6 +102,189 @@ def evidence_text(item: dict[str, Any]) -> str:
     return ""
 
 
+def display_status(status: str) -> str:
+    clean = (status or "").strip()
+    return STATUS_MAP.get(clean, clean or "unknown")
+
+
+def template_path(root: Path, dashboard_path: Path, name: str) -> Path | None:
+    candidates = [
+        dashboard_path.parent / name,
+        root / "template-repo" / "template" / ".chatgpt" / name,
+    ]
+    for candidate in candidates:
+        if candidate.exists():
+            return candidate
+    return None
+
+
+def apply_template(template: str, values: dict[str, str]) -> str:
+    rendered = template
+    for key, value in values.items():
+        rendered = rendered.replace("{{" + key + "}}", value)
+    rendered = re.sub(r"\{\{[A-Z0-9_]+\}\}", "unknown", rendered)
+    return rendered.rstrip() + "\n"
+
+
+def task_items(execution: dict[str, Any]) -> list[dict[str, Any]]:
+    result: list[dict[str, Any]] = []
+    for wave in execution.get("waves", []) or []:
+        if not isinstance(wave, dict):
+            continue
+        for task in wave.get("tasks", []) or []:
+            if isinstance(task, dict):
+                result.append(task)
+    return result
+
+
+def completion_counts(data: dict[str, Any]) -> tuple[int, int]:
+    gates = list_value(data, "stage_gates")
+    execution = data.get("multi_step_execution", {}) if isinstance(data.get("multi_step_execution"), dict) else {}
+    tasks = task_items(execution)
+    items = [item for item in gates + tasks if isinstance(item, dict)]
+    completed = sum(1 for item in items if str(item.get("status") or "") in GREEN_STATUSES)
+    return completed, len(items)
+
+
+def blockers_text(data: dict[str, Any], *, bullet_lines: bool = False) -> str:
+    execution = data.get("multi_step_execution", {}) if isinstance(data.get("multi_step_execution"), dict) else {}
+    blockers: list[str] = []
+    for blocked in execution.get("blocked_tasks", []) or []:
+        blockers.append(str(blocked))
+    for action in data.get("external_actions_ledger", []) or []:
+        if isinstance(action, dict):
+            action_id = action.get("id") or action.get("owner_boundary") or "external-action"
+            blockers.append(f"{action_id}: {action.get('action', '')}")
+    if not blockers:
+        return "- none" if bullet_lines else "none"
+    if bullet_lines:
+        return "\n".join(f"- {item}" for item in blockers)
+    return "; ".join(blockers)
+
+
+def user_action_text(data: dict[str, Any]) -> str:
+    actions = data.get("external_actions_ledger", [])
+    if isinstance(actions, list) and actions:
+        first = actions[0]
+        if isinstance(first, dict):
+            return str(first.get("action") or first.get("id") or "external action pending")
+        return str(first)
+    return "ничего"
+
+
+def next_safe_action(data: dict[str, Any]) -> str:
+    recommended = data.get("recommended_next_step", {}) if isinstance(data.get("recommended_next_step"), dict) else {}
+    execution = data.get("multi_step_execution", {}) if isinstance(data.get("multi_step_execution"), dict) else {}
+    return str(recommended.get("action") or value(execution, "next_task", "action") or "unknown")
+
+
+def active_step_text(data: dict[str, Any]) -> str:
+    execution = data.get("multi_step_execution", {}) if isinstance(data.get("multi_step_execution"), dict) else {}
+    current_wave = execution.get("current_wave", "")
+    next_task = execution.get("next_task", {}) if isinstance(execution.get("next_task"), dict) else {}
+    task_id = next_task.get("id") or "unknown"
+    action = next_task.get("action") or "unknown"
+    return f"wave {current_wave}, task {task_id}: {action}"
+
+
+def remaining_steps_text(data: dict[str, Any]) -> str:
+    execution = data.get("multi_step_execution", {}) if isinstance(data.get("multi_step_execution"), dict) else {}
+    remaining: list[str] = []
+    for task in task_items(execution):
+        status = str(task.get("status") or "")
+        if status not in GREEN_STATUSES:
+            remaining.append(str(task.get("id") or task.get("title") or "task"))
+    if not remaining:
+        next_task = execution.get("next_task", {}) if isinstance(execution.get("next_task"), dict) else {}
+        if next_task.get("id"):
+            remaining.append(str(next_task.get("id")))
+    return ", ".join(remaining) if remaining else "none"
+
+
+def render_chatgpt_card(data: dict[str, Any], root: Path, dashboard_path: Path) -> str:
+    context = optional_context(root, dashboard_path)
+    project = resolved_project(data, context)
+    change = resolved_change(data, context)
+    lifecycle = data.get("lifecycle_phase", {}) if isinstance(data.get("lifecycle_phase"), dict) else {}
+    completed, total = completion_counts(data)
+    values = {
+        "PROJECT_NAME": project["name"] or "unknown",
+        "CURRENT_PHASE": str(lifecycle.get("current") or "unknown"),
+        "NEXT_PHASE": str(lifecycle.get("next") or "unknown"),
+        "ACTIVE_CHANGE_TITLE": change["title"] or "unknown",
+        "ACTIVE_STATUS": display_status(change["status"]),
+        "COMPLETED_STEPS": str(completed),
+        "TOTAL_STEPS": str(total),
+        "BLOCKERS": blockers_text(data),
+        "USER_ACTION_REQUIRED": user_action_text(data),
+        "NEXT_SAFE_ACTION": next_safe_action(data),
+    }
+    path = template_path(root, dashboard_path, "visual-status-card.md.template")
+    template = path.read_text(encoding="utf-8") if path else "\n".join(
+        [
+            "📍 Проект: {{PROJECT_NAME}}",
+            "🧭 Фаза: {{CURRENT_PHASE}} → {{NEXT_PHASE}}",
+            "🧩 Активная задача: {{ACTIVE_CHANGE_TITLE}}",
+            "🟡 Статус: {{ACTIVE_STATUS}}",
+            "✅ Готово: {{COMPLETED_STEPS}}/{{TOTAL_STEPS}}",
+            "⛔ Блокеры: {{BLOCKERS}}",
+            "👤 От пользователя требуется: {{USER_ACTION_REQUIRED}}",
+            "➡️ Следующий шаг: {{NEXT_SAFE_ACTION}}",
+        ]
+    )
+    return apply_template(template, values)
+
+
+def render_codex_card(data: dict[str, Any], root: Path, dashboard_path: Path) -> str:
+    context = optional_context(root, dashboard_path)
+    change = resolved_change(data, context)
+    orchestration = data.get("handoff_orchestration", {}) if isinstance(data.get("handoff_orchestration"), dict) else {}
+    visual = data.get("beginner_visual_surfaces", {}) if isinstance(data.get("beginner_visual_surfaces"), dict) else {}
+    codex_card = visual.get("codex_execution_card", {}) if isinstance(visual.get("codex_execution_card"), dict) else {}
+    completed, total = completion_counts(data)
+    values = {
+        "TASK_CLASS": change["class"] or "unknown",
+        "SELECTED_PROFILE": str(orchestration.get("selected_profile") or "unknown"),
+        "SELECTED_MODEL": str(orchestration.get("selected_model") or "unknown"),
+        "SELECTED_REASONING_EFFORT": str(orchestration.get("selected_reasoning_effort") or "unknown"),
+        "SCENARIO": str(codex_card.get("scenario") or "unknown"),
+        "COMPLETED_STEPS": f"{completed}/{total}",
+        "ACTIVE_STEP": active_step_text(data),
+        "REMAINING_STEPS": remaining_steps_text(data),
+        "BLOCKERS": blockers_text(data, bullet_lines=True),
+        "NEXT_INTERNAL_ACTION": next_safe_action(data),
+        "EXTERNAL_ACTION": f"user action required: {user_action_text(data)}"
+        if user_action_text(data) != "ничего"
+        else "user action not required",
+    }
+    path = template_path(root, dashboard_path, "codex-execution-card.md.template")
+    template = path.read_text(encoding="utf-8") if path else "\n".join(
+        [
+            "route receipt:",
+            "- task_class: {{TASK_CLASS}}",
+            "- selected_profile: {{SELECTED_PROFILE}}",
+            "- selected_model: {{SELECTED_MODEL}}",
+            "- selected_reasoning_effort: {{SELECTED_REASONING_EFFORT}}",
+            "- scenario: {{SCENARIO}}",
+            "",
+            "progress:",
+            "✅ completed steps: {{COMPLETED_STEPS}}",
+            "🟡 active step / wave: {{ACTIVE_STEP}}",
+            "⬜ remaining steps: {{REMAINING_STEPS}}",
+            "",
+            "blockers:",
+            "{{BLOCKERS}}",
+            "",
+            "next:",
+            "- {{NEXT_INTERNAL_ACTION}}",
+            "",
+            "external:",
+            "- {{EXTERNAL_ACTION}}",
+        ]
+    )
+    return apply_template(template, values)
+
+
 def optional_context(root: Path, dashboard_path: Path) -> dict[str, Any]:
     chatgpt_dir = dashboard_path.parent
     task_state = read_yaml(chatgpt_dir / "task-state.yaml")
@@ -145,6 +340,7 @@ def render(data: dict[str, Any], root: Path, dashboard_path: Path) -> str:
     task_state = context.get("task_state", {}) if isinstance(context.get("task_state"), dict) else {}
     execution = data.get("multi_step_execution", {}) if isinstance(data.get("multi_step_execution"), dict) else {}
     orchestration = data.get("handoff_orchestration", {}) if isinstance(data.get("handoff_orchestration"), dict) else {}
+    visual = data.get("beginner_visual_surfaces", {}) if isinstance(data.get("beginner_visual_surfaces"), dict) else {}
     release = data.get("release_readiness", {}) if isinstance(data.get("release_readiness"), dict) else {}
     runtime = data.get("deploy_runtime", {}) if isinstance(data.get("deploy_runtime"), dict) else {}
     standards = data.get("standards_navigator", {}) if isinstance(data.get("standards_navigator"), dict) else {}
@@ -220,6 +416,15 @@ def render(data: dict[str, Any], root: Path, dashboard_path: Path) -> str:
 
     lines.extend(
         [
+            "",
+            "## Визуальные поверхности для новичка",
+            "",
+            f"- default surfaces: `{', '.join(map(str, visual.get('default_surfaces', []) or [])) or 'none'}`",
+            f"- source of truth: `{visual.get('source_of_truth', '')}`",
+            f"- ChatGPT mini card template: `{value(visual, 'chatgpt_mini_card', 'template')}`",
+            f"- Codex execution card template: `{value(visual, 'codex_execution_card', 'template')}`",
+            f"- Markdown dashboard output: `{value(visual, 'markdown_dashboard', 'output')}`",
+            f"- heavy UI boundary: {visual.get('heavy_ui_boundary', '')}",
             "",
             "## Передача и оркестрация",
             "",
@@ -309,6 +514,12 @@ def main() -> int:
     parser = argparse.ArgumentParser(description="Рендерит repo-native Project Lifecycle Dashboard в Markdown.")
     parser.add_argument("--root", default="", help="Project root. По умолчанию определяется автоматически.")
     parser.add_argument("--input", default="", help="Dashboard YAML. По умолчанию `.chatgpt/project-lifecycle-dashboard.yaml` или template source.")
+    parser.add_argument(
+        "--format",
+        choices=["markdown-full", "chatgpt-card", "codex-card"],
+        default="markdown-full",
+        help="Формат вывода: полный Markdown dashboard или короткая visual card.",
+    )
     parser.add_argument("--output", default="reports/project-lifecycle-dashboard.md", help="Markdown output path.")
     parser.add_argument("--stdout", action="store_true", help="Печатать Markdown в stdout вместо записи файла.")
     args = parser.parse_args()
@@ -324,7 +535,12 @@ def main() -> int:
             print(f"- {error}")
         return 1
 
-    rendered = render(data, root, input_path)
+    if args.format == "chatgpt-card":
+        rendered = render_chatgpt_card(data, root, input_path)
+    elif args.format == "codex-card":
+        rendered = render_codex_card(data, root, input_path)
+    else:
+        rendered = render(data, root, input_path)
     if args.stdout:
         print(rendered, end="")
     else:

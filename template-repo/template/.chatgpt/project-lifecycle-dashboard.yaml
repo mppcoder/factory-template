@@ -190,6 +190,61 @@ runbook_packages:
     next_action: "Для материалов без repo загрузить их в target root/_incoming; reconstruction/adoption/conversion выполняет Codex-runbook."
     owner_boundary: internal-repo-follow-up
 
+beginner_visual_surfaces:
+  no_heavy_default_ui: true
+  default_surfaces:
+    - chatgpt-mini-card
+    - codex-execution-card
+    - markdown-dashboard
+  heavy_ui_boundary: "Default is ChatGPT mini card, Codex execution card and Markdown dashboard only; web app, daemon, SQLite, Telegram notifications, websocket/live-refresh and background worker are not default promises."
+  source_of_truth: ".chatgpt/project-lifecycle-dashboard.yaml"
+  status_vocabulary:
+    - pending
+    - in_progress
+    - blocked
+    - passed
+    - failed
+    - completed
+    - not_applicable
+  owner_boundaries:
+    - internal-repo-follow-up
+    - external-user-action
+    - runtime-action
+    - downstream-battle-action
+    - model-mapping-blocker
+    - secret-boundary-blocker
+  chatgpt_mini_card:
+    enabled: true
+    template: ".chatgpt/visual-status-card.md.template"
+    renders_from_dashboard_yaml: true
+    user_action_policy: derive_from_external_actions_ledger
+    user_action_required: derive_from_external_actions_ledger
+    required_fields:
+      - project
+      - phase
+      - active_task
+      - status
+      - completed
+      - blockers
+      - user_action_required
+      - next_safe_action
+  codex_execution_card:
+    enabled: true
+    template: ".chatgpt/codex-execution-card.md.template"
+    renders_from_dashboard_yaml: true
+    scenario: "project-lifecycle-dashboard / beginner visual dashboard UX"
+    execution_evidence_policy: green_status_requires_evidence_or_accepted_reason
+    required_sections:
+      - route_receipt
+      - progress
+      - blockers
+      - next
+      - external
+  markdown_dashboard:
+    enabled: true
+    output: "reports/project-lifecycle-dashboard.md"
+    renders_from_dashboard_yaml: true
+
 release_readiness:
   version: ""
   status: pending
@@ -349,6 +404,8 @@ fallback_next_step:
 
 source_artifacts:
   - ".chatgpt/project-lifecycle-dashboard.yaml"
+  - ".chatgpt/visual-status-card.md.template"
+  - ".chatgpt/codex-execution-card.md.template"
   - ".chatgpt/task-state.yaml"
   - ".chatgpt/stage-state.yaml"
   - ".chatgpt/task-index.yaml"
