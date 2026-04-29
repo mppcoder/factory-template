@@ -2,41 +2,47 @@
 
 ## Что проверяли
 
-- GitHub Actions backlog после hosted runner acquisition failures.
-- Open GitHub Issues / PRs.
-- Historical red runs in the recent Actions window.
-- Whether reruns reach repo steps or expose a real repo-side CI regression.
+- Historical red GitHub Actions CI #1-#5 from `2026-04-23`.
+- Current GitHub Issues / PR backlog.
+- PR #4 supersession state for Dependabot PRs #1, #2, #3.
+- Current workflow baseline and current-main verification behavior.
 
 ## Статус defect-capture
 
-- Bug report создан: `reports/bugs/2026-04-28-ci-run-64-project-root-boundary-regression.md`.
-- Factory feedback не требуется: reusable factory/process defect не подтвержден.
-- Слой: CI workflow / GitHub-hosted runner acquisition.
-- Статус remediation: repo code changes not required; affected runs rerun successfully after GitHub-hosted runner acquisition recovered.
+- Bug report создан: `reports/bugs/2026-04-29-historical-actions-rerun-regression.md`.
+- Factory feedback создан: `reports/factory-feedback/feedback-2026-04-29-historical-actions-rerun-regression.md`.
+- Слой: verification scripts / release audit portability.
+- Статус remediation: fixed in scope.
 
 ## Что подтверждено
 
 - Open GitHub Issues: `0`.
 - Open GitHub PRs: `0`.
-- Closed PR check: PR #4 is `MERGED`; Dependabot PRs #1, #2, #3 are `CLOSED`.
-- Historical red runs inspected: `25054700529`, `25057090187`, `25058477360`, `25059862780`.
-- Each red run originally had `verify-baseline` cancelled before steps with annotation `The job was not acquired by Runner of type hosted even after multiple attempts`.
-- Each inspected red run was rerun and is now green; both `verify-baseline` and `release-bundle-dry-run` passed.
-- No checkout/setup-python/pip/verify-all/release-bundle repo-side failure appeared.
+- PR #4 is `MERGED` and supersedes PRs #1, #2, #3.
+- Current CI workflow uses `actions/checkout@v6`, `actions/setup-python@v6`, `actions/upload-artifact@v7`.
+- Latest pre-fix CI on `main` was green: run `25101111513`, commit `7e6b63c350c4cfff1a8ebe113a722ef46fd40d3f`.
+- CI #1 `24839250094` rerun reproduced old bug-024 snapshot: `EXAMPLES_TEST` / `validate-versioning-layer.py`.
+- CI #2 `24839291045`, CI #3 `24839294182`, CI #4 `24839297068` reruns reproduced stale Dependabot PR failures on superseded merge bases.
+- CI #5 `24839481282` rerun reproduced old fixed bug snapshot on commit `02fb8b7dfb5a74be13e1ba0211f24ac0fc1e0a82`.
+- No hosted-runner acquisition blocker occurred in these five reruns.
+- Current verification gap found separately: GitHub runner lacked `rg`, masking pre-release audit scan behavior; fixed by removing `rg` dependency and normalizing scan paths.
 
 ## Команды проверки
 
 - `gh issue list --repo mppcoder/factory-template --state open --limit 50`: PASS, no open issues.
 - `gh pr list --repo mppcoder/factory-template --state open --limit 50`: PASS, no open PRs.
-- `gh pr list --repo mppcoder/factory-template --state closed --limit 10`: PASS, PR #4 merged and PRs #1-#3 closed.
-- `gh run list --repo mppcoder/factory-template --limit 30`: PASS, four historical red runs identified.
-- `gh run view <RUN_ID> --repo mppcoder/factory-template --json name,event,status,conclusion,headSha,headBranch,displayTitle,createdAt,updatedAt,jobs`: PASS for `25054700529`, `25057090187`, `25058477360`, `25059862780`.
-- `gh run view <RUN_ID> --repo mppcoder/factory-template --verbose`: PASS for all four red runs; runner acquisition annotation captured.
-- `gh run view <RUN_ID> --repo mppcoder/factory-template --log-failed`: PASS as evidence collection for all four red runs; no failed step logs existed before rerun.
-- `gh run rerun <RUN_ID> --repo mppcoder/factory-template --failed`: PASS for all four red runs.
-- `gh run watch <RUN_ID> --repo mppcoder/factory-template --exit-status`: PASS for all four reruns.
-- `gh run list --repo mppcoder/factory-template --limit 12`: PASS, recent window shows inspected red runs now `completed success`.
+- `gh pr view 4 --repo mppcoder/factory-template --json ...`: PASS, PR #4 `MERGED`.
+- `gh run list --repo mppcoder/factory-template --limit 100 --json ...`: PASS, target runs identified.
+- `gh run view <RUN_ID> --repo mppcoder/factory-template --json ...`: PASS for CI #1-#5.
+- `gh run view <RUN_ID> --repo mppcoder/factory-template --verbose`: PASS for CI #1-#5.
+- `gh run view <RUN_ID> --repo mppcoder/factory-template --log-failed`: PASS where logs were available; job-log API used for PR run excerpts.
+- `gh run rerun <RUN_ID> --repo mppcoder/factory-template --failed`: attempted for CI #1-#5.
+- `gh run watch <RUN_ID> --repo mppcoder/factory-template --exit-status`: all five reruns completed red on old snapshot/stale PR verify step.
+- `bash template-repo/scripts/verify-all.sh ci` from clean worktree with the fix-set applied: PASS.
+- `git diff --check`: PASS.
+- `python3 template-repo/scripts/validate-codex-task-pack.py .`: PASS.
+- `python3 template-repo/scripts/validate-human-language-layer.py .`: PASS, active findings `0`.
 
 ## Итоговый вывод
 
-The red Actions were external GitHub-hosted runner acquisition failures. After rerun, all inspected runs reached repo steps and passed. No repo-side CI regression was found, and no remediation or new defect report is required.
+The historical red CI runs are not new current-main regressions. They remain red because they rerun old snapshots or superseded Dependabot PR merge bases that predate the bug-024 fix. A separate current verification portability defect was found and fixed in scope.

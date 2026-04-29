@@ -17,6 +17,6 @@ if ! python3 "$ROOT/template-repo/scripts/validate-tree-contract.py" "$ROOT"; th
 if ! bash "$ROOT/PHASE_DETECTION_TEST.sh"; then FAILS=$((FAILS+1)); fi
 if ! python3 "$ROOT/template-repo/scripts/validate-release-scorecard.py" "$ROOT"; then FAILS=$((FAILS+1)); fi
 if ! python3 "$ROOT/template-repo/scripts/validate-25-ga-kpi-evidence.py" "$ROOT"; then FAILS=$((FAILS+1)); fi
-if rg -n 'factory-v2\.3\.9-alignment-layer' "$ROOT/RELEASE_BUILD.sh" >/dev/null; then echo 'ОШИБКА: RELEASE_BUILD.sh содержит legacy release id'; FAILS=$((FAILS+1)); fi
+if grep -Eq 'factory-v2\.3\.9-alignment-layer' "$ROOT/RELEASE_BUILD.sh"; then echo 'ОШИБКА: RELEASE_BUILD.sh содержит legacy release id'; FAILS=$((FAILS+1)); fi
 if [ "$FAILS" -gt 0 ]; then echo 'PRE-RELEASE AUDIT НЕ ПРОЙДЕН'; exit 1; fi
 echo 'PRE-RELEASE AUDIT ПРОЙДЕН'

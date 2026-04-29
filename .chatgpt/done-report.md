@@ -2,31 +2,35 @@
 
 ## Что было запрошено
 
-Передернуть красные GitHub Actions в `mppcoder/factory-template`, проверить GitHub Issues/PR backlog и отделить внешний hosted runner blocker от настоящей repo-side CI regression.
+Передернуть и классифицировать исторические красные GitHub Actions CI #1-#5 без ошибочного превращения superseded PR checks в новые repo regressions.
 
 ## Что реально сделано
 
-- Прочитан `template-repo/scenario-pack/00-master-router.md`; задача проведена как GitHub Actions rerun/triage.
-- Проверены open Issues, open PRs и recent closed PRs.
-- Проверены последние 30 GitHub Actions runs.
-- Инспектированы red runs `25054700529`, `25057090187`, `25058477360`, `25059862780`.
-- Для каждого red run собраны metadata, verbose annotations и failed log attempt.
-- Все четыре red runs были rerun через `gh run rerun <RUN_ID> --failed` и успешно прошли.
-- Repo-side CI regression не найден: jobs дошли до checkout/setup-python/pip/verify-all/release-bundle и прошли.
+- Прочитан `template-repo/scenario-pack/00-master-router.md`; входящий `chatgpt-handoff` принят как route receipt.
+- Проверены current workflow baseline, open Issues, open PRs и PR #4.
+- Найдены точные run IDs для CI #1-#5.
+- Для каждого CI #1-#5 собраны metadata, annotations и failed-log/job-log evidence.
+- Выполнен rerun `--failed` для всех пяти исторических CI.
+- PR #1/#2/#3 runs классифицированы как historical superseded.
+- CI #1 и CI #5 классифицированы как old fixed bug snapshots.
+- При current-main verification closeout найден отдельный verification portability defect и исправлен минимальным patch.
 
 ## Какие артефакты обновлены
 
 - `.chatgpt/verification-report.md`
 - `.chatgpt/done-report.md`
 - `VERIFY_SUMMARY.md`
+- `reports/bugs/2026-04-29-historical-actions-rerun-regression.md`
+- `reports/factory-feedback/feedback-2026-04-29-historical-actions-rerun-regression.md`
 
-## Что осталось вне объема
+## Что изменено в repo
 
-- Repo code, validators and docs contracts were not changed.
-- New bug report was not created because no repo-side failure appeared after runner acquisition.
-- `CHANGELOG.md` was not updated because downstream-consumed behavior did not change.
+- `PRE_RELEASE_AUDIT.sh`: single-file legacy check no longer depends on `rg`.
+- `VERSION_SYNC_CHECK.sh`: repo-wide legacy scan now uses `find` + `grep` from repo root with repo-relative allowlist matching.
+- `template-repo/template/.chatgpt/project-origin.md`: active template factory identity updated to `factory-v2.5.0` / `2.5.0`.
 
 ## Итог закрытия
 
-- `gh run list --repo mppcoder/factory-template --limit 12`: PASS, inspected historical red runs now show `completed success`.
+- Clean-worktree `bash template-repo/scripts/verify-all.sh ci`: PASS with this fix-set.
+- Historical CI #1-#5 remain classified as historical/stale; no current workflow action regression found.
 - Final sync status фиксируется после commit/push.

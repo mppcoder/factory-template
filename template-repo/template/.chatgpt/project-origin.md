@@ -10,10 +10,10 @@
 {{PROJECT_MODE}}
 
 ## Создан из фабрики
-factory-2.4.0-versioning-layer
+factory-v2.5.0
 
 ## Версия фабрики
-2.4.0-versioning-layer
+2.5.0
 
 ## Дата создания
 2026-04-15

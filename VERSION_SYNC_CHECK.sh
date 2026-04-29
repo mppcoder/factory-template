@@ -26,23 +26,35 @@ META_FACTORY_VERSION="$(awk 'f{gsub(/^[[:space:]]+|[[:space:]]+$/, ""); print; e
 
 grep -q "## ${ROOT_VERSION}" "$ROOT/docs/releases/factory-template-release-notes.md" || die "ОШИБКА: docs/releases/factory-template-release-notes.md не содержит секцию ${ROOT_VERSION}"
 
-if rg -n 'factory-v2\.3\.9-alignment-layer|2\.4\.0-versioning-layer|factory-2\.4\.0-versioning-layer' \
-  "$ROOT" \
-  -g '!factory/producer/registry/release-history.md' \
-  -g '!factory/producer/registry/factory-versions.md' \
-  -g '!factory/producer/registry/projects-created.md' \
-  -g '!CHANGELOG.md' \
-  -g '!VERSION.md' \
-  -g '!docs/releases/factory-template-release-notes.md' >/dev/null; then
+LEGACY_REF_PATTERN='factory-v2\.3\.9-alignment-layer|2\.4\.0-versioning-layer|factory-2\.4\.0-versioning-layer'
+LEGACY_REF_MATCHES="$(
+  cd "$ROOT"
+  find . \
+    -path './.git' -prune -o \
+    -path './.release-stage' -prune -o \
+    -type f -print0 |
+    while IFS= read -r -d '' file; do
+      rel="${file#./}"
+      case "$rel" in
+        factory/producer/registry/release-history.md|\
+        factory/producer/registry/factory-versions.md|\
+        factory/producer/registry/projects-created.md|\
+        CHANGELOG.md|\
+        VERSION.md|\
+        docs/releases/factory-template-release-notes.md)
+          continue
+          ;;
+      esac
+      matches="$(grep -nE "$LEGACY_REF_PATTERN" "$file" || true)"
+      if [ -n "$matches" ]; then
+        printf '%s\n' "$matches" | sed "s#^#${rel}:#"
+      fi
+    done
+)"
+
+if [ -n "$LEGACY_REF_MATCHES" ]; then
   echo 'ОШИБКА: найдены неожиданные legacy/versioning-layer ссылки вне разрешенной истории:'
-  rg -n 'factory-v2\.3\.9-alignment-layer|2\.4\.0-versioning-layer|factory-2\.4\.0-versioning-layer' \
-    "$ROOT" \
-    -g '!factory/producer/registry/release-history.md' \
-    -g '!factory/producer/registry/factory-versions.md' \
-    -g '!factory/producer/registry/projects-created.md' \
-    -g '!CHANGELOG.md' \
-    -g '!VERSION.md' \
-    -g '!docs/releases/factory-template-release-notes.md' || true
+  printf '%s\n' "$LEGACY_REF_MATCHES"
   FAILS=$((FAILS+1))
 fi
 
