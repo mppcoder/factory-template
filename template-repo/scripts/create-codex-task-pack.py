@@ -5,7 +5,7 @@ import sys
 from pathlib import Path
 import yaml
 
-from codex_task_router import build_launch_record, render_normalized_handoff, write_launch_record
+from codex_task_router import allocate_chat_identity, build_launch_record, render_normalized_handoff, write_launch_record
 
 
 def read_text(path: Path) -> str:
@@ -28,7 +28,7 @@ def main() -> int:
     change = task.get('change', {})
     classification = read_text(chat / 'classification.md').strip() or 'Классификация еще не заполнена.'
     codex_input = read_text(chat / 'codex-input.md').strip() or 'codex-input.md еще не заполнен.'
-    routing_record = build_launch_record(root, "chatgpt-handoff", codex_input)
+    routing_record = allocate_chat_identity(root, build_launch_record(root, "chatgpt-handoff", codex_input), codex_input)
     write_launch_record(root, routing_record)
     launch = routing_record["launch"]
     (chat / 'normalized-codex-handoff.md').write_text(
@@ -422,6 +422,12 @@ Compact default:
 Выбранное plan mode reasoning effort: {launch.get('selected_plan_mode_reasoning_effort', 'medium')}
 Статус model catalog: {launch.get('model_catalog_status', 'unknown')}
 Примечание по live availability: {launch.get('model_catalog_validation_note', 'selected_model repo-configured; требует live validation')}
+chat_id: {launch.get('chat_id', '')}
+chat_title: {launch.get('chat_title', '')}
+task_slug: {launch.get('task_slug', '')}
+chat_kind: {launch.get('chat_kind', '')}
+chat_state: {launch.get('chat_state', '')}
+chat_index_path: {launch.get('chat_index_path', '')}
 Режим применения: {launch.get('apply_mode', 'manual-ui')} (default)
 Строгий режим запуска: {launch.get('strict_launch_mode', 'optional')}
 Опциональная команда строгого запуска: {launch.get('launch_command', './scripts/launch-codex-task.sh --launch-source chatgpt-handoff --task-file .chatgpt/codex-input.md --execute')}

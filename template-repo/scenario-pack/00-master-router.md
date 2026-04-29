@@ -56,6 +56,7 @@
 Запрещено:
 - выдавать `parent-orchestration-handoff` только потому, что задача важная, если она реально цельная и один deep/build агент достаточен;
 - выдавать `single-agent-handoff` для большой задачи с независимыми child subtasks и разными профилями;
+- в closeout называть фактическое выполнение "оркестром агентов", если child/subagent sessions не запускались; в таком случае пиши `single-session execution`, `child/subagent count: 0` и фиксируй это как correction, если ранее был заявлен parent orchestration;
 - утверждать, что parent handoff сам переключает model/profile/reasoning в уже открытой live session;
 - смешивать advisory/policy layer с executable routing layer.
 
@@ -121,6 +122,8 @@ User-only closeout допустим только если remaining next step д
 - если существует будущий roadmap stage, но он не actionable сейчас, назови его как future boundary и отдельно скажи, что текущий scope закрыт.
 - если roadmap/readout содержит несколько возможных следующих веток, финал обязан назвать рекомендованную ветку и fallback-ветку; формула `следующий пользовательский шаг отсутствует` относится только к текущему закрытому scope и не должна скрывать рекомендацию следующего roadmap шага.
 Финал, который говорит только `Внешних действий не требуется.` без объяснения "что дальше / полностью done", считается неполным closeout.
+
+Для `factory-template` финальный closeout пишется по-русски. Английский допускается только для technical literal values: команды, пути, YAML/JSON keys, model IDs, commit hash и route fields.
 
 Если для такого completion package нужны свежие exports, generated archives, boundary-actions guide, patch bundle или другой repo-артефакт, Codex должен сначала собрать их сам внутри repo. Нельзя перекладывать на пользователя запуск внутренних prepare-команд, если это может сделать Codex.
 

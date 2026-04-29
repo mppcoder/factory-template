@@ -3,11 +3,28 @@ from __future__ import annotations
 
 import re
 from pathlib import Path
+from typing import Any
 
 import yaml
 
 from factory_automation_common import now_utc, read_text, read_yaml, write_yaml
 from codex_model_catalog import configured_profiles, configured_task_classes, load_model_routing
+
+
+HANDOFF_CHAIN = ["chatgpt_handoff", "codex_accepted", "codex_completed"]
+SELF_HANDOFF_CHAIN = ["codex_self_handoff", "codex_accepted", "codex_completed"]
+DEFAULT_CHAT_KINDS = ["handoff", "self_handoff", "bug", "decision", "research", "completion_followup"]
+DEFAULT_CHAT_STATES = [
+    "open",
+    "codex_accepted",
+    "in_progress",
+    "implemented",
+    "verified",
+    "blocked",
+    "superseded",
+    "not_applicable",
+    "archived",
+]
 
 
 def load_routing_spec(root: Path) -> dict:
@@ -142,6 +159,125 @@ def stringify_yes_no_override(value: object) -> str:
     if lowered in {"false", "no"}:
         return "no"
     return text
+
+
+def slugify_chat_task(value: str) -> str:
+    text = value.lower()
+    text = re.sub(r"[^a-z0-9]+", "-", text)
+    text = re.sub(r"-{2,}", "-", text).strip("-")
+    return text or "task"
+
+
+def default_chat_index_path(root: Path) -> Path:
+    direct = root / ".chatgpt" / "chat-handoff-index.yaml"
+    if direct.exists() or (root / ".chatgpt").exists():
+        return direct
+    return root / "template-repo" / "template" / ".chatgpt" / "chat-handoff-index.yaml"
+
+
+def ensure_chat_index(data: dict[str, Any], project_code: str) -> dict[str, Any]:
+    if not data:
+        data = {}
+    data.setdefault("schema", "chat-handoff-index/v1")
+    data.setdefault("project_code", project_code)
+    data.setdefault("next_chat_number", 1)
+    data.setdefault(
+        "title_policy",
+        {
+            "canonical_format": "<PROJECT_CODE>-CH-<NNNN> <task-slug>",
+            "include_status_in_title": False,
+            "include_kind_in_title": False,
+            "title_is_stable": True,
+            "status_source_of_truth": ".chatgpt/chat-handoff-index.yaml",
+            "manual_rename_required_on_status_change": False,
+        },
+    )
+    data.setdefault(
+        "allocation_policy",
+        {
+            "shared_counter_for_all_kinds": True,
+            "first_chat_response_allocates_handoff_id": True,
+            "codex_self_handoff_uses_same_counter": True,
+            "handoff_must_reference_chat_id": True,
+            "self_handoff_must_reference_chat_id": True,
+        },
+    )
+    data.setdefault("allowed_kinds", DEFAULT_CHAT_KINDS)
+    data.setdefault("allowed_states", DEFAULT_CHAT_STATES)
+    data.setdefault("items", [])
+    return data
+
+
+def project_code_from_root(root: Path) -> str:
+    index = read_yaml(default_chat_index_path(root))
+    configured = str(index.get("project_code") or "").strip()
+    if configured:
+        return configured
+    letters = "".join(part[:1] for part in re.split(r"[^A-Za-z0-9]+", root.name) if part)
+    return (letters or "PRJ").upper()[:6]
+
+
+def chat_identity_overrides(task_text: str) -> dict[str, str]:
+    data = parse_structured_handoff(task_text)
+    if not isinstance(data, dict):
+        return {}
+    result: dict[str, str] = {}
+    for key in ["chat_id", "chat_title", "task_slug", "chat_kind", "chat_state"]:
+        value = data.get(key)
+        if value not in (None, ""):
+            result[key] = str(value)
+    return result
+
+
+def allocate_chat_identity(root: Path, record: dict, task_text: str) -> dict:
+    launch = record.get("launch", {})
+    overrides = chat_identity_overrides(task_text)
+    if overrides.get("chat_id"):
+        launch["chat_id"] = overrides.get("chat_id", "")
+        launch["chat_title"] = overrides.get("chat_title", "")
+        launch["task_slug"] = overrides.get("task_slug", "")
+        launch["chat_kind"] = overrides.get("chat_kind", "handoff")
+        launch["chat_state"] = overrides.get("chat_state", "open")
+        launch["chat_index_path"] = ".chatgpt/chat-handoff-index.yaml"
+        return record
+
+    kind = "self_handoff" if launch.get("launch_source") == "direct-task" else "handoff"
+    state = "open"
+    index_path = default_chat_index_path(root)
+    data = ensure_chat_index(read_yaml(index_path), project_code_from_root(root))
+    next_number = int(data.get("next_chat_number") or 1)
+    project_code = str(data.get("project_code") or project_code_from_root(root))
+    task_slug = slugify_chat_task(str(launch.get("task_summary") or task_text.splitlines()[0] if task_text.strip() else "task"))
+    chat_id = f"{project_code}-CH-{next_number:04d}"
+    chat_title = f"{chat_id} {task_slug}"
+    now = now_utc().replace("+00:00", "Z")
+    item = {
+        "chat_id": chat_id,
+        "chat_number": next_number,
+        "chat_title": chat_title,
+        "task_slug": task_slug,
+        "kind": kind,
+        "state": state,
+        "created_utc": now,
+        "updated_utc": now,
+        "source_type": str(launch.get("launch_source") or "direct-task"),
+        "handoff_group": task_slug,
+        "handoff_revision": 1,
+        "handoff_register_item_id": "",
+        "status_chain": SELF_HANDOFF_CHAIN if kind == "self_handoff" else HANDOFF_CHAIN,
+        "evidence": [f"Allocated during {launch.get('launch_source')} bootstrap before first substantive response."],
+        "next_action": "Use this stable id/title in the handoff or self-handoff; update repo state without renaming the chat.",
+    }
+    data.setdefault("items", []).append(item)
+    data["next_chat_number"] = next_number + 1
+    write_yaml(index_path, data)
+    launch["chat_id"] = chat_id
+    launch["chat_title"] = chat_title
+    launch["task_slug"] = task_slug
+    launch["chat_kind"] = kind
+    launch["chat_state"] = state
+    launch["chat_index_path"] = str(index_path.relative_to(root)) if index_path.is_relative_to(root) else str(index_path)
+    return record
 
 
 def explicit_routing_overrides(text: str) -> dict:
@@ -505,6 +641,15 @@ def render_normalized_handoff(record: dict, task_text: str, title: str) -> str:
 ## Вид handoff
 {launch.get('handoff_shape', '')}
 
+## Стабильная identity чата и handoff
+- chat_id: `{launch.get('chat_id', '')}`
+- chat_title: `{launch.get('chat_title', '')}`
+- task_slug: `{launch.get('task_slug', '')}`
+- kind: `{launch.get('chat_kind', '')}`
+- state: `{launch.get('chat_state', '')}`
+- source_of_truth: `{launch.get('chat_index_path', '.chatgpt/chat-handoff-index.yaml')}`
+- rule: номер выделяется из общего repo counter до первого substantive ответа; status/kind не добавляются в title.
+
 ## Evidence для вида handoff
 {handoff_shape_reason_lines}
 
@@ -677,6 +822,12 @@ Routing:
 - pipeline_stage: {launch.get('pipeline_stage', '')}
 - handoff_allowed: {launch.get('handoff_allowed', '')}
 - defect_capture_path: {launch.get('defect_capture_path', '')}
+- chat_id: {launch.get('chat_id', '')}
+- chat_title: {launch.get('chat_title', '')}
+- task_slug: {launch.get('task_slug', '')}
+- chat_kind: {launch.get('chat_kind', '')}
+- chat_state: {launch.get('chat_state', '')}
+- chat_index_path: {launch.get('chat_index_path', '')}
 
 Артефакты для обновления:
 {artifacts_lines}

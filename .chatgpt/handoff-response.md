@@ -40,6 +40,12 @@
 Выбранное plan mode reasoning effort: high
 Статус model catalog: available
 Примечание по live availability: selected_model совпадает с последним сохраненным snapshot repo catalog; перед внешними обещаниями повторите live catalog check
+chat_id: FT-CH-0001
+chat_title: FT-CH-0001 dashboard-card-ui
+task_slug: dashboard-card-ui
+chat_kind: handoff
+chat_state: verified
+chat_index_path: .chatgpt/chat-handoff-index.yaml
 Режим применения: manual-ui (default)
 Строгий режим запуска: optional
 Опциональная команда строгого запуска: ./scripts/launch-codex-task.sh --launch-source chatgpt-handoff --task-file .chatgpt/codex-input.md --execute

@@ -18,6 +18,9 @@
 ## Режим применения
 <!-- manual-ui -->
 
+## Стабильная identity чата и self-handoff
+<!-- chat_id/chat_title/task_slug берутся из .chatgpt/chat-handoff-index.yaml через общий next_chat_number counter до первого substantive ответа -->
+
 ## Ручное применение в UI
 <!-- новый чат/окно, ручной выбор model/reasoning в picker, затем продолжение работы -->
 

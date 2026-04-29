@@ -134,6 +134,9 @@ def main() -> int:
             errors.append("Handoff должен явно требовать: `Язык ответа Codex: русский`")
         if "Отвечай пользователю по-русски" not in handoff_text:
             errors.append("Handoff должен явно требовать русскоязычные ответы Codex пользователю")
+        for field in ["chat_id", "chat_title", "task_slug", "chat_kind", "chat_state", "chat_index_path"]:
+            if f"{field}:" not in handoff_text:
+                errors.append(f"Handoff должен содержать stable chat identity field `{field}`")
         if re.search(r"(?mi)^##\s+Инструкция пользователю\s*$", handoff_text):
             errors.append("`## Инструкция пользователю` не должен попадать внутрь handoff-блока")
         if re.search(r"(?mi)^##\s+", handoff_text.replace(HANDOFF_HEADING, "", 1)):

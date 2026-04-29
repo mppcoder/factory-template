@@ -1,106 +1,140 @@
 schema: chat-handoff-index/v1
 project_code: FT
-next_chat_number: 5
+next_chat_number: 6
 title_policy:
-  canonical_format: "<PROJECT_CODE>-CH-<NNNN> <task-slug>"
+  canonical_format: <PROJECT_CODE>-CH-<NNNN> <task-slug>
   include_status_in_title: false
   include_kind_in_title: false
   title_is_stable: true
-  status_source_of_truth: ".chatgpt/chat-handoff-index.yaml"
+  status_source_of_truth: .chatgpt/chat-handoff-index.yaml
   manual_rename_required_on_status_change: false
+allocation_policy:
+  shared_counter_for_all_kinds: true
+  first_chat_response_allocates_handoff_id: true
+  codex_self_handoff_uses_same_counter: true
+  handoff_must_reference_chat_id: true
+  self_handoff_must_reference_chat_id: true
 allowed_kinds:
-  - handoff
-  - self_handoff
-  - bug
-  - decision
-  - research
-  - completion_followup
+- handoff
+- self_handoff
+- bug
+- decision
+- research
+- completion_followup
 allowed_states:
-  - open
-  - codex_accepted
-  - in_progress
-  - implemented
-  - verified
-  - blocked
-  - superseded
-  - not_applicable
-  - archived
+- open
+- codex_accepted
+- in_progress
+- implemented
+- verified
+- blocked
+- superseded
+- not_applicable
+- archived
 items:
-  - chat_id: FT-CH-0001
-    chat_number: 1
-    chat_title: "FT-CH-0001 dashboard-card-ui"
-    task_slug: dashboard-card-ui
-    kind: handoff
-    state: implemented
-    created_utc: "2026-04-29T00:00:00Z"
-    updated_utc: "2026-04-29T00:00:00Z"
-    source_type: chatgpt-handoff
-    handoff_group: dashboard-card-ui
-    handoff_revision: 1
-    handoff_register_item_id: ""
-    status_chain:
-      - chatgpt_handoff
-      - codex_accepted
-      - codex_completed
-    evidence:
-      - "Current dashboard/card work accepted by Codex; final done evidence pending."
-    next_action: "Run final validation and closeout."
-  - chat_id: FT-CH-0002
-    chat_number: 2
-    chat_title: "FT-CH-0002 completion-report"
-    task_slug: completion-report
-    kind: handoff
-    state: open
-    created_utc: "2026-04-29T00:00:00Z"
-    updated_utc: "2026-04-29T00:00:00Z"
-    source_type: chatgpt-handoff
-    handoff_group: completion-report
-    handoff_revision: 1
-    handoff_register_item_id: ""
-    status_chain:
-      - chatgpt_handoff
-      - codex_accepted
-      - codex_completed
-    evidence:
-      - "ChatGPT handoff captured; Codex acceptance pending."
-    next_action: "Accept or supersede in repo register before implementation."
-  - chat_id: FT-CH-0003
-    chat_number: 3
-    chat_title: "FT-CH-0003 updates-monitor"
-    task_slug: updates-monitor
-    kind: research
-    state: superseded
-    created_utc: "2026-04-29T00:00:00Z"
-    updated_utc: "2026-04-29T00:00:00Z"
-    source_type: chatgpt-handoff
-    handoff_group: updates-monitor
-    handoff_revision: 1
-    handoff_register_item_id: ""
-    status_chain:
-      - chatgpt_handoff
-      - codex_accepted
-      - codex_completed
-    evidence:
-      - "Superseded by controlled software update governance work."
-    replacement_chat_id: ""
-    accepted_reason: "Covered by software_update_governance dashboard/readiness layer."
-    next_action: "No active action."
-  - chat_id: FT-CH-0004
-    chat_number: 4
-    chat_title: "FT-CH-0004 model-routing"
-    task_slug: model-routing
-    kind: bug
-    state: blocked
-    created_utc: "2026-04-29T00:00:00Z"
-    updated_utc: "2026-04-29T00:00:00Z"
-    source_type: chatgpt-handoff
-    handoff_group: model-routing
-    handoff_revision: 1
-    handoff_register_item_id: ""
-    status_chain:
-      - chatgpt_handoff
-      - codex_accepted
-      - codex_completed
-    evidence:
-      - "Blocked until executable routing/manual picker boundary is clarified."
-    next_action: "Keep status in repo card; do not rename ChatGPT title."
+- chat_id: FT-CH-0001
+  chat_number: 1
+  chat_title: FT-CH-0001 dashboard-card-ui
+  task_slug: dashboard-card-ui
+  kind: handoff
+  state: verified
+  created_utc: '2026-04-29T00:00:00Z'
+  updated_utc: '2026-04-29T12:45:51Z'
+  source_type: chatgpt-handoff
+  handoff_group: dashboard-card-ui
+  handoff_revision: 1
+  handoff_register_item_id: HIR-003
+  status_chain:
+  - chatgpt_handoff
+  - codex_accepted
+  - codex_completed
+  evidence:
+  - Current dashboard/card work accepted by Codex; final done evidence pending.
+  - bash template-repo/scripts/verify-all.sh quick
+  - bash template-repo/scripts/verify-all.sh
+  next_action: No further implementation action; handoff implementation is verified
+    in HIR-003.
+- chat_id: FT-CH-0002
+  chat_number: 2
+  chat_title: FT-CH-0002 completion-report
+  task_slug: completion-report
+  kind: handoff
+  state: open
+  created_utc: '2026-04-29T00:00:00Z'
+  updated_utc: '2026-04-29T00:00:00Z'
+  source_type: chatgpt-handoff
+  handoff_group: completion-report
+  handoff_revision: 1
+  handoff_register_item_id: ''
+  status_chain:
+  - chatgpt_handoff
+  - codex_accepted
+  - codex_completed
+  evidence:
+  - ChatGPT handoff captured; Codex acceptance pending.
+  next_action: Accept or supersede in repo register before implementation.
+- chat_id: FT-CH-0003
+  chat_number: 3
+  chat_title: FT-CH-0003 updates-monitor
+  task_slug: updates-monitor
+  kind: research
+  state: superseded
+  created_utc: '2026-04-29T00:00:00Z'
+  updated_utc: '2026-04-29T00:00:00Z'
+  source_type: chatgpt-handoff
+  handoff_group: updates-monitor
+  handoff_revision: 1
+  handoff_register_item_id: ''
+  status_chain:
+  - chatgpt_handoff
+  - codex_accepted
+  - codex_completed
+  evidence:
+  - Superseded by controlled software update governance work.
+  replacement_chat_id: ''
+  accepted_reason: Covered by software_update_governance dashboard/readiness layer.
+  next_action: No active action.
+- chat_id: FT-CH-0004
+  chat_number: 4
+  chat_title: FT-CH-0004 model-routing
+  task_slug: model-routing
+  kind: bug
+  state: blocked
+  created_utc: '2026-04-29T00:00:00Z'
+  updated_utc: '2026-04-29T00:00:00Z'
+  source_type: chatgpt-handoff
+  handoff_group: model-routing
+  handoff_revision: 1
+  handoff_register_item_id: ''
+  status_chain:
+  - chatgpt_handoff
+  - codex_accepted
+  - codex_completed
+  evidence:
+  - Blocked until executable routing/manual picker boundary is clarified.
+  next_action: Keep status in repo card; do not rename ChatGPT title.
+- chat_id: FT-CH-0005
+  chat_number: 5
+  chat_title: FT-CH-0005 chat-counter-closeout-drift
+  task_slug: chat-counter-closeout-drift
+  kind: self_handoff
+  state: verified
+  created_utc: '2026-04-29T12:36:25Z'
+  updated_utc: '2026-04-29T12:45:51Z'
+  source_type: direct-task
+  handoff_group: chat-counter-closeout-drift
+  handoff_revision: 1
+  handoff_register_item_id: HIR-004
+  status_chain:
+  - codex_self_handoff
+  - codex_accepted
+  - codex_completed
+  evidence:
+  - Allocated for current Codex direct-task self-handoff remediation from the shared
+    repo counter.
+  - python3 template-repo/scripts/validate-chat-handoff-index.py .chatgpt/chat-handoff-index.yaml
+  - python3 template-repo/scripts/validate-codex-routing.py .
+  - bash template-repo/scripts/verify-all.sh quick
+  - bash template-repo/scripts/verify-all.sh
+  next_action: No further implementation action; stable self-handoff identity is
+    verified in repo state.

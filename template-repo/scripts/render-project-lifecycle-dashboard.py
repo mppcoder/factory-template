@@ -235,7 +235,7 @@ def handoff_line_icon(state: str) -> str:
 
 def handoff_status_chain_text(item: dict[str, Any]) -> str:
     state = str(item.get("state") or "open")
-    chatgpt = "✅ GPT-HO"
+    origin = "✅ Codex-SHO" if str(item.get("kind") or "") == "self_handoff" else "✅ GPT-HO"
     codex = "✅ Codex OK" if state in {"codex_accepted", "in_progress", "implemented", "verified", "blocked", "archived"} else "🕒 Codex OK"
     if state in {"verified", "archived"}:
         done = "✅ Done"
@@ -247,7 +247,7 @@ def handoff_status_chain_text(item: dict[str, Any]) -> str:
         done = "⏸ Superseded"
     else:
         done = "🕒 Done"
-    return f"{chatgpt} → {codex} → {done}"
+    return f"{origin} → {codex} → {done}"
 
 
 def active_handoff_lines_text(index: dict[str, Any]) -> str:

@@ -24,7 +24,8 @@ DEFAULT_ALLOWED_STATES = [
     "not_applicable",
     "archived",
 ]
-STATUS_CHAIN = ["chatgpt_handoff", "codex_accepted", "codex_completed"]
+HANDOFF_CHAIN = ["chatgpt_handoff", "codex_accepted", "codex_completed"]
+SELF_HANDOFF_CHAIN = ["codex_self_handoff", "codex_accepted", "codex_completed"]
 
 
 def default_index_path(root: Path) -> Path:
@@ -67,6 +68,13 @@ def ensure_index(data: dict[str, Any], project_code: str) -> dict[str, Any]:
                 "status_source_of_truth": ".chatgpt/chat-handoff-index.yaml",
                 "manual_rename_required_on_status_change": False,
             },
+            "allocation_policy": {
+                "shared_counter_for_all_kinds": True,
+                "first_chat_response_allocates_handoff_id": True,
+                "codex_self_handoff_uses_same_counter": True,
+                "handoff_must_reference_chat_id": True,
+                "self_handoff_must_reference_chat_id": True,
+            },
             "allowed_kinds": DEFAULT_ALLOWED_KINDS,
             "allowed_states": DEFAULT_ALLOWED_STATES,
             "items": [],
@@ -86,6 +94,16 @@ def ensure_index(data: dict[str, Any], project_code: str) -> dict[str, Any]:
             "title_is_stable": True,
             "status_source_of_truth": ".chatgpt/chat-handoff-index.yaml",
             "manual_rename_required_on_status_change": False,
+        },
+    )
+    data.setdefault(
+        "allocation_policy",
+        {
+            "shared_counter_for_all_kinds": True,
+            "first_chat_response_allocates_handoff_id": True,
+            "codex_self_handoff_uses_same_counter": True,
+            "handoff_must_reference_chat_id": True,
+            "self_handoff_must_reference_chat_id": True,
         },
     )
     return data
@@ -112,6 +130,7 @@ def main() -> int:
     parser.add_argument("--handoff-group", default="")
     parser.add_argument("--handoff-revision", type=int, default=1)
     parser.add_argument("--handoff-register-item-id", default="")
+    parser.add_argument("--state", default="open", choices=DEFAULT_ALLOWED_STATES)
     parser.add_argument("--evidence", action="append", default=[])
     parser.add_argument("--dry-run", action="store_true", help="Print allocation without writing the index.")
     args = parser.parse_args()
@@ -135,14 +154,14 @@ def main() -> int:
         "chat_title": chat_title,
         "task_slug": task_slug,
         "kind": args.kind,
-        "state": "open",
+        "state": args.state,
         "created_utc": now,
         "updated_utc": now,
         "source_type": args.source_type,
         "handoff_group": args.handoff_group or task_slug,
         "handoff_revision": args.handoff_revision,
         "handoff_register_item_id": args.handoff_register_item_id,
-        "status_chain": STATUS_CHAIN,
+        "status_chain": SELF_HANDOFF_CHAIN if args.kind == "self_handoff" else HANDOFF_CHAIN,
         "evidence": args.evidence,
         "next_action": "Accept in Codex or update repo state before implementation.",
     }
@@ -165,7 +184,7 @@ def main() -> int:
     print("Repo state:")
     print(f"chat_id: {chat_id}")
     print(f"kind: {args.kind}")
-    print("state: open")
+    print(f"state: {args.state}")
     return 0
 
 

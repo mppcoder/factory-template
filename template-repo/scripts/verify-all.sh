@@ -354,13 +354,21 @@ run_project_lifecycle_dashboard_smoke() {
     "$ROOT/template-repo/template/.chatgpt/chat-handoff-index.yaml"
   python3 "$ROOT/template-repo/scripts/validate-chat-handoff-index.py" \
     "$ROOT/.chatgpt/chat-handoff-index.yaml"
+  cp "$ROOT/template-repo/template/.chatgpt/chat-handoff-index.yaml" "$tmp_dir/chat-handoff-index-allocation.yaml"
   python3 "$ROOT/template-repo/scripts/allocate-chat-handoff-id.py" \
-    --index "$ROOT/template-repo/template/.chatgpt/chat-handoff-index.yaml" \
+    --index "$tmp_dir/chat-handoff-index-allocation.yaml" \
     --project-code FT \
     --kind handoff \
-    --description "dashboard card ui" \
-    --dry-run > "$tmp_dir/allocated-chat-title.txt"
-  grep -q "FT-CH-0001 dashboard-card-ui" "$tmp_dir/allocated-chat-title.txt"
+    --description "dashboard card ui" > "$tmp_dir/allocated-chat-title-1.txt"
+  python3 "$ROOT/template-repo/scripts/allocate-chat-handoff-id.py" \
+    --index "$tmp_dir/chat-handoff-index-allocation.yaml" \
+    --project-code FT \
+    --kind self_handoff \
+    --description "self handoff" > "$tmp_dir/allocated-chat-title-2.txt"
+  grep -q "FT-CH-0001 dashboard-card-ui" "$tmp_dir/allocated-chat-title-1.txt"
+  grep -q "FT-CH-0002 self-handoff" "$tmp_dir/allocated-chat-title-2.txt"
+  python3 "$ROOT/template-repo/scripts/validate-chat-handoff-index.py" "$tmp_dir/chat-handoff-index-allocation.yaml"
+  grep -q "kind: self_handoff" "$tmp_dir/allocated-chat-title-2.txt"
   python3 "$ROOT/template-repo/scripts/validate-handoff-implementation-register.py" \
     "$ROOT/tests/handoff-implementation-register/valid/handoff-implementation-register.yaml"
   python3 "$ROOT/template-repo/scripts/validate-project-lifecycle-dashboard.py" \

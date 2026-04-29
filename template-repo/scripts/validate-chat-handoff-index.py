@@ -24,7 +24,9 @@ STATUS_TITLE_TOKENS = {
     "ARCHIVED",
 }
 KIND_TITLE_TOKENS = {"HO", "SELFHO", "BUG", "DECISION", "RESEARCH"}
-REQUIRED_CHAIN = ["chatgpt_handoff", "codex_accepted", "codex_completed"]
+HANDOFF_CHAIN = ["chatgpt_handoff", "codex_accepted", "codex_completed"]
+SELF_HANDOFF_CHAIN = ["codex_self_handoff", "codex_accepted", "codex_completed"]
+OTHER_ALLOWED_CHAINS = [HANDOFF_CHAIN, SELF_HANDOFF_CHAIN]
 
 
 def load_yaml(path: Path) -> dict[str, Any]:
@@ -57,6 +59,21 @@ def validate_policy(data: dict[str, Any], errors: list[str]) -> None:
     for key, value in expected.items():
         if policy.get(key) != value:
             errors.append(f"title_policy.{key} должен быть `{value}`")
+
+    allocation_policy = data.get("allocation_policy")
+    if not isinstance(allocation_policy, dict):
+        errors.append("allocation_policy должен быть mapping")
+        return
+    allocation_expected = {
+        "shared_counter_for_all_kinds": True,
+        "first_chat_response_allocates_handoff_id": True,
+        "codex_self_handoff_uses_same_counter": True,
+        "handoff_must_reference_chat_id": True,
+        "self_handoff_must_reference_chat_id": True,
+    }
+    for key, value in allocation_expected.items():
+        if allocation_policy.get(key) is not value:
+            errors.append(f"allocation_policy.{key} должен быть `{value}`")
 
 
 def title_has_forbidden_token(title: str, tokens: set[str]) -> str:
@@ -130,10 +147,15 @@ def validate_item(item: dict[str, Any], index: int, allowed_kinds: set[str], all
         errors.append(f"{item_path}.next_action обязателен")
 
     chain = item.get("status_chain")
+    expected_chain = SELF_HANDOFF_CHAIN if kind == "self_handoff" else HANDOFF_CHAIN if kind == "handoff" else None
     if not isinstance(chain, list):
         errors.append(f"{item_path}.status_chain должен быть list")
-    elif [str(entry) for entry in chain] != REQUIRED_CHAIN:
-        errors.append(f"{item_path}.status_chain должен быть {', '.join(REQUIRED_CHAIN)}")
+    else:
+        normalized_chain = [str(entry) for entry in chain]
+        if expected_chain is not None and normalized_chain != expected_chain:
+            errors.append(f"{item_path}.status_chain для kind `{kind}` должен быть {', '.join(expected_chain)}")
+        elif expected_chain is None and normalized_chain not in OTHER_ALLOWED_CHAINS:
+            errors.append(f"{item_path}.status_chain должен быть одним из разрешенных handoff chains")
 
     if state in {"verified", "archived"} and not has_evidence(item):
         errors.append(f"{item_path} state `{state}` требует evidence")

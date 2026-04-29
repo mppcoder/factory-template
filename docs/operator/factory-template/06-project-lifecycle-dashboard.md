@@ -80,6 +80,26 @@ If the next number is unknown, do not invent it. Say: 'Нужно выделит
 Statuses must be shown only in the project card and repo dashboard.
 ```
 
+При первом substantive ответе в новом task chat handoff обязан получить номер из repo counter и ссылаться на него:
+
+```bash
+python3 template-repo/scripts/allocate-chat-handoff-id.py \
+  --index .chatgpt/chat-handoff-index.yaml \
+  --kind handoff \
+  --description "short task name"
+```
+
+Codex self-handoff использует тот же counter:
+
+```bash
+python3 template-repo/scripts/allocate-chat-handoff-id.py \
+  --index .chatgpt/chat-handoff-index.yaml \
+  --kind self_handoff \
+  --description "short self handoff task"
+```
+
+В executable path `bootstrap-codex-task.py` записывает `kind: handoff` для `chatgpt-handoff` и `kind: self_handoff` для `direct-task` до генерации видимого handoff/self-handoff. Поэтому следующий `FT-CH-....` не зависит от того, кто породил задачу: ChatGPT handoff или Codex self-handoff.
+
 Поиск:
 
 - по номеру: `FT-CH-0007`;

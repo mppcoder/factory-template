@@ -5,6 +5,7 @@ import argparse
 from pathlib import Path
 
 from codex_task_router import (
+    allocate_chat_identity,
     build_launch_record,
     read_task_text,
     render_direct_task_response,
@@ -30,6 +31,7 @@ def main() -> int:
     task_file = Path(args.task_file).resolve() if args.task_file else None
     task_text = read_task_text(task_file, args.task_text)
     record = build_launch_record(root, args.launch_source, task_text, args.task_class)
+    record = allocate_chat_identity(root, record, task_text)
 
     launch_path = write_launch_record(root, record)
     launch_input_path = root / record["launch"]["launch_artifact_path"]
@@ -52,6 +54,10 @@ def main() -> int:
     print(f"launch_input={launch_input_path}")
     print(f"normalized_handoff={handoff_path}")
     print(f"handoff_shape={launch['handoff_shape']}")
+    print(f"chat_id={launch.get('chat_id', '')}")
+    print(f"chat_title={launch.get('chat_title', '')}")
+    print(f"chat_kind={launch.get('chat_kind', '')}")
+    print(f"chat_index_path={launch.get('chat_index_path', '')}")
     print(f"selected_profile={launch['selected_profile']}")
     print(f"selected_model={launch['selected_model']}")
     print(f"selected_reasoning_effort={launch['selected_reasoning_effort']}")
