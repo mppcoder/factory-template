@@ -262,6 +262,10 @@ def active_handoff_lines_text(index: dict[str, Any]) -> str:
         for item in items
         if isinstance(item, dict)
         and (
+            str(item.get("handoff_register_item_id") or "").strip()
+            or int(item.get("chat_number") or 0) == current_number
+        )
+        and (
             str(item.get("state") or "") not in TERMINAL_CHAT_STATES
             or int(item.get("chat_number") or 0) == current_number
         )

@@ -380,3 +380,51 @@ items:
     next_action: "No further implementation action for this HIR item."
     created_at: "2026-04-29T15:13:08Z"
     updated_at: "2026-04-29T15:16:32Z"
+  - id: HIR-008
+    title: "Stale chat index items hidden from compact active card"
+    chat_id: FT-CH-0009
+    chat_title: "FT-CH-0009 stale-compact-card-tasks"
+    task_slug: stale-compact-card-tasks
+    chat_state: verified
+    chat_index_item_id: FT-CH-0009
+    handoff_group: "factory-template-stale-compact-card-tasks"
+    handoff_revision: 1
+    source_type: direct-task
+    source_chat: "current Codex chat, 2026-04-29"
+    source_handoff_path: ""
+    task_class: deep
+    selected_profile: deep
+    selected_model: gpt-5.5
+    selected_reasoning_effort: high
+    selected_plan_mode_reasoning_effort: high
+    status: verified
+    priority: high
+    calculated_priority: high
+    depends_on: []
+    blocks: []
+    replaces: []
+    superseded_by: ""
+    replacement_reason: ""
+    owner_boundary: internal-repo-follow-up
+    artifacts_to_update:
+      - ".chatgpt/chat-handoff-index.yaml"
+      - ".chatgpt/handoff-implementation-register.yaml"
+      - "template-repo/scripts/render-project-lifecycle-dashboard.py"
+      - "docs/operator/factory-template/06-project-lifecycle-dashboard.md"
+      - "reports/project-lifecycle-dashboard.md"
+      - "reports/bugs/2026-04-29-stale-chat-index-items-in-compact-card.md"
+      - "reports/factory-feedback/feedback-049-stale-chat-index-active-card.md"
+    evidence:
+      - "defect-capture: reports/bugs/2026-04-29-stale-chat-index-items-in-compact-card.md"
+      - "User report: FT-CH-0002 and FT-CH-0004 are not visible unfinished tasks."
+      - "python3 template-repo/scripts/render-project-lifecycle-dashboard.py --input template-repo/template/.chatgpt/project-lifecycle-dashboard.yaml --format chatgpt-card --stdout"
+      - "python3 template-repo/scripts/validate-chat-handoff-index.py .chatgpt/chat-handoff-index.yaml"
+      - "python3 template-repo/scripts/validate-handoff-implementation-register.py .chatgpt/handoff-implementation-register.yaml"
+      - "python3 template-repo/scripts/validate-project-lifecycle-dashboard.py template-repo/template/.chatgpt/project-lifecycle-dashboard.yaml"
+      - "bash template-repo/scripts/verify-all.sh quick"
+      - "bash template-repo/scripts/verify-all.sh"
+    closeout_reason: "Stale unregistered chat-index entries are written off and no longer appear as active compact-card work; only current/latest or register-backed active tasks appear in `В работе:`."
+    deactivation_handoff_required: false
+    next_action: "No further implementation action for this HIR item."
+    created_at: "2026-04-29T15:22:11Z"
+    updated_at: "2026-04-29T15:25:32Z"

@@ -178,6 +178,7 @@ Codex closeout behavior:
 - обновить `reports/project-lifecycle-dashboard.md`.
 - вставить свежую compact project card в финальный ответ пользователю в разделе `Карточка проекта`; карточка должна быть получена через `render-project-lifecycle-dashboard.py --format chatgpt-card --stdout` и содержать lifecycle chain, `Модули:` и `В работе:`.
 - compact card не является историческим журналом: раздел `В работе:` показывает текущую chat/self-handoff задачу и незакрытые задачи; verified/archived/superseded старые задачи остаются в полном `reports/project-lifecycle-dashboard.md`, но не шумят в compact card.
+- compact card не должен превращать stale/unregistered index seeds в активную очередь: незакрытая строка без `handoff_register_item_id` скрывается из compact `В работе:`, если это не текущая/latest задача; такие записи нужно списывать в `not_applicable`/`superseded` с evidence или accepted reason.
 
 Replacement identity:
 
