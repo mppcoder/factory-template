@@ -43,7 +43,33 @@ def render_notes(decision: dict, notes_body: str) -> str:
     )
 
 
-def publish_release(root: Path, tag: str, notes_path: Path) -> tuple[str, str, str]:
+def release_assets(root: Path, version: str) -> list[Path]:
+    base = root / "_incoming"
+    stem = f"factory-v{version}"
+    candidates = [
+        base / f"{stem}.zip",
+        base / f"{stem}.zip.sha256",
+        base / f"{stem}.manifest.yaml",
+    ]
+    return [path for path in candidates if path.exists()]
+
+
+def upload_release_assets(root: Path, tag: str, assets: list[Path]) -> tuple[bool, str]:
+    if not assets:
+        return True, ""
+    proc = subprocess.run(
+        ["gh", "release", "upload", tag, *[str(path) for path in assets], "--clobber"],
+        cwd=root,
+        text=True,
+        capture_output=True,
+        check=False,
+    )
+    if proc.returncode != 0:
+        return False, proc.stderr.strip() or proc.stdout.strip() or "gh release upload failed"
+    return True, ""
+
+
+def publish_release(root: Path, tag: str, notes_path: Path, assets: list[Path]) -> tuple[str, str, str]:
     if not gh_available():
         return "manual-fallback", "CLI `gh` не найден в окружении", ""
     auth = subprocess.run(["gh", "auth", "status"], cwd=root, text=True, capture_output=True, check=False)
@@ -57,9 +83,15 @@ def publish_release(root: Path, tag: str, notes_path: Path) -> tuple[str, str, s
         check=False,
     )
     if view.returncode == 0 and view.stdout.strip():
+        ok, reason = upload_release_assets(root, tag, assets)
+        if not ok:
+            return "manual-fallback", reason, view.stdout.strip()
         return "already-published", "", view.stdout.strip()
+    create_cmd = ["gh", "release", "create", tag]
+    create_cmd.extend(str(path) for path in assets)
+    create_cmd.extend(["--title", tag, "--notes-file", str(notes_path)])
     create = subprocess.run(
-        ["gh", "release", "create", tag, "--title", tag, "--notes-file", str(notes_path)],
+        create_cmd,
         cwd=root,
         text=True,
         capture_output=True,
@@ -122,7 +154,8 @@ def main() -> int:
 
             push_url = remote_url(root, "origin", "push")
             pushed_via, tag_push_status = push_tag(root, tag, push_url)
-            publish_status, reason, release_url = publish_release(root, tag, notes_path)
+            assets = release_assets(root, decision_version)
+            publish_status, reason, release_url = publish_release(root, tag, notes_path, assets)
             report = {
                 "timestamp": now_utc(),
                 "decision": "release",
@@ -135,6 +168,7 @@ def main() -> int:
                 "notes_artifact": str(notes_path.relative_to(root)),
                 "approved_by": decision.get("approved_by"),
                 "release_url": release_url,
+                "assets": [str(path.relative_to(root)) for path in assets],
             }
             if publish_status == "manual-fallback":
                 report["reason"] = reason
