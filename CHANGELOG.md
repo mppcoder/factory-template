@@ -2,6 +2,13 @@
 
 ## [Unreleased]
 
+## [2.5.8] - 2026-04-30
+### Изменено
+- `WINDOWS_INSTALL_LATEST.md` now preserves the executable automation boundary: before launch the user only sets up PowerShell 7, downloads/verifies the latest package and runs `install-windows.ps1`; SSH/VPS automation is described as installer-owned; post-handoff work is described as Codex-owned.
+
+### Исправлено
+- Defect report `reports/bugs/2026-04-30-windows-latest-install-boundary-overcorrection.md` captures the overcorrection where SSH/VPS preparation moved outside the installer boundary.
+
 ## [2.5.7] - 2026-04-30
 ### Изменено
 - `WINDOWS_INSTALL_LATEST.md` now separates pre-launch user preparation, PowerShell/OpenSSH checks, latest package download/verification and the actual `install-windows.ps1` launch into distinct steps.

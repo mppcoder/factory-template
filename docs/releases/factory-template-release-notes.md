@@ -3,6 +3,15 @@
 ## Не выпущено
 - physical root normalization: legacy/factory-only top-level folders moved under project core, `tests/`, `docs/operator/`, `project-knowledge/` or bounded `factory/producer/*`; tree contract now rejects old active root folders.
 
+## 2.5.8
+- `WINDOWS_INSTALL_LATEST.md` now preserves the executable automation boundary.
+- before executable launch the user only opens PowerShell 7, downloads/verifies/unzips latest release package and runs `windows-bootstrap/install-windows.ps1`.
+- SSH key setup, existing-key checks, VPS connection, remote install and Codex prompt copy are described as installer-owned automation.
+- after handoff, repo-first work is described as Codex-owned work inside the VPS repo.
+- archive + manifest + SHA256 fallback is published as `factory-v2.5.8.zip`, `factory-v2.5.8.manifest.yaml` and `factory-v2.5.8.zip.sha256`.
+- `FactoryTemplateSetup.exe` remains a future signed wrapper boundary and is not published as a real exe in this release.
+- npm install/download path remains unsupported.
+
 ## 2.5.7
 - `WINDOWS_INSTALL_LATEST.md` now puts user preparation before executable launch.
 - Step 0 lists required VPS inputs before any installer run: IP, SSH username, SSH password/key and port.

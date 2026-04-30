@@ -1,6 +1,12 @@
 # Установка Factory Template на Windows: latest release
 
-Этот файл для нового пользователя. Порядок важен: сначала подготовьте VPS и Windows, потом скачайте полный latest release package, и только после этого запускайте текущий executable path `windows-bootstrap/install-windows.ps1`.
+Этот файл для нового пользователя. Правильная граница такая:
+
+```text
+Пользователь до installer: PowerShell 7 -> скачать latest дистрибутив -> запустить executable path.
+Installer: автоматизирует SSH key, подключение к VPS, установку repo и готовит Codex prompt.
+Codex: после вставки handoff работает внутри repo на VPS.
+```
 
 ## Ссылки
 
@@ -11,26 +17,27 @@
 
 `FactoryTemplateSetup.exe` пока не является опубликованным signed installer. Сейчас запускаемый путь для Windows - прозрачный PowerShell script `windows-bootstrap/install-windows.ps1` внутри полного release ZIP.
 
-Не скачивайте и не запускайте один `install-windows.ps1` отдельно: рядом с ним нужны `windows-bootstrap/scripts/` и `windows-bootstrap/prompts/`.
+Не скачивайте один `install-windows.ps1` отдельно: рядом с ним нужны `windows-bootstrap/scripts/` и `windows-bootstrap/prompts/`.
 
 Npm install/download не поддерживается.
 
-## Шаг 0. Что должно быть готово до запуска installer
+## Часть 1. До запуска executable path
 
-До запуска `install-windows.ps1` подготовьте:
+В этой части не настраиваем SSH руками. SSH key, проверку существующего ключа, добавление public key на VPS и remote install делает installer.
+
+Нужно только:
 
 ```text
-1. Windows PC с интернетом.
-2. VPS с Ubuntu 24.04 или близкой Ubuntu/Debian системой.
-3. IP адрес VPS.
-4. SSH username. Для нового VPS обычно: root.
-5. SSH password от VPS или уже настроенный SSH key.
-6. Открытый SSH port. Обычно: 22.
+1. Открыть PowerShell 7.
+2. Скачать latest release package.
+3. Проверить SHA256.
+4. Распаковать package.
+5. Запустить windows-bootstrap/install-windows.ps1.
 ```
 
-Если VPS еще не создан, сначала создайте его в панели провайдера и дождитесь письма/экрана с IP и root password. Без IP VPS installer запускать рано: первый обязательный вопрос будет `VPS host/IP`.
+Под рукой должен быть IP вашего VPS. SSH username/password могут понадобиться уже внутри installer, когда он начнет автоматическую настройку подключения.
 
-## Шаг 1. Установить или открыть PowerShell 7
+### Шаг 1. Открыть PowerShell 7
 
 Откройте обычный Windows PowerShell и вставьте:
 
@@ -46,7 +53,7 @@ winget install --id Microsoft.PowerShell --source winget
 Start -> PowerShell 7
 ```
 
-В PowerShell 7 проверьте версию:
+Проверьте версию:
 
 ```powershell
 $PSVersionTable.PSVersion
@@ -54,31 +61,9 @@ $PSVersionTable.PSVersion
 
 Ожидаемо: major version `7` или выше.
 
-## Шаг 2. Проверить SSH tools на Windows
+### Шаг 2. Скачать latest release package
 
-В PowerShell 7 вставьте:
-
-```powershell
-Get-Command ssh.exe
-Get-Command scp.exe
-Get-Command ssh-keygen.exe
-```
-
-Если все три команды показывают путь к `.exe`, переходите дальше.
-
-Если команда не найдена, откройте PowerShell от имени администратора и установите OpenSSH Client:
-
-```powershell
-Add-WindowsCapability -Online -Name OpenSSH.Client~~~~0.0.1.0
-```
-
-Потом снова откройте PowerShell 7 и повторите проверку.
-
-## Шаг 3. Скачать latest release package и проверить SHA256
-
-Этот блок только скачивает, проверяет и распаковывает latest release. Он еще не запускает installer.
-
-Вставьте блок целиком в PowerShell 7:
+Вставьте блок целиком в PowerShell 7. Он скачивает ZIP, manifest и SHA256 для последнего релиза, проверяет checksum, распаковывает package и сохраняет путь к executable file.
 
 ```powershell
 $ErrorActionPreference = "Stop"
@@ -131,10 +116,10 @@ $Installer.FullName | Set-Content -Path $InstallerInfoPath -Encoding UTF8
 
 Write-Host ""
 Write-Host "Package is ready."
-Write-Host "Installer path:"
+Write-Host "Executable path:"
 Write-Host $Installer.FullName
 Write-Host ""
-Write-Host "Next step: read Step 4, then run Step 5."
+Write-Host "Next step: run the executable path in Step 3."
 ```
 
 Ожидаемый результат:
@@ -142,34 +127,13 @@ Write-Host "Next step: read Step 4, then run Step 5."
 ```text
 SHA256 OK: ...
 Package is ready.
-Installer path:
+Executable path:
 C:\Users\<you>\Downloads\FactoryTemplateLatest\factory-v...\windows-bootstrap\install-windows.ps1
 ```
 
-## Шаг 4. Проверить данные перед запуском executable path
+### Шаг 3. Запустить executable path
 
-Перед запуском installer убедитесь, что у вас под рукой есть:
-
-```text
-VPS host/IP: <IP вашего VPS>
-SSH username: root
-SSH port: 22
-VPS password: <пароль из панели/письма провайдера>
-```
-
-Также решите заранее:
-
-```text
-Set up SSH key login to avoid repeated password prompts? -> Enter
-Target root -> Enter
-Incoming dir -> Enter
-```
-
-Рекомендованный путь - нажимать `Enter` на default questions. Installer сам создаст или использует ключ `%USERPROFILE%\.ssh\factory-template-vps-ed25519`, сначала проверит уже существующий ключ и не будет трогать VPS `authorized_keys`, если ключ уже работает.
-
-## Шаг 5. Запустить executable path
-
-Теперь, когда VPS-данные готовы и package скачан полностью, вставьте в PowerShell 7:
+Вставьте в PowerShell 7:
 
 ```powershell
 $ErrorActionPreference = "Stop"
@@ -194,9 +158,11 @@ Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
 & $InstallerPath
 ```
 
-## Шаг 6. Ответы в installer
+## Часть 2. Что делать внутри installer
 
-Когда installer задает вопросы, используйте такие ответы:
+Дальше работает `install-windows.ps1`. Он автоматизирует SSH и remote setup. Пользователь только отвечает на вопросы.
+
+Рекомендуемые ответы:
 
 ```text
 VPS host/IP: <IP вашего VPS>
@@ -207,30 +173,66 @@ Target root [/projects/factory-template]: Enter
 Incoming dir [/projects/factory-template/_incoming]: Enter
 ```
 
-Что важно:
+Что installer делает сам:
 
-- `VPS host/IP` нельзя предложить по умолчанию, его нужно взять из панели VPS.
-- `SSH username=root` и `SSH port=22` подходят для обычного нового Ubuntu VPS.
-- На вопрос про SSH key login просто нажмите `Enter`: это включает вход по ключу без постоянного ввода пароля.
-- Если ключ `%USERPROFILE%\.ssh\factory-template-vps-ed25519` уже есть, installer сначала проверит, работает ли он.
-- Если существующий ключ уже пускает на VPS, пароль не понадобится.
-- Если ключа еще нет на VPS, пароль понадобится один раз, чтобы добавить public key в `~/.ssh/authorized_keys`.
+- проверяет локальные `ssh.exe`, `scp.exe`, `ssh-keygen.exe`;
+- создает или использует ключ `%USERPROFILE%\.ssh\factory-template-vps-ed25519`;
+- если private key уже есть, но `.pub` потерян, восстанавливает public key;
+- проверяет, работает ли существующий ключ без пароля;
+- если ключ уже работает, не трогает VPS `authorized_keys`;
+- если ключ еще не добавлен на VPS, попросит VPS password один раз и добавит public key в `~/.ssh/authorized_keys`;
+- дальше использует key login для `ssh` и `scp`, чтобы пароль не вводился постоянно;
+- создает `/projects/factory-template/_incoming`;
+- устанавливает или обновляет repo `/projects/factory-template`;
+- запускает remote quick verification;
+- показывает Codex prompt;
+- предлагает скопировать Codex prompt в clipboard.
 
-## Шаг 7. Открыть проект через VS Code Remote SSH
-
-После успешной установки откройте VS Code и подключитесь к VPS:
-
-```text
-VS Code -> Remote Explorer -> SSH -> <root@IP вашего VPS>
-```
-
-На VPS рабочая папка:
+Если installer спрашивает:
 
 ```text
-/projects/factory-template
+Copy Codex prompt to clipboard? [Y/n]
 ```
 
-## Если запуск снова пишет, что install-windows.ps1 не найден
+нажмите `Enter`.
+
+## Часть 3. Вставить handoff в Codex
+
+После сообщения `FACTORY TEMPLATE SETUP PASS`:
+
+```text
+1. Откройте VS Code.
+2. Откройте Remote Explorer.
+3. Подключитесь к SSH host: root@<IP вашего VPS>.
+4. Откройте папку: /projects/factory-template.
+5. Откройте Codex chat в VS Code.
+6. Вставьте Codex prompt, который installer скопировал в clipboard.
+7. Отправьте prompt.
+```
+
+Если clipboard не сработал, installer показывает prompt прямо в PowerShell в блоке `Codex prompt:`. Скопируйте этот текст вручную.
+
+## Часть 4. Дальше работает Codex
+
+После вставки handoff в Codex пользователь не должен вручную запускать внутренние repo-команды, если Codex может сделать это сам.
+
+Codex должен:
+
+- открыть и прочитать `template-repo/scenario-pack/00-master-router.md`;
+- пройти repo-first route;
+- проверить `git status --short --branch`;
+- продолжить задачу пользователя внутри repo;
+- не просить пользователя запускать внутренние проверки, сборки или release-команды, если доступ к repo уже есть;
+- отвечать по-русски.
+
+Пользователь вручную делает только внешние действия:
+
+- вводит VPS password, если installer просит один раз для установки SSH key;
+- авторизует GitHub, если это понадобится;
+- создает или обновляет ChatGPT Project в browser, если это понадобится;
+- подтверждает risky external/destructive actions.
+
+## Если запуск пишет, что install-windows.ps1 не найден
 
 Вставьте этот диагностический блок в PowerShell 7:
 

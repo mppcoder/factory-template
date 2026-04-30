@@ -1,14 +1,14 @@
-# Отчет TEST REPORT v2.5.7 package-ready
+# Отчет TEST REPORT v2.5.8 package-ready
 
 Status source of truth: `docs/releases/release-scorecard.yaml`.
-Current scorecard state: `2.5.7 Package Ready`.
+Current scorecard state: `2.5.8 Package Ready`.
 TEST_REPORT.md is verification evidence, not the canonical release-status source.
 
 ## Проверка Windows beginner bootstrapper MVP
 
 Дата: `2026-04-30`.
 
-Добавлен прозрачный Windows-first путь установки `factory-template` с нуля на VPS: PowerShell entrypoint, remote bash installer, prompts для Codex/ChatGPT Project, README, future exe packaging boundary и targeted validator. Для `2.5.7` `WINDOWS_INSTALL_LATEST.md` перестроен в beginner-safe порядке: сначала VPS inputs и Windows prerequisites, затем PowerShell 7/OpenSSH checks, затем latest release ZIP/manifest/SHA256 download без fixed version, checksum verification и unzip, и только потом отдельный запуск `windows-bootstrap/install-windows.ps1`. Сохранены existing-key check, PowerShell 7 recommendation, `winget` update command, safe defaults and passwordless SSH setup from previous patch releases. Recommended source остается GitHub clone/download из `mppcoder/factory-template`; release archive + manifest + SHA256 остается fallback; npm install path не поддерживается.
+Добавлен прозрачный Windows-first путь установки `factory-template` с нуля на VPS: PowerShell entrypoint, remote bash installer, prompts для Codex/ChatGPT Project, README, future exe packaging boundary и targeted validator. Для `2.5.8` `WINDOWS_INSTALL_LATEST.md` выровнен по executable boundary: до запуска пользователь только открывает PowerShell 7, скачивает latest release ZIP/manifest/SHA256 без fixed version, проверяет checksum, распаковывает package и запускает `windows-bootstrap/install-windows.ps1`; SSH key setup, existing-key check, VPS connection, remote install и Codex prompt copy описаны как installer-owned automation; после вставки handoff repo-first работа описана как Codex-owned. Recommended source остается GitHub clone/download из `mppcoder/factory-template`; release archive + manifest + SHA256 остается fallback; npm install path не поддерживается.
 
 Проверки:
 
@@ -17,7 +17,7 @@ TEST_REPORT.md is verification evidence, not the canonical release-status source
 - `python3 windows-bootstrap/tests/validate-windows-bootstrap.py .` — pass.
 - `python3 template-repo/scripts/validate-tree-contract.py .` — pass.
 - `python3 template-repo/scripts/validate-human-language-layer.py .` — pass; active findings `0`.
-- `bash RELEASE_BUILD.sh /tmp/factory-v2.5.7-windows-bootstrap-test.zip` — pass; release ZIP, sidecar manifest and SHA256 produced and validated.
+- `bash RELEASE_BUILD.sh /tmp/factory-v2.5.8-windows-bootstrap-test.zip` — pass; release ZIP, sidecar manifest and SHA256 produced and validated.
 - PowerShell runtime check — skipped: PowerShell is not available in this Linux environment; `build-windows-bootstrap.ps1` remains a documented check/build contract.
 - Npm support grep — pass: no supported `npm install factory-template` path or `npm_path_supported: true` claim found.
 - `bash template-repo/scripts/verify-all.sh quick` — pass.
