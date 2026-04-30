@@ -3,6 +3,15 @@
 ## Не выпущено
 - physical root normalization: legacy/factory-only top-level folders moved under project core, `tests/`, `docs/operator/`, `project-knowledge/` or bounded `factory/producer/*`; tree contract now rejects old active root folders.
 
+## 2.5.7
+- `WINDOWS_INSTALL_LATEST.md` now puts user preparation before executable launch.
+- Step 0 lists required VPS inputs before any installer run: IP, SSH username, SSH password/key and port.
+- PowerShell 7 and OpenSSH Client checks happen before latest package download.
+- latest release download/checksum/unzip is separated from launching `windows-bootstrap/install-windows.ps1`.
+- archive + manifest + SHA256 fallback is published as `factory-v2.5.7.zip`, `factory-v2.5.7.manifest.yaml` and `factory-v2.5.7.zip.sha256`.
+- `FactoryTemplateSetup.exe` remains a future signed wrapper boundary and is not published as a real exe in this release.
+- npm install/download path remains unsupported.
+
 ## 2.5.6
 - one-file Windows beginner install guide added as `WINDOWS_INSTALL_LATEST.md`.
 - the guide resolves the latest GitHub Release dynamically through `releases/latest` instead of hard-coding `factory-vX.Y.Z`.

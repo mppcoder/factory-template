@@ -2,6 +2,13 @@
 
 ## [Unreleased]
 
+## [2.5.7] - 2026-04-30
+### Изменено
+- `WINDOWS_INSTALL_LATEST.md` now separates pre-launch user preparation, PowerShell/OpenSSH checks, latest package download/verification and the actual `install-windows.ps1` launch into distinct steps.
+
+### Исправлено
+- Defect report `reports/bugs/2026-04-30-windows-latest-install-order-gap.md` captures the beginner install guide order gap where the executable path could start before VPS inputs and SSH prerequisites were prepared.
+
 ## [2.5.6] - 2026-04-30
 ### Добавлено
 - `WINDOWS_INSTALL_LATEST.md`: one-file Russian beginner install guide with links and copy-paste PowerShell blocks that resolve the latest GitHub Release dynamically, download ZIP/manifest/SHA256, verify checksum, unzip and run `windows-bootstrap/install-windows.ps1`.

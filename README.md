@@ -1,4 +1,4 @@
-# Русское ядро фабрики проектов v2.5.6
+# Русское ядро фабрики проектов v2.5.7
 
 Это стабилизационный релиз фабрики проектов для связки:
 
@@ -10,7 +10,7 @@
 
 Release truth source: `docs/releases/release-scorecard.yaml`.
 Current 2.5 stage: `release publication / release artifact assembly`.
-Status: `2.5.6 Package Ready`.
+Status: `2.5.7 Package Ready`.
 GA-ready: `true`.
 
 ## Канонические entry modes
@@ -106,7 +106,7 @@ Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
 .\windows-bootstrap\install-windows.ps1
 ```
 
-Bootstrapper проверяет `ssh.exe`/`scp.exe`, по возможности находит `git.exe` и `code.exe`, спрашивает VPS host/IP, SSH username и port, создает `/projects/factory-template/_incoming`, рекомендует GitHub clone/download из `mppcoder/factory-template`, поддерживает fallback archive upload `factory-v2.5.6.zip` + manifest + SHA256, запускает remote quick verification и сохраняет install log/next-step report.
+Bootstrapper проверяет `ssh.exe`/`scp.exe`, по возможности находит `git.exe` и `code.exe`, спрашивает VPS host/IP, SSH username и port, создает `/projects/factory-template/_incoming`, рекомендует GitHub clone/download из `mppcoder/factory-template`, поддерживает fallback archive upload `factory-v2.5.7.zip` + manifest + SHA256, запускает remote quick verification и сохраняет install log/next-step report.
 
 Пользователь вручную делает только внешние действия: создает/оплачивает VPS, вводит passwords/secrets, авторизует GitHub при необходимости, создает ChatGPT Project в browser и подтверждает risky external/destructive actions. Npm install path для установки `factory-template` не поддерживается.
 
@@ -114,23 +114,23 @@ Fallback для ручной загрузки:
 
 ```bash
 mkdir -p /projects/factory-template/_incoming
-# загрузите factory-v2.5.6.zip, factory-v2.5.6.manifest.yaml и factory-v2.5.6.zip.sha256 в _incoming
+# загрузите factory-v2.5.7.zip, factory-v2.5.7.manifest.yaml и factory-v2.5.7.zip.sha256 в _incoming
 cd /projects/factory-template/_incoming
-sha256sum -c factory-v2.5.6.zip.sha256
-rm -rf /projects/factory-template/factory-v2.5.6
-unzip -q factory-v2.5.6.zip -d /projects/factory-template
-cd /projects/factory-template/factory-v2.5.6
+sha256sum -c factory-v2.5.7.zip.sha256
+rm -rf /projects/factory-template/factory-v2.5.7
+unzip -q factory-v2.5.7.zip -d /projects/factory-template
+cd /projects/factory-template/factory-v2.5.7
 bash POST_UNZIP_SETUP.sh
-python3 template-repo/scripts/validate-release-package.py ../_incoming/factory-v2.5.6.zip --checksum ../_incoming/factory-v2.5.6.zip.sha256 --manifest ../_incoming/factory-v2.5.6.manifest.yaml
+python3 template-repo/scripts/validate-release-package.py ../_incoming/factory-v2.5.7.zip --checksum ../_incoming/factory-v2.5.7.zip.sha256 --manifest ../_incoming/factory-v2.5.7.manifest.yaml
 bash template-repo/scripts/verify-all.sh quick
 ```
 
-Archive contract: внутри zip должен быть один root `factory-v2.5.6/`; sidecar manifest `factory-v2.5.6.manifest.yaml` и checksum `factory-v2.5.6.zip.sha256` лежат рядом с archive.
+Archive contract: внутри zip должен быть один root `factory-v2.5.7/`; sidecar manifest `factory-v2.5.7.manifest.yaml` и checksum `factory-v2.5.7.zip.sha256` лежат рядом с archive.
 
 ## Подготовка после распаковки
 
 ```bash
-cd factory-v2.5.6
+cd factory-v2.5.7
 bash POST_UNZIP_SETUP.sh
 bash tests/onboarding-smoke/run-novice-e2e.sh
 bash MATRIX_TEST.sh
@@ -405,6 +405,14 @@ bash PHASE_DETECTION_TEST.sh
 - временные каталоги smoke/matrix прогонов;
 - логи и служебные следы локальной сборки.
 
+## Что нового в релизе 2.5.7
+- `WINDOWS_INSTALL_LATEST.md` перестроен в правильном порядке: подготовка VPS и Windows prerequisites идут до запуска executable path;
+- latest release download/checksum/unzip отделен от запуска `windows-bootstrap/install-windows.ps1`;
+- перед запуском installer пользователь видит отдельную проверку VPS host/IP, SSH username, port и password/key;
+- fallback archive имена синхронизированы под `factory-v2.5.7.zip` + manifest + SHA256;
+- `FactoryTemplateSetup.exe` по-прежнему future signed wrapper boundary, готовый exe не публикуется;
+- npm path явно не заявляется, потому что repo не содержит `package.json`.
+
 ## Что нового в релизе 2.5.6
 - Добавлен `WINDOWS_INSTALL_LATEST.md`: один файл для новичка со ссылками и copy-paste PowerShell блоками;
 - инструкция скачивает latest GitHub Release через API без фиксированного номера версии;
@@ -460,7 +468,7 @@ bash PHASE_DETECTION_TEST.sh
 ## Программа релиза 2.5 (release truth)
 - Release truth source: `docs/releases/release-scorecard.yaml`;
 - Current 2.5 stage: `release publication / release artifact assembly`;
-- Status: `2.5.6 Package Ready`;
+- Status: `2.5.7 Package Ready`;
 - GA-ready: `true`;
 - канонический план зафиксирован в `docs/releases/2.5-roadmap.md`;
 - success metrics и пороги MVP/full 2.5 зафиксированы в `docs/releases/2.5-success-metrics.md`;
