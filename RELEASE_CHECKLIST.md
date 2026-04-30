@@ -3,12 +3,12 @@
 ## Scope / область
 
 - Repo: `factory-template`
-- Current release line: `2.5.5`
-- Current working section in changelog: `2.5.5`
+- Current release line: `2.5.6`
+- Current working section in changelog: `2.5.6`
 - Next planned release program line: `none`
 - Release truth source: `docs/releases/release-scorecard.yaml`
 - Current 2.5 stage: `release publication / release artifact assembly`
-- Status: `2.5.5 Package Ready`
+- Status: `2.5.6 Package Ready`
 - GA-ready: `true`
 
 ## Intent signals / сигналы намерения
@@ -49,7 +49,7 @@
 - [x] `bash CLEAN_VERIFY_ARTIFACTS.sh`
 - [x] `bash PRE_RELEASE_AUDIT.sh`
 - [x] `bash RELEASE_BUILD.sh`
-- [x] `sha256sum -c factory-v2.5.5.zip.sha256`
+- [x] `sha256sum -c factory-v2.5.6.zip.sha256`
 - [x] `python3 template-repo/scripts/validate-release-package.py <archive> --checksum <sha256> --manifest <manifest>`
 - [x] `python3 factory/producer/extensions/workspace-packs/factory-ops/upgrade-report.py <factory-root> <downstream-root> --format markdown --output UPGRADE_SUMMARY.md`
 - [x] `bash factory/producer/extensions/workspace-packs/factory-ops/apply-template-patch.sh <downstream-root>/_factory-sync-export --apply-safe-zones`
@@ -72,8 +72,8 @@
 ## Проверки release layer
 
 - [x] `VERSION.md`, `FACTORY_MANIFEST.yaml` и `template-repo/TEMPLATE_MANIFEST.yaml` согласованы
-- [x] `bash RELEASE_BUILD.sh` создает `factory-v2.5.5.zip`, `factory-v2.5.5.manifest.yaml` и `factory-v2.5.5.zip.sha256`
-- [x] archive распакован в temp и содержит один root `factory-v2.5.5/`
+- [x] `bash RELEASE_BUILD.sh` создает `factory-v2.5.6.zip`, `factory-v2.5.6.manifest.yaml` и `factory-v2.5.6.zip.sha256`
+- [x] archive распакован в temp и содержит один root `factory-v2.5.6/`
 - [x] release archive содержит только ASCII paths (`NON_ASCII_COUNT=0`) для portable GUI/Windows unzip compatibility
 - [x] release archive исключает transient `.tmp-run/` и проходит portable path-length gate (`MAX_PATH_LEN <= 180`)
 - [x] в распакованном root проходят `bash POST_UNZIP_SETUP.sh` и targeted package verification

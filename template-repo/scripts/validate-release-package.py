@@ -24,6 +24,7 @@ FORBIDDEN_PARTS = {
 REQUIRED_FILES = {
     "VERSION.md",
     "README.md",
+    "WINDOWS_INSTALL_LATEST.md",
     "readme.txt",
     "POST_UNZIP_SETUP.sh",
     "RELEASE_BUILD.sh",

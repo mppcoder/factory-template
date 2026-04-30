@@ -2,6 +2,13 @@
 
 ## [Unreleased]
 
+## [2.5.6] - 2026-04-30
+### Добавлено
+- `WINDOWS_INSTALL_LATEST.md`: one-file Russian beginner install guide with links and copy-paste PowerShell blocks that resolve the latest GitHub Release dynamically, download ZIP/manifest/SHA256, verify checksum, unzip and run `windows-bootstrap/install-windows.ps1`.
+
+### Изменено
+- README Windows install section now points new users to the latest-release one-file install guide instead of making them guess a fixed versioned folder.
+
 ## [2.5.5] - 2026-04-30
 ### Изменено
 - Windows bootstrapper checks whether an existing SSH key already works before touching VPS `authorized_keys`.

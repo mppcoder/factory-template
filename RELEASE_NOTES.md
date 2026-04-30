@@ -1,5 +1,31 @@
 # Release notes / заметки релиза
 
+## 2.5.6 - 2026-04-30
+
+### О чём этот релиз
+
+Patch release для Windows beginner onboarding: добавлен один файл `WINDOWS_INSTALL_LATEST.md` со ссылками и copy-paste PowerShell блоками, который скачивает latest GitHub Release без фиксированного номера версии.
+
+### Что вошло
+
+- `WINDOWS_INSTALL_LATEST.md` ведет нового пользователя от PowerShell 7 до запуска `windows-bootstrap/install-windows.ps1`.
+- Download block использует GitHub API `releases/latest`, находит `factory-v*.zip`, manifest и SHA256 asset без hard-coded версии.
+- ZIP проверяется через SHA256 перед распаковкой.
+- Installer ищется рекурсивно как `windows-bootstrap/install-windows.ps1`, поэтому пользователю не нужно угадывать имя папки `factory-vX.Y.Z`.
+- В инструкции явно описаны defaults: `SSH username=root`, `SSH port=22`, `TargetRoot=/projects/factory-template`, `IncomingDir=/projects/factory-template/_incoming`.
+- SSH key login остается default-yes path; существующий ключ проверяется до изменения VPS `authorized_keys`.
+- Archive + manifest + SHA256 fallback path: `factory-v2.5.6.zip`, `factory-v2.5.6.manifest.yaml`, `factory-v2.5.6.zip.sha256`.
+- `FactoryTemplateSetup.exe` остается future signed wrapper boundary; готовый exe этот релиз не публикует.
+- Npm install/download не поддерживается.
+
+### Что проверять
+
+- `python3 windows-bootstrap/tests/validate-windows-bootstrap.py .`
+- `bash template-repo/scripts/verify-all.sh quick`
+- `bash RELEASE_BUILD.sh _incoming/factory-v2.5.6.zip`
+- `sha256sum -c _incoming/factory-v2.5.6.zip.sha256`
+- `python3 template-repo/scripts/validate-release-package.py _incoming/factory-v2.5.6.zip --checksum _incoming/factory-v2.5.6.zip.sha256 --manifest _incoming/factory-v2.5.6.manifest.yaml`
+
 ## 2.5.5 - 2026-04-30
 
 ### О чём этот релиз

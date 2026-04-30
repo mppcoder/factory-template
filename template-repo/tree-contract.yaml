@@ -385,6 +385,7 @@ contours:
       - VERIFY_SUMMARY.md
       - VERSION.md
       - VERSION_SYNC_CHECK.sh
+      - WINDOWS_INSTALL_LATEST.md
       - bootstrap
       - brownfield
       - deploy
