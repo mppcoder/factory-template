@@ -2,7 +2,7 @@
 
 Release truth source: `docs/releases/release-scorecard.yaml`.
 текущая стадия: `release publication / release artifact assembly`.
-статус: `2.5.4 Package Ready`.
+статус: `2.5.5 Package Ready`.
 GA-ready: `true`.
 
 ## Что уже реализовано
@@ -160,7 +160,7 @@ GA-ready: `true`.
 ## Программа 2.5 (release truth)
 - release truth source: `docs/releases/release-scorecard.yaml`
 - текущая стадия: `release publication / release artifact assembly`
-- статус: `2.5.4 Package Ready`
+- статус: `2.5.5 Package Ready`
 - GA-ready: `true`
 - канонический roadmap: `docs/releases/2.5-roadmap.md`
 - канонические метрики: `docs/releases/2.5-success-metrics.md`
@@ -171,7 +171,7 @@ GA-ready: `true`.
 - downstream upgrade UX closeout зафиксирован в `UPGRADE_SUMMARY.md`
 - `G25-GA` прошел на `2026-04-26`: full-KPI evidence зафиксирован для всех `M25-*`
 - consolidated evidence: `docs/releases/2.5-ga-kpi-evidence.md`
-- граница evidence: `2.5.4 Package Ready` означает, что repo-controlled GA evidence линии `2.5` сохраняется, а patch release добавляет проверяемый Windows beginner bootstrapper artifact contract
+- граница evidence: `2.5.5 Package Ready` означает, что repo-controlled GA evidence линии `2.5` сохраняется, а patch release добавляет проверяемый Windows beginner bootstrapper artifact contract
 - post-GA field pilot roadmap: `docs/releases/2.5.1-field-pilot-roadmap.md`
 - field pilot evidence register: `reports/release/2.5-field-pilot-evidence.md`
 - текущий field evidence status: `completed-field-evidence` (`FP-01`..`FP-05` passed, `5/5`)
@@ -183,7 +183,7 @@ GA-ready: `true`.
 - Plan №3 audit: `docs/releases/plan-3-aif-molyanov-audit.md`
 - текущая стадия: `release-followup -> internal-hardening`
 - текущий planning status: `Plan №7 implemented/verified как repo-native Project Lifecycle Dashboard / Control Tower; Plan №4 P4-S5/P4-S6 remains optional future external contour if real downstream/battle app inputs exist`
-- `2.5.4` scope: Windows beginner bootstrapper SSH-key UX release with passwordless SSH setup, PowerShell 7/defaults retained, archive fallback and npm-unsupported boundary.
+- `2.5.5` scope: Windows beginner bootstrapper existing-key check release with passwordless SSH setup, PowerShell 7/defaults retained, archive fallback and npm-unsupported boundary.
 - `2.6` scope: completed for `factory-template` template/runtime proof: real production VPS deploy, backup restore, rollback drill, runtime/source-hygiene classification, expanded artifact eval, one real `feature-execution-lite` adoption, runtime QA boundary and reference runtime app.
 - completed proof: `2.5.0` repo-controlled GA evidence, `2.5.1-field-pilot` real project proof, downstream sync v3 synthetic multi-cycle proof.
 - optional future external proof: downstream/battle project application image deploy proof, only if validating a generated project with a real app. Infrastructure-level VPS deploy, backup restore and rollback drill passed on 2026-04-27 with local placeholder app image for `factory-template`; Plan №4 now provides the preparation docs/template/validator/eval contour for that future proof.

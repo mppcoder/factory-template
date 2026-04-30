@@ -4,7 +4,7 @@ param(
     [string]$IncomingDir = "/projects/factory-template/_incoming",
     [string]$DefaultSshUser = "root",
     [string]$DefaultSshPort = "22",
-    [string]$ReleaseVersion = "2.5.4"
+    [string]$ReleaseVersion = "2.5.5"
 )
 
 $ErrorActionPreference = "Stop"
@@ -100,6 +100,10 @@ function Ensure-SshKeyLogin {
     New-Item -ItemType Directory -Force -Path $sshDir | Out-Null
 
     if (-not (Test-Path $KeyPath)) {
+        if (Test-Path $publicKeyPath) {
+            Write-Warn "Public key exists without private key; replacing stale public key: $publicKeyPath"
+            Remove-Item -Force $publicKeyPath
+        }
         Write-Info "Creating SSH key for passwordless VPS login: $KeyPath"
         & ssh-keygen.exe -t ed25519 -f $KeyPath -N "" -C "factory-template-vps" 2>&1 | Tee-Object -FilePath $script:LogFile -Append
         if ($LASTEXITCODE -ne 0) {
@@ -110,7 +114,21 @@ function Ensure-SshKeyLogin {
     }
 
     if (-not (Test-Path $publicKeyPath)) {
-        throw "SSH public key not found: $publicKeyPath"
+        Write-Info "Recreating missing SSH public key: $publicKeyPath"
+        $publicKey = & ssh-keygen.exe -y -f $KeyPath 2>&1
+        if ($LASTEXITCODE -ne 0 -or [string]::IsNullOrWhiteSpace($publicKey)) {
+            $publicKey | Tee-Object -FilePath $script:LogFile -Append
+            throw "Could not recreate SSH public key."
+        }
+        Set-Content -Path $publicKeyPath -Value $publicKey -Encoding ascii
+    }
+
+    Write-Info "Checking whether existing SSH key already works without password."
+    $keyTestArgs = @("-o", "BatchMode=yes", "-o", "ConnectTimeout=10", "-i", $KeyPath) + $BaseSshArgs
+    & ssh.exe @keyTestArgs $Remote "printf 'SSH KEY LOGIN PASS\n'" 2>&1 | Tee-Object -FilePath $script:LogFile -Append
+    if ($LASTEXITCODE -eq 0) {
+        Write-Info "Existing SSH key already works; authorized_keys update skipped."
+        return
     }
 
     Write-Host ""
@@ -121,6 +139,12 @@ function Ensure-SshKeyLogin {
     Get-Content -Path $publicKeyPath | & ssh.exe @BaseSshArgs $Remote $remoteInstallKey 2>&1 | Tee-Object -FilePath $script:LogFile -Append
     if ($LASTEXITCODE -ne 0) {
         throw "Could not install SSH public key on VPS."
+    }
+
+    Write-Info "Verifying SSH key login after authorized_keys update."
+    & ssh.exe @keyTestArgs $Remote "printf 'SSH KEY LOGIN PASS\n'" 2>&1 | Tee-Object -FilePath $script:LogFile -Append
+    if ($LASTEXITCODE -ne 0) {
+        throw "SSH key was installed, but key-based login still failed."
     }
 
     Write-Info "SSH key login configured."

@@ -2,6 +2,13 @@
 
 ## [Unreleased]
 
+## [2.5.5] - 2026-04-30
+### Изменено
+- Windows bootstrapper checks whether an existing SSH key already works before touching VPS `authorized_keys`.
+
+### Исправлено
+- Defect report `reports/bugs/2026-04-30-windows-bootstrap-existing-key-check-gap.md` captures the gap where an already-working local key could still trigger a password prompt.
+
 ## [2.5.4] - 2026-04-30
 ### Добавлено
 - Windows bootstrapper now has a default-yes SSH key setup step to avoid repeated VPS password prompts.

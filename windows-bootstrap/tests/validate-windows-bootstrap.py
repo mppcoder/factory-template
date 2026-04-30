@@ -33,9 +33,9 @@ README_REQUIRED_MARKERS = [
     "install-windows.ps1",
     "GitHub clone/download",
     "release artifact archive",
-    "factory-v2.5.4.zip",
-    "factory-v2.5.4.manifest.yaml",
-    "factory-v2.5.4.zip.sha256",
+    "factory-v2.5.5.zip",
+    "factory-v2.5.5.manifest.yaml",
+    "factory-v2.5.5.zip.sha256",
     "SmartScreen",
     "SHA256",
     "PowerShell 7",
@@ -44,6 +44,8 @@ README_REQUIRED_MARKERS = [
     "SSH key login",
     "factory-template-vps-ed25519",
     "authorized_keys",
+    "BatchMode=yes",
+    "ключ уже пускает",
 ]
 
 ROOT_README_MARKERS = [
@@ -63,6 +65,9 @@ POWERSHELL_MARKERS = [
     "DefaultSshPort",
     "Ensure-SshKeyLogin",
     "authorized_keys",
+    "BatchMode=yes",
+    "Existing SSH key already works",
+    "ssh-keygen.exe -y",
     "factory-template-vps-ed25519",
     "VPS host/IP",
     "SSH username",

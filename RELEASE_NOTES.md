@@ -1,5 +1,29 @@
 # Release notes / заметки релиза
 
+## 2.5.5 - 2026-04-30
+
+### О чём этот релиз
+
+Patch release для Windows beginner bootstrapper: существующий SSH key теперь проверяется до изменения VPS `authorized_keys`, чтобы не просить пароль без необходимости.
+
+### Что вошло
+
+- Installer проверяет существующий key login через `ssh -o BatchMode=yes -i <key>`.
+- Если ключ уже работает, `authorized_keys` не меняется и VPS password не запрашивается.
+- Если private key есть, но `.pub` потерян, public key восстанавливается через `ssh-keygen.exe -y`.
+- Если public key пришлось добавить на VPS, installer повторно проверяет key login после update.
+- Archive + manifest + SHA256 fallback path: `factory-v2.5.5.zip`, `factory-v2.5.5.manifest.yaml`, `factory-v2.5.5.zip.sha256`.
+- `FactoryTemplateSetup.exe` остается future signed wrapper boundary; готовый exe этот релиз не публикует.
+- Npm install/download не поддерживается.
+
+### Что проверять
+
+- `python3 windows-bootstrap/tests/validate-windows-bootstrap.py .`
+- `bash template-repo/scripts/verify-all.sh quick`
+- `bash RELEASE_BUILD.sh _incoming/factory-v2.5.5.zip`
+- `sha256sum -c _incoming/factory-v2.5.5.zip.sha256`
+- `python3 template-repo/scripts/validate-release-package.py _incoming/factory-v2.5.5.zip --checksum _incoming/factory-v2.5.5.zip.sha256 --manifest _incoming/factory-v2.5.5.manifest.yaml`
+
 ## 2.5.4 - 2026-04-30
 
 ### О чём этот релиз

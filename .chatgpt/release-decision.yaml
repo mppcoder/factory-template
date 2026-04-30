@@ -1,6 +1,6 @@
 decision: "release"
-version: "2.5.4"
+version: "2.5.5"
 channel: "ga"
 notes_source: "RELEASE_NOTES.md"
 approved_by: "factory-template-operator"
-timestamp: "2026-04-30T15:15:44Z"
+timestamp: "2026-04-30T15:26:52Z"

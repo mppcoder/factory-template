@@ -3,6 +3,14 @@
 ## Не выпущено
 - physical root normalization: legacy/factory-only top-level folders moved under project core, `tests/`, `docs/operator/`, `project-knowledge/` or bounded `factory/producer/*`; tree contract now rejects old active root folders.
 
+## 2.5.5
+- Windows bootstrapper checks existing SSH key login with `ssh -o BatchMode=yes -i <key>` before touching VPS `authorized_keys`.
+- If the existing key already works, password prompt and `authorized_keys` update are skipped.
+- If private key exists but `.pub` is missing, the public key is recreated with `ssh-keygen.exe -y`.
+- If key installation is needed, key login is verified again after updating `authorized_keys`.
+- archive + manifest + SHA256 fallback is published as `factory-v2.5.5.zip`, `factory-v2.5.5.manifest.yaml` and `factory-v2.5.5.zip.sha256`.
+- npm install/download path remains unsupported.
+
 ## 2.5.4
 - Windows bootstrapper now offers default-yes SSH key setup to avoid repeated VPS password prompts.
 - Installer creates or reuses `%USERPROFILE%\\.ssh\\factory-template-vps-ed25519`.
