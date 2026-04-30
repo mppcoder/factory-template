@@ -33,11 +33,14 @@ README_REQUIRED_MARKERS = [
     "install-windows.ps1",
     "GitHub clone/download",
     "release artifact archive",
-    "factory-v2.5.1.zip",
-    "factory-v2.5.1.manifest.yaml",
-    "factory-v2.5.1.zip.sha256",
+    "factory-v2.5.2.zip",
+    "factory-v2.5.2.manifest.yaml",
+    "factory-v2.5.2.zip.sha256",
     "SmartScreen",
     "SHA256",
+    "PowerShell 7",
+    "SSH username`: `root",
+    "SSH port`: `22",
 ]
 
 ROOT_README_MARKERS = [
@@ -51,6 +54,9 @@ POWERSHELL_MARKERS = [
     "scp.exe",
     "git.exe",
     "code.exe",
+    "PowerShell 7",
+    "DefaultSshUser",
+    "DefaultSshPort",
     "VPS host/IP",
     "SSH username",
     "/projects/factory-template/_incoming",

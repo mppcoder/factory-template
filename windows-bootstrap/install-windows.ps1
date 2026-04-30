@@ -1,7 +1,10 @@
 param(
     [string]$RepoUrl = "https://github.com/mppcoder/factory-template.git",
     [string]$TargetRoot = "/projects/factory-template",
-    [string]$IncomingDir = "/projects/factory-template/_incoming"
+    [string]$IncomingDir = "/projects/factory-template/_incoming",
+    [string]$DefaultSshUser = "root",
+    [string]$DefaultSshPort = "22",
+    [string]$ReleaseVersion = "2.5.2"
 )
 
 $ErrorActionPreference = "Stop"
@@ -44,6 +47,17 @@ function Ask-Optional {
     return $value.Trim()
 }
 
+function Ask-DefaultedRequired {
+    param([string]$Prompt, [string]$Default)
+    while ($true) {
+        $value = Ask-Optional $Prompt $Default
+        if (-not [string]::IsNullOrWhiteSpace($value)) {
+            return $value.Trim()
+        }
+        Write-Warn "Please enter a value."
+    }
+}
+
 function Ask-YesNo {
     param([string]$Prompt, [bool]$DefaultYes = $false)
     $suffix = "[y/N]"
@@ -73,6 +87,27 @@ function Require-Command {
     }
     Write-Warn "$Name not found. Continuing where possible."
     return $null
+}
+
+function Show-PowerShellVersionGuidance {
+    $major = $PSVersionTable.PSVersion.Major
+    Write-Info "PowerShell version detected: $($PSVersionTable.PSVersion)"
+    if ($major -ge 7) {
+        return
+    }
+    Write-Warn "PowerShell 7 is recommended. Current shell is older and may be Windows PowerShell 5.1."
+    Write-Host ""
+    Write-Host "Recommended one-time update command:"
+    Write-Host "  winget install --id Microsoft.PowerShell --source winget"
+    Write-Host ""
+    Write-Host "After install, open PowerShell 7 and run this script again:"
+    Write-Host "  pwsh"
+    Write-Host "  Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass"
+    Write-Host "  .\windows-bootstrap\install-windows.ps1"
+    Write-Host ""
+    if (-not (Ask-YesNo "Continue with current PowerShell anyway?" $true)) {
+        throw "Stopped so you can install or open PowerShell 7."
+    }
 }
 
 function Copy-ToClipboardSafe {
@@ -119,19 +154,22 @@ New-Item -ItemType File -Force -Path $script:LogFile | Out-Null
 
 Write-Host ""
 Write-Host "Factory Template Windows Bootstrapper"
+Write-Host "Recommended shell: PowerShell 7 (`pwsh`)."
 Write-Host "Target VPS path: $TargetRoot"
+Write-Host "Defaults: SSH username=$DefaultSshUser, SSH port=$DefaultSshPort, target root=$TargetRoot, install source=GitHub clone/download."
 Write-Host ""
 Write-Info "Local log: $script:LogFile"
 
 try {
+    Show-PowerShellVersionGuidance
     Require-Command "ssh.exe" | Out-Null
     Require-Command "scp.exe" | Out-Null
     Require-Command "git.exe" -Required:$false | Out-Null
     $CodeExe = Require-Command "code.exe" -Required:$false
 
     $HostName = Ask-Required "VPS host/IP"
-    $SshUser = Ask-Required "SSH username"
-    $SshPort = Ask-Optional "SSH port" "22"
+    $SshUser = Ask-DefaultedRequired "SSH username" $DefaultSshUser
+    $SshPort = Ask-Optional "SSH port" $DefaultSshPort
     $Remote = "$SshUser@$HostName"
     $SshArgs = Build-SshArgs -Port $SshPort
     $ScpArgs = Build-ScpArgs -Port $SshPort
@@ -166,9 +204,9 @@ try {
     $UseArchive = Ask-YesNo "Use fallback archive upload instead of GitHub clone?" $false
 
     if ($UseArchive) {
-        $ArchivePath = Ask-Required "Local path to factory-v2.5.1.zip"
-        $ManifestPath = Ask-Required "Local path to factory-v2.5.1.manifest.yaml"
-        $ChecksumPath = Ask-Required "Local path to factory-v2.5.1.zip.sha256"
+        $ArchivePath = Ask-DefaultedRequired "Local path to factory-v$ReleaseVersion.zip" ".\factory-v$ReleaseVersion.zip"
+        $ManifestPath = Ask-DefaultedRequired "Local path to factory-v$ReleaseVersion.manifest.yaml" ".\factory-v$ReleaseVersion.manifest.yaml"
+        $ChecksumPath = Ask-DefaultedRequired "Local path to factory-v$ReleaseVersion.zip.sha256" ".\factory-v$ReleaseVersion.zip.sha256"
         foreach ($item in @($ArchivePath, $ManifestPath, $ChecksumPath)) {
             if (-not (Test-Path $item)) { throw "File not found: $item" }
         }
