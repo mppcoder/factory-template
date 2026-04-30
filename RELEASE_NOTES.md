@@ -1,5 +1,30 @@
 # Release notes / заметки релиза
 
+## 2.5.4 - 2026-04-30
+
+### О чём этот релиз
+
+Patch release для Windows beginner bootstrapper: добавлен SSH key setup, чтобы пользователь не вводил VPS password на каждом `ssh/scp` шаге.
+
+### Что вошло
+
+- Installer по умолчанию спрашивает: `Set up SSH key login to avoid repeated password prompts? [Y/n]`.
+- Создается или используется `%USERPROFILE%\\.ssh\\factory-template-vps-ed25519`.
+- Public key добавляется в VPS `~/.ssh/authorized_keys`; пароль нужен один раз, если key login еще не настроен.
+- После этого installer использует `ssh.exe -i` и `scp.exe -i`.
+- Если пользователь пропускает key setup, installer предупреждает, что password prompts могут повторяться.
+- Archive + manifest + SHA256 fallback path: `factory-v2.5.4.zip`, `factory-v2.5.4.manifest.yaml`, `factory-v2.5.4.zip.sha256`.
+- `FactoryTemplateSetup.exe` остается future signed wrapper boundary; готовый exe этот релиз не публикует.
+- Npm install/download не поддерживается.
+
+### Что проверять
+
+- `python3 windows-bootstrap/tests/validate-windows-bootstrap.py .`
+- `bash template-repo/scripts/verify-all.sh quick`
+- `bash RELEASE_BUILD.sh _incoming/factory-v2.5.4.zip`
+- `sha256sum -c _incoming/factory-v2.5.4.zip.sha256`
+- `python3 template-repo/scripts/validate-release-package.py _incoming/factory-v2.5.4.zip --checksum _incoming/factory-v2.5.4.zip.sha256 --manifest _incoming/factory-v2.5.4.manifest.yaml`
+
 ## 2.5.3 - 2026-04-30
 
 ### О чём этот релиз

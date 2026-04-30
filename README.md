@@ -1,4 +1,4 @@
-# Русское ядро фабрики проектов v2.5.3
+# Русское ядро фабрики проектов v2.5.4
 
 Это стабилизационный релиз фабрики проектов для связки:
 
@@ -10,7 +10,7 @@
 
 Release truth source: `docs/releases/release-scorecard.yaml`.
 Current 2.5 stage: `release publication / release artifact assembly`.
-Status: `2.5.3 Package Ready`.
+Status: `2.5.4 Package Ready`.
 GA-ready: `true`.
 
 ## Канонические entry modes
@@ -80,7 +80,7 @@ Launcher ведет по трем маршрутам:
 
 ## Установка с нуля и fallback archive
 
-Canonical path для установки с нуля — GitHub clone/download или опубликованный release artifact `factory-v2.5.3.zip`.
+Canonical path для установки с нуля — GitHub clone/download или опубликованный release artifact `factory-v2.5.4.zip`.
 Npm path не поддерживается: в repo нет `package.json` и npm packaging contract.
 
 ## Установка с Windows для новичка
@@ -98,7 +98,7 @@ Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
 .\windows-bootstrap\install-windows.ps1
 ```
 
-Bootstrapper проверяет `ssh.exe`/`scp.exe`, по возможности находит `git.exe` и `code.exe`, спрашивает VPS host/IP, SSH username и port, создает `/projects/factory-template/_incoming`, рекомендует GitHub clone/download из `mppcoder/factory-template`, поддерживает fallback archive upload `factory-v2.5.3.zip` + manifest + SHA256, запускает remote quick verification и сохраняет install log/next-step report.
+Bootstrapper проверяет `ssh.exe`/`scp.exe`, по возможности находит `git.exe` и `code.exe`, спрашивает VPS host/IP, SSH username и port, создает `/projects/factory-template/_incoming`, рекомендует GitHub clone/download из `mppcoder/factory-template`, поддерживает fallback archive upload `factory-v2.5.4.zip` + manifest + SHA256, запускает remote quick verification и сохраняет install log/next-step report.
 
 Пользователь вручную делает только внешние действия: создает/оплачивает VPS, вводит passwords/secrets, авторизует GitHub при необходимости, создает ChatGPT Project в browser и подтверждает risky external/destructive actions. Npm install path для установки `factory-template` не поддерживается.
 
@@ -106,23 +106,23 @@ Fallback для ручной загрузки:
 
 ```bash
 mkdir -p /projects/factory-template/_incoming
-# загрузите factory-v2.5.3.zip, factory-v2.5.3.manifest.yaml и factory-v2.5.3.zip.sha256 в _incoming
+# загрузите factory-v2.5.4.zip, factory-v2.5.4.manifest.yaml и factory-v2.5.4.zip.sha256 в _incoming
 cd /projects/factory-template/_incoming
-sha256sum -c factory-v2.5.3.zip.sha256
-rm -rf /projects/factory-template/factory-v2.5.3
-unzip -q factory-v2.5.3.zip -d /projects/factory-template
-cd /projects/factory-template/factory-v2.5.3
+sha256sum -c factory-v2.5.4.zip.sha256
+rm -rf /projects/factory-template/factory-v2.5.4
+unzip -q factory-v2.5.4.zip -d /projects/factory-template
+cd /projects/factory-template/factory-v2.5.4
 bash POST_UNZIP_SETUP.sh
-python3 template-repo/scripts/validate-release-package.py ../_incoming/factory-v2.5.3.zip --checksum ../_incoming/factory-v2.5.3.zip.sha256 --manifest ../_incoming/factory-v2.5.3.manifest.yaml
+python3 template-repo/scripts/validate-release-package.py ../_incoming/factory-v2.5.4.zip --checksum ../_incoming/factory-v2.5.4.zip.sha256 --manifest ../_incoming/factory-v2.5.4.manifest.yaml
 bash template-repo/scripts/verify-all.sh quick
 ```
 
-Archive contract: внутри zip должен быть один root `factory-v2.5.3/`; sidecar manifest `factory-v2.5.3.manifest.yaml` и checksum `factory-v2.5.3.zip.sha256` лежат рядом с archive.
+Archive contract: внутри zip должен быть один root `factory-v2.5.4/`; sidecar manifest `factory-v2.5.4.manifest.yaml` и checksum `factory-v2.5.4.zip.sha256` лежат рядом с archive.
 
 ## Подготовка после распаковки
 
 ```bash
-cd factory-v2.5.3
+cd factory-v2.5.4
 bash POST_UNZIP_SETUP.sh
 bash tests/onboarding-smoke/run-novice-e2e.sh
 bash MATRIX_TEST.sh
@@ -397,6 +397,13 @@ bash PHASE_DETECTION_TEST.sh
 - временные каталоги smoke/matrix прогонов;
 - логи и служебные следы локальной сборки.
 
+## Что нового в релизе 2.5.4
+- Windows bootstrapper теперь по умолчанию предлагает настроить SSH key login без постоянного ввода пароля;
+- installer создает или использует `%USERPROFILE%\\.ssh\\factory-template-vps-ed25519`;
+- public key добавляется в VPS `~/.ssh/authorized_keys`, после чего installer использует `ssh.exe -i` и `scp.exe -i`;
+- пароль VPS нужен один раз для установки public key, если passwordless SSH еще не настроен;
+- fallback archive имена синхронизированы под `factory-v2.5.4.zip` + manifest + SHA256.
+
 ## Что нового в релизе 2.5.3
 - Windows bootstrapper теперь явно рекомендует PowerShell 7 (`pwsh`) и показывает команду установки через `winget`;
 - installer предлагает safe defaults: `SSH username=root`, `SSH port=22`, `TargetRoot=/projects/factory-template`, `IncomingDir=/projects/factory-template/_incoming`;
@@ -429,7 +436,7 @@ bash PHASE_DETECTION_TEST.sh
 ## Программа релиза 2.5 (release truth)
 - Release truth source: `docs/releases/release-scorecard.yaml`;
 - Current 2.5 stage: `release publication / release artifact assembly`;
-- Status: `2.5.3 Package Ready`;
+- Status: `2.5.4 Package Ready`;
 - GA-ready: `true`;
 - канонический план зафиксирован в `docs/releases/2.5-roadmap.md`;
 - success metrics и пороги MVP/full 2.5 зафиксированы в `docs/releases/2.5-success-metrics.md`;

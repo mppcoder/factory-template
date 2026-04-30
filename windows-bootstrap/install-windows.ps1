@@ -4,7 +4,7 @@ param(
     [string]$IncomingDir = "/projects/factory-template/_incoming",
     [string]$DefaultSshUser = "root",
     [string]$DefaultSshPort = "22",
-    [string]$ReleaseVersion = "2.5.3"
+    [string]$ReleaseVersion = "2.5.4"
 )
 
 $ErrorActionPreference = "Stop"
@@ -89,6 +89,43 @@ function Require-Command {
     return $null
 }
 
+function Ensure-SshKeyLogin {
+    param(
+        [string]$Remote,
+        [array]$BaseSshArgs,
+        [string]$KeyPath
+    )
+    $sshDir = Split-Path -Parent $KeyPath
+    $publicKeyPath = "$KeyPath.pub"
+    New-Item -ItemType Directory -Force -Path $sshDir | Out-Null
+
+    if (-not (Test-Path $KeyPath)) {
+        Write-Info "Creating SSH key for passwordless VPS login: $KeyPath"
+        & ssh-keygen.exe -t ed25519 -f $KeyPath -N "" -C "factory-template-vps" 2>&1 | Tee-Object -FilePath $script:LogFile -Append
+        if ($LASTEXITCODE -ne 0) {
+            throw "Could not create SSH key."
+        }
+    } else {
+        Write-Info "Using existing SSH key: $KeyPath"
+    }
+
+    if (-not (Test-Path $publicKeyPath)) {
+        throw "SSH public key not found: $publicKeyPath"
+    }
+
+    Write-Host ""
+    Write-Host "SSH key setup:"
+    Write-Host "  Public key will be added to VPS ~/.ssh/authorized_keys."
+    Write-Host "  You may need to enter the VPS password once for this step."
+    $remoteInstallKey = 'umask 077; mkdir -p ~/.ssh; touch ~/.ssh/authorized_keys; tmp=$(mktemp); cat > "$tmp"; grep -qxF -f "$tmp" ~/.ssh/authorized_keys || cat "$tmp" >> ~/.ssh/authorized_keys; rm -f "$tmp"; chmod 700 ~/.ssh; chmod 600 ~/.ssh/authorized_keys; printf "SSH KEY INSTALL PASS\n"'
+    Get-Content -Path $publicKeyPath | & ssh.exe @BaseSshArgs $Remote $remoteInstallKey 2>&1 | Tee-Object -FilePath $script:LogFile -Append
+    if ($LASTEXITCODE -ne 0) {
+        throw "Could not install SSH public key on VPS."
+    }
+
+    Write-Info "SSH key login configured."
+}
+
 function Show-PowerShellVersionGuidance {
     $major = $PSVersionTable.PSVersion.Major
     Write-Info "PowerShell version detected: $($PSVersionTable.PSVersion)"
@@ -121,8 +158,11 @@ function Copy-ToClipboardSafe {
 }
 
 function Build-SshArgs {
-    param([string]$Port)
+    param([string]$Port, [string]$IdentityFile = "")
     $args = @("-o", "ServerAliveInterval=30")
+    if (-not [string]::IsNullOrWhiteSpace($IdentityFile)) {
+        $args += @("-i", $IdentityFile)
+    }
     if (-not [string]::IsNullOrWhiteSpace($Port)) {
         $args += @("-p", $Port)
     }
@@ -130,8 +170,11 @@ function Build-SshArgs {
 }
 
 function Build-ScpArgs {
-    param([string]$Port)
+    param([string]$Port, [string]$IdentityFile = "")
     $args = @()
+    if (-not [string]::IsNullOrWhiteSpace($IdentityFile)) {
+        $args += @("-i", $IdentityFile)
+    }
     if (-not [string]::IsNullOrWhiteSpace($Port)) {
         $args += @("-P", $Port)
     }
@@ -164,6 +207,7 @@ try {
     Show-PowerShellVersionGuidance
     Require-Command "ssh.exe" | Out-Null
     Require-Command "scp.exe" | Out-Null
+    Require-Command "ssh-keygen.exe" | Out-Null
     Require-Command "git.exe" -Required:$false | Out-Null
     $CodeExe = Require-Command "code.exe" -Required:$false
 
@@ -171,8 +215,18 @@ try {
     $SshUser = Ask-DefaultedRequired "SSH username" $DefaultSshUser
     $SshPort = Ask-Optional "SSH port" $DefaultSshPort
     $Remote = "$SshUser@$HostName"
-    $SshArgs = Build-SshArgs -Port $SshPort
-    $ScpArgs = Build-ScpArgs -Port $SshPort
+    $BaseSshArgs = Build-SshArgs -Port $SshPort
+    $UseSshKey = Ask-YesNo "Set up SSH key login to avoid repeated password prompts?" $true
+    $SshKeyPath = Join-Path $env:USERPROFILE ".ssh\factory-template-vps-ed25519"
+    if ($UseSshKey) {
+        Ensure-SshKeyLogin -Remote $Remote -BaseSshArgs $BaseSshArgs -KeyPath $SshKeyPath
+        $SshArgs = Build-SshArgs -Port $SshPort -IdentityFile $SshKeyPath
+        $ScpArgs = Build-ScpArgs -Port $SshPort -IdentityFile $SshKeyPath
+    } else {
+        Write-Warn "SSH key setup skipped. ssh/scp may ask for a password multiple times."
+        $SshArgs = $BaseSshArgs
+        $ScpArgs = Build-ScpArgs -Port $SshPort
+    }
 
     Write-Info "Testing SSH connection to $Remote ..."
     & ssh.exe @SshArgs $Remote "printf 'SSH PASS\n'; uname -a" 2>&1 | Tee-Object -FilePath $script:LogFile -Append
@@ -265,6 +319,7 @@ VPS: $Remote
 Target root: $TargetRoot
 Incoming folder: $IncomingDir
 Install source: $(if ($UseArchive) { "fallback archive" } else { "GitHub clone/download" })
+SSH key login: $(if ($UseSshKey) { "configured with $SshKeyPath" } else { "skipped; password prompts may repeat" })
 Local log: $script:LogFile
 
 Next steps:

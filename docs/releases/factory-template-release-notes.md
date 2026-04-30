@@ -3,6 +3,14 @@
 ## Не выпущено
 - physical root normalization: legacy/factory-only top-level folders moved under project core, `tests/`, `docs/operator/`, `project-knowledge/` or bounded `factory/producer/*`; tree contract now rejects old active root folders.
 
+## 2.5.4
+- Windows bootstrapper now offers default-yes SSH key setup to avoid repeated VPS password prompts.
+- Installer creates or reuses `%USERPROFILE%\\.ssh\\factory-template-vps-ed25519`.
+- Public key is added to VPS `~/.ssh/authorized_keys`; the password is needed once if key login is not already configured.
+- Later installer steps use `ssh.exe -i` and `scp.exe -i`.
+- archive + manifest + SHA256 fallback is published as `factory-v2.5.4.zip`, `factory-v2.5.4.manifest.yaml` and `factory-v2.5.4.zip.sha256`.
+- npm install/download path remains unsupported.
+
 ## 2.5.3
 - Windows bootstrapper now recommends PowerShell 7 and shows the `winget` install command.
 - Installer prompts include safe defaults: `SSH username=root`, `SSH port=22`, `TargetRoot=/projects/factory-template`, `IncomingDir=/projects/factory-template/_incoming`.

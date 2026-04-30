@@ -1,14 +1,14 @@
-# Отчет TEST REPORT v2.5.3 package-ready
+# Отчет TEST REPORT v2.5.4 package-ready
 
 Status source of truth: `docs/releases/release-scorecard.yaml`.
-Current scorecard state: `2.5.3 Package Ready`.
+Current scorecard state: `2.5.4 Package Ready`.
 TEST_REPORT.md is verification evidence, not the canonical release-status source.
 
 ## Проверка Windows beginner bootstrapper MVP
 
 Дата: `2026-04-30`.
 
-Добавлен прозрачный Windows-first путь установки `factory-template` с нуля на VPS: PowerShell entrypoint, remote bash installer, prompts для Codex/ChatGPT Project, README, future exe packaging boundary и targeted validator. Для `2.5.3` bootstrapper дополнительно рекомендует PowerShell 7, показывает `winget` update command и предлагает safe defaults для SSH username, SSH port, target root, incoming dir и fallback archive names. Recommended source остается GitHub clone/download из `mppcoder/factory-template`; release archive + manifest + SHA256 остается fallback; npm install path не поддерживается.
+Добавлен прозрачный Windows-first путь установки `factory-template` с нуля на VPS: PowerShell entrypoint, remote bash installer, prompts для Codex/ChatGPT Project, README, future exe packaging boundary и targeted validator. Для `2.5.4` bootstrapper дополнительно предлагает default-yes SSH key setup: создает или использует `%USERPROFILE%\\.ssh\\factory-template-vps-ed25519`, добавляет public key в VPS `authorized_keys` и дальше использует `ssh.exe -i` / `scp.exe -i`, чтобы не требовать постоянный ввод VPS password. PowerShell 7 recommendation, `winget` update command and safe defaults from `2.5.3` retained. Recommended source остается GitHub clone/download из `mppcoder/factory-template`; release archive + manifest + SHA256 остается fallback; npm install path не поддерживается.
 
 Проверки:
 
@@ -17,7 +17,7 @@ TEST_REPORT.md is verification evidence, not the canonical release-status source
 - `python3 windows-bootstrap/tests/validate-windows-bootstrap.py .` — pass.
 - `python3 template-repo/scripts/validate-tree-contract.py .` — pass.
 - `python3 template-repo/scripts/validate-human-language-layer.py .` — pass; active findings `0`.
-- `bash RELEASE_BUILD.sh /tmp/factory-v2.5.3-windows-bootstrap-test.zip` — pass; release ZIP, sidecar manifest and SHA256 produced and validated.
+- `bash RELEASE_BUILD.sh /tmp/factory-v2.5.4-windows-bootstrap-test.zip` — pass; release ZIP, sidecar manifest and SHA256 produced and validated.
 - PowerShell runtime check — skipped: PowerShell is not available in this Linux environment; `build-windows-bootstrap.ps1` remains a documented check/build contract.
 - Npm support grep — pass: no supported `npm install factory-template` path or `npm_path_supported: true` claim found.
 - `bash template-repo/scripts/verify-all.sh quick` — pass.
@@ -389,7 +389,7 @@ Runtime defects remediated:
 - `docs/releases/post-2.5-gap-register.md` расширен gap'ами `P3-GAP-01`..`P3-GAP-07`.
 - `CURRENT_FUNCTIONAL_STATE.md` обновлен так, чтобы Plan №3 P3-S0 был виден как planning/audit status, а completed FP-01..FP-05 не выглядели pending.
 - Этот stage не добавлял task-state artifact, learning/evolve validator, новые Artifact Eval specs или real `feature-execution-lite` adoption workspace.
-- Новый release-ready status для этого historical stage не объявлялся; актуальный scorecard позже переведен в `2.5.3 Package Ready`.
+- Новый release-ready status для этого historical stage не объявлялся; актуальный scorecard позже переведен в `2.5.4 Package Ready`.
 
 Проверки:
 
@@ -407,7 +407,7 @@ Runtime defects remediated:
 - `docs/releases/post-2.5-gap-register.md` разделяет completed repo-controlled/synthetic/template-infrastructure proof и optional downstream/battle application proof.
 - `reports/bugs/2026-04-27-post-25-release-planning-gap.md` фиксирует release-followup planning gap как remediated in current scope.
 - Сравнение с `pavel-molyanov/molyanov-ai-dev` записано как adaptation register: already adapted, useful but not yet adapted, intentionally not adapted.
-- Новый release-ready status для этого historical stage не объявлялся; актуальный scorecard позже переведен в `2.5.3 Package Ready`.
+- Новый release-ready status для этого historical stage не объявлялся; актуальный scorecard позже переведен в `2.5.4 Package Ready`.
 
 Проверки:
 

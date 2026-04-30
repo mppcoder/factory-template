@@ -2,6 +2,16 @@
 
 ## [Unreleased]
 
+## [2.5.4] - 2026-04-30
+### Добавлено
+- Windows bootstrapper now has a default-yes SSH key setup step to avoid repeated VPS password prompts.
+
+### Изменено
+- Installer creates or reuses `%USERPROFILE%\\.ssh\\factory-template-vps-ed25519`, adds the public key to VPS `authorized_keys`, then uses `ssh.exe -i` and `scp.exe -i`.
+
+### Исправлено
+- Defect report `reports/bugs/2026-04-30-windows-bootstrap-missing-ssh-key-step.md` captures the missing passwordless SSH setup step.
+
 ## [2.5.3] - 2026-04-30
 ### Изменено
 - Windows bootstrapper UX: recommended PowerShell 7 entry, safe default prompt values and `factory-v2.5.3` fallback artifact names are now explicit in script/docs/validator.
