@@ -1,6 +1,7 @@
 # Журнал изменений
 
 ## Не выпущено
+- Windows beginner bootstrapper MVP added under `windows-bootstrap/`: PowerShell installer, remote bash helper, prompts, docs, future `FactoryTemplateSetup.exe` packaging boundary and validator. GitHub clone/download remains recommended; release archive + manifest + SHA256 remains fallback; npm install path remains unsupported.
 - physical root normalization: legacy/factory-only top-level folders moved under project core, `tests/`, `docs/operator/`, `project-knowledge/` or bounded `factory/producer/*`; tree contract now rejects old active root folders.
 
 ## 2.5.1

@@ -36,6 +36,7 @@ archival_exceptions:
 
 generated_or_technical_exclusions:
   - ".git/"
+  - ".release-stage/"
   - "_artifacts/"
   - "_sources-export/"
   - "_boundary-actions/"

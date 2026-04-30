@@ -226,9 +226,14 @@ mkdir -p /projects/factory-template/_incoming
 
 Canonical install-from-scratch path:
 
-- если доступен GitHub, используйте clone/download repo `mppcoder/factory-template` или опубликованный release artifact;
+- для новичка на Windows используйте `windows-bootstrap/install-windows.ps1` как прозрачный MVP-путь; будущий `FactoryTemplateSetup.exe` допустим только как signed/checked wrapper поверх этих scripts;
+- если доступен GitHub, bootstrapper использует recommended clone/download repo `mppcoder/factory-template`;
 - если GitHub command path недоступен, используйте fallback archive upload;
 - npm path для установки фабрики не поддерживается, потому что в repo нет `package.json` и npm packaging contract.
+
+Windows bootstrapper делает за пользователя все безопасные шаги: локальный prerequisite check, SSH/scp check, ввод VPS host/IP и SSH username, создание `/projects/factory-template/_incoming`, remote install в `/projects/factory-template`, quick verification, подсказку VS Code Remote SSH, вывод Codex prompt и ChatGPT Project Instructions, сохранение install log и next-step report.
+
+Пользователь все равно сам создает/оплачивает VPS, вводит passwords/secrets, авторизует GitHub при необходимости, создает ChatGPT Project в browser и подтверждает risky external/destructive actions.
 
 Fallback archive upload:
 

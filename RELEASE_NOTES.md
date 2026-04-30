@@ -26,6 +26,7 @@ Patch release для проверяемой установки `factory-template
 
 ## Не выпущено - handoff implementation control
 
+- Windows beginner bootstrapper MVP: добавлен `windows-bootstrap/install-windows.ps1`, remote bash installer, prompts, README, packaging contract для будущего `FactoryTemplateSetup.exe` и targeted validator. Recommended install source остается GitHub clone/download из `mppcoder/factory-template`; archive + manifest + SHA256 сохранены как fallback; npm install path не поддерживается.
 - Добавлен repo-native register `.chatgpt/handoff-implementation-register.yaml` для ChatGPT handoff / Codex self-handoff задач, которые нельзя терять между чатами.
 - Project Lifecycle Dashboard теперь показывает handoff implementation control cards: queued/ready, blocked by dependencies, prerequisite blockers, in progress, implemented but not verified, stale без свежего evidence и closed/not applicable.
 - Validator `validate-handoff-implementation-register.py` ловит green status без evidence, `not_applicable` без reason/evidence, unknown dependencies, blocked item ошибочно показанный как ready и secret-like content.

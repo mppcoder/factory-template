@@ -6,6 +6,10 @@
 
 ## Текущий verify baseline
 
+- `bash template-repo/scripts/verify-all.sh quick`: PASS (`2026-04-30`, Windows beginner bootstrapper MVP + release package integration).
+- `python3 windows-bootstrap/tests/validate-windows-bootstrap.py .`: PASS (`2026-04-30`).
+- `bash RELEASE_BUILD.sh /tmp/factory-v2.5.1-windows-bootstrap-test.zip`: PASS (`2026-04-30`); generated zip, manifest and SHA256 validated by `validate-release-package.py`.
+- Npm support grep (`npm install factory-template` / `npm_path_supported: true` patterns): PASS (`2026-04-30`); only unsupported-path wording and validator guard remain.
 - Historical Actions rerun cleanup (`2026-04-29`): CI #1 `24839250094`, CI #2 `24839291045`, CI #3 `24839294182`, CI #4 `24839297068`, CI #5 `24839481282` rerun and classified. CI #1/#5 are old fixed bug snapshots; CI #2/#3/#4 are historical superseded Dependabot PR checks. Clean-worktree `bash template-repo/scripts/verify-all.sh ci` passed after fixing pre-release/version scan portability.
 - GitHub Actions current main before fix commit: run `25101111513` green on `7e6b63c350c4cfff1a8ebe113a722ef46fd40d3f`.
 - GitHub Actions fix commit run `25101530394` exposed a follow-up allowlist gap: legacy scan matched defect-capture report evidence. Clean-worktree `verify-all.sh ci` passes after adding `reports/bugs/*` as allowed historical evidence.

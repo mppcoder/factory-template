@@ -2,6 +2,7 @@
 
 ## [Unreleased]
 ### Добавлено
+- Windows beginner bootstrapper MVP: `windows-bootstrap/install-windows.ps1`, remote installer, prompts, README, exe packaging boundary and quick validator for GitHub-first VPS install with archive fallback.
 - Release package artifact refresh for `2.5.1`: install ZIP теперь исключает transient `.tmp-run/` smoke trees и проходит portable path-length gate (`max_archive_path_length: 180`).
 - Release package artifact refresh for `2.5.1`: install ZIP теперь собирается с ASCII-only archive paths для GUI/Windows-compatible распаковки; `bootstrap/*.md` нормализуются только в staging archive, source repo filenames не меняются в этом fix.
 - `validate-release-package.py` теперь отклоняет release archives с non-ASCII paths, чтобы не выпускать ZIP, который может открываться в Linux CLI, но ломаться в пользовательских archive tools.
@@ -63,6 +64,7 @@
 - `docs/brownfield-to-greenfield-transition.md` описывает without-repo и with-repo transition paths, conversion gates и done rule.
 
 ### Изменено
+- Release build/package validation now includes `windows-bootstrap/` and generated root `readme.txt` pointing Windows beginners to GitHub clone/download first and archive sidecar fallback second.
 - Versioning layer, manifests, release checklist, install-from-scratch runbooks and release truth markers synchronized under patch release `2.5.1`.
 - User and Codex runbooks now document GitHub clone/download or release artifact as canonical path, manual archive upload to `/projects/factory-template/_incoming` as fallback, and npm path as unsupported without `package.json`.
 - Greenfield intake теперь идет как `новый проект` -> выбор default-decision mode -> recommendation-first опрос -> generated Codex handoff, где handoff содержит accepted defaults, overrides и unresolved decisions/blockers.

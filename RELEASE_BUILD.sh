@@ -23,6 +23,23 @@ mkdir -p "$STAGE" "$OUT_DIR"
 rsync -a --delete --exclude-from="$ROOT/.releaseignore" "$ROOT/" "$STAGE/"
 find "$STAGE" -name '*.sh' -exec chmod +x {} +
 find "$STAGE" -name '*.py' -exec chmod +x {} + || true
+cat > "$STAGE/readme.txt" <<EOF
+Factory Template $VERSION
+
+Easiest Windows beginner path:
+1. Use FactoryTemplateSetup.exe when a signed release exe is published.
+2. Transparent MVP fallback: run windows-bootstrap/install-windows.ps1 from Windows PowerShell.
+
+Recommended install source:
+- GitHub clone/download from https://github.com/mppcoder/factory-template
+
+Fallback archive files:
+- factory-v2.5.1.zip
+- factory-v2.5.1.manifest.yaml
+- factory-v2.5.1.zip.sha256
+
+The archive fallback keeps the manifest + SHA256 validation flow. Npm install/download is not a supported install path for factory-template because this repo has no package.json packaging contract.
+EOF
 python3 - "$STAGE/bootstrap" <<'PY'
 from __future__ import annotations
 
@@ -86,9 +103,13 @@ npm_path_supported: false
 filename_compatibility: ascii-only archive paths
 max_archive_path_length: 180
 canonical_install_paths:
-  - GitHub clone/download
-  - release artifact archive
-fallback_install_path: manual archive upload to /projects/factory-template/_incoming
+  - recommended GitHub clone/download from mppcoder/factory-template
+  - fallback release artifact archive
+windows_beginner_bootstrapper:
+  mvp_entrypoint: windows-bootstrap/install-windows.ps1
+  future_exe_name: FactoryTemplateSetup.exe
+  exe_built_by_this_script: false
+fallback_install_path: release archive upload to /projects/factory-template/_incoming
 included_major_directories:
   - .chatgpt/
   - bootstrap/
@@ -96,6 +117,7 @@ included_major_directories:
   - docs/
   - factory/
   - project-knowledge/
+  - windows-bootstrap/
   - scripts/
   - template-repo/
   - tests/

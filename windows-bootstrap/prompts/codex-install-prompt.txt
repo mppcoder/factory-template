@@ -1,0 +1,12 @@
+Работаем в repo `/projects/factory-template` в режиме repo-first.
+
+Сначала открой и прочитай `template-repo/scenario-pack/00-master-router.md`, затем действуй строго по repo route.
+
+Контекст: Windows bootstrapper уже установил или обновил `mppcoder/factory-template` на VPS, создал `_incoming` и запустил quick verification. Проверь текущее состояние repo, выполни `git status --short --branch`, затем продолжай по задаче пользователя.
+
+Важные границы:
+- source of truth - repo files, AGENTS, scenario-pack, runbooks и policy files;
+- npm install path для factory-template не поддерживается;
+- не вводи и не сохраняй secrets;
+- не удаляй `/projects/factory-template` или `_incoming` без явного подтверждения пользователя;
+- отвечай пользователю по-русски.

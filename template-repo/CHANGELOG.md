@@ -2,6 +2,7 @@
 
 ## [Unreleased]
 ### Добавлено
+- Windows beginner bootstrapper MVP documented in factory root release/package layer with GitHub-first install and archive fallback; npm install remains unsupported.
 - VPS Remote SSH-first orchestration runbook and template Codex workflow guidance for full handoff orchestration.
 - `scripts/orchestrate-codex-handoff.py`, `scripts/validate-codex-orchestration.py`, curated pack quality validator and verified sync fallback evidence validator.
 - orchestration support for `deferred_user_actions` and `placeholder_replacements`, including negative fixtures for user action subtasks and invalid placeholder metadata.

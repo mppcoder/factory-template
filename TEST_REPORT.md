@@ -4,6 +4,26 @@ Status source of truth: `docs/releases/release-scorecard.yaml`.
 Current scorecard state: `2.5.1 Package Ready`.
 TEST_REPORT.md is verification evidence, not the canonical release-status source.
 
+## Проверка Windows beginner bootstrapper MVP
+
+Дата: `2026-04-30`.
+
+Добавлен прозрачный Windows-first путь установки `factory-template` с нуля на VPS: PowerShell entrypoint, remote bash installer, prompts для Codex/ChatGPT Project, README, future exe packaging boundary и targeted validator. Recommended source остается GitHub clone/download из `mppcoder/factory-template`; release archive + manifest + SHA256 остается fallback; npm install path не поддерживается.
+
+Проверки:
+
+- `python3 -m py_compile windows-bootstrap/tests/validate-windows-bootstrap.py template-repo/scripts/validate-release-package.py` — pass.
+- `bash -n windows-bootstrap/scripts/remote-install-factory-template.sh RELEASE_BUILD.sh PRE_RELEASE_AUDIT.sh template-repo/scripts/verify-all.sh` — pass.
+- `python3 windows-bootstrap/tests/validate-windows-bootstrap.py .` — pass.
+- `python3 template-repo/scripts/validate-tree-contract.py .` — pass.
+- `python3 template-repo/scripts/validate-human-language-layer.py .` — pass; active findings `0`.
+- `bash RELEASE_BUILD.sh /tmp/factory-v2.5.1-windows-bootstrap-test.zip` — pass; release ZIP, sidecar manifest and SHA256 produced and validated.
+- PowerShell runtime check — skipped: PowerShell is not available in this Linux environment; `build-windows-bootstrap.ps1` remains a documented check/build contract.
+- Npm support grep — pass: no supported `npm install factory-template` path or `npm_path_supported: true` claim found.
+- `bash template-repo/scripts/verify-all.sh quick` — pass.
+
+Full verify decision: не запускался, потому что change затрагивает install UX, release package integration, docs and validators; quick verify plus release build validation cover affected contours.
+
 ## Проверка beginner visual dashboard UX
 
 Дата: `2026-04-29`.

@@ -318,6 +318,7 @@ contours:
       - docs/releases/factory-template-release-notes.md
       - project-knowledge/factory/template-evolution
       - tests/onboarding-smoke
+      - windows-bootstrap
       - work-templates/factory-feedback
     forbidden_paths:
       - .dogfood-bootstrap
@@ -396,6 +397,7 @@ contours:
       - greenfield
       - launcher.sh
       - project-knowledge
+      - readme.txt
       - reports
       - requirements.lock
       - requirements.txt
@@ -405,6 +407,7 @@ contours:
       - template-repo
       - tests
       - tools
+      - windows-bootstrap
       - work
       - work-templates
     ignored_transient_top_level:

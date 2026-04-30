@@ -24,11 +24,19 @@ FORBIDDEN_PARTS = {
 REQUIRED_FILES = {
     "VERSION.md",
     "README.md",
+    "readme.txt",
     "POST_UNZIP_SETUP.sh",
     "RELEASE_BUILD.sh",
     "RELEASE_CHECKLIST.md",
     "RELEASE_NOTES.md",
     "FACTORY_MANIFEST.yaml",
+    "windows-bootstrap/README.md",
+    "windows-bootstrap/install-windows.ps1",
+    "windows-bootstrap/prompts/codex-install-prompt.txt",
+    "windows-bootstrap/prompts/chatgpt-project-instructions.txt",
+    "windows-bootstrap/scripts/remote-install-factory-template.sh",
+    "windows-bootstrap/build/build-windows-bootstrap.ps1",
+    "windows-bootstrap/tests/validate-windows-bootstrap.py",
     "template-repo/scenario-pack/00-master-router.md",
     "template-repo/scripts/verify-all.sh",
     "factory/producer/packaging/release-package-manifest.yaml",
@@ -42,6 +50,14 @@ MANIFEST_MARKERS = {
     "npm_path_supported: false",
     "required_first_run_commands:",
     "verification_status:",
+}
+
+README_TXT_MARKERS = {
+    "FactoryTemplateSetup.exe",
+    "windows-bootstrap/install-windows.ps1",
+    "GitHub clone/download from https://github.com/mppcoder/factory-template",
+    "Fallback archive files:",
+    "Npm install/download is not a supported install path",
 }
 
 MAX_ARCHIVE_PATH_LENGTH = 180
@@ -135,6 +151,12 @@ def validate_zip(archive: Path) -> tuple[str, str]:
         validate_manifest_text(manifest_text, "embedded manifest")
         if f'archive_root: "{root}/"' not in manifest_text and f"archive_root: {root}/" not in manifest_text:
             raise ValueError("embedded manifest archive_root не совпадает с zip root")
+        readme_text = zf.read(f"{root}/readme.txt").decode("utf-8")
+        missing_readme_markers = sorted(marker for marker in README_TXT_MARKERS if marker not in readme_text)
+        if missing_readme_markers:
+            raise ValueError(
+                "root readme.txt не содержит markers: " + ", ".join(missing_readme_markers)
+            )
         return root, manifest_text
 
 

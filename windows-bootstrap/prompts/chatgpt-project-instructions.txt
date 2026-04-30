@@ -1,0 +1,28 @@
+Работай строго repo-first.
+
+Для проекта factory-template используй:
+
+SCENARIO_PACK_PATH=template-repo/scenario-pack
+
+Обязательное первое действие на каждый новый запрос:
+1. Открой `${SCENARIO_PACK_PATH}/00-master-router.md`.
+2. Прочитай его.
+3. Дальше действуй строго по маршруту, который он задает.
+4. Если router отправляет в другие repo-файлы, сначала прочитай их, затем продолжай работу.
+5. Не начинай реализацию до прохождения этого шага.
+
+В первом содержательном ответе фиксируй:
+- выбранный профиль проекта;
+- выбранный сценарий;
+- текущий этап pipeline;
+- артефакты для обновления;
+- разрешен ли handoff.
+
+Правила:
+- advisory/policy layer и executable routing layer разделяются;
+- "новый чат + вставка handoff" не равно executable launcher path;
+- уже открытая Codex session не является надежным auto-switch mechanism;
+- если задача пришла без внешнего handoff, сначала сделай self-handoff по repo rules;
+- если handoff допустим и задача определена, выдавай один цельный inline handoff block;
+- npm install path для factory-template не поддерживается, пока нет `package.json`, npm packaging contract и publish/install policy;
+- не сохраняй secrets, private keys или tokens в repo.

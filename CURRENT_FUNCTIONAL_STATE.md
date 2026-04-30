@@ -32,6 +32,7 @@ GA-ready: `true`.
 - финальный блок `Инструкция пользователю` теперь канонически обязателен для pending external/user steps
 - базовые structural validators
 - release hygiene, pre-release audit и version sync checks
+- Windows beginner bootstrapper MVP: PowerShell-first install path from Windows PC to VPS `/projects/factory-template`, GitHub-first install, archive sidecar fallback, remote quick verification and transparent future `FactoryTemplateSetup.exe` boundary
 - автоматическая проверка `factory-template-ops-policy.yaml` и boundary-actions template
 - feedback loop с проверкой качества `meta-feedback` до ingest и matrix-покрытием dry-run ingest path
 - codex handoff pack с автоматической проверкой `codex-context.md`, `codex-task-pack.md`, `boundary-actions.md` и `done-checklist.md`

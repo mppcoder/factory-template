@@ -83,6 +83,25 @@ Launcher ведет по трем маршрутам:
 Canonical path для установки с нуля — GitHub clone/download или опубликованный release artifact `factory-v2.5.1.zip`.
 Npm path не поддерживается: в repo нет `package.json` и npm packaging contract.
 
+## Установка с Windows для новичка
+
+Для полного новичка на Windows рекомендованный вход теперь находится в:
+
+```text
+windows-bootstrap/
+```
+
+Release-facing имя будущего wrapper artifact: `FactoryTemplateSetup.exe`. В текущем portable repo environment exe не собирается и не выдается за готовый signed installer; MVP executable path — прозрачный PowerShell script:
+
+```powershell
+Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
+.\windows-bootstrap\install-windows.ps1
+```
+
+Bootstrapper проверяет `ssh.exe`/`scp.exe`, по возможности находит `git.exe` и `code.exe`, спрашивает VPS host/IP, SSH username и port, создает `/projects/factory-template/_incoming`, рекомендует GitHub clone/download из `mppcoder/factory-template`, поддерживает fallback archive upload `factory-v2.5.1.zip` + manifest + SHA256, запускает remote quick verification и сохраняет install log/next-step report.
+
+Пользователь вручную делает только внешние действия: создает/оплачивает VPS, вводит passwords/secrets, авторизует GitHub при необходимости, создает ChatGPT Project в browser и подтверждает risky external/destructive actions. Npm install path для установки `factory-template` не поддерживается.
+
 Fallback для ручной загрузки:
 
 ```bash
