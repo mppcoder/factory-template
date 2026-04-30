@@ -34,7 +34,7 @@ Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
 winget install --id Microsoft.PowerShell --source winget
 ```
 
-После установки откройте PowerShell 7 и снова перейдите в распакованную папку `factory-v2.5.2`.
+После установки откройте PowerShell 7 и снова перейдите в распакованную папку `factory-v2.5.3`.
 
 Script не требует admin rights. Он проверяет `ssh.exe`, `scp.exe`, `git.exe` и `code.exe`, спрашивает VPS host/IP, username и optional SSH port, проверяет SSH, создает `/projects/factory-template/_incoming`, загружает remote helper script и запускает установку.
 
@@ -45,7 +45,7 @@ Installer показывает значения по умолчанию там, 
 - `TargetRoot`: `/projects/factory-template`;
 - `IncomingDir`: `/projects/factory-template/_incoming`;
 - install source: GitHub clone/download;
-- fallback archive files: `factory-v2.5.2.zip`, `factory-v2.5.2.manifest.yaml`, `factory-v2.5.2.zip.sha256`.
+- fallback archive files: `factory-v2.5.3.zip`, `factory-v2.5.3.manifest.yaml`, `factory-v2.5.3.zip.sha256`.
 
 `VPS host/IP` не имеет безопасного default и должен быть введен пользователем.
 
@@ -56,7 +56,7 @@ Installer показывает значения по умолчанию там, 
 - Спрашивает VPS host/IP, SSH username и optional SSH port.
 - Создает `/projects/factory-template/_incoming`.
 - Рекомендует GitHub clone/download из `mppcoder/factory-template`.
-- Поддерживает fallback archive upload для `factory-v2.5.2.zip`, `factory-v2.5.2.manifest.yaml`, `factory-v2.5.2.zip.sha256`.
+- Поддерживает fallback archive upload для `factory-v2.5.3.zip`, `factory-v2.5.3.manifest.yaml`, `factory-v2.5.3.zip.sha256`.
 - Запускает remote verification: `POST_UNZIP_SETUP.sh`, release package validator для archive path, затем `bash template-repo/scripts/verify-all.sh quick`.
 - Показывает как открыть VS Code Remote SSH.
 - Показывает/копирует Codex prompt и ChatGPT Project Instructions.
@@ -81,9 +81,9 @@ GitHub clone/download from https://github.com/mppcoder/factory-template
 Fallback release artifact archive files:
 
 ```text
-factory-v2.5.2.zip
-factory-v2.5.2.manifest.yaml
-factory-v2.5.2.zip.sha256
+factory-v2.5.3.zip
+factory-v2.5.3.manifest.yaml
+factory-v2.5.3.zip.sha256
 ```
 
 Npm install/download path не поддерживается: в repo нет `package.json`, npm packaging contract и publish/install policy.

@@ -1,8 +1,10 @@
 # Журнал изменений фабрики
 
 ## [Unreleased]
+
+## [2.5.3] - 2026-04-30
 ### Изменено
-- Windows bootstrapper UX: recommended PowerShell 7 entry, safe default prompt values and `factory-v2.5.2` fallback artifact names are now explicit in script/docs/validator.
+- Windows bootstrapper UX: recommended PowerShell 7 entry, safe default prompt values and `factory-v2.5.3` fallback artifact names are now explicit in script/docs/validator.
 
 ### Исправлено
 - Defect report `reports/bugs/2026-04-30-windows-bootstrap-powershell-defaults-gap.md` captures the missing PowerShell 7/default-values beginner guidance gap.

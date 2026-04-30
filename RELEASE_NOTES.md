@@ -1,5 +1,28 @@
 # Release notes / заметки релиза
 
+## 2.5.3 - 2026-04-30
+
+### О чём этот релиз
+
+Patch release для Windows beginner bootstrapper UX: PowerShell 7 recommendation, safe default prompt values and `factory-v2.5.3` fallback artifact names.
+
+### Что вошло
+
+- `windows-bootstrap/install-windows.ps1` рекомендует PowerShell 7 (`pwsh`) и показывает `winget install --id Microsoft.PowerShell --source winget`.
+- Installer предлагает safe defaults: `SSH username=root`, `SSH port=22`, `TargetRoot=/projects/factory-template`, `IncomingDir=/projects/factory-template/_incoming`.
+- `VPS host/IP` остается обязательным ручным вводом без default.
+- Archive + manifest + SHA256 fallback path: `factory-v2.5.3.zip`, `factory-v2.5.3.manifest.yaml`, `factory-v2.5.3.zip.sha256`.
+- `FactoryTemplateSetup.exe` остается future signed wrapper boundary; готовый exe этот релиз не публикует.
+- Npm install/download не поддерживается.
+
+### Что проверять
+
+- `python3 windows-bootstrap/tests/validate-windows-bootstrap.py .`
+- `bash template-repo/scripts/verify-all.sh quick`
+- `bash RELEASE_BUILD.sh _incoming/factory-v2.5.3.zip`
+- `sha256sum -c _incoming/factory-v2.5.3.zip.sha256`
+- `python3 template-repo/scripts/validate-release-package.py _incoming/factory-v2.5.3.zip --checksum _incoming/factory-v2.5.3.zip.sha256 --manifest _incoming/factory-v2.5.3.manifest.yaml`
+
 ## 2.5.2 - 2026-04-30
 
 ### О чём этот релиз

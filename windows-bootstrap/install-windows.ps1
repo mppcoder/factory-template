@@ -4,7 +4,7 @@ param(
     [string]$IncomingDir = "/projects/factory-template/_incoming",
     [string]$DefaultSshUser = "root",
     [string]$DefaultSshPort = "22",
-    [string]$ReleaseVersion = "2.5.2"
+    [string]$ReleaseVersion = "2.5.3"
 )
 
 $ErrorActionPreference = "Stop"

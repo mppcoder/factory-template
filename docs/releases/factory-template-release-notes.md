@@ -3,6 +3,14 @@
 ## Не выпущено
 - physical root normalization: legacy/factory-only top-level folders moved under project core, `tests/`, `docs/operator/`, `project-knowledge/` or bounded `factory/producer/*`; tree contract now rejects old active root folders.
 
+## 2.5.3
+- Windows bootstrapper now recommends PowerShell 7 and shows the `winget` install command.
+- Installer prompts include safe defaults: `SSH username=root`, `SSH port=22`, `TargetRoot=/projects/factory-template`, `IncomingDir=/projects/factory-template/_incoming`.
+- `VPS host/IP` remains required user input without a default.
+- archive + manifest + SHA256 fallback is published as `factory-v2.5.3.zip`, `factory-v2.5.3.manifest.yaml` and `factory-v2.5.3.zip.sha256`.
+- `FactoryTemplateSetup.exe` remains a future signed wrapper boundary and is not published as a real exe in this release.
+- npm install/download path remains unsupported.
+
 ## 2.5.2
 - Windows beginner bootstrapper MVP is included in the downloadable release artifact.
 - GitHub clone/download from `mppcoder/factory-template` remains the recommended install path.
