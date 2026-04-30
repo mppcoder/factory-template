@@ -6,6 +6,10 @@
 - **Codex** — исполнение по подготовленному handoff.
 - **Repo** — единственный источник правды по документам и изменениям.
 
+License: proprietary. Public visibility does not grant permission to use, copy,
+modify, distribute, run or derive from this repository without prior written
+consent from the copyright holder. See `LICENSE`.
+
 Следующая линия `2.5` уже оформлена как отдельная release-программа: не только hardening процесса, но и beginner-first productization с UI-friendly контуром и безопасной эволюцией downstream-репозиториев.
 
 Release truth source: `docs/releases/release-scorecard.yaml`.

@@ -360,6 +360,7 @@ contours:
       - FACTORY_MANIFEST.yaml
       - GENERATE_BOUNDARY_ACTIONS.sh
       - INGEST_FACTORY_FEEDBACK.sh
+      - LICENSE
       - MATRIX_TEST.sh
       - PATCH_NOTES_codex_dogfood_p1.md
       - PHASE_DETECTION_TEST.sh

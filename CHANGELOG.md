@@ -1,6 +1,8 @@
 # Журнал изменений фабрики
 
 ## [Unreleased]
+### Добавлено
+- Root `LICENSE` now states proprietary terms: public visibility does not grant permission to use, copy, modify, distribute, run or derive from repository content without prior written consent.
 
 ## [2.5.8] - 2026-04-30
 ### Изменено
