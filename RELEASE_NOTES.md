@@ -1,5 +1,28 @@
 # Release notes / заметки релиза
 
+## 2.5.2 - 2026-04-30
+
+### О чём этот релиз
+
+Patch release для публикации downloadable `factory-template` artifact с Windows beginner bootstrapper MVP из commit `02c517fcad5562412c1f06e682251f71e0e7babf`.
+
+### Что вошло
+
+- В release package включен `windows-bootstrap/`: PowerShell entrypoint `install-windows.ps1`, remote bash installer, prompts, README, build boundary для будущего `FactoryTemplateSetup.exe` и targeted validator.
+- Recommended install path остается GitHub clone/download из `mppcoder/factory-template`.
+- `windows-bootstrap/install-windows.ps1` является текущим executable MVP path для новичка на Windows.
+- `FactoryTemplateSetup.exe` зафиксирован только как future signed wrapper boundary; готовый exe этот релиз не публикует.
+- Archive + manifest + SHA256 остаются fallback path: `factory-v2.5.2.zip`, `factory-v2.5.2.manifest.yaml`, `factory-v2.5.2.zip.sha256`.
+- Npm install/download не поддерживается: в repo нет `package.json` и npm packaging contract.
+
+### Что проверять
+
+- `python3 windows-bootstrap/tests/validate-windows-bootstrap.py .`
+- `bash template-repo/scripts/verify-all.sh quick`
+- `bash RELEASE_BUILD.sh _incoming/factory-v2.5.2.zip`
+- `sha256sum -c _incoming/factory-v2.5.2.zip.sha256`
+- `python3 template-repo/scripts/validate-release-package.py _incoming/factory-v2.5.2.zip --checksum _incoming/factory-v2.5.2.zip.sha256 --manifest _incoming/factory-v2.5.2.manifest.yaml`
+
 ## 2.5.1 - 2026-04-29
 
 ### О чём этот релиз
@@ -26,7 +49,6 @@ Patch release для проверяемой установки `factory-template
 
 ## Не выпущено - handoff implementation control
 
-- Windows beginner bootstrapper MVP: добавлен `windows-bootstrap/install-windows.ps1`, remote bash installer, prompts, README, packaging contract для будущего `FactoryTemplateSetup.exe` и targeted validator. Recommended install source остается GitHub clone/download из `mppcoder/factory-template`; archive + manifest + SHA256 сохранены как fallback; npm install path не поддерживается.
 - Добавлен repo-native register `.chatgpt/handoff-implementation-register.yaml` для ChatGPT handoff / Codex self-handoff задач, которые нельзя терять между чатами.
 - Project Lifecycle Dashboard теперь показывает handoff implementation control cards: queued/ready, blocked by dependencies, prerequisite blockers, in progress, implemented but not verified, stale без свежего evidence и closed/not applicable.
 - Validator `validate-handoff-implementation-register.py` ловит green status без evidence, `not_applicable` без reason/evidence, unknown dependencies, blocked item ошибочно показанный как ready и secret-like content.

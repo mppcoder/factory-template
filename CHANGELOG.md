@@ -1,6 +1,22 @@
 # Журнал изменений фабрики
 
 ## [Unreleased]
+
+## [2.5.2] - 2026-04-30
+### Добавлено
+- Windows beginner bootstrapper MVP included in the release artifact: `windows-bootstrap/install-windows.ps1`, remote installer, prompts, README, future `FactoryTemplateSetup.exe` boundary and targeted validator.
+
+### Изменено
+- Release package naming, docs, manifests and release decision synchronized for `factory-v2.5.2`.
+- Root `readme.txt` generated inside the zip now derives fallback archive names from the current release version.
+- Release positioning clarified: GitHub clone/download is recommended, `install-windows.ps1` is the current Windows MVP executable path, archive + manifest + SHA256 is fallback, npm install/download remains unsupported.
+
+### Исправлено
+- `RELEASE_BUILD.sh` now normalizes relative output paths such as `_incoming/factory-v2.5.2.zip` before entering `.release-stage`.
+
+### Не входит
+- Signed `FactoryTemplateSetup.exe` is not built or published in this release.
+
 ### Добавлено
 - Windows beginner bootstrapper MVP: `windows-bootstrap/install-windows.ps1`, remote installer, prompts, README, exe packaging boundary and quick validator for GitHub-first VPS install with archive fallback.
 - Release package artifact refresh for `2.5.1`: install ZIP теперь исключает transient `.tmp-run/` smoke trees и проходит portable path-length gate (`max_archive_path_length: 180`).

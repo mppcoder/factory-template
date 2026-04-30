@@ -1,8 +1,15 @@
 # Журнал изменений
 
 ## Не выпущено
-- Windows beginner bootstrapper MVP added under `windows-bootstrap/`: PowerShell installer, remote bash helper, prompts, docs, future `FactoryTemplateSetup.exe` packaging boundary and validator. GitHub clone/download remains recommended; release archive + manifest + SHA256 remains fallback; npm install path remains unsupported.
 - physical root normalization: legacy/factory-only top-level folders moved under project core, `tests/`, `docs/operator/`, `project-knowledge/` or bounded `factory/producer/*`; tree contract now rejects old active root folders.
+
+## 2.5.2
+- Windows beginner bootstrapper MVP is included in the downloadable release artifact.
+- GitHub clone/download from `mppcoder/factory-template` remains the recommended install path.
+- `windows-bootstrap/install-windows.ps1` is the current Windows beginner executable path.
+- `FactoryTemplateSetup.exe` remains a future signed wrapper boundary and is not published as a real exe in this release.
+- archive + manifest + SHA256 fallback is published as `factory-v2.5.2.zip`, `factory-v2.5.2.manifest.yaml` and `factory-v2.5.2.zip.sha256`.
+- npm install/download path remains unsupported.
 
 ## 2.5.1
 - release package assembly now produces canonical zip, sidecar manifest and SHA256 checksum for install-from-scratch verification.

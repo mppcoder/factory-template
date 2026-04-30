@@ -2,14 +2,14 @@ schema_version: 1
 release_truth:
   canonical_file: docs/releases/release-scorecard.yaml
   release_line: "2.5"
-  release_label: "2.5.1 Package Ready"
-  current_stage: "updated release preparation / release package assembly"
+  release_label: "2.5.2 Package Ready"
+  current_stage: "release publication / release artifact assembly"
   status: ga-ready
   rc_ready: true
   ga_ready: true
-  last_updated: "2026-04-29"
+  last_updated: "2026-04-30"
   status_source_policy: "Markdown release docs must describe this scorecard state; TEST_REPORT.md is verification evidence, not an independent release-status source."
-  next_decision: "Release 2.5.1 can proceed after package verification, verified sync and explicit release executor decision."
+  next_decision: "Release 2.5.2 can proceed after package verification, verified sync and explicit release executor decision."
   canonical_references:
     roadmap: docs/releases/2.5-roadmap.md
     metrics: docs/releases/2.5-success-metrics.md
@@ -46,40 +46,40 @@ release_truth:
   metrics_summary:
     mvp_thresholds: defined
     full_thresholds: defined
-    current_result: "2.5.1 package-ready: 2.5 GA evidence remains valid and install-from-scratch package verification is required for patch release."
+    current_result: "2.5.2 package-ready: 2.5 GA evidence remains valid and install-from-scratch package verification is required for patch release."
   doc_assertions:
     - path: docs/releases/2.5-roadmap.md
       must_contain:
         - "Release truth source: `docs/releases/release-scorecard.yaml`"
-        - "Current pipeline stage: `updated release preparation / release package assembly`"
-        - "Status: `2.5.1 Package Ready`"
+        - "Current pipeline stage: `release publication / release artifact assembly`"
+        - "Status: `2.5.2 Package Ready`"
         - "GA-ready: `true`"
     - path: docs/releases/2.5-success-metrics.md
       must_contain:
         - "Release truth source: `docs/releases/release-scorecard.yaml`"
-        - "Current scorecard result: 2.5.1 package-ready: 2.5 GA evidence remains valid and install-from-scratch package verification is required for patch release."
+        - "Current scorecard result: 2.5.2 package-ready: 2.5 GA evidence remains valid and install-from-scratch package verification is required for patch release."
     - path: CURRENT_FUNCTIONAL_STATE.md
       must_contain:
         - "release truth source: `docs/releases/release-scorecard.yaml`"
-        - "текущая стадия: `updated release preparation / release package assembly`"
-        - "статус: `2.5.1 Package Ready`"
+        - "текущая стадия: `release publication / release artifact assembly`"
+        - "статус: `2.5.2 Package Ready`"
         - "GA-ready: `true`"
     - path: README.md
       must_contain:
         - "Release truth source: `docs/releases/release-scorecard.yaml`"
-        - "Current 2.5 stage: `updated release preparation / release package assembly`"
-        - "Status: `2.5.1 Package Ready`"
+        - "Current 2.5 stage: `release publication / release artifact assembly`"
+        - "Status: `2.5.2 Package Ready`"
         - "GA-ready: `true`"
     - path: RELEASE_CHECKLIST.md
       must_contain:
         - "Release truth source: `docs/releases/release-scorecard.yaml`"
-        - "Current 2.5 stage: `updated release preparation / release package assembly`"
-        - "Status: `2.5.1 Package Ready`"
+        - "Current 2.5 stage: `release publication / release artifact assembly`"
+        - "Status: `2.5.2 Package Ready`"
         - "- [x] GA-ready declared"
     - path: TEST_REPORT.md
       must_contain:
         - "Status source of truth: `docs/releases/release-scorecard.yaml`"
-        - "Current scorecard state: `2.5.1 Package Ready`"
+        - "Current scorecard state: `2.5.2 Package Ready`"
         - "TEST_REPORT.md is verification evidence, not the canonical release-status source."
   forbidden_doc_markers:
     - path: docs/releases/2.5-roadmap.md

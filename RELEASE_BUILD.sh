@@ -11,6 +11,7 @@ OUT_DIR_RAW="$(dirname "$OUT_ZIP")"
 mkdir -p "$OUT_DIR_RAW"
 OUT_DIR="$(cd "$OUT_DIR_RAW" && pwd)"
 OUT_BASE="$(basename "$OUT_ZIP")"
+OUT_ZIP="$OUT_DIR/$OUT_BASE"
 MANIFEST_REL="factory/producer/packaging/release-package-manifest.yaml"
 MANIFEST_STAGE="$STAGE/$MANIFEST_REL"
 MANIFEST_OUT="$OUT_DIR/${OUT_BASE%.zip}.manifest.yaml"
@@ -26,17 +27,19 @@ find "$STAGE" -name '*.py' -exec chmod +x {} + || true
 cat > "$STAGE/readme.txt" <<EOF
 Factory Template $VERSION
 
-Easiest Windows beginner path:
-1. Use FactoryTemplateSetup.exe when a signed release exe is published.
-2. Transparent MVP fallback: run windows-bootstrap/install-windows.ps1 from Windows PowerShell.
-
 Recommended install source:
 - GitHub clone/download from https://github.com/mppcoder/factory-template
 
+Windows beginner MVP executable path:
+- Run windows-bootstrap/install-windows.ps1 from Windows PowerShell.
+
+Future signed wrapper boundary:
+- FactoryTemplateSetup.exe is reserved for a future signed wrapper and is not built by this portable release package.
+
 Fallback archive files:
-- factory-v2.5.1.zip
-- factory-v2.5.1.manifest.yaml
-- factory-v2.5.1.zip.sha256
+- $REL_NAME.zip
+- $REL_NAME.manifest.yaml
+- $REL_NAME.zip.sha256
 
 The archive fallback keeps the manifest + SHA256 validation flow. Npm install/download is not a supported install path for factory-template because this repo has no package.json packaging contract.
 EOF
