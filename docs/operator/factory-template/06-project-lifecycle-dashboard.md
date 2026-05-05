@@ -62,13 +62,15 @@ FT-CH-0011 completion-report
 
 В title нельзя добавлять `HO`, `OPEN`, `CODEX`, `DONE`, `BLOCKED`, `VERIFIED`, `BUG`, `DECISION`, `RESEARCH` или другие status/kind tokens. Статусы живут только в repo state: `.chatgpt/chat-handoff-index.yaml`, handoff register и dashboard/card. Поэтому переход `open -> in_progress -> verified` не требует ручного переименования ChatGPT-чата.
 
-Номер выделяется repo-first через index/allocator. Если следующий номер неизвестен, его нельзя придумывать; нужно сказать:
+Номер выделяется repo-first через index/allocator и считается занятым только после materialized/reserved write в `.chatgpt/chat-handoff-index.yaml`. Если следующий номер неизвестен или repo write не подтвержден в repo/GitHub index, его нельзя придумывать; нужно сказать:
 
 ```text
 Нужно выделить номер через repo chat-handoff-index / allocator.
 ```
 
-Project Instructions могут только предложить пользователю стабильный title для нового чата. Они не могут надежно auto-rename ChatGPT UI, просканировать все названия чатов проекта или гарантировать следующий свободный номер. Переименование ChatGPT UI остается one-time manual action при создании чата, если нет отдельного поддержанного API/tool.
+Project Instructions могут показать пользователю только уже зарезервированный stable title или allocator blocker. Они не могут надежно auto-rename ChatGPT UI, просканировать все названия чатов проекта или гарантировать следующий свободный номер без repo write. Переименование ChatGPT UI остается one-time manual action при создании чата, если нет отдельного поддержанного API/tool.
+
+Важно: `FT-CH-....` в первом ответе не является предложением. Это ссылка на уже созданный item в repo index. Если handoff так и не запустили в Codex, номер остается занятым; следующая задача должна получить новый номер, а старую запись нужно явно закрыть как `superseded`, `not_applicable` или `archived`, если она больше не нужна.
 
 Первый substantive ответ ChatGPT в новом task-чате должен начинаться с:
 
@@ -85,10 +87,10 @@ Project Instructions могут только предложить пользов
 Рекомендуемый snippet для Project Instructions:
 
 ```text
-At the beginning of a new project task chat, propose a stable chat title in this format:
+At the beginning of a new project task chat, show a materialized repo-reserved stable chat title in this format:
 <PROJECT_CODE>-CH-<NNNN> <task-slug>.
 Do not include HO, OPEN, CODEX, DONE, BLOCKED, VERIFIED, BUG, DECISION or other status/kind tokens in the title.
-If the next number is unknown, do not invent it. Say: 'Нужно выделить номер через repo chat-handoff-index / allocator.'
+If the next number is unknown or repo write was not confirmed, do not invent it. Say: 'Нужно выделить номер через repo chat-handoff-index / allocator.'
 Statuses must be shown only in the project card and repo dashboard.
 In the first substantive answer, show sections exactly named 'Название чата для копирования' and 'Карточка проекта' before route receipt or handoff.
 ```
@@ -101,6 +103,8 @@ python3 template-repo/scripts/allocate-chat-handoff-id.py \
   --kind handoff \
   --description "short task name"
 ```
+
+Эта команда должна выполниться без `--dry-run` до показа `FT-CH-....` пользователю. `--dry-run` может использоваться только для диагностики и не резервирует номер.
 
 Codex self-handoff использует отдельный counter и не расходует ChatGPT `FT-CH` номера:
 

@@ -10,16 +10,24 @@ REQUIRED_ROUTER_PHRASES = [
     "Название чата для копирования",
     "Карточка проекта",
     "Нужно выделить номер через repo chat-handoff-index / allocator.",
+    "materialized repo reservation",
+    "dry-run, read-only вычисление",
+    "номер все равно остается занятым repo reservation",
     "render-project-lifecycle-dashboard.py --format chatgpt-card --stdout",
 ]
 REQUIRED_DOC_PHRASES = [
     "Название чата для копирования",
     "Карточка проекта",
     "Нужно выделить номер через repo chat-handoff-index / allocator.",
+    "materialized/reserved",
+    "repo write не подтвержден",
+    "номер остается занятым",
 ]
 FORBIDDEN_OVERCLAIMS = [
     "автоматически переименует ChatGPT",
     "просканирует все чаты",
+    "propose a stable chat title",
+    "Project Instructions могут только предложить",
 ]
 
 

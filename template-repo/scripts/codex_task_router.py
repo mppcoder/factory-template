@@ -25,6 +25,19 @@ DEFAULT_CHAT_STATES = [
     "not_applicable",
     "archived",
 ]
+DEFAULT_CHAT_ALLOCATION_POLICY = {
+    "shared_counter_for_all_kinds": False,
+    "first_chat_response_allocates_handoff_id": True,
+    "visible_chat_title_requires_materialized_index_item": True,
+    "dry_run_title_is_not_reserved": True,
+    "unlaunched_handoff_keeps_chat_number_reserved": True,
+    "allocator_blocker_required_without_write_access": True,
+    "codex_self_handoff_uses_same_counter": False,
+    "handoff_must_reference_chat_id": True,
+    "self_handoff_must_reference_chat_id": False,
+    "codex_self_handoff_uses_codex_work_index": True,
+    "codex_work_index_path": ".chatgpt/codex-work-index.yaml",
+}
 
 
 def load_routing_spec(root: Path) -> dict:
@@ -201,16 +214,12 @@ def ensure_chat_index(data: dict[str, Any], project_code: str) -> dict[str, Any]
     )
     data.setdefault(
         "allocation_policy",
-        {
-            "shared_counter_for_all_kinds": False,
-            "first_chat_response_allocates_handoff_id": True,
-            "codex_self_handoff_uses_same_counter": False,
-            "handoff_must_reference_chat_id": True,
-            "self_handoff_must_reference_chat_id": False,
-            "codex_self_handoff_uses_codex_work_index": True,
-            "codex_work_index_path": ".chatgpt/codex-work-index.yaml",
-        },
+        dict(DEFAULT_CHAT_ALLOCATION_POLICY),
     )
+    allocation_policy = data.get("allocation_policy")
+    if isinstance(allocation_policy, dict):
+        for key, value in DEFAULT_CHAT_ALLOCATION_POLICY.items():
+            allocation_policy.setdefault(key, value)
     data.setdefault("allowed_kinds", DEFAULT_CHAT_KINDS)
     data.setdefault("allowed_states", DEFAULT_CHAT_STATES)
     data.setdefault("items", [])
@@ -348,7 +357,7 @@ def allocate_chat_identity(root: Path, record: dict, task_text: str) -> dict:
         "handoff_register_item_id": "",
         "status_chain": SELF_HANDOFF_CHAIN if kind == "self_handoff" else HANDOFF_CHAIN,
         "evidence": [f"Allocated during {launch.get('launch_source')} bootstrap before first substantive response."],
-        "next_action": "Use this stable id/title in the handoff or self-handoff; update repo state without renaming the chat.",
+        "next_action": "Use this stable id/title in the handoff; if Codex is not launched, keep or close/supersede this repo reservation without reusing the number.",
     }
     data.setdefault("items", []).append(item)
     data["next_chat_number"] = next_number + 1

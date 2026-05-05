@@ -5,5 +5,7 @@
 ✅ Lifecycle → 🟡 Core → 🟡 Security → 🕒 UI/A11y → 🕒 Quality → 🕒 WebSec
 → 🕒 Ops → ⏸ AI
 В работе:
-✅ FT-CX-0007 chatgpt-first-answer-card-title: ✅ Codex-WORK → ✅ Codex OK →
-  ✅ Done
+✅ FT-CH-0010 release-package-updated-bootstrap: ✅ GPT-HO → ✅ Codex OK → ✅
+  Done
+✅ FT-CX-0008 chatgpt-title-reservation-gap: ✅ Codex-WORK → ✅ Codex OK → ✅
+  Done

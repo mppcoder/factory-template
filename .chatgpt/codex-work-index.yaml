@@ -1,6 +1,6 @@
 schema: codex-work-index/v1
 project_code: FT
-next_codex_work_number: 8
+next_codex_work_number: 9
 id_policy:
   canonical_format: <PROJECT_CODE>-CX-<NNNN> <task-slug>
   independent_from_chat_handoff_index: true
@@ -163,5 +163,31 @@ items:
     Instructions snippets and validator/smoke coverage.
   - bash template-repo/scripts/verify-all.sh quick
   - bash template-repo/scripts/verify-all.sh
-  next_action: No further implementation action; ChatGPT first-answer title/card
-    contract is verified.
+  next_action: No further implementation action; ChatGPT first-answer title/card contract
+    is verified.
+- codex_work_id: FT-CX-0008
+  work_number: 8
+  work_title: FT-CX-0008 chatgpt-title-reservation-gap
+  task_slug: chatgpt-title-reservation-gap
+  kind: self_handoff
+  state: verified
+  created_utc: '2026-05-05T12:33:19Z'
+  updated_utc: '2026-05-05T12:40:04Z'
+  source_type: direct-task
+  handoff_group: chatgpt-title-reservation-gap
+  handoff_revision: 1
+  handoff_register_item_id: ''
+  status_chain:
+  - codex_self_handoff
+  - codex_accepted
+  - codex_completed
+  evidence:
+  - Allocated during direct-task bootstrap before first substantive response.
+  - 'User report: ChatGPT first answer could propose an FT-CH number without reserving
+    it in repo/GitHub, allowing later reuse if Codex handoff was not launched.'
+  - Added materialized reservation policy to chat handoff index and validators.
+  - Updated allocator dry-run output so it is explicitly not a copyable reservation.
+  - bash template-repo/scripts/verify-all.sh quick
+  - bash template-repo/scripts/verify-all.sh
+  next_action: No further implementation action; ChatGPT title reservation contract
+    is verified.

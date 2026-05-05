@@ -1,39 +1,54 @@
 # Нормализованный handoff для Codex
 
 ## Источник запуска
-chatgpt-handoff
+direct-task
 
 ## Вид handoff
-single-agent-handoff
+codex-task-handoff
+
+## Решение о фактическом execution mode
+- owner: Codex после route receipt и анализа task graph.
+- allowed modes: `single-session execution` или `orchestrated-child-sessions`.
+- closeout обязателен: назвать actual execution mode и `child/subagent count`.
+- rule: handoff остается одним `codex-task-handoff`; orchestration candidate signals не равны фактическому запуску child/subagent sessions.
+
+## Стабильная identity чата и handoff
+- chat_id: ``
+- chat_title: ``
+- task_slug: `chatgpt-title-reservation-gap`
+- kind: ``
+- state: ``
+- source_of_truth: `.chatgpt/chat-handoff-index.yaml`
+- rule: номер выделяется из общего repo counter до первого substantive ответа; status/kind не добавляются в title.
 
 ## Evidence для вида handoff
-- явный override handoff_shape: single-agent-handoff
+- default neutral handoff: Codex decides actual execution_mode after analysis
 
 ## Класс задачи
-deep
+build
 
 ## Evidence для класса задачи
-- явный override task_class: deep
-- явный override selected_profile: deep
+- keyword-hit: fix
+- явный reasoning/model override совпал с default profile: build
 
 ## Выбранный профиль
-deep
+build
 
 ## Выбранная модель
 gpt-5.5
 
 ## Выбранное reasoning effort
-high
+medium
 
 ## Выбранное reasoning effort для plan mode
-high
+medium
 
 ## Режим применения
 manual-ui
 
 ## Ручное применение через UI
 - Откройте новый чат/окно Codex в VS Code extension.
-- Вручную выберите model `gpt-5.5` и reasoning `high` в picker.
+- Вручную выберите model `gpt-5.5` и reasoning `medium` в picker.
 - Только после этого вставьте handoff.
 - Codex должен отвечать пользователю на русском языке; английский допустим только для technical literal values.
 - Уже открытая live session не считается надежным auto-switch boundary.
@@ -45,13 +60,13 @@ manual-ui
 optional
 
 ## Профиль проекта
-factory-template self-improvement
+unknown-project-profile
 
 ## Выбранный сценарий
-template-repo/scenario-pack/00-master-router.md -> template-repo/scenario-pack/15-handoff-to-codex.md -> docs/operator/factory-template/04-vps-remote-ssh-full-handoff-orchestration.md
+00-master-router.md
 
 ## Этап pipeline
-handoff policy modernization -> routing UX -> validation -> closeout
+done
 
 ## Артефакты для обновления
 - .chatgpt/codex-input.md
@@ -63,10 +78,10 @@ handoff policy modernization -> routing UX -> validation -> closeout
 - reports/factory-feedback/
 
 ## Разрешение handoff
-yes
+yes (forbidden)
 
 ## Маршрут defect-capture
-reports/bugs/2026-04-29-handoff-shape-validator-drift.md
+reproduce -> evidence -> bug report -> layer classification -> factory feedback if reusable -> remediation
 
 ## Правило launch boundary
 Выбор модели и reasoning mode считается надежным только на новом запуске Codex для новой задачи.
@@ -105,10 +120,10 @@ selected_model совпадает с последним сохраненным s
 - Не вставлять current date как постоянную model instruction; даты reports/filenames фиксировать как metadata.
 
 ## Путь launch artifact
-`.chatgpt/codex-input.md`
+`.chatgpt/direct-task-source.md`
 
 ## Опциональная команда строгого запуска
-`./scripts/launch-codex-task.sh --launch-source chatgpt-handoff --task-file .chatgpt/codex-input.md --execute`
+`./scripts/launch-codex-task.sh --launch-source direct-task --task-file .chatgpt/direct-task-source.md --execute`
 
 ## Сценарии для строгого запуска
 - автоматизация
@@ -117,7 +132,7 @@ selected_model совпадает с последним сохраненным s
 - scripted launch
 
 ## Прямая команда Codex за launcher
-`codex --profile deep`
+`codex --profile build`
 
 ## Диагностика проблем
 - Если вы работаете через VS Code Codex extension интерактивно, используйте новый чат/окно, вручную выставьте selected_model и selected_reasoning_effort в picker, а затем вставьте handoff.
@@ -129,26 +144,4 @@ selected_model совпадает с последним сохраненным s
 - Если новый model ID появился в live catalog, сначала создайте proposal через `scripts/check-codex-model-catalog.py --write-proposal`; promotion profile mapping требует ручного review.
 
 ## Текст задачи
-CODEX HANDOFF — GPT-5.5 PROMPT MIGRATION FOR FACTORY-TEMPLATE
-
-launch_source: chatgpt-handoff
-handoff_shape: single-agent-handoff
-task_class: deep
-selected_profile: deep
-selected_model: gpt-5.5
-selected_reasoning_effort: high
-selected_plan_mode_reasoning_effort: high
-apply_mode: manual-ui
-strict_launch_mode: optional
-project_profile: factory-template self-improvement
-selected_scenario: template-repo/scenario-pack/00-master-router.md -> template-repo/scenario-pack/15-handoff-to-codex.md -> docs/operator/factory-template/04-vps-remote-ssh-full-handoff-orchestration.md
-pipeline_stage: handoff policy modernization -> routing UX -> validation -> closeout
-handoff_allowed: yes
-defect_capture_path: reports/bugs/2026-04-29-handoff-shape-validator-drift.md
-
-Язык ответа Codex: русский
-Отвечай пользователю по-русски.
-
-Цель: добавить обязательный выбор вида handoff для новой задачи и сделать validators/tests shape-aware.
-
-Почему parent orchestration не требуется: задача цельная, выполняется одним deep route в одном repo и не требует child Codex sessions.
+Bug: ChatGPT first answer can propose an FT-CH chat number without reserving it in the repo/GitHub index, so if the handoff is not launched in Codex the number appears free and can be allocated to another chat. Fix the repo-first contract so visible ChatGPT chat numbers are materialized reservations, not suggestions.

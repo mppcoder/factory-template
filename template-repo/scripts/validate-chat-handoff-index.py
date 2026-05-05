@@ -67,6 +67,10 @@ def validate_policy(data: dict[str, Any], errors: list[str]) -> None:
     allocation_expected = {
         "shared_counter_for_all_kinds": False,
         "first_chat_response_allocates_handoff_id": True,
+        "visible_chat_title_requires_materialized_index_item": True,
+        "dry_run_title_is_not_reserved": True,
+        "unlaunched_handoff_keeps_chat_number_reserved": True,
+        "allocator_blocker_required_without_write_access": True,
         "codex_self_handoff_uses_same_counter": False,
         "handoff_must_reference_chat_id": True,
         "self_handoff_must_reference_chat_id": False,

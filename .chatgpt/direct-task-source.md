@@ -1,1 +1,1 @@
-Добавить к запрету плоского дерева repo в `/projects` правило: все temporary/intermediate/reconstructed/helper repos для intake/adoption/reconstruction должны находиться внутри repo целевого `greenfield-product`, а не как sibling project roots в `/projects`.
+Bug: ChatGPT first answer can propose an FT-CH chat number without reserving it in the repo/GitHub index, so if the handoff is not launched in Codex the number appears free and can be allocated to another chat. Fix the repo-first contract so visible ChatGPT chat numbers are materialized reservations, not suggestions.

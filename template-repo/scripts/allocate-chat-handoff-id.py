@@ -26,6 +26,19 @@ DEFAULT_ALLOWED_STATES = [
 ]
 HANDOFF_CHAIN = ["chatgpt_handoff", "codex_accepted", "codex_completed"]
 SELF_HANDOFF_CHAIN = ["codex_self_handoff", "codex_accepted", "codex_completed"]
+DEFAULT_ALLOCATION_POLICY = {
+    "shared_counter_for_all_kinds": False,
+    "first_chat_response_allocates_handoff_id": True,
+    "visible_chat_title_requires_materialized_index_item": True,
+    "dry_run_title_is_not_reserved": True,
+    "unlaunched_handoff_keeps_chat_number_reserved": True,
+    "allocator_blocker_required_without_write_access": True,
+    "codex_self_handoff_uses_same_counter": False,
+    "handoff_must_reference_chat_id": True,
+    "self_handoff_must_reference_chat_id": False,
+    "codex_self_handoff_uses_codex_work_index": True,
+    "codex_work_index_path": ".chatgpt/codex-work-index.yaml",
+}
 
 
 def default_index_path(root: Path) -> Path:
@@ -68,15 +81,7 @@ def ensure_index(data: dict[str, Any], project_code: str) -> dict[str, Any]:
                 "status_source_of_truth": ".chatgpt/chat-handoff-index.yaml",
                 "manual_rename_required_on_status_change": False,
             },
-            "allocation_policy": {
-                "shared_counter_for_all_kinds": False,
-                "first_chat_response_allocates_handoff_id": True,
-                "codex_self_handoff_uses_same_counter": False,
-                "handoff_must_reference_chat_id": True,
-                "self_handoff_must_reference_chat_id": False,
-                "codex_self_handoff_uses_codex_work_index": True,
-                "codex_work_index_path": ".chatgpt/codex-work-index.yaml",
-            },
+            "allocation_policy": dict(DEFAULT_ALLOCATION_POLICY),
             "allowed_kinds": DEFAULT_ALLOWED_KINDS,
             "allowed_states": DEFAULT_ALLOWED_STATES,
             "items": [],
@@ -100,16 +105,12 @@ def ensure_index(data: dict[str, Any], project_code: str) -> dict[str, Any]:
     )
     data.setdefault(
         "allocation_policy",
-        {
-            "shared_counter_for_all_kinds": False,
-            "first_chat_response_allocates_handoff_id": True,
-            "codex_self_handoff_uses_same_counter": False,
-            "handoff_must_reference_chat_id": True,
-            "self_handoff_must_reference_chat_id": False,
-            "codex_self_handoff_uses_codex_work_index": True,
-            "codex_work_index_path": ".chatgpt/codex-work-index.yaml",
-        },
+        dict(DEFAULT_ALLOCATION_POLICY),
     )
+    allocation_policy = data.get("allocation_policy")
+    if isinstance(allocation_policy, dict):
+        for key, value in DEFAULT_ALLOCATION_POLICY.items():
+            allocation_policy.setdefault(key, value)
     return data
 
 
@@ -130,7 +131,7 @@ def main() -> int:
     parser.add_argument("--project-code", default="", help="Uppercase project code, e.g. FT.")
     parser.add_argument("--kind", required=True, choices=DEFAULT_ALLOWED_KINDS)
     parser.add_argument("--description", required=True, help="Short task description; will be slugified.")
-    parser.add_argument("--source-type", default="manual-entry")
+    parser.add_argument("--source-type", default="chatgpt-first-answer")
     parser.add_argument("--handoff-group", default="")
     parser.add_argument("--handoff-revision", type=int, default=1)
     parser.add_argument("--handoff-register-item-id", default="")
@@ -173,7 +174,7 @@ def main() -> int:
         "handoff_register_item_id": args.handoff_register_item_id,
         "status_chain": SELF_HANDOFF_CHAIN if args.kind == "self_handoff" else HANDOFF_CHAIN,
         "evidence": args.evidence,
-        "next_action": "Accept in Codex or update repo state before implementation.",
+        "next_action": "Start the Codex handoff or close/supersede this repo reservation; do not reuse this chat number.",
     }
 
     data.setdefault("items", []).append(item)
@@ -188,7 +189,11 @@ def main() -> int:
     if not args.dry_run:
         write_yaml(index_path, data)
 
-    print("ChatGPT title to copy:")
+    if args.dry_run:
+        print("DRY RUN ONLY - CHAT NUMBER NOT RESERVED")
+        print("Do not show this title in the first ChatGPT answer.")
+        print()
+    print("ChatGPT title to copy:" if not args.dry_run else "Calculated title:")
     print(chat_title)
     print()
     print("Repo state:")

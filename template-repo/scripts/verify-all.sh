@@ -366,12 +366,23 @@ run_project_lifecycle_dashboard_smoke() {
     --project-code FT \
     --kind handoff \
     --description "dashboard card ui" > "$tmp_dir/allocated-chat-title-1.txt"
+  python3 "$ROOT/template-repo/scripts/allocate-chat-handoff-id.py" \
+    --index "$tmp_dir/chat-handoff-index-allocation.yaml" \
+    --project-code FT \
+    --kind handoff \
+    --description "dry run title" \
+    --dry-run > "$tmp_dir/allocated-chat-title-dry-run.txt"
   python3 "$ROOT/template-repo/scripts/allocate-codex-work-id.py" \
     --index "$tmp_dir/codex-work-index-allocation.yaml" \
     --project-code FT \
     --kind self_handoff \
     --description "self handoff" > "$tmp_dir/allocated-chat-title-2.txt"
   grep -q "FT-CH-0001 dashboard-card-ui" "$tmp_dir/allocated-chat-title-1.txt"
+  grep -q "DRY RUN ONLY - CHAT NUMBER NOT RESERVED" "$tmp_dir/allocated-chat-title-dry-run.txt"
+  if grep -q "ChatGPT title to copy:" "$tmp_dir/allocated-chat-title-dry-run.txt"; then
+    echo "dry-run allocation must not print copyable ChatGPT title label" >&2
+    return 1
+  fi
   grep -q "FT-CX-0001 self-handoff" "$tmp_dir/allocated-chat-title-2.txt"
   python3 "$ROOT/template-repo/scripts/validate-chat-handoff-index.py" "$tmp_dir/chat-handoff-index-allocation.yaml"
   python3 "$ROOT/template-repo/scripts/validate-codex-work-index.py" "$tmp_dir/codex-work-index-allocation.yaml"
@@ -517,9 +528,10 @@ write_case("status-token-title", lambda data: data["items"][0].update({"chat_tit
 write_case("duplicate-number", lambda data: data["items"][1].update({"chat_number": data["items"][0]["chat_number"]}))
 write_case("verified-no-evidence", lambda data: data["items"][0].update({"state": "verified", "evidence": []}))
 write_case("next-number-stale", lambda data: data.update({"next_chat_number": 1}))
+write_case("unmaterialized-title-policy", lambda data: data["allocation_policy"].update({"visible_chat_title_requires_materialized_index_item": False}))
 PY
 
-  for fixture in status-token-title duplicate-number verified-no-evidence next-number-stale; do
+  for fixture in status-token-title duplicate-number verified-no-evidence next-number-stale unmaterialized-title-policy; do
     if python3 "$ROOT/template-repo/scripts/validate-chat-handoff-index.py" \
       "$tmp_dir/chat-handoff-index-$fixture.yaml" \
       >"/tmp/chat-handoff-index-$fixture.log" 2>&1; then

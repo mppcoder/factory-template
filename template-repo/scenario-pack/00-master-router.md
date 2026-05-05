@@ -23,10 +23,12 @@
 ```
 
 Правила:
-- `Название чата для копирования` берется только из repo `.chatgpt/chat-handoff-index.yaml` / allocator. Если точный номер неизвестен или ChatGPT не может надежно прочитать repo state, не выдумывай номер; выведи ровно: `Нужно выделить номер через repo chat-handoff-index / allocator.`
+- `Название чата для копирования` берется только из materialized repo reservation в `.chatgpt/chat-handoff-index.yaml`, созданной write-allocator'ом. Выводимый `FT-CH-....` означает, что item уже записан в repo/GitHub index; dry-run, read-only вычисление или "следующий вероятный номер" не являются резервированием.
+- Если ChatGPT не может надежно выполнить write в repo index и подтвердить запись, не показывай `FT-CH-....`; выведи ровно: `Нужно выделить номер через repo chat-handoff-index / allocator.`
+- Если handoff не был запущен в Codex, номер все равно остается занятым repo reservation; следующая задача не должна переиспользовать его. Закрывать такую запись можно только явным status update (`superseded`, `not_applicable`, `archived`), но не освобождением номера.
 - Название содержит только stable `FT-CH-....` и slug; status/kind tokens запрещены.
 - `Карточка проекта` должна соответствовать repo renderer output: `python3 template-repo/scripts/render-project-lifecycle-dashboard.py --format chatgpt-card --stdout`. Если ChatGPT не может выполнить команду, он должен прочитать свежий `reports/project-status-card.md` или компактный card block из `reports/project-lifecycle-dashboard.md`; если карточка недоступна, это blocker, который надо назвать явно.
-- Project Instructions могут предложить название и показать карточку, но не могут гарантировать auto-rename ChatGPT UI, global chat scan или write в repo index.
+- Project Instructions могут показать только уже материализованное repo title или allocator blocker; они не могут гарантировать auto-rename ChatGPT UI, global chat scan или write в repo index без доступного repo tool/write path.
 - Этот contract действует и когда ответ продолжает route receipt / готовит handoff: title + card не заменяют handoff и не отменяют repo-first чтение router.
 
 ## Контракт маршрутизации

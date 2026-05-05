@@ -11,6 +11,10 @@ title_policy:
 allocation_policy:
   shared_counter_for_all_kinds: false
   first_chat_response_allocates_handoff_id: true
+  visible_chat_title_requires_materialized_index_item: true
+  dry_run_title_is_not_reserved: true
+  unlaunched_handoff_keeps_chat_number_reserved: true
+  allocator_blocker_required_without_write_access: true
   codex_self_handoff_uses_same_counter: false
   handoff_must_reference_chat_id: true
   self_handoff_must_reference_chat_id: false
