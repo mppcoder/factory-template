@@ -6,14 +6,8 @@ import subprocess
 import sys
 from pathlib import Path
 
+from task_control_paths import default_dashboard, default_registry, script_path
 
-DEFAULT_REGISTRY = "template-repo/template/.chatgpt/task-registry.yaml"
-DEFAULT_DASHBOARD = "template-repo/template/.chatgpt/project-lifecycle-dashboard.yaml"
-PREVIEW_SCRIPT = "template-repo/scripts/preview-task-handoff.py"
-HANDOFF_SCRIPT = "template-repo/scripts/task-to-codex-handoff.py"
-HANDOFF_VALIDATOR = "template-repo/scripts/validate-codex-task-handoff.py"
-REGISTRY_VALIDATOR = "template-repo/scripts/validate-task-registry.py"
-STATUS_SCRIPT = "template-repo/scripts/update-task-status.py"
 
 
 def default_preview_path(task_id: str) -> str:
@@ -38,8 +32,8 @@ def main() -> int:
     parser = argparse.ArgumentParser(
         description="Готовит repo-native task pack: preview, Codex handoff, validation, optional ready_for_codex transition."
     )
-    parser.add_argument("--registry", default=DEFAULT_REGISTRY)
-    parser.add_argument("--dashboard", default=DEFAULT_DASHBOARD)
+    parser.add_argument("--registry", default=default_registry())
+    parser.add_argument("--dashboard", default=default_dashboard())
     parser.add_argument("--task-id", required=True)
     parser.add_argument("--preview-output", default="")
     parser.add_argument("--handoff-output", default="")
@@ -62,14 +56,14 @@ def main() -> int:
 
     run_step(
         "validate_registry",
-        [sys.executable, REGISTRY_VALIDATOR, args.registry],
+        [sys.executable, script_path("validate-task-registry.py"), args.registry],
         dry_run=dry_run,
     )
     run_step(
         "write_preview",
         [
             sys.executable,
-            PREVIEW_SCRIPT,
+            script_path("preview-task-handoff.py"),
             "--registry",
             args.registry,
             "--task-id",
@@ -85,7 +79,7 @@ def main() -> int:
         "write_handoff",
         [
             sys.executable,
-            HANDOFF_SCRIPT,
+            script_path("task-to-codex-handoff.py"),
             "--registry",
             args.registry,
             "--task-id",
@@ -97,13 +91,13 @@ def main() -> int:
     )
     run_step(
         "validate_handoff",
-        [sys.executable, HANDOFF_VALIDATOR, handoff_output],
+        [sys.executable, script_path("validate-codex-task-handoff.py"), handoff_output],
         dry_run=dry_run,
     )
     if args.mark_ready_for_codex:
         status_cmd = [
             sys.executable,
-            STATUS_SCRIPT,
+            script_path("update-task-status.py"),
             "--registry",
             args.registry,
             "--dashboard",

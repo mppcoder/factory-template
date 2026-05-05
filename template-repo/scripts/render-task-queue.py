@@ -7,8 +7,8 @@ from typing import Any
 
 import yaml
 
+from task_control_paths import default_registry, python_script_command
 
-DEFAULT_REGISTRY = "template-repo/template/.chatgpt/task-registry.yaml"
 DEFAULT_OUTPUT = "reports/task-queue.md"
 TERMINAL_STATUSES = {"verified", "superseded", "not_applicable", "archived"}
 STATUS_ORDER = {
@@ -56,14 +56,14 @@ def command(task_id: str, registry_path: Path, kind: str) -> str:
     registry = registry_path.as_posix()
     if kind == "preview":
         return (
-            f"python3 template-repo/scripts/preview-task-handoff.py --registry {registry} "
+            f"{python_script_command('preview-task-handoff.py')} --registry {registry} "
             f"--task-id {task_id} --output reports/handoffs/{task_id}-preview.md"
         )
     if kind == "prepare":
-        return f"python3 template-repo/scripts/prepare-task-pack.py --registry {registry} --task-id {task_id} --write"
+        return f"{python_script_command('prepare-task-pack.py')} --registry {registry} --task-id {task_id} --write"
     if kind == "ready":
         return (
-            f"python3 template-repo/scripts/prepare-task-pack.py --registry {registry} --task-id {task_id} "
+            f"{python_script_command('prepare-task-pack.py')} --registry {registry} --task-id {task_id} "
             "--mark-ready-for-codex --sync-dashboard --write"
         )
     return ""
@@ -201,7 +201,7 @@ def render_queue(registry_path: Path, registry: dict[str, Any]) -> str:
 
 def main() -> int:
     parser = argparse.ArgumentParser(description="Рендерит read-only Markdown очередь Universal Codex задач.")
-    parser.add_argument("--registry", default=DEFAULT_REGISTRY)
+    parser.add_argument("--registry", default=default_registry())
     parser.add_argument("--output", default=DEFAULT_OUTPUT)
     parser.add_argument("--stdout", action="store_true")
     args = parser.parse_args()

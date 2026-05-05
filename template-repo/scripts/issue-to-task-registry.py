@@ -11,9 +11,8 @@ from typing import Any
 
 import yaml
 
+from task_control_paths import default_registry, python_script_command, script_path
 
-DEFAULT_REGISTRY = "template-repo/template/.chatgpt/task-registry.yaml"
-ALLOCATOR = "template-repo/scripts/allocate-task-id.py"
 MASTER_ROUTER = "template-repo/scenario-pack/00-master-router.md"
 CLASS_LABELS = {
     "task:bug": "bug",
@@ -153,7 +152,7 @@ def ensure_no_secret_like_text(issue: dict[str, Any]) -> None:
 def run_allocator(args: argparse.Namespace, issue: dict[str, Any], task_class: str, goal: str, ref: str) -> str:
     cmd = [
         sys.executable,
-        ALLOCATOR,
+        script_path("allocate-task-id.py"),
         "--registry",
         args.registry,
         "--append-draft",
@@ -205,9 +204,9 @@ def append_issue_context(registry_path: Path, task_id: str, issue: dict[str, Any
         task["context"] = evidence
     task["artifacts_to_update"] = args.artifacts_to_update or []
     task["verification_commands"] = [
-        f"python3 template-repo/scripts/validate-task-registry.py {args.registry}",
-        f"python3 template-repo/scripts/task-to-codex-handoff.py --registry {args.registry} --task-id {task_id} --output reports/handoffs/{task_id}-codex-handoff.md",
-        f"python3 template-repo/scripts/validate-codex-task-handoff.py reports/handoffs/{task_id}-codex-handoff.md",
+        f"{python_script_command('validate-task-registry.py')} {args.registry}",
+        f"{python_script_command('task-to-codex-handoff.py')} --registry {args.registry} --task-id {task_id} --output reports/handoffs/{task_id}-codex-handoff.md",
+        f"{python_script_command('validate-codex-task-handoff.py')} reports/handoffs/{task_id}-codex-handoff.md",
     ]
     registry_path.write_text(yaml.safe_dump(registry, allow_unicode=True, sort_keys=False), encoding="utf-8")
 
@@ -216,7 +215,7 @@ def main() -> int:
     parser = argparse.ArgumentParser(
         description="Создает task-registry entry из sanitized GitHub Issue JSON/YAML/Markdown draft. Не обращается к GitHub API."
     )
-    parser.add_argument("--registry", default=DEFAULT_REGISTRY)
+    parser.add_argument("--registry", default=default_registry())
     parser.add_argument("--issue-file", required=True, help="JSON/YAML/Markdown draft from GitHub Issue or issue form.")
     parser.add_argument("--task-class", default="", help="Override task class.")
     parser.add_argument("--title", default="")
@@ -239,7 +238,7 @@ def main() -> int:
     task_id = run_allocator(args, issue, task_class, goal, ref)
     append_issue_context(Path(args.registry), task_id, issue, args)
     print(f"issue_to_task_bridge=ok task_id={task_id}")
-    print(f"next_handoff_command=python3 template-repo/scripts/task-to-codex-handoff.py --registry {args.registry} --task-id {task_id} --output reports/handoffs/{task_id}-codex-handoff.md")
+    print(f"next_handoff_command={python_script_command('task-to-codex-handoff.py')} --registry {args.registry} --task-id {task_id} --output reports/handoffs/{task_id}-codex-handoff.md")
     return 0
 
 

@@ -9,9 +9,8 @@ from typing import Any
 
 import yaml
 
+from task_control_paths import default_dashboard, default_registry
 
-DEFAULT_REGISTRY = "template-repo/template/.chatgpt/task-registry.yaml"
-DEFAULT_DASHBOARD = "template-repo/template/.chatgpt/project-lifecycle-dashboard.yaml"
 TERMINAL_STATUSES = {"verified", "superseded", "not_applicable", "archived"}
 EVIDENCE_REQUIRED_STATUSES = {
     "implemented",
@@ -182,8 +181,8 @@ def apply_update(args: argparse.Namespace, registry: dict[str, Any], task: dict[
 
 def main() -> int:
     parser = argparse.ArgumentParser(description="Безопасно меняет status FT-TASK и при необходимости пересчитывает dashboard counters.")
-    parser.add_argument("--registry", default=DEFAULT_REGISTRY)
-    parser.add_argument("--dashboard", default=DEFAULT_DASHBOARD)
+    parser.add_argument("--registry", default=default_registry())
+    parser.add_argument("--dashboard", default=default_dashboard())
     parser.add_argument("--task-id", required=True)
     parser.add_argument("--status", required=True)
     parser.add_argument("--reason", required=True)

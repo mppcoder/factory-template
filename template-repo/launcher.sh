@@ -107,11 +107,15 @@ cp "$SCRIPT_DIR/project-presets.yaml" "$DEST_DIR/project-presets.yaml"
 cp "$SCRIPT_DIR/compatibility-aliases.yaml" "$DEST_DIR/compatibility-aliases.yaml"
 cp "$SCRIPT_DIR/codex-routing.yaml" "$DEST_DIR/codex-routing.yaml"
 cp "$SCRIPT_DIR/codex-model-routing.yaml" "$DEST_DIR/codex-model-routing.yaml"
+if [ -d "$SCRIPT_DIR/../.github/ISSUE_TEMPLATE" ]; then
+  mkdir -p "$DEST_DIR/.github/ISSUE_TEMPLATE"
+  cp "$SCRIPT_DIR/../.github/ISSUE_TEMPLATE/"*.yml "$DEST_DIR/.github/ISSUE_TEMPLATE/"
+fi
 mkdir -p "$DEST_DIR/template-repo"
 cp -R "$SCRIPT_DIR/scenario-pack" "$DEST_DIR/template-repo/scenario-pack"
 cp "$SCRIPT_DIR/tree-contract.yaml" "$DEST_DIR/template-repo/tree-contract.yaml"
 cp "$SCRIPT_DIR/mode-parity.yaml" "$DEST_DIR/template-repo/mode-parity.yaml"
-mkdir -p "$DEST_DIR/reports/bugs" "$DEST_DIR/reports/factory-feedback" "$DEST_DIR/tasks/chatgpt" "$DEST_DIR/tasks/codex"
+mkdir -p "$DEST_DIR/reports/bugs" "$DEST_DIR/reports/factory-feedback" "$DEST_DIR/reports/handoffs" "$DEST_DIR/reports/release" "$DEST_DIR/tasks/chatgpt" "$DEST_DIR/tasks/codex"
 
 CHANGE_ID="$($DEST_DIR/scripts/new-change-id.sh "$DEST_DIR")"
 PROJECT_NAME="$PROJECT_NAME" CHANGE_CLASS="$CHANGE_CLASS" EXEC_MODE="$EXEC_MODE" CHANGE_ID="$CHANGE_ID" DEST_DIR="$DEST_DIR" PROJECT_MODE="$PROJECT_MODE" PROJECT_PRESET="$PROJECT_PRESET" LIFECYCLE_STATE="$LIFECYCLE_STATE" TARGET_LIFECYCLE_STATE="$TARGET_LIFECYCLE_STATE" CONVERSION_REQUIRED="$CONVERSION_REQUIRED" python3 - <<'PY'
@@ -257,6 +261,42 @@ codex_bug_capture_required: true  # Должен ли Codex получить def
 silent_fix_forbidden: true  # Silent fix запрещен
 '''
 (chat / 'bugflow-status.yaml').write_text(bugflow, encoding='utf-8')
+
+registry_path = chat / 'task-registry.yaml'
+if registry_path.exists():
+    registry = yaml.safe_load(registry_path.read_text(encoding='utf-8')) or {}
+    if isinstance(registry, dict):
+        policy = registry.setdefault('task_id_policy', {})
+        if isinstance(policy, dict):
+            policy['source_of_truth'] = '.chatgpt/task-registry.yaml'
+        for task in registry.get('tasks', []) or []:
+            if isinstance(task, dict) and task.get('status') == 'not_applicable':
+                task['verification_commands'] = [
+                    'python3 scripts/validate-task-registry.py .chatgpt/task-registry.yaml',
+                    'bash scripts/verify-all.sh quick',
+                ]
+        registry_path.write_text(yaml.safe_dump(registry, allow_unicode=True, sort_keys=False), encoding='utf-8')
+
+dashboard_path = chat / 'project-lifecycle-dashboard.yaml'
+if dashboard_path.exists():
+    dashboard = yaml.safe_load(dashboard_path.read_text(encoding='utf-8')) or {}
+    if isinstance(dashboard, dict):
+        control = dashboard.setdefault('universal_task_control', {})
+        if isinstance(control, dict):
+            control['registry_path'] = '.chatgpt/task-registry.yaml'
+            control['status'] = 'pending'
+            control['evidence'] = [
+                '.chatgpt/task-registry.yaml',
+                'scripts/validate-task-registry.py',
+                'scripts/allocate-task-id.py',
+                'scripts/issue-to-task-registry.py',
+                'scripts/preview-task-handoff.py',
+                'scripts/update-task-status.py',
+                'scripts/prepare-task-pack.py',
+                'scripts/render-task-queue.py',
+                'reports/task-queue.md',
+            ]
+        dashboard_path.write_text(yaml.safe_dump(dashboard, allow_unicode=True, sort_keys=False), encoding='utf-8')
 
 today = datetime.date.today().isoformat()
 

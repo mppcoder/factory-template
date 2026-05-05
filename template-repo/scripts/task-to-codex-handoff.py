@@ -8,6 +8,7 @@ from typing import Any
 
 import yaml
 
+from task_control_paths import default_registry, python_script_command, verify_all_command
 
 MASTER_ROUTER = "template-repo/scenario-pack/00-master-router.md"
 
@@ -137,8 +138,8 @@ def render_handoff(registry: dict[str, Any], task: dict[str, Any]) -> str:
     else:
         lines.extend(
             [
-                "- python3 template-repo/scripts/validate-task-registry.py template-repo/template/.chatgpt/task-registry.yaml",
-                "- bash template-repo/scripts/verify-all.sh quick",
+                f"- {python_script_command('validate-task-registry.py')} {default_registry()}",
+                f"- {verify_all_command()}",
             ]
         )
     lines.extend(

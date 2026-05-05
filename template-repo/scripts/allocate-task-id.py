@@ -9,8 +9,8 @@ from typing import Any
 
 import yaml
 
+from task_control_paths import default_registry, python_script_command, verify_all_command
 
-DEFAULT_REGISTRY = "template-repo/template/.chatgpt/task-registry.yaml"
 MASTER_ROUTER = "template-repo/scenario-pack/00-master-router.md"
 
 
@@ -113,8 +113,8 @@ def default_task(args: argparse.Namespace, registry: dict[str, Any], new_task_id
             "external_user_action": args.external_user_action,
         },
         "verification_commands": [
-            f"python3 template-repo/scripts/validate-task-registry.py {args.registry}",
-            "bash template-repo/scripts/verify-all.sh quick",
+            f"{python_script_command('validate-task-registry.py')} {args.registry}",
+            verify_all_command(),
         ],
         "evidence": [],
         "next_action": args.next_action,
@@ -125,7 +125,7 @@ def main() -> int:
     parser = argparse.ArgumentParser(
         description="Выделяет следующий FT-TASK id. Не использует и не меняет FT-CH/FT-CX counters."
     )
-    parser.add_argument("--registry", default=DEFAULT_REGISTRY)
+    parser.add_argument("--registry", default=default_registry())
     parser.add_argument("--append-draft", action="store_true", help="Добавить draft task и увеличить next_task_number.")
     parser.add_argument("--title", default="Draft universal Codex task")
     parser.add_argument("--goal", default="")

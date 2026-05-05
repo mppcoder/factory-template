@@ -8,8 +8,8 @@ from typing import Any
 
 import yaml
 
+from task_control_paths import default_registry, python_script_command
 
-DEFAULT_REGISTRY = "template-repo/template/.chatgpt/task-registry.yaml"
 MASTER_ROUTER = "template-repo/scenario-pack/00-master-router.md"
 OPEN_TERMINAL_STATUSES = {"verified", "superseded", "not_applicable", "archived"}
 COUNT_STATUSES = [
@@ -116,9 +116,9 @@ def render_preview(registry_path: Path, registry: dict[str, Any], task: dict[str
     verification_commands = as_list(task.get("verification_commands"))
     if not verification_commands:
         verification_commands = [
-            f"python3 template-repo/scripts/validate-task-registry.py {registry_path.as_posix()}",
-            f"python3 template-repo/scripts/task-to-codex-handoff.py --registry {registry_path.as_posix()} --task-id {task_id} --output {handoff_output}",
-            f"python3 template-repo/scripts/validate-codex-task-handoff.py {handoff_output}",
+            f"{python_script_command('validate-task-registry.py')} {registry_path.as_posix()}",
+            f"{python_script_command('task-to-codex-handoff.py')} --registry {registry_path.as_posix()} --task-id {task_id} --output {handoff_output}",
+            f"{python_script_command('validate-codex-task-handoff.py')} {handoff_output}",
         ]
 
     lines = [
@@ -160,7 +160,7 @@ def render_preview(registry_path: Path, registry: dict[str, Any], task: dict[str
         "- команда генерации:",
         "",
         "```bash",
-        f"python3 template-repo/scripts/task-to-codex-handoff.py --registry {registry_path.as_posix()} --task-id {task_id} --output {handoff_output}",
+        f"{python_script_command('task-to-codex-handoff.py')} --registry {registry_path.as_posix()} --task-id {task_id} --output {handoff_output}",
         "```",
         "",
         "## Предпросмотр dashboard",
@@ -202,7 +202,7 @@ def render_preview(registry_path: Path, registry: dict[str, Any], task: dict[str
 
 def main() -> int:
     parser = argparse.ArgumentParser(description="Показывает safe preview для Codex task handoff без запуска Codex.")
-    parser.add_argument("--registry", default=DEFAULT_REGISTRY)
+    parser.add_argument("--registry", default=default_registry())
     parser.add_argument("--task-id", required=True)
     parser.add_argument("--handoff-output", default="", help="Планируемый путь generated handoff.")
     parser.add_argument("--output", default="", help="Записать preview markdown в файл. По умолчанию stdout.")
