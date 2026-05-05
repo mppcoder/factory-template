@@ -1,0 +1,12 @@
+{
+  "issue": {
+    "number": 102,
+    "title": "Security-sensitive fix",
+    "body": "Acceptance criteria: investigate a security-sensitive path. Expected outcome: human security review.",
+    "labels": [
+      {"name": "agent:ready"},
+      {"name": "type:bug"},
+      {"name": "security"}
+    ]
+  }
+}

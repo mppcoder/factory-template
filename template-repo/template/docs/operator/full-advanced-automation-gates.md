@@ -9,3 +9,5 @@ Prohibited now: auto-merge default, production deploy, secrets, security issue a
 Future unlock conditions: sandboxed runner, worktree isolation, permission model, audit log, rollback, required human review policy and cost/rate guard where applicable.
 
 Emergency stop: add label `agent:blocked`, disable workflow, remove `agent:ready`, or run runner `--dry-run`.
+
+Supporting hardening docs: `docs/operator/issue-autofix-permission-model.md`, `docs/operator/worktree-isolation-policy.md`, `docs/operator/automation-rollback.md` and `docs/operator/curator-promotion-flow.md`.

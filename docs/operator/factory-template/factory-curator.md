@@ -13,3 +13,7 @@
 ## Proposal shape / форма предложения
 
 Each proposal must include evidence, proposal, risk and suggested validation. The curator may suggest a new runbook step, validator, fixture, reusable handoff template, obsolete doc/archive candidate or recurring defect pattern.
+
+## Promotion / продвижение
+
+Curator output is promoted only through `docs/operator/factory-template/curator-promotion-flow.md`: curator proposal -> FT-TASK draft -> review -> handoff -> implementation -> validator -> release note. Do not auto-apply curator proposals.

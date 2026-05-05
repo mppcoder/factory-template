@@ -15,6 +15,8 @@
 - Hermes-like factory curator writes repo-reviewed proposals only; no hidden self-learning and no auto-apply by default.
 - Full advanced automation gates document allowed MVP automation, prohibited security/deploy/auto-merge/public-submit actions and emergency stop controls.
 - `verify-all quick` includes advanced automation validators for issue support, workflow spec, bounded runner, curator and gates.
+- Advanced automation hardening adds fixture-driven issue-autofix dry-run proof, label/trust validation, worktree isolation policy, append-only audit ledger, rollback policy, curator promotion flow and downstream sync guidance.
+- `verify-all quick` now includes issue-autofix synthetic smoke plus validators for labels, worktree isolation, automation ledger, rollback and curator promotion.
 
 ## 2.5.8
 - `WINDOWS_INSTALL_LATEST.md` now preserves the executable automation boundary.

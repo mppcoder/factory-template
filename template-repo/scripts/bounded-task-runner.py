@@ -7,6 +7,8 @@ import re
 import subprocess
 from pathlib import Path
 
+from automation_run_ledger import append_entry
+
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser()
@@ -80,6 +82,22 @@ def main() -> int:
             "no_pr": str(args.no_pr).lower(),
             "launcher_command": launcher_command,
             "safety": "no auto-merge, no production deploy, no security/external-secret tasks",
+        },
+    )
+    append_entry(
+        Path(".chatgpt") / "automation-runs" / "ledger.jsonl",
+        {
+            "issue_or_task_id": f"{source}:{identifier}",
+            "trigger": "bounded-task-runner",
+            "actor": os.environ.get("GITHUB_ACTOR", "local"),
+            "gate_result": "prechecked-or-manual",
+            "handoff_path": args.handoff or "",
+            "branch": branch,
+            "launcher_command": launcher_command,
+            "verification_commands_results": "pending",
+            "pr_url": "",
+            "blockers": "",
+            "final_status": status,
         },
     )
     print(f"bounded_runner_status={status}")

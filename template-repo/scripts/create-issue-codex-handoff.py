@@ -9,6 +9,8 @@ import subprocess
 from pathlib import Path
 from typing import Any
 
+from automation_run_ledger import append_entry
+
 SECRET_PATTERNS = [
     re.compile(r"(?i)(api[_-]?key|token|password|secret|private[_ -]?key)\s*[:=]\s*\S+"),
     re.compile(r"-----BEGIN [A-Z ]*PRIVATE KEY-----"),
@@ -208,6 +210,22 @@ END CODEX HANDOFF
             "branch": branch,
             "pr_number": None,
             "verification": "pending",
+        },
+    )
+    append_entry(
+        Path(".chatgpt") / "automation-runs" / "ledger.jsonl",
+        {
+            "issue_or_task_id": f"issue-{args.issue}",
+            "trigger": "issue-handoff-renderer",
+            "actor": os.environ.get("GITHUB_ACTOR", "unknown"),
+            "gate_result": "assumed-prechecked",
+            "handoff_path": out.as_posix(),
+            "branch": branch,
+            "launcher_command": "create-issue-codex-handoff.py",
+            "verification_commands_results": "run.yaml generated",
+            "pr_url": "",
+            "blockers": "",
+            "final_status": "handoff_created",
         },
     )
     print(f"handoff_path={out}")

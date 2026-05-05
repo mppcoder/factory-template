@@ -1,0 +1,12 @@
+{
+  "issue": {
+    "number": 101,
+    "title": "Docs: clarify support automation dry-run",
+    "body": "Goal: update docs only.\n\nAcceptance criteria:\n- Explain dry-run issue-autofix.\n- No secrets.\nExpected outcome: operator can verify the local dry-run path.",
+    "labels": [
+      {"name": "agent:ready"},
+      {"name": "type:docs"},
+      {"name": "risk:low"}
+    ]
+  }
+}

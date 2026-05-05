@@ -1,0 +1,12 @@
+{
+  "issue": {
+    "number": 102,
+    "title": "Unclear change",
+    "body": "Please fix it.",
+    "labels": [
+      {"name": "agent:ready"},
+      {"name": "type:change"},
+      {"name": "risk:low"}
+    ]
+  }
+}

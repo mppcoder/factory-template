@@ -1,0 +1,14 @@
+{
+  "issue": {
+    "number": 102,
+    "title": "PR should not enter issue-autofix",
+    "body": "Acceptance criteria: target is a pull request and must be refused. Expected outcome: no issue runner.",
+    "labels": [
+      {"name": "agent:ready"},
+      {"name": "type:docs"}
+    ],
+    "pull_request": {
+      "url": "https://api.github.com/repos/example/repo/pulls/102"
+    }
+  }
+}

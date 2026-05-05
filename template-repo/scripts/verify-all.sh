@@ -780,6 +780,10 @@ run_downstream_task_control_materialization_smoke() {
     test -f "docs/operator/bounded-runner.md"
     test -f "docs/operator/factory-curator.md"
     test -f "docs/operator/full-advanced-automation-gates.md"
+    test -f "docs/operator/issue-autofix-permission-model.md"
+    test -f "docs/operator/worktree-isolation-policy.md"
+    test -f "docs/operator/automation-rollback.md"
+    test -f "docs/operator/curator-promotion-flow.md"
     test -d "reports/handoffs"
     test -d "reports/release"
 
@@ -969,6 +973,12 @@ run_quick() {
   run_step "validate-bounded-runner" python3 "$ROOT/template-repo/scripts/validate-bounded-runner.py" "$ROOT"
   run_step "validate-factory-curator" python3 "$ROOT/template-repo/scripts/validate-factory-curator.py" "$ROOT"
   run_step "validate-advanced-automation-gates" python3 "$ROOT/template-repo/scripts/validate-advanced-automation-gates.py" "$ROOT"
+  run_step "issue-autofix-smoke" python3 "$ROOT/template-repo/scripts/issue-autofix-smoke.py" "$ROOT"
+  run_step "validate-issue-autofix-labels" python3 "$ROOT/template-repo/scripts/validate-issue-autofix-labels.py" "$ROOT"
+  run_step "validate-worktree-isolation-policy" python3 "$ROOT/template-repo/scripts/validate-worktree-isolation-policy.py" "$ROOT"
+  run_step "validate-automation-run-ledger" python3 "$ROOT/template-repo/scripts/validate-automation-run-ledger.py" "$ROOT"
+  run_step "validate-automation-rollback" python3 "$ROOT/template-repo/scripts/validate-automation-rollback.py" "$ROOT"
+  run_step "validate-curator-promotion-flow" python3 "$ROOT/template-repo/scripts/validate-curator-promotion-flow.py" "$ROOT"
   if [[ -f "$ROOT/.chatgpt/handoff-implementation-register.yaml" ]]; then
     run_step "validate-root-handoff-implementation-register" python3 "$ROOT/template-repo/scripts/validate-handoff-implementation-register.py" "$ROOT/.chatgpt/handoff-implementation-register.yaml"
   fi

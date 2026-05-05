@@ -1,0 +1,12 @@
+{
+  "issue": {
+    "number": 102,
+    "title": "Blocked issue",
+    "body": "Acceptance criteria: blocked until a prerequisite lands. Expected outcome: no runner starts.",
+    "labels": [
+      {"name": "agent:ready"},
+      {"name": "type:docs"},
+      {"name": "blocked"}
+    ]
+  }
+}

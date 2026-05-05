@@ -10,11 +10,24 @@ import sys
 from pathlib import Path
 from typing import Any
 
+from automation_run_ledger import append_entry
+
 BLOCKING_LABELS = {"security", "needs-human", "external-secret", "blocked", "agent:running"}
 READY_LABEL = "agent:ready"
 HIGH_RISK_LABEL = "risk:high"
 HIGH_RISK_APPROVAL = "agent:approved-high-risk"
 PERMITTED_ROLES = {"admin", "maintain", "write"}
+SECRET_PATTERNS = [
+    re.compile(r"(?i)(api[_-]?key|token|password|secret|private[_ -]?key)\s*[:=]\s*\S+"),
+    re.compile(r"-----BEGIN [A-Z ]*PRIVATE KEY-----"),
+]
+COMMAND_INJECTION_PATTERNS = [
+    re.compile(r"(?i)\bcurl\b.+\|\s*(bash|sh)\b"),
+    re.compile(r"(?i)\bwget\b.+\|\s*(bash|sh)\b"),
+    re.compile(r"(?i)\brm\s+-rf\s+(/|\$[A-Z_])"),
+    re.compile(r"`[^`]+`"),
+    re.compile(r"\$\([^)]*\)"),
+]
 
 
 def run_gh(args: list[str], *, check: bool = False) -> subprocess.CompletedProcess[str]:
@@ -65,6 +78,9 @@ def fetch_issue(repo: str, issue: int) -> dict[str, Any]:
 
 
 def actor_permission(repo: str, actor: str) -> str:
+    override = os.environ.get("ISSUE_AUTOFIX_ACTOR_PERMISSION")
+    if override:
+        return override
     if not gh_available():
         return "unknown"
     proc = run_gh(["api", f"repos/{repo}/collaborators/{actor}/permission", "--jq", ".permission"])
@@ -80,6 +96,14 @@ def has_actionable_scope(body: str, labels: set[str]) -> bool:
     if {"type:docs", "type:change", "type:factory-feedback"} & labels:
         return any(marker in lowered for marker in ["expected", "ожидаем", "outcome", "результат", "критер"])
     return False
+
+
+def has_secret_like_content(text: str) -> bool:
+    return any(pattern.search(text or "") for pattern in SECRET_PATTERNS)
+
+
+def has_command_injection_like_content(text: str) -> bool:
+    return any(pattern.search(text or "") for pattern in COMMAND_INJECTION_PATTERNS)
 
 
 def comment_issue(repo: str, issue: int, body: str) -> None:
@@ -162,6 +186,12 @@ def main() -> int:
     if not has_actionable_scope(body, labels):
         reasons.append("missing_reproduction_or_acceptance_criteria")
         status_label = status_label or "status:needs-info"
+    if has_secret_like_content(body) or has_secret_like_content(command_body):
+        reasons.append("secret_like_content_requires_human_redaction")
+        status_label = "agent:blocked"
+    if has_command_injection_like_content(body) or has_command_injection_like_content(command_body):
+        reasons.append("command_injection_like_content_refused")
+        status_label = "agent:blocked"
     if args.event_label and args.event_label != READY_LABEL and not command_requested:
         reasons.append("event_label_is_not_agent_ready")
 
@@ -176,6 +206,22 @@ def main() -> int:
             "eligible": eligible,
             "reasons": reasons or ["ok"],
             "labels": sorted(labels),
+        },
+    )
+    append_entry(
+        Path(".chatgpt") / "automation-runs" / "ledger.jsonl",
+        {
+            "issue_or_task_id": f"issue-{args.issue}",
+            "trigger": "issue-autofix-gate",
+            "actor": args.actor,
+            "gate_result": "eligible" if eligible else "refused",
+            "handoff_path": "",
+            "branch": f"codex/issue-{args.issue}",
+            "launcher_command": "issue-autofix-gate.py --dry-run" if args.dry_run else "issue-autofix-gate.py",
+            "verification_commands_results": "gate-only",
+            "pr_url": "",
+            "blockers": "; ".join(reasons),
+            "final_status": "gate_passed" if eligible else "gate_refused",
         },
     )
 

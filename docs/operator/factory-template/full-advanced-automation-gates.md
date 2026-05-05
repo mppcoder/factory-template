@@ -36,3 +36,10 @@ Full automation is not enabled. This document defines the gates and refusal boun
 - disable workflow;
 - remove `agent:ready`;
 - run runner `--dry-run`.
+
+Supporting hardening docs:
+- `docs/operator/factory-template/issue-autofix-permission-model.md`;
+- `docs/operator/factory-template/worktree-isolation-policy.md`;
+- `docs/operator/factory-template/automation-audit-log.md`;
+- `docs/operator/factory-template/automation-rollback.md`;
+- `docs/operator/factory-template/curator-promotion-flow.md`.

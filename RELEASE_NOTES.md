@@ -8,6 +8,8 @@ Repo-native Universal Codex Handoff Factory MVP: шаблон получает �
 
 Advanced automation increment: поверх Universal Task Control добавлен bounded GitHub Issue -> gate -> normalized Codex handoff -> branch/PR substrate, Symphony-compatible workflow spec, bounded runner skeleton, repo-reviewed curator proposal loop и full advanced automation refusal gates.
 
+Advanced automation hardening increment: добавлены synthetic/local issue-autofix dry-run proof, permission/label trust model, worktree isolation policy, append-only audit ledger, rollback recovery policy, curator promotion path, downstream sync package и final safety/readiness reports без включения full autonomous mode по умолчанию.
+
 ### Что вошло
 
 - `task-registry.yaml`, allocator, issue bridge, handoff generator, handoff validator, preview/prepare/status/queue commands.
@@ -24,6 +26,10 @@ Advanced automation increment: поверх Universal Task Control добавл�
 - `factory-curator.py` создает repo-reviewed proposals в `reports/curator/` без hidden self-learning и без auto-apply.
 - Full advanced automation gates документируют, что сейчас разрешены только dry-run/gated issue dispatch, PR creation, human review and one-task runner mode; production deploy, secrets, security issue autofix and auto-merge запрещены.
 - `verify-all quick` включает validators для issue-autofix support, Symphony workflow, bounded runner, factory curator and advanced automation gates.
+- Synthetic issue-autofix fixtures cover eligible docs/change input and refusal paths for `security`, `external-secret`, `blocked`, high risk without approval, missing acceptance criteria, PR targets, command-injection-like text and secret-like content.
+- `issue-autofix-smoke.py` proves gate -> handoff -> `run.yaml` -> bounded runner dry-run -> ledger without live GitHub mutation.
+- Permission/label model, worktree isolation, audit ledger, rollback and curator promotion policies are documented for root and downstream-generated surfaces where applicable.
+- New validators cover labels/trust model, worktree isolation, ledger, rollback and curator promotion; `verify-all quick` runs them.
 
 ### Что проверять
 
@@ -37,6 +43,12 @@ Advanced automation increment: поверх Universal Task Control добавл�
 - `python3 template-repo/scripts/validate-bounded-runner.py .`
 - `python3 template-repo/scripts/validate-factory-curator.py .`
 - `python3 template-repo/scripts/validate-advanced-automation-gates.py .`
+- `python3 template-repo/scripts/issue-autofix-smoke.py .`
+- `python3 template-repo/scripts/validate-issue-autofix-labels.py .`
+- `python3 template-repo/scripts/validate-worktree-isolation-policy.py .`
+- `python3 template-repo/scripts/validate-automation-run-ledger.py .`
+- `python3 template-repo/scripts/validate-automation-rollback.py .`
+- `python3 template-repo/scripts/validate-curator-promotion-flow.py .`
 
 ## 2.5.8 - 2026-04-30
 

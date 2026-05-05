@@ -1,0 +1,12 @@
+{
+  "issue": {
+    "number": 102,
+    "title": "High risk change",
+    "body": "Acceptance criteria: change a high-risk workflow. Expected outcome: explicit approval required.",
+    "labels": [
+      {"name": "agent:ready"},
+      {"name": "type:change"},
+      {"name": "risk:high"}
+    ]
+  }
+}
