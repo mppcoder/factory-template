@@ -209,6 +209,22 @@ python3 template-repo/scripts/render-task-queue.py \
   --output reports/task-queue.md
 ```
 
+Быстро посмотреть очередь в terminal без записи файла:
+
+```bash
+python3 template-repo/scripts/render-task-queue.py \
+  --registry template-repo/template/.chatgpt/task-registry.yaml \
+  --stdout
+```
+
+В отчете смотрите три строки в первую очередь:
+
+- `open_tasks` - сколько задач еще не закрыто terminal status;
+- `compact line` - короткий операторский статус `ready-for-handoff -> ready-for-codex -> running -> human-review`;
+- `Команды подготовки` - готовые preview/prepare/ready commands для каждого `FT-TASK`.
+
+Если registry невалиден, сначала чините `validate-task-registry.py`; queue renderer не должен становиться обходом validator.
+
 Безопасная дорожка для оператора:
 
 ```bash
