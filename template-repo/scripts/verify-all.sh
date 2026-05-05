@@ -658,6 +658,19 @@ run_universal_task_control_smoke() {
     --source-ref "verify-all" > "$tmp_dir/task-id-append.txt"
   grep -q "allocated_task_id=FT-TASK-0002" "$tmp_dir/task-id-append.txt"
 
+  python3 "$ROOT/template-repo/scripts/issue-to-task-registry.py" \
+    --registry "$tmp_dir/task-registry.yaml" \
+    --issue-file "$ROOT/tests/universal-task-control/positive/issues/feature-issue-draft.yaml" \
+    --artifacts-to-update docs/operator/factory-template/08-chatgpt-codex-github-vps-one-paste-flow.md \
+    > "$tmp_dir/issue-bridge-fixture.txt"
+  grep -q "issue_to_task_bridge=ok task_id=FT-TASK-0003" "$tmp_dir/issue-bridge-fixture.txt"
+  grep -q "next_handoff_command=.*FT-TASK-0003-codex-handoff.md" "$tmp_dir/issue-bridge-fixture.txt"
+  python3 "$ROOT/template-repo/scripts/validate-task-registry.py" "$tmp_dir/task-registry.yaml"
+  grep -q "FT-TASK-0003" "$tmp_dir/task-registry.yaml"
+  grep -q "class: feature" "$tmp_dir/task-registry.yaml"
+  grep -q "affected_layer: operator runbook" "$tmp_dir/task-registry.yaml"
+  grep -q "docs/operator/factory-template/08-chatgpt-codex-github-vps-one-paste-flow.md" "$tmp_dir/task-registry.yaml"
+
   cat > "$tmp_dir/issue.yaml" <<'YAML'
 title: "[Feature]: Smoke issue bridge"
 labels:
@@ -673,7 +686,7 @@ YAML
     --registry "$tmp_dir/task-registry.yaml" \
     --issue-file "$tmp_dir/issue.yaml" \
     --artifacts-to-update template-repo/scripts/task-to-codex-handoff.py > "$tmp_dir/issue-bridge.txt"
-  grep -q "issue_to_task_bridge=ok task_id=FT-TASK-0003" "$tmp_dir/issue-bridge.txt"
+  grep -q "issue_to_task_bridge=ok task_id=FT-TASK-0004" "$tmp_dir/issue-bridge.txt"
 
   python3 "$ROOT/template-repo/scripts/validate-task-registry.py" "$tmp_dir/task-registry.yaml"
   python3 "$ROOT/template-repo/scripts/update-task-status.py" \

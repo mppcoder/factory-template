@@ -1,0 +1,14 @@
+title: "[Feature]: Add beginner deployment checklist"
+number: 42
+html_url: "https://github.com/example/factory-template/issues/42"
+labels:
+  - task:feature
+  - needs-triage
+fields:
+  goal: "Добавить понятный checklist перед VPS deploy."
+  user_value: "Новичок видит, какие repo/VPS проверки нужно пройти до production action."
+  expected_behavior: "Checklist остается repo-native, не требует секретов и может стать Codex handoff."
+  affected_layer: "operator runbook"
+  codex_involvement: "handoff only"
+  evidence: "Sanitized issue draft; no secrets, tokens, private keys or private logs."
+  privacy_confirmation: "No secrets, tokens, passwords or private keys are included."
