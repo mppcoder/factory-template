@@ -4,6 +4,7 @@ Negative fixtures here protect the repo-native `FT-TASK` contracts used by `veri
 
 - `negative/task-registry/*.yaml` must fail `validate-task-registry.py`.
 - `negative/codex-handoff/*.md` must fail `validate-codex-task-handoff.py`.
+- `negative/issues/*.yaml` must fail `issue-to-task-registry.py` secret-like input checks.
 - `positive/task-registry/*.yaml` must pass `validate-task-registry.py` and can be used by queue renderer smoke tests.
 - `positive/issues/*.yaml` are sanitized GitHub Issue drafts for `issue-to-task-registry.py` bridge smoke tests.
 

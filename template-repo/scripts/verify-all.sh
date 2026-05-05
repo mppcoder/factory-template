@@ -643,6 +643,15 @@ run_universal_task_control_smoke() {
     cat "$tmp_dir/codex-handoff-negative.log" >&2
     return 1
   fi
+  if python3 "$ROOT/template-repo/scripts/issue-to-task-registry.py" \
+    --registry "$tmp_dir/task-registry.yaml" \
+    --issue-file "$ROOT/tests/universal-task-control/negative/issues/secret-like-issue-draft.yaml" \
+    >"$tmp_dir/issue-secret-negative.log" 2>&1; then
+    echo "issue-to-task secret-like negative fixture unexpectedly passed" >&2
+    cat "$tmp_dir/issue-secret-negative.log" >&2
+    return 1
+  fi
+  grep -q "secret-containing input" "$tmp_dir/issue-secret-negative.log"
 
   python3 "$ROOT/template-repo/scripts/allocate-task-id.py" \
     --registry "$tmp_dir/task-registry.yaml" > "$tmp_dir/task-id-dry-run.txt"
