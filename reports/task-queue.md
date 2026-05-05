@@ -8,40 +8,24 @@
 - schema: `factory-task-registry/v1`
 - project_code: `FT`
 - next_task_number: `2`
-- open_tasks: `1`
+- open_tasks: `0`
 - compact line: Tasks: 0 ready-for-handoff -> 0 ready-for-codex -> 0 running -> 0 human-review
 
 ## Статусы
 
 | Status | Count |
 |---|---:|
-| `draft` | 1 |
+| `not_applicable` | 1 |
 
 ## Очередь
 
 | Task | Class | Status | Human boundary | Blocked by | Next action | Evidence |
 |---|---|---|---|---|---|---|
-| `FT-TASK-0001` Example universal Codex task | `feature` | `draft` | review | none | Replace example task or create real task through allocator or bridge. | none |
+| `FT-TASK-0001` Example universal Codex task | `feature` | `not_applicable` | review | none | Create the first real task through allocator or issue bridge. | none |
 
 ## Команды подготовки
 
 ### `FT-TASK-0001`
 
-- status: `draft`
-- preview:
-
-```bash
-python3 template-repo/scripts/preview-task-handoff.py --registry template-repo/template/.chatgpt/task-registry.yaml --task-id FT-TASK-0001 --output reports/handoffs/FT-TASK-0001-preview.md
-```
-
-- prepare pack:
-
-```bash
-python3 template-repo/scripts/prepare-task-pack.py --registry template-repo/template/.chatgpt/task-registry.yaml --task-id FT-TASK-0001 --write
-```
-
-- mark ready for Codex after review:
-
-```bash
-python3 template-repo/scripts/prepare-task-pack.py --registry template-repo/template/.chatgpt/task-registry.yaml --task-id FT-TASK-0001 --mark-ready-for-codex --sync-dashboard --write
-```
+- status: `not_applicable`
+- terminal task: команды подготовки не нужны.

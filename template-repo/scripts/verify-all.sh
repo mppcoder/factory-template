@@ -617,6 +617,7 @@ run_universal_task_control_smoke() {
   grep -q "compact line: Tasks: 1 ready-for-handoff -> 1 ready-for-codex -> 1 running -> 1 human-review" "$tmp_dir/mixed-status-task-queue.md"
   grep -q "| \`blocked\` | 1 |" "$tmp_dir/mixed-status-task-queue.md"
   grep -q "| \`verified\` | 1 |" "$tmp_dir/mixed-status-task-queue.md"
+  grep -q "terminal task: команды подготовки не нужны" "$tmp_dir/mixed-status-task-queue.md"
 
   for fixture in \
     bad-task-id \

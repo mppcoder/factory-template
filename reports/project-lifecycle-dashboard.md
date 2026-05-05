@@ -1,6 +1,6 @@
 # Панель жизненного цикла проекта / `project-lifecycle-dashboard`
 
-Generated UTC: `2026-05-05T13:37:19+00:00`
+Generated UTC: `2026-05-05T14:44:39+00:00`
 Source: `/projects/factory-template/template-repo/template/.chatgpt/project-lifecycle-dashboard.yaml`
 
 ## Сейчас
@@ -100,16 +100,16 @@ Source: `/projects/factory-template/template-repo/template/.chatgpt/project-life
 
 ## Универсальный контроль задач
 
-- status: `in_progress`
+- status: `pending`
 - registry: `template-repo/template/.chatgpt/task-registry.yaml`
-- compact line: Tasks: 🟡 0 ready-for-handoff -> 0 ready-for-codex -> 0 running -> 0
+- compact line: Tasks: 🕒 0 ready-for-handoff -> 0 ready-for-codex -> 0 running -> 0
   human-review
-- next action: Add first real tasks through task registry or GitHub issue bridge.
-- fallback: Keep using existing handoff implementation register when a task is not yet ready for registry allocation.
+- next action: Generate or update Codex handoff for the next ready task.
+- fallback: Keep task in triage until route, evidence and human boundary are clear.
 
 | Counter | Value |
 |---|---|
-| `open` | `1` |
+| `open` | `0` |
 | `ready_for_handoff` | `0` |
 | `ready_for_codex` | `0` |
 | `codex_running` | `0` |

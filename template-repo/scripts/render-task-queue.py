@@ -160,6 +160,17 @@ def render_queue(registry_path: Path, registry: dict[str, Any]) -> str:
     for task in items:
         task_id = str(task.get("task_id") or "")
         status = str(task.get("status") or "")
+        if status in TERMINAL_STATUSES:
+            lines.extend(
+                [
+                    f"### `{task_id}`",
+                    "",
+                    f"- status: `{status}`",
+                    "- terminal task: команды подготовки не нужны.",
+                    "",
+                ]
+            )
+            continue
         lines.extend(
             [
                 f"### `{task_id}`",

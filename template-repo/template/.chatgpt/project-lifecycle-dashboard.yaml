@@ -1,538 +1,580 @@
-# Единая repo-native панель состояния проекта.
-# Английские ключи используются валидаторами; значения и operator-facing текст можно писать по-русски.
 schema: project-lifecycle-dashboard/v1
-
 project:
-  name: "{{PROJECT_NAME}}"
-  slug: "{{PROJECT_SLUG}}"
-  profile: "greenfield-product"
-  lifecycle_state: "{{LIFECYCLE_STATE}}"
-  current_mode: "{{PROJECT_MODE}}"
+  name: '{{PROJECT_NAME}}'
+  slug: '{{PROJECT_SLUG}}'
+  profile: greenfield-product
+  lifecycle_state: '{{LIFECYCLE_STATE}}'
+  current_mode: '{{PROJECT_MODE}}'
   factory_producer_owned_layer: false
   owner_boundary: template-owned-generated-project-artifact
-
 lifecycle_phase:
   current: execution
   previous: handoff
   next: verification
   allowed:
-    - idea
-    - intake
-    - spec
-    - architecture
-    - handoff
-    - execution
-    - verification
-    - release
-    - deploy
-    - operate
-    - improve
+  - idea
+  - intake
+  - spec
+  - architecture
+  - handoff
+  - execution
+  - verification
+  - release
+  - deploy
+  - operate
+  - improve
   compact_chain:
-    - id: idea
-      label: "Идея"
-      status: completed
-      evidence:
-        - ".chatgpt/intake.yaml"
-    - id: intake
-      label: "Intake"
-      status: completed
-      evidence:
-        - ".chatgpt/intake.yaml"
-    - id: spec
-      label: "Спека"
-      status: completed
-      evidence:
-        - ".chatgpt/user-spec.md"
-    - id: architecture
-      label: "Архитектура"
-      status: completed
-      evidence:
-        - ".chatgpt/tech-spec.md"
-    - id: handoff
-      label: "Handoff"
-      status: completed
-      evidence:
-        - ".chatgpt/normalized-codex-handoff.md"
-    - id: execution
-      label: "Исполнение"
-      status: in_progress
-      evidence: []
-    - id: verification
-      label: "Проверка"
-      status: pending
-      evidence: []
-    - id: release
-      label: "Release"
-      status: pending
-      evidence: []
-    - id: deploy
-      label: "Deploy"
-      status: pending
-      evidence: []
-    - id: operate
-      label: "Сопровождение"
-      status: pending
-      evidence: []
-
+  - id: idea
+    label: Идея
+    status: completed
+    evidence:
+    - .chatgpt/intake.yaml
+  - id: intake
+    label: Intake
+    status: completed
+    evidence:
+    - .chatgpt/intake.yaml
+  - id: spec
+    label: Спека
+    status: completed
+    evidence:
+    - .chatgpt/user-spec.md
+  - id: architecture
+    label: Архитектура
+    status: completed
+    evidence:
+    - .chatgpt/tech-spec.md
+  - id: handoff
+    label: Handoff
+    status: completed
+    evidence:
+    - .chatgpt/normalized-codex-handoff.md
+  - id: execution
+    label: Исполнение
+    status: in_progress
+    evidence: []
+  - id: verification
+    label: Проверка
+    status: pending
+    evidence: []
+  - id: release
+    label: Release
+    status: pending
+    evidence: []
+  - id: deploy
+    label: Deploy
+    status: pending
+    evidence: []
+  - id: operate
+    label: Сопровождение
+    status: pending
+    evidence: []
 active_change:
-  id: ""
-  title: "Первое изменение проекта"
+  id: ''
+  title: Первое изменение проекта
   class: feature
   priority: medium
   status: draft
   owner_boundary: internal-repo-follow-up
   source_artifacts:
-    - ".chatgpt/task-index.yaml"
-
+  - .chatgpt/task-index.yaml
 stage_gates:
-  - id: intake
-    title: "Intake принят"
-    status: pending
-    evidence: []
-  - id: classification
-    title: "Маршрут и класс задачи выбраны"
-    status: pending
-    evidence: []
-  - id: reuse_reality_check
-    title: "Reuse/reality-check выполнен"
-    status: pending
-    evidence: []
-  - id: spec
-    title: "User spec готов"
-    status: pending
-    evidence: []
-  - id: tech_spec
-    title: "Tech spec готов"
-    status: pending
-    evidence: []
-  - id: handoff_allowed
-    title: "Handoff разрешен"
-    status: pending
-    evidence: []
-  - id: execution
-    title: "Execution завершен"
-    status: pending
-    evidence: []
-  - id: verification
-    title: "Verification завершена"
-    status: pending
-    evidence: []
-  - id: done
-    title: "Done/архивирование завершено"
-    status: pending
-    evidence: []
-
+- id: intake
+  title: Intake принят
+  status: pending
+  evidence: []
+- id: classification
+  title: Маршрут и класс задачи выбраны
+  status: pending
+  evidence: []
+- id: reuse_reality_check
+  title: Reuse/reality-check выполнен
+  status: pending
+  evidence: []
+- id: spec
+  title: User spec готов
+  status: pending
+  evidence: []
+- id: tech_spec
+  title: Tech spec готов
+  status: pending
+  evidence: []
+- id: handoff_allowed
+  title: Handoff разрешен
+  status: pending
+  evidence: []
+- id: execution
+  title: Execution завершен
+  status: pending
+  evidence: []
+- id: verification
+  title: Verification завершена
+  status: pending
+  evidence: []
+- id: done
+  title: Done/архивирование завершено
+  status: pending
+  evidence: []
 multi_step_execution:
   current_wave: 0
   waves:
-    - id: wave-0
-      title: "Подготовка"
+  - id: wave-0
+    title: Подготовка
+    status: pending
+    tasks:
+    - id: T-001
+      title: Зафиксировать intake и следующий шаг
       status: pending
-      tasks:
-        - id: T-001
-          title: "Зафиксировать intake и следующий шаг"
-          status: pending
-          owner_boundary: internal-repo-follow-up
-          evidence: []
+      owner_boundary: internal-repo-follow-up
+      evidence: []
   completed_tasks: []
   blocked_tasks: []
   next_task:
     id: T-001
     owner_boundary: internal-repo-follow-up
-    action: "Заполнить `.chatgpt/task-index.yaml`, `.chatgpt/stage-state.yaml` и уточнить первый рабочий шаг."
+    action: Заполнить `.chatgpt/task-index.yaml`, `.chatgpt/stage-state.yaml` и уточнить
+      первый рабочий шаг.
   final_verification:
     status: pending
     evidence: []
   archive_to_work_completed:
     allowed: false
-    reason: "Feature нельзя архивировать до `final_verification.status: passed` и evidence."
-
+    reason: 'Feature нельзя архивировать до `final_verification.status: passed` и
+      evidence.'
 handoff_orchestration:
   parent_handoff:
-    id: ""
-    title: ""
+    id: ''
+    title: ''
     status: not_started
   child_tasks: []
-  selected_profile: ""
-  selected_model: ""
-  selected_reasoning_effort: ""
-  selected_plan_mode_reasoning_effort: ""
-  route_explanation_boundary: "Advisory layer показывает маршрут и handoff-текст, но не переключает model/profile/reasoning внутри уже открытой Codex-сессии; надежная executable boundary — новый task launch или ручной picker в новом чате."
+  selected_profile: ''
+  selected_model: ''
+  selected_reasoning_effort: ''
+  selected_plan_mode_reasoning_effort: ''
+  route_explanation_boundary: Advisory layer показывает маршрут и handoff-текст, но
+    не переключает model/profile/reasoning внутри уже открытой Codex-сессии; надежная
+    executable boundary — новый task launch или ручной picker в новом чате.
   source_artifacts:
-    - ".chatgpt/orchestration-cockpit.yaml"
-
+  - .chatgpt/orchestration-cockpit.yaml
 handoff_implementation_control:
   enabled: true
-  source_artifact: ".chatgpt/handoff-implementation-register.yaml"
-  dashboard_section: "Handoff implementation control"
+  source_artifact: .chatgpt/handoff-implementation-register.yaml
+  dashboard_section: Handoff implementation control
   queue_policy: deterministic_dependency_priority_calculation
   summary:
     open_items: 0
     blocked_items: 0
     implemented_not_verified: 0
     stale_items_without_recent_evidence: 0
-  route_boundary: "Dashboard показывает handoff route/model/reasoning как readout; handoff/register не переключают model/profile/reasoning внутри уже открытой Codex-сессии."
-  closeout_policy: "Codex при завершении задачи обновляет matching item: status, evidence, новые self-handoff items, superseded replacement links или explicit not_applicable closeout без silent deletion."
-
+  route_boundary: Dashboard показывает handoff route/model/reasoning как readout;
+    handoff/register не переключают model/profile/reasoning внутри уже открытой Codex-сессии.
+  closeout_policy: 'Codex при завершении задачи обновляет matching item: status, evidence,
+    новые self-handoff items, superseded replacement links или explicit not_applicable
+    closeout без silent deletion.'
 universal_task_control:
-  status: in_progress
+  status: pending
   registry_path: template-repo/template/.chatgpt/task-registry.yaml
-  open_tasks: 1
+  open_tasks: 0
   ready_for_handoff: 0
   ready_for_codex: 0
   codex_running: 0
   human_review: 0
   blocked: 0
   verified: 0
-  next_action: Add first real tasks through task registry or GitHub issue bridge.
-  fallback_next_action: Keep using existing handoff implementation register when a task is not yet ready for registry allocation.
+  next_action: Generate or update Codex handoff for the next ready task.
+  fallback_next_action: Keep task in triage until route, evidence and human boundary
+    are clear.
   evidence:
-    - template-repo/template/.chatgpt/task-registry.yaml
-    - template-repo/scripts/validate-task-registry.py
-    - template-repo/scripts/allocate-task-id.py
-    - template-repo/scripts/issue-to-task-registry.py
-    - template-repo/scripts/preview-task-handoff.py
-    - template-repo/scripts/update-task-status.py
-    - template-repo/scripts/prepare-task-pack.py
-    - template-repo/scripts/render-task-queue.py
-    - reports/task-queue.md
-
+  - template-repo/template/.chatgpt/task-registry.yaml
+  - template-repo/scripts/validate-task-registry.py
+  - template-repo/scripts/allocate-task-id.py
+  - template-repo/scripts/issue-to-task-registry.py
+  - template-repo/scripts/preview-task-handoff.py
+  - template-repo/scripts/update-task-status.py
+  - template-repo/scripts/prepare-task-pack.py
+  - template-repo/scripts/render-task-queue.py
+  - reports/task-queue.md
 module_readiness:
   selected_profile: solo_lightweight
-  source_artifact: ".chatgpt/project-lifecycle-dashboard.yaml"
-  false_green_policy: "Green module statuses require evidence or accepted_reason; this is standards-inspired readiness, not compliance or certification."
+  source_artifact: .chatgpt/project-lifecycle-dashboard.yaml
+  false_green_policy: Green module statuses require evidence or accepted_reason; this
+    is standards-inspired readiness, not compliance or certification.
   required_modules:
-    - lifecycle
-    - core
-    - security
-    - ui_a11y
-    - quality
-    - websec
-    - ops
-    - ai
+  - lifecycle
+  - core
+  - security
+  - ui_a11y
+  - quality
+  - websec
+  - ops
+  - ai
   modules:
-    - id: lifecycle
-      label: "Lifecycle"
-      status: completed
-      standard_refs: [iso_12207]
-      gate_refs: [lifecycle_intent_recorded, product_requirements_recorded]
-      source_refs: []
-      evidence:
-        - ".chatgpt/project-lifecycle-dashboard.yaml"
-        - ".chatgpt/stage-state.yaml"
-      accepted_reason: ""
-    - id: core
-      label: "Core"
-      status: in_progress
-      standard_refs: []
-      gate_refs: []
-      source_refs: [active_change, stage_gates, multi_step_execution, final_verification]
-      evidence: []
-      accepted_reason: ""
-    - id: security
-      label: "Security"
-      status: in_progress
-      standard_refs: [nist_ssdf]
-      gate_refs: [security_minimum_checked]
-      source_refs: []
-      evidence: []
-      accepted_reason: ""
-    - id: ui_a11y
-      label: "UI/A11y"
-      status: pending
-      standard_refs: [wcag_22]
-      gate_refs: [accessibility_minimum_checked]
-      source_refs: []
-      evidence: []
-      accepted_reason: ""
-    - id: quality
-      label: "Quality"
-      status: pending
-      standard_refs: [iso_25010]
-      gate_refs: [quality_minimum_checked]
-      source_refs: []
-      evidence: []
-      accepted_reason: ""
-    - id: websec
-      label: "WebSec"
-      status: pending
-      standard_refs: [owasp_asvs]
-      gate_refs: [web_security_checked]
-      source_refs: []
-      evidence: []
-      accepted_reason: ""
-    - id: ops
-      label: "Ops"
-      status: pending
-      standard_refs: [dora_metrics]
-      gate_refs: [operations_health_baseline]
-      source_refs: [deploy_runtime, software_update_governance]
-      evidence: []
-      accepted_reason: ""
-    - id: ai
-      label: "AI"
-      status: not_applicable
-      standard_refs: [openai_ai_safety_overlay]
-      gate_refs: [ai_safety_gate]
-      source_refs: []
-      evidence: []
-      accepted_reason: "Project has not declared AI model, agent or AI-output behavior."
-
+  - id: lifecycle
+    label: Lifecycle
+    status: completed
+    standard_refs:
+    - iso_12207
+    gate_refs:
+    - lifecycle_intent_recorded
+    - product_requirements_recorded
+    source_refs: []
+    evidence:
+    - .chatgpt/project-lifecycle-dashboard.yaml
+    - .chatgpt/stage-state.yaml
+    accepted_reason: ''
+  - id: core
+    label: Core
+    status: in_progress
+    standard_refs: []
+    gate_refs: []
+    source_refs:
+    - active_change
+    - stage_gates
+    - multi_step_execution
+    - final_verification
+    evidence: []
+    accepted_reason: ''
+  - id: security
+    label: Security
+    status: in_progress
+    standard_refs:
+    - nist_ssdf
+    gate_refs:
+    - security_minimum_checked
+    source_refs: []
+    evidence: []
+    accepted_reason: ''
+  - id: ui_a11y
+    label: UI/A11y
+    status: pending
+    standard_refs:
+    - wcag_22
+    gate_refs:
+    - accessibility_minimum_checked
+    source_refs: []
+    evidence: []
+    accepted_reason: ''
+  - id: quality
+    label: Quality
+    status: pending
+    standard_refs:
+    - iso_25010
+    gate_refs:
+    - quality_minimum_checked
+    source_refs: []
+    evidence: []
+    accepted_reason: ''
+  - id: websec
+    label: WebSec
+    status: pending
+    standard_refs:
+    - owasp_asvs
+    gate_refs:
+    - web_security_checked
+    source_refs: []
+    evidence: []
+    accepted_reason: ''
+  - id: ops
+    label: Ops
+    status: pending
+    standard_refs:
+    - dora_metrics
+    gate_refs:
+    - operations_health_baseline
+    source_refs:
+    - deploy_runtime
+    - software_update_governance
+    evidence: []
+    accepted_reason: ''
+  - id: ai
+    label: AI
+    status: not_applicable
+    standard_refs:
+    - openai_ai_safety_overlay
+    gate_refs:
+    - ai_safety_gate
+    source_refs: []
+    evidence: []
+    accepted_reason: Project has not declared AI model, agent or AI-output behavior.
 runbook_packages:
-  - id: 01-factory-template
-    title: "Factory-template package"
-    path: "docs/operator/runbook-packages/01-factory-template"
-    current_phase: execution
-    current_step: FT-000
-    default_decision_mode: not_selected
-    defaults_count: 0
-    overrides_count: 0
-    unresolved_decisions_count: 0
-    next_decision: "Подтвердить setup defaults: Timeweb Ubuntu 24.04, ed25519 SSH, /projects/factory-template, VS Code Remote SSH + Codex extension."
-    readiness_to_generate_handoff: false
-    active_contour: not_selected
-    takeover_ready: false
-    checklist_path: "docs/operator/runbook-packages/01-factory-template/03-checklist.md"
-    gates:
-      - route-receipt
-      - implementation
-      - verification
-      - verified-sync
-    blockers: []
-    next_action: "Для задач самого шаблона пройти beginner user-only setup до Codex takeover point, затем передать automation Codex-runbook."
-    owner_boundary: internal-repo-follow-up
-  - id: 02-greenfield-product
-    title: "Greenfield product package"
-    path: "docs/operator/runbook-packages/02-greenfield-product"
-    current_phase: intake
-    current_step: GF-010
-    intake_channel: factory-template-chatgpt-project
-    trigger_command: "новый проект"
-    default_decision_mode: not_selected
-    defaults_count: 0
-    overrides_count: 0
-    unresolved_decisions_count: 0
-    next_decision: "Выбрать default-decision mode после команды `новый проект`."
-    readiness_to_generate_handoff: false
-    handoff_ready: false
-    codex_takeover_ready: false
-    battle_chatgpt_project_created: false
-    battle_repo_created_by: codex
-    chatgpt_project_ui_owner: user
-    repo_first_instruction_prepared_by: codex
-    repo_first_instruction_pasted_by: user
-    active_contour: not_selected
-    takeover_ready: false
-    checklist_path: "docs/operator/runbook-packages/02-greenfield-product/03-checklist.md"
-    gates:
-      - scaffold
-      - greenfield-docs
-      - verification
-      - closeout
-    blockers: []
-    next_action: "Для нового боевого проекта стартовать в ChatGPT Project шаблона фабрики: новый чат -> `новый проект` -> выбор default-decision mode -> recommendation-first опрос -> generated Codex handoff."
-    owner_boundary: internal-repo-follow-up
-  - id: 03-brownfield-with-repo-to-greenfield
-    title: "Brownfield with repo conversion package"
-    path: "docs/operator/runbook-packages/03-brownfield-with-repo-to-greenfield"
-    current_phase: adoption
-    current_step: BWR-000
-    default_decision_mode: not_selected
-    defaults_count: 0
-    overrides_count: 0
-    unresolved_decisions_count: 0
-    next_decision: "Подтвердить или переопределить defaults: keep existing repo, no overwrite, evidence-first audit."
-    readiness_to_generate_handoff: false
-    active_contour: not_selected
-    takeover_ready: false
-    checklist_path: "docs/operator/runbook-packages/03-brownfield-with-repo-to-greenfield/03-checklist.md"
-    gates:
-      - audit
-      - adoption
-      - conversion
-      - verification
-    blockers: []
-    next_action: "Для существующего repo дать Codex remote access к canonical root; audit/adoption/conversion выполняет Codex-runbook."
-    owner_boundary: internal-repo-follow-up
-  - id: 04-brownfield-without-repo-to-greenfield
-    title: "Brownfield without repo reconstruction package"
-    path: "docs/operator/runbook-packages/04-brownfield-without-repo-to-greenfield"
-    current_phase: reconstruction
-    current_step: BWO-000
-    default_decision_mode: not_selected
-    defaults_count: 0
-    overrides_count: 0
-    unresolved_decisions_count: 0
-    next_decision: "Подтвердить или переопределить defaults: _incoming inside target root, reconstruction inside target root."
-    readiness_to_generate_handoff: false
-    active_contour: not_selected
-    takeover_ready: false
-    checklist_path: "docs/operator/runbook-packages/04-brownfield-without-repo-to-greenfield/03-checklist.md"
-    gates:
-      - intake
-      - reconstruction
-      - with-repo-adoption
-      - conversion
-    blockers: []
-    next_action: "Для материалов без repo загрузить их в target root/_incoming; reconstruction/adoption/conversion выполняет Codex-runbook."
-    owner_boundary: internal-repo-follow-up
-
+- id: 01-factory-template
+  title: Factory-template package
+  path: docs/operator/runbook-packages/01-factory-template
+  current_phase: execution
+  current_step: FT-000
+  default_decision_mode: not_selected
+  defaults_count: 0
+  overrides_count: 0
+  unresolved_decisions_count: 0
+  next_decision: 'Подтвердить setup defaults: Timeweb Ubuntu 24.04, ed25519 SSH, /projects/factory-template,
+    VS Code Remote SSH + Codex extension.'
+  readiness_to_generate_handoff: false
+  active_contour: not_selected
+  takeover_ready: false
+  checklist_path: docs/operator/runbook-packages/01-factory-template/03-checklist.md
+  gates:
+  - route-receipt
+  - implementation
+  - verification
+  - verified-sync
+  blockers: []
+  next_action: Для задач самого шаблона пройти beginner user-only setup до Codex takeover
+    point, затем передать automation Codex-runbook.
+  owner_boundary: internal-repo-follow-up
+- id: 02-greenfield-product
+  title: Greenfield product package
+  path: docs/operator/runbook-packages/02-greenfield-product
+  current_phase: intake
+  current_step: GF-010
+  intake_channel: factory-template-chatgpt-project
+  trigger_command: новый проект
+  default_decision_mode: not_selected
+  defaults_count: 0
+  overrides_count: 0
+  unresolved_decisions_count: 0
+  next_decision: Выбрать default-decision mode после команды `новый проект`.
+  readiness_to_generate_handoff: false
+  handoff_ready: false
+  codex_takeover_ready: false
+  battle_chatgpt_project_created: false
+  battle_repo_created_by: codex
+  chatgpt_project_ui_owner: user
+  repo_first_instruction_prepared_by: codex
+  repo_first_instruction_pasted_by: user
+  active_contour: not_selected
+  takeover_ready: false
+  checklist_path: docs/operator/runbook-packages/02-greenfield-product/03-checklist.md
+  gates:
+  - scaffold
+  - greenfield-docs
+  - verification
+  - closeout
+  blockers: []
+  next_action: 'Для нового боевого проекта стартовать в ChatGPT Project шаблона фабрики:
+    новый чат -> `новый проект` -> выбор default-decision mode -> recommendation-first
+    опрос -> generated Codex handoff.'
+  owner_boundary: internal-repo-follow-up
+- id: 03-brownfield-with-repo-to-greenfield
+  title: Brownfield with repo conversion package
+  path: docs/operator/runbook-packages/03-brownfield-with-repo-to-greenfield
+  current_phase: adoption
+  current_step: BWR-000
+  default_decision_mode: not_selected
+  defaults_count: 0
+  overrides_count: 0
+  unresolved_decisions_count: 0
+  next_decision: 'Подтвердить или переопределить defaults: keep existing repo, no
+    overwrite, evidence-first audit.'
+  readiness_to_generate_handoff: false
+  active_contour: not_selected
+  takeover_ready: false
+  checklist_path: docs/operator/runbook-packages/03-brownfield-with-repo-to-greenfield/03-checklist.md
+  gates:
+  - audit
+  - adoption
+  - conversion
+  - verification
+  blockers: []
+  next_action: Для существующего repo дать Codex remote access к canonical root; audit/adoption/conversion
+    выполняет Codex-runbook.
+  owner_boundary: internal-repo-follow-up
+- id: 04-brownfield-without-repo-to-greenfield
+  title: Brownfield without repo reconstruction package
+  path: docs/operator/runbook-packages/04-brownfield-without-repo-to-greenfield
+  current_phase: reconstruction
+  current_step: BWO-000
+  default_decision_mode: not_selected
+  defaults_count: 0
+  overrides_count: 0
+  unresolved_decisions_count: 0
+  next_decision: 'Подтвердить или переопределить defaults: _incoming inside target
+    root, reconstruction inside target root.'
+  readiness_to_generate_handoff: false
+  active_contour: not_selected
+  takeover_ready: false
+  checklist_path: docs/operator/runbook-packages/04-brownfield-without-repo-to-greenfield/03-checklist.md
+  gates:
+  - intake
+  - reconstruction
+  - with-repo-adoption
+  - conversion
+  blockers: []
+  next_action: Для материалов без repo загрузить их в target root/_incoming; reconstruction/adoption/conversion
+    выполняет Codex-runbook.
+  owner_boundary: internal-repo-follow-up
 beginner_visual_surfaces:
   no_heavy_default_ui: true
   default_surfaces:
-    - chatgpt-mini-card
-    - codex-execution-card
-    - markdown-dashboard
-  heavy_ui_boundary: "Default is ChatGPT mini card, Codex execution card and Markdown dashboard only; web app, daemon, SQLite, Telegram notifications, websocket/live-refresh and background worker are not default promises."
-  source_of_truth: ".chatgpt/project-lifecycle-dashboard.yaml"
+  - chatgpt-mini-card
+  - codex-execution-card
+  - markdown-dashboard
+  heavy_ui_boundary: Default is ChatGPT mini card, Codex execution card and Markdown
+    dashboard only; web app, daemon, SQLite, Telegram notifications, websocket/live-refresh
+    and background worker are not default promises.
+  source_of_truth: .chatgpt/project-lifecycle-dashboard.yaml
   status_vocabulary:
-    - pending
-    - in_progress
-    - blocked
-    - passed
-    - failed
-    - completed
-    - not_applicable
+  - pending
+  - in_progress
+  - blocked
+  - passed
+  - failed
+  - completed
+  - not_applicable
   owner_boundaries:
-    - internal-repo-follow-up
-    - external-user-action
-    - runtime-action
-    - downstream-battle-action
-    - model-mapping-blocker
-    - secret-boundary-blocker
+  - internal-repo-follow-up
+  - external-user-action
+  - runtime-action
+  - downstream-battle-action
+  - model-mapping-blocker
+  - secret-boundary-blocker
   chatgpt_mini_card:
     enabled: true
-    template: ".chatgpt/visual-status-card.md.template"
+    template: .chatgpt/visual-status-card.md.template
     renders_from_dashboard_yaml: true
     user_action_policy: derive_from_external_actions_ledger
     user_action_required: derive_from_external_actions_ledger
     required_fields:
-      - project
-      - lifecycle_chain
-      - module_readiness_chain
-      - active_handoff_lines
+    - project
+    - lifecycle_chain
+    - module_readiness_chain
+    - active_handoff_lines
   codex_execution_card:
     enabled: true
-    template: ".chatgpt/codex-execution-card.md.template"
+    template: .chatgpt/codex-execution-card.md.template
     renders_from_dashboard_yaml: true
-    scenario: "project-lifecycle-dashboard / beginner visual dashboard UX"
+    scenario: project-lifecycle-dashboard / beginner visual dashboard UX
     execution_evidence_policy: green_status_requires_evidence_or_accepted_reason
     required_sections:
-      - route_receipt
-      - progress
-      - blockers
-      - next
-      - external
+    - route_receipt
+    - progress
+    - blockers
+    - next
+    - external
   markdown_dashboard:
     enabled: true
-    output: "reports/project-lifecycle-dashboard.md"
+    output: reports/project-lifecycle-dashboard.md
     renders_from_dashboard_yaml: true
-
 release_readiness:
-  version: ""
+  version: ''
   status: pending
-  changelog: ""
-  release_notes: ""
-  scorecard: ""
+  changelog: ''
+  release_notes: ''
+  scorecard: ''
   verification_state: pending
   evidence: []
-
 deploy_runtime:
   status: pending
   preset: starter
-  operator_dashboard_source: "template-repo/scripts/operator-dashboard.py"
+  operator_dashboard_source: template-repo/scripts/operator-dashboard.py
   runtime_reports:
-    - ".factory-runtime/reports/deploy-dry-run-latest.txt"
-    - ".factory-runtime/reports/deploy-last-run.txt"
+  - .factory-runtime/reports/deploy-dry-run-latest.txt
+  - .factory-runtime/reports/deploy-last-run.txt
   evidence: []
-  boundary: "Runtime evidence может подтягиваться из operator-dashboard reports; dry-run/report evidence не является real deploy proof."
-
+  boundary: Runtime evidence может подтягиваться из operator-dashboard reports; dry-run/report
+    evidence не является real deploy proof.
 standards_navigator:
   selected_profile: solo_lightweight
-  standards_registry: "template-repo/standards/lifecycle-standards-registry.yaml"
-  stage_map: "template-repo/standards/lifecycle-stage-map.yaml"
-  gates_source: ".chatgpt/standards-gates.yaml"
+  standards_registry: template-repo/standards/lifecycle-standards-registry.yaml
+  stage_map: template-repo/standards/lifecycle-stage-map.yaml
+  gates_source: .chatgpt/standards-gates.yaml
   lifecycle_backbone:
     standard_ref: iso_12207
-    selected_version: "2017"
+    selected_version: '2017'
     version_status: current_with_revision_pending
     source_verification_status: current_with_revision_pending
     verify_current_gate: true
   current_phase_required_standards:
     phase: intake
     standard_refs:
-      - iso_12207
-      - scrum_guide_2020
+    - iso_12207
+    - scrum_guide_2020
     required_gates:
-      - lifecycle_intent_recorded
-      - product_requirements_recorded
+    - lifecycle_intent_recorded
+    - product_requirements_recorded
   gate_summary:
     total: 9
     passed: 0
     missing: 9
     blocking: 0
   gates:
-    - id: lifecycle_intent_recorded
-      status: pending
-      standard_refs: [iso_12207]
-      evidence: []
-      accepted_reason: ""
-    - id: product_requirements_recorded
-      status: pending
-      standard_refs: [iso_12207, scrum_guide_2020]
-      evidence: []
-      accepted_reason: ""
-    - id: quality_minimum_checked
-      status: pending
-      standard_refs: [iso_25010]
-      evidence: []
-      accepted_reason: ""
-    - id: security_minimum_checked
-      status: pending
-      standard_refs: [nist_ssdf]
-      evidence: []
-      accepted_reason: ""
-    - id: web_security_checked
-      status: pending
-      standard_refs: [owasp_asvs]
-      evidence: []
-      accepted_reason: ""
-    - id: accessibility_minimum_checked
-      status: pending
-      standard_refs: [wcag_22]
-      evidence: []
-      accepted_reason: ""
-    - id: ai_safety_gate
-      status: not_applicable
-      standard_refs: [openai_ai_safety_overlay]
-      evidence: []
-      accepted_reason: "Project has not declared AI model, agent or AI-output behavior."
-    - id: operations_health_baseline
-      status: pending
-      standard_refs: [dora_metrics]
-      evidence: []
-      accepted_reason: ""
-    - id: false_compliance_checked
-      status: pending
-      standard_refs: [iso_12207, iso_25010, nist_ssdf, owasp_asvs, wcag_22, dora_metrics, openai_ai_safety_overlay]
-      evidence: []
-      accepted_reason: ""
+  - id: lifecycle_intent_recorded
+    status: pending
+    standard_refs:
+    - iso_12207
+    evidence: []
+    accepted_reason: ''
+  - id: product_requirements_recorded
+    status: pending
+    standard_refs:
+    - iso_12207
+    - scrum_guide_2020
+    evidence: []
+    accepted_reason: ''
+  - id: quality_minimum_checked
+    status: pending
+    standard_refs:
+    - iso_25010
+    evidence: []
+    accepted_reason: ''
+  - id: security_minimum_checked
+    status: pending
+    standard_refs:
+    - nist_ssdf
+    evidence: []
+    accepted_reason: ''
+  - id: web_security_checked
+    status: pending
+    standard_refs:
+    - owasp_asvs
+    evidence: []
+    accepted_reason: ''
+  - id: accessibility_minimum_checked
+    status: pending
+    standard_refs:
+    - wcag_22
+    evidence: []
+    accepted_reason: ''
+  - id: ai_safety_gate
+    status: not_applicable
+    standard_refs:
+    - openai_ai_safety_overlay
+    evidence: []
+    accepted_reason: Project has not declared AI model, agent or AI-output behavior.
+  - id: operations_health_baseline
+    status: pending
+    standard_refs:
+    - dora_metrics
+    evidence: []
+    accepted_reason: ''
+  - id: false_compliance_checked
+    status: pending
+    standard_refs:
+    - iso_12207
+    - iso_25010
+    - nist_ssdf
+    - owasp_asvs
+    - wcag_22
+    - dora_metrics
+    - openai_ai_safety_overlay
+    evidence: []
+    accepted_reason: ''
   missing_standards_evidence:
-    - lifecycle_intent_recorded
-    - product_requirements_recorded
-    - quality_minimum_checked
-    - security_minimum_checked
-    - web_security_checked
-    - accessibility_minimum_checked
-    - operations_health_baseline
-    - false_compliance_checked
+  - lifecycle_intent_recorded
+  - product_requirements_recorded
+  - quality_minimum_checked
+  - security_minimum_checked
+  - web_security_checked
+  - accessibility_minimum_checked
+  - operations_health_baseline
+  - false_compliance_checked
   next_safe_standards_action:
     owner_boundary: internal-repo-follow-up
-    action: "Заполнить `.chatgpt/standards-gates.yaml` для текущей фазы и приложить evidence или accepted_reason."
+    action: Заполнить `.chatgpt/standards-gates.yaml` для текущей фазы и приложить
+      evidence или accepted_reason.
     evidence: []
   monitoring_status:
-    watchlist: "template-repo/standards/standards-watchlist.yaml"
-    last_checked_utc: "2026-04-29T00:00:00Z"
+    watchlist: template-repo/standards/standards-watchlist.yaml
+    last_checked_utc: '2026-04-29T00:00:00Z'
     status: current
     proposal_required: false
   claims:
@@ -544,54 +586,52 @@ standards_navigator:
     compliance_claim: false
     claim_evidence: []
   allowed_to_advance_phase: false
-  false_compliance_boundary: "Standards navigator is a lifecycle/evidence control layer, not ISO/NIST/OWASP/WCAG/DORA/OpenAI certification."
-
+  false_compliance_boundary: Standards navigator is a lifecycle/evidence control layer,
+    not ISO/NIST/OWASP/WCAG/DORA/OpenAI certification.
 software_update_governance:
   baseline_status: pending
   auto_update_policy: manual-approved-upgrade
-  last_update_intelligence_check: ""
+  last_update_intelligence_check: ''
   relevant_findings_count: 0
   upgrade_proposal_status: not_started
   next_safe_action:
     owner_boundary: internal-repo-follow-up
-    action: "Заполнить `.chatgpt/software-inventory.yaml`, проверить unattended upgrades и обновить watchlist без установки обновлений."
+    action: Заполнить `.chatgpt/software-inventory.yaml`, проверить unattended upgrades
+      и обновить watchlist без установки обновлений.
     evidence: []
   fallback_action:
     owner_boundary: internal-repo-follow-up
-    action: "Если baseline неполный, заблокировать upgrade proposal до записи OS/runtime/package evidence."
+    action: Если baseline неполный, заблокировать upgrade proposal до записи OS/runtime/package
+      evidence.
     evidence: []
   blockers: []
   source_artifacts:
-    - ".chatgpt/software-inventory.yaml"
-    - ".chatgpt/software-update-watchlist.yaml"
-    - ".chatgpt/software-update-readiness.yaml"
-    - "reports/software-updates/README.md"
-
+  - .chatgpt/software-inventory.yaml
+  - .chatgpt/software-update-watchlist.yaml
+  - .chatgpt/software-update-readiness.yaml
+  - reports/software-updates/README.md
 post_release_improvement:
   incidents: []
   feedback: []
   learning_proposals: []
   backlog_candidates: []
-
 external_actions_ledger: []
-
 recommended_next_step:
   owner_boundary: internal-repo-follow-up
-  action: "Продолжить repo-first intake: обновить stage/task state и подготовить spec."
+  action: 'Продолжить repo-first intake: обновить stage/task state и подготовить spec.'
   evidence: []
-
 fallback_next_step:
   owner_boundary: internal-repo-follow-up
-  action: "Если scope пока неясен, открыть guided launcher continue path и зафиксировать один следующий шаг."
+  action: Если scope пока неясен, открыть guided launcher continue path и зафиксировать
+    один следующий шаг.
   evidence: []
-
 source_artifacts:
-  - ".chatgpt/project-lifecycle-dashboard.yaml"
-  - ".chatgpt/handoff-implementation-register.yaml"
-  - ".chatgpt/task-registry.yaml"
-  - ".chatgpt/chat-handoff-index.yaml"
-  - ".chatgpt/visual-status-card.md.template"
-  - ".chatgpt/codex-execution-card.md.template"
-  - ".chatgpt/task-state.yaml"
-  - ".chatgpt/stage-state.yaml"
-  - ".chatgpt/task-index.yaml"
+- .chatgpt/project-lifecycle-dashboard.yaml
+- .chatgpt/handoff-implementation-register.yaml
+- .chatgpt/task-registry.yaml
+- .chatgpt/chat-handoff-index.yaml
+- .chatgpt/visual-status-card.md.template
+- .chatgpt/codex-execution-card.md.template
+- .chatgpt/task-state.yaml
+- .chatgpt/stage-state.yaml
+- .chatgpt/task-index.yaml
