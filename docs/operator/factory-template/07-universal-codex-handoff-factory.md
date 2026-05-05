@@ -43,6 +43,7 @@ MVP добавляет repo-native основу для всех Codex-задач
 - `template-repo/scripts/issue-to-task-registry.py` - локальный bridge из sanitized GitHub Issue/draft в task registry entry;
 - `template-repo/scripts/preview-task-handoff.py` - safe preview route, handoff path, dashboard counters и verification commands до запуска Codex;
 - `template-repo/scripts/update-task-status.py` - безопасный status transition для `FT-TASK` с optional dashboard counter sync;
+- `template-repo/scripts/prepare-task-pack.py` - один wrapper для preview, handoff generation, handoff validation и optional `ready_for_codex`;
 - `template-repo/scripts/task-to-codex-handoff.py` - генератор одного copy-paste Codex handoff;
 - `template-repo/scripts/validate-codex-task-handoff.py` - проверка generated handoff;
 - `.github/ISSUE_TEMPLATE/*.yml` - GitHub Issue Forms для основных task classes;
@@ -164,6 +165,28 @@ python3 template-repo/scripts/update-task-status.py \
 ```
 
 Без `--write` команда работает как dry-run. Для `verified` нужен `--confirm-verified`, а для evidence-required статусов нужен `--evidence` или `--accepted-reason`.
+
+Подготовить task pack одним вызовом:
+
+```bash
+python3 template-repo/scripts/prepare-task-pack.py \
+  --registry template-repo/template/.chatgpt/task-registry.yaml \
+  --dashboard template-repo/template/.chatgpt/project-lifecycle-dashboard.yaml \
+  --task-id FT-TASK-0001 \
+  --write
+```
+
+Перевод в `ready_for_codex` делается только явно:
+
+```bash
+python3 template-repo/scripts/prepare-task-pack.py \
+  --registry template-repo/template/.chatgpt/task-registry.yaml \
+  --dashboard template-repo/template/.chatgpt/project-lifecycle-dashboard.yaml \
+  --task-id FT-TASK-0001 \
+  --mark-ready-for-codex \
+  --sync-dashboard \
+  --write
+```
 
 ## Advanced automation flow
 
