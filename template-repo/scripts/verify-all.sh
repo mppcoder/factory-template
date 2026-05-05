@@ -598,6 +598,103 @@ PY
   rm -rf "$tmp_dir"
 }
 
+run_universal_task_control_smoke() {
+  local tmp_dir
+  tmp_dir="$(mktemp -d)"
+
+  cp "$ROOT/template-repo/template/.chatgpt/task-registry.yaml" "$tmp_dir/task-registry.yaml"
+  cp "$ROOT/template-repo/template/.chatgpt/project-lifecycle-dashboard.yaml" "$tmp_dir/project-lifecycle-dashboard.yaml"
+  cp "$ROOT/template-repo/template/.chatgpt/handoff-implementation-register.yaml" "$tmp_dir/handoff-implementation-register.yaml"
+
+  python3 "$ROOT/template-repo/scripts/validate-task-registry.py" \
+    "$ROOT/template-repo/template/.chatgpt/task-registry.yaml"
+  python3 "$ROOT/template-repo/scripts/allocate-task-id.py" \
+    --registry "$tmp_dir/task-registry.yaml" > "$tmp_dir/task-id-dry-run.txt"
+  grep -q "next_task_id=FT-TASK-0002" "$tmp_dir/task-id-dry-run.txt"
+  grep -q "dry_run=true" "$tmp_dir/task-id-dry-run.txt"
+
+  python3 "$ROOT/template-repo/scripts/allocate-task-id.py" \
+    --registry "$tmp_dir/task-registry.yaml" \
+    --append-draft \
+    --title "Task control smoke" \
+    --task-class docs \
+    --source-kind smoke \
+    --source-ref "verify-all" > "$tmp_dir/task-id-append.txt"
+  grep -q "allocated_task_id=FT-TASK-0002" "$tmp_dir/task-id-append.txt"
+
+  cat > "$tmp_dir/issue.yaml" <<'YAML'
+title: "[Feature]: Smoke issue bridge"
+labels:
+  - task:feature
+  - needs-triage
+fields:
+  goal: "Проверить локальный issue-to-task bridge без GitHub API."
+  affected_layer: "task registry"
+  codex_involvement: "handoff only"
+  evidence: "Sanitized smoke draft; no secrets."
+YAML
+  python3 "$ROOT/template-repo/scripts/issue-to-task-registry.py" \
+    --registry "$tmp_dir/task-registry.yaml" \
+    --issue-file "$tmp_dir/issue.yaml" \
+    --artifacts-to-update template-repo/scripts/task-to-codex-handoff.py > "$tmp_dir/issue-bridge.txt"
+  grep -q "issue_to_task_bridge=ok task_id=FT-TASK-0003" "$tmp_dir/issue-bridge.txt"
+
+  python3 "$ROOT/template-repo/scripts/validate-task-registry.py" "$tmp_dir/task-registry.yaml"
+  python3 "$ROOT/template-repo/scripts/update-task-status.py" \
+    --registry "$tmp_dir/task-registry.yaml" \
+    --dashboard "$tmp_dir/project-lifecycle-dashboard.yaml" \
+    --task-id FT-TASK-0002 \
+    --status ready_for_handoff \
+    --reason "Task route is clear." \
+    --sync-dashboard > "$tmp_dir/status-dry-run.txt"
+  grep -q "dry_run=true" "$tmp_dir/status-dry-run.txt"
+  python3 "$ROOT/template-repo/scripts/update-task-status.py" \
+    --registry "$tmp_dir/task-registry.yaml" \
+    --dashboard "$tmp_dir/project-lifecycle-dashboard.yaml" \
+    --task-id FT-TASK-0002 \
+    --status ready_for_handoff \
+    --reason "Task route is clear." \
+    --sync-dashboard \
+    --write
+
+  python3 "$ROOT/template-repo/scripts/preview-task-handoff.py" \
+    --registry "$tmp_dir/task-registry.yaml" \
+    --task-id FT-TASK-0002 \
+    --handoff-output "$tmp_dir/FT-TASK-0002-codex-handoff.md" \
+    --output "$tmp_dir/FT-TASK-0002-preview.md"
+  grep -q "Предпросмотр Codex handoff task" "$tmp_dir/FT-TASK-0002-preview.md"
+
+  python3 "$ROOT/template-repo/scripts/prepare-task-pack.py" \
+    --registry "$tmp_dir/task-registry.yaml" \
+    --dashboard "$tmp_dir/project-lifecycle-dashboard.yaml" \
+    --task-id FT-TASK-0002 \
+    --preview-output "$tmp_dir/FT-TASK-0002-preview.md" \
+    --handoff-output "$tmp_dir/FT-TASK-0002-codex-handoff.md" > "$tmp_dir/prepare-dry-run.txt"
+  grep -q "task_pack_prepare=dry_run" "$tmp_dir/prepare-dry-run.txt"
+
+  python3 "$ROOT/template-repo/scripts/prepare-task-pack.py" \
+    --registry "$tmp_dir/task-registry.yaml" \
+    --dashboard "$tmp_dir/project-lifecycle-dashboard.yaml" \
+    --task-id FT-TASK-0002 \
+    --preview-output "$tmp_dir/FT-TASK-0002-preview.md" \
+    --handoff-output "$tmp_dir/FT-TASK-0002-codex-handoff.md" \
+    --mark-ready-for-codex \
+    --sync-dashboard \
+    --write
+  python3 "$ROOT/template-repo/scripts/validate-codex-task-handoff.py" "$tmp_dir/FT-TASK-0002-codex-handoff.md"
+  python3 "$ROOT/template-repo/scripts/validate-task-registry.py" "$tmp_dir/task-registry.yaml"
+  python3 "$ROOT/template-repo/scripts/validate-project-lifecycle-dashboard.py" "$tmp_dir/project-lifecycle-dashboard.yaml"
+
+  python3 "$ROOT/template-repo/scripts/render-task-queue.py" \
+    --registry "$tmp_dir/task-registry.yaml" \
+    --output "$tmp_dir/task-queue.md"
+  grep -q "Очередь Universal Codex задач" "$tmp_dir/task-queue.md"
+  grep -q "FT-TASK-0002" "$tmp_dir/task-queue.md"
+  grep -q "FT-TASK-0003" "$tmp_dir/task-queue.md"
+
+  rm -rf "$tmp_dir"
+}
+
 run_standards_navigator_smoke() {
   python3 "$ROOT/template-repo/scripts/validate-standards-gates.py" \
     "$ROOT/template-repo/template/.chatgpt/standards-gates.yaml"
@@ -732,6 +829,7 @@ run_quick() {
   run_step "codex-orchestration-runner-negative-smoke" run_codex_orchestration_runner_negative_smoke
   run_step "plan6-productization-smoke" run_plan6_productization_smoke
   run_step "project-lifecycle-dashboard-smoke" run_project_lifecycle_dashboard_smoke
+  run_step "universal-task-control-smoke" run_universal_task_control_smoke
   if [[ -f "$ROOT/.chatgpt/handoff-implementation-register.yaml" ]]; then
     run_step "validate-root-handoff-implementation-register" python3 "$ROOT/template-repo/scripts/validate-handoff-implementation-register.py" "$ROOT/.chatgpt/handoff-implementation-register.yaml"
   fi
