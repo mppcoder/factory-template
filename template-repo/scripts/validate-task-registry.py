@@ -9,6 +9,7 @@ from typing import Any
 
 import yaml
 
+from task_control_paths import default_registry
 
 SCHEMA = "factory-task-registry/v1"
 TERMINAL_EVIDENCE_STATUSES = {
@@ -165,7 +166,7 @@ def validate_registry(data: dict[str, Any], registry_path: Path) -> list[str]:
 
 def main() -> int:
     parser = argparse.ArgumentParser(description="Валидирует Universal Codex task registry.")
-    parser.add_argument("registry_path", help="Путь к task-registry.yaml")
+    parser.add_argument("registry_path", nargs="?", default=default_registry(), help="Путь к task-registry.yaml")
     args = parser.parse_args()
 
     path = Path(args.registry_path)
