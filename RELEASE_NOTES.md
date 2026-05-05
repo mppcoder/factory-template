@@ -1,5 +1,26 @@
 # Release notes / заметки релиза
 
+## Unreleased / не выпущено
+
+### О чём этот инкремент
+
+Repo-native Universal Codex Handoff Factory MVP: шаблон получает единый `FT-TASK` слой для Codex-задач, понятный русскоязычный handoff flow и проверяемый dashboard/queue контур без daemon, web app, Telegram/Slack bot или background worker.
+
+### Что вошло
+
+- `task-registry.yaml`, allocator, issue bridge, handoff generator, handoff validator, preview/prepare/status/queue commands.
+- GitHub Issue templates для основных task classes: bug, feature, docs, research, audit, release, downstream sync и curator.
+- Русскоязычные operator docs: architecture overview и one-paste flow `ChatGPT -> Codex -> GitHub -> VPS`.
+- Lifecycle dashboard показывает Universal Task Control без false green.
+- `verify-all quick` включает Universal Task Control smoke и negative fixtures в `tests/universal-task-control/`.
+
+### Что проверять
+
+- `python3 template-repo/scripts/validate-task-registry.py template-repo/template/.chatgpt/task-registry.yaml`
+- `python3 template-repo/scripts/validate-codex-task-handoff.py reports/handoffs/FT-TASK-0001-codex-handoff.md`
+- `python3 template-repo/scripts/validate-project-lifecycle-dashboard.py template-repo/template/.chatgpt/project-lifecycle-dashboard.yaml`
+- `bash template-repo/scripts/verify-all.sh quick`
+
 ## 2.5.8 - 2026-04-30
 
 ### О чём этот релиз

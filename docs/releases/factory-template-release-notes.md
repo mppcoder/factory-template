@@ -2,6 +2,10 @@
 
 ## Не выпущено
 - physical root normalization: legacy/factory-only top-level folders moved under project core, `tests/`, `docs/operator/`, `project-knowledge/` or bounded `factory/producer/*`; tree contract now rejects old active root folders.
+- Universal Codex Handoff Factory MVP добавляет repo-native `FT-TASK` слой для всех Codex-задач, не только bugs.
+- Added task registry, allocator, issue bridge, handoff preview/prepare/status/queue commands and validators under `template-repo/scripts/`.
+- Added GitHub Issue templates, Russian one-paste runbook, lifecycle dashboard integration and explicit Symphony/OpenClaw/Hermes future boundaries without daemon/runtime dependency.
+- `verify-all quick` now includes Universal Task Control smoke with positive flow and explicit negative fixtures under `tests/universal-task-control/`.
 
 ## 2.5.8
 - `WINDOWS_INSTALL_LATEST.md` now preserves the executable automation boundary.
