@@ -1,0 +1,81 @@
+- name: agent:ready
+  color: "2da44e"
+  description: "Maintainer-approved issue-autofix input."
+- name: agent:claimed
+  color: "0969da"
+  description: "Automation gate claimed this issue."
+- name: agent:running
+  color: "8250df"
+  description: "Bounded runner is processing this issue."
+- name: agent:blocked
+  color: "cf222e"
+  description: "Automation is blocked or refused."
+- name: agent:pr-opened
+  color: "1f883d"
+  description: "Automation opened or prepared a PR."
+- name: agent:human-review
+  color: "bf8700"
+  description: "Human review is required before merge."
+- name: agent:done
+  color: "6e7781"
+  description: "Automation task is completed."
+- name: status:needs-info
+  color: "fbca04"
+  description: "More issue detail is required."
+- name: type:bug
+  color: "d73a4a"
+  description: "Bug or regression."
+- name: type:docs
+  color: "0075ca"
+  description: "Documentation change."
+- name: type:change
+  color: "a2eeef"
+  description: "Change request."
+- name: type:support
+  color: "d4c5f9"
+  description: "Support question."
+- name: type:factory-feedback
+  color: "5319e7"
+  description: "Reusable factory feedback."
+- name: type:release-sync
+  color: "cfd3d7"
+  description: "Release-facing sync."
+- name: risk:low
+  color: "2da44e"
+  description: "Low-risk change."
+- name: risk:medium
+  color: "fbca04"
+  description: "Medium-risk change."
+- name: risk:high
+  color: "cf222e"
+  description: "High-risk change; requires explicit approval."
+- name: surface:scenario-pack
+  color: "bfd4f2"
+  description: "Scenario pack surface."
+- name: surface:template
+  color: "bfd4f2"
+  description: "Template payload surface."
+- name: surface:launcher
+  color: "bfd4f2"
+  description: "Launcher surface."
+- name: surface:validator
+  color: "bfd4f2"
+  description: "Validator surface."
+- name: surface:runbook
+  color: "bfd4f2"
+  description: "Runbook surface."
+- name: surface:docs
+  color: "bfd4f2"
+  description: "Docs surface."
+- name: security
+  color: "b60205"
+  description: "Security-sensitive; issue-autofix must not run."
+- name: needs-human
+  color: "bf8700"
+  description: "Human decision required."
+- name: external-secret
+  color: "b60205"
+  description: "Needs external secret; automation must stop."
+- name: blocked
+  color: "000000"
+  description: "Blocked."

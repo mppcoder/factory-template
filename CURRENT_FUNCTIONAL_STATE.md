@@ -15,6 +15,7 @@ GA-ready: `true`.
 - ownership taxonomy отделяет project-core, template-owned zones, project-owned zones, brownfield evidence/audit/reconstruction, factory-producer-owned, archives и transient-generated
 - генерация greenfield и brownfield проектов
 - scenario-pack, `.chatgpt` и launcher
+- Universal Task Control and advanced automation substrate: `FT-TASK` registry, issue-autofix gate/handoff/runner, Symphony-compatible workflow spec, bounded one-task runner, repo-reviewed curator proposals and full automation gates without daemon, auto-merge or production deploy.
 - project presets, policy presets и change classes
 - defect-capture layer и feedback loop
 - drift detection, patch export и safe apply для разрешенных зон

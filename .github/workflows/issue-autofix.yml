@@ -1,0 +1,95 @@
+name: Issue autofix
+
+on:
+  issues:
+    types: [labeled]
+  issue_comment:
+    types: [created]
+  workflow_dispatch:
+    inputs:
+      issue_number:
+        description: "Issue number to gate and prepare for Codex handoff"
+        required: true
+        type: string
+
+permissions:
+  contents: write
+  issues: write
+  pull-requests: write
+  checks: read
+
+concurrency:
+  group: issue-autofix-${{ github.repository }}-${{ github.event.issue.number || inputs.issue_number }}
+  cancel-in-progress: false
+
+jobs:
+  issue-autofix:
+    if: >-
+      ${{
+        (github.event_name == 'issues' && github.event.label.name == 'agent:ready') ||
+        (github.event_name == 'issue_comment' && startsWith(github.event.comment.body, '/factory fix') && github.event.issue.pull_request == null) ||
+        github.event_name == 'workflow_dispatch'
+      }}
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ github.token }}
+      ISSUE_NUMBER: ${{ github.event.issue.number || inputs.issue_number }}
+      EVENT_LABEL: ${{ github.event.label.name || '' }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Select repo script path
+        run: |
+          set -euo pipefail
+          if [ -d template-repo/scripts ]; then
+            echo "SCRIPT_DIR=template-repo/scripts" >> "$GITHUB_ENV"
+          else
+            echo "SCRIPT_DIR=scripts" >> "$GITHUB_ENV"
+          fi
+
+      - name: Store issue comment as data
+        if: github.event_name == 'issue_comment'
+        run: |
+          set -euo pipefail
+          mkdir -p ".chatgpt/issue-runs/issue-${ISSUE_NUMBER}"
+          jq -r '.comment.body' "$GITHUB_EVENT_PATH" > ".chatgpt/issue-runs/issue-${ISSUE_NUMBER}/comment-body.txt"
+
+      - name: Gate issue
+        id: gate
+        run: |
+          set -euo pipefail
+          mkdir -p ".chatgpt/issue-runs/issue-${ISSUE_NUMBER}"
+          COMMENT_FILE=""
+          if [ -f ".chatgpt/issue-runs/issue-${ISSUE_NUMBER}/comment-body.txt" ]; then
+            COMMENT_FILE="--comment-body-file .chatgpt/issue-runs/issue-${ISSUE_NUMBER}/comment-body.txt"
+          fi
+          python3 "$SCRIPT_DIR/issue-autofix-gate.py" \
+            --repo "${GITHUB_REPOSITORY}" \
+            --issue "${ISSUE_NUMBER}" \
+            --actor "${GITHUB_ACTOR}" \
+            --event-label "${EVENT_LABEL}" \
+            ${COMMENT_FILE} | tee ".chatgpt/issue-runs/issue-${ISSUE_NUMBER}/gate-output.txt"
+          if grep -q '^eligible=true$' ".chatgpt/issue-runs/issue-${ISSUE_NUMBER}/gate-output.txt"; then
+            echo "eligible=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "eligible=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Render Codex handoff
+        if: steps.gate.outputs.eligible == 'true'
+        run: |
+          set -euo pipefail
+          python3 "$SCRIPT_DIR/create-issue-codex-handoff.py" \
+            --repo "${GITHUB_REPOSITORY}" \
+            --issue "${ISSUE_NUMBER}" \
+            --out ".chatgpt/issue-runs/issue-${ISSUE_NUMBER}/codex-input.md" \
+            --run-yaml ".chatgpt/issue-runs/issue-${ISSUE_NUMBER}/run.yaml"
+
+      - name: Run bounded issue autofix
+        if: steps.gate.outputs.eligible == 'true'
+        run: |
+          set -euo pipefail
+          bash "$SCRIPT_DIR/run-issue-autofix.sh" ".chatgpt/issue-runs/issue-${ISSUE_NUMBER}/codex-input.md"

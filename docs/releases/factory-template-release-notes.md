@@ -9,6 +9,12 @@
 - Downstream materialization now covers generated projects with `.chatgpt/task-registry.yaml`, root `scripts/*` commands, `.github/ISSUE_TEMPLATE/*.yml`, downstream operator docs and report target dirs.
 - `verify-all quick` now includes a temporary generated-project Universal Task Control smoke that does not launch Codex and does not use GitHub API.
 - Existing downstream sync guidance explicitly forbids blind overwrite of `.chatgpt/task-registry.yaml` when user tasks or evidence are present.
+- Advanced automation adds bounded GitHub Issue -> gate -> normalized Codex handoff -> branch/PR substrate with root and downstream `issue-autofix.yml`.
+- Symphony-compatible `WORKFLOW.md` defines tracker/control plane, max concurrency, terminal states, external boundary rules, no auto-merge, no `pull_request_target`, and `00-master-router.md` first-read contract.
+- Bounded runner skeleton records run yaml and exact launcher command while refusing unsafe parallel execution without worktree isolation.
+- Hermes-like factory curator writes repo-reviewed proposals only; no hidden self-learning and no auto-apply by default.
+- Full advanced automation gates document allowed MVP automation, prohibited security/deploy/auto-merge/public-submit actions and emergency stop controls.
+- `verify-all quick` includes advanced automation validators for issue support, workflow spec, bounded runner, curator and gates.
 
 ## 2.5.8
 - `WINDOWS_INSTALL_LATEST.md` now preserves the executable automation boundary.

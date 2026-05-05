@@ -767,7 +767,19 @@ run_downstream_task_control_materialization_smoke() {
     test -f "scripts/task_control_paths.py"
     test -f ".github/ISSUE_TEMPLATE/feature.yml"
     test -f ".github/ISSUE_TEMPLATE/downstream-feedback.yml"
+    test -f ".github/workflows/issue-autofix.yml"
+    test -f ".github/ISSUE_TEMPLATE/bug.yml"
+    test -f ".github/ISSUE_TEMPLATE/support-question.yml"
+    test -f ".github/ISSUE_TEMPLATE/factory-feedback.yml"
+    test -f ".github/ISSUE_TEMPLATE/change-request.yml"
+    test -f ".github/ISSUE_TEMPLATE/release-sync.yml"
     test -f "docs/operator/universal-task-control.md"
+    test -f "docs/support-automation.md"
+    test -f "SECURITY.md"
+    test -f "WORKFLOW.md"
+    test -f "docs/operator/bounded-runner.md"
+    test -f "docs/operator/factory-curator.md"
+    test -f "docs/operator/full-advanced-automation-gates.md"
     test -d "reports/handoffs"
     test -d "reports/release"
 
@@ -808,6 +820,10 @@ run_downstream_task_control_materialization_smoke() {
     grep -q "registry_path: .chatgpt/task-registry.yaml" .chatgpt/project-lifecycle-dashboard.yaml
     grep -q "ready_for_codex: 1" .chatgpt/project-lifecycle-dashboard.yaml
     grep -q "sanitized upstream feedback" .github/ISSUE_TEMPLATE/downstream-feedback.yml
+    grep -q "issue-autofix-gate.py" .github/workflows/issue-autofix.yml
+    grep -q "no auto-merge" docs/support-automation.md
+    grep -q "issue-autofix is disabled" SECURITY.md
+    grep -q "max concurrency" WORKFLOW.md
   )
   rm -rf "$tmp_dir"
 }
@@ -948,6 +964,11 @@ run_quick() {
   run_step "project-lifecycle-dashboard-smoke" run_project_lifecycle_dashboard_smoke
   run_step "universal-task-control-smoke" run_universal_task_control_smoke
   run_step "downstream-task-control-materialization-smoke" run_downstream_task_control_materialization_smoke
+  run_step "validate-issue-autofix-support" python3 "$ROOT/template-repo/scripts/validate-issue-autofix-support.py" "$ROOT"
+  run_step "validate-symphony-workflow" python3 "$ROOT/template-repo/scripts/validate-symphony-workflow.py" "$ROOT"
+  run_step "validate-bounded-runner" python3 "$ROOT/template-repo/scripts/validate-bounded-runner.py" "$ROOT"
+  run_step "validate-factory-curator" python3 "$ROOT/template-repo/scripts/validate-factory-curator.py" "$ROOT"
+  run_step "validate-advanced-automation-gates" python3 "$ROOT/template-repo/scripts/validate-advanced-automation-gates.py" "$ROOT"
   if [[ -f "$ROOT/.chatgpt/handoff-implementation-register.yaml" ]]; then
     run_step "validate-root-handoff-implementation-register" python3 "$ROOT/template-repo/scripts/validate-handoff-implementation-register.py" "$ROOT/.chatgpt/handoff-implementation-register.yaml"
   fi

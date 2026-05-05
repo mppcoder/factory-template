@@ -1,0 +1,33 @@
+name: "Release sync / синхронизация релиза"
+description: "Зафиксировать release-facing update, readout или downstream sync."
+title: "[Release sync]: "
+labels: ["type:release-sync", "risk:medium", "status:needs-info"]
+body:
+  - type: textarea
+    id: release_surface
+    attributes:
+      label: "Release surface"
+      description: "Какие release/readout artifacts затронуты?"
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: "Expected / ожидаемый outcome"
+      description: "Какая release truth должна стать видимой?"
+    validations:
+      required: true
+  - type: textarea
+    id: verification
+    attributes:
+      label: "Verification"
+      description: "Какие команды подтверждают sync?"
+    validations:
+      required: true
+  - type: checkboxes
+    id: safety
+    attributes:
+      label: "Safety"
+      options:
+        - label: "Нет secret, deploy approval или public security fix boundary."
+          required: true

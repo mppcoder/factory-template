@@ -1,0 +1,43 @@
+name: "Factory feedback / reusable defect"
+description: "Сообщить о reusable дефекте шаблона, который нужно поднять в factory-template."
+title: "[Factory feedback]: "
+labels: ["type:factory-feedback", "risk:medium", "status:needs-info"]
+body:
+  - type: markdown
+    attributes:
+      value: "Local project-owned bugs stay local. Reusable factory feedback belongs in factory-template. No secrets in public issues."
+  - type: textarea
+    id: reusable_signal
+    attributes:
+      label: "Reusable factory signal"
+      description: "Почему это дефект фабрики, а не только боевого проекта?"
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: "Шаги воспроизведения"
+      description: "Как повторить на чистом generated project или factory-template?"
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: "Expected / ожидаемый outcome"
+      description: "Как должен вести себя шаблон?"
+    validations:
+      required: true
+  - type: textarea
+    id: downstream_impact
+    attributes:
+      label: "Downstream impact"
+      description: "Как affected generated project страдает от дефекта?"
+    validations:
+      required: true
+  - type: checkboxes
+    id: privacy
+    attributes:
+      label: "Безопасность"
+      options:
+        - label: "Я удалил(а) project secrets и приватные данные перед публикацией."
+          required: true

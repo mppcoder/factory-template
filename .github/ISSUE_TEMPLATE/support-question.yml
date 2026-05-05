@@ -1,0 +1,36 @@
+name: "Support question / вопрос"
+description: "Задать вопрос по использованию фабрики или generated project."
+title: "[Support]: "
+labels: ["type:support", "risk:low", "status:needs-info"]
+body:
+  - type: markdown
+    attributes:
+      value: "Не вставляйте secrets. Support issues обычно не запускают Codex; для исправления maintainer отдельно добавит `agent:ready` или `/factory fix`."
+  - type: textarea
+    id: question
+    attributes:
+      label: "Вопрос"
+      description: "Что вы хотите понять?"
+    validations:
+      required: true
+  - type: textarea
+    id: context
+    attributes:
+      label: "Контекст"
+      description: "Версия, repo path, команда или runbook, где возник вопрос."
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: "Expected / ожидаемый outcome"
+      description: "Какой ответ или результат поможет закрыть вопрос?"
+    validations:
+      required: true
+  - type: checkboxes
+    id: privacy
+    attributes:
+      label: "Безопасность"
+      options:
+        - label: "В вопросе нет секретов, токенов, паролей, private keys или приватных логов."
+          required: true

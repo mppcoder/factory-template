@@ -1,0 +1,43 @@
+name: "Change request / изменение"
+description: "Предложить bounded изменение с критериями готовности."
+title: "[Change]: "
+labels: ["type:change", "risk:medium", "status:needs-info"]
+body:
+  - type: textarea
+    id: objective
+    attributes:
+      label: "Цель изменения"
+      description: "Что нужно изменить?"
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: "Expected / ожидаемый outcome"
+      description: "Как система должна выглядеть после изменения?"
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: "Acceptance criteria"
+      description: "Команды, документы или checks, по которым изменение будет принято."
+    validations:
+      required: true
+  - type: dropdown
+    id: risk
+    attributes:
+      label: "Risk"
+      options:
+        - risk:low
+        - risk:medium
+        - risk:high
+    validations:
+      required: true
+  - type: checkboxes
+    id: boundaries
+    attributes:
+      label: "Boundaries"
+      options:
+        - label: "Изменение не требует secrets, production deploy, auto-merge или security issue autofix."
+          required: true

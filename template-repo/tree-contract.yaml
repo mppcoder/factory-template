@@ -184,6 +184,7 @@ common_generated_required_paths: &common_generated_required_paths
   - VERSION.md
   - CHANGELOG.md
   - CURRENT_FUNCTIONAL_STATE.md
+  - WORKFLOW.md
   - PROJECT_BRIEF.md
   - .chatgpt
   - .chatgpt/project-profile.yaml
@@ -195,6 +196,7 @@ common_generated_required_paths: &common_generated_required_paths
   - .chatgpt/codex-input.md
   - .chatgpt/direct-task-self-handoff.md
   - .codex
+  - .github
   - brownfield
   - deploy
   - docs
@@ -209,6 +211,7 @@ common_generated_required_paths: &common_generated_required_paths
   - tasks/codex
   - tests
   - reports/learnings
+  - SECURITY.md
   - work/active
   - work/features
   - work/completed
@@ -387,6 +390,7 @@ contours:
       - VERSION.md
       - VERSION_SYNC_CHECK.sh
       - WINDOWS_INSTALL_LATEST.md
+      - WORKFLOW.md
       - bootstrap
       - brownfield
       - deploy
