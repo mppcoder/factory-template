@@ -1,6 +1,6 @@
 # Панель жизненного цикла проекта / `project-lifecycle-dashboard`
 
-Generated UTC: `2026-05-05T13:12:44+00:00`
+Generated UTC: `2026-05-05T13:17:40+00:00`
 Source: `/projects/factory-template/template-repo/template/.chatgpt/project-lifecycle-dashboard.yaml`
 
 ## Сейчас
@@ -123,6 +123,7 @@ Source: `/projects/factory-template/template-repo/template/.chatgpt/project-life
 - template-repo/scripts/validate-task-registry.py
 - template-repo/scripts/allocate-task-id.py
 - template-repo/scripts/issue-to-task-registry.py
+- template-repo/scripts/preview-task-handoff.py
 
 ## Контроль реализации handoff / Handoff implementation control
 

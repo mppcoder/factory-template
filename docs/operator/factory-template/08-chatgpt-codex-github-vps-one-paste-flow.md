@@ -170,6 +170,11 @@ python3 template-repo/scripts/issue-to-task-registry.py \
 После этого:
 
 ```bash
+python3 template-repo/scripts/preview-task-handoff.py \
+  --registry template-repo/template/.chatgpt/task-registry.yaml \
+  --task-id FT-TASK-0002 \
+  --output reports/handoffs/FT-TASK-0002-preview.md
+
 python3 template-repo/scripts/task-to-codex-handoff.py \
   --registry template-repo/template/.chatgpt/task-registry.yaml \
   --task-id FT-TASK-0002 \
@@ -217,6 +222,7 @@ Targeted check для handoff factory:
 ```bash
 python3 template-repo/scripts/validate-task-registry.py template-repo/template/.chatgpt/task-registry.yaml
 python3 template-repo/scripts/allocate-task-id.py --registry template-repo/template/.chatgpt/task-registry.yaml
+python3 template-repo/scripts/preview-task-handoff.py --registry template-repo/template/.chatgpt/task-registry.yaml --task-id FT-TASK-0001 --output reports/handoffs/FT-TASK-0001-preview.md
 python3 template-repo/scripts/task-to-codex-handoff.py --registry template-repo/template/.chatgpt/task-registry.yaml --task-id FT-TASK-0001 --output reports/handoffs/FT-TASK-0001-codex-handoff.md
 python3 template-repo/scripts/validate-codex-task-handoff.py reports/handoffs/FT-TASK-0001-codex-handoff.md
 python3 template-repo/scripts/validate-project-lifecycle-dashboard.py template-repo/template/.chatgpt/project-lifecycle-dashboard.yaml

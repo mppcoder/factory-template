@@ -41,6 +41,7 @@ MVP добавляет repo-native основу для всех Codex-задач
 - `template-repo/scripts/validate-task-registry.py` - проверка схемы, классов, статусов, route и evidence;
 - `template-repo/scripts/allocate-task-id.py` - безопасное выделение `FT-TASK-NNNN` без использования `FT-CH` или `FT-CX`;
 - `template-repo/scripts/issue-to-task-registry.py` - локальный bridge из sanitized GitHub Issue/draft в task registry entry;
+- `template-repo/scripts/preview-task-handoff.py` - safe preview route, handoff path, dashboard counters и verification commands до запуска Codex;
 - `template-repo/scripts/task-to-codex-handoff.py` - генератор одного copy-paste Codex handoff;
 - `template-repo/scripts/validate-codex-task-handoff.py` - проверка generated handoff;
 - `.github/ISSUE_TEMPLATE/*.yml` - GitHub Issue Forms для основных task classes;
@@ -138,6 +139,15 @@ python3 template-repo/scripts/issue-to-task-registry.py \
 ```
 
 `issue-to-task-registry.py` не обращается к GitHub API и не публикует данные. Он работает с локальным отредактированным JSON/YAML/Markdown draft.
+
+Посмотреть preview перед генерацией handoff:
+
+```bash
+python3 template-repo/scripts/preview-task-handoff.py \
+  --registry template-repo/template/.chatgpt/task-registry.yaml \
+  --task-id FT-TASK-0001 \
+  --output reports/handoffs/FT-TASK-0001-preview.md
+```
 
 ## Advanced automation flow
 

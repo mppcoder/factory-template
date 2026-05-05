@@ -74,6 +74,7 @@ def validate_registry(data: dict[str, Any], registry_path: Path) -> list[str]:
     allowed_status_set = {str(item) for item in allowed_statuses}
     id_re = task_id_pattern(project_code)
     seen_ids: set[str] = set()
+    seen_numbers: list[int] = []
 
     for index, task in enumerate(tasks, 1):
         path = f"tasks[{index}]"
@@ -82,8 +83,11 @@ def validate_registry(data: dict[str, Any], registry_path: Path) -> list[str]:
             continue
 
         task_id = str(task.get("task_id") or "")
-        if not id_re.fullmatch(task_id):
+        match = id_re.fullmatch(task_id)
+        if not match:
             errors.append(f"{path}.task_id должен быть формата `{project_code}-TASK-0001`, сейчас `{task_id}`")
+        else:
+            seen_numbers.append(int(task_id.rsplit("-", 1)[1]))
         if task_id in seen_ids:
             errors.append(f"{path}.task_id повторяется: `{task_id}`")
         seen_ids.add(task_id)
@@ -135,6 +139,13 @@ def validate_registry(data: dict[str, Any], registry_path: Path) -> list[str]:
         for flag in ["requires_review", "requires_secret", "external_user_action"]:
             if flag in human and not isinstance(human.get(flag), bool):
                 errors.append(f"{path}.human_boundary.{flag} должен быть boolean")
+
+    next_task_number = data.get("next_task_number")
+    max_seen = max(seen_numbers or [0])
+    if not isinstance(next_task_number, int) or next_task_number < 1:
+        errors.append("next_task_number должен быть positive integer")
+    elif next_task_number <= max_seen:
+        errors.append(f"next_task_number `{next_task_number}` должен быть больше max task number `{max_seen}`")
 
     return errors
 

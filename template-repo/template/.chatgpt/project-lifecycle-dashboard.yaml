@@ -191,6 +191,7 @@ universal_task_control:
     - template-repo/scripts/validate-task-registry.py
     - template-repo/scripts/allocate-task-id.py
     - template-repo/scripts/issue-to-task-registry.py
+    - template-repo/scripts/preview-task-handoff.py
 
 module_readiness:
   selected_profile: solo_lightweight
