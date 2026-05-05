@@ -9,6 +9,7 @@
 - source commit: `5ecf7f1a35749452d79adc6e3f087abb5c3c200a`
 - package stage: `release publication / release artifact assembly`
 - publication boundary: GitHub Release/tag publication was not executed; this report covers artifact assembly and validation only.
+- live release boundary: GitHub Release `v2.5.8` already exists at target commitish `fa61d8e62db4e1690fa732c5119d01df2454e966`, so the rebuilt local archive was not uploaded over existing public assets.
 
 ## Артефакты
 
@@ -31,3 +32,4 @@
 - npm install/download path remains unsupported.
 - `FactoryTemplateSetup.exe` remains a future signed wrapper boundary and is not built by this package.
 - GitHub Release publication, tag creation and release approval remain outside this artifact assembly step.
+- Existing public `v2.5.8` assets must not be clobbered with a package built from a different source commit. Publish post-`fa61d8e` changes under a new patch version or an explicit audited release replacement decision.
