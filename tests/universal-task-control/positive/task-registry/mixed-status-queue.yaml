@@ -1,0 +1,219 @@
+schema: factory-task-registry/v1
+project_code: FT
+description: "Positive fixture: mixed statuses for queue renderer smoke."
+next_task_number: 8
+task_id_policy:
+  canonical_format: FT-TASK-NNNN
+  source_of_truth: .chatgpt/task-registry.yaml
+  task_id_is_not_chat_id: true
+  task_id_is_not_codex_work_id: true
+allowed_classes:
+  - bug
+  - feature
+  - docs
+  - research
+  - audit
+  - refactor
+  - release
+  - maintenance
+  - downstream_sync
+  - curator
+allowed_statuses:
+  - draft
+  - needs_triage
+  - ready_for_handoff
+  - ready_for_codex
+  - codex_running
+  - implemented
+  - verification_pending
+  - human_review
+  - verified
+  - blocked
+  - superseded
+  - not_applicable
+  - archived
+tasks:
+  - task_id: FT-TASK-0001
+    title: Blocked dependency example
+    class: feature
+    priority: high
+    status: blocked
+    source: {kind: fixture, ref: ""}
+    route:
+      selected_project_profile: factory-template self-improvement / automation-orchestration implementation
+      selected_scenario: template-repo/scenario-pack/00-master-router.md
+      pipeline_stage: implementation
+      handoff_allowed: true
+      handoff_shape: codex-task-handoff
+      selected_profile: deep
+      selected_reasoning_effort: high
+    execution:
+      preferred_surface: codex_app
+      allowed_surfaces: [codex_app, vscode_remote_ssh_codex_extension, codex_cli, codex_cloud]
+      workspace_mode: repo_root_or_per_task_worktree
+    dependencies:
+      blocked_by: [FT-TASK-0006]
+      unlocks: []
+    outputs_required: [codex_handoff, verification_evidence, dashboard_update, closeout_summary]
+    human_boundary:
+      requires_review: true
+      requires_secret: false
+      external_user_action: false
+    evidence: []
+    next_action: Blocked by FT-TASK-0006.
+  - task_id: FT-TASK-0002
+    title: Ready for Codex example
+    class: docs
+    priority: medium
+    status: ready_for_codex
+    source: {kind: fixture, ref: ""}
+    route:
+      selected_project_profile: factory-template self-improvement / automation-orchestration implementation
+      selected_scenario: template-repo/scenario-pack/00-master-router.md
+      pipeline_stage: implementation
+      handoff_allowed: true
+      handoff_shape: codex-task-handoff
+      selected_profile: deep
+      selected_reasoning_effort: high
+    execution:
+      preferred_surface: codex_app
+      allowed_surfaces: [codex_app, vscode_remote_ssh_codex_extension, codex_cli, codex_cloud]
+      workspace_mode: repo_root_or_per_task_worktree
+    dependencies: {blocked_by: [], unlocks: []}
+    outputs_required: [codex_handoff, verification_evidence, dashboard_update, closeout_summary]
+    human_boundary:
+      requires_review: true
+      requires_secret: false
+      external_user_action: false
+    evidence: [reports/handoffs/FT-TASK-0002-codex-handoff.md]
+    next_action: Paste generated handoff into a new Codex session.
+  - task_id: FT-TASK-0003
+    title: Ready for handoff example
+    class: research
+    priority: medium
+    status: ready_for_handoff
+    source: {kind: fixture, ref: ""}
+    route:
+      selected_project_profile: factory-template self-improvement / automation-orchestration implementation
+      selected_scenario: template-repo/scenario-pack/00-master-router.md
+      pipeline_stage: implementation
+      handoff_allowed: true
+      handoff_shape: codex-task-handoff
+      selected_profile: deep
+      selected_reasoning_effort: high
+    execution:
+      preferred_surface: codex_app
+      allowed_surfaces: [codex_app, vscode_remote_ssh_codex_extension, codex_cli, codex_cloud]
+      workspace_mode: repo_root_or_per_task_worktree
+    dependencies: {blocked_by: [], unlocks: []}
+    outputs_required: [codex_handoff, verification_evidence, dashboard_update, closeout_summary]
+    human_boundary:
+      requires_review: true
+      requires_secret: false
+      external_user_action: false
+    evidence: []
+    next_action: Generate preview and handoff.
+  - task_id: FT-TASK-0004
+    title: Codex running example
+    class: maintenance
+    priority: medium
+    status: codex_running
+    source: {kind: fixture, ref: ""}
+    route:
+      selected_project_profile: factory-template self-improvement / automation-orchestration implementation
+      selected_scenario: template-repo/scenario-pack/00-master-router.md
+      pipeline_stage: implementation
+      handoff_allowed: true
+      handoff_shape: codex-task-handoff
+      selected_profile: deep
+      selected_reasoning_effort: high
+    execution:
+      preferred_surface: codex_app
+      allowed_surfaces: [codex_app, vscode_remote_ssh_codex_extension, codex_cli, codex_cloud]
+      workspace_mode: repo_root_or_per_task_worktree
+    dependencies: {blocked_by: [], unlocks: []}
+    outputs_required: [codex_handoff, verification_evidence, dashboard_update, closeout_summary]
+    human_boundary:
+      requires_review: true
+      requires_secret: false
+      external_user_action: false
+    evidence: []
+    next_action: Wait for Codex closeout.
+  - task_id: FT-TASK-0005
+    title: Human review example
+    class: audit
+    priority: medium
+    status: human_review
+    source: {kind: fixture, ref: ""}
+    route:
+      selected_project_profile: factory-template self-improvement / automation-orchestration implementation
+      selected_scenario: template-repo/scenario-pack/00-master-router.md
+      pipeline_stage: implementation
+      handoff_allowed: true
+      handoff_shape: codex-task-handoff
+      selected_profile: deep
+      selected_reasoning_effort: high
+    execution:
+      preferred_surface: codex_app
+      allowed_surfaces: [codex_app, vscode_remote_ssh_codex_extension, codex_cli, codex_cloud]
+      workspace_mode: repo_root_or_per_task_worktree
+    dependencies: {blocked_by: [], unlocks: []}
+    outputs_required: [codex_handoff, verification_evidence, dashboard_update, closeout_summary]
+    human_boundary:
+      requires_review: true
+      requires_secret: false
+      external_user_action: true
+    evidence: [reports/human-review/FT-TASK-0005.md]
+    next_action: Human must approve sanitized external report before publication.
+  - task_id: FT-TASK-0006
+    title: Draft example
+    class: curator
+    priority: low
+    status: draft
+    source: {kind: fixture, ref: ""}
+    route:
+      selected_project_profile: factory-template self-improvement / automation-orchestration implementation
+      selected_scenario: template-repo/scenario-pack/00-master-router.md
+      pipeline_stage: implementation
+      handoff_allowed: true
+      handoff_shape: codex-task-handoff
+      selected_profile: deep
+      selected_reasoning_effort: high
+    execution:
+      preferred_surface: codex_app
+      allowed_surfaces: [codex_app, vscode_remote_ssh_codex_extension, codex_cli, codex_cloud]
+      workspace_mode: repo_root_or_per_task_worktree
+    dependencies: {blocked_by: [], unlocks: [FT-TASK-0001]}
+    outputs_required: [codex_handoff, verification_evidence, dashboard_update, closeout_summary]
+    human_boundary:
+      requires_review: true
+      requires_secret: false
+      external_user_action: false
+    evidence: []
+    next_action: Triage curator proposal.
+  - task_id: FT-TASK-0007
+    title: Verified example
+    class: release
+    priority: medium
+    status: verified
+    source: {kind: fixture, ref: ""}
+    route:
+      selected_project_profile: factory-template self-improvement / automation-orchestration implementation
+      selected_scenario: template-repo/scenario-pack/00-master-router.md
+      pipeline_stage: implementation
+      handoff_allowed: true
+      handoff_shape: codex-task-handoff
+      selected_profile: deep
+      selected_reasoning_effort: high
+    execution:
+      preferred_surface: codex_app
+      allowed_surfaces: [codex_app, vscode_remote_ssh_codex_extension, codex_cli, codex_cloud]
+      workspace_mode: repo_root_or_per_task_worktree
+    dependencies: {blocked_by: [], unlocks: []}
+    outputs_required: [codex_handoff, verification_evidence, dashboard_update, closeout_summary]
+    human_boundary:
+      requires_review: true
+      requires_secret: false
+      external_user_action: false
+    evidence: [reports/release/verified-sync-fallback-evidence.md]
+    next_action: No action; fixture remains as terminal queue example.

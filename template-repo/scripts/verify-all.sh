@@ -608,6 +608,15 @@ run_universal_task_control_smoke() {
 
   python3 "$ROOT/template-repo/scripts/validate-task-registry.py" \
     "$ROOT/template-repo/template/.chatgpt/task-registry.yaml"
+  python3 "$ROOT/template-repo/scripts/validate-task-registry.py" \
+    "$ROOT/tests/universal-task-control/positive/task-registry/mixed-status-queue.yaml"
+  python3 "$ROOT/template-repo/scripts/render-task-queue.py" \
+    --registry "$ROOT/tests/universal-task-control/positive/task-registry/mixed-status-queue.yaml" \
+    --output "$tmp_dir/mixed-status-task-queue.md"
+  grep -q "open_tasks: \`6\`" "$tmp_dir/mixed-status-task-queue.md"
+  grep -q "compact line: Tasks: 1 ready-for-handoff -> 1 ready-for-codex -> 1 running -> 1 human-review" "$tmp_dir/mixed-status-task-queue.md"
+  grep -q "| \`blocked\` | 1 |" "$tmp_dir/mixed-status-task-queue.md"
+  grep -q "| \`verified\` | 1 |" "$tmp_dir/mixed-status-task-queue.md"
 
   for fixture in \
     bad-task-id \

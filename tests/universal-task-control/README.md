@@ -4,5 +4,6 @@ Negative fixtures here protect the repo-native `FT-TASK` contracts used by `veri
 
 - `negative/task-registry/*.yaml` must fail `validate-task-registry.py`.
 - `negative/codex-handoff/*.md` must fail `validate-codex-task-handoff.py`.
+- `positive/task-registry/*.yaml` must pass `validate-task-registry.py` and can be used by queue renderer smoke tests.
 
 These fixtures are intentionally small and explicit so a reviewer can see which boundary each file covers without reading generated smoke code.
