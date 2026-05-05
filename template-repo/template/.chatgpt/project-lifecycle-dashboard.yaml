@@ -185,10 +185,12 @@ universal_task_control:
   blocked: 0
   verified: 0
   next_action: Add first real tasks through task registry or GitHub issue bridge.
-  fallback_next_action: Keep using existing handoff implementation register until bridge is ready.
+  fallback_next_action: Keep using existing handoff implementation register when a task is not yet ready for registry allocation.
   evidence:
     - template-repo/template/.chatgpt/task-registry.yaml
     - template-repo/scripts/validate-task-registry.py
+    - template-repo/scripts/allocate-task-id.py
+    - template-repo/scripts/issue-to-task-registry.py
 
 module_readiness:
   selected_profile: solo_lightweight

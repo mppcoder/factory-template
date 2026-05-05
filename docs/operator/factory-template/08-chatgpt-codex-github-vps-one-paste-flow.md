@@ -159,7 +159,22 @@ git status --short --branch
 
 Если не получилось: не создавайте blank issue с приватными логами. Вернитесь к template и заполните минимум: цель, expected result, affected layer, context/evidence, Codex involvement.
 
-Future bridge: issue-to-task сможет создать запись в `.chatgpt/task-registry.yaml`, после чего `task-to-codex-handoff.py` соберет handoff.
+Repo-native bridge может создать запись в `.chatgpt/task-registry.yaml`, после чего `task-to-codex-handoff.py` соберет handoff.
+
+```bash
+python3 template-repo/scripts/issue-to-task-registry.py \
+  --registry template-repo/template/.chatgpt/task-registry.yaml \
+  --issue-file reports/handoffs/example-issue-draft.yaml
+```
+
+После этого:
+
+```bash
+python3 template-repo/scripts/task-to-codex-handoff.py \
+  --registry template-repo/template/.chatgpt/task-registry.yaml \
+  --task-id FT-TASK-0002 \
+  --output reports/handoffs/FT-TASK-0002-codex-handoff.md
+```
 
 ## Сценарий 3. Задача начинается как maintenance/scheduled item
 
@@ -201,6 +216,7 @@ Targeted check для handoff factory:
 
 ```bash
 python3 template-repo/scripts/validate-task-registry.py template-repo/template/.chatgpt/task-registry.yaml
+python3 template-repo/scripts/allocate-task-id.py --registry template-repo/template/.chatgpt/task-registry.yaml
 python3 template-repo/scripts/task-to-codex-handoff.py --registry template-repo/template/.chatgpt/task-registry.yaml --task-id FT-TASK-0001 --output reports/handoffs/FT-TASK-0001-codex-handoff.md
 python3 template-repo/scripts/validate-codex-task-handoff.py reports/handoffs/FT-TASK-0001-codex-handoff.md
 python3 template-repo/scripts/validate-project-lifecycle-dashboard.py template-repo/template/.chatgpt/project-lifecycle-dashboard.yaml

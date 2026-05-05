@@ -1,6 +1,6 @@
 # Панель жизненного цикла проекта / `project-lifecycle-dashboard`
 
-Generated UTC: `2026-05-05T13:04:27+00:00`
+Generated UTC: `2026-05-05T13:12:44+00:00`
 Source: `/projects/factory-template/template-repo/template/.chatgpt/project-lifecycle-dashboard.yaml`
 
 ## Сейчас
@@ -105,7 +105,7 @@ Source: `/projects/factory-template/template-repo/template/.chatgpt/project-life
 - compact line: Tasks: 🟡 0 ready-for-handoff -> 0 ready-for-codex -> 0 running -> 0
   human-review
 - next action: Add first real tasks through task registry or GitHub issue bridge.
-- fallback: Keep using existing handoff implementation register until bridge is ready.
+- fallback: Keep using existing handoff implementation register when a task is not yet ready for registry allocation.
 
 | Counter | Value |
 |---|---|
@@ -121,6 +121,8 @@ Source: `/projects/factory-template/template-repo/template/.chatgpt/project-life
 
 - template-repo/template/.chatgpt/task-registry.yaml
 - template-repo/scripts/validate-task-registry.py
+- template-repo/scripts/allocate-task-id.py
+- template-repo/scripts/issue-to-task-registry.py
 
 ## Контроль реализации handoff / Handoff implementation control
 

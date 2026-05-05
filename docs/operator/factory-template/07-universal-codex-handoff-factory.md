@@ -39,6 +39,8 @@ MVP добавляет repo-native основу для всех Codex-задач
 
 - `template-repo/template/.chatgpt/task-registry.yaml` - canonical registry для `FT-TASK-NNNN`;
 - `template-repo/scripts/validate-task-registry.py` - проверка схемы, классов, статусов, route и evidence;
+- `template-repo/scripts/allocate-task-id.py` - безопасное выделение `FT-TASK-NNNN` без использования `FT-CH` или `FT-CX`;
+- `template-repo/scripts/issue-to-task-registry.py` - локальный bridge из sanitized GitHub Issue/draft в task registry entry;
 - `template-repo/scripts/task-to-codex-handoff.py` - генератор одного copy-paste Codex handoff;
 - `template-repo/scripts/validate-codex-task-handoff.py` - проверка generated handoff;
 - `.github/ISSUE_TEMPLATE/*.yml` - GitHub Issue Forms для основных task classes;
@@ -106,6 +108,36 @@ Executable routing layer: named profiles, launcher scripts, Codex picker, Codex 
 5. Codex меняет repo, запускает проверки и обновляет dashboard.
 6. GitHub хранит issue/PR/history.
 7. VPS дает среду выполнения, когда задача касается runtime.
+
+## Repo-native task commands
+
+Посмотреть следующий task id без записи:
+
+```bash
+python3 template-repo/scripts/allocate-task-id.py --registry template-repo/template/.chatgpt/task-registry.yaml
+```
+
+Зарезервировать draft task в registry:
+
+```bash
+python3 template-repo/scripts/allocate-task-id.py \
+  --registry template-repo/template/.chatgpt/task-registry.yaml \
+  --append-draft \
+  --title "Add deployment checklist" \
+  --task-class docs \
+  --source-kind manual \
+  --source-ref ""
+```
+
+Перевести sanitized GitHub Issue draft в task registry entry:
+
+```bash
+python3 template-repo/scripts/issue-to-task-registry.py \
+  --registry template-repo/template/.chatgpt/task-registry.yaml \
+  --issue-file reports/handoffs/example-issue-draft.yaml
+```
+
+`issue-to-task-registry.py` не обращается к GitHub API и не публикует данные. Он работает с локальным отредактированным JSON/YAML/Markdown draft.
 
 ## Advanced automation flow
 
