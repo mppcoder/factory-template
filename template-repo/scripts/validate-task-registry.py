@@ -46,6 +46,19 @@ def task_id_pattern(project_code: str) -> re.Pattern[str]:
     return re.compile(rf"^{code}-TASK-\d{{4}}$")
 
 
+def scenario_exists(registry_path: Path, scenario: str) -> bool:
+    scenario_path = Path(scenario)
+    candidates = [scenario_path, Path.cwd() / scenario_path]
+    if registry_path.is_absolute():
+        for parent in registry_path.parents:
+            candidates.append(parent / scenario_path)
+    else:
+        resolved = registry_path.resolve()
+        for parent in resolved.parents:
+            candidates.append(parent / scenario_path)
+    return any(candidate.exists() for candidate in candidates)
+
+
 def validate_registry(data: dict[str, Any], registry_path: Path) -> list[str]:
     errors: list[str] = []
     schema = data.get("schema")
@@ -110,7 +123,7 @@ def validate_registry(data: dict[str, Any], registry_path: Path) -> list[str]:
             scenario = str(route.get("selected_scenario") or "")
             if not scenario:
                 errors.append(f"{path}.route.selected_scenario обязателен для routable task")
-            elif not (registry_path.parents[3] / scenario).exists() and not Path(scenario).exists():
+            elif not scenario_exists(registry_path, scenario):
                 errors.append(f"{path}.route.selected_scenario указывает на несуществующий файл: `{scenario}`")
 
         dependencies = task.get("dependencies")

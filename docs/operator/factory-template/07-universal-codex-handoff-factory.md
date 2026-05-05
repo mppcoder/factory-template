@@ -42,6 +42,7 @@ MVP добавляет repo-native основу для всех Codex-задач
 - `template-repo/scripts/allocate-task-id.py` - безопасное выделение `FT-TASK-NNNN` без использования `FT-CH` или `FT-CX`;
 - `template-repo/scripts/issue-to-task-registry.py` - локальный bridge из sanitized GitHub Issue/draft в task registry entry;
 - `template-repo/scripts/preview-task-handoff.py` - safe preview route, handoff path, dashboard counters и verification commands до запуска Codex;
+- `template-repo/scripts/update-task-status.py` - безопасный status transition для `FT-TASK` с optional dashboard counter sync;
 - `template-repo/scripts/task-to-codex-handoff.py` - генератор одного copy-paste Codex handoff;
 - `template-repo/scripts/validate-codex-task-handoff.py` - проверка generated handoff;
 - `.github/ISSUE_TEMPLATE/*.yml` - GitHub Issue Forms для основных task classes;
@@ -148,6 +149,21 @@ python3 template-repo/scripts/preview-task-handoff.py \
   --task-id FT-TASK-0001 \
   --output reports/handoffs/FT-TASK-0001-preview.md
 ```
+
+Перевести task в следующий статус и пересчитать dashboard counters:
+
+```bash
+python3 template-repo/scripts/update-task-status.py \
+  --registry template-repo/template/.chatgpt/task-registry.yaml \
+  --dashboard template-repo/template/.chatgpt/project-lifecycle-dashboard.yaml \
+  --task-id FT-TASK-0001 \
+  --status ready_for_handoff \
+  --reason "Task route is clear and handoff can be generated." \
+  --sync-dashboard \
+  --write
+```
+
+Без `--write` команда работает как dry-run. Для `verified` нужен `--confirm-verified`, а для evidence-required статусов нужен `--evidence` или `--accepted-reason`.
 
 ## Advanced automation flow
 
