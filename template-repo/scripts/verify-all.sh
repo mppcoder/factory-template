@@ -754,6 +754,64 @@ YAML
   rm -rf "$tmp_dir"
 }
 
+run_downstream_task_control_materialization_smoke() {
+  local tmp_dir
+  tmp_dir="$(mktemp -d)"
+  (
+    cd "$tmp_dir"
+    printf 'UTC Verify Smoke\nutc-verify-smoke\ngreenfield-product\ngreenfield\nfeature\ncodex-led\n' | \
+      FACTORY_REGISTRY_MODE=skip "$ROOT/template-repo/launcher.sh" >/dev/null
+    cd utc-verify-smoke
+
+    test -f ".chatgpt/task-registry.yaml"
+    test -f "scripts/task_control_paths.py"
+    test -f ".github/ISSUE_TEMPLATE/feature.yml"
+    test -f ".github/ISSUE_TEMPLATE/downstream-feedback.yml"
+    test -f "docs/operator/universal-task-control.md"
+    test -d "reports/handoffs"
+    test -d "reports/release"
+
+    python3 scripts/validate-task-registry.py
+    python3 scripts/allocate-task-id.py > "$tmp_dir/allocate-dry-run.txt"
+    grep -q "next_task_id=FT-TASK-0002" "$tmp_dir/allocate-dry-run.txt"
+    grep -q "dry_run=true" "$tmp_dir/allocate-dry-run.txt"
+
+    python3 scripts/allocate-task-id.py \
+      --append-draft \
+      --title "Downstream verify task" \
+      --goal "Проверить generated Universal Task Control quick smoke." \
+      --task-class docs \
+      --source-kind smoke \
+      --source-ref verify-all
+    python3 scripts/validate-task-registry.py
+    python3 scripts/update-task-status.py \
+      --task-id FT-TASK-0002 \
+      --status ready_for_handoff \
+      --reason "Task route is clear for downstream quick smoke." \
+      --sync-dashboard \
+      --write
+    python3 scripts/preview-task-handoff.py \
+      --task-id FT-TASK-0002 \
+      --output reports/handoffs/FT-TASK-0002-preview.md
+    python3 scripts/prepare-task-pack.py \
+      --task-id FT-TASK-0002 \
+      --mark-ready-for-codex \
+      --sync-dashboard \
+      --write
+    python3 scripts/validate-codex-task-handoff.py reports/handoffs/FT-TASK-0002-codex-handoff.md
+    python3 scripts/validate-task-registry.py
+    python3 scripts/render-task-queue.py --output reports/task-queue.md
+    python3 scripts/validate-project-lifecycle-dashboard.py .chatgpt/project-lifecycle-dashboard.yaml
+
+    grep -q 'registry: `.chatgpt/task-registry.yaml`' reports/task-queue.md
+    grep -q "python3 scripts/prepare-task-pack.py --registry .chatgpt/task-registry.yaml" reports/task-queue.md
+    grep -q "registry_path: .chatgpt/task-registry.yaml" .chatgpt/project-lifecycle-dashboard.yaml
+    grep -q "ready_for_codex: 1" .chatgpt/project-lifecycle-dashboard.yaml
+    grep -q "sanitized upstream feedback" .github/ISSUE_TEMPLATE/downstream-feedback.yml
+  )
+  rm -rf "$tmp_dir"
+}
+
 run_standards_navigator_smoke() {
   python3 "$ROOT/template-repo/scripts/validate-standards-gates.py" \
     "$ROOT/template-repo/template/.chatgpt/standards-gates.yaml"
@@ -889,6 +947,7 @@ run_quick() {
   run_step "plan6-productization-smoke" run_plan6_productization_smoke
   run_step "project-lifecycle-dashboard-smoke" run_project_lifecycle_dashboard_smoke
   run_step "universal-task-control-smoke" run_universal_task_control_smoke
+  run_step "downstream-task-control-materialization-smoke" run_downstream_task_control_materialization_smoke
   if [[ -f "$ROOT/.chatgpt/handoff-implementation-register.yaml" ]]; then
     run_step "validate-root-handoff-implementation-register" python3 "$ROOT/template-repo/scripts/validate-handoff-implementation-register.py" "$ROOT/.chatgpt/handoff-implementation-register.yaml"
   fi
