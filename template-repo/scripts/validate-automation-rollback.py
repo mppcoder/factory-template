@@ -26,10 +26,14 @@ def main() -> int:
         "failed run",
         "bad branch",
         "bad PR",
-        "label reset",
-        "task status reset",
+        "wrong labels",
+        "wrong task status",
+        "failed deploy",
+        "bad public submit",
+        "security false positive",
         "run.yaml correction",
         "no main rewrite",
+        "destructive cleanup",
     ]:
         if marker not in text:
             fail(f"missing rollback marker: {marker}")
@@ -51,7 +55,8 @@ def main() -> int:
             stderr=subprocess.PIPE,
             check=False,
         )
-        if proc.returncode != 0 or "no main rewrite" not in out.read_text(encoding="utf-8"):
+        generated = out.read_text(encoding="utf-8") if out.exists() else ""
+        if proc.returncode != 0 or "no main rewrite" not in generated or "git push --force" in generated:
             fail(proc.stderr or "rollback helper failed")
     print("validate-automation-rollback=ok")
     return 0

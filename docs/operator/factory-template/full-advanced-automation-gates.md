@@ -40,6 +40,13 @@ Full automation is not enabled. This document defines the gates and refusal boun
 Supporting hardening docs:
 - `docs/operator/factory-template/issue-autofix-permission-model.md`;
 - `docs/operator/factory-template/worktree-isolation-policy.md`;
+- `docs/operator/factory-template/worktree-manager.md`;
 - `docs/operator/factory-template/automation-audit-log.md`;
 - `docs/operator/factory-template/automation-rollback.md`;
+- `docs/operator/factory-template/required-human-review-policy.md`;
+- `docs/operator/factory-template/automation-approval.md`;
+- `docs/operator/factory-template/auto-merge-gate.md`;
+- `docs/operator/factory-template/production-deploy-gate.md`;
+- `docs/operator/factory-template/security-issue-gate.md`;
+- `docs/operator/factory-template/public-submit-gate.md`;
 - `docs/operator/factory-template/curator-promotion-flow.md`.

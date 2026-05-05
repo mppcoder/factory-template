@@ -17,6 +17,8 @@
 - `verify-all quick` includes advanced automation validators for issue support, workflow spec, bounded runner, curator and gates.
 - Advanced automation hardening adds fixture-driven issue-autofix dry-run proof, label/trust validation, worktree isolation policy, append-only audit ledger, rollback policy, curator promotion flow and downstream sync guidance.
 - `verify-all quick` now includes issue-autofix synthetic smoke plus validators for labels, worktree isolation, automation ledger, rollback and curator promotion.
+- Gated full autonomous mode substrate adds worktree manager, permission enforcement, separate approvals, hash-chain audit ledger, rollback proof, required human review policy and disabled-by-default gates for auto-merge, production deploy, security issue autofix and public external submit.
+- `verify-all quick` now includes safe fixture validators for worktree manager, permission model, approvals, required human review, auto-merge, production deploy, security and public submit gates.
 
 ## 2.5.8
 - `WINDOWS_INSTALL_LATEST.md` now preserves the executable automation boundary.

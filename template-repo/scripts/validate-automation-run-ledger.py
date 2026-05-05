@@ -9,15 +9,23 @@ from pathlib import Path
 
 
 REQUIRED_FIELDS = {
+    "run_id",
+    "parent_run_id",
     "issue_or_task_id",
     "trigger",
     "actor",
-    "gate_result",
+    "permission_decision",
+    "approvals",
+    "worktree",
     "handoff_path",
     "branch",
+    "commands",
     "launcher_command",
-    "verification_commands_results",
+    "verification",
     "pr_url",
+    "deploy_status",
+    "public_submit_status",
+    "rollback_plan",
     "blockers",
     "final_status",
     "timestamp_utc",
@@ -42,8 +50,8 @@ def main() -> int:
     for marker in sorted(REQUIRED_FIELDS - {"timestamp_utc"}):
         if marker not in docs:
             fail(f"ledger field missing from docs: {marker}")
-    if "no secrets" not in docs or "append-only" not in docs:
-        fail("ledger docs must state append-only and no secrets")
+    if "no secrets" not in docs or "append-only" not in docs or "hash chain" not in docs:
+        fail("ledger docs must state append-only, hash chain and no secrets")
 
     with tempfile.TemporaryDirectory() as tmp_raw:
         ledger = Path(tmp_raw) / "ledger.jsonl"
@@ -86,6 +94,39 @@ def main() -> int:
             fail("ledger entry missing fields: " + ", ".join(missing))
         if "API_KEY=" in line or "password=" in line:
             fail("ledger contains secret-like value")
+        proc2 = subprocess.run(
+            [
+                sys.executable,
+                str((root / "template-repo/scripts/automation_run_ledger.py").resolve()),
+                "--ledger",
+                str(ledger),
+                "--issue",
+                "102",
+                "--trigger",
+                "validator-smoke-2",
+                "--actor",
+                "maintainer",
+                "--gate-result",
+                "eligible",
+                "--final-status",
+                "dry_run_complete",
+            ],
+            text=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            check=False,
+        )
+        if proc2.returncode != 0:
+            fail(proc2.stderr or "second ledger helper failed")
+        valid = subprocess.run(
+            [sys.executable, str((root / "template-repo/scripts/automation_run_ledger.py").resolve()), "--ledger", str(ledger), "validate"],
+            text=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            check=False,
+        )
+        if valid.returncode != 0:
+            fail(valid.stderr or "hash chain validation failed")
     print("validate-automation-run-ledger=ok")
     return 0
 

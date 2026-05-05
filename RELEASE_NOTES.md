@@ -10,6 +10,8 @@ Advanced automation increment: поверх Universal Task Control добавл�
 
 Advanced automation hardening increment: добавлены synthetic/local issue-autofix dry-run proof, permission/label trust model, worktree isolation policy, append-only audit ledger, rollback recovery policy, curator promotion path, downstream sync package и final safety/readiness reports без включения full autonomous mode по умолчанию.
 
+Gated full autonomous mode increment: добавлен dry-run-first substrate для worktree manager, bounded parallel runner proof, permission enforcement, separate approval layer, hardened audit ledger, rollback proof, required human review policy и disabled-by-default gates для auto-merge, production deploy, security issue autofix и public external submit.
+
 ### Что вошло
 
 - `task-registry.yaml`, allocator, issue bridge, handoff generator, handoff validator, preview/prepare/status/queue commands.
@@ -30,6 +32,7 @@ Advanced automation hardening increment: добавлены synthetic/local issu
 - `issue-autofix-smoke.py` proves gate -> handoff -> `run.yaml` -> bounded runner dry-run -> ledger without live GitHub mutation.
 - Permission/label model, worktree isolation, audit ledger, rollback and curator promotion policies are documented for root and downstream-generated surfaces where applicable.
 - New validators cover labels/trust model, worktree isolation, ledger, rollback and curator promotion; `verify-all quick` runs them.
+- New validators cover worktree manager, permission model enforcement, automation approvals, required human review, auto-merge gate, production deploy gate, security issue gate and public submit gate; `verify-all quick` runs only safe fixture/temp-dir checks.
 
 ### Что проверять
 

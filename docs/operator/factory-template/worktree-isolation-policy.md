@@ -21,7 +21,7 @@ Parallel execution requires worktree per issue/task before it can be enabled. Ea
 
 ## Refusal
 
-The bounded runner refuses `--max-concurrency > 1` until worktree isolation is implemented and tested. Parallel execution is refused without that isolation.
+The bounded runner refuses `--max-concurrency > 1` until worktree isolation is implemented and tested. parallel execution is refused without that isolation.
 
 ## Cleanup policy
 

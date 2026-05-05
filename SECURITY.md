@@ -16,6 +16,8 @@
 
 Если private reporting недоступен, откройте минимальный public issue без sensitive details и попросите secure follow-up channel.
 
+Public security issue autofix refused: public issues may only trigger safe refusal and private-channel guidance. Any security fix automation requires a private report channel, explicit `security-fix` approval, sanitized handoff, no public logs and human review.
+
 ## Целевые сроки ответа
 
 - Initial triage: в течение 3 business days.
