@@ -5,7 +5,7 @@ labels: ["task:curator", "needs-triage"]
 body:
   - type: markdown
     attributes:
-      value: "Curator proposal должен быть repo-reviewed: никаких скрытых self-learning изменений вне repo artifacts."
+      value: "Это локальная curator-задача текущего repo. Curator proposal должен быть repo-reviewed: никаких скрытых self-learning изменений вне repo artifacts."
   - type: textarea
     id: repeated_pattern
     attributes:

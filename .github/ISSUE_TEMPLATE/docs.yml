@@ -5,7 +5,7 @@ labels: ["task:docs", "needs-triage"]
 body:
   - type: markdown
     attributes:
-      value: "Пишите простыми словами: что непонятно сейчас и какое объяснение нужно."
+      value: "Это локальная docs-задача текущего repo. Пишите простыми словами: что непонятно сейчас и какое объяснение нужно."
   - type: textarea
     id: confusing_section
     attributes:

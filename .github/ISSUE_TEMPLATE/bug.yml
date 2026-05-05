@@ -6,6 +6,7 @@ body:
   - type: markdown
     attributes:
       value: |
+        Это локальная задача текущего repo. Она не отправляет данные upstream в factory-template сама по себе.
         Опишите проблему простыми словами. Не вставляйте секреты, токены, пароли, private keys, приватные URL или необработанные приватные логи.
   - type: textarea
     id: symptom

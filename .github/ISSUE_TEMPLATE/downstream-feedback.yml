@@ -7,6 +7,8 @@ body:
     attributes:
       value: |
         Внешние пользователи не должны загружать секреты, private logs, приватные repo URLs или данные клиентов.
+        Если вы работаете в generated project, обычные Bug/Feature/Docs формы являются локальными задачами этого repo.
+        Эту форму используйте только для сознательной подготовки sanitized upstream feedback в factory-template.
         Публичная отправка downstream-feedback требует явного review и согласия. По умолчанию готовьте отредактированный draft.
   - type: dropdown
     id: downstream_project_type

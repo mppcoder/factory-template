@@ -5,7 +5,7 @@ labels: ["task:audit", "needs-triage"]
 body:
   - type: markdown
     attributes:
-      value: "Audit не означает compliance/certification claim. Это repo evidence review и список рисков/выводов."
+      value: "Это локальная audit-задача текущего repo. Audit не означает compliance/certification claim. Это repo evidence review и список рисков/выводов."
   - type: textarea
     id: audit_scope
     attributes:

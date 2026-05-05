@@ -5,7 +5,7 @@ labels: ["task:release", "needs-triage"]
 body:
   - type: markdown
     attributes:
-      value: "Release-задачи могут требовать review. Не публикуйте секреты, приватные ссылки и raw production logs."
+      value: "Это локальная release-задача текущего repo. Release-задачи могут требовать review. Не публикуйте секреты, приватные ссылки и raw production logs."
   - type: input
     id: release_target
     attributes:

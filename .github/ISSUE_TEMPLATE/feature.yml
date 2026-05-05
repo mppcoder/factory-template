@@ -5,7 +5,7 @@ labels: ["task:feature", "needs-triage"]
 body:
   - type: markdown
     attributes:
-      value: "Опишите желаемый результат. Если приводите примеры из реального проекта, заранее удалите приватные данные."
+      value: "Это локальная задача текущего repo, не upstream report в factory-template. Опишите желаемый результат. Если приводите примеры из реального проекта, заранее удалите приватные данные."
   - type: textarea
     id: goal
     attributes:
