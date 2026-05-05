@@ -115,6 +115,18 @@ Executable routing layer: named profiles, launcher scripts, Codex picker, Codex 
 
 ## Repo-native task commands
 
+Минимальный lifecycle для одной задачи:
+
+1. `draft` - задача только создана или импортирована.
+2. `ready_for_handoff` - route понятен, можно готовить preview/handoff.
+3. `ready_for_codex` - handoff сгенерирован и валидирован, но Codex еще не запущен.
+4. `codex_running` - задача выполняется в Codex session.
+5. `implemented` или `verification_pending` - изменения сделаны, evidence еще проверяется.
+6. `human_review` - нужен человек: review, секрет, consent, deploy approval или другой boundary.
+7. `verified` - проверки и evidence есть, задача закрыта.
+
+Не ставьте `verified`, `implemented`, `verification_pending`, `human_review` или `archived` без `evidence` или `accepted_reason`. Если нужен внешний пользовательский шаг, явно заполните `human_boundary.external_user_action` и `next_action`.
+
 Посмотреть следующий task id без записи:
 
 ```bash
@@ -196,6 +208,18 @@ python3 template-repo/scripts/render-task-queue.py \
   --registry template-repo/template/.chatgpt/task-registry.yaml \
   --output reports/task-queue.md
 ```
+
+Безопасная дорожка для оператора:
+
+```bash
+python3 template-repo/scripts/validate-task-registry.py template-repo/template/.chatgpt/task-registry.yaml
+python3 template-repo/scripts/preview-task-handoff.py --registry template-repo/template/.chatgpt/task-registry.yaml --task-id FT-TASK-0001 --output reports/handoffs/FT-TASK-0001-preview.md
+python3 template-repo/scripts/prepare-task-pack.py --registry template-repo/template/.chatgpt/task-registry.yaml --dashboard template-repo/template/.chatgpt/project-lifecycle-dashboard.yaml --task-id FT-TASK-0001
+python3 template-repo/scripts/prepare-task-pack.py --registry template-repo/template/.chatgpt/task-registry.yaml --dashboard template-repo/template/.chatgpt/project-lifecycle-dashboard.yaml --task-id FT-TASK-0001 --mark-ready-for-codex --sync-dashboard --write
+python3 template-repo/scripts/render-task-queue.py --registry template-repo/template/.chatgpt/task-registry.yaml --output reports/task-queue.md
+```
+
+Первый `prepare-task-pack.py` без `--write` показывает planned commands и не меняет файлы. Второй вызов с `--write` записывает preview/handoff, валидирует handoff и только при явном `--mark-ready-for-codex` переводит задачу в `ready_for_codex`.
 
 ## Advanced automation flow
 

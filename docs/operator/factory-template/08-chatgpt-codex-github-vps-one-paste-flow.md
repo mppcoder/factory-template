@@ -147,6 +147,137 @@ git status --short --branch
 
 Если не получилось: не делайте merge/deploy/secret action, пока не понятно, что именно подтверждается.
 
+## Сценарий 1.5. Repo-native task lifecycle без GitHub Issue
+
+Этот сценарий нужен, когда задача уже понятна и вы хотите вести ее через `.chatgpt/task-registry.yaml`, но пока не создаете GitHub Issue.
+
+### 1. Посмотреть следующий номер
+
+Что делаем: проверяем, какой `FT-TASK-NNNN` будет следующим.
+
+Где выполняем: terminal в repo на VPS.
+
+Что вставить или какую команду выполнить:
+
+```bash
+python3 template-repo/scripts/allocate-task-id.py \
+  --registry template-repo/template/.chatgpt/task-registry.yaml
+```
+
+Ожидаемый результат: команда печатает следующий id и `dry_run=true`.
+
+Если не получилось: сначала проверьте, что registry валиден:
+
+```bash
+python3 template-repo/scripts/validate-task-registry.py template-repo/template/.chatgpt/task-registry.yaml
+```
+
+### 2. Добавить draft task
+
+Что делаем: создаем запись задачи в registry.
+
+Где выполняем: terminal в repo на VPS.
+
+Что вставить или какую команду выполнить:
+
+```bash
+python3 template-repo/scripts/allocate-task-id.py \
+  --registry template-repo/template/.chatgpt/task-registry.yaml \
+  --append-draft \
+  --title "Add deployment checklist" \
+  --goal "Сделать короткий checklist перед deploy на VPS." \
+  --task-class docs \
+  --source-kind manual \
+  --source-ref ""
+```
+
+Ожидаемый результат: появляется новый `FT-TASK-NNNN`, а `next_task_number` увеличивается.
+
+Если не получилось: не правьте `FT-CH` или `FT-CX` counters. Для Codex task используется отдельный `FT-TASK`.
+
+### 3. Посмотреть preview
+
+Что делаем: смотрим будущий handoff path, route, dashboard counters и verification commands без запуска Codex.
+
+Где выполняем: terminal в repo на VPS.
+
+Что вставить или какую команду выполнить:
+
+```bash
+python3 template-repo/scripts/preview-task-handoff.py \
+  --registry template-repo/template/.chatgpt/task-registry.yaml \
+  --task-id FT-TASK-0002 \
+  --output reports/handoffs/FT-TASK-0002-preview.md
+```
+
+Ожидаемый результат: preview markdown создан, Codex не запускался.
+
+Если не получилось: проверьте, что task id существует и route содержит `handoff_shape: codex-task-handoff`.
+
+### 4. Подготовить handoff
+
+Что делаем: генерируем Codex-ready handoff и валидируем его.
+
+Где выполняем: terminal в repo на VPS.
+
+Что вставить или какую команду выполнить:
+
+```bash
+python3 template-repo/scripts/prepare-task-pack.py \
+  --registry template-repo/template/.chatgpt/task-registry.yaml \
+  --dashboard template-repo/template/.chatgpt/project-lifecycle-dashboard.yaml \
+  --task-id FT-TASK-0002 \
+  --write
+```
+
+Ожидаемый результат: preview и handoff записаны, handoff прошел validator.
+
+Если не получилось: запустите validator напрямую и сохраните sanitized ошибку:
+
+```bash
+python3 template-repo/scripts/validate-codex-task-handoff.py reports/handoffs/FT-TASK-0002-codex-handoff.md
+```
+
+### 5. Разрешить запуск в Codex
+
+Что делаем: явно переводим задачу в `ready_for_codex` и пересчитываем dashboard.
+
+Где выполняем: terminal в repo на VPS.
+
+Что вставить или какую команду выполнить:
+
+```bash
+python3 template-repo/scripts/prepare-task-pack.py \
+  --registry template-repo/template/.chatgpt/task-registry.yaml \
+  --dashboard template-repo/template/.chatgpt/project-lifecycle-dashboard.yaml \
+  --task-id FT-TASK-0002 \
+  --mark-ready-for-codex \
+  --sync-dashboard \
+  --write
+```
+
+Ожидаемый результат: task status стал `ready_for_codex`, dashboard counters обновлены.
+
+Если не получилось: не ставьте зеленый статус вручную. Сначала исправьте validator или добавьте понятный blocker.
+
+### 6. Показать очередь
+
+Что делаем: рендерим read-only список задач для оператора.
+
+Где выполняем: terminal в repo на VPS.
+
+Что вставить или какую команду выполнить:
+
+```bash
+python3 template-repo/scripts/render-task-queue.py \
+  --registry template-repo/template/.chatgpt/task-registry.yaml \
+  --output reports/task-queue.md
+```
+
+Ожидаемый результат: `reports/task-queue.md` показывает draft/ready/running/human-review задачи и команды подготовки.
+
+Если не получилось: запустите `validate-task-registry.py`; очередь не должна скрывать невалидный registry.
+
 ## Сценарий 2. Задача начинается в GitHub Issue
 
 Что делаем: создаем issue через подходящий template: bug, feature, docs, research, audit, release, downstream feedback или curator proposal.
