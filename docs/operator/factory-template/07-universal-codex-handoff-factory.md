@@ -44,6 +44,7 @@ MVP добавляет repo-native основу для всех Codex-задач
 - `template-repo/scripts/preview-task-handoff.py` - safe preview route, handoff path, dashboard counters и verification commands до запуска Codex;
 - `template-repo/scripts/update-task-status.py` - безопасный status transition для `FT-TASK` с optional dashboard counter sync;
 - `template-repo/scripts/prepare-task-pack.py` - один wrapper для preview, handoff generation, handoff validation и optional `ready_for_codex`;
+- `template-repo/scripts/render-task-queue.py` - read-only Markdown очередь всех `FT-TASK` с командами подготовки;
 - `template-repo/scripts/task-to-codex-handoff.py` - генератор одного copy-paste Codex handoff;
 - `template-repo/scripts/validate-codex-task-handoff.py` - проверка generated handoff;
 - `.github/ISSUE_TEMPLATE/*.yml` - GitHub Issue Forms для основных task classes;
@@ -186,6 +187,14 @@ python3 template-repo/scripts/prepare-task-pack.py \
   --mark-ready-for-codex \
   --sync-dashboard \
   --write
+```
+
+Показать очередь всех task:
+
+```bash
+python3 template-repo/scripts/render-task-queue.py \
+  --registry template-repo/template/.chatgpt/task-registry.yaml \
+  --output reports/task-queue.md
 ```
 
 ## Advanced automation flow

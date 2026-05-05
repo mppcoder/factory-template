@@ -194,6 +194,8 @@ universal_task_control:
     - template-repo/scripts/preview-task-handoff.py
     - template-repo/scripts/update-task-status.py
     - template-repo/scripts/prepare-task-pack.py
+    - template-repo/scripts/render-task-queue.py
+    - reports/task-queue.md
 
 module_readiness:
   selected_profile: solo_lightweight
