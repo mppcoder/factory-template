@@ -32,6 +32,8 @@
 8. `06-project-lifecycle-dashboard.md`
 9. `07-beginner-visual-dashboard-ux.md`
 10. `07-AGENTS-factory-template.md`
+11. `07-universal-codex-handoff-factory.md`
+12. `08-chatgpt-codex-github-vps-one-paste-flow.md`
 
 ## Назначение
 

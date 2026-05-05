@@ -1,0 +1,71 @@
+name: "Release / выпуск"
+description: "Подготовить выпуск, changelog, release notes или readiness evidence."
+title: "[Release]: "
+labels: ["task:release", "needs-triage"]
+body:
+  - type: markdown
+    attributes:
+      value: "Release-задачи могут требовать review. Не публикуйте секреты, приватные ссылки и raw production logs."
+  - type: input
+    id: release_target
+    attributes:
+      label: "Цель релиза"
+      placeholder: "Например: 2.6.0 MVP или patch release"
+    validations:
+      required: true
+  - type: textarea
+    id: artifacts
+    attributes:
+      label: "Артефакты"
+      description: "Что нужно обновить: changelog, release notes, scorecard, docs, tags."
+    validations:
+      required: true
+  - type: textarea
+    id: verification_evidence
+    attributes:
+      label: "Verification evidence"
+      description: "Какие проверки уже зеленые или должны быть запущены?"
+    validations:
+      required: true
+  - type: textarea
+    id: changelog_release_notes
+    attributes:
+      label: "Changelog / release notes"
+      description: "Что должно попасть в release-facing текст?"
+  - type: textarea
+    id: blockers
+    attributes:
+      label: "Блокеры"
+      description: "Что мешает выпуску?"
+  - type: dropdown
+    id: affected_layer
+    attributes:
+      label: "Затронутый слой"
+      options:
+        - template-repo
+        - generated project
+        - GitHub workflow
+        - VPS/runtime
+        - docs/runbook
+        - unknown
+    validations:
+      required: true
+  - type: dropdown
+    id: codex_involvement
+    attributes:
+      label: "Ожидаемое участие Codex"
+      options:
+        - implementation
+        - review
+        - handoff only
+        - research
+        - no Codex
+    validations:
+      required: true
+  - type: checkboxes
+    id: privacy
+    attributes:
+      label: "Безопасность"
+      options:
+        - label: "Я проверил(а), что в issue нет секретов, токенов, паролей или private keys."
+          required: true

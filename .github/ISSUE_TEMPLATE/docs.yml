@@ -1,0 +1,78 @@
+name: "Docs / документация"
+description: "Улучшить объяснение, runbook, пример или onboarding."
+title: "[Docs]: "
+labels: ["task:docs", "needs-triage"]
+body:
+  - type: markdown
+    attributes:
+      value: "Пишите простыми словами: что непонятно сейчас и какое объяснение нужно."
+  - type: textarea
+    id: confusing_section
+    attributes:
+      label: "Что непонятно"
+      description: "Раздел, шаг, команда или формулировка, которая сбивает."
+    validations:
+      required: true
+  - type: textarea
+    id: desired_explanation
+    attributes:
+      label: "Какое объяснение нужно"
+      description: "Что документация должна сказать пользователю?"
+    validations:
+      required: true
+  - type: dropdown
+    id: target_audience
+    attributes:
+      label: "Для кого"
+      options:
+        - beginner
+        - operator
+        - Codex
+        - maintainer
+        - downstream user
+    validations:
+      required: true
+  - type: textarea
+    id: example_needed
+    attributes:
+      label: "Нужен ли пример"
+      description: "Команда, handoff, YAML, скриншот или короткий сценарий."
+  - type: input
+    id: source_path
+    attributes:
+      label: "Путь к исходному разделу"
+      placeholder: "Например: docs/operator/factory-template/README.md"
+  - type: dropdown
+    id: affected_layer
+    attributes:
+      label: "Затронутый слой"
+      options:
+        - docs/runbook
+        - template-repo
+        - generated project
+        - ChatGPT handoff
+        - Codex execution
+        - GitHub workflow
+        - VPS/runtime
+        - unknown
+    validations:
+      required: true
+  - type: dropdown
+    id: codex_involvement
+    attributes:
+      label: "Ожидаемое участие Codex"
+      options:
+        - implementation
+        - handoff only
+        - review
+        - research
+        - no Codex
+    validations:
+      required: true
+  - type: checkboxes
+    id: privacy
+    attributes:
+      label: "Безопасность"
+      options:
+        - label: "Я проверил(а), что в issue нет секретов, токенов, паролей или private keys."
+          required: true

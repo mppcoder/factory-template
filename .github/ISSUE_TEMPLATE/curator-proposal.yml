@@ -1,0 +1,77 @@
+name: "Curator proposal / предложение к Factory Curator"
+description: "Предложить reusable skill, runbook, validator или learning loop improvement."
+title: "[Curator]: "
+labels: ["task:curator", "needs-triage"]
+body:
+  - type: markdown
+    attributes:
+      value: "Curator proposal должен быть repo-reviewed: никаких скрытых self-learning изменений вне repo artifacts."
+  - type: textarea
+    id: repeated_pattern
+    attributes:
+      label: "Повторяющийся паттерн"
+      description: "Что часто повторяется в задачах, ошибках или handoff?"
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: "Предлагаемый reusable artifact"
+      description: "Skill, runbook, validator, issue template, checklist или dashboard rule."
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: "Evidence"
+      description: "Какие repo-факты подтверждают, что это повторяется?"
+    validations:
+      required: true
+  - type: textarea
+    id: expected_benefit
+    attributes:
+      label: "Ожидаемая польза"
+      description: "Что станет проще, безопаснее или понятнее?"
+    validations:
+      required: true
+  - type: textarea
+    id: risk
+    attributes:
+      label: "Риск"
+      description: "Как избежать over-automation, hidden learning или privacy leak?"
+    validations:
+      required: true
+  - type: dropdown
+    id: affected_layer
+    attributes:
+      label: "Затронутый слой"
+      options:
+        - template-repo
+        - generated project
+        - ChatGPT handoff
+        - Codex execution
+        - GitHub workflow
+        - VPS/runtime
+        - docs/runbook
+        - unknown
+    validations:
+      required: true
+  - type: dropdown
+    id: codex_involvement
+    attributes:
+      label: "Ожидаемое участие Codex"
+      options:
+        - research
+        - review
+        - implementation
+        - handoff only
+        - no Codex
+    validations:
+      required: true
+  - type: checkboxes
+    id: privacy
+    attributes:
+      label: "Безопасность"
+      options:
+        - label: "Я проверил(а), что в issue нет секретов, токенов, паролей или private keys."
+          required: true

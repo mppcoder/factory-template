@@ -242,6 +242,21 @@ def module_readiness_chain_text(data: dict[str, Any]) -> str:
     return wrap_chain(parts)
 
 
+def universal_task_line(data: dict[str, Any]) -> str:
+    control = data.get("universal_task_control", {})
+    if not isinstance(control, dict):
+        return "Tasks: 🕒 pending/unknown"
+    status = str(control.get("status") or "pending")
+    ready_handoff = control.get("ready_for_handoff", "unknown")
+    ready_codex = control.get("ready_for_codex", "unknown")
+    running = control.get("codex_running", "unknown")
+    review = control.get("human_review", "unknown")
+    return wrap_card_line(
+        f"Tasks: {status_icon(status)} {ready_handoff} ready-for-handoff -> "
+        f"{ready_codex} ready-for-codex -> {running} running -> {review} human-review"
+    )
+
+
 def read_chat_handoff_index(root: Path, dashboard_path: Path) -> dict[str, Any]:
     local = read_yaml(dashboard_path.parent / "chat-handoff-index.yaml")
     local_items = local.get("items") if isinstance(local, dict) else []
@@ -508,6 +523,7 @@ def render_chatgpt_card(data: dict[str, Any], root: Path, dashboard_path: Path) 
         "PROJECT_NAME": project["name"] or "unknown",
         "LIFECYCLE_CHAIN": lifecycle_chain_text(data),
         "MODULE_READINESS_CHAIN": module_readiness_chain_text(data),
+        "UNIVERSAL_TASK_LINE": universal_task_line(data),
         "ACTIVE_HANDOFF_LINES": active_work_lines_text(
             context.get("chat_handoff_index", {}),
             context.get("codex_work_index", {}),
@@ -735,6 +751,44 @@ def render_handoff_implementation_control(data: dict[str, Any], context: dict[st
     return lines
 
 
+def render_universal_task_control(data: dict[str, Any]) -> list[str]:
+    control = data.get("universal_task_control", {})
+    if not isinstance(control, dict):
+        return [
+            "## Универсальный контроль задач",
+            "",
+            "- status: `pending/unknown`",
+            "- registry: not configured",
+            "- next action: add `universal_task_control` after task registry is enabled",
+        ]
+    status = str(control.get("status") or "pending/unknown")
+    counts = [
+        ("open", control.get("open_tasks", "unknown")),
+        ("ready_for_handoff", control.get("ready_for_handoff", "unknown")),
+        ("ready_for_codex", control.get("ready_for_codex", "unknown")),
+        ("codex_running", control.get("codex_running", "unknown")),
+        ("human_review", control.get("human_review", "unknown")),
+        ("blocked", control.get("blocked", "unknown")),
+        ("verified", control.get("verified", "unknown")),
+    ]
+    lines = [
+        "## Универсальный контроль задач",
+        "",
+        f"- status: `{status}`",
+        f"- registry: `{control.get('registry_path', '')}`",
+        f"- compact line: {universal_task_line(data)}",
+        f"- next action: {control.get('next_action', '')}",
+        f"- fallback: {control.get('fallback_next_action', '')}",
+        "",
+        "| Counter | Value |",
+        "|---|---|",
+    ]
+    for key, value in counts:
+        lines.append(f"| `{key}` | `{value}` |")
+    lines.extend(["", "### Подтверждения", "", bullet(control.get("evidence", []) or [], empty="- evidence пока нет")])
+    return lines
+
+
 def render(data: dict[str, Any], root: Path, dashboard_path: Path) -> str:
     context = optional_context(root, dashboard_path)
     project = resolved_project(data, context)
@@ -850,6 +904,8 @@ def render(data: dict[str, Any], root: Path, dashboard_path: Path) -> str:
             f"- parent handoff: `{value(orchestration, 'parent_handoff', 'id') or cockpit_parent.get('id', '')}` `{value(orchestration, 'parent_handoff', 'status') or cockpit_parent.get('status', '')}`",
             f"- selected profile/model/reasoning: `{orchestration.get('selected_profile') or cockpit_route.get('selected_profile', '')}` / `{orchestration.get('selected_model') or cockpit_route.get('selected_model', '')}` / `{orchestration.get('selected_reasoning_effort') or cockpit_route.get('selected_reasoning_effort', '')}`",
             f"- route boundary: {orchestration.get('route_explanation_boundary', '')}",
+            "",
+            *render_universal_task_control(data),
             "",
             *render_handoff_implementation_control(data, context),
             "",

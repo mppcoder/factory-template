@@ -1,0 +1,75 @@
+name: "Audit / проверка"
+description: "Проверить качество, безопасность, release readiness или архитектурный контур."
+title: "[Audit]: "
+labels: ["task:audit", "needs-triage"]
+body:
+  - type: markdown
+    attributes:
+      value: "Audit не означает compliance/certification claim. Это repo evidence review и список рисков/выводов."
+  - type: textarea
+    id: audit_scope
+    attributes:
+      label: "Scope проверки"
+      description: "Что именно проверяем?"
+    validations:
+      required: true
+  - type: textarea
+    id: risks
+    attributes:
+      label: "Какие риски важны"
+      description: "Например: false green, privacy leak, broken runbook, dashboard drift."
+    validations:
+      required: true
+  - type: textarea
+    id: evidence_required
+    attributes:
+      label: "Какие evidence нужны"
+      description: "Команды, отчеты, файлы, dashboard/card, issue/PR references."
+    validations:
+      required: true
+  - type: dropdown
+    id: output_format
+    attributes:
+      label: "Формат результата"
+      options:
+        - findings list
+        - markdown report
+        - issue comments
+        - dashboard update
+        - release checklist
+    validations:
+      required: true
+  - type: dropdown
+    id: affected_layer
+    attributes:
+      label: "Затронутый слой"
+      options:
+        - template-repo
+        - generated project
+        - ChatGPT handoff
+        - Codex execution
+        - GitHub workflow
+        - VPS/runtime
+        - docs/runbook
+        - unknown
+    validations:
+      required: true
+  - type: dropdown
+    id: codex_involvement
+    attributes:
+      label: "Ожидаемое участие Codex"
+      options:
+        - review
+        - research
+        - implementation
+        - handoff only
+        - no Codex
+    validations:
+      required: true
+  - type: checkboxes
+    id: privacy
+    attributes:
+      label: "Безопасность"
+      options:
+        - label: "Я проверил(а), что в issue нет секретов, токенов, паролей или private keys."
+          required: true

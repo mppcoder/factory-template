@@ -1,6 +1,6 @@
 # Панель жизненного цикла проекта / `project-lifecycle-dashboard`
 
-Generated UTC: `2026-04-29T15:54:23+00:00`
+Generated UTC: `2026-05-05T13:04:27+00:00`
 Source: `/projects/factory-template/template-repo/template/.chatgpt/project-lifecycle-dashboard.yaml`
 
 ## Сейчас
@@ -63,8 +63,10 @@ Source: `/projects/factory-template/template-repo/template/.chatgpt/project-life
 
 ### Активные ChatGPT handoff-задачи
 
-✅ FT-CX-0007 chatgpt-first-answer-card-title: ✅ Codex-WORK → ✅ Codex OK →
-  ✅ Done
+✅ FT-CH-0010 release-package-updated-bootstrap: ✅ GPT-HO → ✅ Codex OK → ✅
+  Done
+✅ FT-CX-0008 chatgpt-title-reservation-gap: ✅ Codex-WORK → ✅ Codex OK → ✅
+  Done
 
 ### История ChatGPT handoff-задач
 
@@ -72,6 +74,8 @@ Source: `/projects/factory-template/template-repo/template/.chatgpt/project-life
 ⏸ FT-CH-0002 completion-report: ✅ GPT-HO → 🕒 Codex OK → ⏸ Done
 ⏸ FT-CH-0003 updates-monitor: ✅ GPT-HO → 🕒 Codex OK → ⏸ Superseded
 ⏸ FT-CH-0004 model-routing: ✅ GPT-HO → 🕒 Codex OK → ⏸ Done
+✅ FT-CH-0010 release-package-updated-bootstrap: ✅ GPT-HO → ✅ Codex OK → ✅
+  Done
 
 ### История Codex-доработок
 
@@ -85,12 +89,38 @@ Source: `/projects/factory-template/template-repo/template/.chatgpt/project-life
 ✅ FT-CX-0006 card-wrap-codex-numbering: ✅ Codex-WORK → ✅ Codex OK → ✅ Done
 ✅ FT-CX-0007 chatgpt-first-answer-card-title: ✅ Codex-WORK → ✅ Codex OK →
   ✅ Done
+✅ FT-CX-0008 chatgpt-title-reservation-gap: ✅ Codex-WORK → ✅ Codex OK → ✅
+  Done
 
 ## Передача и оркестрация
 
 - parent handoff: `p9-lifecycle-standards-navigator` `not_started`
 - selected profile/model/reasoning: `deep` / `gpt-5.5` / `high`
 - route boundary: Advisory layer показывает маршрут и handoff-текст, но не переключает model/profile/reasoning внутри уже открытой Codex-сессии; надежная executable boundary — новый task launch или ручной picker в новом чате.
+
+## Универсальный контроль задач
+
+- status: `in_progress`
+- registry: `template-repo/template/.chatgpt/task-registry.yaml`
+- compact line: Tasks: 🟡 0 ready-for-handoff -> 0 ready-for-codex -> 0 running -> 0
+  human-review
+- next action: Add first real tasks through task registry or GitHub issue bridge.
+- fallback: Keep using existing handoff implementation register until bridge is ready.
+
+| Counter | Value |
+|---|---|
+| `open` | `1` |
+| `ready_for_handoff` | `0` |
+| `ready_for_codex` | `0` |
+| `codex_running` | `0` |
+| `human_review` | `0` |
+| `blocked` | `0` |
+| `verified` | `0` |
+
+### Подтверждения
+
+- template-repo/template/.chatgpt/task-registry.yaml
+- template-repo/scripts/validate-task-registry.py
 
 ## Контроль реализации handoff / Handoff implementation control
 
@@ -150,7 +180,7 @@ Source: `/projects/factory-template/template-repo/template/.chatgpt/project-life
 - status: `pending`
 - preset: `starter`
 - operator source: `template-repo/scripts/operator-dashboard.py`
-- dry-run report present: `False`
+- dry-run report present: `True`
 - deploy report present: `False`
 - boundary: Runtime evidence может подтягиваться из operator-dashboard reports; dry-run/report evidence не является real deploy proof.
 

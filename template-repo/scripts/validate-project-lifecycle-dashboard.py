@@ -199,6 +199,16 @@ MODULE_SOURCE_REFS = {
     "software_update_governance",
 }
 FALSE_COMPLIANCE_RE = re.compile(r"(?i)\b(certified|certification|compliant|compliance)\b")
+UNIVERSAL_TASK_STATUSES = {
+    "pending",
+    "unknown",
+    "in_progress",
+    "blocked",
+    "passed",
+    "completed",
+    "verified",
+}
+UNIVERSAL_TASK_GREEN_STATUSES = {"passed", "completed", "verified"}
 
 
 def load_yaml(path: Path) -> dict[str, Any]:
@@ -514,6 +524,42 @@ def validate_handoff_implementation_control(item: Any, data: dict[str, Any], das
                 errors.append(f"handoff_implementation_control register invalid: {register_error}")
 
 
+def validate_universal_task_control(item: Any, dashboard_path: Path | None, errors: list[str]) -> None:
+    if item is None:
+        return
+    if not isinstance(item, dict):
+        errors.append("universal_task_control должен быть mapping")
+        return
+    status = str(item.get("status") or "unknown")
+    if status not in UNIVERSAL_TASK_STATUSES:
+        errors.append("universal_task_control.status неизвестен")
+    registry_path = str(item.get("registry_path") or "")
+    if not registry_path:
+        errors.append("universal_task_control.registry_path обязателен")
+    for key in [
+        "open_tasks",
+        "ready_for_handoff",
+        "ready_for_codex",
+        "codex_running",
+        "human_review",
+        "blocked",
+        "verified",
+    ]:
+        if key not in item or not isinstance(item.get(key), int) or item.get(key) < 0:
+            errors.append(f"universal_task_control.{key} должен быть non-negative integer")
+    if not str(item.get("next_action") or "").strip():
+        errors.append("universal_task_control.next_action обязателен")
+    if not str(item.get("fallback_next_action") or "").strip():
+        errors.append("universal_task_control.fallback_next_action обязателен")
+    evidence = item.get("evidence", [])
+    if evidence is not None and not isinstance(evidence, list):
+        errors.append("universal_task_control.evidence должен быть list")
+        evidence = []
+    accepted_reason = str(item.get("accepted_reason") or item.get("reason") or "").strip()
+    if status in UNIVERSAL_TASK_GREEN_STATUSES and not evidence and not accepted_reason:
+        errors.append("universal_task_control green status требует evidence или accepted_reason")
+
+
 def validate_module_readiness(item: Any, data: dict[str, Any], dashboard_path: Path | None, errors: list[str]) -> None:
     visual = data.get("beginner_visual_surfaces", {}) if isinstance(data.get("beginner_visual_surfaces"), dict) else {}
     chatgpt_card = visual.get("chatgpt_mini_card", {}) if isinstance(visual.get("chatgpt_mini_card"), dict) else {}
@@ -825,6 +871,7 @@ def validate_dashboard(data: dict[str, Any], dashboard_path: Path | None = None)
         errors.append("handoff_orchestration.route_explanation_boundary должен явно запрещать advisory auto-switch claim")
     validate_orchestration_execution_claims(orchestration, errors)
     validate_handoff_implementation_control(data.get("handoff_implementation_control"), data, dashboard_path, errors)
+    validate_universal_task_control(data.get("universal_task_control"), dashboard_path, errors)
     validate_module_readiness(data.get("module_readiness"), data, dashboard_path, errors)
     source_artifacts = data.get("source_artifacts", [])
     if isinstance(source_artifacts, list) and CHAT_HANDOFF_INDEX_ARTIFACT not in {str(source) for source in source_artifacts}:

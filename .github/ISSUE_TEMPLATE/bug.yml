@@ -1,0 +1,86 @@
+name: "Bug / ошибка"
+description: "Сообщить об ошибке, регрессии или неожиданном поведении."
+title: "[Bug]: "
+labels: ["task:bug", "needs-triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Опишите проблему простыми словами. Не вставляйте секреты, токены, пароли, private keys, приватные URL или необработанные приватные логи.
+  - type: textarea
+    id: symptom
+    attributes:
+      label: "Симптом"
+      description: "Что вы увидели?"
+      placeholder: "Например: проверка падает на шаге validate-task-registry."
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: "Ожидаемый результат"
+      description: "Как должно было быть?"
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: "Фактический результат"
+      description: "Что произошло на самом деле?"
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: "Шаги воспроизведения"
+      description: "Команды или действия, по которым ошибку можно повторить."
+      placeholder: |
+        1. Запустить ...
+        2. Открыть ...
+        3. Получить ошибку ...
+    validations:
+      required: true
+  - type: dropdown
+    id: affected_layer
+    attributes:
+      label: "Затронутый слой"
+      options:
+        - template-repo
+        - generated project
+        - ChatGPT handoff
+        - Codex execution
+        - GitHub workflow
+        - VPS/runtime
+        - docs/runbook
+        - unknown
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: "Evidence или контекст"
+      description: "Сокращенный вывод команды, путь к файлу, скриншот без секретов."
+  - type: input
+    id: version
+    attributes:
+      label: "Версия / commit / окружение"
+      placeholder: "Например: factory-template 2.5.x, commit abc123, Ubuntu VPS"
+  - type: dropdown
+    id: codex_involvement
+    attributes:
+      label: "Ожидаемое участие Codex"
+      options:
+        - implementation
+        - handoff only
+        - review
+        - research
+        - no Codex
+    validations:
+      required: true
+  - type: checkboxes
+    id: redaction
+    attributes:
+      label: "Безопасность"
+      options:
+        - label: "Я проверил(а), что в issue нет секретов, токенов, паролей или private keys."
+          required: true

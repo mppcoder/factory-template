@@ -1,0 +1,77 @@
+name: "Downstream feedback / отзыв из боевого repo"
+description: "Сообщить проблему или потребность синхронизации из downstream-проекта."
+title: "[Downstream]: "
+labels: ["task:downstream-sync", "external-user-report", "needs-triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Внешние пользователи не должны загружать секреты, private logs, приватные repo URLs или данные клиентов.
+        Публичная отправка downstream-feedback требует явного review и согласия. По умолчанию готовьте отредактированный draft.
+  - type: dropdown
+    id: downstream_project_type
+    attributes:
+      label: "Тип downstream-проекта"
+      options:
+        - greenfield generated project
+        - brownfield with repo
+        - brownfield without repo
+        - factory-template fork
+        - unknown
+    validations:
+      required: true
+  - type: input
+    id: factory_version
+    attributes:
+      label: "Версия factory-template"
+      placeholder: "Например: 2.5.x или commit"
+  - type: textarea
+    id: problem_or_sync_need
+    attributes:
+      label: "Проблема или потребность синхронизации"
+      description: "Что нужно исправить, перенести или объяснить?"
+    validations:
+      required: true
+  - type: textarea
+    id: redacted_evidence
+    attributes:
+      label: "Отредактированное evidence"
+      description: "Только sanitized excerpts, без приватных логов и секретов."
+    validations:
+      required: true
+  - type: dropdown
+    id: affected_layer
+    attributes:
+      label: "Затронутый слой"
+      options:
+        - downstream template clone
+        - generated project
+        - ChatGPT handoff
+        - Codex execution
+        - GitHub workflow
+        - VPS/runtime
+        - docs/runbook
+        - unknown
+    validations:
+      required: true
+  - type: dropdown
+    id: codex_involvement
+    attributes:
+      label: "Ожидаемое участие Codex"
+      options:
+        - handoff only
+        - implementation
+        - review
+        - research
+        - no Codex
+    validations:
+      required: true
+  - type: checkboxes
+    id: consent
+    attributes:
+      label: "Согласие и редактирование"
+      options:
+        - label: "Я проверил(а), что в issue нет секретов, токенов, паролей, private keys, приватных логов или данных клиентов."
+          required: true
+        - label: "Я понимаю, что публичная отправка требует явного review и согласия."
+          required: true

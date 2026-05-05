@@ -1,0 +1,82 @@
+schema: factory-task-registry/v1
+project_code: FT
+description: Universal repo-native registry for ChatGPT, Codex, GitHub and scheduled tasks.
+next_task_number: 2
+task_id_policy:
+  canonical_format: FT-TASK-NNNN
+  source_of_truth: .chatgpt/task-registry.yaml
+  task_id_is_not_chat_id: true
+  task_id_is_not_codex_work_id: true
+allowed_classes:
+  - bug
+  - feature
+  - docs
+  - research
+  - audit
+  - refactor
+  - release
+  - maintenance
+  - downstream_sync
+  - curator
+allowed_statuses:
+  - draft
+  - needs_triage
+  - ready_for_handoff
+  - ready_for_codex
+  - codex_running
+  - implemented
+  - verification_pending
+  - human_review
+  - verified
+  - blocked
+  - superseded
+  - not_applicable
+  - archived
+tasks:
+  - task_id: FT-TASK-0001
+    title: Example universal Codex task
+    goal: "Показать минимальную структуру universal task, из которой можно собрать Codex handoff."
+    class: feature
+    priority: medium
+    status: draft
+    source:
+      kind: example
+      ref: ""
+    route:
+      selected_project_profile: factory-template self-improvement / automation-orchestration implementation
+      selected_scenario: template-repo/scenario-pack/00-master-router.md
+      pipeline_stage: implementation
+      handoff_allowed: true
+      handoff_shape: codex-task-handoff
+      selected_profile: deep
+      selected_reasoning_effort: high
+      selected_model: repo-configured; do not assume live auto-switch
+    execution:
+      preferred_surface: codex_app
+      allowed_surfaces:
+        - codex_app
+        - vscode_remote_ssh_codex_extension
+        - codex_cli
+        - codex_cloud
+        - symphony_like_runner
+      workspace_mode: repo_root_or_per_task_worktree
+    dependencies:
+      blocked_by: []
+      unlocks: []
+    artifacts_to_update:
+      - template-repo/template/.chatgpt/task-registry.yaml
+      - reports/handoffs/FT-TASK-0001-codex-handoff.md
+    outputs_required:
+      - codex_handoff
+      - verification_evidence
+      - dashboard_update
+      - closeout_summary
+    human_boundary:
+      requires_review: true
+      requires_secret: false
+      external_user_action: false
+    verification_commands:
+      - python3 template-repo/scripts/validate-task-registry.py template-repo/template/.chatgpt/task-registry.yaml
+      - python3 template-repo/scripts/validate-codex-task-handoff.py reports/handoffs/FT-TASK-0001-codex-handoff.md
+    evidence: []
+    next_action: Replace example task or create real task through allocator or bridge.
