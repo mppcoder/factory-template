@@ -1,6 +1,6 @@
-# Source map: Universal Task Control downstream materialization
+# Карта источников: downstream materialization Universal Task Control
 
-## Route receipt
+## Подтверждение маршрута
 
 - selected_project_profile: `factory-template self-improvement / downstream materialization`
 - selected_scenario: `template-repo/scenario-pack/00-master-router.md`
@@ -9,7 +9,7 @@
 - handoff_shape: `codex-task-handoff`
 - execution_policy: `continue-through-roadmap-until-done-or-real-blocker`
 
-## Baseline
+## Базовое состояние
 
 Universal Task Control уже реализован в factory-facing слое как repo-native capability:
 
@@ -22,7 +22,7 @@ Universal Task Control уже реализован в factory-facing слое к
 
 Generated downstream canonical path must be `.chatgpt/task-registry.yaml`. Factory self-improvement canonical path stays `template-repo/template/.chatgpt/task-registry.yaml`.
 
-## Control artifacts
+## Контрольные артефакты
 
 | Layer | Artifact | Current state | Downstream expectation |
 |---|---|---|---|
@@ -35,7 +35,7 @@ Generated downstream canonical path must be `.chatgpt/task-registry.yaml`. Facto
 | Tests policy | `tests/universal-task-control/*` | Factory positive/negative fixtures exist. | Factory-only by default unless a downstream generated-project quick smoke explicitly needs a minimal copy. |
 | Operator docs | `docs/operator/factory-template/07-universal-codex-handoff-factory.md` | Factory operator doc exists and mentions generated registry path. | Need downstream-facing docs under `template-repo/template/docs/operator/`. |
 
-## Materialization layer
+## Слой materialization
 
 Primary launcher path:
 
@@ -50,7 +50,7 @@ Wrapper paths:
 - `template-repo/scripts/first-project-wizard.py` calls `template-repo/launcher.sh`.
 - `template-repo/scripts/factory-launcher.py` calls `first-project-wizard.py` for project creation and supports generated-project `--continue`.
 
-## Risks found for roadmap
+## Риски для roadmap
 
 1. Several Universal Task Control scripts default to factory paths like `template-repo/template/.chatgpt/task-registry.yaml`; generated projects need root-relative defaults like `.chatgpt/task-registry.yaml`.
 2. Dashboard template currently stores `universal_task_control.registry_path: template-repo/template/.chatgpt/task-registry.yaml`; generated project should materialize `.chatgpt/task-registry.yaml`.
@@ -58,7 +58,7 @@ Wrapper paths:
 4. Issue templates must be confirmed as copied, because `template-repo/launcher.sh` currently copies only `template/`, scripts, configs and scenario-pack explicitly.
 5. Existing `verify-all quick` has factory Universal Task Control smoke, but no generated-project smoke that exercises the materialized root layout.
 
-## P0 targeted verification
+## P0 targeted-проверка
 
 Use:
 
