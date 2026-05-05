@@ -609,46 +609,6 @@ run_universal_task_control_smoke() {
   python3 "$ROOT/template-repo/scripts/validate-task-registry.py" \
     "$ROOT/template-repo/template/.chatgpt/task-registry.yaml"
 
-  python3 - "$ROOT/template-repo/template/.chatgpt/task-registry.yaml" "$tmp_dir" <<'PY'
-from pathlib import Path
-import copy
-import sys
-import yaml
-
-source = Path(sys.argv[1])
-out_dir = Path(sys.argv[2])
-base = yaml.safe_load(source.read_text(encoding="utf-8"))
-
-def write_case(name, mutate):
-    data = copy.deepcopy(base)
-    mutate(data)
-    (out_dir / f"{name}.yaml").write_text(
-        yaml.safe_dump(data, allow_unicode=True, sort_keys=False),
-        encoding="utf-8",
-    )
-
-write_case("bad-task-id", lambda data: data["tasks"][0].update({"task_id": "FT-CH-0001"}))
-write_case("bad-handoff-shape", lambda data: data["tasks"][0]["route"].update({"handoff_shape": "parent-orchestration-handoff"}))
-write_case("missing-scenario", lambda data: (
-    data["tasks"][0].update({"status": "ready_for_codex"}),
-    data["tasks"][0]["route"].update({"selected_scenario": "template-repo/scenario-pack/missing-router.md"}),
-))
-write_case("blocked-without-blocker", lambda data: (
-    data["tasks"][0].update({"status": "blocked", "next_action": "Waiting for input."}),
-    data["tasks"][0]["dependencies"].update({"blocked_by": []}),
-))
-write_case("verified-without-evidence", lambda data: (
-    data["tasks"][0].update({"status": "verified", "evidence": []}),
-    data["tasks"][0].pop("accepted_reason", None),
-    data["tasks"][0].pop("reason", None),
-))
-write_case("silent-external-action", lambda data: (
-    data["tasks"][0].update({"next_action": "", "evidence": []}),
-    data["tasks"][0]["human_boundary"].update({"external_user_action": True}),
-))
-write_case("stale-next-task-number", lambda data: data.update({"next_task_number": 1}))
-PY
-
   for fixture in \
     bad-task-id \
     bad-handoff-shape \
@@ -659,7 +619,7 @@ PY
     stale-next-task-number
   do
     if python3 "$ROOT/template-repo/scripts/validate-task-registry.py" \
-      "$tmp_dir/$fixture.yaml" \
+      "$ROOT/tests/universal-task-control/negative/task-registry/$fixture.yaml" \
       >"$tmp_dir/task-registry-negative-$fixture.log" 2>&1; then
       echo "task registry negative fixture unexpectedly passed: $fixture" >&2
       cat "$tmp_dir/task-registry-negative-$fixture.log" >&2
@@ -667,13 +627,8 @@ PY
     fi
   done
 
-  cat > "$tmp_dir/incomplete-codex-handoff.md" <<'EOF'
-Ты Codex. launch_source=task-registry-handoff.
-
-handoff_shape: codex-task-handoff
-EOF
   if python3 "$ROOT/template-repo/scripts/validate-codex-task-handoff.py" \
-    "$tmp_dir/incomplete-codex-handoff.md" \
+    "$ROOT/tests/universal-task-control/negative/codex-handoff/incomplete-codex-handoff.md" \
     >"$tmp_dir/codex-handoff-negative.log" 2>&1; then
     echo "codex task handoff negative fixture unexpectedly passed" >&2
     cat "$tmp_dir/codex-handoff-negative.log" >&2

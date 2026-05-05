@@ -1,0 +1,23 @@
+schema: factory-task-registry/v1
+project_code: FT
+description: Negative fixture: external user action must not be silent.
+next_task_number: 2
+allowed_classes: [feature]
+allowed_statuses: [draft, needs_triage, ready_for_handoff, ready_for_codex, codex_running, implemented, verification_pending, human_review, verified, blocked, superseded, not_applicable, archived]
+tasks:
+  - task_id: FT-TASK-0001
+    title: Silent external action
+    class: feature
+    priority: medium
+    status: draft
+    source: {kind: fixture, ref: ""}
+    route:
+      selected_scenario: template-repo/scenario-pack/00-master-router.md
+      handoff_shape: codex-task-handoff
+    dependencies: {blocked_by: [], unlocks: []}
+    human_boundary:
+      requires_review: true
+      requires_secret: false
+      external_user_action: true
+    evidence: []
+    next_action: ""
