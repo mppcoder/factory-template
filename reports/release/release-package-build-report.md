@@ -1,53 +1,33 @@
-# Отчет сборки релизного пакета
+# Отчет сборки release package
+
+Дата: 2026-05-05
 
 ## Область
 
-- chat_id: `FT-CH-0010`
-- task: `release-package-updated-bootstrap`
-- release decision: `patch-release-2.5.1`
-- publication decision: `.chatgpt/release-decision.yaml` is `no-release`; tag/GitHub Release publication is intentionally skipped until a separate explicit release decision.
-
-## Карта источников
-
-- router: `template-repo/scenario-pack/00-master-router.md`
-- handoff scenario: `template-repo/scenario-pack/15-handoff-to-codex.md`
-- user runbook: `docs/operator/factory-template/01-runbook-dlya-polzovatelya-factory-template.md`
-- Codex runbook: `docs/operator/factory-template/02-runbook-dlya-codex-factory-template.md`
-- release truth source: `docs/releases/release-scorecard.yaml`
-- release builder: `RELEASE_BUILD.sh`
-- package validator: `template-repo/scripts/validate-release-package.py`
-- defect capture: `reports/bugs/2026-04-29-release-package-updated-bootstrap-gaps.md`
-
-## Версионный gate
-
-- previous repo version: `2.5.0`
-- selected decision: `patch-release-2.5.1`
-- rationale: manifest/checksum generation, fallback archive verification and install-from-scratch package validation change the release-facing installation contract.
-- npm path: unsupported; no `package.json` exists in repo.
+- release line: `2.5.8`
+- package: `factory-v2.5.8`
+- source commit: `5ecf7f1a35749452d79adc6e3f087abb5c3c200a`
+- package stage: `release publication / release artifact assembly`
+- publication boundary: GitHub Release/tag publication was not executed; this report covers artifact assembly and validation only.
 
 ## Артефакты
 
-- archive: `/projects/factory-template/_incoming/factory-v2.5.1.zip`
-- manifest: `/projects/factory-template/_incoming/factory-v2.5.1.manifest.yaml`
-- checksum: `/projects/factory-template/_incoming/factory-v2.5.1.zip.sha256`
-- archive root: `factory-v2.5.1/`
-- SHA256 value: recorded in `/projects/factory-template/_incoming/factory-v2.5.1.zip.sha256`.
+- archive: `/projects/factory-template/_incoming/factory-v2.5.8.zip`
+- manifest: `/projects/factory-template/_incoming/factory-v2.5.8.manifest.yaml`
+- checksum: `/projects/factory-template/_incoming/factory-v2.5.8.zip.sha256`
+- archive root: `factory-v2.5.8/`
+- archive size: `2026502 bytes`
+- SHA256: `f74e0c65d5da4a9fb5bf676ce142b10d9ef5c1e4a34914398272097f1dccd83e`
 
 ## Проверка
 
-- `bash VERSION_SYNC_CHECK.sh` — passed.
-- `bash PRE_RELEASE_AUDIT.sh` — passed after cleanup.
-- `bash RELEASE_BUILD.sh` — passed and produced archive, manifest and checksum.
-- `(cd /projects/factory-template/_incoming && sha256sum -c factory-v2.5.1.zip.sha256)` — passed.
-- `python3 template-repo/scripts/validate-release-package.py /projects/factory-template/_incoming/factory-v2.5.1.zip --checksum /projects/factory-template/_incoming/factory-v2.5.1.zip.sha256 --manifest /projects/factory-template/_incoming/factory-v2.5.1.manifest.yaml` — passed.
-- Temp unpack root: `/tmp/tmp.01hagnB4VR/factory-v2.5.1`.
-- Temp unpack `bash POST_UNZIP_SETUP.sh` — passed.
-- Temp unpack `bash template-repo/scripts/verify-all.sh quick` — passed.
-- Working repo `bash CLEAN_VERIFY_ARTIFACTS.sh && bash template-repo/scripts/verify-all.sh quick` — passed.
-- Layout correction: flat `/projects/factory-v2.5.1.*` artifacts were removed; `/projects` contains only project roots.
+- `bash RELEASE_BUILD.sh _incoming/factory-v2.5.8.zip` -> passed.
+- `cd _incoming && sha256sum -c factory-v2.5.8.zip.sha256` -> passed.
+- `python3 template-repo/scripts/validate-release-package.py _incoming/factory-v2.5.8.zip --checksum _incoming/factory-v2.5.8.zip.sha256 --manifest _incoming/factory-v2.5.8.manifest.yaml` -> passed.
+- embedded manifest says `stage_version_sync: passed`, `stage_pre_release_audit: passed`, `archive_validator: passed`.
 
-## Известные ограничения
+## Safety boundary / граница
 
-- GitHub Release/tag publication was not executed in this scope.
-- npm install/download is not supported.
-- Full `verify-all.sh` / smoke / examples / matrix were not rerun after this patch because package quick verification and pre-release audit covered the changed packaging/docs/validator contour.
+- npm install/download path remains unsupported.
+- `FactoryTemplateSetup.exe` remains a future signed wrapper boundary and is not built by this package.
+- GitHub Release publication, tag creation and release approval remain outside this artifact assembly step.
