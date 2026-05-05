@@ -13,6 +13,9 @@ Repo-native Universal Codex Handoff Factory MVP: шаблон получает �
 - Русскоязычные operator docs: architecture overview и one-paste flow `ChatGPT -> Codex -> GitHub -> VPS`.
 - Lifecycle dashboard показывает Universal Task Control без false green.
 - `verify-all quick` включает Universal Task Control smoke и negative fixtures в `tests/universal-task-control/`.
+- Downstream materialization теперь покрывает generated root layout: `.chatgpt/task-registry.yaml`, `scripts/*`, `.github/ISSUE_TEMPLATE/*.yml`, `docs/operator/universal-task-control.md`, `reports/handoffs/` и `reports/release/`.
+- `verify-all quick` включает temporary generated-project smoke для allocate -> preview -> prepare pack -> `ready_for_codex` -> queue -> dashboard validation без запуска Codex и без GitHub API.
+- Для existing downstream sync зафиксировано правило: `.chatgpt/task-registry.yaml` нельзя слепо перезаписывать, если там есть user tasks/evidence.
 
 ### Что проверять
 
@@ -20,6 +23,7 @@ Repo-native Universal Codex Handoff Factory MVP: шаблон получает �
 - `python3 template-repo/scripts/validate-codex-task-handoff.py reports/handoffs/FT-TASK-0001-codex-handoff.md`
 - `python3 template-repo/scripts/validate-project-lifecycle-dashboard.py template-repo/template/.chatgpt/project-lifecycle-dashboard.yaml`
 - `bash template-repo/scripts/verify-all.sh quick`
+- `reports/downstream-materialization/smoke-report.md`
 
 ## 2.5.8 - 2026-04-30
 

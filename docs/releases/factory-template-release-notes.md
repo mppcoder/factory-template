@@ -6,6 +6,9 @@
 - Added task registry, allocator, issue bridge, handoff preview/prepare/status/queue commands and validators under `template-repo/scripts/`.
 - Added GitHub Issue templates, Russian one-paste runbook, lifecycle dashboard integration and explicit Symphony/OpenClaw/Hermes future boundaries without daemon/runtime dependency.
 - `verify-all quick` now includes Universal Task Control smoke with positive flow and explicit negative fixtures under `tests/universal-task-control/`.
+- Downstream materialization now covers generated projects with `.chatgpt/task-registry.yaml`, root `scripts/*` commands, `.github/ISSUE_TEMPLATE/*.yml`, downstream operator docs and report target dirs.
+- `verify-all quick` now includes a temporary generated-project Universal Task Control smoke that does not launch Codex and does not use GitHub API.
+- Existing downstream sync guidance explicitly forbids blind overwrite of `.chatgpt/task-registry.yaml` when user tasks or evidence are present.
 
 ## 2.5.8
 - `WINDOWS_INSTALL_LATEST.md` now preserves the executable automation boundary.
