@@ -48,15 +48,15 @@ Routing:
 - selected_scenario: 00-master-router.md
 - pipeline_stage: done
 - handoff_allowed: yes (forbidden)
-- defect_capture_path: reproduce -> evidence -> bug report -> layer classification -> factory feedback if reusable -> remediation
+- defect_capture_path: not-required-by-text-signal
 - chat_id:
 - chat_title:
-- task_slug: chatgpt-title-reservation-gap
+- task_slug: chatgpt-first-answer-title-one-click-copy-chatgpt
 - chat_kind:
 - chat_state:
 - chat_index_path:
-- codex_work_id: FT-CX-0008
-- codex_work_title: FT-CX-0008 chatgpt-title-reservation-gap
+- codex_work_id: FT-CX-0010
+- codex_work_title: FT-CX-0010 chatgpt-first-answer-title-one-click-copy-chatgpt
 - codex_work_kind: self_handoff
 - codex_work_state: verified
 - codex_work_index_path: .chatgpt/codex-work-index.yaml
@@ -67,11 +67,9 @@ Routing:
 - .chatgpt/codex-task-pack.md
 - .chatgpt/verification-report.md
 - .chatgpt/done-report.md
-- reports/bugs/
-- reports/factory-feedback/
 
 Текст задачи:
-Bug: ChatGPT first answer can propose an FT-CH chat number without reserving it in the repo/GitHub index, so if the handoff is not launched in Codex the number appears free and can be allocated to another chat. Fix the repo-first contract so visible ChatGPT chat numbers are materialized reservations, not suggestions.
+chatgpt-first-answer-title-one-click-copy: Название чата в первом ответе на запрос в ChatGPT должно быть копируемо одним кликом
 
 Continuation rule:
 Если задача пришла в уже открытую Codex-сессию и этот route совместим с текущей сессией, после видимого self-handoff продолжай remediation / implementation / verification без отдельного запроса пользователя. Остановка допустима только при реальном blocker, внешнем действии, несовместимом route или необходимости нового task launch.

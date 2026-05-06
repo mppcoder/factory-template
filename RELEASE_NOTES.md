@@ -35,6 +35,7 @@ VPS project hosting topology increment: добавлен стандарт выб
 - Permission/label model, worktree isolation, audit ledger, rollback and curator promotion policies are documented for root and downstream-generated surfaces where applicable.
 - New validators cover labels/trust model, worktree isolation, ledger, rollback and curator promotion; `verify-all quick` runs them.
 - New validators cover worktree manager, permission model enforcement, automation approvals, required human review, auto-merge gate, production deploy gate, security issue gate and public submit gate; `verify-all quick` runs only safe fixture/temp-dir checks.
+- ChatGPT first-answer `Название чата для копирования` now renders the stable title or allocator blocker as a one-line fenced `text` code block, giving the operator a one-click copy control before route receipt or handoff.
 
 ### Что проверять
 
@@ -54,6 +55,7 @@ VPS project hosting topology increment: добавлен стандарт выб
 - `python3 template-repo/scripts/validate-automation-run-ledger.py .`
 - `python3 template-repo/scripts/validate-automation-rollback.py .`
 - `python3 template-repo/scripts/validate-curator-promotion-flow.py .`
+- `python3 template-repo/scripts/validate-chatgpt-first-answer-contract.py .`
 
 ## 2.5.8 - 2026-04-30
 

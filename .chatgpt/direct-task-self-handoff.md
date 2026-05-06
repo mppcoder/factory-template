@@ -15,7 +15,7 @@ codex-task-handoff
 ## Стабильная identity чата и handoff
 - chat_id: ``
 - chat_title: ``
-- task_slug: `chatgpt-title-reservation-gap`
+- task_slug: `chatgpt-first-answer-title-one-click-copy-chatgpt`
 - kind: ``
 - state: ``
 - source_of_truth: `.chatgpt/chat-handoff-index.yaml`
@@ -28,7 +28,7 @@ codex-task-handoff
 build
 
 ## Evidence для класса задачи
-- keyword-hit: fix
+- keyword-hit не найден; fallback на default task class `build`
 - явный reasoning/model override совпал с default profile: build
 
 ## Выбранный профиль
@@ -74,14 +74,12 @@ done
 - .chatgpt/codex-task-pack.md
 - .chatgpt/verification-report.md
 - .chatgpt/done-report.md
-- reports/bugs/
-- reports/factory-feedback/
 
 ## Разрешение handoff
 yes (forbidden)
 
 ## Маршрут defect-capture
-reproduce -> evidence -> bug report -> layer classification -> factory feedback if reusable -> remediation
+not-required-by-text-signal
 
 ## Правило launch boundary
 Выбор модели и reasoning mode считается надежным только на новом запуске Codex для новой задачи.
@@ -144,4 +142,4 @@ selected_model совпадает с последним сохраненным s
 - Если новый model ID появился в live catalog, сначала создайте proposal через `scripts/check-codex-model-catalog.py --write-proposal`; promotion profile mapping требует ручного review.
 
 ## Текст задачи
-Bug: ChatGPT first answer can propose an FT-CH chat number without reserving it in the repo/GitHub index, so if the handoff is not launched in Codex the number appears free and can be allocated to another chat. Fix the repo-first contract so visible ChatGPT chat numbers are materialized reservations, not suggestions.
+chatgpt-first-answer-title-one-click-copy: Название чата в первом ответе на запрос в ChatGPT должно быть копируемо одним кликом

@@ -1,5 +1,5 @@
 launch:
-  timestamp_utc: '2026-05-05T12:33:19+00:00'
+  timestamp_utc: '2026-05-06T06:16:56+00:00'
   launch_unit: new-task-launch
   launch_source: direct-task
   router_layer: executable
@@ -8,7 +8,7 @@ launch:
   - 'default neutral handoff: Codex decides actual execution_mode after analysis'
   task_class: build
   task_class_reasons:
-  - 'keyword-hit: fix'
+  - keyword-hit не найден; fallback на default task class `build`
   - 'явный reasoning/model override совпал с default profile: build'
   selected_profile: build
   selected_model: gpt-5.5
@@ -25,15 +25,10 @@ launch:
   - .chatgpt/codex-task-pack.md
   - .chatgpt/verification-report.md
   - .chatgpt/done-report.md
-  - reports/bugs/
-  - reports/factory-feedback/
   handoff_allowed: yes (forbidden)
-  defect_capture_path: reproduce -> evidence -> bug report -> layer classification
-    -> factory feedback if reusable -> remediation
-  task_summary: 'Bug: ChatGPT first answer can propose an FT-CH chat number without
-    reserving it in the repo/GitHub index, so if the handoff is not launched in Codex
-    the number appears free and can be allocated to another chat. Fix the repo-first
-    contract s'
+  defect_capture_path: not-required-by-text-signal
+  task_summary: 'chatgpt-first-answer-title-one-click-copy: Название чата в первом
+    ответе на запрос в ChatGPT должно быть копируемо одним кликом'
   launch_boundary_rule: Выбор модели и reasoning mode считается надежным только на
     новом запуске Codex для новой задачи.
   interactive_default_rule: 'Для интерактивной работы в VS Code Codex extension основной
@@ -107,9 +102,9 @@ launch:
   requested_selected_profile: null
   requested_selected_model: null
   requested_selected_reasoning_effort: null
-  codex_work_id: FT-CX-0008
-  codex_work_title: FT-CX-0008 chatgpt-title-reservation-gap
-  task_slug: chatgpt-title-reservation-gap
+  codex_work_id: FT-CX-0010
+  codex_work_title: FT-CX-0010 chatgpt-first-answer-title-one-click-copy-chatgpt
+  task_slug: chatgpt-first-answer-title-one-click-copy-chatgpt
   codex_work_kind: self_handoff
   codex_work_state: verified
   codex_work_index_path: .chatgpt/codex-work-index.yaml

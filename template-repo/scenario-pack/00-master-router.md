@@ -14,17 +14,20 @@
 
 Первый substantive ответ ChatGPT в новом project task chat обязан начинаться с двух видимых блоков до route receipt, анализа или handoff:
 
-```text
+````markdown
 ## Название чата для копирования
+```text
 <PROJECT_CODE>-CH-<NNNN> <task-slug>
+```
 
 ## Карточка проекта
 <compact project status card>
-```
+````
 
 Правила:
 - `Название чата для копирования` берется только из materialized repo reservation в `.chatgpt/chat-handoff-index.yaml`, созданной write-allocator'ом. Выводимый `FT-CH-....` означает, что item уже записан в repo/GitHub index; dry-run, read-only вычисление или "следующий вероятный номер" не являются резервированием.
 - Если ChatGPT не может надежно выполнить write в repo index и подтвердить запись, не показывай `FT-CH-....`; выведи ровно: `Нужно выделить номер через repo chat-handoff-index / allocator.`
+- Значение под `Название чата для копирования` всегда выводится как отдельный однострочный fenced `text` code block, чтобы ChatGPT UI дал copy button и оператор мог скопировать title/blocker одним кликом. Внутри code block должна быть ровно одна строка: stable title или exact allocator blocker.
 - Инвариант первого ответа: first substantive answer обязан дать один из двух видимых outcomes до route receipt, анализа или handoff: materialized allocation or allocator blocker. Первый outcome: materialized allocation confirmed, затем stable title block. Второй outcome: allocation unavailable или write not confirmed, затем exact allocator blocker.
 - Третье состояние запрещено: no allocation attempted / no blocker / answer continues. Нельзя продолжать route receipt, анализ, handoff или remediation, если нет materialized allocation и нет exact allocator blocker.
 - Состояние `chatgpt-first-answer-allocation-not-attempted` является contract violation и defect-class для первого ответа ChatGPT. Его нужно фиксировать как bug, а не как допустимый fallback.

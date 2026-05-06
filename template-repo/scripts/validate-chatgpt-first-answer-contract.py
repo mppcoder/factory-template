@@ -19,6 +19,8 @@ REQUIRED_ROUTER_PHRASES = [
     "dry-run, read-only вычисление",
     "номер все равно остается занятым repo reservation",
     "render-project-lifecycle-dashboard.py --format chatgpt-card --stdout",
+    "однострочный fenced `text` code block",
+    "copy button",
 ]
 REQUIRED_HANDOFF_PHRASES = [
     "Название чата для копирования",
@@ -27,6 +29,8 @@ REQUIRED_HANDOFF_PHRASES = [
     "третье состояние запрещено",
     "allocation attempt/blocker",
     "chatgpt-first-answer-allocation-not-attempted",
+    "однострочный fenced `text` code block",
+    "copy button",
 ]
 REQUIRED_DOC_PHRASES = [
     "Название чата для копирования",
@@ -40,6 +44,8 @@ REQUIRED_DOC_PHRASES = [
     "ошибка первого ответа",
     "repo write не подтвержден",
     "номер остается занятым",
+    "однострочный fenced `text` code block",
+    "copy button",
 ]
 FORBIDDEN_OVERCLAIMS = [
     "автоматически переименует ChatGPT",
@@ -51,14 +57,8 @@ TITLE_HEADER = "## Название чата для копирования"
 CARD_HEADER = "## Карточка проекта"
 ALLOCATOR_BLOCKER = "Нужно выделить номер через repo chat-handoff-index / allocator."
 CHAT_TITLE_RE = re.compile(r"\b[A-Z][A-Z0-9]*-CH-\d{4} [a-z0-9][a-z0-9-]*\b")
-ROUTE_MARKERS = [
-    "route receipt",
-    "Route Receipt",
-    "handoff",
-    "Handoff",
-    "анализ",
-    "Анализ",
-]
+TITLE_COPY_BLOCK_RE = re.compile(r"\A\s*```text\n([^\n]+)\n```\s*", re.MULTILINE)
+ROUTE_MARKER_RE = re.compile(r"(?im)^\s*(?:#+\s*)?(route receipt|handoff|анализ|начинаю анализ)\b")
 
 
 def read(path: Path) -> str:
@@ -77,7 +77,7 @@ def validate_visible_first_answer_outcome(text: str) -> list[str]:
     if title_pos >= 0 and card_pos >= 0 and title_pos > card_pos:
         errors.append("блок title расположен после card")
 
-    marker_positions = [text.find(marker) for marker in ROUTE_MARKERS if text.find(marker) >= 0]
+    marker_positions = [match.start() for match in ROUTE_MARKER_RE.finditer(text)]
     first_route_pos = min(marker_positions) if marker_positions else -1
     if first_route_pos >= 0:
         if title_pos < 0 or title_pos > first_route_pos:
@@ -92,6 +92,14 @@ def validate_visible_first_answer_outcome(text: str) -> list[str]:
         has_allocator_blocker = ALLOCATOR_BLOCKER in title_block
         if not has_materialized_title and not has_allocator_blocker:
             errors.append("title block не содержит materialized allocation or allocator blocker")
+        title_body = title_block[len(TITLE_HEADER) :]
+        copy_match = TITLE_COPY_BLOCK_RE.match(title_body)
+        if not copy_match:
+            errors.append("title block должен начинаться с однострочного fenced `text` code block для one-click copy")
+        else:
+            copy_value = copy_match.group(1).strip()
+            if copy_value != ALLOCATOR_BLOCKER and not CHAT_TITLE_RE.fullmatch(copy_value):
+                errors.append("copyable title line должен быть stable title или exact allocator blocker")
 
     return errors
 
@@ -133,6 +141,28 @@ def main() -> int:
             errors.append(
                 f"{negative_fixture.relative_to(root)} должен быть negative fixture для allocation-not-attempted, но прошел проверку"
             )
+
+    not_copyable_fixture = root / "tests" / "chatgpt-first-answer-contract" / "negative" / "title-not-one-click-copyable.md"
+    if not not_copyable_fixture.exists():
+        errors.append(f"{not_copyable_fixture.relative_to(root)} отсутствует")
+    else:
+        fixture_errors = validate_visible_first_answer_outcome(read(not_copyable_fixture))
+        if not fixture_errors:
+            errors.append(
+                f"{not_copyable_fixture.relative_to(root)} должен быть negative fixture для title-not-one-click-copyable, но прошел проверку"
+            )
+
+    positive_fixtures = [
+        root / "tests" / "chatgpt-first-answer-contract" / "positive" / "materialized-title-copyable.md",
+        root / "tests" / "chatgpt-first-answer-contract" / "positive" / "allocator-blocker-copyable.md",
+    ]
+    for path in positive_fixtures:
+        if not path.exists():
+            errors.append(f"{path.relative_to(root)} отсутствует")
+            continue
+        fixture_errors = validate_visible_first_answer_outcome(read(path))
+        if fixture_errors:
+            errors.append(f"{path.relative_to(root)} не прошел positive fixture: {'; '.join(fixture_errors)}")
 
     card_path = root / "reports" / "project-status-card.md"
     if not card_path.exists():

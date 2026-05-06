@@ -76,15 +76,19 @@ Project Instructions могут показать пользователю тол
 
 третье состояние запрещено: no allocation attempted / no blocker / answer continues. Если ChatGPT не показал `FT-CH-....` и не показал allocator blocker, это ошибка первого ответа `allocation-not-attempted`. Пользователь должен остановить route и запустить repo allocator или передать Codex remediation, а не продолжать с примерным номером.
 
+Значение title/blocker в первом ответе должно быть оформлено как отдельный однострочный fenced `text` code block: так ChatGPT UI показывает copy button, и пользователь может скопировать его одним кликом. Внутри code block должна быть ровно одна строка: stable title или exact allocator blocker.
+
 Первый substantive ответ ChatGPT в новом task-чате должен начинаться с:
 
-```text
+````markdown
 ## Название чата для копирования
+```text
 <stable chat title или allocator blocker>
+```
 
 ## Карточка проекта
 <compact project card>
-```
+````
 
 `Карточка проекта` берется из `python3 template-repo/scripts/render-project-lifecycle-dashboard.py --format chatgpt-card --stdout`, `reports/project-status-card.md` или compact block в `reports/project-lifecycle-dashboard.md`. Этот блок обязателен для ChatGPT-ответов так же, как для Codex closeout.
 
@@ -96,6 +100,7 @@ Project Instructions могут показать пользователю тол
 2. `Карточка проекта`.
 
 Stable title имеет формат `<PROJECT_CODE>-CH-<NNNN> <task-slug>` и разрешен только после materialized/reserved write в repo index.
+Title/blocker под `Название чата для копирования` выводи как отдельный однострочный fenced `text` code block, чтобы ChatGPT UI показал copy button и пользователь мог скопировать значение одним кликом.
 Инвариант first substantive answer: до route receipt, анализа или handoff должен быть один из двух видимых outcomes - materialized allocation or allocator blocker.
 Если repo write не подтвержден, не придумывай номер и скажи: `Нужно выделить номер через repo chat-handoff-index / allocator.`
 третье состояние запрещено: no allocation attempted / no blocker / answer continues.

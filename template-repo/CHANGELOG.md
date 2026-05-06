@@ -10,6 +10,7 @@
 ### Изменено
 - generated normalized handoff template uses Russian human-facing headings and includes orchestration boundary.
 - quick verify now covers orchestration, curated pack quality and sync fallback evidence validators.
+- ChatGPT first-answer title/blocker contract now requires a one-line fenced `text` code block so the visible chat title can be copied from the UI with one click.
 
 ### Исправлено
 - зафиксирован `bug-034`: generated boundary-actions и validator теперь требуют explicit recommendation matrix для внешних действий.

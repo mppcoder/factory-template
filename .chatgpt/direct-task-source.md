@@ -1,1 +1,1 @@
-Bug: ChatGPT first answer can propose an FT-CH chat number without reserving it in the repo/GitHub index, so if the handoff is not launched in Codex the number appears free and can be allocated to another chat. Fix the repo-first contract so visible ChatGPT chat numbers are materialized reservations, not suggestions.
+chatgpt-first-answer-title-one-click-copy: Название чата в первом ответе на запрос в ChatGPT должно быть копируемо одним кликом

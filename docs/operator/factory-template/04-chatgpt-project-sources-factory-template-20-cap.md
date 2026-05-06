@@ -27,7 +27,7 @@
 5. только после этого формировать ответ.
 
 В первом substantive ответе нового task-чата обязательно сначала выведи:
-1. раздел `Название чата для копирования` со stable title, который уже materialized/reserved в repo `.chatgpt/chat-handoff-index.yaml` через allocator;
+1. раздел `Название чата для копирования` со stable title, который уже materialized/reserved в repo `.chatgpt/chat-handoff-index.yaml` через allocator; само значение title/blocker выведи как отдельный однострочный fenced `text` code block, чтобы ChatGPT UI показал copy button и пользователь мог скопировать его одним кликом;
 2. раздел `Карточка проекта` со свежей compact card из repo dashboard.
 
 Инвариант first substantive answer: до route receipt, анализа или handoff должен быть один из двух видимых outcomes - materialized allocation or allocator blocker.
