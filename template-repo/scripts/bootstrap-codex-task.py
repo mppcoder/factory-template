@@ -10,6 +10,7 @@ from codex_task_router import (
     read_task_text,
     render_direct_task_response,
     render_normalized_handoff,
+    render_project_card_for_codex_response,
     write_launch_record,
     write_markdown,
 )
@@ -44,7 +45,8 @@ def main() -> int:
         self_handoff_path = root / ".chatgpt" / "direct-task-self-handoff.md"
         write_markdown(self_handoff_path, render_normalized_handoff(record, task_text, "Self-handoff для прямой задачи"))
         direct_response_path = root / ".chatgpt" / "direct-task-response.md"
-        write_markdown(direct_response_path, render_direct_task_response(record, task_text))
+        project_card = render_project_card_for_codex_response(root)
+        write_markdown(direct_response_path, render_direct_task_response(record, task_text, project_card))
         record["launch"]["direct_self_handoff_completed"] = True
         write_launch_record(root, record)
         print(f"direct_self_handoff={self_handoff_path}")

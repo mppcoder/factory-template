@@ -495,6 +495,7 @@ run_project_lifecycle_dashboard_smoke() {
     --format codex-card \
     --stdout > "$tmp_dir/codex-card.md"
   grep -q "route receipt" "$tmp_dir/codex-card.md"
+  grep -q "request:" "$tmp_dir/codex-card.md"
   grep -q "selected_model: gpt-5.5" "$tmp_dir/codex-card.md"
 
   python3 "$ROOT/template-repo/scripts/validate-project-lifecycle-dashboard.py" \

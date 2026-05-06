@@ -236,7 +236,7 @@ Dashboard агрегирует task/stage state, feature execution progress, orc
 
 Для новичка есть 3 визуальные поверхности:
 - ChatGPT mini card — коротко показывает проект, фазу, активную задачу, статус, готово, блокеры, действие пользователя и следующий шаг;
-- Codex execution card — показывает route receipt, текущую wave/task, progress, blockers, next internal action и verify/sync boundary;
+- Codex execution card — показывает request identity, route receipt, текущую wave/task, progress, blockers, next internal action и verify/sync boundary;
 - Markdown dashboard — полный отчет `reports/project-lifecycle-dashboard.md`.
 
 ## Standards navigator / контроль жизненного цикла по стандартам

@@ -23,6 +23,7 @@
 - копирует canonical model routing policy: `codex-model-routing.yaml`
 - подготавливает generated project к launch-time self-handoff и routing verification
 - direct-task contour теперь включает отдельный visible response artifact для стартового self-handoff
+- direct-task response начинается с `Номер запроса Codex` (`FT-CX-....`) и `Карточка проекта` из repo renderer, а не прячет identity внутри handoff block
 - smoke и pre-release layer теперь прикрывают наличие этого visible direct-task response artifact
 - handoff/completion layer теперь выдает отдельный executable launch boundary и troubleshooting для sticky last-used route state
 - model availability auto-check сравнивает repo-configured mapping с live `codex debug models` и генерирует proposal без automatic profile promotion

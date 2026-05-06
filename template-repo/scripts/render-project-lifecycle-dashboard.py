@@ -381,6 +381,27 @@ def active_work_lines_text(chat_index: dict[str, Any], codex_index: dict[str, An
     return "\n".join(lines) if lines else "🕒 Нет текущих или незакрытых задач"
 
 
+def active_request_title_text(chat_index: dict[str, Any], codex_index: dict[str, Any]) -> str:
+    codex_items = codex_index.get("items", []) if isinstance(codex_index, dict) else []
+    if not isinstance(codex_items, list):
+        codex_items = []
+    codex_candidates = [item for item in codex_items if isinstance(item, dict)]
+    if codex_candidates:
+        codex_candidates.sort(key=lambda item: int(item.get("work_number") or 0), reverse=True)
+        current = codex_candidates[0]
+        return str(current.get("work_title") or current.get("codex_work_id") or "unknown")
+
+    chat_items = chat_index.get("items", []) if isinstance(chat_index, dict) else []
+    if not isinstance(chat_items, list):
+        chat_items = []
+    chat_candidates = [item for item in chat_items if isinstance(item, dict)]
+    if chat_candidates:
+        chat_candidates.sort(key=lambda item: int(item.get("chat_number") or 0), reverse=True)
+        current = chat_candidates[0]
+        return str(current.get("chat_title") or current.get("chat_id") or "unknown")
+    return "unknown"
+
+
 def handoff_history_lines_text(index: dict[str, Any]) -> str:
     items = index.get("items", []) if isinstance(index, dict) else []
     if not isinstance(items, list):
@@ -553,6 +574,10 @@ def render_codex_card(data: dict[str, Any], root: Path, dashboard_path: Path) ->
     codex_card = visual.get("codex_execution_card", {}) if isinstance(visual.get("codex_execution_card"), dict) else {}
     completed, total = completion_counts(data)
     values = {
+        "REQUEST_ID": active_request_title_text(
+            context.get("chat_handoff_index", {}),
+            context.get("codex_work_index", {}),
+        ),
         "TASK_CLASS": change["class"] or "unknown",
         "SELECTED_PROFILE": str(orchestration.get("selected_profile") or "unknown"),
         "SELECTED_MODEL": str(orchestration.get("selected_model") or "unknown"),

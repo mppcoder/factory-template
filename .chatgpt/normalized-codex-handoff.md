@@ -15,7 +15,7 @@ codex-task-handoff
 ## Стабильная identity чата и handoff
 - chat_id: ``
 - chat_title: ``
-- task_slug: `chatgpt-first-answer-title-one-click-copy-chatgpt`
+- task_slug: `factory-template`
 - kind: ``
 - state: ``
 - source_of_truth: `.chatgpt/chat-handoff-index.yaml`
@@ -142,4 +142,4 @@ selected_model совпадает с последним сохраненным s
 - Если новый model ID появился в live catalog, сначала создайте proposal через `scripts/check-codex-model-catalog.py --write-proposal`; promotion profile mapping требует ручного review.
 
 ## Текст задачи
-chatgpt-first-answer-title-one-click-copy: Название чата в первом ответе на запрос в ChatGPT должно быть копируемо одним кликом
+в ответе кодекса в factory-template не видно карточки проекта и номера тикета запроса

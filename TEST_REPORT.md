@@ -4,6 +4,20 @@ Status source of truth: `docs/releases/release-scorecard.yaml`.
 Current scorecard state: `2.5.8 Package Ready`.
 TEST_REPORT.md is verification evidence, not the canonical release-status source.
 
+## Проверка Codex direct-task first-answer card
+
+Дата: `2026-05-06`.
+
+Исправлен defect, при котором первый direct-task ответ Codex мог прятать `FT-CX` номер внутри большого handoff-блока и не показывать compact project card вверху ответа. Теперь `.chatgpt/direct-task-response.md` начинается с `Номер запроса Codex` и `Карточка проекта`, а Codex execution card показывает `request:`.
+
+Проверки:
+
+- `python3 template-repo/scripts/validate-codex-routing.py .` — pass.
+- `python3 template-repo/scripts/eval-artifact.py tests/artifact-eval/specs/direct-task-self-handoff.yaml --output tests/artifact-eval/reports/direct-task-self-handoff.md --json` — pass.
+- `python3 -m py_compile template-repo/scripts/codex_task_router.py template-repo/scripts/bootstrap-codex-task.py template-repo/scripts/render-project-lifecycle-dashboard.py template-repo/scripts/validate-codex-routing.py` — pass.
+- `python3 template-repo/scripts/validate-codex-work-index.py .chatgpt/codex-work-index.yaml` — pass.
+- `bash template-repo/scripts/verify-all.sh quick` — pass.
+
 ## Проверка Windows beginner bootstrapper MVP
 
 Дата: `2026-04-30`.

@@ -2,6 +2,8 @@
 from __future__ import annotations
 
 import re
+import subprocess
+import sys
 from pathlib import Path
 from typing import Any
 
@@ -38,6 +40,8 @@ DEFAULT_CHAT_ALLOCATION_POLICY = {
     "codex_self_handoff_uses_codex_work_index": True,
     "codex_work_index_path": ".chatgpt/codex-work-index.yaml",
 }
+CODEX_WORK_ALLOCATOR_BLOCKER = "Нужно выделить номер через repo codex-work-index / allocator."
+PROJECT_CARD_BLOCKER = "Блокер: compact project card недоступна; нужно запустить repo renderer или обновить dashboard state."
 
 
 def load_routing_spec(root: Path) -> dict:
@@ -86,6 +90,46 @@ def read_task_text(task_file: Path | None, task_text: str | None) -> str:
     if task_file and task_file.exists():
         return task_file.read_text(encoding="utf-8", errors="ignore").strip()
     return ""
+
+
+def render_project_card_for_codex_response(root: Path) -> str:
+    candidates = [
+        (
+            root / "template-repo" / "scripts" / "render-project-lifecycle-dashboard.py",
+            root / "template-repo" / "template" / ".chatgpt" / "project-lifecycle-dashboard.yaml",
+        ),
+        (
+            root / "scripts" / "render-project-lifecycle-dashboard.py",
+            root / ".chatgpt" / "project-lifecycle-dashboard.yaml",
+        ),
+    ]
+    for script_path, input_path in candidates:
+        if not script_path.exists() or not input_path.exists():
+            continue
+        result = subprocess.run(
+            [
+                sys.executable,
+                str(script_path),
+                "--input",
+                str(input_path),
+                "--format",
+                "chatgpt-card",
+                "--stdout",
+            ],
+            cwd=root,
+            text=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            check=False,
+        )
+        if result.returncode == 0 and result.stdout.strip():
+            return result.stdout.strip()
+
+    for fallback_path in [root / "reports" / "project-status-card.md", root / "reports" / "project-lifecycle-dashboard.md"]:
+        fallback = read_text(fallback_path).strip()
+        if fallback:
+            return fallback
+    return PROJECT_CARD_BLOCKER
 
 
 def _normalize(value: str) -> str:
@@ -854,12 +898,17 @@ def render_normalized_handoff(record: dict, task_text: str, title: str) -> str:
 {task_text.strip() or '-'}"""
 
 
-def render_direct_task_response(record: dict, task_text: str) -> str:
+def render_direct_task_response(record: dict, task_text: str, project_card: str = "") -> str:
     launch = record.get("launch", {})
     artifacts = launch.get("artifacts_to_update", [])
     artifacts_lines = "\n".join(f"- {item}" for item in artifacts) if artifacts else "- none"
+    codex_work_title = str(launch.get("codex_work_title") or "").strip() or CODEX_WORK_ALLOCATOR_BLOCKER
+    visible_project_card = project_card.strip() or PROJECT_CARD_BLOCKER
+    route_value = lambda key: str(launch.get(key) or "not_applicable").strip()
     compatibility_markers = "\n".join(
         [
+            "- `## Номер запроса Codex`",
+            "- `## Карточка проекта`",
             "- `## Self-handoff для прямой задачи`",
             "- `## Классификация`",
             "- `## Выбранный профиль проекта`",
@@ -877,7 +926,17 @@ def render_direct_task_response(record: dict, task_text: str) -> str:
             "- `## Следующий шаг`",
         ]
     )
-    return f"""## Применение в Codex UI
+    return f"""## Номер запроса Codex
+
+```text
+{codex_work_title}
+```
+
+## Карточка проекта
+
+{visible_project_card}
+
+## Применение в Codex UI
 
 `apply_mode: {launch.get('apply_mode', 'manual-ui')} (default)`.
 
@@ -908,37 +967,40 @@ def render_direct_task_response(record: dict, task_text: str) -> str:
 Цель:
 Выполнить direct-task self-handoff и продолжить работу в этом же task, если текущий live route совпадает с routing ниже. Не завершай ответ только self-handoff block и не требуй ручного продолжения пользователя для внутренней Codex-eligible работы.
 
+Visible answer contract:
+Первый substantive ответ Codex для direct-task должен показывать `Номер запроса Codex` и `Карточка проекта` до route receipt, self-handoff или remediation. `Номер запроса Codex` берется из `.chatgpt/codex-work-index.yaml` как `codex_work_title` и не расходует ChatGPT `FT-CH` counter. Если номер не выделен, нужно показать exact blocker: `{CODEX_WORK_ALLOCATOR_BLOCKER}`.
+
 Repo rules:
 В рамках repo приоритет у repo rules, AGENTS, runbook и policy files репозитория. Общие рабочие инструкции применяются только там, где не противоречат правилам repo и старшим системным ограничениям среды.
 
 Routing:
-- launch_source: {launch.get('launch_source', '')}
-- handoff_shape: {launch.get('handoff_shape', '')}
+- launch_source: {route_value('launch_source')}
+- handoff_shape: {route_value('handoff_shape')}
 - execution_mode_decision_owner: Codex runtime after task graph analysis
 - execution_mode_closeout_required: actual execution mode plus child/subagent count
-- task_class: {launch.get('task_class', '')}
-- selected_profile: {launch.get('selected_profile', '')}
-- selected_model: {launch.get('selected_model', '')}
-- selected_reasoning_effort: {launch.get('selected_reasoning_effort', '')}
-- selected_plan_mode_reasoning_effort: {launch.get('selected_plan_mode_reasoning_effort', '')}
-- apply_mode: {launch.get('apply_mode', '')}
-- strict_launch_mode: {launch.get('strict_launch_mode', '')}
-- project_profile: {launch.get('project_profile', '')}
-- selected_scenario: {launch.get('selected_scenario', '')}
-- pipeline_stage: {launch.get('pipeline_stage', '')}
-- handoff_allowed: {launch.get('handoff_allowed', '')}
-- defect_capture_path: {launch.get('defect_capture_path', '')}
-- chat_id: {launch.get('chat_id', '')}
-- chat_title: {launch.get('chat_title', '')}
-- task_slug: {launch.get('task_slug', '')}
-- chat_kind: {launch.get('chat_kind', '')}
-- chat_state: {launch.get('chat_state', '')}
-- chat_index_path: {launch.get('chat_index_path', '')}
-- codex_work_id: {launch.get('codex_work_id', '')}
-- codex_work_title: {launch.get('codex_work_title', '')}
-- codex_work_kind: {launch.get('codex_work_kind', '')}
-- codex_work_state: {launch.get('codex_work_state', '')}
-- codex_work_index_path: {launch.get('codex_work_index_path', '')}
+- task_class: {route_value('task_class')}
+- selected_profile: {route_value('selected_profile')}
+- selected_model: {route_value('selected_model')}
+- selected_reasoning_effort: {route_value('selected_reasoning_effort')}
+- selected_plan_mode_reasoning_effort: {route_value('selected_plan_mode_reasoning_effort')}
+- apply_mode: {route_value('apply_mode')}
+- strict_launch_mode: {route_value('strict_launch_mode')}
+- project_profile: {route_value('project_profile')}
+- selected_scenario: {route_value('selected_scenario')}
+- pipeline_stage: {route_value('pipeline_stage')}
+- handoff_allowed: {route_value('handoff_allowed')}
+- defect_capture_path: {route_value('defect_capture_path')}
+- chat_id: {route_value('chat_id')}
+- chat_title: {route_value('chat_title')}
+- task_slug: {route_value('task_slug')}
+- chat_kind: {route_value('chat_kind')}
+- chat_state: {route_value('chat_state')}
+- chat_index_path: {route_value('chat_index_path')}
+- codex_work_id: {route_value('codex_work_id')}
+- codex_work_title: {route_value('codex_work_title')}
+- codex_work_kind: {route_value('codex_work_kind')}
+- codex_work_state: {route_value('codex_work_state')}
+- codex_work_index_path: {route_value('codex_work_index_path')}
 
 Артефакты для обновления:
 {artifacts_lines}

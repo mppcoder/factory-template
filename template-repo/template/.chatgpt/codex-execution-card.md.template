@@ -1,4 +1,5 @@
 route receipt:
+- request: {{REQUEST_ID}}
 - task_class: {{TASK_CLASS}}
 - selected_profile: {{SELECTED_PROFILE}}
 - selected_model: {{SELECTED_MODEL}}

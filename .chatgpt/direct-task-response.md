@@ -1,3 +1,24 @@
+## Номер запроса Codex
+
+```text
+FT-CX-0011 factory-template
+```
+
+## Карточка проекта
+
+🏭 factory-template
+✅ Идея → ✅ Intake → ✅ Спека → ✅ Архитектура → ✅ Handoff → 🟡 Исполнение
+→ 🕒 Проверка → 🕒 Release → 🕒 Deploy → 🕒 Сопровождение
+Модули:
+✅ Lifecycle → 🟡 Core → 🟡 Security → 🕒 UI/A11y → 🕒 Quality → 🕒 WebSec
+→ 🕒 Ops → ⏸ AI
+Tasks: 🕒 0 ready-for-handoff -> 0 ready-for-codex -> 0 running -> 0
+  human-review
+В работе:
+✅ FT-CH-0012 chatgpt-first-answer-allocation-not-attempted: ✅ GPT-HO → ✅
+  Codex OK → ✅ Done
+✅ FT-CX-0011 factory-template: ✅ Codex-WORK → ✅ Codex OK → ✅ Done
+
 ## Применение в Codex UI
 
 `apply_mode: manual-ui (default)`.
@@ -29,6 +50,9 @@ codex --profile build
 Цель:
 Выполнить direct-task self-handoff и продолжить работу в этом же task, если текущий live route совпадает с routing ниже. Не завершай ответ только self-handoff block и не требуй ручного продолжения пользователя для внутренней Codex-eligible работы.
 
+Visible answer contract:
+Первый substantive ответ Codex для direct-task должен показывать `Номер запроса Codex` и `Карточка проекта` до route receipt, self-handoff или remediation. `Номер запроса Codex` берется из `.chatgpt/codex-work-index.yaml` как `codex_work_title` и не расходует ChatGPT `FT-CH` counter. Если номер не выделен, нужно показать exact blocker: `Нужно выделить номер через repo codex-work-index / allocator.`.
+
 Repo rules:
 В рамках repo приоритет у repo rules, AGENTS, runbook и policy files репозитория. Общие рабочие инструкции применяются только там, где не противоречат правилам repo и старшим системным ограничениям среды.
 
@@ -49,14 +73,14 @@ Routing:
 - pipeline_stage: done
 - handoff_allowed: yes (forbidden)
 - defect_capture_path: not-required-by-text-signal
-- chat_id:
-- chat_title:
-- task_slug: chatgpt-first-answer-title-one-click-copy-chatgpt
-- chat_kind:
-- chat_state:
-- chat_index_path:
-- codex_work_id: FT-CX-0010
-- codex_work_title: FT-CX-0010 chatgpt-first-answer-title-one-click-copy-chatgpt
+- chat_id: not_applicable
+- chat_title: not_applicable
+- task_slug: factory-template
+- chat_kind: not_applicable
+- chat_state: not_applicable
+- chat_index_path: not_applicable
+- codex_work_id: FT-CX-0011
+- codex_work_title: FT-CX-0011 factory-template
 - codex_work_kind: self_handoff
 - codex_work_state: verified
 - codex_work_index_path: .chatgpt/codex-work-index.yaml
@@ -69,7 +93,7 @@ Routing:
 - .chatgpt/done-report.md
 
 Текст задачи:
-chatgpt-first-answer-title-one-click-copy: Название чата в первом ответе на запрос в ChatGPT должно быть копируемо одним кликом
+в ответе кодекса в factory-template не видно карточки проекта и номера тикета запроса
 
 Continuation rule:
 Если задача пришла в уже открытую Codex-сессию и этот route совместим с текущей сессией, после видимого self-handoff продолжай remediation / implementation / verification без отдельного запроса пользователя. Остановка допустима только при реальном blocker, внешнем действии, несовместимом route или необходимости нового task launch.
@@ -82,6 +106,8 @@ Completion rule:
 
 Этот раздел фиксирует legacy-маркеры direct-task response без создания второго handoff-блока:
 
+- `## Номер запроса Codex`
+- `## Карточка проекта`
 - `## Self-handoff для прямой задачи`
 - `## Классификация`
 - `## Выбранный профиль проекта`

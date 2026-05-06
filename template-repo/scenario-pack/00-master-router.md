@@ -10,6 +10,28 @@
 - разрешен ли handoff в Codex.
 - `handoff_shape`, если handoff в Codex разрешен, готовится или обсуждается.
 
+## Контракт первого ответа Codex
+
+Первый substantive ответ Codex для `launch_source: direct-task` обязан начинаться с двух видимых блоков после чтения этого router и до route receipt, self-handoff, анализа или remediation:
+
+````markdown
+## Номер запроса Codex
+```text
+<PROJECT_CODE>-CX-<NNNN> <task-slug>
+```
+
+## Карточка проекта
+<compact project status card>
+````
+
+Правила:
+- `Номер запроса Codex` берется только из materialized repo reservation в `.chatgpt/codex-work-index.yaml`, созданной direct-task bootstrap / Codex work allocator. `FT-CX-....` означает Codex remediation/direct work и не расходует ChatGPT `FT-CH` counter.
+- Если Codex не может надежно выполнить write в repo codex-work index и подтвердить запись, не показывай `FT-CX-....`; выведи ровно: `Нужно выделить номер через repo codex-work-index / allocator.`
+- Значение под `Номер запроса Codex` всегда выводится как отдельный однострочный fenced `text` code block. Внутри code block должна быть ровно одна строка: stable Codex work title или exact allocator blocker.
+- `Карточка проекта` должна соответствовать repo renderer output: `python3 template-repo/scripts/render-project-lifecycle-dashboard.py --input template-repo/template/.chatgpt/project-lifecycle-dashboard.yaml --format chatgpt-card --stdout` для `factory-template`, либо downstream-equivalent repo-local renderer/input.
+- Если карточка недоступна, это blocker, который надо назвать явно; нельзя заменять карточку свободным пересказом.
+- Для `launch_source: chatgpt-handoff` Codex не создает новый `FT-CX` self-handoff; в route receipt нужно показывать входящий `chat_id/chat_title`, если он есть, и не расходовать Codex work counter без отдельной direct/incidental task boundary.
+
 ## Контракт первого ответа ChatGPT
 
 Первый substantive ответ ChatGPT в новом project task chat обязан начинаться с двух видимых блоков до route receipt, анализа или handoff:

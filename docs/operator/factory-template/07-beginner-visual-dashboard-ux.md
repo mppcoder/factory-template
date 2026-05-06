@@ -113,6 +113,7 @@ Owner boundary говорит, кто должен действовать:
 
 Смотрите на Codex execution card:
 
+- `request` показывает текущий `FT-CX` / `FT-CH` номер;
 - `route receipt` появился в начале задачи;
 - `active step / wave` меняется после checkpoint;
 - completed steps растут только с evidence;

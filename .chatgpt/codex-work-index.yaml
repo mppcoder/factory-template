@@ -1,6 +1,6 @@
 schema: codex-work-index/v1
 project_code: FT
-next_codex_work_number: 11
+next_codex_work_number: 12
 id_policy:
   canonical_format: <PROJECT_CODE>-CX-<NNNN> <task-slug>
   independent_from_chat_handoff_index: true
@@ -204,7 +204,8 @@ items:
   handoff_revision: 1
   handoff_register_item_id: ''
   replacement_work_id: FT-CX-0010
-  replacement_reason: Superseded by a corrected bootstrap with a more specific task slug before implementation closeout.
+  replacement_reason: Superseded by a corrected bootstrap with a more specific task
+    slug before implementation closeout.
   status_chain:
   - codex_self_handoff
   - codex_accepted
@@ -239,3 +240,29 @@ items:
   - python3 template-repo/scripts/validate-codex-task-pack.py .
   - bash template-repo/scripts/verify-all.sh quick
   next_action: No further implementation action; one-click copy contract is verified.
+- codex_work_id: FT-CX-0011
+  work_number: 11
+  work_title: FT-CX-0011 factory-template
+  task_slug: factory-template
+  kind: self_handoff
+  state: verified
+  created_utc: '2026-05-06T06:27:12Z'
+  updated_utc: '2026-05-06T06:33:09Z'
+  source_type: direct-task
+  handoff_group: factory-template
+  handoff_revision: 1
+  handoff_register_item_id: ''
+  status_chain:
+  - codex_self_handoff
+  - codex_accepted
+  - codex_completed
+  evidence:
+  - Allocated during direct-task bootstrap before first substantive response.
+  - Added visible Codex request number and project card contract to router, direct-task
+    scenario, AGENTS, docs, generator and validator.
+  - python3 template-repo/scripts/validate-codex-routing.py .
+  - python3 template-repo/scripts/eval-artifact.py tests/artifact-eval/specs/direct-task-self-handoff.yaml
+    --output tests/artifact-eval/reports/direct-task-self-handoff.md --json
+  - bash template-repo/scripts/verify-all.sh quick
+  next_action: No further implementation action; Codex first-answer request number
+    and project card contract is verified.

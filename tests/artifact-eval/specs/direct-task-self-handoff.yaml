@@ -27,6 +27,13 @@ expected_trigger:
           must_contain:
             - "готовый visible self-handoff block"
             - "первом substantive ответе"
+        - id: visible-number-and-card
+          category: outcome
+          must_contain:
+            - "Номер запроса Codex"
+            - "Карточка проекта"
+            - ".chatgpt/codex-work-index.yaml"
+            - "Нужно выделить номер через repo codex-work-index / allocator."
     - id: defect-direct-task
       prompt: "Прямая задача содержит regression."
       expected: "Artifact routes through defect-capture before implementation."
@@ -69,3 +76,5 @@ compliance_assertions:
     must_contain:
       - "## Правило visible gate"
       - "Недостаточно только записать"
+      - "`Модули:`"
+      - "`В работе:`"

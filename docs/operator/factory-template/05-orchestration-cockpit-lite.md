@@ -17,7 +17,7 @@
 
 Это не полный lifecycle dashboard проекта. Cockpit отвечает на вопрос “как идет этот parent handoff и его child tasks”. Верхний `project-lifecycle-dashboard` агрегирует cockpit вместе с task/stage state, feature waves, release readiness, runtime/deploy state и post-release improvement queue.
 
-Для новичка короткий readout этого же исполнения показывает `Codex execution card` из `project-lifecycle-dashboard`: route receipt, активная wave/task, completed/remaining steps, blockers, next internal action и external action boundary.
+Для новичка короткий readout этого же исполнения показывает `Codex execution card` из `project-lifecycle-dashboard`: request identity, route receipt, активная wave/task, completed/remaining steps, blockers, next internal action и external action boundary.
 
 Cockpit остается detailed orchestration artifact для parent handoff: он хранит child task table, deferred user actions, placeholder replacements и continuation outcome. Execution card не заменяет cockpit, а показывает пользователю короткую версию хода исполнения прямо в Codex App / VS Code Codex chat.
 

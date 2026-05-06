@@ -130,9 +130,30 @@ python3 template-repo/scripts/allocate-codex-work-id.py \
 
 В executable path `bootstrap-codex-task.py` записывает `kind: handoff` в `.chatgpt/chat-handoff-index.yaml` только для `chatgpt-handoff`. Для `direct-task` он записывает `kind: self_handoff` в `.chatgpt/codex-work-index.yaml`. Поэтому `FT-CH-....` означает ChatGPT task chat, а `FT-CX-....` означает Codex remediation/direct work.
 
+Первый substantive ответ Codex для direct task должен начинаться с видимой пары:
+
+````markdown
+## Номер запроса Codex
+```text
+<PROJECT_CODE>-CX-<NNNN> <task-slug>
+```
+
+## Карточка проекта
+<compact project card>
+````
+
+`FT-CX-....` разрешен только после materialized write в `.chatgpt/codex-work-index.yaml`. Если write не подтвержден, Codex должен показать exact blocker:
+
+```text
+Нужно выделить номер через repo codex-work-index / allocator.
+```
+
+Карточка проекта для этого блока берется из repo renderer (`--format chatgpt-card --stdout`) так же, как финальная closeout-card. Если renderer недоступен, это blocker, а не повод заменить карточку пересказом.
+
 Поиск:
 
 - по номеру: `FT-CH-0010`;
+- по Codex work номеру: `FT-CX-0010`;
 - по slug: `dashboard-card-ui`;
 - незавершенная работа ищется в dashboard/card, а не по status token в title.
 
@@ -141,7 +162,7 @@ python3 template-repo/scripts/allocate-codex-work-id.py \
 Для новичка dashboard проявляется в трех местах:
 
 - `ChatGPT mini card` — короткий readout в ChatGPT Project: проект, compact lifecycle chain, module readiness chain и активные handoff/task status lines.
-- `Codex execution card` — короткий readout в Codex App / VS Code Codex extension: route receipt, выбранный профиль/model/reasoning, текущая wave/task, completed/remaining steps, blockers, next internal action и external action boundary.
+- `Codex execution card` — короткий readout в Codex App / VS Code Codex extension: request identity, route receipt, выбранный профиль/model/reasoning, текущая wave/task, completed/remaining steps, blockers, next internal action и external action boundary.
 - `reports/project-lifecycle-dashboard.md` — полная Markdown доска состояния, которую можно открыть в VS Code Markdown Preview или GitHub preview.
 
 Связь слоев:

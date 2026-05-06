@@ -83,6 +83,7 @@
 4. Для direct task сначала создай self-handoff по repo-сценариям.
 5. Проверяемый выбор хранится в `.chatgpt/task-launch.yaml`.
 6. Для direct task self-handoff должен быть явно показан в первом substantive ответе, а не оставаться только внутренним артефактом или неявным рассуждением.
+7. Первый substantive ответ Codex для direct task должен до route receipt/remediation показать `Номер запроса Codex` из `.chatgpt/codex-work-index.yaml` и `Карточка проекта` из repo renderer.
 
 ## Правило inline handoff
 

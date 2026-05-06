@@ -1,6 +1,6 @@
 # Панель жизненного цикла проекта / `project-lifecycle-dashboard`
 
-Generated UTC: `2026-05-06T06:09:03+00:00`
+Generated UTC: `2026-05-06T06:33:27+00:00`
 Source: `/projects/factory-template/template-repo/template/.chatgpt/project-lifecycle-dashboard.yaml`
 
 ## Сейчас
@@ -65,8 +65,7 @@ Source: `/projects/factory-template/template-repo/template/.chatgpt/project-life
 
 ✅ FT-CH-0012 chatgpt-first-answer-allocation-not-attempted: ✅ GPT-HO → ✅
   Codex OK → ✅ Done
-✅ FT-CX-0008 chatgpt-title-reservation-gap: ✅ Codex-WORK → ✅ Codex OK → ✅
-  Done
+✅ FT-CX-0011 factory-template: ✅ Codex-WORK → ✅ Codex OK → ✅ Done
 
 ### История ChatGPT handoff-задач
 
@@ -94,6 +93,10 @@ Source: `/projects/factory-template/template-repo/template/.chatgpt/project-life
   ✅ Done
 ✅ FT-CX-0008 chatgpt-title-reservation-gap: ✅ Codex-WORK → ✅ Codex OK → ✅
   Done
+⏸ FT-CX-0009 chatgpt: ✅ Codex-WORK → 🕒 Codex OK → ⏸ Superseded
+✅ FT-CX-0010 chatgpt-first-answer-title-one-click-copy-chatgpt: ✅
+  Codex-WORK → ✅ Codex OK → ✅ Done
+✅ FT-CX-0011 factory-template: ✅ Codex-WORK → ✅ Codex OK → ✅ Done
 
 ## Передача и оркестрация
 
@@ -190,7 +193,7 @@ Source: `/projects/factory-template/template-repo/template/.chatgpt/project-life
 - status: `pending`
 - preset: `starter`
 - operator source: `template-repo/scripts/operator-dashboard.py`
-- dry-run report present: `False`
+- dry-run report present: `True`
 - deploy report present: `False`
 - boundary: Runtime evidence может подтягиваться из operator-dashboard reports; dry-run/report evidence не является real deploy proof.
 

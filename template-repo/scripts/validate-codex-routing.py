@@ -271,12 +271,22 @@ def main() -> int:
                 if section not in direct_response_text:
                     errors.append(f"direct-task response не содержит обязательный раздел `{section}`")
             for section in [
+                "## Номер запроса Codex",
+                "## Карточка проекта",
                 "## Применение в Codex UI",
                 "## Строгий launch mode (опционально)",
                 "## Handoff в Codex",
             ]:
                 if section not in direct_response_text:
                     errors.append(f"direct-task response не содержит publishable section `{section}`")
+            work_title = str(launch.get("codex_work_title") or "").strip()
+            if work_title and work_title not in direct_response_text:
+                errors.append("direct-task response не показывает visible Codex work title из launch.codex_work_title")
+            if "Нужно выделить номер через repo codex-work-index / allocator." not in direct_response_text:
+                errors.append("direct-task response не содержит exact Codex work allocator blocker fallback")
+            for fragment in ["🏭", "Идея", "Модули:", "В работе:"]:
+                if fragment not in direct_response_text:
+                    errors.append(f"direct-task response не содержит visible project card fragment `{fragment}`")
             if "Не завершай ответ только self-handoff block" not in direct_response_text:
                 errors.append("direct-task response не содержит запрет остановки на self-handoff без продолжения")
             if "## Инструкция пользователю" not in direct_response_text:
