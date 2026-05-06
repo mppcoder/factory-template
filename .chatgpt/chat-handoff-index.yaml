@@ -1,6 +1,6 @@
 schema: chat-handoff-index/v1
 project_code: FT
-next_chat_number: 15
+next_chat_number: 16
 title_policy:
   canonical_format: <PROJECT_CODE>-CH-<NNNN> <task-slug>
   include_status_in_title: false
@@ -237,3 +237,25 @@ items:
   - Chat produced product support architecture, GitHub Issues support model, issue-autofix automation analysis, and P0-P1 MVP Codex handoff.
   - User confirmed task is already completed and requested numbering correction.
   next_action: No further implementation action; chat numbering corrected and task marked verified.
+- chat_id: FT-CH-0015
+  chat_number: 15
+  chat_title: FT-CH-0015 windows-bootstrapper-release-publication
+  task_slug: windows-bootstrapper-release-publication
+  kind: handoff
+  state: verified
+  created_utc: '2026-05-06T07:15:00Z'
+  updated_utc: '2026-05-06T07:15:00Z'
+  source_type: chatgpt-first-answer-retrofix
+  handoff_group: windows-bootstrapper-release-publication
+  handoff_revision: 1
+  handoff_register_item_id: ''
+  status_chain:
+  - chatgpt_handoff
+  - codex_accepted
+  - codex_completed
+  evidence:
+  - 'Retrofix: this ChatGPT task initially showed FT-CH-0011, but FT-CH-0011 is already reserved for single-vps-dev-runtime-host.'
+  - 'User explicitly clarified this chat is not the FT-CH-0013 or FT-CH-0014 numbering-fix chat.'
+  - 'This chat covered install-from-scratch guidance, beginner readme.txt, GitHub-vs-npm install clarification, Windows bootstrapper MVP handoff, verified Codex closeout for commit 02c517fcad5562412c1f06e682251f71e0e7babf, and release-publication handoff.'
+  - 'Task outcome accepted by user as completed; numbering corrected to FT-CH-0015 and marked verified.'
+  next_action: No further numbering action; use this stable title for this chat and do not reuse FT-CH-0011, FT-CH-0013 or FT-CH-0014 for it.
