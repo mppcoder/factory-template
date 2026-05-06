@@ -1,6 +1,6 @@
 # Панель жизненного цикла проекта / `project-lifecycle-dashboard`
 
-Generated UTC: `2026-05-06T12:33:12+00:00`
+Generated UTC: `2026-05-06T12:45:40+00:00`
 Source: `/projects/factory-template/template-repo/template/.chatgpt/project-lifecycle-dashboard.yaml`
 
 ## Сейчас
@@ -65,8 +65,8 @@ Source: `/projects/factory-template/template-repo/template/.chatgpt/project-life
 
 🔴 FT-CX-0012 continue-after-unified-roadmap: ✅ Codex-WORK → ✅ Codex OK → 🔴
   Blocked
-✅ FT-CX-0015 external-pilot-runbook-question-answer: ✅ Codex-WORK → ✅
-  Codex OK → ✅ Done
+✅ FT-CX-0016 start-downstream-pilot-dialog: ✅ Codex-WORK → ✅ Codex OK → ✅
+  Done
 
 ### История ChatGPT handoff-задач
 
@@ -86,6 +86,8 @@ Source: `/projects/factory-template/template-repo/template/.chatgpt/project-life
   OK → ✅ Done
 🟡 FT-CH-0016 chat-title-allocator-blocker-regression: ✅ GPT-HO → 🕒 Codex
   OK → 🕒 Done
+🟡 FT-CH-0017 module-gated-vps-downstream-beginner-roadmap: ✅ GPT-HO → 🕒
+  Codex OK → 🕒 Done
 
 ### История Codex-доработок
 
@@ -113,6 +115,8 @@ Source: `/projects/factory-template/template-repo/template/.chatgpt/project-life
   OK → ✅ Done
 ✅ FT-CX-0015 external-pilot-runbook-question-answer: ✅ Codex-WORK → ✅
   Codex OK → ✅ Done
+✅ FT-CX-0016 start-downstream-pilot-dialog: ✅ Codex-WORK → ✅ Codex OK → ✅
+  Done
 
 ## Передача и оркестрация
 

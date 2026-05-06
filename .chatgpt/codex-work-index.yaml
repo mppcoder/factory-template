@@ -1,6 +1,6 @@
 schema: codex-work-index/v1
 project_code: FT
-next_codex_work_number: 16
+next_codex_work_number: 17
 id_policy:
   canonical_format: <PROJECT_CODE>-CX-<NNNN> <task-slug>
   independent_from_chat_handoff_index: true
@@ -360,9 +360,32 @@ items:
   evidence:
   - 'User clarified: ранбук должен быть в виде вопроса кодекса и ответа пользователя,
     а не разрозненных задач.'
-  - Reworked docs/operator/downstream-battle-external-pilot-runbook.md into a
-    sequential Codex question and user answer interview flow.
+  - Reworked docs/operator/downstream-battle-external-pilot-runbook.md into a sequential
+    Codex question and user answer interview flow.
   - Preserved false-pass guards for downstream repo selection, real APP_IMAGE, target,
     secrets boundary and deploy/restore/rollback approvals.
-  next_action: No internal repo action remains; user can answer the five Codex
-    questions when ready to start a real downstream pilot.
+  next_action: No internal repo action remains; user can answer the five Codex questions
+    when ready to start a real downstream pilot.
+- codex_work_id: FT-CX-0016
+  work_number: 16
+  work_title: FT-CX-0016 start-downstream-pilot-dialog
+  task_slug: start-downstream-pilot-dialog
+  kind: direct_task
+  state: verified
+  created_utc: '2026-05-06T12:45:09Z'
+  updated_utc: '2026-05-06T12:45:23Z'
+  source_type: direct-task
+  handoff_group: start-downstream-pilot-dialog
+  handoff_revision: 1
+  handoff_register_item_id: ''
+  status_chain:
+  - codex_self_handoff
+  - codex_accepted
+  - codex_completed
+  evidence:
+  - 'User asked: и как заупстить этот диалог?'
+  - Explained that the dialog starts by answering Question 1/5 from docs/operator/downstream-battle-external-pilot-runbook.md.
+  - Provided a ready-to-use start block and the first Codex question for downstream
+    pilot repo selection.
+  next_action: User can start the external pilot dialog by answering Question 1/5
+    with a real downstream repo, or say not_ready to keep the proof blocked.
