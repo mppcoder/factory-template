@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 from __future__ import annotations
 
+import re
 import sys
 from pathlib import Path
 
@@ -11,15 +12,32 @@ REQUIRED_ROUTER_PHRASES = [
     "Карточка проекта",
     "Нужно выделить номер через repo chat-handoff-index / allocator.",
     "materialized repo reservation",
+    "allocation-not-attempted",
+    "first substantive answer",
+    "materialized allocation or allocator blocker",
+    "Третье состояние запрещено",
     "dry-run, read-only вычисление",
     "номер все равно остается занятым repo reservation",
     "render-project-lifecycle-dashboard.py --format chatgpt-card --stdout",
+]
+REQUIRED_HANDOFF_PHRASES = [
+    "Название чата для копирования",
+    "Карточка проекта",
+    "materialized allocation or allocator blocker",
+    "третье состояние запрещено",
+    "allocation attempt/blocker",
+    "chatgpt-first-answer-allocation-not-attempted",
 ]
 REQUIRED_DOC_PHRASES = [
     "Название чата для копирования",
     "Карточка проекта",
     "Нужно выделить номер через repo chat-handoff-index / allocator.",
     "materialized/reserved",
+    "allocation-not-attempted",
+    "first substantive answer",
+    "materialized allocation or allocator blocker",
+    "третье состояние запрещено",
+    "ошибка первого ответа",
     "repo write не подтвержден",
     "номер остается занятым",
 ]
@@ -29,10 +47,53 @@ FORBIDDEN_OVERCLAIMS = [
     "propose a stable chat title",
     "Project Instructions могут только предложить",
 ]
+TITLE_HEADER = "## Название чата для копирования"
+CARD_HEADER = "## Карточка проекта"
+ALLOCATOR_BLOCKER = "Нужно выделить номер через repo chat-handoff-index / allocator."
+CHAT_TITLE_RE = re.compile(r"\b[A-Z][A-Z0-9]*-CH-\d{4} [a-z0-9][a-z0-9-]*\b")
+ROUTE_MARKERS = [
+    "route receipt",
+    "Route Receipt",
+    "handoff",
+    "Handoff",
+    "анализ",
+    "Анализ",
+]
 
 
 def read(path: Path) -> str:
     return path.read_text(encoding="utf-8")
+
+
+def validate_visible_first_answer_outcome(text: str) -> list[str]:
+    errors: list[str] = []
+    title_pos = text.find(TITLE_HEADER)
+    card_pos = text.find(CARD_HEADER)
+
+    if title_pos < 0:
+        errors.append("нет блока `Название чата для копирования`")
+    if card_pos < 0:
+        errors.append("нет блока `Карточка проекта`")
+    if title_pos >= 0 and card_pos >= 0 and title_pos > card_pos:
+        errors.append("блок title расположен после card")
+
+    marker_positions = [text.find(marker) for marker in ROUTE_MARKERS if text.find(marker) >= 0]
+    first_route_pos = min(marker_positions) if marker_positions else -1
+    if first_route_pos >= 0:
+        if title_pos < 0 or title_pos > first_route_pos:
+            errors.append("route/analysis/handoff начался до title allocation outcome")
+        if card_pos < 0 or card_pos > first_route_pos:
+            errors.append("route/analysis/handoff начался до project card")
+
+    if title_pos >= 0:
+        title_end = card_pos if card_pos > title_pos else len(text)
+        title_block = text[title_pos:title_end]
+        has_materialized_title = bool(CHAT_TITLE_RE.search(title_block))
+        has_allocator_blocker = ALLOCATOR_BLOCKER in title_block
+        if not has_materialized_title and not has_allocator_blocker:
+            errors.append("title block не содержит materialized allocation or allocator blocker")
+
+    return errors
 
 
 def main() -> int:
@@ -45,7 +106,7 @@ def main() -> int:
             errors.append(f"00-master-router.md не содержит `{phrase}`")
 
     handoff = read(root / "template-repo" / "scenario-pack" / "15-handoff-to-codex.md")
-    for phrase in ["Название чата для копирования", "Карточка проекта"]:
+    for phrase in REQUIRED_HANDOFF_PHRASES:
         if phrase not in handoff:
             errors.append(f"15-handoff-to-codex.md не содержит `{phrase}`")
 
@@ -62,6 +123,16 @@ def main() -> int:
         for phrase in FORBIDDEN_OVERCLAIMS:
             if phrase in text:
                 errors.append(f"{path.relative_to(root)} содержит overclaim `{phrase}`")
+
+    negative_fixture = root / "tests" / "chatgpt-first-answer-contract" / "negative" / "allocation-not-attempted.md"
+    if not negative_fixture.exists():
+        errors.append(f"{negative_fixture.relative_to(root)} отсутствует")
+    else:
+        fixture_errors = validate_visible_first_answer_outcome(read(negative_fixture))
+        if not fixture_errors:
+            errors.append(
+                f"{negative_fixture.relative_to(root)} должен быть negative fixture для allocation-not-attempted, но прошел проверку"
+            )
 
     card_path = root / "reports" / "project-status-card.md"
     if not card_path.exists():

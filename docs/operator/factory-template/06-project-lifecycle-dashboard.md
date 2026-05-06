@@ -72,6 +72,10 @@ Project Instructions могут показать пользователю тол
 
 Важно: `FT-CH-....` в первом ответе не является предложением. Это ссылка на уже созданный item в repo index. Если handoff так и не запустили в Codex, номер остается занятым; следующая задача должна получить новый номер, а старую запись нужно явно закрыть как `superseded`, `not_applicable` или `archived`, если она больше не нужна.
 
+Инвариант first substantive answer: до route receipt, анализа или handoff должен быть один из двух видимых outcomes - materialized allocation or allocator blocker. Первое допустимое состояние - materialized allocation confirmed, затем stable title block. Второе допустимое состояние - repo write не подтвержден или allocation unavailable, затем exact allocator blocker.
+
+третье состояние запрещено: no allocation attempted / no blocker / answer continues. Если ChatGPT не показал `FT-CH-....` и не показал allocator blocker, это ошибка первого ответа `allocation-not-attempted`. Пользователь должен остановить route и запустить repo allocator или передать Codex remediation, а не продолжать с примерным номером.
+
 Первый substantive ответ ChatGPT в новом task-чате должен начинаться с:
 
 ```text
@@ -87,12 +91,16 @@ Project Instructions могут показать пользователю тол
 Рекомендуемый snippet для Project Instructions:
 
 ```text
-At the beginning of a new project task chat, show a materialized repo-reserved stable chat title in this format:
-<PROJECT_CODE>-CH-<NNNN> <task-slug>.
-Do not include HO, OPEN, CODEX, DONE, BLOCKED, VERIFIED, BUG, DECISION or other status/kind tokens in the title.
-If the next number is unknown or repo write was not confirmed, do not invent it. Say: 'Нужно выделить номер через repo chat-handoff-index / allocator.'
-Statuses must be shown only in the project card and repo dashboard.
-In the first substantive answer, show sections exactly named 'Название чата для копирования' and 'Карточка проекта' before route receipt or handoff.
+В первом substantive ответе нового task chat сначала покажи:
+1. `Название чата для копирования`;
+2. `Карточка проекта`.
+
+Stable title имеет формат `<PROJECT_CODE>-CH-<NNNN> <task-slug>` и разрешен только после materialized/reserved write в repo index.
+Инвариант first substantive answer: до route receipt, анализа или handoff должен быть один из двух видимых outcomes - materialized allocation or allocator blocker.
+Если repo write не подтвержден, не придумывай номер и скажи: `Нужно выделить номер через repo chat-handoff-index / allocator.`
+третье состояние запрещено: no allocation attempted / no blocker / answer continues.
+Если нет `FT-CH-....` и нет allocator blocker, это ошибка первого ответа `allocation-not-attempted`; останови route и не продолжай с примерным номером.
+Status/kind tokens в title запрещены; статусы показывай только в project card и repo dashboard.
 ```
 
 При первом substantive ответе в новом task chat handoff обязан получить номер из repo counter и ссылаться на него:

@@ -172,13 +172,13 @@ items:
   chat_title: FT-CH-0012 chatgpt-first-answer-allocation-not-attempted
   task_slug: chatgpt-first-answer-allocation-not-attempted
   kind: bug
-  state: open
+  state: verified
   created_utc: '2026-05-06T05:56:29Z'
-  updated_utc: '2026-05-06T05:56:29Z'
+  updated_utc: '2026-05-06T06:08:37Z'
   source_type: chatgpt-first-answer
   handoff_group: chatgpt-first-answer-allocation-not-attempted
   handoff_revision: 1
-  handoff_register_item_id: ''
+  handoff_register_item_id: HIR-012
   status_chain:
   - chatgpt_handoff
   - codex_accepted
@@ -186,4 +186,11 @@ items:
   evidence:
   - 'User requested closure of chatgpt-first-answer-allocation-not-attempted at router/validator/runbook level.'
   - 'First-answer title reservation was materialized before visible substantive answer.'
-  next_action: Start the Codex handoff below and close the router/validator/runbook gap; do not reuse this chat number.
+  - 'route receipt: launch_source=chatgpt-handoff, handoff_shape=codex-task-handoff, selected_profile=build, selected_model=gpt-5.5, reasoning=medium'
+  - 'defect-capture: reports/bugs/2026-05-06-chatgpt-first-answer-allocation-not-attempted.md'
+  - 'factory feedback: reports/factory-feedback/feedback-053-chatgpt-first-answer-allocation-not-attempted.md'
+  - 'python3 template-repo/scripts/validate-chat-handoff-index.py .chatgpt/chat-handoff-index.yaml'
+  - 'python3 template-repo/scripts/validate-chatgpt-first-answer-contract.py .'
+  - 'bash template-repo/scripts/verify-all.sh quick'
+  - 'bash template-repo/scripts/verify-all.sh'
+  next_action: No further implementation action; defect is closed at router/validator/runbook level.
