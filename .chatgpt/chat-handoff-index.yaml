@@ -1,6 +1,6 @@
 schema: chat-handoff-index/v1
 project_code: FT
-next_chat_number: 17
+next_chat_number: 18
 title_policy:
   canonical_format: <PROJECT_CODE>-CH-<NNNN> <task-slug>
   include_status_in_title: false
@@ -282,3 +282,24 @@ items:
   - User reported ChatGPT shows allocator blocker instead of stable copy title.
   - Materialized reservation created before visible substantive response for this defect task.
   next_action: Reproduce allocator/write path issue and fix router/validator/runbook behavior so reachable write allocator is attempted before blocker fallback.
+- chat_id: FT-CH-0017
+  chat_number: 17
+  chat_title: FT-CH-0017 module-gated-vps-downstream-beginner-roadmap
+  task_slug: module-gated-vps-downstream-beginner-roadmap
+  kind: handoff
+  state: open
+  created_utc: '2026-05-06T11:02:00Z'
+  updated_utc: '2026-05-06T11:02:00Z'
+  source_type: chatgpt-first-answer-retrofix
+  handoff_group: module-gated-vps-downstream-beginner-roadmap
+  handoff_revision: 1
+  handoff_register_item_id: ''
+  status_chain:
+  - chatgpt_handoff
+  - codex_accepted
+  - codex_completed
+  evidence:
+  - 'Retrofix: this ChatGPT task initially showed allocator blocker instead of stable title.'
+  - 'User requested materialized number assignment for the current unified roadmap chat.'
+  - 'Scope: close module gate baseline first, then single big VPS architecture, downstream/battle project proof, and beginner-first Windows-to-first-project path.'
+  next_action: Start the Codex handoff or close/supersede this repo reservation; do not reuse this chat number.
