@@ -1,6 +1,6 @@
 schema: codex-work-index/v1
 project_code: FT
-next_codex_work_number: 13
+next_codex_work_number: 14
 id_policy:
   canonical_format: <PROJECT_CODE>-CX-<NNNN> <task-slug>
   independent_from_chat_handoff_index: true
@@ -286,6 +286,32 @@ items:
   - 'User said: продолжай'
   - 'Repo readout checked: docs/releases/unified-single-vps-downstream-beginner-roadmap.md'
   - 'Downstream proof report checked: proof_status=blocked_external_inputs, readiness_status=ready_for_external_pilot'
-  - 'No internal repo-eligible continuation remains without selecting a real downstream/battle repo and pilot inputs.'
-  accepted_reason: Continuation is blocked on external downstream pilot inputs; beginner-first fallback branch is already materialized and verified in commit e022f9754c6b6509b1d500b36098cdecfa07ec86.
-  next_action: Provide real downstream/battle pilot inputs or choose a new internal repo task.
+  - No internal repo-eligible continuation remains without selecting a real downstream/battle
+    repo and pilot inputs.
+  accepted_reason: Continuation is blocked on external downstream pilot inputs; beginner-first
+    fallback branch is already materialized and verified in commit e022f9754c6b6509b1d500b36098cdecfa07ec86.
+  next_action: Provide real downstream/battle pilot inputs or choose a new internal
+    repo task.
+- codex_work_id: FT-CX-0013
+  work_number: 13
+  work_title: FT-CX-0013 project-card-closeout-drift
+  task_slug: project-card-closeout-drift
+  kind: remediation
+  state: verified
+  created_utc: '2026-05-06T12:13:06Z'
+  updated_utc: '2026-05-06T12:13:30Z'
+  source_type: direct-task
+  handoff_group: project-card-closeout-drift
+  handoff_revision: 1
+  handoff_register_item_id: ''
+  status_chain:
+  - codex_self_handoff
+  - codex_accepted
+  - codex_completed
+  evidence:
+  - 'User reported: почему пропадла карточка проекта ?'
+  - Reproduced drift between reports/project-status-card.md and live chatgpt-card renderer output.
+  - Refreshed reports/project-status-card.md to match renderer output for the current
+    blocked FT-CX-0012 continuation state.
+  next_action: No further remediation action; compact project status card artifact
+    is synchronized with renderer output.
