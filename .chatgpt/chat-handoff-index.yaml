@@ -1,6 +1,6 @@
 schema: chat-handoff-index/v1
 project_code: FT
-next_chat_number: 16
+next_chat_number: 17
 title_policy:
   canonical_format: <PROJECT_CODE>-CH-<NNNN> <task-slug>
   include_status_in_title: false
@@ -259,3 +259,21 @@ items:
   - 'This chat covered install-from-scratch guidance, beginner readme.txt, GitHub-vs-npm install clarification, Windows bootstrapper MVP handoff, verified Codex closeout for commit 02c517fcad5562412c1f06e682251f71e0e7babf, and release-publication handoff.'
   - 'Task outcome accepted by user as completed; numbering corrected to FT-CH-0015 and marked verified.'
   next_action: No further numbering action; use this stable title for this chat and do not reuse FT-CH-0011, FT-CH-0013 or FT-CH-0014 for it.
+- chat_id: FT-CH-0016
+  chat_number: 16
+  chat_title: FT-CH-0016 chat-title-allocator-blocker-regression
+  task_slug: chat-title-allocator-blocker-regression
+  kind: bug
+  state: open
+  created_utc: '2026-05-06T10:43:00Z'
+  updated_utc: '2026-05-06T10:43:00Z'
+  source_type: chatgpt-first-answer
+  handoff_group: chat-title-allocator-blocker-regression
+  handoff_revision: 1
+  handoff_register_item_id: ''
+  status_chain:
+  - chatgpt_handoff
+  evidence:
+  - User reported ChatGPT shows allocator blocker instead of stable copy title.
+  - Materialized reservation created before visible substantive response for this defect task.
+  next_action: Reproduce allocator/write path issue and fix router/validator/runbook behavior so reachable write allocator is attempted before blocker fallback.
