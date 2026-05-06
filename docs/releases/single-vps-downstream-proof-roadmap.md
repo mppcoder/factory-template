@@ -34,6 +34,9 @@ Current status: `ready_for_external_pilot`.
 - deploy/restore/rollback approval;
 - sanitized transcript.
 
+Operator runbook for these actions:
+`docs/operator/downstream-battle-external-pilot-runbook.md`.
+
 ## Защита от false pass
 
 - Placeholder app proves only template/runtime path, not business workload.

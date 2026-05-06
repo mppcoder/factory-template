@@ -1,6 +1,6 @@
 schema: codex-work-index/v1
 project_code: FT
-next_codex_work_number: 14
+next_codex_work_number: 15
 id_policy:
   canonical_format: <PROJECT_CODE>-CX-<NNNN> <task-slug>
   independent_from_chat_handoff_index: true
@@ -310,8 +310,34 @@ items:
   - codex_completed
   evidence:
   - 'User reported: почему пропадла карточка проекта ?'
-  - Reproduced drift between reports/project-status-card.md and live chatgpt-card renderer output.
+  - Reproduced drift between reports/project-status-card.md and live chatgpt-card
+    renderer output.
   - Refreshed reports/project-status-card.md to match renderer output for the current
     blocked FT-CX-0012 continuation state.
   next_action: No further remediation action; compact project status card artifact
     is synchronized with renderer output.
+- codex_work_id: FT-CX-0014
+  work_number: 14
+  work_title: FT-CX-0014 downstream-external-actions-runbook
+  task_slug: downstream-external-actions-runbook
+  kind: direct_task
+  state: verified
+  created_utc: '2026-05-06T12:17:01Z'
+  updated_utc: '2026-05-06T12:18:30Z'
+  source_type: direct-task
+  handoff_group: downstream-external-actions-runbook
+  handoff_revision: 1
+  handoff_register_item_id: ''
+  status_chain:
+  - codex_self_handoff
+  - codex_accepted
+  - codex_completed
+  evidence:
+  - 'User requested detailed runbook for external downstream pilot actions: repo selection,
+    real APP_IMAGE, target confirmation, secrets outside repo and deploy/restore/rollback
+    approvals.'
+  - Added docs/operator/downstream-battle-external-pilot-runbook.md with operator
+    windows, inputs, pass/stop criteria, sanitized transcript rules and handoff block.
+  - Linked the runbook from docs/downstream-application-proof.md and docs/releases/single-vps-downstream-proof-roadmap.md.
+  next_action: No internal repo action remains; external downstream pilot inputs
+    are required before runtime proof can run.

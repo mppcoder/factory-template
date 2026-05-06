@@ -17,6 +17,9 @@
 - approval for deploy, restore and rollback;
 - sanitized transcript without secrets.
 
+Detailed operator-facing instructions for collecting these inputs live in
+`docs/operator/downstream-battle-external-pilot-runbook.md`.
+
 Если этих inputs нет, stage остается `blocked_external_inputs`, а repo может подготовить только docs/template/checklist evidence.
 
 ## Путь от placeholder к real app image
