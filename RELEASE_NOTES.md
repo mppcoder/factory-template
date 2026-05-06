@@ -12,6 +12,8 @@ Advanced automation hardening increment: добавлены synthetic/local issu
 
 Gated full autonomous mode increment: добавлен dry-run-first substrate для worktree manager, bounded parallel runner proof, permission enforcement, separate approval layer, hardened audit ledger, rollback proof, required human review policy и disabled-by-default gates для auto-merge, production deploy, security issue autofix и public external submit.
 
+VPS project hosting topology increment: добавлен стандарт выбора между `single-host` и `split-host`, multi-project `/projects` vs `/srv` boundary, per-project `/etc/<project>.env`, systemd/nginx/docker compose/backup templates, migration/pilot/restore runbooks and safe validators. Это repo standard implementation, а не real production migration proof.
+
 ### Что вошло
 
 - `task-registry.yaml`, allocator, issue bridge, handoff generator, handoff validator, preview/prepare/status/queue commands.

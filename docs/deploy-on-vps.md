@@ -9,6 +9,8 @@
 
 По умолчанию используется минимальный `starter` profile. Production-функции подключаются только через opt-in presets, чтобы первый deploy не превращался в тяжёлый production checklist.
 
+Для размещения нескольких боевых проектов и выбора между all-on-one VPS и split runtime VPS используйте отдельный стандарт: `docs/architecture/vps-project-hosting-topologies.md`. Текущий документ остается single-service proof path для template runtime/reference app; multi-project runtime copies должны жить в `/srv/<project>-prod`, а не запускаться напрямую из `/projects`.
+
 ## Быстрый старт
 
 1. Проверьте операторский статус:
@@ -294,3 +296,4 @@ bash template-repo/scripts/deploy-local-vps.sh --yes
 - `R-DEPLOY-02`: скрипты зависят от `docker compose` (или legacy `docker-compose`) в окружении VPS.
 - `R-DEPLOY-03`: TLS/домен/реверс-прокси доступны как opt-in preset, но DNS/firewall/секреты остаются ответственностью оператора.
 - `R-DEPLOY-04`: дефолтный image (`nginx`) демонстрационный; если реального сервиса ещё нет, используйте `build-placeholder-app-image.py --install-volume`, а для application-level proof нужен явный production image в `APP_IMAGE`.
+- `R-DEPLOY-05`: для multi-project hosting не используйте `deploy/.env` как real prod env внутри repo; per-project real env должен быть outside repo, например `/etc/<project>.env`.

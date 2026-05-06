@@ -82,6 +82,72 @@ FAKE_DOCKER
   rm -rf "$tmp_dir"
 }
 
+run_vps_project_hosting_topology_smoke() {
+  local tmp_dir
+  tmp_dir="$(mktemp -d)"
+  mkdir -p \
+    "$tmp_dir/projects/demo" \
+    "$tmp_dir/srv/demo-prod" \
+    "$tmp_dir/etc/systemd/system" \
+    "$tmp_dir/etc/nginx/sites-available" \
+    "$tmp_dir/etc/nginx/sites-enabled" \
+    "$tmp_dir/var/backups/projects/demo"
+
+  cp "$ROOT/deploy/templates/docker-compose.project.template.yml" "$tmp_dir/srv/demo-prod/compose.yaml"
+  cp "$ROOT/deploy/templates/systemd.project.service.template" "$tmp_dir/etc/systemd/system/demo.service"
+  cp "$ROOT/deploy/templates/nginx.project.conf.template" "$tmp_dir/etc/nginx/sites-available/demo.conf"
+  ln -s "../sites-available/demo.conf" "$tmp_dir/etc/nginx/sites-enabled/demo.conf"
+  printf 'PROJECT_IMAGE=registry.example.com/demo:fixture\n' > "$tmp_dir/etc/demo.env"
+  chmod 600 "$tmp_dir/etc/demo.env"
+
+  bash "$ROOT/scripts/validators/validate-vps-hosting-layout.sh" \
+    --topology-mode single-host \
+    --fixture-root "$tmp_dir" \
+    --skip-host-tools
+  bash "$ROOT/scripts/validators/validate-vps-hosting-layout.sh" \
+    --topology-mode split-host \
+    --runtime-host demo-runtime \
+    --fixture-root "$tmp_dir" \
+    --skip-host-tools
+  bash "$ROOT/scripts/validators/validate-project-runtime.sh" \
+    --project-slug demo \
+    --topology-mode single-host \
+    --runtime-path /srv/demo-prod \
+    --env-path /etc/demo.env \
+    --service-name demo \
+    --service-file /etc/systemd/system/demo.service \
+    --nginx-conf /etc/nginx/sites-available/demo.conf \
+    --nginx-enabled /etc/nginx/sites-enabled/demo.conf \
+    --compose-file /srv/demo-prod/compose.yaml \
+    --backup-path /var/backups/projects/demo \
+    --repo-path /projects/demo \
+    --deploy-script "$ROOT/scripts/deploy/deploy-project.template.sh" \
+    --fixture-root "$tmp_dir" \
+    --skip-host-tools
+  bash "$ROOT/scripts/validators/validate-project-secrets-boundary.sh" \
+    --root "$ROOT" \
+    --project-slug demo \
+    --env-path /etc/demo.env
+  bash "$ROOT/scripts/validators/validate-project-network-exposure.sh" \
+    --compose-file "$ROOT/deploy/templates/docker-compose.project.template.yml" \
+    --nginx-conf "$ROOT/deploy/templates/nginx.project.conf.template"
+
+  cat > "$tmp_dir/bad-compose.yml" <<'YAML'
+services:
+  app:
+    ports:
+      - "0.0.0.0:8080:80"
+YAML
+  if bash "$ROOT/scripts/validators/validate-project-network-exposure.sh" \
+    --compose-file "$tmp_dir/bad-compose.yml" >/tmp/vps-network-negative.log 2>&1; then
+    echo "vps project network negative fixture unexpectedly passed" >&2
+    cat /tmp/vps-network-negative.log >&2
+    return 1
+  fi
+  rm -f /tmp/vps-network-negative.log
+  rm -rf "$tmp_dir"
+}
+
 run_artifact_eval_smoke() {
   local tmp_dir
   tmp_dir="$(mktemp -d)"
@@ -954,6 +1020,7 @@ run_quick() {
   run_step "validate-operator-env-production-example" python3 "$ROOT/template-repo/scripts/validate-operator-env.py" "$ROOT" --env-file "$ROOT/deploy/.env.example" --preset production --allow-example-placeholders
   run_step "placeholder-app-image-builder-dry-run" python3 "$ROOT/template-repo/scripts/build-placeholder-app-image.py" --env-file "$ROOT/deploy/.env.example" --static-dir "$ROOT/deploy/static-placeholder" --dry-run --install-volume
   run_step "deploy-dry-run-smoke-starter-app-db" run_deploy_dry_run_smoke
+  run_step "vps-project-hosting-topology-smoke" run_vps_project_hosting_topology_smoke
   run_step "validate-spec-traceability" python3 "$ROOT/template-repo/scripts/validate-spec-traceability.py" "$ROOT"
   run_step "validate-task-state-lite" python3 "$ROOT/template-repo/scripts/validate-task-state-lite.py" "$ROOT/template-repo/template"
   run_step "task-state-lite-smoke" run_task_state_lite_smoke

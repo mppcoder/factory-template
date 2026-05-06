@@ -1,0 +1,19 @@
+[Unit]
+Description=PROJECT_SLUG production runtime
+Requires=docker.service
+After=docker.service network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+WorkingDirectory=PROJECT_RUNTIME_PATH
+EnvironmentFile=PROJECT_ENV_FILE
+ExecStartPre=/usr/bin/docker compose --env-file PROJECT_ENV_FILE -p COMPOSE_PROJECT_NAME -f PROJECT_RUNTIME_PATH/compose.yaml config
+ExecStart=/usr/bin/docker compose --env-file PROJECT_ENV_FILE -p COMPOSE_PROJECT_NAME -f PROJECT_RUNTIME_PATH/compose.yaml up -d --remove-orphans
+ExecStop=/usr/bin/docker compose --env-file PROJECT_ENV_FILE -p COMPOSE_PROJECT_NAME -f PROJECT_RUNTIME_PATH/compose.yaml down
+TimeoutStartSec=120
+TimeoutStopSec=120
+
+[Install]
+WantedBy=multi-user.target

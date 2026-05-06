@@ -2,6 +2,8 @@
 
 Этот runbook проверяет single-VPS production path без разрушительных действий по умолчанию. Реальный deploy, DNS/firewall changes, backup restore и rollback drill выполняются только после явного approval оператора.
 
+Если цель - перенос нескольких боевых проектов или выбор между `single-host` и `split-host`, сначала примените `docs/architecture/vps-project-hosting-topologies.md` и `docs/runbooks/migrate-projects-vps-topologies.md`. Этот field pilot остается доказательством single-service production preset contour, а не полной миграцией нескольких runtime.
+
 ## Область проверки
 
 - starter остаётся beginner default.

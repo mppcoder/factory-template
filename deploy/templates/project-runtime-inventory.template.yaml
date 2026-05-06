@@ -1,0 +1,42 @@
+schema: project-runtime-inventory/v1
+project_slug: PROJECT_SLUG
+topology_mode: TOPOLOGY_MODE
+runtime_host: RUNTIME_HOST
+github_source_of_truth: true
+
+paths:
+  repo: PROJECT_REPO_PATH
+  runtime: PROJECT_RUNTIME_PATH
+  env_file: PROJECT_ENV_FILE
+  systemd_service: /etc/systemd/system/PROJECT_SLUG.service
+  nginx_available: /etc/nginx/sites-available/PROJECT_SLUG.conf
+  nginx_enabled: /etc/nginx/sites-enabled/PROJECT_SLUG.conf
+  backup_root: /var/backups/projects/PROJECT_SLUG
+
+network:
+  domain: PROJECT_DOMAIN
+  internal_port: PROJECT_INTERNAL_PORT
+  health_path: PROJECT_HEALTH_PATH
+  compose_project_name: COMPOSE_PROJECT_NAME
+  docker_network: DOCKER_NETWORK
+  public_edge: nginx
+  app_bind: 127.0.0.1
+  expected_public_ports:
+    - 22
+    - 80
+    - 443
+
+security_boundary:
+  prod_runs_from_projects: false
+  real_env_committed: false
+  real_env_location: PROJECT_ENV_FILE
+  env_permissions: "0600"
+  backups_in_repo: false
+  split_host_inventory_contains_secrets: false
+
+rollback:
+  previous_git_tag: "<record-before-deploy>"
+  previous_image_tag: "<record-before-deploy>"
+  old_vps_grace_period: "<record-duration>"
+  restore_proof_required: true
+  rollback_proof_required: true

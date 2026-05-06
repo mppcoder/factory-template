@@ -1,0 +1,30 @@
+name: COMPOSE_PROJECT_NAME
+
+services:
+  app:
+    image: ${PROJECT_IMAGE:?set PROJECT_IMAGE in PROJECT_ENV_FILE}
+    restart: unless-stopped
+    env_file:
+      - PROJECT_ENV_FILE
+    ports:
+      - "127.0.0.1:PROJECT_INTERNAL_PORT:${PROJECT_CONTAINER_PORT:-80}"
+    networks:
+      - project_net
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://127.0.0.1:${PROJECT_CONTAINER_PORT:-80}PROJECT_HEALTH_PATH >/dev/null || exit 1"]
+      interval: ${PROJECT_HEALTHCHECK_INTERVAL:-30s}
+      timeout: ${PROJECT_HEALTHCHECK_TIMEOUT:-5s}
+      retries: ${PROJECT_HEALTHCHECK_RETRIES:-3}
+      start_period: ${PROJECT_HEALTHCHECK_START_PERIOD:-20s}
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+    security_opt:
+      - no-new-privileges:true
+
+networks:
+  project_net:
+    name: DOCKER_NETWORK
+    driver: bridge

@@ -3,6 +3,9 @@
 ## [Unreleased]
 ### Добавлено
 - Root `LICENSE` now states proprietary terms: public visibility does not grant permission to use, copy, modify, distribute, run or derive from repository content without prior written consent.
+- Стандарт `VPS Project Hosting Topologies`: architecture/runbook слой для `single-host` и `split-host`, разделение `/projects` и `/srv`, GitHub source-of-truth, per-project `/etc/<project>.env`, systemd/nginx/compose/backup model, pilot/restore proof checklists.
+- Project runtime deploy templates under `deploy/templates/`, dry-run-first deploy/backup/restore script templates under `scripts/deploy/` and host-safe validators under `scripts/validators/`.
+- ADR `docs/decisions/vps-project-hosting-topologies.md`, risk register `factory/producer/registry/known-risks/vps-project-hosting-risks.md` and incidental security bug report for an untracked in-repo runtime env boundary violation.
 
 ## [2.5.8] - 2026-04-30
 ### Изменено
