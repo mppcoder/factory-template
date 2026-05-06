@@ -1,6 +1,6 @@
 schema: chat-handoff-index/v1
 project_code: FT
-next_chat_number: 14
+next_chat_number: 15
 title_policy:
   canonical_format: <PROJECT_CODE>-CH-<NNNN> <task-slug>
   include_status_in_title: false
@@ -215,3 +215,25 @@ items:
   - 'This chat covered Universal Task Control, downstream materialization, advanced automation substrate, gated autonomous mode, release/readout closeouts and numbering correction.'
   - 'FT-CH-0011 remains occupied and must not be reused.'
   next_action: No further numbering action; use this stable title for the current chat.
+- chat_id: FT-CH-0014
+  chat_number: 14
+  chat_title: FT-CH-0014 product-support-architecture
+  task_slug: product-support-architecture
+  kind: handoff
+  state: verified
+  created_utc: '2026-05-06T07:08:22Z'
+  updated_utc: '2026-05-06T07:08:22Z'
+  source_type: chatgpt-first-answer-retrofix
+  handoff_group: product-support-architecture
+  handoff_revision: 1
+  handoff_register_item_id: ''
+  status_chain:
+  - chatgpt_handoff
+  - codex_accepted
+  - codex_completed
+  evidence:
+  - First visible ChatGPT title incorrectly used FT-CH-0011, which is already reserved for single-vps-dev-runtime-host.
+  - This chat is not FT-CH-0013 universal-task-control-automation-roadmap.
+  - Chat produced product support architecture, GitHub Issues support model, issue-autofix automation analysis, and P0-P1 MVP Codex handoff.
+  - User confirmed task is already completed and requested numbering correction.
+  next_action: No further implementation action; chat numbering corrected and task marked verified.
