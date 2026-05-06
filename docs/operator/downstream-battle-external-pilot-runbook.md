@@ -70,13 +70,14 @@ goal: провести пошаговый опрос для downstream/battle ap
 могу проверять APP_IMAGE, deploy path, backup, restore или rollback.
 
 Repo-first остается целевым proof mode: для pass нужен git repo или Codex должен
-сначала материализовать/подключить repo. Папка проекта без git repo допустима
-только как intake/preflight candidate, но не как downstream proof pass.
+сначала материализовать/подключить repo. Папка проекта без git repo или папка
+в нестандартном месте VPS допустима только как legacy intake/preflight
+candidate, но не как downstream proof pass.
 
 Выбери вариант:
 A. Боевой repo уже есть на VPS: /projects/<repo>
 B. Боевой repo есть в GitHub, но еще не открыт/не клонирован на VPS: <owner>/<repo>
-C. Есть папка проекта без git repo: /projects/<project-root>
+C. Есть папка проекта без git repo или вне стандарта: <absolute-path>
 D. Проект еще не выбран
 E. Другое: опиши коротко
 
@@ -94,7 +95,11 @@ B: mppcoder/my-product
 ```
 
 ```text
-C: /projects/my-product-source
+C: /my-product-source
+```
+
+```text
+C: /root/my-product-source
 ```
 
 ```text
@@ -114,20 +119,22 @@ test -f AGENTS.md && sed -n '1,160p' AGENTS.md
 
 - если `B`, выясняет, можно ли Codex clone/open repo через available GitHub/SSH
   path;
-- если `C`, проверяет папку только как project-root candidate, затем предлагает
-  repo materialization path: `git init`, connect GitHub remote, or choose existing
-  repo. Пока repo не материализован, proof остается blocked;
+- если `C`, проверяет папку только как legacy/non-standard project-root
+  candidate, затем предлагает standardization path: move/copy to
+  `/projects/<repo>`, `git init`, connect GitHub remote, or choose existing repo.
+  Пока repo не материализован and layout не нормализован, proof остается blocked;
 - если `D`, фиксирует `blocked_external_inputs: downstream project not selected`;
 - если `E`, нормализует ответ в `A`, `B`, `C` или `D`, либо задает уточнение.
 
 **Gate pass для вопроса 1:**
 
 - выбран боевой/downstream проект, не `factory-template`;
-- repo path/GitHub repo указан, либо дана project-root папка для intake;
-- repo доступен или есть понятный путь материализовать repo;
+- repo path/GitHub repo указан, либо дана absolute project-root папка для intake;
+- repo доступен или есть понятный путь материализовать repo and normalize layout;
 - protected paths/data еще не трогаются;
-- пользователь не просит pass без real repo. Project-root без git repo остается
-  `blocked_external_inputs` до repo materialization.
+- пользователь не просит pass без real repo. Project-root без git repo или
+  нестандартный VPS path остается `blocked_external_inputs` до repo
+  materialization and `/projects/<repo>` standardization.
 
 ## Вопрос 2. Это real `APP_IMAGE` или его нужно собрать?
 

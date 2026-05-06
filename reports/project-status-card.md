@@ -9,5 +9,5 @@ Tasks: 🕒 0 ready-for-handoff -> 0 ready-for-codex -> 0 running -> 0
 В работе:
 🔴 FT-CX-0012 continue-after-unified-roadmap: ✅ Codex-WORK → ✅ Codex OK → 🔴
   Blocked
-✅ FT-CX-0018 clarify-downstream-repo-vs-project-root: ✅ Codex-WORK → ✅
+✅ FT-CX-0019 nonstandard-vps-project-root-survey-option: ✅ Codex-WORK → ✅
   Codex OK → ✅ Done

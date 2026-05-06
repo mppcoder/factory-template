@@ -1,6 +1,6 @@
 schema: codex-work-index/v1
 project_code: FT
-next_codex_work_number: 19
+next_codex_work_number: 20
 id_policy:
   canonical_format: <PROJECT_CODE>-CX-<NNNN> <task-slug>
   independent_from_chat_handoff_index: true
@@ -430,11 +430,37 @@ items:
   - codex_accepted
   - codex_completed
   evidence:
-  - 'User asked whether the selected repo should be factory-template or a battle
-    project, and why there was no option for project root folders without repo.'
+  - User asked whether the selected repo should be factory-template or a battle project,
+    and why there was no option for project root folders without repo.
   - 'Clarified Question 1 in docs/operator/downstream-battle-external-pilot-runbook.md:
     select the downstream/battle project, not factory-template.'
-  - Added option for a project root folder without git repo as intake/preflight
-    candidate, with proof remaining blocked until repo materialization.
+  - Added option for a project root folder without git repo as intake/preflight candidate,
+    with proof remaining blocked until repo materialization.
   next_action: No internal repo action remains; continue the survey with the clarified
     Question 1 options.
+- codex_work_id: FT-CX-0019
+  work_number: 19
+  work_title: FT-CX-0019 nonstandard-vps-project-root-survey-option
+  task_slug: nonstandard-vps-project-root-survey-option
+  kind: remediation
+  state: verified
+  created_utc: '2026-05-06T13:02:27Z'
+  updated_utc: '2026-05-06T13:02:56Z'
+  source_type: direct-task
+  handoff_group: nonstandard-vps-project-root-survey-option
+  handoff_revision: 1
+  handoff_register_item_id: ''
+  status_chain:
+  - codex_self_handoff
+  - codex_accepted
+  - codex_completed
+  evidence:
+  - 'User answered survey option E: project folder is currently at the VPS root
+    and not in the template standard layout.'
+  - Updated docs/operator/downstream-battle-external-pilot-runbook.md so Question
+    1 accepts a legacy/non-standard absolute project-root path as intake/preflight
+    candidate.
+  - Clarified that proof remains blocked until repo materialization and normalization
+    to /projects/<repo>.
+  next_action: Continue survey by asking for the exact absolute path of the non-standard
+    project folder.
