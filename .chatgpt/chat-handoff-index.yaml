@@ -1,6 +1,6 @@
 schema: chat-handoff-index/v1
 project_code: FT
-next_chat_number: 13
+next_chat_number: 14
 title_policy:
   canonical_format: <PROJECT_CODE>-CH-<NNNN> <task-slug>
   include_status_in_title: false
@@ -194,3 +194,24 @@ items:
   - 'bash template-repo/scripts/verify-all.sh quick'
   - 'bash template-repo/scripts/verify-all.sh'
   next_action: No further implementation action; defect is closed at router/validator/runbook level.
+- chat_id: FT-CH-0013
+  chat_number: 13
+  chat_title: FT-CH-0013 universal-task-control-automation-roadmap
+  task_slug: universal-task-control-automation-roadmap
+  kind: handoff
+  state: verified
+  created_utc: '2026-05-06T06:30:00Z'
+  updated_utc: '2026-05-06T06:30:00Z'
+  source_type: chatgpt-first-answer-retrofix
+  handoff_group: universal-task-control-automation-roadmap
+  handoff_revision: 1
+  handoff_register_item_id: ''
+  status_chain:
+  - chatgpt_handoff
+  - codex_accepted
+  - codex_completed
+  evidence:
+  - 'Retrofix: first visible ChatGPT title in this chat incorrectly used FT-CH-0011, which is already reserved for single-vps-dev-runtime-host.'
+  - 'This chat covered Universal Task Control, downstream materialization, advanced automation substrate, gated autonomous mode, release/readout closeouts and numbering correction.'
+  - 'FT-CH-0011 remains occupied and must not be reused.'
+  next_action: No further numbering action; use this stable title for the current chat.
