@@ -1,6 +1,6 @@
 schema: codex-work-index/v1
 project_code: FT
-next_codex_work_number: 12
+next_codex_work_number: 13
 id_policy:
   canonical_format: <PROJECT_CODE>-CX-<NNNN> <task-slug>
   independent_from_chat_handoff_index: true
@@ -266,3 +266,26 @@ items:
   - bash template-repo/scripts/verify-all.sh quick
   next_action: No further implementation action; Codex first-answer request number
     and project card contract is verified.
+- codex_work_id: FT-CX-0012
+  work_number: 12
+  work_title: FT-CX-0012 continue-after-unified-roadmap
+  task_slug: continue-after-unified-roadmap
+  kind: direct_task
+  state: blocked
+  created_utc: '2026-05-06T12:09:05Z'
+  updated_utc: '2026-05-06T12:12:00Z'
+  source_type: direct-task
+  handoff_group: continue-after-unified-roadmap
+  handoff_revision: 1
+  handoff_register_item_id: ''
+  status_chain:
+  - codex_self_handoff
+  - codex_accepted
+  - codex_completed
+  evidence:
+  - 'User said: продолжай'
+  - 'Repo readout checked: docs/releases/unified-single-vps-downstream-beginner-roadmap.md'
+  - 'Downstream proof report checked: proof_status=blocked_external_inputs, readiness_status=ready_for_external_pilot'
+  - 'No internal repo-eligible continuation remains without selecting a real downstream/battle repo and pilot inputs.'
+  accepted_reason: Continuation is blocked on external downstream pilot inputs; beginner-first fallback branch is already materialized and verified in commit e022f9754c6b6509b1d500b36098cdecfa07ec86.
+  next_action: Provide real downstream/battle pilot inputs or choose a new internal repo task.
