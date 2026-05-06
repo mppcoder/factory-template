@@ -1,6 +1,6 @@
 schema: codex-work-index/v1
 project_code: FT
-next_codex_work_number: 17
+next_codex_work_number: 18
 id_policy:
   canonical_format: <PROJECT_CODE>-CX-<NNNN> <task-slug>
   independent_from_chat_handoff_index: true
@@ -389,3 +389,29 @@ items:
     pilot repo selection.
   next_action: User can start the external pilot dialog by answering Question 1/5
     with a real downstream repo, or say not_ready to keep the proof blocked.
+- codex_work_id: FT-CX-0017
+  work_number: 17
+  work_title: FT-CX-0017 external-pilot-handoff-survey-runbook
+  task_slug: external-pilot-handoff-survey-runbook
+  kind: remediation
+  state: verified
+  created_utc: '2026-05-06T12:48:54Z'
+  updated_utc: '2026-05-06T12:50:06Z'
+  source_type: direct-task
+  handoff_group: external-pilot-handoff-survey-runbook
+  handoff_revision: 1
+  handoff_register_item_id: ''
+  status_chain:
+  - codex_self_handoff
+  - codex_accepted
+  - codex_completed
+  evidence:
+  - 'User requested: Переработай ранбук в хэндоф с промежуточным опросом пользователя
+    не блоками а по одному вопросу с пояснениями и вариантами ответов.'
+  - Reworked docs/operator/downstream-battle-external-pilot-runbook.md into a
+    codex-task-handoff start block plus one-question-at-a-time survey with explanations
+    and answer options.
+  - Preserved no-secrets, no-runtime-mutation-without-approval and no-false-pass
+    gates.
+  next_action: No internal repo action remains; user can start the handoff survey
+    by pasting the start block from the runbook into Codex.
