@@ -9,5 +9,5 @@ Tasks: 🕒 0 ready-for-handoff -> 0 ready-for-codex -> 0 running -> 0
 В работе:
 🔴 FT-CX-0012 continue-after-unified-roadmap: ✅ Codex-WORK → ✅ Codex OK → 🔴
   Blocked
-✅ FT-CX-0014 downstream-external-actions-runbook: ✅ Codex-WORK → ✅ Codex
-  OK → ✅ Done
+✅ FT-CX-0015 external-pilot-runbook-question-answer: ✅ Codex-WORK → ✅
+  Codex OK → ✅ Done

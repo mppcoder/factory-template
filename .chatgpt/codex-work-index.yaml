@@ -1,6 +1,6 @@
 schema: codex-work-index/v1
 project_code: FT
-next_codex_work_number: 15
+next_codex_work_number: 16
 id_policy:
   canonical_format: <PROJECT_CODE>-CX-<NNNN> <task-slug>
   independent_from_chat_handoff_index: true
@@ -339,5 +339,30 @@ items:
   - Added docs/operator/downstream-battle-external-pilot-runbook.md with operator
     windows, inputs, pass/stop criteria, sanitized transcript rules and handoff block.
   - Linked the runbook from docs/downstream-application-proof.md and docs/releases/single-vps-downstream-proof-roadmap.md.
-  next_action: No internal repo action remains; external downstream pilot inputs
-    are required before runtime proof can run.
+  next_action: No internal repo action remains; external downstream pilot inputs are
+    required before runtime proof can run.
+- codex_work_id: FT-CX-0015
+  work_number: 15
+  work_title: FT-CX-0015 external-pilot-runbook-question-answer
+  task_slug: external-pilot-runbook-question-answer
+  kind: remediation
+  state: verified
+  created_utc: '2026-05-06T12:31:02Z'
+  updated_utc: '2026-05-06T12:32:42Z'
+  source_type: direct-task
+  handoff_group: external-pilot-runbook-question-answer
+  handoff_revision: 1
+  handoff_register_item_id: ''
+  status_chain:
+  - codex_self_handoff
+  - codex_accepted
+  - codex_completed
+  evidence:
+  - 'User clarified: ранбук должен быть в виде вопроса кодекса и ответа пользователя,
+    а не разрозненных задач.'
+  - Reworked docs/operator/downstream-battle-external-pilot-runbook.md into a
+    sequential Codex question and user answer interview flow.
+  - Preserved false-pass guards for downstream repo selection, real APP_IMAGE, target,
+    secrets boundary and deploy/restore/rollback approvals.
+  next_action: No internal repo action remains; user can answer the five Codex
+    questions when ready to start a real downstream pilot.
