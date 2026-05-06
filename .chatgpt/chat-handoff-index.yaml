@@ -1,6 +1,6 @@
 schema: chat-handoff-index/v1
 project_code: FT
-next_chat_number: 11
+next_chat_number: 12
 title_policy:
   canonical_format: <PROJECT_CODE>-CH-<NNNN> <task-slug>
   include_status_in_title: false
@@ -78,8 +78,8 @@ items:
   - codex_completed
   evidence:
   - ChatGPT handoff captured; Codex acceptance pending.
-  - User report on 2026-04-29 confirmed no visible unfinished task exists for
-    this chat title; no linked HIR/source task exists.
+  - User report on 2026-04-29 confirmed no visible unfinished task exists for this
+    chat title; no linked HIR/source task exists.
   accepted_reason: Stale seed/index entry without a matching handoff implementation
     register item; not an active task.
   next_action: No active action; keep only as historical index record.
@@ -122,8 +122,8 @@ items:
   - codex_completed
   evidence:
   - Blocked until executable routing/manual picker boundary is clarified.
-  - User report on 2026-04-29 confirmed no visible unfinished task exists for
-    this chat title; no linked HIR/source task exists.
+  - User report on 2026-04-29 confirmed no visible unfinished task exists for this
+    chat title; no linked HIR/source task exists.
   accepted_reason: Stale seed/index entry without a matching handoff implementation
     register item; not an active blocked task.
   next_action: No active action; keep only as historical index record.
@@ -144,11 +144,37 @@ items:
   - codex_accepted
   - codex_completed
   evidence:
-  - 'route receipt: launch_source=chatgpt-handoff, handoff_shape=codex-task-handoff, selected_profile=deep, selected_model=gpt-5.5, reasoning=high'
-  - 'bash RELEASE_BUILD.sh'
-  - 'sha256sum -c /projects/factory-template/_incoming/factory-v2.5.1.zip.sha256'
-  - 'python3 template-repo/scripts/validate-release-package.py /projects/factory-template/_incoming/factory-v2.5.1.zip --checksum /projects/factory-template/_incoming/factory-v2.5.1.zip.sha256 --manifest /projects/factory-template/_incoming/factory-v2.5.1.manifest.yaml'
-  - 'bash template-repo/scripts/verify-all.sh quick in unpacked /tmp root'
-  - 'bash template-repo/scripts/verify-all.sh quick in working repo'
+  - 'route receipt: launch_source=chatgpt-handoff, handoff_shape=codex-task-handoff,
+    selected_profile=deep, selected_model=gpt-5.5, reasoning=high'
+  - bash RELEASE_BUILD.sh
+  - sha256sum -c /projects/factory-template/_incoming/factory-v2.5.1.zip.sha256
+  - python3 template-repo/scripts/validate-release-package.py /projects/factory-template/_incoming/factory-v2.5.1.zip
+    --checksum /projects/factory-template/_incoming/factory-v2.5.1.zip.sha256 --manifest
+    /projects/factory-template/_incoming/factory-v2.5.1.manifest.yaml
+  - bash template-repo/scripts/verify-all.sh quick in unpacked /tmp root
+  - bash template-repo/scripts/verify-all.sh quick in working repo
   - 'layout correction: release artifacts moved under /projects/factory-template/_incoming'
-  next_action: No further implementation action; release package is verified and sync gate remains.
+  next_action: No further implementation action; release package is verified and sync
+    gate remains.
+- chat_id: FT-CH-0011
+  chat_number: 11
+  chat_title: FT-CH-0011 single-vps-dev-runtime-host
+  task_slug: single-vps-dev-runtime-host
+  kind: handoff
+  state: open
+  created_utc: '2026-05-06T05:53:39Z'
+  updated_utc: '2026-05-06T05:53:39Z'
+  source_type: chatgpt-first-answer-retrofix
+  handoff_group: single-vps-dev-runtime-host
+  handoff_revision: 1
+  handoff_register_item_id: ''
+  status_chain:
+  - chatgpt_handoff
+  - codex_accepted
+  - codex_completed
+  evidence:
+  - 'Retrofix: architecture task was launched before materialized ChatGPT title reservation'
+  - 'Original ChatGPT handoff: Single Big VPS Dev+Runtime Host / split runtime VPS
+    topology standard'
+  next_action: Start the Codex handoff or close/supersede this repo reservation; do
+    not reuse this chat number.
