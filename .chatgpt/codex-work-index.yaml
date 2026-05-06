@@ -1,6 +1,6 @@
 schema: codex-work-index/v1
 project_code: FT
-next_codex_work_number: 18
+next_codex_work_number: 19
 id_policy:
   canonical_format: <PROJECT_CODE>-CX-<NNNN> <task-slug>
   independent_from_chat_handoff_index: true
@@ -408,10 +408,33 @@ items:
   evidence:
   - 'User requested: Переработай ранбук в хэндоф с промежуточным опросом пользователя
     не блоками а по одному вопросу с пояснениями и вариантами ответов.'
-  - Reworked docs/operator/downstream-battle-external-pilot-runbook.md into a
-    codex-task-handoff start block plus one-question-at-a-time survey with explanations
-    and answer options.
-  - Preserved no-secrets, no-runtime-mutation-without-approval and no-false-pass
-    gates.
+  - Reworked docs/operator/downstream-battle-external-pilot-runbook.md into a codex-task-handoff
+    start block plus one-question-at-a-time survey with explanations and answer options.
+  - Preserved no-secrets, no-runtime-mutation-without-approval and no-false-pass gates.
   next_action: No internal repo action remains; user can start the handoff survey
     by pasting the start block from the runbook into Codex.
+- codex_work_id: FT-CX-0018
+  work_number: 18
+  work_title: FT-CX-0018 clarify-downstream-repo-vs-project-root
+  task_slug: clarify-downstream-repo-vs-project-root
+  kind: remediation
+  state: verified
+  created_utc: '2026-05-06T12:56:27Z'
+  updated_utc: '2026-05-06T12:57:07Z'
+  source_type: direct-task
+  handoff_group: clarify-downstream-repo-vs-project-root
+  handoff_revision: 1
+  handoff_register_item_id: ''
+  status_chain:
+  - codex_self_handoff
+  - codex_accepted
+  - codex_completed
+  evidence:
+  - 'User asked whether the selected repo should be factory-template or a battle
+    project, and why there was no option for project root folders without repo.'
+  - 'Clarified Question 1 in docs/operator/downstream-battle-external-pilot-runbook.md:
+    select the downstream/battle project, not factory-template.'
+  - Added option for a project root folder without git repo as intake/preflight
+    candidate, with proof remaining blocked until repo materialization.
+  next_action: No internal repo action remains; continue the survey with the clarified
+    Question 1 options.

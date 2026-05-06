@@ -57,22 +57,28 @@ goal: провести пошаговый опрос для downstream/battle ap
 - После пяти вопросов Codex собирает итоговый evidence summary and asks for
   final confirmation before any deploy/restore/rollback work.
 
-## Вопрос 1. Какой downstream/battle repo выбираем?
+## Вопрос 1. Какой downstream/battle проект выбираем?
 
 **Codex спрашивает:**
 
 ```text
-Вопрос 1/5: какой downstream/battle repo берем в pilot?
+Вопрос 1/5: какой downstream/battle проект берем в pilot?
 
 Зачем спрашиваю:
-downstream proof можно делать только на реальном repo с реальным workload. Без
-выбранного repo я не могу проверять APP_IMAGE, deploy path, backup, restore или rollback.
+выбирается не проект шаблона `factory-template`, а боевой/downstream проект,
+чью реальную application workload нужно доказать. Без выбранного проекта я не
+могу проверять APP_IMAGE, deploy path, backup, restore или rollback.
+
+Repo-first остается целевым proof mode: для pass нужен git repo или Codex должен
+сначала материализовать/подключить repo. Папка проекта без git repo допустима
+только как intake/preflight candidate, но не как downstream proof pass.
 
 Выбери вариант:
-A. Repo уже есть на VPS: /projects/<repo>
-B. Repo есть в GitHub, но еще не открыт/не клонирован на VPS: <owner>/<repo>
-C. Repo еще не выбран
-D. Другое: опиши коротко
+A. Боевой repo уже есть на VPS: /projects/<repo>
+B. Боевой repo есть в GitHub, но еще не открыт/не клонирован на VPS: <owner>/<repo>
+C. Есть папка проекта без git repo: /projects/<project-root>
+D. Проект еще не выбран
+E. Другое: опиши коротко
 
 Ответь одной строкой, без secrets.
 ```
@@ -88,7 +94,11 @@ B: mppcoder/my-product
 ```
 
 ```text
-C: repo еще не выбран
+C: /projects/my-product-source
+```
+
+```text
+D: проект еще не выбран
 ```
 
 **Codex после ответа:**
@@ -104,15 +114,20 @@ test -f AGENTS.md && sed -n '1,160p' AGENTS.md
 
 - если `B`, выясняет, можно ли Codex clone/open repo через available GitHub/SSH
   path;
-- если `C`, фиксирует `blocked_external_inputs: downstream repo not selected`;
-- если `D`, нормализует ответ в `A`, `B` или `C`, либо задает уточнение.
+- если `C`, проверяет папку только как project-root candidate, затем предлагает
+  repo materialization path: `git init`, connect GitHub remote, or choose existing
+  repo. Пока repo не материализован, proof остается blocked;
+- если `D`, фиксирует `blocked_external_inputs: downstream project not selected`;
+- если `E`, нормализует ответ в `A`, `B`, `C` или `D`, либо задает уточнение.
 
 **Gate pass для вопроса 1:**
 
-- repo path или GitHub repo указан;
-- repo доступен или есть понятный путь получить доступ;
+- выбран боевой/downstream проект, не `factory-template`;
+- repo path/GitHub repo указан, либо дана project-root папка для intake;
+- repo доступен или есть понятный путь материализовать repo;
 - protected paths/data еще не трогаются;
-- пользователь не просит pass без real repo.
+- пользователь не просит pass без real repo. Project-root без git repo остается
+  `blocked_external_inputs` до repo materialization.
 
 ## Вопрос 2. Это real `APP_IMAGE` или его нужно собрать?
 
