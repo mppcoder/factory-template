@@ -152,9 +152,9 @@ items:
   chat_title: FT-CH-0011 single-vps-dev-runtime-host
   task_slug: single-vps-dev-runtime-host
   kind: handoff
-  state: open
+  state: verified
   created_utc: '2026-05-06T05:53:39Z'
-  updated_utc: '2026-05-06T05:53:39Z'
+  updated_utc: '2026-05-06T10:57:47Z'
   source_type: chatgpt-first-answer-retrofix
   handoff_group: single-vps-dev-runtime-host
   handoff_revision: 1
@@ -166,7 +166,10 @@ items:
   evidence:
   - 'Retrofix: architecture task was launched before materialized ChatGPT title reservation'
   - 'Original ChatGPT handoff: Single Big VPS Dev+Runtime Host / split runtime VPS topology standard'
-  next_action: Start the Codex handoff or close/supersede this repo reservation; do not reuse this chat number.
+  - User confirmed on 2026-05-06 that FT-CH-0011 single-vps-dev-runtime-host is implemented.
+  - Scope continues with single big VPS architecture and downstream/battle project proof before beginner-first install hardening.
+  accepted_reason: Single big VPS architecture task is treated as implemented by explicit user decision; remaining work moves to proof/materialization roadmap.
+  next_action: No further numbering action for FT-CH-0011; continue with unified roadmap implementation.
 - chat_id: FT-CH-0012
   chat_number: 12
   chat_title: FT-CH-0012 chatgpt-first-answer-allocation-not-attempted
@@ -273,6 +276,8 @@ items:
   handoff_register_item_id: ''
   status_chain:
   - chatgpt_handoff
+  - codex_accepted
+  - codex_completed
   evidence:
   - User reported ChatGPT shows allocator blocker instead of stable copy title.
   - Materialized reservation created before visible substantive response for this defect task.

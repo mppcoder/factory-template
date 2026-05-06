@@ -222,6 +222,8 @@ run_project_knowledge_done_loop_smoke() {
 run_downstream_application_proof_smoke() {
   python3 "$ROOT/template-repo/scripts/validate-downstream-application-proof.py" \
     "$ROOT/tests/downstream-application-proof/valid/downstream-application-proof-report.md"
+  python3 "$ROOT/template-repo/scripts/validate-downstream-application-proof.py" \
+    "$ROOT/tests/downstream-application-proof/blocked/downstream-application-proof-report.md"
   if python3 "$ROOT/template-repo/scripts/validate-downstream-application-proof.py" \
     "$ROOT/tests/downstream-application-proof/missing-evidence/downstream-application-proof-report.md" \
     >/tmp/downstream-application-proof-negative.log 2>&1; then
@@ -229,7 +231,15 @@ run_downstream_application_proof_smoke() {
     cat /tmp/downstream-application-proof-negative.log >&2
     return 1
   fi
+  if python3 "$ROOT/template-repo/scripts/validate-downstream-application-proof.py" \
+    "$ROOT/tests/downstream-application-proof/secret-transcript/downstream-application-proof-report.md" \
+    >/tmp/downstream-application-proof-secret-negative.log 2>&1; then
+    echo "downstream application proof secret transcript fixture unexpectedly passed" >&2
+    cat /tmp/downstream-application-proof-secret-negative.log >&2
+    return 1
+  fi
   rm -f /tmp/downstream-application-proof-negative.log
+  rm -f /tmp/downstream-application-proof-secret-negative.log
 }
 
 run_codex_orchestration_smoke() {

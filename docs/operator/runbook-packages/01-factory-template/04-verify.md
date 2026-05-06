@@ -26,6 +26,7 @@ lsb_release -a || cat /etc/os-release
 ```
 
 Ожидаемый результат: `root`, remote path `/projects` или `/root`, Ubuntu 24.04.
+REMOTE_CONTEXT_MARKER обязателен: если эти команды выполнены в локальном Windows/macOS context, takeover не готов. Do not paste into local Codex.
 
 ## Проверка автоматизации Codex после takeover
 
@@ -73,6 +74,8 @@ python3 template-repo/scripts/validate-project-lifecycle-dashboard.py template-r
 ```bash
 git status --short --branch
 ```
+
+No hidden second shell step: после `FT-170` пользователь не запускает clone/setup/verify/dashboard/sync вручную, если remote Codex shell доступен.
 
 ## Проверка package layer из factory-template root
 

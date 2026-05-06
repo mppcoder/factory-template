@@ -498,8 +498,11 @@ Codex sidebar signed in, новый Codex chat/window открыт в Remote SSH
 - открыт новый Codex chat/window;
 - выбран model/reasoning в picker, если picker доступен;
 - context remote: factory-vps;
+- REMOTE_CONTEXT_MARKER подтвержден: whoami/pwd/uname/lsb_release выполняются на VPS;
+- do not paste into local Codex: локальный Windows/macOS Codex не считается takeover;
 - handoff вставляется одним цельным блоком;
 - после вставки Codex делает clone/setup/verify сам.
+- no hidden second shell step: после handoff пользователь не запускает clone/setup/verify руками.
 
 Вставить:
 <handoff block>

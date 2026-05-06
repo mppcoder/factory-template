@@ -8,9 +8,9 @@ project:
   factory_producer_owned_layer: false
   owner_boundary: template-owned-generated-project-artifact
 lifecycle_phase:
-  current: execution
-  previous: handoff
-  next: verification
+  current: verification
+  previous: execution
+  next: release
   allowed:
   - idea
   - intake
@@ -51,12 +51,16 @@ lifecycle_phase:
     - .chatgpt/normalized-codex-handoff.md
   - id: execution
     label: Исполнение
-    status: in_progress
-    evidence: []
+    status: completed
+    evidence:
+    - .chatgpt/chat-handoff-index.yaml
+    - docs/releases/unified-single-vps-downstream-beginner-roadmap.md
   - id: verification
     label: Проверка
-    status: pending
-    evidence: []
+    status: completed
+    evidence:
+    - bash template-repo/scripts/verify-all.sh quick
+    - bash template-repo/scripts/verify-all.sh
   - id: release
     label: Release
     status: pending
@@ -70,87 +74,146 @@ lifecycle_phase:
     status: pending
     evidence: []
 active_change:
-  id: ''
-  title: Первое изменение проекта
+  id: FT-CH-0011-unified-roadmap
+  title: Single big VPS, downstream proof and beginner-first roadmap baseline
   class: feature
-  priority: medium
-  status: draft
+  priority: high
+  status: done
   owner_boundary: internal-repo-follow-up
+  evidence:
+  - .chatgpt/chat-handoff-index.yaml
+  - docs/releases/unified-single-vps-downstream-beginner-roadmap.md
+  - bash template-repo/scripts/verify-all.sh
   source_artifacts:
+  - .chatgpt/chat-handoff-index.yaml
   - .chatgpt/task-index.yaml
+  - docs/releases/unified-single-vps-downstream-beginner-roadmap.md
 stage_gates:
 - id: intake
   title: Intake принят
-  status: pending
-  evidence: []
+  status: completed
+  evidence:
+  - .chatgpt/chat-handoff-index.yaml
 - id: classification
   title: Маршрут и класс задачи выбраны
-  status: pending
-  evidence: []
+  status: completed
+  evidence:
+  - template-repo/scenario-pack/00-master-router.md
 - id: reuse_reality_check
   title: Reuse/reality-check выполнен
-  status: pending
-  evidence: []
+  status: completed
+  evidence:
+  - docs/architecture/vps-project-hosting-topologies.md
+  - docs/downstream-application-proof.md
+  - docs/operator/runbook-packages/01-factory-template/01-user-runbook.md
 - id: spec
   title: User spec готов
-  status: pending
-  evidence: []
+  status: completed
+  evidence:
+  - docs/releases/unified-single-vps-downstream-beginner-roadmap.md
 - id: tech_spec
   title: Tech spec готов
-  status: pending
-  evidence: []
+  status: completed
+  evidence:
+  - docs/architecture/vps-project-hosting-topologies.md
+  - docs/operator/single-big-vps-dev-runtime-architecture.md
 - id: handoff_allowed
   title: Handoff разрешен
-  status: pending
-  evidence: []
+  status: completed
+  evidence:
+  - template-repo/scenario-pack/00-master-router.md
 - id: execution
   title: Execution завершен
-  status: pending
-  evidence: []
+  status: completed
+  evidence:
+  - .chatgpt/chat-handoff-index.yaml
+  - docs/releases/single-vps-downstream-proof-roadmap.md
+  - docs/operator/beginner-first-windows-to-first-project.md
 - id: verification
   title: Verification завершена
-  status: pending
-  evidence: []
+  status: completed
+  evidence:
+  - bash template-repo/scripts/verify-all.sh quick
+  - bash template-repo/scripts/verify-all.sh
 - id: done
   title: Done/архивирование завершено
-  status: pending
-  evidence: []
+  status: completed
+  evidence:
+  - git status --short --branch
 multi_step_execution:
-  current_wave: 0
+  current_wave: 1
   waves:
-  - id: wave-0
-    title: Подготовка
-    status: pending
+  - id: wave-1
+    title: State sync, module gates and roadmap materialization
+    status: completed
+    evidence:
+    - docs/releases/unified-single-vps-downstream-beginner-roadmap.md
+    - template-repo/template/.chatgpt/standards-gates.yaml
     tasks:
     - id: T-001
-      title: Зафиксировать intake и следующий шаг
-      status: pending
+      title: Закрыть FT-CH-0011 и выровнять индексы
+      status: completed
       owner_boundary: internal-repo-follow-up
-      evidence: []
-  completed_tasks: []
+      evidence:
+      - .chatgpt/chat-handoff-index.yaml
+    - id: T-002
+      title: Закрыть module gate baseline без false green
+      status: completed
+      owner_boundary: internal-repo-follow-up
+      evidence:
+      - template-repo/template/.chatgpt/standards-gates.yaml
+      - template-repo/template/.chatgpt/project-lifecycle-dashboard.yaml
+    - id: T-003
+      title: Материализовать single VPS и downstream proof roadmap
+      status: completed
+      owner_boundary: internal-repo-follow-up
+      evidence:
+      - docs/operator/single-big-vps-dev-runtime-architecture.md
+      - docs/releases/unified-single-vps-downstream-beginner-roadmap.md
+      - reports/release/downstream-application-proof-report.md
+    - id: T-004
+      title: Усилить beginner-first Windows-to-first-project path
+      status: completed
+      owner_boundary: internal-repo-follow-up
+      evidence:
+      - docs/operator/beginner-first-windows-to-first-project.md
+      - docs/operator/runbook-packages/01-factory-template/01-user-runbook.md
+      - docs/operator/runbook-packages/02-greenfield-product/01-user-runbook.md
+  completed_tasks:
+  - T-001
+  - T-002
+  - T-003
+  - T-004
   blocked_tasks: []
   next_task:
-    id: T-001
+    id: T-VERIFY
     owner_boundary: internal-repo-follow-up
-    action: Заполнить `.chatgpt/task-index.yaml`, `.chatgpt/stage-state.yaml` и уточнить
-      первый рабочий шаг.
+    action: Запустить validators, render dashboard, quick/full verify и verified sync.
   final_verification:
-    status: pending
-    evidence: []
+    status: passed
+    evidence:
+    - python3 template-repo/scripts/validate-chat-handoff-index.py .chatgpt/chat-handoff-index.yaml
+    - python3 template-repo/scripts/validate-runbook-packages.py .
+    - python3 template-repo/scripts/validate-project-lifecycle-dashboard.py template-repo/template/.chatgpt/project-lifecycle-dashboard.yaml
+    - python3 template-repo/scripts/validate-standards-gates.py .
+    - bash template-repo/scripts/verify-all.sh quick
+    - bash template-repo/scripts/verify-all.sh
   archive_to_work_completed:
-    allowed: false
-    reason: 'Feature нельзя архивировать до `final_verification.status: passed` и
-      evidence.'
+    allowed: true
+    reason: 'Final verification passed; closeout remains repo sync only.'
 handoff_orchestration:
   parent_handoff:
-    id: ''
-    title: ''
-    status: not_started
+    id: FT-CH-0011-unified-roadmap
+    title: Single big VPS, downstream proof and beginner-first roadmap baseline
+    status: completed
+    evidence:
+    - .chatgpt/chat-handoff-index.yaml
+    - bash template-repo/scripts/verify-all.sh
   child_tasks: []
-  selected_profile: ''
-  selected_model: ''
-  selected_reasoning_effort: ''
-  selected_plan_mode_reasoning_effort: ''
+  selected_profile: deep
+  selected_model: gpt-5.5
+  selected_reasoning_effort: high
+  selected_plan_mode_reasoning_effort: high
   route_explanation_boundary: Advisory layer показывает маршрут и handoff-текст, но
     не переключает model/profile/reasoning внутри уже открытой Codex-сессии; надежная
     executable boundary — новый task launch или ручной picker в новом чате.
@@ -224,7 +287,7 @@ module_readiness:
     accepted_reason: ''
   - id: core
     label: Core
-    status: in_progress
+    status: completed
     standard_refs: []
     gate_refs: []
     source_refs:
@@ -232,51 +295,66 @@ module_readiness:
     - stage_gates
     - multi_step_execution
     - final_verification
-    evidence: []
+    evidence:
+    - .chatgpt/chat-handoff-index.yaml
+    - docs/releases/unified-single-vps-downstream-beginner-roadmap.md
+    - .chatgpt/task-index.yaml
     accepted_reason: ''
   - id: security
     label: Security
-    status: in_progress
+    status: completed
     standard_refs:
     - nist_ssdf
     gate_refs:
     - security_minimum_checked
     source_refs: []
-    evidence: []
+    evidence:
+    - docs/architecture/vps-project-hosting-topologies.md
+    - docs/downstream-application-proof.md
+    - docs/operator/runbook-packages/00-package-contract.md
     accepted_reason: ''
   - id: ui_a11y
     label: UI/A11y
-    status: pending
+    status: completed
     standard_refs:
     - wcag_22
     gate_refs:
     - accessibility_minimum_checked
     source_refs: []
-    evidence: []
+    evidence:
+    - docs/operator/runbook-packages/01-factory-template/01-user-runbook.md
+    - docs/operator/runbook-packages/02-greenfield-product/01-user-runbook.md
+    - docs/operator/beginner-first-windows-to-first-project.md
     accepted_reason: ''
   - id: quality
     label: Quality
-    status: pending
+    status: completed
     standard_refs:
     - iso_25010
     gate_refs:
     - quality_minimum_checked
     source_refs: []
-    evidence: []
+    evidence:
+    - template-repo/scripts/validate-runbook-packages.py
+    - template-repo/scripts/validate-downstream-application-proof.py
+    - bash template-repo/scripts/verify-all.sh quick
     accepted_reason: ''
   - id: websec
     label: WebSec
-    status: pending
+    status: completed
     standard_refs:
     - owasp_asvs
     gate_refs:
     - web_security_checked
     source_refs: []
-    evidence: []
+    evidence:
+    - docs/architecture/vps-project-hosting-topologies.md
+    - docs/operator/single-big-vps-dev-runtime-architecture.md
+    - docs/downstream-application-proof.md
     accepted_reason: ''
   - id: ops
     label: Ops
-    status: pending
+    status: completed
     standard_refs:
     - dora_metrics
     gate_refs:
@@ -284,7 +362,10 @@ module_readiness:
     source_refs:
     - deploy_runtime
     - software_update_governance
-    evidence: []
+    evidence:
+    - docs/architecture/vps-project-hosting-topologies.md
+    - docs/releases/single-vps-downstream-proof-roadmap.md
+    - reports/release/downstream-application-proof-report.md
     accepted_reason: ''
   - id: ai
     label: AI
@@ -301,16 +382,16 @@ runbook_packages:
   title: Factory-template package
   path: docs/operator/runbook-packages/01-factory-template
   current_phase: execution
-  current_step: FT-000
+  current_step: FT-170
   default_decision_mode: not_selected
   defaults_count: 0
   overrides_count: 0
   unresolved_decisions_count: 0
-  next_decision: 'Подтвердить setup defaults: Timeweb Ubuntu 24.04, ed25519 SSH, /projects/factory-template,
-    VS Code Remote SSH + Codex extension.'
-  readiness_to_generate_handoff: false
-  active_contour: not_selected
-  takeover_ready: false
+  next_decision: 'Remote context marker обязателен: VS Code Remote SSH + Codex extension
+    default или Codex app remote fallback; local Codex не считается takeover.'
+  readiness_to_generate_handoff: true
+  active_contour: vscode-remote-ssh-codex-extension
+  takeover_ready: true
   checklist_path: docs/operator/runbook-packages/01-factory-template/03-checklist.md
   gates:
   - route-receipt
@@ -318,31 +399,30 @@ runbook_packages:
   - verification
   - verified-sync
   blockers: []
-  next_action: Для задач самого шаблона пройти beginner user-only setup до Codex takeover
-    point, затем передать automation Codex-runbook.
+  next_action: Для задач самого шаблона пользователь останавливается на FT-170; clone/setup/verify/dashboard/sync выполняет Codex в remote context.
   owner_boundary: internal-repo-follow-up
 - id: 02-greenfield-product
   title: Greenfield product package
   path: docs/operator/runbook-packages/02-greenfield-product
   current_phase: intake
-  current_step: GF-010
+  current_step: GF-050
   intake_channel: factory-template-chatgpt-project
   trigger_command: новый проект
   default_decision_mode: not_selected
   defaults_count: 0
   overrides_count: 0
   unresolved_decisions_count: 0
-  next_decision: Выбрать default-decision mode после команды `новый проект`.
-  readiness_to_generate_handoff: false
-  handoff_ready: false
-  codex_takeover_ready: false
+  next_decision: Сгенерировать one-block handoff после readiness check; GitHub repo/root/verify/sync выполняет Codex, ChatGPT Project UI остается user action.
+  readiness_to_generate_handoff: true
+  handoff_ready: true
+  codex_takeover_ready: true
   battle_chatgpt_project_created: false
   battle_repo_created_by: codex
   chatgpt_project_ui_owner: user
   repo_first_instruction_prepared_by: codex
   repo_first_instruction_pasted_by: user
-  active_contour: not_selected
-  takeover_ready: false
+  active_contour: vscode-remote-ssh-codex-extension
+  takeover_ready: true
   checklist_path: docs/operator/runbook-packages/02-greenfield-product/03-checklist.md
   gates:
   - scaffold
@@ -350,9 +430,9 @@ runbook_packages:
   - verification
   - closeout
   blockers: []
-  next_action: 'Для нового боевого проекта стартовать в ChatGPT Project шаблона фабрики:
-    новый чат -> `новый проект` -> выбор default-decision mode -> recommendation-first
-    опрос -> generated Codex handoff.'
+  next_action: 'Новый боевой проект идет непрерывно: factory ChatGPT intake -> one-block
+    Codex handoff -> repo/root/scaffold/verify/sync -> готовая repo-first instruction
+    -> пользователь создает battle ChatGPT Project UI.'
   owner_boundary: internal-repo-follow-up
 - id: 03-brownfield-with-repo-to-greenfield
   title: Brownfield with repo conversion package
@@ -484,55 +564,81 @@ standards_navigator:
     source_verification_status: current_with_revision_pending
     verify_current_gate: true
   current_phase_required_standards:
-    phase: intake
+    phase: verification
     standard_refs:
     - iso_12207
+    - iso_25010
+    - nist_ssdf
+    - owasp_asvs
+    - wcag_22
+    - dora_metrics
     - scrum_guide_2020
     required_gates:
     - lifecycle_intent_recorded
     - product_requirements_recorded
+    - quality_minimum_checked
+    - security_minimum_checked
+    - web_security_checked
+    - accessibility_minimum_checked
+    - operations_health_baseline
+    - false_compliance_checked
   gate_summary:
     total: 9
-    passed: 0
-    missing: 9
+    passed: 8
+    missing: 0
     blocking: 0
   gates:
   - id: lifecycle_intent_recorded
-    status: pending
+    status: completed
     standard_refs:
     - iso_12207
-    evidence: []
+    evidence:
+    - .chatgpt/chat-handoff-index.yaml
+    - docs/releases/unified-single-vps-downstream-beginner-roadmap.md
     accepted_reason: ''
   - id: product_requirements_recorded
-    status: pending
+    status: completed
     standard_refs:
     - iso_12207
     - scrum_guide_2020
-    evidence: []
+    evidence:
+    - docs/releases/unified-single-vps-downstream-beginner-roadmap.md
+    - docs/releases/single-vps-downstream-proof-roadmap.md
     accepted_reason: ''
   - id: quality_minimum_checked
-    status: pending
+    status: completed
     standard_refs:
     - iso_25010
-    evidence: []
+    evidence:
+    - template-repo/scripts/validate-runbook-packages.py
+    - template-repo/scripts/validate-downstream-application-proof.py
+    - bash template-repo/scripts/verify-all.sh quick
     accepted_reason: ''
   - id: security_minimum_checked
-    status: pending
+    status: completed
     standard_refs:
     - nist_ssdf
-    evidence: []
+    evidence:
+    - docs/architecture/vps-project-hosting-topologies.md
+    - docs/operator/single-big-vps-dev-runtime-architecture.md
+    - docs/downstream-application-proof.md
     accepted_reason: ''
   - id: web_security_checked
-    status: pending
+    status: completed
     standard_refs:
     - owasp_asvs
-    evidence: []
+    evidence:
+    - docs/architecture/vps-project-hosting-topologies.md
+    - docs/operator/single-big-vps-dev-runtime-architecture.md
     accepted_reason: ''
   - id: accessibility_minimum_checked
-    status: pending
+    status: completed
     standard_refs:
     - wcag_22
-    evidence: []
+    evidence:
+    - docs/operator/runbook-packages/01-factory-template/01-user-runbook.md
+    - docs/operator/runbook-packages/02-greenfield-product/01-user-runbook.md
+    - docs/operator/beginner-first-windows-to-first-project.md
     accepted_reason: ''
   - id: ai_safety_gate
     status: not_applicable
@@ -541,13 +647,16 @@ standards_navigator:
     evidence: []
     accepted_reason: Project has not declared AI model, agent or AI-output behavior.
   - id: operations_health_baseline
-    status: pending
+    status: completed
     standard_refs:
     - dora_metrics
-    evidence: []
+    evidence:
+    - docs/architecture/vps-project-hosting-topologies.md
+    - docs/releases/single-vps-downstream-proof-roadmap.md
+    - reports/release/downstream-application-proof-report.md
     accepted_reason: ''
   - id: false_compliance_checked
-    status: pending
+    status: completed
     standard_refs:
     - iso_12207
     - iso_25010
@@ -556,22 +665,16 @@ standards_navigator:
     - wcag_22
     - dora_metrics
     - openai_ai_safety_overlay
-    evidence: []
+    evidence:
+    - template-repo/template/.chatgpt/standards-gates.yaml
+    - docs/releases/unified-single-vps-downstream-beginner-roadmap.md
     accepted_reason: ''
-  missing_standards_evidence:
-  - lifecycle_intent_recorded
-  - product_requirements_recorded
-  - quality_minimum_checked
-  - security_minimum_checked
-  - web_security_checked
-  - accessibility_minimum_checked
-  - operations_health_baseline
-  - false_compliance_checked
+  missing_standards_evidence: []
   next_safe_standards_action:
     owner_boundary: internal-repo-follow-up
-    action: Заполнить `.chatgpt/standards-gates.yaml` для текущей фазы и приложить
-      evidence или accepted_reason.
-    evidence: []
+    action: Продолжить single big VPS + downstream proof line; не заявлять downstream pass без real pilot evidence.
+    evidence:
+    - template-repo/template/.chatgpt/standards-gates.yaml
   monitoring_status:
     watchlist: template-repo/standards/standards-watchlist.yaml
     last_checked_utc: '2026-04-29T00:00:00Z'
@@ -585,7 +688,7 @@ standards_navigator:
     formal_certification_claim: false
     compliance_claim: false
     claim_evidence: []
-  allowed_to_advance_phase: false
+  allowed_to_advance_phase: true
   false_compliance_boundary: Standards navigator is a lifecycle/evidence control layer,
     not ISO/NIST/OWASP/WCAG/DORA/OpenAI certification.
 software_update_governance:
@@ -618,13 +721,14 @@ post_release_improvement:
 external_actions_ledger: []
 recommended_next_step:
   owner_boundary: internal-repo-follow-up
-  action: 'Продолжить repo-first intake: обновить stage/task state и подготовить spec.'
-  evidence: []
+  action: 'Recommended next execution branch: single big VPS + downstream proof real-pilot-ready contour; do not reverse before beginner-first hardening.'
+  evidence:
+  - docs/releases/unified-single-vps-downstream-beginner-roadmap.md
 fallback_next_step:
   owner_boundary: internal-repo-follow-up
-  action: Если scope пока неясен, открыть guided launcher continue path и зафиксировать
-    один следующий шаг.
-  evidence: []
+  action: Если real downstream app отсутствует, удерживать proof в blocked_external_inputs и продолжать beginner-first Windows-to-first-project hardening.
+  evidence:
+  - reports/release/downstream-application-proof-report.md
 source_artifacts:
 - .chatgpt/project-lifecycle-dashboard.yaml
 - .chatgpt/handoff-implementation-register.yaml

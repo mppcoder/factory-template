@@ -7,6 +7,8 @@
 - `single-host`: один большой VPS совмещает dev workspace, factory host, Codex / VS Code Remote SSH host, build/test host и runtime/prod host для нескольких проектов.
 - `split-host`: большой VPS остается dev/build/deploy control plane, а runtime/prod каждого готового проекта размещается на отдельном минимальном VPS.
 
+Default supported topology для solo/beginner operator: `single-host`, то есть один большой VPS с жестким разделением `/projects/*` для dev/Codex/build и `/srv/*-prod` для runtime/prod. Маленькие VPS остаются optional runtime-only, staging или backup targets; они не являются default heavy dev/Codex/build host.
+
 Стандарт расширяет существующий single-VPS deploy proof из `docs/deploy-on-vps.md` и `docs/production-vps-field-pilot.md`. Он не заменяет текущие production presets для template runtime reference app и не заявляет real migration proof без approved runtime evidence.
 
 ## Карта gap
@@ -82,7 +84,12 @@ Runtime area or runtime VPS stores:
 
 The big VPS hosts both development and runtime, but with hard path separation:
 
+- `/projects/factory-template`: factory/template repo and operator automation.
+- `/projects/project-a`: dev workspace for project A.
+- `/projects/project-b`: dev workspace for project B.
 - `/projects/*`: development git workspaces only.
+- `/srv/project-a-prod`: runtime copy for project A.
+- `/srv/project-b-prod`: runtime copy for project B.
 - `/srv/*-prod`: runtime copies only.
 - `/etc/*.env`: real project env/secrets.
 - `/etc/systemd/system/*.service`: project-specific services.
@@ -99,6 +106,8 @@ Rules:
 - Use one service per project, for example `<project>.service`.
 - Use one nginx config per project.
 - Bind the app to `127.0.0.1:<project-port>` and publish only nginx publicly.
+- Keep deploy/runtime boundaries separate: project-owned data, env files, backup sets, rollback tags and runtime transcripts are per project.
+- Keep nginx/server-level shared infra separate from project runtime files.
 
 Use `single-host` when:
 
@@ -155,6 +164,30 @@ Hybrid is allowed:
 - some projects stay `single-host`;
 - critical projects move to `split-host`;
 - the runbook and validators must record topology per project instead of assuming one global mode.
+
+## Операторский чеклист для `single-host`
+
+Use this checklist before claiming that the big VPS topology is ready for a project:
+
+- Prerequisites: Ubuntu VPS is selected, SSH access works, Docker/Compose/nginx/systemd are available or listed as blockers, and GitHub is the source of truth.
+- Folder creation: create `/projects/<repo>` for each dev workspace and `/srv/<project>-prod` for each runtime copy; never run production from `/projects`.
+- GitHub clone roots: clone `factory-template` to `/projects/factory-template` and each battle repo to `/projects/<project>`.
+- VS Code Remote SSH: open `/projects/factory-template` for factory work and `/projects/<project>` for project work; do not use a local Codex context for remote VPS automation.
+- Codex working directory: Codex starts in the relevant repo root and records `pwd`, `git status --short --branch`, selected contour and remote OS evidence.
+- Deploy root: create `/srv/<project>-prod`, render compose/runtime files there and read real env from `/etc/<project>.env`.
+- Nginx/systemd/docker: use unique domain, port, compose project name, Docker network, nginx config and systemd unit for every project.
+- Verification commands: run `docker compose config`, `nginx -t`, `systemd-analyze verify` where available, service healthcheck and public HTTPS healthcheck when a public runtime is in scope.
+- Backup/restore/rollback: create a project backup before deploy, test restore on disposable/staging target, and run rollback drill before deleting old runtime or old VPS.
+
+## Не делать
+
+- Не смешивать `/projects` и `/srv`.
+- Не хранить secrets, real `.env`, private keys or raw transcripts in repo.
+- Не складывать все проекты в один compose/network/service without a documented reason.
+- Не считать dev proof production proof.
+- Не считать `factory-template-placeholder-app:local` proof реального downstream продукта.
+- Не открывать app container напрямую наружу, если nginx/TLS boundary required.
+- Не переиспользовать systemd unit names, compose project names, ports, domains, backup paths or rollback tags between projects.
 
 ## Модель env и secrets
 

@@ -32,6 +32,8 @@ Package layer должен содержать `USER-ONLY SETUP`, `CODEX-AUTOMATI
   - no hidden forced defaults for risky actions.
 - handoff содержит boundary: GitHub repo/root/verify/sync делает Codex;
 - пользовательские external actions ограничены factory ChatGPT intake, вставкой handoff в Codex, созданием battle ChatGPT Project, открытием Project settings/instructions, вставкой готовой instruction и сохранением настроек.
+- `GF-050` содержит REMOTE_CONTEXT_MARKER и запрет `Do not paste into local Codex`;
+- после `GF-050` нет hidden second shell step: repo/root/scaffold/verify/sync выполняет Codex;
 
 ## Проверка Codex automation после handoff
 
@@ -48,6 +50,7 @@ Package layer должен содержать `USER-ONLY SETUP`, `CODEX-AUTOMATI
 - Codex подготовил готовый текст repo-first instruction для battle ChatGPT Project;
 - Codex подготовил пошаговую инструкцию пользователю, куда вставить этот текст в ChatGPT UI;
 - Codex не создавал ChatGPT Project, не вставлял instruction и не сохранял настройки через browser/desktop UI automation.
+- First project ready proof содержит repo URL, VPS project root, verify result, commit/push or sync blocker и готовую repo-first instruction.
 
 ## Проверка battle ChatGPT Project
 

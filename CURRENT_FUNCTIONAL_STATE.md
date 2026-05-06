@@ -119,6 +119,8 @@ GA-ready: `true`.
 - Plan №3 P3-S6 closed the roadmap continuity and closure gap after runtime proof: release-facing docs now mark the 2.6 `factory-template` template/runtime roadmap complete and separate optional future downstream/battle application proof
 - Plan №4 P4-S0..P4-S4 prepared the optional downstream/battle application proof contour without reopening template/runtime proof: roadmap, downstream proof doc, report template, scorecard validator, handoff transcript eval and Project Knowledge reuse proof are repo-local preparation artifacts
 - downstream/battle application proof now has a generated report template and validator: a passed claim requires real app image, healthcheck, migrations policy, backup, restore, rollback, sanitized transcript, secrets boundary and novice-to-deploy scorecard evidence
+- FT-CH-0011 `single-vps-dev-runtime-host` closed as `verified` by explicit user confirmation on 2026-05-06; remaining work moved to a unified roadmap line: single big VPS -> downstream/battle proof -> beginner-first first project.
+- Module Gate Baseline is materialized: Lifecycle/Core/Security/Quality/WebSec/Ops/UI-A11y have repo evidence, AI remains `not_applicable`, and downstream/battle proof stays `blocked_external_inputs` until real pilot inputs exist.
 - Artifact Eval Harness now includes handoff transcript eval and Project Knowledge reuse proof specs/reports for multi-block handoff, vague continuation, false auto-switch, user-only internal closeout, ignored Project Knowledge and stale Project Knowledge negative fixtures
 - Plan №5 internal hardening implemented/verified после integrity follow-up: добавлен VPS Remote SSH-first Full Handoff Orchestration Layer, operator runbook, repo-native dry-run parent orchestrator, per-subtask handoff/session files для valid plans, parent orchestration report, guardrails against Cloud/App default overclaim, child route inheritance and secrets in orchestration artifacts
 - `orchestrate-codex-handoff.py` and `validate-codex-orchestration.py` now validate one large parent handoff plan, explicit child `quick/build/deep/review` routes, model/reasoning/scenario fields, dry-run commands, `user_actions_policy: defer-to-final-closeout`, `deferred_user_actions`, `placeholder_replacements` and negative fixtures for missing child routing, secret-like content, multi-block handoff, user action as child subtask and invalid placeholder metadata
@@ -184,14 +186,14 @@ GA-ready: `true`.
 - gap register: `docs/releases/post-2.5-gap-register.md`
 - Plan №3 audit: `docs/releases/plan-3-aif-molyanov-audit.md`
 - текущая стадия: `release-followup -> internal-hardening`
-- текущий planning status: `Plan №7 implemented/verified как repo-native Project Lifecycle Dashboard / Control Tower; Plan №4 P4-S5/P4-S6 remains optional future external contour if real downstream/battle app inputs exist`
+- текущий planning status: `FT-CH-0011 closed; Module Gate Baseline materialized; active roadmap line is single big VPS + downstream/battle proof first, then beginner-first Windows-to-first-project hardening`
 - `2.5.8` scope: Windows beginner one-file latest install guide executable-boundary fix: PowerShell/download/run before executable, SSH/VPS automation inside installer, Codex-owned repo-first work after handoff, archive fallback and npm-unsupported boundary.
 - `2.6` scope: completed for `factory-template` template/runtime proof: real production VPS deploy, backup restore, rollback drill, runtime/source-hygiene classification, expanded artifact eval, one real `feature-execution-lite` adoption, runtime QA boundary and reference runtime app.
 - completed proof: `2.5.0` repo-controlled GA evidence, `2.5.1-field-pilot` real project proof, downstream sync v3 synthetic multi-cycle proof.
-- optional future external proof: downstream/battle project application image deploy proof, only if validating a generated project with a real app. Infrastructure-level VPS deploy, backup restore and rollback drill passed on 2026-04-27 with local placeholder app image for `factory-template`; Plan №4 now provides the preparation docs/template/validator/eval contour for that future proof.
+- optional future external proof: downstream/battle project application image deploy proof, only if validating a generated project with a real app. Infrastructure-level VPS deploy, backup restore and rollback drill passed on 2026-04-27 with local placeholder app image for `factory-template`; current repo status is `ready_for_external_pilot` / `blocked_external_inputs`, not downstream proof passed.
 - Plan №3 status: P3-S0 audit captured; P3-S1 task-state-lite, P3-S2 learning patch loop, P3-S3 expanded evals, P3-S4 real adoption, P3-S5 runtime QA boundary preparation and P3-S6 roadmap closeout implemented.
-- Plan №4 status: P4-S0 audit captured; P4-S1/P4-S2 downstream app proof scenario and novice scorecard validator implemented as preparation; P4-S3/P4-S4 handoff transcript eval and Project Knowledge reuse proof implemented as repo-local eval/checklist; P4-S5/P4-S6 blocked until a real downstream/battle project is selected.
-- Recommended next roadmap step after Plan №7: использовать lifecycle dashboard как default current-state readout для будущей multi-stage work; запускать P4-S5/P4-S6 только если есть real downstream/battle app с real `APP_IMAGE`; fallback — нет немедленного internal follow-up, пока не выбран новый internal gap.
+- Plan №4 status: P4-S0..P4-S4 prepared; unified roadmap now keeps P4-S5/P4-S6 as real-pilot branch after single big VPS topology, with validator-backed false-pass guards for placeholder image, missing restore/rollback and secret-like transcript.
+- Recommended next roadmap branch: single big VPS + downstream proof real pilot if real downstream inputs exist. Next branch after that: beginner-first Windows-to-first-project hardening. Do not reverse the order unless the user explicitly changes priority.
 - Router, done-closeout scenario and generated Codex task-pack checklist now require roadmap readouts with multiple branches to name the recommended branch and fallback branch.
 - `pavel-molyanov/molyanov-ai-dev` comparison recorded in `docs/releases/post-2.5-gap-register.md`; factory keeps useful spec/project-knowledge/eval ideas but does not import Claude-specific `.claude`, command or TeamCreate assumptions.
 
@@ -214,9 +216,9 @@ GA-ready: `true`.
 - future production hardening for git sync only if new remote/provider failures appear beyond the current fallback evidence matrix
 - дальнейшее расширение KPI evidence за пределы repo-controlled pilot к внешним downstream программам
 - real downstream domain-scenario pilots beyond synthetic CRM/inventory acceptance examples
-- downstream/battle application image proof требует отдельного generated/battle project, application artifact, approved runtime run, secrets outside repo and sanitized transcript; текущий repo статус: `template-runtime-proof-passed`
+- downstream/battle application image proof требует отдельного generated/battle project, application artifact, approved runtime run, secrets outside repo and sanitized transcript; текущий repo статус: `template-runtime-proof-passed`, downstream proof `blocked_external_inputs`
 - Plan №4 real pilot requires external inputs: downstream repo path, real application image, approved VPS/staging target, secrets entered outside repo, deploy/restore/rollback approval and sanitized transcript.
-- Если Plan №4 external inputs отсутствуют, немедленного external pilot action нет; используйте Plan №7 lifecycle dashboard как default readout перед выбором нового internal gap.
+- Если Plan №4 external inputs отсутствуют, не симулировать pass; удерживать proof report как `blocked_external_inputs` и продолжать beginner-first hardening после single VPS/downstream proof contour.
 
 ## Граница core
 Core включает фабрику, шаблон, versioning/documentation layer, `.chatgpt`, scenario-pack, examples и feedback loop.

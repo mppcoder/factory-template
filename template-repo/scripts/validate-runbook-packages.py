@@ -172,6 +172,13 @@ FACTORY_CODEX_AUTOMATION_TOKENS = [
     "bash VERIFIED_SYNC.sh",
     "git status --short --branch",
 ]
+BEGINNER_REMOTE_ACCEPTANCE_TOKENS = [
+    "REMOTE_CONTEXT_MARKER",
+    "Do not paste into local Codex",
+    "do not paste into local Codex",
+    "No hidden second shell step",
+    "no hidden second shell step",
+]
 FORBIDDEN_USER_CHECKLIST_PHRASES = [
     "Advisory/policy layer",
     "advisory layer",
@@ -608,6 +615,9 @@ def validate_beginner_flow(root: Path, errors: list[str]) -> None:
             ]:
                 if token not in user_text + "\n" + codex_text:
                     errors.append(f"`{package}` не содержит beginner setup token `{token}`")
+            for token in ["REMOTE_CONTEXT_MARKER", "do not paste into local Codex", "no hidden second shell step"]:
+                if token not in package_combined:
+                    errors.append(f"`{package}` не содержит beginner remote acceptance marker `{token}`")
         if package == "02-greenfield-product":
             greenfield_combined = "\n".join([user_text, codex_text, checklist_text])
             for token in GREENFIELD_REQUIRED_USER_TOKENS:
@@ -646,6 +656,11 @@ def validate_beginner_flow(root: Path, errors: list[str]) -> None:
                 "initial commit/push",
                 "VPS project root",
                 "verified sync",
+                "REMOTE_CONTEXT_MARKER",
+                "Do not paste into local Codex",
+                "No hidden second shell step",
+                "GF-050 continuity",
+                "First project ready proof",
             ]:
                 if token not in greenfield_combined:
                     errors.append(f"`{package}` не содержит greenfield ChatGPT UI boundary token `{token}`")

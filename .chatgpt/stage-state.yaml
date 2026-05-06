@@ -23,18 +23,20 @@ gates:
   tech_spec_ready: true
   decomposition_complete: true
 change:
-  id: chg-20260428-project-root-boundary
-  title: Закрепить project-root boundary для intermediate repos
+  id: FT-CH-0011-unified-roadmap
+  title: Single big VPS, downstream proof and beginner-first roadmap baseline
   class: fix
   execution_mode: codex-led
   type: factory-improvement
   status: done
   priority: high
-  summary: "Уточнить canonical VPS layout: промежуточные repo живут внутри repo целевого greenfield-product, не как siblings в /projects."
+  summary: "Закрыть FT-CH-0011, зафиксировать module gate baseline, single big VPS topology, downstream proof readiness и beginner-first Windows-to-first-project path."
   outputs:
-    - reports/bugs/2026-04-28-flat-project-tree-intermediate-repo-gap.md
-    - reports/factory-feedback/feedback-2026-04-28-flat-project-tree-intermediate-repo-gap.md
-    - template-repo/tree-contract.yaml
-    - template-repo/scripts/validate-tree-contract.py
-    - tests/artifact-eval/specs/project-root-boundary.yaml
-    - tests/artifact-eval/reports/project-root-boundary.md
+    - .chatgpt/chat-handoff-index.yaml
+    - template-repo/template/.chatgpt/project-lifecycle-dashboard.yaml
+    - template-repo/template/.chatgpt/standards-gates.yaml
+    - docs/operator/single-big-vps-dev-runtime-architecture.md
+    - docs/releases/unified-single-vps-downstream-beginner-roadmap.md
+    - docs/releases/single-vps-downstream-proof-roadmap.md
+    - docs/operator/beginner-first-windows-to-first-project.md
+    - reports/release/downstream-application-proof-report.md

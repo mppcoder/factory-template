@@ -8,7 +8,7 @@ from pathlib import Path
 
 
 PASSED_STATUSES = {"passed", "pass"}
-BLOCKED_STATUSES = {"blocked", "not_run", "not-run", "pending"}
+BLOCKED_STATUSES = {"blocked", "blocked_external_inputs", "ready_for_external_pilot", "not_run", "not-run", "pending"}
 PLACEHOLDER_MARKERS = {
     "",
     "unknown",
@@ -50,6 +50,17 @@ REQUIRED_EVIDENCE_KEYS = {
     "secrets_boundary_evidence",
     "scorecard_evidence",
 }
+SECRET_LIKE_RE = re.compile(
+    r"(?i)\b(?:api[_-]?key|token|password|passwd|private[_-]?key|secret[_-]?key)\s*[:=]\s*[^`\s]+"
+)
+
+
+def transcript_text(text: str) -> str:
+    marker = "## Санитизированный transcript"
+    start = text.find(marker)
+    if start < 0:
+        return ""
+    return text[start:]
 
 
 def read_text(path: Path) -> str:
@@ -89,7 +100,11 @@ def validate_report(path: Path) -> list[str]:
 
     status = fields.get("proof_status", "").lower()
     if status not in PASSED_STATUSES | BLOCKED_STATUSES:
-        errors.append("`proof_status` должен быть `passed`, `blocked` или `not_run`")
+        errors.append("`proof_status` должен быть `passed`, `blocked_external_inputs`, `ready_for_external_pilot`, `blocked` или `not_run`")
+
+    transcript = transcript_text(text)
+    if transcript and SECRET_LIKE_RE.search(transcript):
+        errors.append("sanitized transcript содержит secret-like content")
 
     if status in PASSED_STATUSES:
         for field in sorted(REQUIRED_PASSED_FIELDS):
@@ -121,6 +136,8 @@ def validate_report(path: Path) -> list[str]:
     else:
         if not fields.get("blocker_reason") or is_placeholder(fields.get("blocker_reason", "")):
             errors.append("blocked/not_run report должен содержать `blocker_reason`")
+        if status in {"blocked_external_inputs", "ready_for_external_pilot"} and "external" not in fields.get("blocker_reason", "").lower():
+            errors.append("blocked_external_inputs/ready_for_external_pilot должен явно ссылаться на external inputs")
         for overclaim in ["deploy_result", "healthcheck_result", "backup_result", "restore_result", "rollback_result"]:
             if fields.get(overclaim, "").lower() in {"pass", "passed"}:
                 errors.append(f"blocked/not_run report не может claim `{overclaim}: pass`")
@@ -153,4 +170,3 @@ def main() -> int:
 
 if __name__ == "__main__":
     sys.exit(main())
-

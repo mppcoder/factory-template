@@ -2,7 +2,7 @@
 
 Дата: {{YYYY-MM-DD}}
 
-proof_status: not_run
+proof_status: blocked_external_inputs
 downstream_repo: {{downstream_repo_path_or_url}}
 app_image: {{real_app_image}}
 runtime_target: {{approved_vps_or_staging_target}}
@@ -15,6 +15,7 @@ rollback_result: not_run
 sanitized_transcript: missing
 secrets_boundary: unconfirmed
 blocker_reason: external_inputs_missing
+readiness_status: ready_for_external_pilot
 
 ## Runtime evidence данные
 

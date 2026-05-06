@@ -72,18 +72,13 @@
 
 `factory-template` template/runtime proof is complete. Downstream/battle app proof is an optional future contour and must not be claimed until a generated/battle project supplies a real application image and passes app-level deploy, healthcheck, backup, restore and rollback evidence.
 
+Current materialized status after FT-CH-0011 closeout: `ready_for_external_pilot` / `blocked_external_inputs`. The single big VPS topology is a supported architecture, but it is not an application proof pass by itself.
+
 ## Рекомендация следующего шага
 
 Recommended next step depends on whether a real downstream/battle app exists now:
 
 1. If a real downstream/battle project is selected and has a real `APP_IMAGE`, run P4-S5/P4-S6 on that project. This is the canonical next stage for application-level proof.
-2. If no real downstream app exists now, do not simulate P4-S5 inside `factory-template`. Open internal Plan №5 / hardening contour instead.
+2. If no real downstream app exists now, do not simulate P4-S5 inside `factory-template`. Keep the report blocked/ready and continue the beginner-first Windows-to-first-project hardening branch after the single VPS/downstream proof contour.
 
-Recommended Plan №5 focus:
-
-- runner layer and operational reports polish;
-- curated/reference pack quality validator beyond structural checks;
-- production hardening for git sync fallback strategy;
-- novice acceptance expansion from parity smoke to domain scenarios.
-
-This recommendation is part of roadmap closeout: future external proof remains optional, while internal hardening is the next actionable repo-local path when no downstream app is available.
+This recommendation is part of roadmap closeout: future external proof remains optional and evidence-gated; internal beginner-first hardening remains the next repo-local branch when no downstream app is selected.

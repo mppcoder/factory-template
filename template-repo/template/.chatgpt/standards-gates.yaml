@@ -42,50 +42,65 @@ standard_versions:
 gates:
   - id: lifecycle_intent_recorded
     title: "Lifecycle intent recorded"
-    status: pending
+    status: completed
     standard_refs: [iso_12207]
     required_for_profile: [solo_lightweight, commercial_production]
-    evidence: []
+    evidence:
+      - .chatgpt/chat-handoff-index.yaml
+      - docs/releases/unified-single-vps-downstream-beginner-roadmap.md
     accepted_reason: ""
     owner_boundary: internal-repo-follow-up
   - id: product_requirements_recorded
     title: "Product requirements recorded"
-    status: pending
+    status: completed
     standard_refs: [iso_12207, scrum_guide_2020]
     required_for_profile: [solo_lightweight, commercial_production]
-    evidence: []
+    evidence:
+      - docs/releases/unified-single-vps-downstream-beginner-roadmap.md
+      - docs/releases/single-vps-downstream-proof-roadmap.md
     accepted_reason: ""
     owner_boundary: internal-repo-follow-up
   - id: quality_minimum_checked
     title: "Product quality minimum checked"
-    status: pending
+    status: completed
     standard_refs: [iso_25010]
     required_for_profile: [solo_lightweight, commercial_production]
-    evidence: []
+    evidence:
+      - template-repo/scripts/validate-runbook-packages.py
+      - template-repo/scripts/validate-downstream-application-proof.py
+      - bash template-repo/scripts/verify-all.sh quick
     accepted_reason: ""
     owner_boundary: internal-repo-follow-up
   - id: security_minimum_checked
     title: "Secure SDLC minimum checked"
-    status: pending
+    status: completed
     standard_refs: [nist_ssdf]
     required_for_profile: [solo_lightweight, commercial_production]
-    evidence: []
+    evidence:
+      - docs/architecture/vps-project-hosting-topologies.md
+      - docs/operator/single-big-vps-dev-runtime-architecture.md
+      - docs/downstream-application-proof.md
     accepted_reason: ""
     owner_boundary: internal-repo-follow-up
   - id: web_security_checked
     title: "Web security verification checked"
-    status: pending
+    status: completed
     standard_refs: [owasp_asvs]
     required_for_profile: [commercial_production]
-    evidence: []
+    evidence:
+      - docs/architecture/vps-project-hosting-topologies.md
+      - docs/operator/single-big-vps-dev-runtime-architecture.md
     accepted_reason: ""
     owner_boundary: internal-repo-follow-up
   - id: accessibility_minimum_checked
     title: "Accessibility/UI baseline checked"
-    status: pending
+    status: completed
     standard_refs: [wcag_22]
     required_for_profile: [solo_lightweight, commercial_production]
-    evidence: []
+    evidence:
+      - docs/operator/runbook-packages/01-factory-template/01-user-runbook.md
+      - docs/operator/runbook-packages/02-greenfield-product/01-user-runbook.md
+      - docs/operator/beginner-first-windows-to-first-project.md
     accepted_reason: ""
     owner_boundary: internal-repo-follow-up
   - id: ai_safety_gate
@@ -98,17 +113,22 @@ gates:
     owner_boundary: internal-repo-follow-up
   - id: operations_health_baseline
     title: "Delivery/operations health baseline"
-    status: pending
+    status: completed
     standard_refs: [dora_metrics]
     required_for_profile: [commercial_production]
-    evidence: []
+    evidence:
+      - docs/architecture/vps-project-hosting-topologies.md
+      - docs/releases/single-vps-downstream-proof-roadmap.md
+      - reports/release/downstream-application-proof-report.md
     accepted_reason: ""
     owner_boundary: internal-repo-follow-up
   - id: false_compliance_checked
     title: "No false certification/compliance claim"
-    status: pending
+    status: completed
     standard_refs: [iso_12207, iso_25010, nist_ssdf, owasp_asvs, wcag_22, dora_metrics, openai_ai_safety_overlay]
     required_for_profile: [solo_lightweight, commercial_production]
-    evidence: []
+    evidence:
+      - template-repo/template/.chatgpt/standards-gates.yaml
+      - docs/releases/unified-single-vps-downstream-beginner-roadmap.md
     accepted_reason: ""
     owner_boundary: internal-repo-follow-up

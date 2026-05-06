@@ -77,6 +77,27 @@ python3 template-repo/scripts/validate-downstream-application-proof.py reports/r
 
 Validator accepts blocked/not-run reports only when they do not claim pass and include a blocker reason. A passed report must use a real app image, not `factory-template-placeholder-app:local`, and must include evidence for healthcheck, migrations policy, backup, restore, rollback, sanitized transcript and secrets boundary.
 
+## Непрерывный roadmap stage
+
+Application-level proof идет строго в таком порядке:
+
+1. Single big VPS topology proof.
+2. Select downstream/battle project.
+3. Replace placeholder `APP_IMAGE` with real app image.
+4. Configure app-specific healthcheck and migrations policy.
+5. Approved deploy to `/srv/<project>-prod` or approved staging target.
+6. HTTPS/nginx/systemd/docker healthcheck.
+7. Backup.
+8. Disposable/staging restore.
+9. Rollback drill.
+10. Sanitized transcript.
+11. Fill downstream application proof report.
+12. Validate report.
+13. Update dashboard/release continuity.
+14. Only then claim downstream/battle app proof pass.
+
+Status `ready_for_external_pilot` or `blocked_external_inputs` is allowed when the report lists concrete missing external inputs and does not claim pass.
+
 ## Boundary правило
 
 This scenario is outside the completed `factory-template` template/runtime proof. It becomes actionable only in a selected downstream/battle project with a real workload.
