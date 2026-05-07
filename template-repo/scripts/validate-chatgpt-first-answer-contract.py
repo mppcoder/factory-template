@@ -21,6 +21,10 @@ REQUIRED_ROUTER_PHRASES = [
     "render-project-lifecycle-dashboard.py --format chatgpt-card --stdout",
     "однострочный fenced `text` code block",
     "copy button",
+    "repo-local allocator",
+    "GitHub connector write path",
+    "confirm fetch",
+    "blocker нельзя выводить",
 ]
 REQUIRED_HANDOFF_PHRASES = [
     "Название чата для копирования",
@@ -31,6 +35,10 @@ REQUIRED_HANDOFF_PHRASES = [
     "chatgpt-first-answer-allocation-not-attempted",
     "однострочный fenced `text` code block",
     "copy button",
+    "repo-local allocator",
+    "GitHub connector write path",
+    "confirm fetch",
+    "blocker нельзя выводить",
 ]
 REQUIRED_DOC_PHRASES = [
     "Название чата для копирования",
@@ -46,6 +54,10 @@ REQUIRED_DOC_PHRASES = [
     "номер остается занятым",
     "однострочный fenced `text` code block",
     "copy button",
+    "repo-local allocator",
+    "GitHub connector write path",
+    "confirm fetch",
+    "blocker нельзя выводить",
 ]
 FORBIDDEN_OVERCLAIMS = [
     "автоматически переименует ChatGPT",
@@ -59,6 +71,21 @@ ALLOCATOR_BLOCKER = "Нужно выделить номер через repo chat
 CHAT_TITLE_RE = re.compile(r"\b[A-Z][A-Z0-9]*-CH-\d{4} [a-z0-9][a-z0-9-]*\b")
 TITLE_COPY_BLOCK_RE = re.compile(r"\A\s*```text\n([^\n]+)\n```\s*", re.MULTILINE)
 ROUTE_MARKER_RE = re.compile(r"(?im)^\s*(?:#+\s*)?(route receipt|handoff|анализ|начинаю анализ)\b")
+CONNECTOR_WRITE_AVAILABLE_MARKERS = [
+    "repo_write_path: github_connector_available",
+    "GitHub connector write path available",
+]
+REPO_LOCAL_ALLOCATOR_UNAVAILABLE_MARKERS = [
+    "repo_local_allocator: unavailable_in_chatgpt_connector_context",
+    "repo-local allocator unavailable in ChatGPT connector context",
+]
+CONFIRMED_WRITE_BLOCKER_MARKERS = [
+    "confirmed_write_blocker:",
+    "allocator_blocker_reason:",
+    "confirm fetch failed",
+    "GitHub connector write rejected",
+    "GitHub connector write unavailable",
+]
 
 
 def read(path: Path) -> str:
@@ -90,8 +117,22 @@ def validate_visible_first_answer_outcome(text: str) -> list[str]:
         title_block = text[title_pos:title_end]
         has_materialized_title = bool(CHAT_TITLE_RE.search(title_block))
         has_allocator_blocker = ALLOCATOR_BLOCKER in title_block
+        connector_write_available = any(marker in text for marker in CONNECTOR_WRITE_AVAILABLE_MARKERS)
+        repo_local_allocator_unavailable = any(marker in text for marker in REPO_LOCAL_ALLOCATOR_UNAVAILABLE_MARKERS)
+        has_confirmed_write_blocker = any(marker in text for marker in CONFIRMED_WRITE_BLOCKER_MARKERS)
         if not has_materialized_title and not has_allocator_blocker:
             errors.append("title block не содержит materialized allocation or allocator blocker")
+        if (
+            connector_write_available
+            and repo_local_allocator_unavailable
+            and has_allocator_blocker
+            and not has_materialized_title
+            and not has_confirmed_write_blocker
+        ):
+            errors.append(
+                "allocator blocker нельзя выводить, когда GitHub connector write path доступен; "
+                "нужен materialized FT-CH item или explicit confirmed write blocker reason"
+            )
         title_body = title_block[len(TITLE_HEADER) :]
         copy_match = TITLE_COPY_BLOCK_RE.match(title_body)
         if not copy_match:
@@ -155,6 +196,7 @@ def main() -> int:
     positive_fixtures = [
         root / "tests" / "chatgpt-first-answer-contract" / "positive" / "materialized-title-copyable.md",
         root / "tests" / "chatgpt-first-answer-contract" / "positive" / "allocator-blocker-copyable.md",
+        root / "tests" / "chatgpt-first-answer-contract" / "positive" / "connector-write-fallback-materialized.md",
     ]
     for path in positive_fixtures:
         if not path.exists():
@@ -163,6 +205,18 @@ def main() -> int:
         fixture_errors = validate_visible_first_answer_outcome(read(path))
         if fixture_errors:
             errors.append(f"{path.relative_to(root)} не прошел positive fixture: {'; '.join(fixture_errors)}")
+
+    connector_false_blocker_fixture = (
+        root / "tests" / "chatgpt-first-answer-contract" / "negative" / "connector-write-available-silent-blocker.md"
+    )
+    if not connector_false_blocker_fixture.exists():
+        errors.append(f"{connector_false_blocker_fixture.relative_to(root)} отсутствует")
+    else:
+        fixture_errors = validate_visible_first_answer_outcome(read(connector_false_blocker_fixture))
+        if not fixture_errors:
+            errors.append(
+                f"{connector_false_blocker_fixture.relative_to(root)} должен быть negative fixture для false blocker при доступном GitHub connector write path, но прошел проверку"
+            )
 
     card_path = root / "reports" / "project-status-card.md"
     if not card_path.exists():

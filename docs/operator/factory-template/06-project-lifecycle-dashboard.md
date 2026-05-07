@@ -70,6 +70,8 @@ FT-CH-0011 completion-report
 
 Project Instructions могут показать пользователю только уже зарезервированный stable title или allocator blocker. Они не могут надежно auto-rename ChatGPT UI, просканировать все названия чатов проекта или гарантировать следующий свободный номер без repo write. Переименование ChatGPT UI остается one-time manual action при создании чата, если нет отдельного поддержанного API/tool.
 
+Fallback contract: сначала попытка через repo-local allocator; если repo-local allocator недоступен в ChatGPT connector context, но доступен GitHub connector write path, ChatGPT делает connector update `.chatgpt/chat-handoff-index.yaml`, затем confirm fetch/readback. blocker нельзя выводить, когда GitHub connector write path доступен и confirm fetch подтверждает update. Exact blocker допустим только если write path отсутствует, write rejected или confirm fetch не подтвердил запись.
+
 Важно: `FT-CH-....` в первом ответе не является предложением. Это ссылка на уже созданный item в repo index. Если handoff так и не запустили в Codex, номер остается занятым; следующая задача должна получить новый номер, а старую запись нужно явно закрыть как `superseded`, `not_applicable` или `archived`, если она больше не нужна.
 
 Инвариант first substantive answer: до route receipt, анализа или handoff должен быть один из двух видимых outcomes - materialized allocation or allocator blocker. Первое допустимое состояние - materialized allocation confirmed, затем stable title block. Второе допустимое состояние - repo write не подтвержден или allocation unavailable, затем exact allocator blocker.

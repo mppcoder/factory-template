@@ -886,7 +886,7 @@ def render(data: dict[str, Any], root: Path, dashboard_path: Path) -> str:
         f"- title: {change['title']}",
         f"- class/priority/status: `{change['class']}` / `{change['priority']}` / `{change['status']}`",
         f"- boundary: `{change['owner_boundary']}`",
-        f"- task-state next action: {value(task_state, 'next_action', 'summary')}",
+        f"- task-state next action: {value(task_state, 'next_action', 'summary') or 'not set'}",
         "",
             "## Гейты этапов",
         "",

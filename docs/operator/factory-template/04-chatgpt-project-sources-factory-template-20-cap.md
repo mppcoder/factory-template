@@ -31,6 +31,8 @@
 2. раздел `Карточка проекта` со свежей compact card из repo dashboard.
 
 Инвариант first substantive answer: до route receipt, анализа или handoff должен быть один из двух видимых outcomes - materialized allocation or allocator blocker.
+Порядок allocation attempt: сначала repo-local allocator, если он исполним; если repo-local allocator недоступен в ChatGPT connector context, но доступен GitHub connector write path, materialize reservation через connector update в `.chatgpt/chat-handoff-index.yaml`, затем confirm fetch/readback и покажи stable title.
+blocker нельзя выводить, когда GitHub connector write path доступен и confirm fetch подтверждает update.
 Если точный следующий номер неизвестен или repo write не подтвержден, не придумывай его и не показывай `FT-CH-....`. Напиши: `Нужно выделить номер через repo chat-handoff-index / allocator.`
 третье состояние запрещено: no allocation attempted / no blocker / answer continues.
 Если ChatGPT не показал `FT-CH-....` и не показал allocator blocker, это ошибка первого ответа `allocation-not-attempted`. Останови route и запусти repo allocator или передай Codex remediation; не продолжай с примерным номером.

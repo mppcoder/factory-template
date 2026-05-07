@@ -1,6 +1,6 @@
 # Панель жизненного цикла проекта / `project-lifecycle-dashboard`
 
-Generated UTC: `2026-05-07T12:12:52+00:00`
+Generated UTC: `2026-05-07T13:43:48+00:00`
 Source: `/projects/factory-template/template-repo/template/.chatgpt/project-lifecycle-dashboard.yaml`
 
 ## Сейчас
@@ -19,7 +19,7 @@ Source: `/projects/factory-template/template-repo/template/.chatgpt/project-life
 - title: Close historical FT-CX-0012 blocker and align dashboard release state
 - class/priority/status: `small-fix` / `medium` / `done`
 - boundary: `internal-repo-follow-up`
-- task-state next action:
+- task-state next action: not set
 
 ## Гейты этапов
 
@@ -63,6 +63,8 @@ Source: `/projects/factory-template/template-repo/template/.chatgpt/project-life
 
 ### Активные ChatGPT handoff-задачи
 
+✅ FT-CH-0020 chat-title-allocation-blocker-still-returned: ✅ GPT-HO → ✅
+  Codex OK → ✅ Done
 ✅ FT-CX-0027 close-ft-cx-0012-dashboard-release-state: ✅ Codex-WORK → ✅
   Codex OK → ✅ Done
 
@@ -82,16 +84,16 @@ Source: `/projects/factory-template/template-repo/template/.chatgpt/project-life
 ✅ FT-CH-0014 product-support-architecture: ✅ GPT-HO → ✅ Codex OK → ✅ Done
 ✅ FT-CH-0015 windows-bootstrapper-release-publication: ✅ GPT-HO → ✅ Codex
   OK → ✅ Done
-🟡 FT-CH-0016 chat-title-allocator-blocker-regression: ✅ GPT-HO → 🕒 Codex
-  OK → 🕒 Done
+✅ FT-CH-0016 chat-title-allocator-blocker-regression: ✅ GPT-HO → ✅ Codex
+  OK → ✅ Done
 🟡 FT-CH-0017 module-gated-vps-downstream-beginner-roadmap: ✅ GPT-HO → 🕒
   Codex OK → 🕒 Done
-🟡 FT-CH-0018 chat-title-allocator-write-path-regression: ✅ GPT-HO → 🕒
-  Codex OK → 🕒 Done
+✅ FT-CH-0018 chat-title-allocator-write-path-regression: ✅ GPT-HO → ✅
+  Codex OK → ✅ Done
 🟡 FT-CH-0019 external-user-action-interview-handoff-scenario: ✅ GPT-HO → 🕒
   Codex OK → 🕒 Done
-🟡 FT-CH-0020 chat-title-allocation-blocker-still-returned: ✅ GPT-HO → 🕒
-  Codex OK → 🕒 Done
+✅ FT-CH-0020 chat-title-allocation-blocker-still-returned: ✅ GPT-HO → ✅
+  Codex OK → ✅ Done
 
 ### История Codex-доработок
 

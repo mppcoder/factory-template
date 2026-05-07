@@ -1,7 +1,7 @@
 # Bug: chat-title-allocator-blocker-regression
 
 Date: 2026-05-06
-Status: open
+Status: verified via FT-CH-0020 remediation
 
 ## Symptom
 
@@ -58,3 +58,9 @@ Only if allocation is unavailable or the repo write cannot be confirmed may Chat
 - `python3 template-repo/scripts/validate-chatgpt-first-answer-contract.py .`
 - `bash template-repo/scripts/verify-all.sh quick`
 - Full verify if scenario-pack, validators or runbook are changed.
+
+## Resolution
+
+Closed by `FT-CH-0020 chat-title-allocation-blocker-still-returned` / `HIR-013`.
+
+The contract now distinguishes repo-local allocator execution from GitHub connector write availability: if the local allocator cannot run in ChatGPT connector context, ChatGPT must use connector-based materialized reservation plus confirm fetch/readback before showing the title. The generic allocator blocker is forbidden when GitHub connector write path is available and confirms the update.

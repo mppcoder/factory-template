@@ -659,3 +659,68 @@ items:
     next_action: "No further implementation action for this HIR item."
     created_at: "2026-05-06T06:02:52Z"
     updated_at: "2026-05-06T06:08:37Z"
+  - id: HIR-013
+    title: "ChatGPT connector write fallback for first-answer title allocation"
+    chat_id: FT-CH-0020
+    chat_title: "FT-CH-0020 chat-title-allocation-blocker-still-returned"
+    task_slug: chat-title-allocation-blocker-still-returned
+    chat_state: verified
+    chat_index_item_id: FT-CH-0020
+    handoff_group: "chat-title-allocation-blocker-still-returned"
+    handoff_revision: 1
+    source_type: chatgpt-handoff
+    source_chat: "FT-CH-0020 chat-title-allocation-blocker-still-returned"
+    source_handoff_path: ""
+    task_class: build
+    selected_profile: build
+    selected_model: gpt-5.5
+    selected_reasoning_effort: medium
+    selected_plan_mode_reasoning_effort: medium
+    status: verified
+    priority: high
+    calculated_priority: high
+    depends_on: []
+    blocks: []
+    replaces: []
+    superseded_by: ""
+    replacement_reason: ""
+    owner_boundary: internal-repo-follow-up
+    artifacts_to_update:
+      - "template-repo/scenario-pack/00-master-router.md"
+      - "template-repo/scenario-pack/15-handoff-to-codex.md"
+      - "template-repo/scripts/allocate-chat-handoff-id.py"
+      - "template-repo/scripts/create-codex-task-pack.py"
+      - "template-repo/scripts/render-project-lifecycle-dashboard.py"
+      - "template-repo/scripts/validate-chat-handoff-index.py"
+      - "template-repo/scripts/validate-chatgpt-first-answer-contract.py"
+      - "tests/chatgpt-first-answer-contract/negative/connector-write-available-silent-blocker.md"
+      - "tests/chatgpt-first-answer-contract/positive/connector-write-fallback-materialized.md"
+      - "docs/operator/factory-template/01-runbook-dlya-polzovatelya-factory-template.md"
+      - "docs/operator/factory-template/04-chatgpt-project-sources-factory-template-20-cap.md"
+      - "docs/operator/factory-template/06-project-lifecycle-dashboard.md"
+      - "reports/bugs/2026-05-07-chat-title-allocation-blocker-still-returned.md"
+      - "reports/factory-feedback/feedback-055-chatgpt-connector-write-fallback.md"
+      - ".chatgpt/chat-handoff-index.yaml"
+      - "template-repo/template/.chatgpt/chat-handoff-index.yaml"
+      - ".chatgpt/handoff-implementation-register.yaml"
+      - "reports/project-status-card.md"
+      - "reports/project-lifecycle-dashboard.md"
+    evidence:
+      - "route receipt: launch_source=chatgpt-handoff, handoff_shape=codex-task-handoff, selected_profile=build, selected_model=gpt-5.5, reasoning=medium"
+      - "defect-capture: reports/bugs/2026-05-07-chat-title-allocation-blocker-still-returned.md"
+      - "factory feedback: reports/factory-feedback/feedback-055-chatgpt-connector-write-fallback.md"
+      - "related reservations: FT-CH-0016 and FT-CH-0018"
+      - "python3 template-repo/scripts/validate-chat-handoff-index.py .chatgpt/chat-handoff-index.yaml"
+      - "python3 template-repo/scripts/validate-chat-handoff-index.py template-repo/template/.chatgpt/chat-handoff-index.yaml"
+      - "python3 template-repo/scripts/validate-handoff-implementation-register.py .chatgpt/handoff-implementation-register.yaml"
+      - "python3 template-repo/scripts/validate-chatgpt-first-answer-contract.py ."
+      - "bash template-repo/scripts/verify-all.sh quick"
+      - "incidental full-verify blocker fixed: template-repo/scripts/create-codex-task-pack.py update-required branch now emits repo-first GitHub access markers required by generated boundary-actions validator"
+      - "renderer cleanup: empty task-state next action now renders as not set instead of trailing whitespace"
+      - "bash SMOKE_TEST.sh"
+      - "bash template-repo/scripts/verify-all.sh"
+    closeout_reason: "Defect closed at ChatGPT Project first-answer workflow / repo connector write-path / allocator fallback contract layer. Router, handoff scenario, runbooks, allocation policy, validators and regression fixtures now require repo-local allocator first, GitHub connector materialized write fallback when local execution is unavailable, confirm fetch/readback before stable title, and a true write/confirm blocker before the exact allocator blocker."
+    deactivation_handoff_required: false
+    next_action: "No further implementation action; commit and push verified sync."
+    created_at: "2026-05-07T13:29:36Z"
+    updated_at: "2026-05-07T13:29:36Z"

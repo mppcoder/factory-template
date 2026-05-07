@@ -14,6 +14,10 @@ allocation_policy:
   visible_chat_title_requires_materialized_index_item: true
   dry_run_title_is_not_reserved: true
   unlaunched_handoff_keeps_chat_number_reserved: true
+  repo_local_allocator_attempt_first: true
+  github_connector_write_fallback: true
+  github_connector_write_requires_confirm_fetch: true
+  blocker_forbidden_when_confirmed_write_path_available: true
   allocator_blocker_required_without_write_access: true
   codex_self_handoff_uses_same_counter: false
   handoff_must_reference_chat_id: true
@@ -237,9 +241,9 @@ items:
   chat_title: FT-CH-0016 chat-title-allocator-blocker-regression
   task_slug: chat-title-allocator-blocker-regression
   kind: bug
-  state: open
+  state: verified
   created_utc: '2026-05-06T10:43:00Z'
-  updated_utc: '2026-05-06T10:43:00Z'
+  updated_utc: '2026-05-07T13:29:36Z'
   source_type: chatgpt-first-answer
   handoff_group: chat-title-allocator-blocker-regression
   handoff_revision: 1
@@ -248,7 +252,8 @@ items:
   evidence:
   - User reported ChatGPT shows allocator blocker instead of stable copy title.
   - Materialized reservation created before visible substantive response for this defect task.
-  next_action: Reproduce allocator/write path issue and fix router/validator/runbook behavior so reachable write allocator is attempted before blocker fallback.
+  - 'Closed by FT-CH-0020 / HIR-013: connector write fallback contract and regression fixture added.'
+  next_action: No further implementation action; keep this historical reservation closed and do not reuse the chat number.
 - chat_id: FT-CH-0017
   chat_number: 17
   chat_title: FT-CH-0017 module-gated-vps-downstream-beginner-roadmap
@@ -272,9 +277,9 @@ items:
   chat_title: FT-CH-0018 chat-title-allocator-write-path-regression
   task_slug: chat-title-allocator-write-path-regression
   kind: bug
-  state: open
+  state: verified
   created_utc: '2026-05-06T12:59:00Z'
-  updated_utc: '2026-05-06T12:59:00Z'
+  updated_utc: '2026-05-07T13:29:36Z'
   source_type: chatgpt-first-answer
   handoff_group: chat-title-allocator-write-path-regression
   handoff_revision: 1
@@ -283,8 +288,9 @@ items:
   evidence:
   - 'User reported recurring first-answer failure: ChatGPT reads next_chat_number=18 but still outputs allocator blocker instead of materializing reservation.'
   - Router contract requires materialized repo reservation or exact allocator blocker before any route receipt or analysis.
-  - Existing FT-CH-0016 remains open and covers related allocator-blocker regression; this item captures the repeated no-number symptom and write-path remediation follow-up.
-  next_action: Fix first-answer allocator/write-path behavior so ChatGPT attempts reachable repo write allocator before blocker fallback and validates materialized reservation.
+  - FT-CH-0016 covered the related allocator-blocker regression; this item captured the repeated no-number symptom and write-path remediation follow-up.
+  - 'Closed by FT-CH-0020 / HIR-013: connector write fallback contract and regression fixture added.'
+  next_action: No further implementation action; keep this historical reservation closed and do not reuse the chat number.
 - chat_id: FT-CH-0019
   chat_number: 19
   chat_title: FT-CH-0019 external-user-action-interview-handoff-scenario
@@ -308,17 +314,25 @@ items:
   chat_title: FT-CH-0020 chat-title-allocation-blocker-still-returned
   task_slug: chat-title-allocation-blocker-still-returned
   kind: bug
-  state: open
+  state: verified
   created_utc: '2026-05-07T06:45:00Z'
-  updated_utc: '2026-05-07T06:45:00Z'
+  updated_utc: '2026-05-07T13:29:36Z'
   source_type: chatgpt-first-answer
   handoff_group: chat-title-allocation-blocker-still-returned
   handoff_revision: 1
-  handoff_register_item_id: ''
+  handoff_register_item_id: HIR-013
   status_chain: [chatgpt_handoff, codex_accepted, codex_completed]
   evidence:
   - User again reported that the first ChatGPT answer shows the exact allocator blocker instead of allocating a stable FT-CH title.
   - Main router was read via GitHub connector before reservation.
   - Direct GitHub connector write materialized this reservation because the allocator script exists in repo but cannot be executed inside ChatGPT connector context.
-  - Related open defects remain FT-CH-0016 and FT-CH-0018.
-  next_action: Fix ChatGPT first-answer contract tooling so a reachable GitHub connector write path is attempted or an explicit true write-access blocker is shown; avoid returning allocator blocker when GitHub write connector is available.
+  - Related defects were FT-CH-0016 and FT-CH-0018.
+  - 'Codex route receipt: launch_source=chatgpt-handoff, selected_profile=build, selected_model=gpt-5.5, reasoning=medium'
+  - 'Defect-capture: reports/bugs/2026-05-07-chat-title-allocation-blocker-still-returned.md'
+  - 'Remediation: router/handoff/runbook/tooling now require GitHub connector materialized write fallback and confirm fetch.'
+  - 'Regression coverage: tests/chatgpt-first-answer-contract/negative/connector-write-available-silent-blocker.md'
+  - 'python3 template-repo/scripts/validate-chat-handoff-index.py .chatgpt/chat-handoff-index.yaml'
+  - 'python3 template-repo/scripts/validate-chatgpt-first-answer-contract.py .'
+  - 'bash template-repo/scripts/verify-all.sh quick'
+  - 'bash template-repo/scripts/verify-all.sh'
+  next_action: No further implementation action; exact allocator blocker is forbidden when GitHub connector write path is available and confirms update.

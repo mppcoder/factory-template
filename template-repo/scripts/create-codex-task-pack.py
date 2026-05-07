@@ -230,7 +230,13 @@ GPT-5.5 не считать drop-in replacement для старого prompt sta
         handoff_line = 'Handoff в Codex сейчас не является обязательным для выбранного профиля.'
 
     if active.get('status') == 'нужно_обновить_repo_first_инструкцию':
-        sources_line = f'Обновите repo-first инструкцию в ChatGPT Project и начните с {entrypoint}. Сценарии нужно читать из GitHub repo через GitHub connector / repo tool / authenticated `gh`; public URL fallback допустим только при named blocker.'
+        sources_line = (
+            f'Обновите repo-first инструкцию в ChatGPT Project и начните с {entrypoint}. '
+            f'В ChatGPT Project должен действовать repo-first режим: сначала GitHub repo через GitHub connector / repo tool / authenticated `gh`, затем {entrypoint}. '
+            'Сценарии не должны пересказываться из памяти. '
+            'Public `github.com` / raw URL fallback допустим только при named blocker: connector unavailable, no permission, repo not installed in connector, authenticated repo tool unavailable или explicit user request for public URL. '
+            'public URL fallback допустим только при named blocker.'
+        )
     else:
         sources_line = f'В ChatGPT Project должен действовать repo-first режим: сначала GitHub repo через GitHub connector / repo tool / authenticated `gh`, затем {entrypoint}. Сценарии не должны пересказываться из памяти.'
 
