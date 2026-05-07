@@ -230,9 +230,9 @@ GPT-5.5 не считать drop-in replacement для старого prompt sta
         handoff_line = 'Handoff в Codex сейчас не является обязательным для выбранного профиля.'
 
     if active.get('status') == 'нужно_обновить_repo_first_инструкцию':
-        sources_line = f'Обновите repo-first инструкцию в ChatGPT Project и начните с {entrypoint}. Сценарии нужно читать прямо из GitHub repo.'
+        sources_line = f'Обновите repo-first инструкцию в ChatGPT Project и начните с {entrypoint}. Сценарии нужно читать из GitHub repo через GitHub connector / repo tool / authenticated `gh`; public URL fallback допустим только при named blocker.'
     else:
-        sources_line = f'В ChatGPT Project должен действовать repo-first режим: сначала GitHub repo, затем {entrypoint}. Сценарии не должны пересказываться из памяти.'
+        sources_line = f'В ChatGPT Project должен действовать repo-first режим: сначала GitHub repo через GitHub connector / repo tool / authenticated `gh`, затем {entrypoint}. Сценарии не должны пересказываться из памяти.'
 
     route_line = 'Активные стартовые сценарии: ' + (', '.join(active_scenarios) if active_scenarios else 'еще не определены.')
     impact_model = policy.get('boundary_actions', {}).get('completion_impacts', {}) if isinstance(policy.get('boundary_actions', {}), dict) else {}
@@ -380,6 +380,7 @@ Compact default:
 - Для обновления factory ChatGPT Project сначала сам подготовьте точный repo-first instruction text; этот шаг выполняет Codex внутри repo до пользовательского блока.
 - Для downstream repo sync сначала используйте `factory/producer/extensions/workspace-packs/factory-ops/export-template-patch.sh` и `factory/producer/extensions/workspace-packs/factory-ops/apply-template-patch.sh`.
 - Для downstream repo instruction layer source-of-truth хранится в `template-repo/AGENTS.md`, а Codex в battle repo должен читать materialized root `AGENTS.md`.
+- Для GitHub repo `mppcoder/factory-template` ChatGPT/Codex primary path — GitHub connector / repo tool / authenticated `gh`; public `github.com` / raw URL fallback допустим только при named blocker.
 - Не перекладывайте на пользователя запуск внутренних repo-команд вроде `GENERATE_BOUNDARY_ACTIONS.sh`, если эти шаги может выполнить Codex.
 - Если замена может создать устаревшие дубликаты, добавляйте точный раздел `Удалить перед заменой`.
 

@@ -74,6 +74,23 @@
 Отдельно фиксируй, что "новый чат + вставка handoff" и "new task launch через executable launcher" — не одно и то же.
 Нельзя выдавать manual UI apply за авто-переключение profile/model/reasoning внутри уже открытой live session.
 
+## Контракт доступа к GitHub repo
+
+Для GitHub repo `mppcoder/factory-template` repo-first означает authenticated repo-first, а не browser/public URL by default.
+Если ChatGPT или Codex должен читать, проверять или менять этот repo, primary path:
+- GitHub connector;
+- repo tool / installed GitHub app capability;
+- authenticated `gh` access.
+
+Публичные `github.com` или `raw.githubusercontent.com` URL допускаются только как fallback при явном blocker:
+- connector unavailable;
+- no permission;
+- repo not installed in connector;
+- authenticated repo tool unavailable;
+- user explicitly asks for public URL.
+
+При таком fallback ответ обязан явно назвать blocker. Формулировки вроде "прочитай GitHub repo" или "сценарии читаются из GitHub repo" нельзя трактовать как разрешение по умолчанию открывать публичный browser/raw URL, если connector/tool доступен.
+
 ## Gate handoff и runtime execution mode
 
 Перед выдачей handoff обязательно зафиксируй нормализованное поле `handoff_shape`.

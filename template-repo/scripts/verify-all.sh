@@ -1087,6 +1087,7 @@ run_quick() {
   run_step "VALIDATE_FACTORY_TEMPLATE_OPS" bash "$ROOT/VALIDATE_FACTORY_TEMPLATE_OPS.sh"
   run_step "validate-codex-task-pack" python3 "$ROOT/template-repo/scripts/validate-codex-task-pack.py" "$ROOT"
   run_step "validate-codex-routing" python3 "$ROOT/template-repo/scripts/validate-codex-routing.py" "$ROOT"
+  run_step "validate-repo-first-github-access" python3 "$ROOT/template-repo/scripts/validate-repo-first-github-access.py" "$ROOT"
   run_step "validate-runbook-packages" python3 "$ROOT/template-repo/scripts/validate-runbook-packages.py" "$ROOT"
   run_step "first-project-github-identity-smoke" run_first_project_github_identity_smoke
   run_step "validate-windows-bootstrap" python3 "$ROOT/windows-bootstrap/tests/validate-windows-bootstrap.py" "$ROOT"

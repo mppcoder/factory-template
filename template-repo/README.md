@@ -24,9 +24,11 @@
 
 Во всех режимах generated project использует один и тот же repo-first принцип:
 
-- сценарии читаются прямо из GitHub repo проекта;
+- сценарии читаются прямо из GitHub repo проекта через GitHub connector / repo tool / authenticated `gh`, если такой доступ доступен;
 - первое обязательное чтение: `template-repo/scenario-pack/00-master-router.md`;
 - entry mode влияет не на набор загружаемых файлов, а на стартовый маршрут и preset/policy.
+
+Для ChatGPT/Codex public `github.com` / raw URL не является default repo-first path. Public URL fallback допустим только при named blocker: connector unavailable, no permission, repo not installed in connector, authenticated repo tool unavailable или explicit user request for public URL.
 
 Для Codex task routing advisory слоя недостаточно:
 - `AGENTS`, repo instructions и scenario-pack не переключают модель сами по себе;

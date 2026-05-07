@@ -16,7 +16,8 @@
 Если в любом месте ответа предлагается конкретный пример текста, который пользователь должен написать, вставить, отправить или сохранить как instruction, этот пример всегда выдается отдельным fenced code block для копирования. Inline-кавычки, пересказ и ссылка на repo-файл не заменяют готовый copy block.
 
 - Создать или открыть ChatGPT Project для этого рабочего проекта.
-- В ChatGPT Project должен действовать repo-first режим: сначала GitHub repo, затем 00-master-router.md. Сценарии не должны пересказываться из памяти.
+- В ChatGPT Project должен действовать repo-first режим: сначала GitHub repo через GitHub connector / repo tool / authenticated `gh`, затем 00-master-router.md. Сценарии не должны пересказываться из памяти.
+- Public `github.com` / raw URL fallback допустим только при named blocker: connector unavailable, no permission, repo not installed in connector, authenticated repo tool unavailable или explicit user request for public URL.
 - Активные стартовые сценарии: еще не определены.
 - Проверить, что Codex получает актуальные `codex-input.md`, `codex-context.md`, `codex-task-pack.md` и `boundary-actions.md`.
 

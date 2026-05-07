@@ -108,19 +108,22 @@ codex --version
 
 ### CX-050. Создать `/projects` и clone/sync repo
 
+Primary path для repo `mppcoder/factory-template` — authenticated `gh repo clone`. Public HTTPS clone не используется как default для Codex. Он допустим только после named blocker `authenticated-repo-tool-unavailable`, `github-auth-required`, `github-permission-required` или explicit user request for public URL.
+
 ```bash
 set -euo pipefail
 mkdir -p /projects
 cd /projects
 if [ ! -d factory-template/.git ]; then
-  git clone https://github.com/mppcoder/factory-template.git factory-template
+  gh auth status
+  gh repo clone mppcoder/factory-template factory-template
 fi
 cd /projects/factory-template
 git status --short --branch
 git remote -v
 ```
 
-Если repo уже существует, не перетирай user changes. Если clone private/auth fails, попробуй `gh repo clone mppcoder/factory-template factory-template` только после successful `gh auth status`; иначе blocker.
+Если repo уже существует, не перетирай user changes. Если `gh auth status` или `gh repo clone` fails, назови точный blocker. Public URL fallback допустим только после явного blocker и должен быть помечен в closeout.
 
 ### CX-060. Прочитать repo rules
 

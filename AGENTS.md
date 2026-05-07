@@ -18,6 +18,11 @@
 4. Если router отправляет в другие repo-файлы, сначала прочитай их, затем продолжай работу.
 5. Не начинай реализацию до прохождения этого шага.
 
+## Правило доступа к GitHub repo
+Если ChatGPT или Codex должен читать или менять GitHub repo `mppcoder/factory-template`, primary path — GitHub connector, repo tool или authenticated `gh`.
+Публичные `github.com` / `raw.githubusercontent.com` URL не являются default path для ChatGPT/Codex, если connector/tool доступен.
+Public URL fallback допустим только при явном blocker: connector unavailable, no permission, repo not installed in connector, authenticated repo tool unavailable или пользователь явно попросил public URL. При fallback обязательно назови blocker.
+
 ## Что фиксировать в первом содержательном ответе
 - номер запроса Codex (`FT-CX-....`) или exact allocator blocker;
 - карточку проекта из repo renderer;

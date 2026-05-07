@@ -11,7 +11,8 @@
 - `PROJECT_BRIEF.md`
 - `CURRENT_FUNCTIONAL_STATE.md`
 
-Для ChatGPT Project используйте repo-first инструкцию: её нужно внести в поле `Instructions`, а сценарии должны читаться из GitHub repo проекта, а не храниться внутри самого проекта как source of truth.
+Для ChatGPT Project используйте repo-first инструкцию: её нужно внести в поле `Instructions`, а сценарии должны читаться из GitHub repo проекта через GitHub connector / repo tool / authenticated `gh`, а не храниться внутри самого проекта как source of truth.
+Public `github.com` / raw URL fallback допустим только при named blocker: connector unavailable, no permission, repo not installed in connector, authenticated repo tool unavailable или explicit user request for public URL.
 
 Для Codex используйте named profiles `quick / build / deep / review`.
 Здесь важно различать advisory layer (инструкции и сценарии) и executable routing layer (named profiles + launcher).

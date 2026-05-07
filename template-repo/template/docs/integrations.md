@@ -7,9 +7,11 @@
 Для проекта задайте repo-first правило:
 
 1. В поле `Instructions` ChatGPT Project внесите только короткую repo-first инструкцию.
-2. На каждый запрос сначала открывается GitHub repo проекта.
+2. На каждый запрос сначала открывается GitHub repo проекта через GitHub connector / repo tool / authenticated `gh`.
 3. Первое обязательное чтение: `template-repo/scenario-pack/00-master-router.md`.
 4. Ответ формируется только после прохождения маршрута из router-сценария.
+
+Public `github.com` / raw URL fallback допустим только при named blocker: connector unavailable, no permission, repo not installed in connector, authenticated repo tool unavailable или explicit user request for public URL.
 
 Если где-то остаются legacy export-артефакты, считайте их вспомогательным reference-слоем, а не основным источником сценариев.
 

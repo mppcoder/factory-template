@@ -158,6 +158,8 @@ def main() -> int:
     ensure_contains(boundary, "`.chatgpt/task-launch.yaml`", errors, "boundary-actions.md")
     ensure_contains(boundary, "`selected_profile` — это исполнимая граница маршрутизации", errors, "boundary-actions.md")
     ensure_contains(boundary, "При исполнении handoff приоритет у правил repo", errors, "boundary-actions.md")
+    ensure_contains(boundary, "сначала GitHub repo через GitHub connector / repo tool / authenticated `gh`", errors, "boundary-actions.md")
+    ensure_contains(boundary, "Public `github.com` / raw URL fallback допустим только при named blocker", errors, "boundary-actions.md")
     ensure_contains(boundary, "только один цельный блок для вставки в Codex", errors, "boundary-actions.md")
     ensure_contains(boundary, "Нельзя заменять handoff ссылкой на файл", errors, "boundary-actions.md")
     ensure_contains(boundary, "## Для внешних границ", errors, "boundary-actions.md")
