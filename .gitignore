@@ -7,6 +7,8 @@ __pycache__/
 deploy/.env
 *.pem
 *.key
+*.code-workspace
+!factory-template.code-workspace
 .release-stage/
 _boundary-actions/
 _sources-export/
