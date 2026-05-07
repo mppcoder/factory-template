@@ -1,6 +1,6 @@
 schema: codex-work-index/v1
 project_code: FT
-next_codex_work_number: 26
+next_codex_work_number: 27
 id_policy:
   canonical_format: <PROJECT_CODE>-CX-<NNNN> <task-slug>
   independent_from_chat_handoff_index: true
@@ -623,3 +623,26 @@ items:
     instruction saved, and verification request sent.
   - Factory repo and downstream rehearsal repo were clean before recording this receipt.
   next_action: No further action; external ChatGPT Project setup is complete.
+- codex_work_id: FT-CX-0026
+  work_number: 26
+  work_title: FT-CX-0026 next-step-after-beginner-rehearsal
+  task_slug: next-step-after-beginner-rehearsal
+  kind: self_handoff
+  state: verified
+  created_utc: '2026-05-07T09:48:07Z'
+  updated_utc: '2026-05-07T09:51:30Z'
+  source_type: direct-task
+  handoff_group: next-step-after-beginner-rehearsal
+  handoff_revision: 1
+  handoff_register_item_id: ''
+  status_chain:
+  - codex_self_handoff
+  - codex_accepted
+  - codex_completed
+  evidence:
+  - Allocated during direct-task bootstrap before first substantive response.
+  - Read router and rendered canonical factory-template project card.
+  - Reviewed beginner-first hardening evidence and current dashboard state.
+  - Recommended the next product contour after beginner rehearsal.
+  next_action: Recommended next branch is real first product intake through the factory
+    ChatGPT Project; fallback is internal release-state cleanup around FT-CX-0012.

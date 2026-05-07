@@ -1,6 +1,6 @@
 # Панель жизненного цикла проекта / `project-lifecycle-dashboard`
 
-Generated UTC: `2026-05-07T08:35:27+00:00`
+Generated UTC: `2026-05-07T09:48:36+00:00`
 Source: `/projects/factory-template/template-repo/template/.chatgpt/project-lifecycle-dashboard.yaml`
 
 ## Сейчас
@@ -65,8 +65,8 @@ Source: `/projects/factory-template/template-repo/template/.chatgpt/project-life
 
 🔴 FT-CX-0012 continue-after-unified-roadmap: ✅ Codex-WORK → ✅ Codex OK → 🔴
   Blocked
-✅ FT-CX-0025 rehearsal-project-ui-completion-confirmation: ✅ Codex-WORK →
-  ✅ Codex OK → ✅ Done
+✅ FT-CX-0026 next-step-after-beginner-rehearsal: ✅ Codex-WORK → ✅ Codex OK
+  → ✅ Done
 
 ### История ChatGPT handoff-задач
 
@@ -140,6 +140,8 @@ Source: `/projects/factory-template/template-repo/template/.chatgpt/project-life
   → ✅ Done
 ✅ FT-CX-0025 rehearsal-project-ui-completion-confirmation: ✅ Codex-WORK →
   ✅ Codex OK → ✅ Done
+✅ FT-CX-0026 next-step-after-beginner-rehearsal: ✅ Codex-WORK → ✅ Codex OK
+  → ✅ Done
 
 ## Передача и оркестрация
 
