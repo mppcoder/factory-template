@@ -1,6 +1,6 @@
 schema: codex-work-index/v1
 project_code: FT
-next_codex_work_number: 22
+next_codex_work_number: 23
 id_policy:
   canonical_format: <PROJECT_CODE>-CX-<NNNN> <task-slug>
   independent_from_chat_handoff_index: true
@@ -521,3 +521,26 @@ items:
   - bash template-repo/scripts/verify-all.sh quick
   next_action: No further internal action; external user actions now require dialog-style
     steps and inline copy blocks.
+- codex_work_id: FT-CX-0022
+  work_number: 22
+  work_title: FT-CX-0022 beginner-rehearsal-project-ui-dialog
+  task_slug: beginner-rehearsal-project-ui-dialog
+  kind: self_handoff
+  state: verified
+  created_utc: '2026-05-07T06:23:53Z'
+  updated_utc: '2026-05-07T06:24:31Z'
+  source_type: direct-task
+  handoff_group: beginner-rehearsal-project-ui-dialog
+  handoff_revision: 1
+  handoff_register_item_id: ''
+  status_chain:
+  - codex_self_handoff
+  - codex_accepted
+  - codex_completed
+  evidence:
+  - Allocated during direct-task bootstrap before first substantive response.
+  - Read downstream rehearsal AGENTS.md and docs/integrations.md to prepare inline
+    ChatGPT Project UI dialog.
+  - Confirmed rehearsal repo clean at commit 68cd156 before preparing copy block.
+  next_action: User external action remains; create the ChatGPT Project in UI and
+    paste the inline repo-first instruction block from the response.
