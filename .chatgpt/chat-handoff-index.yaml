@@ -1,6 +1,6 @@
 schema: chat-handoff-index/v1
 project_code: FT
-next_chat_number: 24
+next_chat_number: 25
 title_policy:
   canonical_format: <PROJECT_CODE>-CH-<NNNN> <task-slug>
   include_status_in_title: false
@@ -498,3 +498,25 @@ items:
     confirmed.
   next_action: Use this stable title for the current chat and decide whether to materialize
     the advisory logic into repo docs/runbook.
+- chat_id: FT-CH-0024
+  chat_number: 24
+  chat_title: FT-CH-0024 github-connector-first-chat-number
+  task_slug: github-connector-first-chat-number
+  kind: bug
+  state: open
+  created_utc: '2026-05-07T16:20:00Z'
+  updated_utc: '2026-05-07T16:20:00Z'
+  source_type: chatgpt-first-answer-correction
+  handoff_group: github-connector-first-chat-number
+  handoff_revision: 1
+  handoff_register_item_id: ''
+  status_chain:
+  - chatgpt_handoff
+  evidence:
+  - User required GitHub requests for factory-template to go through connectors rather
+    than public URLs.
+  - User requested the assistant to allocate the chat number directly through the
+    GitHub connector instead of delegating to Codex.
+  - Main router and chat-handoff index were read via GitHub connector before reservation.
+  next_action: Use this stable title for the current ChatGPT chat; optionally implement
+    any remaining connector-first policy hardening as a separate Codex task.
