@@ -1,6 +1,6 @@
 schema: codex-work-index/v1
 project_code: FT
-next_codex_work_number: 30
+next_codex_work_number: 31
 id_policy:
   canonical_format: <PROJECT_CODE>-CX-<NNNN> <task-slug>
   independent_from_chat_handoff_index: true
@@ -719,10 +719,38 @@ items:
   - Added full factory-to-battle lifecycle map to docs/template-architecture-and-event-workflows.md.
   - Linked lifecycle from README.md and docs/operator/runbook-packages/README.md.
   - Clarified controlled downstream upgrade placement in docs/downstream-upgrade-policy.md.
-  - Normalized freshly fetched FT-CH-0021 status_chain after rebase so chat-handoff-index validates.
+  - Normalized freshly fetched FT-CH-0021 status_chain after rebase so chat-handoff-index
+    validates.
   - python3 template-repo/scripts/validate-chat-handoff-index.py .chatgpt/chat-handoff-index.yaml
   - python3 template-repo/scripts/validate-codex-work-index.py .chatgpt/codex-work-index.yaml
   - python3 template-repo/scripts/validate-codex-routing.py .
   - python3 template-repo/scripts/validate-runbook-packages.py
+  - bash template-repo/scripts/verify-all.sh quick
+  next_action: No further internal action after verified sync.
+- codex_work_id: FT-CX-0030
+  work_number: 30
+  work_title: FT-CX-0030 per-project-unique-chatgpt-codex-indexes
+  task_slug: per-project-unique-chatgpt-codex-indexes
+  kind: remediation
+  state: verified
+  created_utc: '2026-05-07T15:36:15Z'
+  updated_utc: '2026-05-07T15:42:00Z'
+  source_type: direct-task
+  handoff_group: per-project-unique-chatgpt-codex-indexes
+  handoff_revision: 1
+  handoff_register_item_id: ''
+  status_chain:
+  - codex_self_handoff
+  - codex_accepted
+  - codex_completed
+  evidence:
+  - Allocated during direct-task bootstrap before first substantive response.
+  - User requested remediation of missing ChatGPT reservation for current task chat.
+  - Materialized FT-CH-0022 per-project-unique-chatgpt-codex-indexes in .chatgpt/chat-handoff-index.yaml.
+  - Set next_chat_number to 23 while preserving FT-CH-0021 github-errors-analysis.
+  - Fixed chat title validator false positive for legitimate codex task slugs.
+  - Added generated-project materialization smoke for per-project ChatGPT/Codex indexes.
+  - python3 template-repo/scripts/validate-chat-handoff-index.py .chatgpt/chat-handoff-index.yaml
+  - python3 template-repo/scripts/validate-codex-work-index.py .chatgpt/codex-work-index.yaml
   - bash template-repo/scripts/verify-all.sh quick
   next_action: No further internal action after verified sync.

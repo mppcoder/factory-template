@@ -15,7 +15,6 @@ TASK_SLUG_RE = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
 SECRET_RE = re.compile(r"(?i)\b[A-Z0-9_]*(TOKEN|SECRET|PASSWORD|API_KEY|PRIVATE_KEY)\s*[:=]\s*['\"]?[^'\"\s]+")
 STATUS_TITLE_TOKENS = {
     "OPEN",
-    "CODEX",
     "DONE",
     "BLOCKED",
     "SUPERSEDED",

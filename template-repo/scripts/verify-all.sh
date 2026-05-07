@@ -447,6 +447,11 @@ run_project_lifecycle_dashboard_smoke() {
     --index "$tmp_dir/chat-handoff-index-allocation.yaml" \
     --project-code FT \
     --kind handoff \
+    --description "per project unique chatgpt codex indexes" > "$tmp_dir/allocated-chat-title-codex-slug.txt"
+  python3 "$ROOT/template-repo/scripts/allocate-chat-handoff-id.py" \
+    --index "$tmp_dir/chat-handoff-index-allocation.yaml" \
+    --project-code FT \
+    --kind handoff \
     --description "dry run title" \
     --dry-run > "$tmp_dir/allocated-chat-title-dry-run.txt"
   python3 "$ROOT/template-repo/scripts/allocate-codex-work-id.py" \
@@ -455,6 +460,7 @@ run_project_lifecycle_dashboard_smoke() {
     --kind self_handoff \
     --description "self handoff" > "$tmp_dir/allocated-chat-title-2.txt"
   grep -q "FT-CH-0001 dashboard-card-ui" "$tmp_dir/allocated-chat-title-1.txt"
+  grep -q "FT-CH-0002 per-project-unique-chatgpt-codex-indexes" "$tmp_dir/allocated-chat-title-codex-slug.txt"
   grep -q "DRY RUN ONLY - CHAT NUMBER NOT RESERVED" "$tmp_dir/allocated-chat-title-dry-run.txt"
   if grep -q "ChatGPT title to copy:" "$tmp_dir/allocated-chat-title-dry-run.txt"; then
     echo "dry-run allocation must not print copyable ChatGPT title label" >&2
@@ -464,6 +470,17 @@ run_project_lifecycle_dashboard_smoke() {
   python3 "$ROOT/template-repo/scripts/validate-chat-handoff-index.py" "$tmp_dir/chat-handoff-index-allocation.yaml"
   python3 "$ROOT/template-repo/scripts/validate-codex-work-index.py" "$tmp_dir/codex-work-index-allocation.yaml"
   grep -q "kind: self_handoff" "$tmp_dir/allocated-chat-title-2.txt"
+  mkdir -p "$tmp_dir/generated-project/.chatgpt"
+  python3 "$ROOT/template-repo/scripts/materialize-project-indexes.py" \
+    --root "$tmp_dir/generated-project" \
+    --project-code PUI
+  python3 "$ROOT/template-repo/scripts/validate-chat-handoff-index.py" "$tmp_dir/generated-project/.chatgpt/chat-handoff-index.yaml"
+  python3 "$ROOT/template-repo/scripts/validate-codex-work-index.py" "$tmp_dir/generated-project/.chatgpt/codex-work-index.yaml"
+  python3 "$ROOT/template-repo/scripts/validate-project-index-identity.py" "$tmp_dir/generated-project"
+  grep -q "project_code: PUI" "$tmp_dir/generated-project/.chatgpt/chat-handoff-index.yaml"
+  grep -q "project_code: PUI" "$tmp_dir/generated-project/.chatgpt/codex-work-index.yaml"
+  grep -q "next_chat_number: 1" "$tmp_dir/generated-project/.chatgpt/chat-handoff-index.yaml"
+  grep -q "next_codex_work_number: 1" "$tmp_dir/generated-project/.chatgpt/codex-work-index.yaml"
   python3 "$ROOT/template-repo/scripts/validate-handoff-implementation-register.py" \
     "$ROOT/tests/handoff-implementation-register/valid/handoff-implementation-register.yaml"
   python3 "$ROOT/template-repo/scripts/validate-project-lifecycle-dashboard.py" \

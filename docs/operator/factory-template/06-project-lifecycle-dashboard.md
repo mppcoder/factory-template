@@ -60,7 +60,7 @@ FT-CH-0010 dashboard-card-ui
 FT-CH-0011 completion-report
 ```
 
-В title нельзя добавлять `HO`, `OPEN`, `CODEX`, `DONE`, `BLOCKED`, `VERIFIED`, `BUG`, `DECISION`, `RESEARCH` или другие status/kind tokens. Статусы живут только в repo state: `.chatgpt/chat-handoff-index.yaml`, handoff register и dashboard/card. Поэтому переход `open -> in_progress -> verified` не требует ручного переименования ChatGPT-чата.
+В title нельзя добавлять `HO`, `OPEN`, `DONE`, `BLOCKED`, `VERIFIED`, `BUG`, `DECISION`, `RESEARCH` или другие status/kind tokens. Статусы живут только в repo state: `.chatgpt/chat-handoff-index.yaml`, handoff register и dashboard/card. Поэтому переход `open -> in_progress -> verified` не требует ручного переименования ChatGPT-чата.
 
 Номер выделяется repo-first через index/allocator и считается занятым только после materialized/reserved write в `.chatgpt/chat-handoff-index.yaml`. Если следующий номер неизвестен или repo write не подтвержден в repo/GitHub index, его нельзя придумывать; нужно сказать:
 
