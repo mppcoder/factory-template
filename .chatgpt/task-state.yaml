@@ -1,0 +1,21 @@
+schema: task-state-lite/v1
+current_state: done
+owner_boundary: internal_repo
+next_action:
+  type: none
+  summary: ""
+blocked:
+  status: false
+  reason: not_required
+boundaries:
+  internal_work:
+    - "Repo work внутри текущего проекта."
+  external_user_actions: []
+  external_runtime: []
+  downstream_sync: []
+source_artifacts:
+  - ".chatgpt/stage-state.yaml"
+  - ".chatgpt/codex-work-index.yaml"
+  - "reports/release/beginner-first-hardening-runbook-checklist.md"
+  - "reports/release/first-project-ready-report.md"
+last_updated: "2026-05-07T12:10:30Z"

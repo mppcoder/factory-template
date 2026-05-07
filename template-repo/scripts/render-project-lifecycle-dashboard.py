@@ -352,7 +352,14 @@ def active_codex_work_lines_text(index: dict[str, Any]) -> str:
     if not isinstance(items, list):
         items = []
     current_number = max(
-        [int(item.get("work_number") or 0) for item in items if isinstance(item, dict)] or [0]
+        [
+            int(item.get("work_number") or 0)
+            for item in items
+            if isinstance(item, dict)
+            and str(item.get("state") or "") not in {"superseded", "not_applicable"}
+        ]
+        or [int(item.get("work_number") or 0) for item in items if isinstance(item, dict)]
+        or [0]
     )
     active = [
         item
@@ -629,6 +636,23 @@ def optional_context(root: Path, dashboard_path: Path) -> dict[str, Any]:
     handoff_implementation_register = read_yaml(chatgpt_dir / "handoff-implementation-register.yaml")
     root_chatgpt = root / ".chatgpt"
     root_stage_state = read_yaml(root_chatgpt / "stage-state.yaml")
+    template_chatgpt_dir = (root / "template-repo" / "template" / ".chatgpt").resolve()
+    is_template_dashboard = dashboard_path.parent.resolve() == template_chatgpt_dir
+    if is_template_dashboard:
+        root_task_state = read_yaml(root_chatgpt / "task-state.yaml")
+        root_task_index = read_yaml(root_chatgpt / "task-index.yaml")
+        root_cockpit = read_yaml(root_chatgpt / "orchestration-cockpit.yaml")
+        root_handoff_register = read_yaml(root_chatgpt / "handoff-implementation-register.yaml")
+        if root_task_state:
+            task_state = root_task_state
+        if root_stage_state:
+            stage_state = root_stage_state
+        if root_task_index:
+            task_index = root_task_index
+        if root_cockpit:
+            cockpit = root_cockpit
+        if root_handoff_register:
+            handoff_implementation_register = root_handoff_register
     if not task_state:
         task_state = read_yaml(root_chatgpt / "task-state.yaml")
     if not stage_state:

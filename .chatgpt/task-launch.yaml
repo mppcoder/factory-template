@@ -1,5 +1,5 @@
 launch:
-  timestamp_utc: '2026-05-06T06:27:12+00:00'
+  timestamp_utc: '2026-05-07T12:09:22+00:00'
   launch_unit: new-task-launch
   launch_source: direct-task
   router_layer: executable
@@ -27,8 +27,7 @@ launch:
   - .chatgpt/done-report.md
   handoff_allowed: yes (forbidden)
   defect_capture_path: not-required-by-text-signal
-  task_summary: в ответе кодекса в factory-template не видно карточки проекта и номера
-    тикета запроса
+  task_summary: сначала закрываем FT-CX-0012
   launch_boundary_rule: Выбор модели и reasoning mode считается надежным только на
     новом запуске Codex для новой задачи.
   interactive_default_rule: 'Для интерактивной работы в VS Code Codex extension основной
@@ -102,9 +101,9 @@ launch:
   requested_selected_profile: null
   requested_selected_model: null
   requested_selected_reasoning_effort: null
-  codex_work_id: FT-CX-0011
-  codex_work_title: FT-CX-0011 factory-template
-  task_slug: factory-template
+  codex_work_id: FT-CX-0027
+  codex_work_title: FT-CX-0027 close-ft-cx-0012-dashboard-release-state
+  task_slug: close-ft-cx-0012-dashboard-release-state
   codex_work_kind: self_handoff
   codex_work_state: verified
   codex_work_index_path: .chatgpt/codex-work-index.yaml

@@ -8,9 +8,9 @@ project:
   factory_producer_owned_layer: false
   owner_boundary: template-owned-generated-project-artifact
 lifecycle_phase:
-  current: verification
-  previous: execution
-  next: release
+  current: release
+  previous: verification
+  next: deploy
   allowed:
   - idea
   - intake
@@ -74,20 +74,21 @@ lifecycle_phase:
     status: pending
     evidence: []
 active_change:
-  id: FT-CH-0011-unified-roadmap
-  title: Single big VPS, downstream proof and beginner-first roadmap baseline
-  class: feature
-  priority: high
+  id: FT-CX-0027-dashboard-release-state-cleanup
+  title: Close historical FT-CX-0012 blocker and align dashboard release state
+  class: small-fix
+  priority: medium
   status: done
   owner_boundary: internal-repo-follow-up
   evidence:
-  - .chatgpt/chat-handoff-index.yaml
-  - docs/releases/unified-single-vps-downstream-beginner-roadmap.md
-  - bash template-repo/scripts/verify-all.sh
+  - .chatgpt/codex-work-index.yaml
+  - .chatgpt/task-state.yaml
+  - reports/release/beginner-first-hardening-runbook-checklist.md
+  - reports/release/first-project-ready-report.md
   source_artifacts:
-  - .chatgpt/chat-handoff-index.yaml
-  - .chatgpt/task-index.yaml
-  - docs/releases/unified-single-vps-downstream-beginner-roadmap.md
+  - .chatgpt/codex-work-index.yaml
+  - .chatgpt/task-state.yaml
+  - template-repo/template/.chatgpt/project-lifecycle-dashboard.yaml
 stage_gates:
 - id: intake
   title: Intake принят
@@ -186,9 +187,9 @@ multi_step_execution:
   - T-004
   blocked_tasks: []
   next_task:
-    id: T-VERIFY
+    id: T-NEXT
     owner_boundary: internal-repo-follow-up
-    action: Запустить validators, render dashboard, quick/full verify и verified sync.
+    action: Запустить первый реальный greenfield product intake или оставить release/public deploy как future approval boundary.
   final_verification:
     status: passed
     evidence:

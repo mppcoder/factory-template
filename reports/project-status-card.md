@@ -7,7 +7,5 @@
 Tasks: 🕒 0 ready-for-handoff -> 0 ready-for-codex -> 0 running -> 0
   human-review
 В работе:
-🔴 FT-CX-0012 continue-after-unified-roadmap: ✅ Codex-WORK → ✅ Codex OK → 🔴
-  Blocked
-✅ FT-CX-0026 next-step-after-beginner-rehearsal: ✅ Codex-WORK → ✅ Codex OK
-  → ✅ Done
+✅ FT-CX-0027 close-ft-cx-0012-dashboard-release-state: ✅ Codex-WORK → ✅
+  Codex OK → ✅ Done

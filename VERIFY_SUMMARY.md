@@ -47,6 +47,7 @@
 - `reports/bugs/2026-04-27-external-actions-oververbose-closeout.md`: defect capture закрыт как `remediated-in-current-scope`.
 - Compact closeout contract: если внешних действий нет, финальный ответ говорит `Внешних действий не требуется.`
 - Если внешние действия есть, `## Инструкция пользователю` содержит только реальные external/manual actions.
+- Copy-block contract: любой конкретный пример текста для вставки, отправки, instruction, UI-поля, чата или CLI должен быть выдан отдельным fenced code block для копирования, даже вне финального внешнего шага.
 - `validate-codex-task-pack.py` закрепляет compact outcome и ловит oververbose no-op ledger.
 
 ## Проверенные слои

@@ -1,23 +1,22 @@
 ## Номер запроса Codex
 
 ```text
-FT-CX-0011 factory-template
+FT-CX-0027 close-ft-cx-0012-dashboard-release-state
 ```
 
 ## Карточка проекта
 
 🏭 factory-template
-✅ Идея → ✅ Intake → ✅ Спека → ✅ Архитектура → ✅ Handoff → 🟡 Исполнение
-→ 🕒 Проверка → 🕒 Release → 🕒 Deploy → 🕒 Сопровождение
+✅ Идея → ✅ Intake → ✅ Спека → ✅ Архитектура → ✅ Handoff → ✅ Исполнение
+→ ✅ Проверка → 🕒 Release → 🕒 Deploy → 🕒 Сопровождение
 Модули:
-✅ Lifecycle → 🟡 Core → 🟡 Security → 🕒 UI/A11y → 🕒 Quality → 🕒 WebSec
-→ 🕒 Ops → ⏸ AI
+✅ Lifecycle → ✅ Core → ✅ Security → ✅ UI/A11y → ✅ Quality → ✅ WebSec
+→ ✅ Ops → ⏸ AI
 Tasks: 🕒 0 ready-for-handoff -> 0 ready-for-codex -> 0 running -> 0
   human-review
 В работе:
-✅ FT-CH-0012 chatgpt-first-answer-allocation-not-attempted: ✅ GPT-HO → ✅
+✅ FT-CX-0027 close-ft-cx-0012-dashboard-release-state: ✅ Codex-WORK → ✅
   Codex OK → ✅ Done
-✅ FT-CX-0011 factory-template: ✅ Codex-WORK → ✅ Codex OK → ✅ Done
 
 ## Применение в Codex UI
 
@@ -75,12 +74,12 @@ Routing:
 - defect_capture_path: not-required-by-text-signal
 - chat_id: not_applicable
 - chat_title: not_applicable
-- task_slug: factory-template
+- task_slug: close-ft-cx-0012-dashboard-release-state
 - chat_kind: not_applicable
 - chat_state: not_applicable
 - chat_index_path: not_applicable
-- codex_work_id: FT-CX-0011
-- codex_work_title: FT-CX-0011 factory-template
+- codex_work_id: FT-CX-0027
+- codex_work_title: FT-CX-0027 close-ft-cx-0012-dashboard-release-state
 - codex_work_kind: self_handoff
 - codex_work_state: verified
 - codex_work_index_path: .chatgpt/codex-work-index.yaml
@@ -93,7 +92,7 @@ Routing:
 - .chatgpt/done-report.md
 
 Текст задачи:
-в ответе кодекса в factory-template не видно карточки проекта и номера тикета запроса
+сначала закрываем FT-CX-0012
 
 Continuation rule:
 Если задача пришла в уже открытую Codex-сессию и этот route совместим с текущей сессией, после видимого self-handoff продолжай remediation / implementation / verification без отдельного запроса пользователя. Остановка допустима только при реальном blocker, внешнем действии, несовместимом route или необходимости нового task launch.

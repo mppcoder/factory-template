@@ -2,49 +2,26 @@
 
 ## Что проверяли
 
-- Historical red GitHub Actions CI #1-#5 from `2026-04-23`.
-- Current GitHub Issues / PR backlog.
-- PR #4 supersession state for Dependabot PRs #1, #2, #3.
-- Current workflow baseline and current-main verification behavior.
-
-## Статус defect-capture
-
-- Bug report создан: `reports/bugs/2026-04-29-historical-actions-rerun-regression.md`.
-- Factory feedback создан: `reports/factory-feedback/feedback-2026-04-29-historical-actions-rerun-regression.md`.
-- Слой: verification scripts / release audit portability.
-- Статус remediation: fixed in scope.
+- `FT-CX-0012` больше не должен отображаться как активный красный blocker.
+- Factory dashboard должен читать root state вместо template seed state при rendering из `template-repo/template/.chatgpt/project-lifecycle-dashboard.yaml`.
+- Release-state readout должен показывать текущую future boundary без false green.
 
 ## Что подтверждено
 
-- Open GitHub Issues: `0`.
-- Open GitHub PRs: `0`.
-- PR #4 is `MERGED` and supersedes PRs #1, #2, #3.
-- Current CI workflow uses `actions/checkout@v6`, `actions/setup-python@v6`, `actions/upload-artifact@v7`.
-- Latest pre-fix CI on `main` was green: run `25101111513`, commit `7e6b63c350c4cfff1a8ebe113a722ef46fd40d3f`.
-- CI #1 `24839250094` rerun reproduced old bug-024 snapshot: `EXAMPLES_TEST` / `validate-versioning-layer.py`.
-- CI #2 `24839291045`, CI #3 `24839294182`, CI #4 `24839297068` reruns reproduced stale Dependabot PR failures on superseded merge bases.
-- CI #5 `24839481282` rerun reproduced old fixed bug snapshot on commit `02fb8b7dfb5a74be13e1ba0211f24ac0fc1e0a82`.
-- No hosted-runner acquisition blocker occurred in these five reruns.
-- Current verification gap found separately: GitHub runner lacked `rg`, masking pre-release audit scan behavior; fixed by removing `rg` dependency and normalizing scan paths.
-- Post-fix GitHub CI #96 (`25101530394`) failed because the stricter scan also matched quoted legacy evidence inside the new bug report; follow-up allowlist treats `reports/bugs/*` as historical defect-capture evidence.
+- `FT-CX-0012 continue-after-unified-roadmap` закрыт как `superseded`, replacement `FT-CX-0020`.
+- `FT-CX-0027 close-ft-cx-0012-dashboard-release-state` закрыт как `verified`.
+- Случайная reservation `FT-CX-0028 task` закрыта как `superseded` и больше не перехватывает текущую строку карточки.
+- Compact card показывает `FT-CX-0027` done и не показывает active red blocker.
+- Markdown dashboard показывает `Фаза: release -> next deploy` и `Stage file говорит: current done, next none`.
+- Release остается pending, то есть public release/deploy approval не выдана ложным green.
 
 ## Команды проверки
 
-- `gh issue list --repo mppcoder/factory-template --state open --limit 50`: PASS, no open issues.
-- `gh pr list --repo mppcoder/factory-template --state open --limit 50`: PASS, no open PRs.
-- `gh pr view 4 --repo mppcoder/factory-template --json ...`: PASS, PR #4 `MERGED`.
-- `gh run list --repo mppcoder/factory-template --limit 100 --json ...`: PASS, target runs identified.
-- `gh run view <RUN_ID> --repo mppcoder/factory-template --json ...`: PASS for CI #1-#5.
-- `gh run view <RUN_ID> --repo mppcoder/factory-template --verbose`: PASS for CI #1-#5.
-- `gh run view <RUN_ID> --repo mppcoder/factory-template --log-failed`: PASS where logs were available; job-log API used for PR run excerpts.
-- `gh run rerun <RUN_ID> --repo mppcoder/factory-template --failed`: attempted for CI #1-#5.
-- `gh run watch <RUN_ID> --repo mppcoder/factory-template --exit-status`: all five reruns completed red on old snapshot/stale PR verify step.
-- `bash template-repo/scripts/verify-all.sh ci` from clean worktree with the fix-set applied: PASS.
-- `gh run watch 25101530394 --repo mppcoder/factory-template --exit-status`: FAIL, expected follow-up evidence for bug-report allowlist adjustment.
-- `git diff --check`: PASS.
-- `python3 template-repo/scripts/validate-codex-task-pack.py .`: PASS.
-- `python3 template-repo/scripts/validate-human-language-layer.py .`: PASS, active findings `0`.
+- `python3 template-repo/scripts/validate-codex-work-index.py .chatgpt/codex-work-index.yaml`: PASS.
+- `python3 template-repo/scripts/validate-task-state-lite.py .chatgpt/task-state.yaml`: PASS.
+- `python3 template-repo/scripts/validate-project-lifecycle-dashboard.py template-repo/template/.chatgpt/project-lifecycle-dashboard.yaml`: PASS.
+- `bash template-repo/scripts/verify-all.sh quick`: PASS.
 
 ## Итоговый вывод
 
-The historical red CI runs are not new current-main regressions. They remain red because they rerun old snapshots or superseded Dependabot PR merge bases that predate the bug-024 fix. A separate current verification portability defect was found and fixed in scope.
+Dashboard/release-state cleanup выполнен. Активный красный `FT-CX-0012` снят без удаления исторического evidence; следующий продуктовый контур снова чистый.

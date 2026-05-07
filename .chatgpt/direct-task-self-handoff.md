@@ -15,7 +15,7 @@ codex-task-handoff
 ## Стабильная identity чата и handoff
 - chat_id: ``
 - chat_title: ``
-- task_slug: `factory-template`
+- task_slug: `close-ft-cx-0012-dashboard-release-state`
 - kind: ``
 - state: ``
 - source_of_truth: `.chatgpt/chat-handoff-index.yaml`
@@ -142,4 +142,4 @@ selected_model совпадает с последним сохраненным s
 - Если новый model ID появился в live catalog, сначала создайте proposal через `scripts/check-codex-model-catalog.py --write-proposal`; promotion profile mapping требует ручного review.
 
 ## Текст задачи
-в ответе кодекса в factory-template не видно карточки проекта и номера тикета запроса
+сначала закрываем FT-CX-0012

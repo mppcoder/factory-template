@@ -1,25 +1,25 @@
 # Панель жизненного цикла проекта / `project-lifecycle-dashboard`
 
-Generated UTC: `2026-05-07T09:48:36+00:00`
+Generated UTC: `2026-05-07T12:12:52+00:00`
 Source: `/projects/factory-template/template-repo/template/.chatgpt/project-lifecycle-dashboard.yaml`
 
 ## Сейчас
 
 - Проект: `factory-template` (`factory-template`)
 - Профиль: `greenfield-product`
-- Lifecycle state: `{{LIFECYCLE_STATE}}`
-- Текущий mode: ``
+- Lifecycle state: ``
+- Текущий mode: `factory-improvement`
 - Factory producer layer: `False`
-- Фаза: `verification` -> next `release`
-- Stage file говорит: current `intake`, next `classification`
+- Фаза: `release` -> next `deploy`
+- Stage file говорит: current `done`, next `none`
 
 ## Активное изменение
 
-- id: `FT-CH-0011-unified-roadmap`
-- title: Single big VPS, downstream proof and beginner-first roadmap baseline
-- class/priority/status: `feature` / `high` / `done`
+- id: `FT-CX-0027-dashboard-release-state-cleanup`
+- title: Close historical FT-CX-0012 blocker and align dashboard release state
+- class/priority/status: `small-fix` / `medium` / `done`
 - boundary: `internal-repo-follow-up`
-- task-state next action: Заполнить task-index, stage-state и следующий конкретный шаг.
+- task-state next action:
 
 ## Гейты этапов
 
@@ -40,7 +40,7 @@ Source: `/projects/factory-template/template-repo/template/.chatgpt/project-life
 - current wave: `1`
 - completed tasks: `T-001, T-002, T-003, T-004`
 - blocked tasks: `none`
-- next task: `T-VERIFY` - Запустить validators, render dashboard, quick/full verify и verified sync.
+- next task: `T-NEXT` - Запустить первый реальный greenfield product intake или оставить release/public deploy как future approval boundary.
 - final verification: `passed` `python3 template-repo/scripts/validate-chat-handoff-index.py .chatgpt/chat-handoff-index.yaml`, `python3 template-repo/scripts/validate-runbook-packages.py .`, `python3 template-repo/scripts/validate-project-lifecycle-dashboard.py template-repo/template/.chatgpt/project-lifecycle-dashboard.yaml`, `python3 template-repo/scripts/validate-standards-gates.py .`, `bash template-repo/scripts/verify-all.sh quick`, `bash template-repo/scripts/verify-all.sh`
 - archive allowed: `True`; Final verification passed; closeout remains repo sync only.
 
@@ -63,10 +63,8 @@ Source: `/projects/factory-template/template-repo/template/.chatgpt/project-life
 
 ### Активные ChatGPT handoff-задачи
 
-🔴 FT-CX-0012 continue-after-unified-roadmap: ✅ Codex-WORK → ✅ Codex OK → 🔴
-  Blocked
-✅ FT-CX-0026 next-step-after-beginner-rehearsal: ✅ Codex-WORK → ✅ Codex OK
-  → ✅ Done
+✅ FT-CX-0027 close-ft-cx-0012-dashboard-release-state: ✅ Codex-WORK → ✅
+  Codex OK → ✅ Done
 
 ### История ChatGPT handoff-задач
 
@@ -113,8 +111,8 @@ Source: `/projects/factory-template/template-repo/template/.chatgpt/project-life
 ✅ FT-CX-0010 chatgpt-first-answer-title-one-click-copy-chatgpt: ✅
   Codex-WORK → ✅ Codex OK → ✅ Done
 ✅ FT-CX-0011 factory-template: ✅ Codex-WORK → ✅ Codex OK → ✅ Done
-🔴 FT-CX-0012 continue-after-unified-roadmap: ✅ Codex-WORK → ✅ Codex OK → 🔴
-  Blocked
+⏸ FT-CX-0012 continue-after-unified-roadmap: ✅ Codex-WORK → 🕒 Codex OK → ⏸
+  Superseded
 ✅ FT-CX-0013 project-card-closeout-drift: ✅ Codex-WORK → ✅ Codex OK → ✅
   Done
 ✅ FT-CX-0014 downstream-external-actions-runbook: ✅ Codex-WORK → ✅ Codex
@@ -142,6 +140,9 @@ Source: `/projects/factory-template/template-repo/template/.chatgpt/project-life
   ✅ Codex OK → ✅ Done
 ✅ FT-CX-0026 next-step-after-beginner-rehearsal: ✅ Codex-WORK → ✅ Codex OK
   → ✅ Done
+✅ FT-CX-0027 close-ft-cx-0012-dashboard-release-state: ✅ Codex-WORK → ✅
+  Codex OK → ✅ Done
+⏸ FT-CX-0028 task: ✅ Codex-WORK → 🕒 Codex OK → ⏸ Superseded
 
 ## Передача и оркестрация
 

@@ -1,6 +1,6 @@
 schema: codex-work-index/v1
 project_code: FT
-next_codex_work_number: 27
+next_codex_work_number: 29
 id_policy:
   canonical_format: <PROJECT_CODE>-CX-<NNNN> <task-slug>
   independent_from_chat_handoff_index: true
@@ -271,9 +271,9 @@ items:
   work_title: FT-CX-0012 continue-after-unified-roadmap
   task_slug: continue-after-unified-roadmap
   kind: direct_task
-  state: blocked
+  state: superseded
   created_utc: '2026-05-06T12:09:05Z'
-  updated_utc: '2026-05-06T12:12:00Z'
+  updated_utc: '2026-05-07T12:10:30Z'
   source_type: direct-task
   handoff_group: continue-after-unified-roadmap
   handoff_revision: 1
@@ -288,10 +288,15 @@ items:
   - 'Downstream proof report checked: proof_status=blocked_external_inputs, readiness_status=ready_for_external_pilot'
   - No internal repo-eligible continuation remains without selecting a real downstream/battle
     repo and pilot inputs.
-  accepted_reason: Continuation is blocked on external downstream pilot inputs; beginner-first
-    fallback branch is already materialized and verified in commit e022f9754c6b6509b1d500b36098cdecfa07ec86.
-  next_action: Provide real downstream/battle pilot inputs or choose a new internal
-    repo task.
+  - Beginner-first hardening later replaced this blocked continuation path with a
+    repo-backed downstream rehearsal and ChatGPT Project route check.
+  - Superseded during FT-CX-0027 dashboard/release-state cleanup so the historical
+    blocker no longer appears as active current work.
+  replacement_work_id: FT-CX-0020
+  accepted_reason: The old external-pilot continuation branch was superseded by
+    the verified beginner-first hardening contour and its downstream rehearsal;
+    it remains historical evidence, not an active blocker.
+  next_action: No action; retained as a historical superseded continuation branch.
 - codex_work_id: FT-CX-0013
   work_number: 13
   work_title: FT-CX-0013 project-card-closeout-drift
@@ -646,3 +651,49 @@ items:
   - Recommended the next product contour after beginner rehearsal.
   next_action: Recommended next branch is real first product intake through the factory
     ChatGPT Project; fallback is internal release-state cleanup around FT-CX-0012.
+- codex_work_id: FT-CX-0027
+  work_number: 27
+  work_title: FT-CX-0027 close-ft-cx-0012-dashboard-release-state
+  task_slug: close-ft-cx-0012-dashboard-release-state
+  kind: self_handoff
+  state: verified
+  created_utc: '2026-05-07T12:08:02Z'
+  updated_utc: '2026-05-07T12:10:30Z'
+  source_type: direct-task
+  handoff_group: close-ft-cx-0012-dashboard-release-state
+  handoff_revision: 1
+  handoff_register_item_id: ''
+  status_chain:
+  - codex_self_handoff
+  - codex_accepted
+  - codex_completed
+  evidence:
+  - Allocated during direct-task bootstrap before first substantive response.
+  - Read router and rendered canonical factory-template project card.
+  - Reproduced dashboard/card active-work drift caused by FT-CX-0012 still being
+    marked blocked.
+  - Reclassified FT-CX-0012 as superseded by FT-CX-0020 beginner-first hardening.
+  - Added renderer/root-state cleanup and bug evidence for release-state drift.
+  next_action: No further cleanup action after verify and verified sync.
+- codex_work_id: FT-CX-0028
+  work_number: 28
+  work_title: FT-CX-0028 task
+  task_slug: task
+  kind: self_handoff
+  state: superseded
+  created_utc: '2026-05-07T12:09:22Z'
+  updated_utc: '2026-05-07T12:10:30Z'
+  source_type: direct-task
+  handoff_group: task
+  handoff_revision: 1
+  handoff_register_item_id: ''
+  status_chain:
+  - codex_self_handoff
+  - codex_accepted
+  - codex_completed
+  evidence:
+  - Allocated during direct-task bootstrap before first substantive response.
+  replacement_work_id: FT-CX-0027
+  accepted_reason: Accidental extra allocator reservation created during the same
+    cleanup turn; the canonical work item is FT-CX-0027.
+  next_action: No action; do not reuse this consumed reservation number.
