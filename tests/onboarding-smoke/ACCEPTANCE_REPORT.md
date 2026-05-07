@@ -1,6 +1,6 @@
 # Onboarding Smoke Acceptance
 
-- Run timestamp (UTC): `2026-05-07T13:08:11Z`
+- Run timestamp (UTC): `2026-05-07T16:13:50Z`
 - Runner: `tests/onboarding-smoke/run-novice-e2e.sh`
 - Root: `/projects/factory-template`
 
@@ -19,7 +19,7 @@
 - expected preset: `brownfield-without-repo`
 - generated project: `/projects/factory-template/tests/onboarding-smoke/.tmp-run/brownfield-without-repo-novice/novice-brownfield-no-repo-smoke`
 - log: `/projects/factory-template/tests/onboarding-smoke/.tmp-run/brownfield-without-repo-novice.txt`
-- duration_seconds: `4`
+- duration_seconds: `5`
 - manual_interventions: `0`
 
 3. `brownfield-modernization-novice`
@@ -35,7 +35,7 @@
 - expected preset: `brownfield-with-repo-integration`
 - generated project: `/projects/factory-template/tests/onboarding-smoke/.tmp-run/brownfield-integration-novice/novice-brownfield-integration-smoke`
 - log: `/projects/factory-template/tests/onboarding-smoke/.tmp-run/brownfield-integration-novice.txt`
-- duration_seconds: `4`
+- duration_seconds: `5`
 - manual_interventions: `0`
 
 5. `brownfield-audit-novice`
@@ -43,7 +43,7 @@
 - expected preset: `brownfield-with-repo-audit`
 - generated project: `/projects/factory-template/tests/onboarding-smoke/.tmp-run/brownfield-audit-novice/novice-brownfield-audit-smoke`
 - log: `/projects/factory-template/tests/onboarding-smoke/.tmp-run/brownfield-audit-novice.txt`
-- duration_seconds: `4`
+- duration_seconds: `5`
 - manual_interventions: `0`
 
 6. `guided-launcher-greenfield`
@@ -51,7 +51,7 @@
 - expected preset: `greenfield-product`
 - generated project: `/projects/factory-template/tests/onboarding-smoke/.tmp-run/guided-launcher-greenfield/guided-launcher-greenfield-smoke`
 - log: `/projects/factory-template/tests/onboarding-smoke/.tmp-run/guided-launcher-greenfield.txt`
-- duration_seconds: `4`
+- duration_seconds: `5`
 - manual_interventions: `0`
 
 7. `guided-launcher-brownfield-no-repo`
@@ -67,7 +67,7 @@
 - expected preset: `brownfield-with-repo-modernization`
 - generated project: `/projects/factory-template/tests/onboarding-smoke/.tmp-run/guided-launcher-brownfield-with-repo/guided-launcher-brownfield-with-repo-smoke`
 - log: `/projects/factory-template/tests/onboarding-smoke/.tmp-run/guided-launcher-brownfield-with-repo.txt`
-- duration_seconds: `4`
+- duration_seconds: `5`
 - manual_interventions: `0`
 
 9. `guided-launcher-continue-flow`

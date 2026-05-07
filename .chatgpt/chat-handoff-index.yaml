@@ -437,13 +437,13 @@ items:
   chat_title: FT-CH-0021 github-errors-analysis
   task_slug: github-errors-analysis
   kind: research
-  state: open
+  state: verified
   created_utc: '2026-05-07T15:10:00Z'
-  updated_utc: '2026-05-07T15:10:00Z'
+  updated_utc: '2026-05-07T16:25:00Z'
   source_type: chatgpt-first-answer
   handoff_group: github-errors-analysis
   handoff_revision: 1
-  handoff_register_item_id: ''
+  handoff_register_item_id: HIR-014
   status_chain:
   - chatgpt_handoff
   - codex_accepted
@@ -451,16 +451,19 @@ items:
   evidence:
   - User requested analysis of errors in GitHub.
   - Main router was read via GitHub connector before reservation.
-  next_action: Analyze GitHub issues/PRs/workflows in mppcoder/factory-template and
-    prepare repo-first findings.
+  - 'GitHub triage via authenticated gh: open issues [], open PRs [].'
+  - 'GitHub Actions latest failing run captured in reports/ci/latest-actions-status.md.'
+  - 'CI root cause: FT-CH-0023 and FT-CH-0024 connector-created reservations had incomplete status_chain.'
+  next_action: No further GitHub issue/PR triage action; Actions status is persisted
+    and remediation is tracked in HIR-014.
 - chat_id: FT-CH-0022
   chat_number: 22
   chat_title: FT-CH-0022 per-project-unique-chatgpt-codex-indexes
   task_slug: per-project-unique-chatgpt-codex-indexes
   kind: handoff
-  state: open
+  state: verified
   created_utc: '2026-05-07T15:38:31Z'
-  updated_utc: '2026-05-07T15:38:31Z'
+  updated_utc: '2026-05-07T16:25:00Z'
   source_type: chatgpt-first-answer-correction
   handoff_group: per-project-unique-chatgpt-codex-indexes
   handoff_revision: 1
@@ -475,7 +478,9 @@ items:
   - Router requires materialized repo reservation or exact allocator blocker before
     substantive answer.
   - 'Current repo index showed next_chat_number: 22 after FT-CH-0021 github-errors-analysis.'
-  next_action: Implement per-project unique ChatGPT/Codex index generation and validation.
+  - 'Implemented and verified by FT-CX-0030 per-project-unique-chatgpt-codex-indexes.'
+  - python3 template-repo/scripts/validate-chat-handoff-index.py .chatgpt/chat-handoff-index.yaml
+  next_action: No further implementation action; FT-CX-0030 closed this reservation.
 - chat_id: FT-CH-0023
   chat_number: 23
   chat_title: FT-CH-0023 template-install-downstream-deploy-feedback-loop
@@ -490,12 +495,16 @@ items:
   handoff_register_item_id: ''
   status_chain:
   - chatgpt_handoff
+  - codex_accepted
+  - codex_completed
   evidence:
   - User asked to output step-by-step logic for installing the factory template on VPS,
     launching a new battle project from the template, developing and deploying the
     battle project, and confirming the upstream GitHub issue feedback model.
   - Previous response could not show stable title because write reservation was not
     confirmed.
+  - '2026-05-07 remediation: connector-created reservation normalized to the canonical
+    status_chain required by validate-chat-handoff-index.py.'
   next_action: Use this stable title for the current chat and decide whether to materialize
     the advisory logic into repo docs/runbook.
 - chat_id: FT-CH-0024
@@ -503,20 +512,26 @@ items:
   chat_title: FT-CH-0024 github-connector-first-chat-number
   task_slug: github-connector-first-chat-number
   kind: bug
-  state: open
+  state: verified
   created_utc: '2026-05-07T16:20:00Z'
-  updated_utc: '2026-05-07T16:20:00Z'
+  updated_utc: '2026-05-07T16:25:00Z'
   source_type: chatgpt-first-answer-correction
   handoff_group: github-connector-first-chat-number
   handoff_revision: 1
-  handoff_register_item_id: ''
+  handoff_register_item_id: HIR-014
   status_chain:
   - chatgpt_handoff
+  - codex_accepted
+  - codex_completed
   evidence:
   - User required GitHub requests for factory-template to go through connectors rather
     than public URLs.
   - User requested the assistant to allocate the chat number directly through the
     GitHub connector instead of delegating to Codex.
   - Main router and chat-handoff index were read via GitHub connector before reservation.
-  next_action: Use this stable title for the current ChatGPT chat; optionally implement
-    any remaining connector-first policy hardening as a separate Codex task.
+  - '2026-05-07 remediation: connector-created reservation normalized to the canonical
+    status_chain required by validate-chat-handoff-index.py.'
+  - 'Connector-safe reservation patch contract added: append one item and bump next_chat_number.'
+  - 'Regression fixture: tests/chatgpt-first-answer-contract/positive/connector-safe-reservation-patch.md'
+  next_action: No further connector-first policy hardening action for this item; HIR-014
+    closes the remediation.

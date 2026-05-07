@@ -81,6 +81,7 @@ Post-remediation follow-up handoff тоже является нормальны�
 - source of truth: `.chatgpt/chat-handoff-index.yaml`;
 - command path для repo executor: `python3 template-repo/scripts/allocate-chat-handoff-id.py --kind handoff --description "<short task>"`;
 - allocation attempt order: сначала read router, затем repo-local allocator, если он исполним; если repo-local allocator unavailable in ChatGPT connector context, но доступен GitHub connector write path, выполнить connector-based materialized reservation, затем confirm fetch/readback;
+- connector fallback должен быть connector-safe reservation patch: append one item and bump `next_chat_number`; не делай ручной full-file rewrite без сверки текущего counter, canonical `status_chain` и confirm fetch/readback;
 - `chat_title` должен быть ровно `<chat_id> <task_slug>`;
 - visible `chat_title` разрешен только после materialized write в repo index; dry-run/read-only расчет номера не является reservation и не должен показываться как название для копирования;
 - `kind` и `state` хранятся отдельно и не попадают в title;

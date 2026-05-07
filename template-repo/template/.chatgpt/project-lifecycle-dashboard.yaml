@@ -74,20 +74,20 @@ lifecycle_phase:
     status: pending
     evidence: []
 active_change:
-  id: FT-CX-0027-dashboard-release-state-cleanup
-  title: Close historical FT-CX-0012 blocker and align dashboard release state
-  class: small-fix
-  priority: medium
+  id: HIR-014-connector-safe-allocation-actions-status
+  title: Connector-safe allocation, active card visibility and Actions status
+  class: build
+  priority: critical
   status: done
   owner_boundary: internal-repo-follow-up
   evidence:
-  - .chatgpt/codex-work-index.yaml
-  - .chatgpt/task-state.yaml
-  - reports/release/beginner-first-hardening-runbook-checklist.md
-  - reports/release/first-project-ready-report.md
+  - .chatgpt/chat-handoff-index.yaml
+  - .chatgpt/handoff-implementation-register.yaml
+  - reports/ci/latest-actions-status.md
+  - reports/bugs/2026-05-07-chat-title-allocation-runtime-enforcement-gap.md
   source_artifacts:
-  - .chatgpt/codex-work-index.yaml
-  - .chatgpt/task-state.yaml
+  - .chatgpt/chat-handoff-index.yaml
+  - .chatgpt/handoff-implementation-register.yaml
   - template-repo/template/.chatgpt/project-lifecycle-dashboard.yaml
 stage_gates:
 - id: intake

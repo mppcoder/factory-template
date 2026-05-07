@@ -1,6 +1,6 @@
 # Панель жизненного цикла проекта / `project-lifecycle-dashboard`
 
-Generated UTC: `2026-05-07T13:43:48+00:00`
+Generated UTC: `2026-05-07T16:15:19+00:00`
 Source: `/projects/factory-template/template-repo/template/.chatgpt/project-lifecycle-dashboard.yaml`
 
 ## Сейчас
@@ -15,9 +15,9 @@ Source: `/projects/factory-template/template-repo/template/.chatgpt/project-life
 
 ## Активное изменение
 
-- id: `FT-CX-0027-dashboard-release-state-cleanup`
-- title: Close historical FT-CX-0012 blocker and align dashboard release state
-- class/priority/status: `small-fix` / `medium` / `done`
+- id: `HIR-014-connector-safe-allocation-actions-status`
+- title: Connector-safe allocation, active card visibility and Actions status
+- class/priority/status: `build` / `critical` / `done`
 - boundary: `internal-repo-follow-up`
 - task-state next action: not set
 
@@ -63,9 +63,13 @@ Source: `/projects/factory-template/template-repo/template/.chatgpt/project-life
 
 ### Активные ChatGPT handoff-задачи
 
-✅ FT-CH-0020 chat-title-allocation-blocker-still-returned: ✅ GPT-HO → ✅
-  Codex OK → ✅ Done
-✅ FT-CX-0027 close-ft-cx-0012-dashboard-release-state: ✅ Codex-WORK → ✅
+🟡 FT-CH-0017 module-gated-vps-downstream-beginner-roadmap: ✅ GPT-HO → 🕒
+  Codex OK → 🕒 Done
+🟡 FT-CH-0019 external-user-action-interview-handoff-scenario: ✅ GPT-HO → 🕒
+  Codex OK → 🕒 Done
+🟡 FT-CH-0023 template-install-downstream-deploy-feedback-loop: ✅ GPT-HO →
+  🕒 Codex OK → 🕒 Done
+✅ FT-CX-0030 per-project-unique-chatgpt-codex-indexes: ✅ Codex-WORK → ✅
   Codex OK → ✅ Done
 
 ### История ChatGPT handoff-задач
@@ -94,6 +98,13 @@ Source: `/projects/factory-template/template-repo/template/.chatgpt/project-life
   Codex OK → 🕒 Done
 ✅ FT-CH-0020 chat-title-allocation-blocker-still-returned: ✅ GPT-HO → ✅
   Codex OK → ✅ Done
+✅ FT-CH-0021 github-errors-analysis: ✅ GPT-HO → ✅ Codex OK → ✅ Done
+✅ FT-CH-0022 per-project-unique-chatgpt-codex-indexes: ✅ GPT-HO → ✅ Codex
+  OK → ✅ Done
+🟡 FT-CH-0023 template-install-downstream-deploy-feedback-loop: ✅ GPT-HO →
+  🕒 Codex OK → 🕒 Done
+✅ FT-CH-0024 github-connector-first-chat-number: ✅ GPT-HO → ✅ Codex OK → ✅
+  Done
 
 ### История Codex-доработок
 
@@ -145,6 +156,10 @@ Source: `/projects/factory-template/template-repo/template/.chatgpt/project-life
 ✅ FT-CX-0027 close-ft-cx-0012-dashboard-release-state: ✅ Codex-WORK → ✅
   Codex OK → ✅ Done
 ⏸ FT-CX-0028 task: ✅ Codex-WORK → 🕒 Codex OK → ⏸ Superseded
+✅ FT-CX-0029 full-factory-lifecycle-map: ✅ Codex-WORK → ✅ Codex OK → ✅
+  Done
+✅ FT-CX-0030 per-project-unique-chatgpt-codex-indexes: ✅ Codex-WORK → ✅
+  Codex OK → ✅ Done
 
 ## Передача и оркестрация
 
@@ -241,7 +256,7 @@ Source: `/projects/factory-template/template-repo/template/.chatgpt/project-life
 - status: `pending`
 - preset: `starter`
 - operator source: `template-repo/scripts/operator-dashboard.py`
-- dry-run report present: `True`
+- dry-run report present: `False`
 - deploy report present: `False`
 - boundary: Runtime evidence может подтягиваться из operator-dashboard reports; dry-run/report evidence не является real deploy proof.
 

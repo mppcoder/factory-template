@@ -51,3 +51,10 @@
 - Validator has an explicit negative fixture for this exact repeated runtime gap.
 - Runbook has connector-only reservation procedure with precise append + confirm readback steps.
 - Dashboard/handoff register shows this defect as open until Codex verifies and closes it.
+
+## Remediation 2026-05-07
+- Router, handoff scenario and operator docs now require a connector-safe reservation patch: append one item and bump `next_chat_number`, with canonical `status_chain` and confirm fetch/readback.
+- Added positive regression fixture `tests/chatgpt-first-answer-contract/positive/connector-safe-reservation-patch.md`.
+- `validate-chatgpt-first-answer-contract.py` now requires connector-safe reservation wording in router, handoff and docs.
+- Related connector-created reservations `FT-CH-0023` and `FT-CH-0024` were normalized to the canonical `chatgpt_handoff -> codex_accepted -> codex_completed` chain.
+- Verification target: `python3 template-repo/scripts/validate-chatgpt-first-answer-contract.py .` and `python3 template-repo/scripts/validate-chat-handoff-index.py .chatgpt/chat-handoff-index.yaml`.

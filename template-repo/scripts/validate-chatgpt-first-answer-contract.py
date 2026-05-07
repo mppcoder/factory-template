@@ -25,6 +25,8 @@ REQUIRED_ROUTER_PHRASES = [
     "GitHub connector write path",
     "confirm fetch",
     "blocker нельзя выводить",
+    "connector-safe reservation patch",
+    "append one item and bump `next_chat_number`",
 ]
 REQUIRED_HANDOFF_PHRASES = [
     "Название чата для копирования",
@@ -39,6 +41,8 @@ REQUIRED_HANDOFF_PHRASES = [
     "GitHub connector write path",
     "confirm fetch",
     "blocker нельзя выводить",
+    "connector-safe reservation patch",
+    "append one item and bump `next_chat_number`",
 ]
 REQUIRED_DOC_PHRASES = [
     "Название чата для копирования",
@@ -58,6 +62,8 @@ REQUIRED_DOC_PHRASES = [
     "GitHub connector write path",
     "confirm fetch",
     "blocker нельзя выводить",
+    "connector-safe reservation patch",
+    "append one item and bump `next_chat_number`",
 ]
 FORBIDDEN_OVERCLAIMS = [
     "автоматически переименует ChatGPT",
@@ -197,6 +203,7 @@ def main() -> int:
         root / "tests" / "chatgpt-first-answer-contract" / "positive" / "materialized-title-copyable.md",
         root / "tests" / "chatgpt-first-answer-contract" / "positive" / "allocator-blocker-copyable.md",
         root / "tests" / "chatgpt-first-answer-contract" / "positive" / "connector-write-fallback-materialized.md",
+        root / "tests" / "chatgpt-first-answer-contract" / "positive" / "connector-safe-reservation-patch.md",
     ]
     for path in positive_fixtures:
         if not path.exists():

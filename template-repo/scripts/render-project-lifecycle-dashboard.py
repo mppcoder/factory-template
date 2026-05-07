@@ -306,19 +306,12 @@ def active_handoff_lines_text(index: dict[str, Any]) -> str:
     items = index.get("items", []) if isinstance(index, dict) else []
     if not isinstance(items, list):
         items = []
-    current_number = max(
-        [int(item.get("chat_number") or 0) for item in items if isinstance(item, dict)] or [0]
-    )
     active = [
         item
         for item in items
         if isinstance(item, dict)
         and str(item.get("kind") or "") != "self_handoff"
-        and str(item.get("handoff_register_item_id") or "").strip()
-        and (
-            str(item.get("state") or "") not in TERMINAL_CHAT_STATES
-            or int(item.get("chat_number") or 0) == current_number
-        )
+        and str(item.get("state") or "") not in TERMINAL_CHAT_STATES
     ]
     if not active:
         return "🕒 Нет текущих или незакрытых handoff-задач"

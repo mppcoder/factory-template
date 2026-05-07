@@ -4,6 +4,22 @@ Status source of truth: `docs/releases/release-scorecard.yaml`.
 Current scorecard state: `2.5.8 Package Ready`.
 TEST_REPORT.md is verification evidence, not the canonical release-status source.
 
+## Проверка connector-safe allocation и GitHub Actions status artifact
+
+Дата: `2026-05-07`.
+
+Закрыты три defect-контуры: ChatGPT connector fallback теперь описан как connector-safe reservation patch, compact card показывает open `FT-CH` reservations без HIR link, а latest observed GitHub Actions status сохраняется в `reports/ci/latest-actions-status.md`.
+
+Проверки:
+
+- `python3 template-repo/scripts/validate-chat-handoff-index.py .chatgpt/chat-handoff-index.yaml` — pass.
+- `python3 template-repo/scripts/validate-chatgpt-first-answer-contract.py .` — pass.
+- `python3 template-repo/scripts/validate-github-actions-status.py reports/ci/latest-actions-status.md` — pass.
+- `python3 template-repo/scripts/validate-handoff-implementation-register.py .chatgpt/handoff-implementation-register.yaml` — pass.
+- `python3 template-repo/scripts/validate-project-lifecycle-dashboard.py template-repo/template/.chatgpt/project-lifecycle-dashboard.yaml` — pass.
+- `bash template-repo/scripts/verify-all.sh quick` — pass.
+- `bash template-repo/scripts/verify-all.sh` — pass.
+
 ## Проверка Codex direct-task first-answer card
 
 Дата: `2026-05-06`.
