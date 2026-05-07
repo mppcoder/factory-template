@@ -1,6 +1,6 @@
 schema: codex-work-index/v1
 project_code: FT
-next_codex_work_number: 20
+next_codex_work_number: 21
 id_policy:
   canonical_format: <PROJECT_CODE>-CX-<NNNN> <task-slug>
   independent_from_chat_handoff_index: true
@@ -455,8 +455,8 @@ items:
   - codex_accepted
   - codex_completed
   evidence:
-  - 'User answered survey option E: project folder is currently at the VPS root
-    and not in the template standard layout.'
+  - 'User answered survey option E: project folder is currently at the VPS root and
+    not in the template standard layout.'
   - Updated docs/operator/downstream-battle-external-pilot-runbook.md so Question
     1 accepts a legacy/non-standard absolute project-root path as intake/preflight
     candidate.
@@ -464,3 +464,33 @@ items:
     to /projects/<repo>.
   next_action: Continue survey by asking for the exact absolute path of the non-standard
     project folder.
+- codex_work_id: FT-CX-0020
+  work_number: 20
+  work_title: FT-CX-0020 beginner-first-hardening
+  task_slug: beginner-first-hardening
+  kind: self_handoff
+  state: verified
+  created_utc: '2026-05-07T04:54:20Z'
+  updated_utc: '2026-05-07T05:10:00Z'
+  source_type: direct-task
+  handoff_group: beginner-first-hardening
+  handoff_revision: 1
+  handoff_register_item_id: ''
+  status_chain:
+  - codex_self_handoff
+  - codex_accepted
+  - codex_completed
+  evidence:
+  - Allocated during direct-task bootstrap before first substantive response.
+  - Ran repo-backed greenfield rehearsal through factory launcher with GitHub repo
+    creation.
+  - Fixed clean-VPS git identity, generated work-template lookup, generated task-pack
+    artifacts, plan-mode routing default, smoke handoff drift, and generated pycache/gitignore
+    hygiene.
+  - 'Final rehearsal repo: https://github.com/mppcoder/beginner-first-rehearsal-20260507e'
+  - 'Generated verify: bash scripts/verify-all.sh quick'
+  - 'Generated sync: commit 68cd156 pushed to origin/main'
+  - bash template-repo/scripts/verify-all.sh quick
+  next_action: No further internal action for beginner-first hardening rehearsal;
+    only external battle ChatGPT Project UI paste remains optional for the rehearsal
+    repo.

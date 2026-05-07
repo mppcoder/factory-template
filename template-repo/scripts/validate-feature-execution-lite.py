@@ -26,6 +26,8 @@ def rel(path: Path, root: Path) -> str:
 
 
 def template_root(root: Path) -> Path:
+    if (root / "work-templates" / "execution-plan.md.template").exists():
+        return root / "work-templates"
     if (root / "template-repo" / "template" / "work-templates").exists():
         return root / "template-repo" / "template" / "work-templates"
     if (root / "template" / "work-templates").exists():

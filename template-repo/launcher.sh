@@ -100,6 +100,8 @@ rm -f "$DEST_DIR/AGENT.md"
 python3 "$SCRIPT_DIR/scripts/sync-agents.py" "$SCRIPT_DIR/AGENTS.md" "$DEST_DIR/AGENTS.md"
 mkdir -p "$DEST_DIR/scripts"
 cp -R "$SCRIPT_DIR/scripts/." "$DEST_DIR/scripts/"
+find "$DEST_DIR/scripts" -type d -name "__pycache__" -prune -exec rm -rf {} +
+find "$DEST_DIR/scripts" -type f -name "*.pyc" -delete
 rm -f "$DEST_DIR/scripts/install-codex-dogfood-pack.sh"
 cp "$SCRIPT_DIR/change-classes.yaml" "$DEST_DIR/change-classes.yaml"
 cp "$SCRIPT_DIR/policy-presets.yaml" "$DEST_DIR/policy-presets.yaml"
@@ -411,6 +413,7 @@ create_or_reuse_github_repo() {
   if [ ! -d "$project_dir/.git" ]; then
     git -C "$project_dir" init -b main
   fi
+  ensure_project_git_identity "$project_dir"
   if git -C "$project_dir" remote get-url origin >/dev/null 2>&1; then
     origin_url="$(git -C "$project_dir" remote get-url origin)"
     origin_name="$(PYTHONPATH="$SCRIPT_DIR/scripts" python3 - "$origin_url" <<'PY'
@@ -448,6 +451,46 @@ PY
       visibility_arg="--public"
     fi
     gh repo create "$repo_full" "$visibility_arg" --source="$project_dir" --remote=origin --push
+  fi
+}
+
+ensure_project_git_identity() {
+  local project_dir="$1"
+  local current_name
+  local current_email
+  local gh_login
+  local gh_id
+  local gh_name
+  local gh_email
+  current_name="$(git -C "$project_dir" config user.name || true)"
+  current_email="$(git -C "$project_dir" config user.email || true)"
+  if [ -n "$current_name" ] && [ -n "$current_email" ]; then
+    return 0
+  fi
+
+  gh_login="$(gh api user --jq .login 2>/dev/null || true)"
+  gh_id="$(gh api user --jq .id 2>/dev/null || true)"
+  gh_name="$(gh api user --jq .name 2>/dev/null || true)"
+  gh_email="$(gh api user --jq .email 2>/dev/null || true)"
+  if [ "$gh_name" = "null" ] || [ -z "$gh_name" ]; then
+    gh_name="$gh_login"
+  fi
+  if [ "$gh_email" = "null" ] || [ -z "$gh_email" ]; then
+    if [ -n "$gh_id" ] && [ -n "$gh_login" ]; then
+      gh_email="${gh_id}+${gh_login}@users.noreply.github.com"
+    fi
+  fi
+
+  if [ -z "$gh_name" ] || [ -z "$gh_email" ]; then
+    echo "GitHub repo не создан: git user.name/user.email не настроены, а gh не вернул login/id для локальной identity." >&2
+    echo "Настройте git identity или повторите после восстановления gh auth." >&2
+    return 1
+  fi
+  if [ -z "$current_name" ]; then
+    git -C "$project_dir" config user.name "$gh_name"
+  fi
+  if [ -z "$current_email" ]; then
+    git -C "$project_dir" config user.email "$gh_email"
   fi
 }
 

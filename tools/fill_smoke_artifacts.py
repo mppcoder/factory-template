@@ -132,11 +132,30 @@ if not chat.exists():
 - Не менять core-структуру проекта.
 - Общие рабочие инструкции применять только там, где они не противоречат repo rules и старшим системным ограничениям среды.
 ''', encoding='utf-8')
-(chat / 'handoff-response.md').write_text('''## Handoff в Codex
+(chat / 'handoff-response.md').write_text('''## Применение в Codex UI
+
+- `apply_mode: manual-ui (default)`.
+- Для VS Code Codex extension откройте новый чат/окно Codex.
+- Вручную выберите model/reasoning в picker.
+- Только после этого вставьте handoff-блок ниже.
+- новый чат + вставка handoff и новый task launch через executable launcher — не одно и то же.
+- Advisory handoff text сам по себе не переключает profile/model/reasoning.
+- Если видите sticky last-used state, закройте текущую сессию и начните новый task launch.
+
+## Строгий launch mode (опционально)
+
+```bash
+./scripts/launch-codex-task.sh --launch-source chatgpt-handoff --task-file .chatgpt/codex-input.md --execute
+```
+
+- advisory/handoff text не равен executable profile switch.
+
+## Handoff в Codex
 
 ```text
 Repo: smoke-test project
 Цель: завершить smoke-test без дополнительных изменений кода.
+Язык ответа Codex: русский. Отвечай пользователю по-русски.
 Приоритет: сначала правила repo, затем общие инструкции, если нет конфликта.
 Scope: не менять core-структуру проекта.
 Verify: использовать уже заполненные smoke artifacts и существующие validators.

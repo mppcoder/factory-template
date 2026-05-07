@@ -43,10 +43,13 @@
 <!-- новый чат/окно, ручной выбор model/reasoning в picker, затем вставка handoff -->
 
 ## Язык ответа Codex
-<!-- русский; английский допустим только для technical literal values -->
+Русский. Codex должен отвечать пользователю по-русски; английский допустим только для technical literal values: команды, пути, YAML/JSON keys, model IDs и route fields.
 
-## Опциональная strict launch command
+## Опциональная команда строгого запуска
 <!-- launch command only when needed for strict routing -->
+
+## Прямая команда Codex за launcher
+<!-- codex --profile <profile> -->
 
 ## Профиль проекта
 <!-- из .chatgpt/project-profile.yaml -->
@@ -57,14 +60,17 @@
 ## Этап pipeline
 <!-- текущий этап -->
 
-## Handoff разрешен
+## Разрешение handoff
 <!-- yes/no + policy -->
 
-## Путь фиксации дефекта
+## Маршрут defect-capture
 <!-- defect path или not-required -->
+
+## Приоритет правил repo
+При исполнении handoff приоритет у правил repo: `AGENTS`, runbook, scenario-pack, policy files и других канонических файлов этого репозитория.
 
 ## Базовый prompt contract для GPT-5.5
 <!-- Не считать GPT-5.5 drop-in replacement. Начинайте prompt-like task pack с outcome, success criteria, constraints, evidence requirements, output shape и stop rules. Подробную процессность оставляйте только для обязательных repo invariants. -->
 
-## Входной handoff
+## Входные данные handoff
 <!-- Сведите сюда ключевой handoff input. Стабильные правила должны идти выше dynamic task fields. Человекочитаемый текст должен быть на русском; technical literal values можно не переводить. -->

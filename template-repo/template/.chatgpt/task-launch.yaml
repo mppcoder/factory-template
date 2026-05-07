@@ -2,24 +2,27 @@
 launch:
   timestamp_utc: ""
   launch_unit: "new-task-launch"
-  launch_source: "" # chatgpt-handoff / direct-task
+  launch_source: "chatgpt-handoff" # chatgpt-handoff / direct-task
   router_layer: "executable"
   handoff_shape: "codex-task-handoff" # neutral handoff; Codex decides actual execution_mode
   handoff_shape_reasons: []
-  task_class: "" # quick / build / deep / review
+  task_class: "build" # quick / build / deep / review
   task_class_reasons: []
-  selected_profile: ""
-  selected_model: ""
-  selected_reasoning_effort: ""
-  selected_plan_mode_reasoning_effort: ""
+  selected_profile: "build"
+  selected_model: "gpt-5.5"
+  selected_reasoning_effort: "medium"
+  selected_plan_mode_reasoning_effort: "medium"
   apply_mode: "manual-ui"
   strict_launch_mode: "optional"
-  project_profile: ""
-  selected_scenario: ""
-  pipeline_stage: ""
-  artifacts_to_update: []
-  handoff_allowed: ""
-  defect_capture_path: ""
+  project_profile: "greenfield-product"
+  selected_scenario: "00-master-router.md"
+  pipeline_stage: "intake"
+  artifacts_to_update:
+    - .chatgpt/codex-input.md
+    - .chatgpt/codex-context.md
+    - .chatgpt/codex-task-pack.md
+  handoff_allowed: "yes"
+  defect_capture_path: "not-required"
   task_summary: ""
   launch_boundary_rule: ""
   interactive_default_rule: ""
@@ -32,9 +35,9 @@ launch:
   model_catalog_validation_note: ""
   advisory_layers: []
   executable_layers: []
-  launch_artifact_path: ""
-  launch_command: ""
-  codex_profile_command: ""
+  launch_artifact_path: ".chatgpt/codex-input.md"
+  launch_command: "./scripts/launch-codex-task.sh --launch-source chatgpt-handoff --task-file .chatgpt/codex-input.md --execute"
+  codex_profile_command: "codex --profile build"
   strict_launch_use_cases: []
   direct_self_handoff_required: false
   direct_self_handoff_completed: false

@@ -721,17 +721,19 @@ post_release_improvement:
 external_actions_ledger: []
 recommended_next_step:
   owner_boundary: internal-repo-follow-up
-  action: 'Recommended next execution branch: preserve OpenClaw local runtime pilot evidence, continue reusable template feedback, then proceed to beginner-first hardening. Public HTTPS/reverse-proxy proof remains separate approval boundary.'
+  action: 'Beginner-first hardening rehearsal is complete. Recommended next branch: optional battle ChatGPT Project UI paste for the rehearsal project, then continue product work from the created greenfield repo. Public HTTPS/reverse-proxy proof remains a separate approval boundary.'
   evidence:
   - docs/releases/unified-single-vps-downstream-beginner-roadmap.md
-  - reports/release/openclaw-local-runtime-pilot-summary.md
+  - reports/release/beginner-first-hardening-runbook-checklist.md
+  - reports/release/first-project-ready-report.md
 fallback_next_step:
   owner_boundary: internal-repo-follow-up
   action: >-
-    Если public endpoint approval отсутствует, не claim public downstream proof;
-    удерживать `public_https: not_claimed`.
+    Если пользователь не готов создавать battle ChatGPT Project UI для rehearsal
+    repo, оставить project repo verified/synced и продолжить factory-template
+    hardening без claims про сохраненную ChatGPT Project instruction.
   evidence:
-  - reports/release/downstream-application-proof-report.md
+  - reports/release/first-project-ready-report.md
 source_artifacts:
 - .chatgpt/project-lifecycle-dashboard.yaml
 - .chatgpt/handoff-implementation-register.yaml

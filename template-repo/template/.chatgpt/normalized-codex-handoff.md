@@ -3,6 +3,9 @@
 ## Источник запуска
 <!-- chatgpt-handoff / direct-task -->
 
+## Вид handoff
+codex-task-handoff
+
 ## Класс задачи
 <!-- quick / build / deep / review -->
 
@@ -21,7 +24,7 @@
 ## Режим применения
 <!-- manual-ui -->
 
-## Ручное применение в UI
+## Ручное применение через UI
 <!-- новый chat/window, ручной picker selection, затем один цельный handoff -->
 
 ## Строгий режим запуска
@@ -56,13 +59,13 @@
 ## VPS Remote SSH-first orchestration по умолчанию
 <!-- default path для full handoff orchestration; Codex App / Cloud Director optional, not default -->
 
-## Опциональная strict launch command
+## Опциональная команда строгого запуска
 <!-- launch command только когда нужен strict routing -->
 
 ## Прямая команда Codex за launcher
 <!-- codex --profile <profile> -->
 
-## Диагностика
+## Диагностика проблем
 <!-- stale live session, manual UI vs strict launch, picker checks -->
 
 ## Payload задачи

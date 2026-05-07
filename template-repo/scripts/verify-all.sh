@@ -952,6 +952,66 @@ run_curated_pack_quality_smoke() {
   rm -f /tmp/curated-pack-quality-negative.log
 }
 
+run_first_project_github_identity_smoke() {
+  local tmp_dir
+  local fake_bin
+  tmp_dir="$(mktemp -d)"
+  fake_bin="$tmp_dir/bin"
+  mkdir -p "$fake_bin" "$tmp_dir/home"
+  cat > "$fake_bin/gh" <<'SH'
+#!/usr/bin/env bash
+set -euo pipefail
+if [ "${1:-}" = "auth" ] && [ "${2:-}" = "status" ]; then
+  exit 0
+fi
+if [ "${1:-}" = "api" ] && [ "${2:-}" = "user" ]; then
+  case "${4:-}" in
+    .login) echo "novice-bot" ;;
+    .id) echo "424242" ;;
+    .name) echo "null" ;;
+    .email) echo "null" ;;
+    *) echo "null" ;;
+  esac
+  exit 0
+fi
+if [ "${1:-}" = "repo" ] && [ "${2:-}" = "view" ]; then
+  exit 1
+fi
+if [ "${1:-}" = "repo" ] && [ "${2:-}" = "create" ]; then
+  repo_full="${3:-novice-bot/novice-git-identity-smoke}"
+  source_dir=""
+  for arg in "$@"; do
+    case "$arg" in
+      --source=*) source_dir="${arg#--source=}" ;;
+    esac
+  done
+  if [ -n "$source_dir" ] && ! git -C "$source_dir" remote get-url origin >/dev/null 2>&1; then
+    git -C "$source_dir" remote add origin "https://github.com/${repo_full}.git"
+  fi
+  exit 0
+fi
+echo "unexpected fake gh invocation: $*" >&2
+exit 2
+SH
+  chmod +x "$fake_bin/gh"
+  (
+    cd "$tmp_dir"
+    printf 'Novice Git Identity Smoke\nnovice-git-identity-smoke\ngreenfield-product\ngreenfield\nfeature\ncodex-led\n' | \
+      PATH="$fake_bin:$PATH" \
+      HOME="$tmp_dir/home" \
+      XDG_CONFIG_HOME="$tmp_dir/xdg" \
+      FACTORY_REGISTRY_MODE=skip \
+      FACTORY_CREATE_GITHUB_REPO=true \
+      FACTORY_GITHUB_OWNER=novice-bot \
+      FACTORY_GITHUB_VISIBILITY=private \
+      "$ROOT/template-repo/launcher.sh" >/dev/null
+    git -C "$tmp_dir/novice-git-identity-smoke" rev-parse --verify HEAD >/dev/null
+    test "$(git -C "$tmp_dir/novice-git-identity-smoke" config --local user.name)" = "novice-bot"
+    test "$(git -C "$tmp_dir/novice-git-identity-smoke" config --local user.email)" = "424242+novice-bot@users.noreply.github.com"
+  )
+  rm -rf "$tmp_dir"
+}
+
 project_preset() {
   python3 - "$ROOT/.chatgpt/project-profile.yaml" <<'PY'
 from pathlib import Path
@@ -1018,6 +1078,7 @@ run_quick() {
   run_step "validate-codex-task-pack" python3 "$ROOT/template-repo/scripts/validate-codex-task-pack.py" "$ROOT"
   run_step "validate-codex-routing" python3 "$ROOT/template-repo/scripts/validate-codex-routing.py" "$ROOT"
   run_step "validate-runbook-packages" python3 "$ROOT/template-repo/scripts/validate-runbook-packages.py" "$ROOT"
+  run_step "first-project-github-identity-smoke" run_first_project_github_identity_smoke
   run_step "validate-windows-bootstrap" python3 "$ROOT/windows-bootstrap/tests/validate-windows-bootstrap.py" "$ROOT"
   run_step "validate-software-update-governance" python3 "$ROOT/template-repo/scripts/validate-software-update-governance.py" "$ROOT/template-repo/template"
   run_step "validate-gpt55-prompt-contract" run_gpt55_prompt_contract_smoke

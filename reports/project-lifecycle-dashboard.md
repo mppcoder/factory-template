@@ -1,6 +1,6 @@
 # Панель жизненного цикла проекта / `project-lifecycle-dashboard`
 
-Generated UTC: `2026-05-07T04:34:49+00:00`
+Generated UTC: `2026-05-07T05:08:24+00:00`
 Source: `/projects/factory-template/template-repo/template/.chatgpt/project-lifecycle-dashboard.yaml`
 
 ## Сейчас
@@ -65,8 +65,7 @@ Source: `/projects/factory-template/template-repo/template/.chatgpt/project-life
 
 🔴 FT-CX-0012 continue-after-unified-roadmap: ✅ Codex-WORK → ✅ Codex OK → 🔴
   Blocked
-✅ FT-CX-0019 nonstandard-vps-project-root-survey-option: ✅ Codex-WORK → ✅
-  Codex OK → ✅ Done
+✅ FT-CX-0020 beginner-first-hardening: ✅ Codex-WORK → ✅ Codex OK → ✅ Done
 
 ### История ChatGPT handoff-задач
 
@@ -87,6 +86,10 @@ Source: `/projects/factory-template/template-repo/template/.chatgpt/project-life
 🟡 FT-CH-0016 chat-title-allocator-blocker-regression: ✅ GPT-HO → 🕒 Codex
   OK → 🕒 Done
 🟡 FT-CH-0017 module-gated-vps-downstream-beginner-roadmap: ✅ GPT-HO → 🕒
+  Codex OK → 🕒 Done
+🟡 FT-CH-0018 chat-title-allocator-write-path-regression: ✅ GPT-HO → 🕒
+  Codex OK → 🕒 Done
+🟡 FT-CH-0019 external-user-action-interview-handoff-scenario: ✅ GPT-HO → 🕒
   Codex OK → 🕒 Done
 
 ### История Codex-доработок
@@ -123,6 +126,7 @@ Source: `/projects/factory-template/template-repo/template/.chatgpt/project-life
   Codex OK → ✅ Done
 ✅ FT-CX-0019 nonstandard-vps-project-root-survey-option: ✅ Codex-WORK → ✅
   Codex OK → ✅ Done
+✅ FT-CX-0020 beginner-first-hardening: ✅ Codex-WORK → ✅ Codex OK → ✅ Done
 
 ## Передача и оркестрация
 
@@ -219,7 +223,7 @@ Source: `/projects/factory-template/template-repo/template/.chatgpt/project-life
 - status: `pending`
 - preset: `starter`
 - operator source: `template-repo/scripts/operator-dashboard.py`
-- dry-run report present: `False`
+- dry-run report present: `True`
 - deploy report present: `False`
 - boundary: Runtime evidence может подтягиваться из operator-dashboard reports; dry-run/report evidence не является real deploy proof.
 
@@ -272,5 +276,5 @@ Source: `/projects/factory-template/template-repo/template/.chatgpt/project-life
 
 ## Следующий шаг
 
-- Recommended (`internal-repo-follow-up`): Recommended next execution branch: preserve OpenClaw local runtime pilot evidence, continue reusable template feedback, then proceed to beginner-first hardening. Public HTTPS/reverse-proxy proof remains separate approval boundary.
-- Fallback (`internal-repo-follow-up`): Если public endpoint approval отсутствует, не claim public downstream proof; удерживать `public_https: not_claimed`.
+- Recommended (`internal-repo-follow-up`): Beginner-first hardening rehearsal is complete. Recommended next branch: optional battle ChatGPT Project UI paste for the rehearsal project, then continue product work from the created greenfield repo. Public HTTPS/reverse-proxy proof remains a separate approval boundary.
+- Fallback (`internal-repo-follow-up`): Если пользователь не готов создавать battle ChatGPT Project UI для rehearsal repo, оставить project repo verified/synced и продолжить factory-template hardening без claims про сохраненную ChatGPT Project instruction.

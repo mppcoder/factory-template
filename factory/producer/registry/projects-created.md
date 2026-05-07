@@ -127,3 +127,69 @@
   change_class: feature
   execution_mode: codex-led
   примечание: создан через launcher; GitHub repo `mppcoder/greenfield-test`, latest commit `cca68d5`
+- дата: 2026-05-07
+  проект: Beginner First Rehearsal
+  slug: beginner-first-rehearsal-20260507
+  версия_фабрики: 2.5.0
+  режим: greenfield
+  статус_записи: production
+  project_preset: greenfield-product
+  change_class: feature
+  execution_mode: codex-led
+  reserved_slug_override: false
+  примечание: создан через launcher
+- дата: 2026-05-07
+  проект: Beginner First Rehearsal
+  slug: beginner-first-rehearsal-20260507
+  версия_фабрики: 2.5.0
+  режим: greenfield
+  статус_записи: production
+  project_preset: greenfield-product
+  change_class: feature
+  execution_mode: codex-led
+  reserved_slug_override: false
+  примечание: создан через launcher
+- дата: 2026-05-07
+  проект: Beginner First Rehearsal B
+  slug: beginner-first-rehearsal-20260507b
+  версия_фабрики: 2.5.0
+  режим: greenfield
+  статус_записи: production
+  project_preset: greenfield-product
+  change_class: feature
+  execution_mode: codex-led
+  reserved_slug_override: false
+  примечание: создан через launcher
+- дата: 2026-05-07
+  проект: Beginner First Rehearsal C
+  slug: beginner-first-rehearsal-20260507c
+  версия_фабрики: 2.5.0
+  режим: greenfield
+  статус_записи: production
+  project_preset: greenfield-product
+  change_class: feature
+  execution_mode: codex-led
+  reserved_slug_override: false
+  примечание: создан через launcher
+- дата: 2026-05-07
+  проект: Beginner First Rehearsal D
+  slug: beginner-first-rehearsal-20260507d
+  версия_фабрики: 2.5.0
+  режим: greenfield
+  статус_записи: production
+  project_preset: greenfield-product
+  change_class: feature
+  execution_mode: codex-led
+  reserved_slug_override: false
+  примечание: создан через launcher
+- дата: 2026-05-07
+  проект: Beginner First Rehearsal E
+  slug: beginner-first-rehearsal-20260507e
+  версия_фабрики: 2.5.0
+  режим: greenfield
+  статус_записи: production
+  project_preset: greenfield-product
+  change_class: feature
+  execution_mode: codex-led
+  reserved_slug_override: false
+  примечание: создан через launcher
