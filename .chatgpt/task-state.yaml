@@ -16,6 +16,53 @@ boundaries:
 source_artifacts:
   - ".chatgpt/stage-state.yaml"
   - ".chatgpt/codex-work-index.yaml"
-  - "reports/release/beginner-first-hardening-runbook-checklist.md"
-  - "reports/release/first-project-ready-report.md"
-last_updated: "2026-05-07T12:10:30Z"
+  - ".chatgpt/task-launch.yaml"
+  - "docs/template-architecture-and-event-workflows.md"
+  - "docs/downstream-upgrade-policy.md"
+  - "docs/operator/runbook-packages/README.md"
+last_updated: "2026-05-07T14:58:48Z"
+change:
+  id: FT-CX-0029-full-factory-lifecycle-map
+  title: Full factory-to-battle lifecycle map
+  summary: "Материализовать в repo сквозную карту lifecycle от установки factory-template на VPS до downstream feedback loop и controlled upgrade."
+tasks:
+  - id: T-001
+    title: Пройти direct-task self-handoff
+    type: routing
+    risk_level: medium
+    executor: developer
+    status: done
+    outputs:
+      - .chatgpt/codex-work-index.yaml
+      - .chatgpt/task-launch.yaml
+      - .chatgpt/direct-task-self-handoff.md
+    acceptance:
+      - FT-CX-0029 is materialized before implementation
+  - id: T-002
+    title: Materialize full lifecycle map in canonical docs
+    type: documentation
+    risk_level: medium
+    executor: developer
+    status: done
+    depends_on:
+      - T-001
+    outputs:
+      - docs/template-architecture-and-event-workflows.md
+      - docs/operator/runbook-packages/README.md
+      - docs/downstream-upgrade-policy.md
+      - README.md
+    acceptance:
+      - lifecycle separates upstream, installed clone, downstream repo, battle ChatGPT Project, Codex remote execution, production runtime/deploy, feedback loop and controlled upgrade
+  - id: T-003
+    title: Verify lifecycle docs
+    type: verification
+    risk_level: medium
+    executor: developer
+    status: done
+    depends_on:
+      - T-002
+    outputs:
+      - .chatgpt/verification-report.md
+      - .chatgpt/done-report.md
+    acceptance:
+      - relevant validators and quick verify pass

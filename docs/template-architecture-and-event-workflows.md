@@ -188,6 +188,56 @@ flowchart TD
     M --> N[Release]
 ```
 
+### 4.1. Полный factory-to-battle lifecycle
+
+Этот lifecycle не является новым workflow. Он связывает уже существующие source-of-truth:
+
+- install/setup фабрики: `docs/operator/runbook-packages/01-factory-template/*` и `docs/operator/beginner-first-windows-to-first-project.md`;
+- создание нового боевого проекта: `docs/operator/runbook-packages/02-greenfield-product/*`;
+- handoff discipline: `template-repo/scenario-pack/15-handoff-to-codex.md`, `17-direct-task-self-handoff.md` и `.chatgpt/task-launch.yaml`;
+- deploy/runtime boundary: reusable deploy templates, operator runbooks и production VPS field-pilot zones из `docs/downstream-upgrade-policy.md`;
+- factory feedback: `VALIDATE_FACTORY_FEEDBACK.sh`, `INGEST_FACTORY_FEEDBACK.sh`, `TRIAGE_INCOMING_LEARNINGS.sh`, GitHub issues/PR и `reports/factory-feedback/`;
+- controlled downstream upgrade: `docs/downstream-upgrade-policy.md` и `factory/producer/extensions/workspace-packs/factory-ops/*`.
+
+```mermaid
+flowchart LR
+    U[upstream template repo\nmppcoder/factory-template] --> I[installed factory clone\n/projects/factory-template]
+    I --> G[downstream/battle repo\n/projects/<project-slug>]
+    G --> P[battle ChatGPT Project\nrepo-first instruction]
+    P --> H[ChatGPT handoff\none paste block]
+    H --> C[Codex remote execution\nVPS/Remote SSH contour]
+    C --> D[production runtime/deploy zone\nproject-owned runtime]
+    D --> M[maintenance\nverify, sync, support]
+    M --> F[GitHub issue / PR / factory feedback]
+    F --> U
+    U --> X[controlled downstream upgrade\npreview -> safe apply -> report -> rollback]
+    X --> G
+```
+
+| Контур | Source-of-truth | Кто действует | Что происходит | Граница |
+| --- | --- | --- | --- | --- |
+| Upstream template repo | `mppcoder/factory-template`, `template-repo/`, `docs/`, `factory/producer/` | Codex/maintainer | Развивается сама фабрика, scenario-pack, runbooks, validators, packaging и sync tooling. | Не хранит downstream secrets или live runtime state. |
+| Installed factory clone | `/projects/factory-template` на VPS | Codex после `FT-170` | Устанавливает packages, clone/sync repo, запускает setup/verify/dashboard/sync. | Пользователь нужен только для external UI, account, billing, secret entry и approvals. |
+| Downstream/battle repo | `/projects/<project-slug>` и GitHub repo проекта | Codex после `GF-050` | Создает repo/root/scaffold, materializes repo-first core, запускает quick verify, делает initial commit/push. | Root `AGENTS.md` является materialized clone из `template-repo/AGENTS.md`; project-owned work не перезаписывается template apply. |
+| Battle ChatGPT Project | ChatGPT UI проекта | Пользователь, по тексту от Codex | Пользователь создает Project, вставляет готовую repo-first instruction и сохраняет настройки. | Codex готовит текст, но не является ChatGPT Project UI actor. |
+| Codex remote execution | VS Code Remote SSH + Codex extension или Codex app remote thread | Codex | Исполняет handoff, читает router, меняет repo, запускает validators, делает verified sync при доступности. | Advisory text не переключает model/profile/reasoning внутри уже открытой сессии; надежная граница - новый task launch. |
+| Production runtime/deploy zone | Downstream `deploy/`, `.factory-runtime/`, runtime host | Codex с approval gates, пользователь для secrets/approvals | Reusable deploy templates/scripts могут обновляться, реальные env/secrets/runtime transcripts остаются project-owned. | `deploy/.env`, `.factory-runtime/`, secret entry и destructive/paid deploy decisions не входят в safe apply. |
+| GitHub issue feedback loop | GitHub issues/PR, `reports/factory-feedback/`, incoming learnings | Downstream operator, Codex, maintainer | Downstream defects/learnings оформляются как issue/PR/factory feedback, валидируются и ingest-ятся обратно в фабрику. | Feedback должен содержать evidence и reusable pattern; пустой/template feedback не ingest-ится без explicit override. |
+| Controlled downstream upgrade | `factory-ops/export-template-patch.sh`, `apply-template-patch.sh`, `upgrade-report.py` | Codex/operator | Upstream changes идут в downstream через preview bundle, tiered safe apply, report и rollback path. | `safe-generated`/`safe-clone` можно применять controlled apply; `advisory-review` и `manual-project-owned` только review/manual. |
+
+Сквозной порядок:
+
+1. Пользователь готовит внешний доступ по factory-template package до `FT-170`.
+2. Remote Codex устанавливает и verifies installed factory clone на VPS.
+3. Пользователь в ChatGPT Project фабрики пишет `новый проект`, проходит recommendation-first intake и получает один Codex handoff.
+4. Remote Codex создает downstream/battle repo, materializes repo-first core, verifies и syncs.
+5. Codex выдает готовую repo-first instruction; пользователь создает battle ChatGPT Project и вставляет instruction в UI.
+6. Дальнейшая разработка боевого проекта идет через battle ChatGPT Project -> normalized handoff -> Codex remote execution.
+7. Deploy на VPS отделяет reusable deploy templates/scripts от project-owned runtime/secrets; production actions проходят approval/runtime boundary.
+8. Сопровождение фиксирует verify/sync/support evidence внутри downstream repo.
+9. Reusable learnings идут обратно в upstream через GitHub issue/PR/factory feedback и factory feedback scripts.
+10. Обновления upstream возвращаются в downstream только через controlled upgrade: dry-run preview, safe apply для template-owned zones, report, verification и rollback option.
+
 Ниже каждый workflow описан в одном формате:
 
 - входы;

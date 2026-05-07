@@ -2,6 +2,10 @@
 
 Эта политика описывает, как downstream/battle repos получают обновления из `factory-template`.
 
+В полном factory-to-battle lifecycle эта политика отвечает только за обратное направление:
+из upstream template repo обратно в уже созданные downstream/battle repos.
+Создание downstream repo, настройка battle ChatGPT Project, разработка через handoff, deploy и feedback loop описаны в `docs/template-architecture-and-event-workflows.md#41-полный-factory-to-battle-lifecycle` и runbook packages.
+
 ## Источник истины
 
 - `factory-template` остается каноническим source для шаблона.
@@ -54,6 +58,20 @@ python3 factory/producer/extensions/workspace-packs/factory-ops/upgrade-report.p
 
 `--dry-run` собирает обычный preview bundle и materializes только safe-generated/safe-clone candidates в `generated-files/`.
 `--advisory` собирает review-only bundle: diff/preview сохраняются, но generated files для apply не создаются.
+
+## Место controlled upgrade в lifecycle
+
+Controlled downstream upgrade начинается только после того, как downstream/battle repo уже создан, verified и synced.
+Он не заменяет разработческий handoff и не deploy-ит runtime changes сам по себе.
+
+| Шаг | Что делает | Что запрещено |
+| --- | --- | --- |
+| Preview | `export-template-patch.sh --dry-run` сравнивает upstream factory с downstream repo и пишет tiered bundle. | Не применять изменения без preview/readback. |
+| Check | `apply-template-patch.sh --check` подтверждает, какие generated files можно safe apply. | Не включать project-owned runtime/secrets в safe apply. |
+| Apply | `--apply-safe-zones` обновляет только `safe-generated` и `safe-clone`; `--with-project-snapshot` сохраняет расширенный rollback state. | Не копировать `advisory-review`, `manual-project-owned` и brownfield historical evidence автоматически. |
+| Report | `upgrade-report.py` объясняет diff, tier impact, manual review и rollback path. | Не выдавать raw diff как единственный operator closeout. |
+| Verify | Downstream запускает repo-local validators/quick verify и фиксирует evidence. | Не считать upgrade завершенным без verify или explicit blocker. |
+| Feedback | Reusable problem идет в GitHub issue/PR/factory feedback для upstream. | Не исправлять reusable factory defect только локально в downstream без feedback record. |
 
 ## Multi-cycle proof / проверка нескольких циклов
 

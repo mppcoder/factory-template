@@ -1,6 +1,6 @@
 schema: codex-work-index/v1
 project_code: FT
-next_codex_work_number: 29
+next_codex_work_number: 30
 id_policy:
   canonical_format: <PROJECT_CODE>-CX-<NNNN> <task-slug>
   independent_from_chat_handoff_index: true
@@ -293,9 +293,9 @@ items:
   - Superseded during FT-CX-0027 dashboard/release-state cleanup so the historical
     blocker no longer appears as active current work.
   replacement_work_id: FT-CX-0020
-  accepted_reason: The old external-pilot continuation branch was superseded by
-    the verified beginner-first hardening contour and its downstream rehearsal;
-    it remains historical evidence, not an active blocker.
+  accepted_reason: The old external-pilot continuation branch was superseded by the
+    verified beginner-first hardening contour and its downstream rehearsal; it remains
+    historical evidence, not an active blocker.
   next_action: No action; retained as a historical superseded continuation branch.
 - codex_work_id: FT-CX-0013
   work_number: 13
@@ -670,8 +670,8 @@ items:
   evidence:
   - Allocated during direct-task bootstrap before first substantive response.
   - Read router and rendered canonical factory-template project card.
-  - Reproduced dashboard/card active-work drift caused by FT-CX-0012 still being
-    marked blocked.
+  - Reproduced dashboard/card active-work drift caused by FT-CX-0012 still being marked
+    blocked.
   - Reclassified FT-CX-0012 as superseded by FT-CX-0020 beginner-first hardening.
   - Added renderer/root-state cleanup and bug evidence for release-state drift.
   next_action: No further cleanup action after verify and verified sync.
@@ -697,3 +697,32 @@ items:
   accepted_reason: Accidental extra allocator reservation created during the same
     cleanup turn; the canonical work item is FT-CX-0027.
   next_action: No action; do not reuse this consumed reservation number.
+- codex_work_id: FT-CX-0029
+  work_number: 29
+  work_title: FT-CX-0029 full-factory-lifecycle-map
+  task_slug: full-factory-lifecycle-map
+  kind: self_handoff
+  state: verified
+  created_utc: '2026-05-07T14:54:13Z'
+  updated_utc: '2026-05-07T14:58:48Z'
+  source_type: direct-task
+  handoff_group: full-factory-lifecycle-map
+  handoff_revision: 1
+  handoff_register_item_id: ''
+  status_chain:
+  - codex_self_handoff
+  - codex_accepted
+  - codex_completed
+  evidence:
+  - Allocated during direct-task bootstrap before first substantive response.
+  - Read router and rendered canonical factory-template project card.
+  - Added full factory-to-battle lifecycle map to docs/template-architecture-and-event-workflows.md.
+  - Linked lifecycle from README.md and docs/operator/runbook-packages/README.md.
+  - Clarified controlled downstream upgrade placement in docs/downstream-upgrade-policy.md.
+  - Normalized freshly fetched FT-CH-0021 status_chain after rebase so chat-handoff-index validates.
+  - python3 template-repo/scripts/validate-chat-handoff-index.py .chatgpt/chat-handoff-index.yaml
+  - python3 template-repo/scripts/validate-codex-work-index.py .chatgpt/codex-work-index.yaml
+  - python3 template-repo/scripts/validate-codex-routing.py .
+  - python3 template-repo/scripts/validate-runbook-packages.py
+  - bash template-repo/scripts/verify-all.sh quick
+  next_action: No further internal action after verified sync.

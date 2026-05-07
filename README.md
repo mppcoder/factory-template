@@ -82,6 +82,9 @@ Launcher ведет по трем маршрутам:
 - `docs/releases/2.5-roadmap.md`
 - `docs/releases/2.5-success-metrics.md`
 
+Полный factory-to-battle lifecycle закреплен в `docs/template-architecture-and-event-workflows.md#41-полный-factory-to-battle-lifecycle`.
+Он явно разделяет upstream template repo, installed factory clone, downstream/battle repo, battle ChatGPT Project, Codex remote execution, production runtime/deploy zone, GitHub issue/factory feedback loop и controlled downstream upgrade.
+
 ## Установка с нуля и fallback archive
 
 Canonical path для установки с нуля — GitHub clone/download или последний опубликованный release artifact на https://github.com/mppcoder/factory-template/releases/latest.

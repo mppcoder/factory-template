@@ -3,6 +3,9 @@
 Этот каталог — финальный слой пошаговых пакетов "с пустого ПК до Codex takeover и рабочего состояния".
 Он не заменяет scenario-pack, presets или validators. Он связывает их в operator-facing маршрут и отделяет user-only setup от automation, которую после takeover выполняет Codex.
 
+Полная карта жизненного цикла находится в `docs/template-architecture-and-event-workflows.md#41-полный-factory-to-battle-lifecycle`.
+Она связывает эти пакеты с downstream upgrade policy, factory feedback loop, ChatGPT Project границей, Codex remote execution и production runtime/deploy zone.
+
 ## Пакеты
 
 - `01-factory-template` — развитие самого repo `factory-template` как `greenfield-product` с дополнительным `factory-producer-owned` слоем.
@@ -21,6 +24,19 @@
    - `04-verify.md`;
    - `05-closeout.md`.
 4. Для любой новой задачи сначала все равно открывайте `template-repo/scenario-pack/00-master-router.md`.
+
+## Сквозной lifecycle для нового боевого проекта
+
+| Этап | Пакет/source | Каноническая граница |
+| --- | --- | --- |
+| Установить фабрику на VPS | `01-factory-template` и `docs/operator/beginner-first-windows-to-first-project.md` | Пользователь делает external setup до `FT-170`; дальше remote Codex clone/setup/verify/sync. |
+| Создать downstream/battle repo | `02-greenfield-product` | Пользователь стартует в factory ChatGPT Project командой `новый проект`; Codex после `GF-050` создает repo/root/scaffold. |
+| Создать battle ChatGPT Project | `02-greenfield-product/02-codex-runbook.md` и `05-closeout.md` | Codex готовит repo-first instruction; пользователь создает Project в ChatGPT UI и вставляет текст. |
+| Разрабатывать боевой проект | `template-repo/scenario-pack/15-handoff-to-codex.md` и repo-local `.chatgpt/task-launch.yaml` | Battle ChatGPT Project готовит один handoff; Codex исполняет в remote contour. |
+| Deploy на VPS | downstream deploy docs/templates и `docs/downstream-upgrade-policy.md` | Reusable deploy templates/scripts template-owned; secrets/runtime/approvals project-owned. |
+| Сопровождать | downstream verify/dashboard/support artifacts | Codex выполняет internal verify/sync; external actions только при реальном UI/secret/approval blocker. |
+| Вернуть learning в фабрику | GitHub issue/PR, `reports/factory-feedback/`, feedback scripts | Reusable defect/learning получает evidence, validation и ingest/triage path. |
+| Обновить downstream из upstream | `docs/downstream-upgrade-policy.md`, `factory-ops` workspace pack | Dry-run preview -> safe-generated/safe-clone apply -> upgrade report -> verify -> rollback option. |
 
 ## Граница для новичка
 

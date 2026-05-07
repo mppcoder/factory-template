@@ -348,7 +348,7 @@ items:
   handoff_group: github-errors-analysis
   handoff_revision: 1
   handoff_register_item_id: ''
-  status_chain: [chatgpt_handoff]
+  status_chain: [chatgpt_handoff, codex_accepted, codex_completed]
   evidence:
   - User requested analysis of errors in GitHub.
   - Main router was read via GitHub connector before reservation.
