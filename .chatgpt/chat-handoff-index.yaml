@@ -1,6 +1,6 @@
 schema: chat-handoff-index/v1
 project_code: FT
-next_chat_number: 21
+next_chat_number: 22
 title_policy:
   canonical_format: <PROJECT_CODE>-CH-<NNNN> <task-slug>
   include_status_in_title: false
@@ -336,3 +336,20 @@ items:
   - 'bash template-repo/scripts/verify-all.sh quick'
   - 'bash template-repo/scripts/verify-all.sh'
   next_action: No further implementation action; exact allocator blocker is forbidden when GitHub connector write path is available and confirms update.
+- chat_id: FT-CH-0021
+  chat_number: 21
+  chat_title: FT-CH-0021 github-errors-analysis
+  task_slug: github-errors-analysis
+  kind: research
+  state: open
+  created_utc: '2026-05-07T15:10:00Z'
+  updated_utc: '2026-05-07T15:10:00Z'
+  source_type: chatgpt-first-answer
+  handoff_group: github-errors-analysis
+  handoff_revision: 1
+  handoff_register_item_id: ''
+  status_chain: [chatgpt_handoff]
+  evidence:
+  - User requested analysis of errors in GitHub.
+  - Main router was read via GitHub connector before reservation.
+  next_action: Analyze GitHub issues/PRs/workflows in mppcoder/factory-template and prepare repo-first findings.
