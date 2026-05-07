@@ -23,20 +23,20 @@ gates:
   tech_spec_ready: true
   decomposition_complete: true
 change:
-  id: FT-CH-0011-unified-roadmap
-  title: Single big VPS, downstream proof and beginner-first roadmap baseline
-  class: fix
-  execution_mode: codex-led
+  id: FT-CX-0031-close-unfinished-repo-tasks
+  title: Close unfinished repo task state
+  class: small-fix
+  execution_mode: hybrid
   type: factory-improvement
   status: done
   priority: high
-  summary: "Закрыть FT-CH-0011, зафиксировать module gate baseline, single big VPS topology, downstream proof readiness и beginner-first Windows-to-first-project path."
+  summary: "Закрыть stale open ChatGPT reservations, текущий Codex self-handoff и перерендерить project card/dashboard."
   outputs:
+    - .chatgpt/codex-work-index.yaml
     - .chatgpt/chat-handoff-index.yaml
-    - template-repo/template/.chatgpt/project-lifecycle-dashboard.yaml
-    - template-repo/template/.chatgpt/standards-gates.yaml
-    - docs/operator/single-big-vps-dev-runtime-architecture.md
-    - docs/releases/unified-single-vps-downstream-beginner-roadmap.md
-    - docs/releases/single-vps-downstream-proof-roadmap.md
-    - docs/operator/beginner-first-windows-to-first-project.md
-    - reports/release/downstream-application-proof-report.md
+    - .chatgpt/task-index.yaml
+    - .chatgpt/task-state.yaml
+    - .chatgpt/verification-report.md
+    - .chatgpt/done-report.md
+    - reports/project-status-card.md
+    - reports/project-lifecycle-dashboard.md

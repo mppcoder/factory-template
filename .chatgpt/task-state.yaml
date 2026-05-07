@@ -16,15 +16,15 @@ boundaries:
 source_artifacts:
   - ".chatgpt/stage-state.yaml"
   - ".chatgpt/codex-work-index.yaml"
+  - ".chatgpt/chat-handoff-index.yaml"
   - ".chatgpt/task-launch.yaml"
-  - "docs/template-architecture-and-event-workflows.md"
-  - "docs/downstream-upgrade-policy.md"
-  - "docs/operator/runbook-packages/README.md"
-last_updated: "2026-05-07T14:58:48Z"
+  - "reports/project-status-card.md"
+  - "reports/project-lifecycle-dashboard.md"
+last_updated: "2026-05-07T16:27:26Z"
 change:
-  id: FT-CX-0029-full-factory-lifecycle-map
-  title: Full factory-to-battle lifecycle map
-  summary: "Материализовать в repo сквозную карту lifecycle от установки factory-template на VPS до downstream feedback loop и controlled upgrade."
+  id: FT-CX-0031-close-unfinished-repo-tasks
+  title: Close unfinished repo task state
+  summary: "Закрыть незавершенные repo-state хвосты: stale open ChatGPT reservations и текущий Codex self-handoff."
 tasks:
   - id: T-001
     title: Пройти direct-task self-handoff
@@ -37,24 +37,21 @@ tasks:
       - .chatgpt/task-launch.yaml
       - .chatgpt/direct-task-self-handoff.md
     acceptance:
-      - FT-CX-0029 is materialized before implementation
+      - FT-CX-0031 is materialized before closeout
   - id: T-002
-    title: Materialize full lifecycle map in canonical docs
-    type: documentation
+    title: Закрыть stale open ChatGPT reservations
+    type: closeout
     risk_level: medium
     executor: developer
     status: done
     depends_on:
       - T-001
     outputs:
-      - docs/template-architecture-and-event-workflows.md
-      - docs/operator/runbook-packages/README.md
-      - docs/downstream-upgrade-policy.md
-      - README.md
+      - .chatgpt/chat-handoff-index.yaml
     acceptance:
-      - lifecycle separates upstream, installed clone, downstream repo, battle ChatGPT Project, Codex remote execution, production runtime/deploy, feedback loop and controlled upgrade
+      - FT-CH-0017, FT-CH-0019, FT-CH-0023 and FT-CH-0025 no longer remain open after verified follow-up work
   - id: T-003
-    title: Verify lifecycle docs
+    title: Verify and refresh project card
     type: verification
     risk_level: medium
     executor: developer
@@ -64,5 +61,7 @@ tasks:
     outputs:
       - .chatgpt/verification-report.md
       - .chatgpt/done-report.md
+      - reports/project-status-card.md
+      - reports/project-lifecycle-dashboard.md
     acceptance:
-      - relevant validators and quick verify pass
+      - chat/codex work indexes validate and compact card no longer shows stale open FT-CH items

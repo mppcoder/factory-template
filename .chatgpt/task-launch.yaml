@@ -1,19 +1,18 @@
 launch:
-  timestamp_utc: '2026-05-07T14:54:13+00:00'
+  timestamp_utc: '2026-05-07T16:26:28+00:00'
   launch_unit: new-task-launch
   launch_source: direct-task
   router_layer: executable
   handoff_shape: codex-task-handoff
   handoff_shape_reasons:
   - 'default neutral handoff: Codex decides actual execution_mode after analysis'
-  task_class: quick
+  task_class: build
   task_class_reasons:
-  - 'keyword-hit: docs'
-  - 'keyword-hit: readme'
-  - 'явный reasoning/model override совпал с default profile: quick'
-  selected_profile: quick
-  selected_model: gpt-5.4-mini
-  selected_reasoning_effort: low
+  - keyword-hit не найден; fallback на default task class `build`
+  - 'явный reasoning/model override совпал с default profile: build'
+  selected_profile: build
+  selected_model: gpt-5.5
+  selected_reasoning_effort: medium
   selected_plan_mode_reasoning_effort: medium
   apply_mode: manual-ui
   strict_launch_mode: optional
@@ -28,10 +27,7 @@ launch:
   - .chatgpt/done-report.md
   handoff_allowed: yes (forbidden)
   defect_capture_path: not-required-by-text-signal
-  task_summary: 'Материализовать в repo логику полного жизненного цикла factory-template:
-    установка factory-template на VPS; создание greenfield downstream/battle project;
-    создание/настройка battle ChatGPT Project; разработка через ChatGPT handoff ->
-    Codex;'
+  task_summary: заканчивай все незавершенные задачи
   launch_boundary_rule: Выбор модели и reasoning mode считается надежным только на
     новом запуске Codex для новой задачи.
   interactive_default_rule: 'Для интерактивной работы в VS Code Codex extension основной
@@ -75,7 +71,7 @@ launch:
   launch_artifact_path: .chatgpt/direct-task-source.md
   launch_command: ./scripts/launch-codex-task.sh --launch-source direct-task --task-file
     .chatgpt/direct-task-source.md --execute
-  codex_profile_command: codex --profile quick
+  codex_profile_command: codex --profile build
   strict_launch_use_cases:
   - автоматизация
   - воспроизводимость
@@ -105,9 +101,9 @@ launch:
   requested_selected_profile: null
   requested_selected_model: null
   requested_selected_reasoning_effort: null
-  codex_work_id: FT-CX-0029
-  codex_work_title: FT-CX-0029 full-factory-lifecycle-map
-  task_slug: full-factory-lifecycle-map
+  codex_work_id: FT-CX-0031
+  codex_work_title: FT-CX-0031 close-unfinished-repo-tasks
+  task_slug: close-unfinished-repo-tasks
   codex_work_kind: self_handoff
-  codex_work_state: open
+  codex_work_state: verified
   codex_work_index_path: .chatgpt/codex-work-index.yaml

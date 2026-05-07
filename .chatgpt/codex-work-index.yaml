@@ -1,6 +1,6 @@
 schema: codex-work-index/v1
 project_code: FT
-next_codex_work_number: 31
+next_codex_work_number: 32
 id_policy:
   canonical_format: <PROJECT_CODE>-CX-<NNNN> <task-slug>
   independent_from_chat_handoff_index: true
@@ -754,3 +754,31 @@ items:
   - python3 template-repo/scripts/validate-codex-work-index.py .chatgpt/codex-work-index.yaml
   - bash template-repo/scripts/verify-all.sh quick
   next_action: No further internal action after verified sync.
+- codex_work_id: FT-CX-0031
+  work_number: 31
+  work_title: FT-CX-0031 close-unfinished-repo-tasks
+  task_slug: close-unfinished-repo-tasks
+  kind: self_handoff
+  state: verified
+  created_utc: '2026-05-07T16:26:28Z'
+  updated_utc: '2026-05-07T16:27:26Z'
+  source_type: direct-task
+  handoff_group: close-unfinished-repo-tasks
+  handoff_revision: 1
+  handoff_register_item_id: ''
+  status_chain:
+  - codex_self_handoff
+  - codex_accepted
+  - codex_completed
+  evidence:
+  - Allocated during direct-task bootstrap before first substantive response.
+  - Read router and completed direct-task self-handoff for the user's closeout request.
+  - Closed stale open ChatGPT reservations FT-CH-0017, FT-CH-0019, FT-CH-0023
+    and FT-CH-0025
+    after confirming their scopes were already materialized by verified follow-up work.
+  - Regenerated project status card and lifecycle dashboard after closing active-work
+    drift.
+  - python3 template-repo/scripts/validate-chat-handoff-index.py .chatgpt/chat-handoff-index.yaml
+  - python3 template-repo/scripts/validate-codex-work-index.py .chatgpt/codex-work-index.yaml
+  - bash template-repo/scripts/verify-all.sh quick
+  next_action: No further internal action; unfinished repo-state tasks are closed.

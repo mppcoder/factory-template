@@ -1,78 +1,48 @@
 change:
-  id: FT-CH-0011-unified-roadmap
-  title: Single big VPS, downstream proof and beginner-first roadmap baseline
-  summary: "Закрыть FT-CH-0011, материализовать module gate baseline, поддерживаемую single big VPS topology, downstream proof readiness и beginner-first Windows-to-first-project path."
+  id: FT-CX-0031-close-unfinished-repo-tasks
+  title: Close unfinished repo task state
+  class: small-fix
+  execution_mode: hybrid
+  summary: "Закрыть stale open ChatGPT reservations, текущий Codex self-handoff и перерендерить project card/dashboard."
 
 tasks:
   - id: T-001
-    title: Закрыть FT-CH-0011 и выровнять dashboard/state
-    type: remediation
+    title: Пройти direct-task self-handoff
+    type: routing
     risk_level: medium
     executor: developer
     status: done
     outputs:
-      - .chatgpt/chat-handoff-index.yaml
-      - reports/project-status-card.md
-      - reports/project-lifecycle-dashboard.md
+      - .chatgpt/codex-work-index.yaml
+      - .chatgpt/task-launch.yaml
+      - .chatgpt/direct-task-self-handoff.md
     acceptance:
-      - FT-CH-0011 is verified and next_chat_number remains 15
+      - FT-CX-0031 is materialized before closeout
   - id: T-002
-    title: Закрыть module gate baseline
-    type: implementation
+    title: Закрыть stale open ChatGPT reservations
+    type: closeout
     risk_level: medium
     executor: developer
     status: done
     depends_on:
       - T-001
     outputs:
-      - template-repo/template/.chatgpt/project-lifecycle-dashboard.yaml
-      - template-repo/template/.chatgpt/standards-gates.yaml
+      - .chatgpt/chat-handoff-index.yaml
     acceptance:
-      - modules have evidence, accepted_reason, not_applicable or real blocker
+      - FT-CH-0017, FT-CH-0019, FT-CH-0023 and FT-CH-0025 are verified or otherwise terminal
   - id: T-003
-    title: Материализовать single VPS и downstream proof roadmap
-    type: implementation
+    title: Verify and refresh project card
+    type: verification
     risk_level: medium
     executor: developer
     status: done
     depends_on:
       - T-002
     outputs:
-      - docs/architecture/vps-project-hosting-topologies.md
-      - docs/operator/single-big-vps-dev-runtime-architecture.md
-      - docs/releases/unified-single-vps-downstream-beginner-roadmap.md
-      - docs/releases/single-vps-downstream-proof-roadmap.md
-      - reports/release/downstream-application-proof-report.md
-    acceptance:
-      - downstream proof remains blocked/ready without false pass when real pilot inputs are absent
-  - id: T-004
-    title: Усилить beginner-first path и validator guards
-    type: implementation
-    risk_level: medium
-    executor: developer
-    status: done
-    depends_on:
-      - T-003
-    outputs:
-      - docs/operator/beginner-first-windows-to-first-project.md
-      - docs/operator/runbook-packages/01-factory-template/01-user-runbook.md
-      - docs/operator/runbook-packages/02-greenfield-product/01-user-runbook.md
-      - template-repo/scripts/validate-runbook-packages.py
-      - template-repo/scripts/validate-downstream-application-proof.py
-    acceptance:
-      - Windows-to-first-project flow has remote context, one-block handoff and first project ready boundaries
-  - id: T-005
-    title: Verify and close out
-    type: verification
-    risk_level: medium
-    executor: developer
-    status: done
-    depends_on:
-      - T-004
-    outputs:
+      - .chatgpt/verification-report.md
+      - .chatgpt/done-report.md
       - reports/project-status-card.md
       - reports/project-lifecycle-dashboard.md
-      - CURRENT_FUNCTIONAL_STATE.md
-      - VERIFY_SUMMARY.md
     acceptance:
-      - required verification commands pass
+      - chat/codex indexes have no non-terminal unfinished items
+      - quick verify passes

@@ -1,7 +1,7 @@
 ## Номер запроса Codex
 
 ```text
-FT-CX-0029 full-factory-lifecycle-map
+FT-CX-0031 close-unfinished-repo-tasks
 ```
 
 ## Карточка проекта
@@ -15,17 +15,14 @@ FT-CX-0029 full-factory-lifecycle-map
 Tasks: 🕒 0 ready-for-handoff -> 0 ready-for-codex -> 0 running -> 0
   human-review
 В работе:
-✅ FT-CH-0020 chat-title-allocation-blocker-still-returned: ✅ GPT-HO → ✅
-  Codex OK → ✅ Done
-🟡 FT-CX-0029
-  full-factory-lifecycle-map:
-  ✅ Codex-WORK → 🕒 Codex OK → 🕒 Done
+✅ FT-CX-0031 close-unfinished-repo-tasks: ✅ Codex-WORK → ✅ Codex OK → ✅
+  Done
 
 ## Применение в Codex UI
 
 `apply_mode: manual-ui (default)`.
 
-Для интерактивной работы открой новый чат/окно Codex в VS Code extension, вручную выбери model `gpt-5.4-mini` и reasoning `low` в picker, затем вставь один цельный handoff block ниже.
+Для интерактивной работы открой новый чат/окно Codex в VS Code extension, вручную выбери model `gpt-5.5` и reasoning `medium` в picker, затем вставь один цельный handoff block ниже.
 
 Новый чат + вставка handoff и новый task launch через executable launcher — не одно и то же. Advisory layer сам по себе не переключает model/profile/reasoning; надежная единица маршрутизации — новый task launch. Уже открытая live session допустима только как non-canonical fallback без обещаний auto-switch.
 
@@ -40,7 +37,7 @@ Tasks: 🕒 0 ready-for-handoff -> 0 ready-for-codex -> 0 running -> 0
 Прямая команда profile за launcher:
 
 ```bash
-codex --profile quick
+codex --profile build
 ```
 
 ## Handoff в Codex
@@ -63,10 +60,10 @@ Routing:
 - handoff_shape: codex-task-handoff
 - execution_mode_decision_owner: Codex runtime after task graph analysis
 - execution_mode_closeout_required: actual execution mode plus child/subagent count
-- task_class: quick
-- selected_profile: quick
-- selected_model: gpt-5.4-mini
-- selected_reasoning_effort: low
+- task_class: build
+- selected_profile: build
+- selected_model: gpt-5.5
+- selected_reasoning_effort: medium
 - selected_plan_mode_reasoning_effort: medium
 - apply_mode: manual-ui
 - strict_launch_mode: optional
@@ -77,14 +74,14 @@ Routing:
 - defect_capture_path: not-required-by-text-signal
 - chat_id: not_applicable
 - chat_title: not_applicable
-- task_slug: full-factory-lifecycle-map
+- task_slug: close-unfinished-repo-tasks
 - chat_kind: not_applicable
 - chat_state: not_applicable
 - chat_index_path: not_applicable
-- codex_work_id: FT-CX-0029
-- codex_work_title: FT-CX-0029 full-factory-lifecycle-map
+- codex_work_id: FT-CX-0031
+- codex_work_title: FT-CX-0031 close-unfinished-repo-tasks
 - codex_work_kind: self_handoff
-- codex_work_state: open
+- codex_work_state: verified
 - codex_work_index_path: .chatgpt/codex-work-index.yaml
 
 Артефакты для обновления:
@@ -95,7 +92,7 @@ Routing:
 - .chatgpt/done-report.md
 
 Текст задачи:
-Материализовать в repo логику полного жизненного цикла factory-template: установка factory-template на VPS; создание greenfield downstream/battle project; создание/настройка battle ChatGPT Project; разработка через ChatGPT handoff -> Codex; deploy на VPS; сопровождение; feedback loop из downstream/battle repos обратно в mppcoder/factory-template через GitHub issues/PR/factory feedback; controlled downstream upgrade из factory-template обратно в боевые проекты. Опереться на docs/template-architecture-and-event-workflows.md, docs/downstream-upgrade-policy.md, docs/operator/runbook-packages/README.md, docs/operator/beginner-first-windows-to-first-project.md, README.md. Явно разделить upstream template repo, installed factory clone, downstream/battle repo, battle ChatGPT Project, Codex remote execution, production runtime/deploy zone, GitHub issue feedback loop. Добавить diagram/table если уместно. Не трогать secrets/runtime env. Запустить validators/verify. Closeout: actual execution mode и child/subagent count.
+заканчивай все незавершенные задачи
 
 Continuation rule:
 Если задача пришла в уже открытую Codex-сессию и этот route совместим с текущей сессией, после видимого self-handoff продолжай remediation / implementation / verification без отдельного запроса пользователя. Остановка допустима только при реальном blocker, внешнем действии, несовместимом route или необходимости нового task launch.

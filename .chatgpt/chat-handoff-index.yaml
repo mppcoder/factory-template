@@ -297,9 +297,9 @@ items:
   chat_title: FT-CH-0017 module-gated-vps-downstream-beginner-roadmap
   task_slug: module-gated-vps-downstream-beginner-roadmap
   kind: handoff
-  state: open
+  state: verified
   created_utc: '2026-05-06T11:02:00Z'
-  updated_utc: '2026-05-06T11:02:00Z'
+  updated_utc: '2026-05-07T16:27:26Z'
   source_type: chatgpt-first-answer-retrofix
   handoff_group: module-gated-vps-downstream-beginner-roadmap
   handoff_revision: 1
@@ -309,10 +309,18 @@ items:
   - codex_accepted
   - codex_completed
   evidence:
-  - 'Retrofix: this ChatGPT task initially showed allocator blocker instead of stable title.'
-  - User requested materialized number assignment for the current unified roadmap chat.
-  - 'Scope: close module gate baseline first, then single big VPS architecture, downstream/battle project proof, and beginner-first Windows-to-first-project path.'
-  next_action: Start the Codex handoff or close/supersede this repo reservation; do not reuse this chat number.
+  - 'Retrofix: this ChatGPT task initially showed allocator blocker instead of stable
+    title.'
+  - User requested materialized number assignment for the current unified roadmap
+    chat.
+  - 'Scope: close module gate baseline first, then single big VPS architecture, downstream/battle
+    project proof, and beginner-first Windows-to-first-project path.'
+  - 'Closed by verified follow-up work: FT-CX-0020 beginner-first-hardening, FT-CX-0027
+    release-state cleanup and FT-CX-0029 full-factory-lifecycle-map materialized the
+    module-gated VPS/downstream/beginner roadmap scope.'
+  - python3 template-repo/scripts/validate-chat-handoff-index.py .chatgpt/chat-handoff-index.yaml
+  next_action: No further internal action; unified roadmap scope is materialized and
+    this historical reservation is closed.
 - chat_id: FT-CH-0018
   chat_number: 18
   chat_title: FT-CH-0018 chat-title-allocator-write-path-regression
@@ -340,9 +348,9 @@ items:
   chat_title: FT-CH-0019 external-user-action-interview-handoff-scenario
   task_slug: external-user-action-interview-handoff-scenario
   kind: handoff
-  state: open
+  state: verified
   created_utc: '2026-05-07T00:00:00Z'
-  updated_utc: '2026-05-07T00:00:00Z'
+  updated_utc: '2026-05-07T16:27:26Z'
   source_type: chatgpt-first-answer-correction
   handoff_group: external-user-action-interview-handoff-scenario
   handoff_revision: 1
@@ -352,10 +360,19 @@ items:
   - codex_accepted
   - codex_completed
   evidence:
-  - User requested that every external action requiring Codex to ask the user must be implemented as a handoff scenario with interactive interview, explanations, and answer options.
-  - Previous assistant response incorrectly proposed already occupied FT-CH-0018; this item materializes the corrected current chat title.
-  - FT-CH-0018 remains occupied by chat-title-allocator-write-path-regression and must not be reused.
-  next_action: Start Codex handoff for external-user-action interview scenario or close/supersede this repo reservation; do not reuse this chat number.
+  - User requested that every external action requiring Codex to ask the user must
+    be implemented as a handoff scenario with interactive interview, explanations,
+    and answer options.
+  - Previous assistant response incorrectly proposed already occupied FT-CH-0018;
+    this item materializes the corrected current chat title.
+  - FT-CH-0018 remains occupied by chat-title-allocator-write-path-regression and
+    must not be reused.
+  - 'Closed by verified follow-up work: FT-CX-0021 external-user-actions-dialog-rule,
+    FT-CX-0022 beginner-rehearsal-project-ui-dialog and FT-CX-0025 rehearsal-project-ui-completion-confirmation
+    materialized the external user action interview/dialog contract.'
+  - python3 template-repo/scripts/validate-chat-handoff-index.py .chatgpt/chat-handoff-index.yaml
+  next_action: No further internal action; external user action dialog contract is
+    materialized and this historical reservation is closed.
 - chat_id: FT-CH-0020
   chat_number: 20
   chat_title: FT-CH-0020 chat-title-allocation-blocker-still-returned
@@ -437,9 +454,9 @@ items:
   chat_title: FT-CH-0023 template-install-downstream-deploy-feedback-loop
   task_slug: template-install-downstream-deploy-feedback-loop
   kind: research
-  state: open
+  state: verified
   created_utc: '2026-05-07T15:55:00Z'
-  updated_utc: '2026-05-07T15:55:00Z'
+  updated_utc: '2026-05-07T16:27:26Z'
   source_type: chatgpt-first-answer-correction
   handoff_group: template-install-downstream-deploy-feedback-loop
   handoff_revision: 1
@@ -449,10 +466,19 @@ items:
   - codex_accepted
   - codex_completed
   evidence:
-  - User asked to output step-by-step logic for installing the factory template on VPS, launching a new battle project from the template, developing and deploying the battle project, and confirming the upstream GitHub issue feedback model.
-  - Previous response could not show stable title because write reservation was not confirmed.
-  - '2026-05-07 remediation: connector-created reservation normalized to the canonical status_chain required by validate-chat-handoff-index.py.'
-  next_action: Use this stable title for the current chat and decide whether to materialize the advisory logic into repo docs/runbook.
+  - User asked to output step-by-step logic for installing the factory template on VPS,
+    launching a new battle project from the template, developing and deploying the
+    battle project, and confirming the upstream GitHub issue feedback model.
+  - Previous response could not show stable title because write reservation was not
+    confirmed.
+  - '2026-05-07 remediation: connector-created reservation normalized to the canonical
+    status_chain required by validate-chat-handoff-index.py.'
+  - 'Closed by verified follow-up work: FT-CX-0029 full-factory-lifecycle-map materialized
+    VPS install, downstream/battle project creation, deploy/sustainment, upstream feedback
+    loop and controlled downstream upgrade in canonical repo docs.'
+  - python3 template-repo/scripts/validate-chat-handoff-index.py .chatgpt/chat-handoff-index.yaml
+  next_action: No further internal action; template install/downstream deploy feedback
+    loop is materialized and this historical reservation is closed.
 - chat_id: FT-CH-0024
   chat_number: 24
   chat_title: FT-CH-0024 github-connector-first-chat-number
@@ -482,9 +508,9 @@ items:
   chat_title: FT-CH-0025 github-errors-actions-audit
   task_slug: github-errors-actions-audit
   kind: research
-  state: open
+  state: verified
   created_utc: '2026-05-07T17:05:00Z'
-  updated_utc: '2026-05-07T17:05:00Z'
+  updated_utc: '2026-05-07T17:28:00Z'
   source_type: chatgpt-first-answer-correction
   handoff_group: github-errors-actions-audit
   handoff_revision: 1
@@ -497,4 +523,10 @@ items:
   - User requested assigning the chat number after GitHub errors and Actions audit returned allocator blocker.
   - Main router and chat-handoff index were read via GitHub connector before reservation.
   - This reservation materializes the current ChatGPT chat title after confirming next_chat_number was 25.
-  next_action: Use this stable title for the current chat and continue GitHub errors / Actions audit follow-up if needed.
+  - 'Closed by existing verified audit evidence: FT-CH-0021 github-errors-analysis
+    captured Issues/PR triage and latest Actions status in reports/ci/latest-actions-status.md.'
+  - 'Closed by HIR-014: connector-safe allocation, active card visibility and Actions
+    status remediation is verified.'
+  - python3 template-repo/scripts/validate-chat-handoff-index.py .chatgpt/chat-handoff-index.yaml
+  next_action: No further internal GitHub errors / Actions audit action; this follow-up
+    reservation is closed.

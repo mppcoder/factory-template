@@ -15,7 +15,7 @@ codex-task-handoff
 ## Стабильная identity чата и handoff
 - chat_id: ``
 - chat_title: ``
-- task_slug: `full-factory-lifecycle-map`
+- task_slug: `close-unfinished-repo-tasks`
 - kind: ``
 - state: ``
 - source_of_truth: `.chatgpt/chat-handoff-index.yaml`
@@ -25,21 +25,20 @@ codex-task-handoff
 - default neutral handoff: Codex decides actual execution_mode after analysis
 
 ## Класс задачи
-quick
+build
 
 ## Evidence для класса задачи
-- keyword-hit: docs
-- keyword-hit: readme
-- явный reasoning/model override совпал с default profile: quick
+- keyword-hit не найден; fallback на default task class `build`
+- явный reasoning/model override совпал с default profile: build
 
 ## Выбранный профиль
-quick
+build
 
 ## Выбранная модель
-gpt-5.4-mini
+gpt-5.5
 
 ## Выбранное reasoning effort
-low
+medium
 
 ## Выбранное reasoning effort для plan mode
 medium
@@ -49,7 +48,7 @@ manual-ui
 
 ## Ручное применение через UI
 - Откройте новый чат/окно Codex в VS Code extension.
-- Вручную выберите model `gpt-5.4-mini` и reasoning `low` в picker.
+- Вручную выберите model `gpt-5.5` и reasoning `medium` в picker.
 - Только после этого вставьте handoff.
 - Codex должен отвечать пользователю на русском языке; английский допустим только для technical literal values.
 - Уже открытая live session не считается надежным auto-switch boundary.
@@ -131,7 +130,7 @@ selected_model совпадает с последним сохраненным s
 - scripted launch
 
 ## Прямая команда Codex за launcher
-`codex --profile quick`
+`codex --profile build`
 
 ## Диагностика проблем
 - Если вы работаете через VS Code Codex extension интерактивно, используйте новый чат/окно, вручную выставьте selected_model и selected_reasoning_effort в picker, а затем вставьте handoff.
@@ -143,4 +142,4 @@ selected_model совпадает с последним сохраненным s
 - Если новый model ID появился в live catalog, сначала создайте proposal через `scripts/check-codex-model-catalog.py --write-proposal`; promotion profile mapping требует ручного review.
 
 ## Текст задачи
-Материализовать в repo логику полного жизненного цикла factory-template: установка factory-template на VPS; создание greenfield downstream/battle project; создание/настройка battle ChatGPT Project; разработка через ChatGPT handoff -> Codex; deploy на VPS; сопровождение; feedback loop из downstream/battle repos обратно в mppcoder/factory-template через GitHub issues/PR/factory feedback; controlled downstream upgrade из factory-template обратно в боевые проекты. Опереться на docs/template-architecture-and-event-workflows.md, docs/downstream-upgrade-policy.md, docs/operator/runbook-packages/README.md, docs/operator/beginner-first-windows-to-first-project.md, README.md. Явно разделить upstream template repo, installed factory clone, downstream/battle repo, battle ChatGPT Project, Codex remote execution, production runtime/deploy zone, GitHub issue feedback loop. Добавить diagram/table если уместно. Не трогать secrets/runtime env. Запустить validators/verify. Closeout: actual execution mode и child/subagent count.
+заканчивай все незавершенные задачи
