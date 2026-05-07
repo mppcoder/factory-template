@@ -1,6 +1,6 @@
 schema: chat-handoff-index/v1
 project_code: FT
-next_chat_number: 23
+next_chat_number: 24
 title_policy:
   canonical_format: <PROJECT_CODE>-CH-<NNNN> <task-slug>
   include_status_in_title: false
@@ -128,8 +128,8 @@ items:
   - Blocked until executable routing/manual picker boundary is clarified.
   - User report on 2026-04-29 confirmed no visible unfinished task exists for this
     chat title; no linked HIR/source task exists.
-  accepted_reason: Stale seed/index entry without a matching handoff implementation
-    register item; not an active blocked task.
+  accepted_reason: Stale seed entry without a matching handoff implementation register
+    item; not an active blocked task.
   next_action: No active action; keep only as historical index record.
 - chat_id: FT-CH-0010
   chat_number: 10
@@ -476,3 +476,25 @@ items:
     substantive answer.
   - 'Current repo index showed next_chat_number: 22 after FT-CH-0021 github-errors-analysis.'
   next_action: Implement per-project unique ChatGPT/Codex index generation and validation.
+- chat_id: FT-CH-0023
+  chat_number: 23
+  chat_title: FT-CH-0023 template-install-downstream-deploy-feedback-loop
+  task_slug: template-install-downstream-deploy-feedback-loop
+  kind: research
+  state: open
+  created_utc: '2026-05-07T15:55:00Z'
+  updated_utc: '2026-05-07T15:55:00Z'
+  source_type: chatgpt-first-answer-correction
+  handoff_group: template-install-downstream-deploy-feedback-loop
+  handoff_revision: 1
+  handoff_register_item_id: ''
+  status_chain:
+  - chatgpt_handoff
+  evidence:
+  - User asked to output step-by-step logic for installing the factory template on VPS,
+    launching a new battle project from the template, developing and deploying the
+    battle project, and confirming the upstream GitHub issue feedback model.
+  - Previous response could not show stable title because write reservation was not
+    confirmed.
+  next_action: Use this stable title for the current chat and decide whether to materialize
+    the advisory logic into repo docs/runbook.
