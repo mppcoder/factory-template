@@ -1,6 +1,6 @@
 # Панель жизненного цикла проекта / `project-lifecycle-dashboard`
 
-Generated UTC: `2026-05-07T08:22:32+00:00`
+Generated UTC: `2026-05-07T08:33:43+00:00`
 Source: `/projects/factory-template/template-repo/template/.chatgpt/project-lifecycle-dashboard.yaml`
 
 ## Сейчас
@@ -65,7 +65,7 @@ Source: `/projects/factory-template/template-repo/template/.chatgpt/project-life
 
 🔴 FT-CX-0012 continue-after-unified-roadmap: ✅ Codex-WORK → ✅ Codex OK → 🔴
   Blocked
-✅ FT-CX-0023 rehearsal-route-audit-remediation: ✅ Codex-WORK → ✅ Codex OK
+✅ FT-CX-0024 rehearsal-route-check-confirmation: ✅ Codex-WORK → ✅ Codex OK
   → ✅ Done
 
 ### История ChatGPT handoff-задач
@@ -91,6 +91,8 @@ Source: `/projects/factory-template/template-repo/template/.chatgpt/project-life
 🟡 FT-CH-0018 chat-title-allocator-write-path-regression: ✅ GPT-HO → 🕒
   Codex OK → 🕒 Done
 🟡 FT-CH-0019 external-user-action-interview-handoff-scenario: ✅ GPT-HO → 🕒
+  Codex OK → 🕒 Done
+🟡 FT-CH-0020 chat-title-allocation-blocker-still-returned: ✅ GPT-HO → 🕒
   Codex OK → 🕒 Done
 
 ### История Codex-доработок
@@ -133,6 +135,8 @@ Source: `/projects/factory-template/template-repo/template/.chatgpt/project-life
 ✅ FT-CX-0022 beginner-rehearsal-project-ui-dialog: ✅ Codex-WORK → ✅ Codex
   OK → ✅ Done
 ✅ FT-CX-0023 rehearsal-route-audit-remediation: ✅ Codex-WORK → ✅ Codex OK
+  → ✅ Done
+✅ FT-CX-0024 rehearsal-route-check-confirmation: ✅ Codex-WORK → ✅ Codex OK
   → ✅ Done
 
 ## Передача и оркестрация

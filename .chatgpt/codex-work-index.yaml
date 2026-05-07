@@ -1,6 +1,6 @@
 schema: codex-work-index/v1
 project_code: FT
-next_codex_work_number: 24
+next_codex_work_number: 25
 id_policy:
   canonical_format: <PROJECT_CODE>-CX-<NNNN> <task-slug>
   independent_from_chat_handoff_index: true
@@ -562,8 +562,8 @@ items:
   - codex_completed
   evidence:
   - Allocated during direct-task bootstrap before first substantive response.
-  - Confirmed allocator blocker was expected without ChatGPT write access, while
-    generated fallback card and state drift were real defects.
+  - Confirmed allocator blocker was expected without ChatGPT write access, while generated
+    fallback card and state drift were real defects.
   - Remediated downstream rehearsal repo and pushed commit b300073 to origin/main.
   - Added factory bug report reports/bugs/2026-05-07-rehearsal-route-audit-state-card-drift.md.
   - Hardened launcher, smoke artifact filler and dashboard validator against missing
@@ -573,3 +573,31 @@ items:
   - bash template-repo/scripts/verify-all.sh quick
   next_action: No further internal action; rerun the ChatGPT Project route audit if
     a user-visible confirmation is desired.
+- codex_work_id: FT-CX-0024
+  work_number: 24
+  work_title: FT-CX-0024 rehearsal-route-check-confirmation
+  task_slug: rehearsal-route-check-confirmation
+  kind: self_handoff
+  state: verified
+  created_utc: '2026-05-07T08:31:24Z'
+  updated_utc: '2026-05-07T08:33:24Z'
+  source_type: direct-task
+  handoff_group: rehearsal-route-check-confirmation
+  handoff_revision: 1
+  handoff_register_item_id: ''
+  status_chain:
+  - codex_self_handoff
+  - codex_accepted
+  - codex_completed
+  evidence:
+  - Allocated during direct-task bootstrap before first substantive response.
+  - Fetched downstream route-check commits 498c30d and f090a07 from origin/main.
+  - Verified fallback card exists at reports/project-status-card.md.
+  - Found noncanonical downstream chat-handoff-index fields and normalized them.
+  - Downstream repair pushed as 004dc63 fix: normalize route check chat index.
+  - Added factory bug report reports/bugs/2026-05-07-rehearsal-route-check-noncanonical-chat-index.md.
+  - python3 scripts/validate-chat-handoff-index.py .chatgpt/chat-handoff-index.yaml
+    in downstream rehearsal repo
+  - bash scripts/verify-all.sh quick in downstream rehearsal repo
+  - python3 scripts/check-dod.py . in downstream rehearsal repo
+  next_action: No further internal action; route check is confirmed and schema-valid.
