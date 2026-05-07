@@ -2,9 +2,13 @@
 
 ## Статус
 
-Current status: `ready_for_external_pilot`.
+Current status: `external_local_runtime_pilot_evidence_recorded`.
 
-`factory-template` has template/runtime proof and a supported `single-host` topology. It does not have a selected real downstream/battle app in this repo. Therefore downstream/battle application proof must remain blocked until external pilot inputs exist.
+`factory-template` has template/runtime proof and a supported `single-host`
+topology. The external OpenClaw pilot recorded a real downstream local prod
+runtime proof in `mppcoder/openclaw`, but it intentionally did not claim public
+HTTPS/nginx proof. Therefore the factory repo keeps full public downstream proof
+guarded until a public endpoint boundary is approved and verified.
 
 ## Непрерывный proof path
 
@@ -24,6 +28,28 @@ Current status: `ready_for_external_pilot`.
 | L | Validate report | `validate-downstream-application-proof.py` | ready |
 | M | Update dashboard/release continuity | no false green, no release-ready claim | ready |
 | N | Claim proof pass | only after all real evidence exists | blocked_external_inputs |
+
+## Evidence внешнего пилота
+
+OpenClaw pilot summary:
+
+```text
+reports/release/downstream-local-runtime-pilot-summary.md
+```
+
+Accepted scope:
+
+- brownfield-without-repo to greenfield repo conversion;
+- real local `APP_IMAGE`;
+- local prod runtime deploy;
+- localhost healthcheck;
+- backup, restore and rollback drill;
+- source hardening;
+- operator readiness.
+
+Non-claim:
+
+- public HTTPS/nginx proof is not claimed.
 
 ## Внешние inputs для pass
 
@@ -45,6 +71,8 @@ Operator runbook for these actions:
 
 ## Следующее действие
 
-Recommended next execution branch: single big VPS + downstream proof real pilot when the external inputs above exist.
+Recommended next execution branch: keep OpenClaw local runtime evidence and
+continue reusable template feedback. Run public HTTPS/reverse-proxy proof only
+after explicit approval.
 
 Fallback branch: keep downstream proof blocked/ready and continue beginner-first Windows-to-first-project hardening.

@@ -5,6 +5,8 @@ Package layer должен содержать `USER-ONLY SETUP`, `CODEX-AUTOMATI
 User readiness до takeover:
 
 - target root и `_incoming` определены;
+- non-standard VPS folders, если есть, описаны как intake/evidence candidates,
+  not active source roots;
 - default decision mode selected;
 - defaults accepted or overridden: `/projects/<target-slug>/_incoming`, reconstructed/intermediate repos inside target root, evidence inventory -> reconstruction -> with-repo adoption -> conversion;
 - custom overrides captured;
@@ -18,6 +20,10 @@ Codex automation после takeover:
 - inventory/evidence создан;
 - reconstruction выполнена внутри target root;
 - with-repo conversion выполнена или documented blocker;
+- source hardening completed or blocker documented when runtime distribution
+  patches exist;
+- local prod runtime proof completed or explicit blocker documented when real
+  image/target/approvals exist;
 - validators green;
 - sync clean или blocker documented.
 

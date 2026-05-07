@@ -104,3 +104,19 @@ Status `ready_for_external_pilot` or `blocked_external_inputs` is allowed when t
 ## Boundary правило
 
 This scenario is outside the completed `factory-template` template/runtime proof. It becomes actionable only in a selected downstream/battle project with a real workload.
+
+## Локальный runtime proof sub-scope
+
+Real downstream pilots may first close a local prod runtime proof:
+
+- real downstream repo exists;
+- real `APP_IMAGE` is built or selected;
+- runtime root is under `/srv/<project>-prod`;
+- secrets remain outside repo;
+- systemd/docker/localhost healthcheck passes;
+- backup, disposable restore and rollback drill pass;
+- sanitized transcript exists;
+- `public_https: not_claimed` is explicit.
+
+This is valid local runtime evidence, but it is not public HTTPS/nginx proof.
+Public endpoint proof remains a separate approval and verification boundary.

@@ -1,6 +1,6 @@
 # Панель жизненного цикла проекта / `project-lifecycle-dashboard`
 
-Generated UTC: `2026-05-06T13:03:22+00:00`
+Generated UTC: `2026-05-07T04:34:49+00:00`
 Source: `/projects/factory-template/template-repo/template/.chatgpt/project-lifecycle-dashboard.yaml`
 
 ## Сейчас
@@ -219,7 +219,7 @@ Source: `/projects/factory-template/template-repo/template/.chatgpt/project-life
 - status: `pending`
 - preset: `starter`
 - operator source: `template-repo/scripts/operator-dashboard.py`
-- dry-run report present: `True`
+- dry-run report present: `False`
 - deploy report present: `False`
 - boundary: Runtime evidence может подтягиваться из operator-dashboard reports; dry-run/report evidence не является real deploy proof.
 
@@ -272,5 +272,5 @@ Source: `/projects/factory-template/template-repo/template/.chatgpt/project-life
 
 ## Следующий шаг
 
-- Recommended (`internal-repo-follow-up`): Recommended next execution branch: single big VPS + downstream proof real-pilot-ready contour; do not reverse before beginner-first hardening.
-- Fallback (`internal-repo-follow-up`): Если real downstream app отсутствует, удерживать proof в blocked_external_inputs и продолжать beginner-first Windows-to-first-project hardening.
+- Recommended (`internal-repo-follow-up`): Recommended next execution branch: preserve OpenClaw local runtime pilot evidence, continue reusable template feedback, then proceed to beginner-first hardening. Public HTTPS/reverse-proxy proof remains separate approval boundary.
+- Fallback (`internal-repo-follow-up`): Если public endpoint approval отсутствует, не claim public downstream proof; удерживать `public_https: not_claimed`.

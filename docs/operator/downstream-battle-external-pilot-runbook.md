@@ -369,6 +369,36 @@ Downstream pilot survey summary:
 Если любой gate неполный, Codex обновляет proof report as blocked and does not
 claim pass.
 
+## Развилка закрытия proof
+
+После deploy, healthcheck, backup, restore и rollback Codex обязан отдельно
+зафиксировать, какой proof закрывается:
+
+```text
+Вопрос закрытия: какой scope закрываем сейчас?
+
+Зачем спрашиваю:
+local runtime proof и public HTTPS/nginx proof имеют разные риски. Нельзя
+заявлять public endpoint proof, если мы проверили только localhost/systemd/docker
+runtime.
+
+Выбери вариант:
+A. Закрыть как local prod runtime proof, public HTTPS/nginx не заявлять
+B. Продолжить отдельный public HTTPS/reverse-proxy proof
+C. Остановиться и оставить proof blocked
+```
+
+Если пользователь выбирает `A`, Codex может зафиксировать
+`local_prod_runtime_proof_passed` при наличии real repo, real `APP_IMAGE`,
+approved target, secrets outside repo, deploy, healthcheck, backup, restore,
+rollback и sanitized transcript. При этом `public_https` должен остаться
+`not_claimed`.
+
+Если пользователь выбирает `B`, Codex переходит к отдельному approval boundary
+для domain, TLS, nginx/reverse-proxy, exposed ports and public healthcheck.
+
+Если пользователь выбирает `C`, Codex фиксирует blocker and does not claim pass.
+
 ## Санитизированный transcript
 
 Можно оставлять:

@@ -721,12 +721,15 @@ post_release_improvement:
 external_actions_ledger: []
 recommended_next_step:
   owner_boundary: internal-repo-follow-up
-  action: 'Recommended next execution branch: single big VPS + downstream proof real-pilot-ready contour; do not reverse before beginner-first hardening.'
+  action: 'Recommended next execution branch: preserve OpenClaw local runtime pilot evidence, continue reusable template feedback, then proceed to beginner-first hardening. Public HTTPS/reverse-proxy proof remains separate approval boundary.'
   evidence:
   - docs/releases/unified-single-vps-downstream-beginner-roadmap.md
+  - reports/release/openclaw-local-runtime-pilot-summary.md
 fallback_next_step:
   owner_boundary: internal-repo-follow-up
-  action: Если real downstream app отсутствует, удерживать proof в blocked_external_inputs и продолжать beginner-first Windows-to-first-project hardening.
+  action: >-
+    Если public endpoint approval отсутствует, не claim public downstream proof;
+    удерживать `public_https: not_claimed`.
   evidence:
   - reports/release/downstream-application-proof-report.md
 source_artifacts:

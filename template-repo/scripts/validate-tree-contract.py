@@ -73,6 +73,8 @@ def iter_repo_paths(root: Path) -> list[str]:
         relative_parts = item.relative_to(root).parts
         if any(part in ignored_parts for part in relative_parts):
             continue
+        if len(relative_parts) == 1 and relative_parts[0].endswith(".code-workspace"):
+            continue
         paths.append(item.relative_to(root).as_posix())
     return paths
 
@@ -84,6 +86,8 @@ def validate_top_level(root: Path, contour: dict[str, Any], label: str, errors: 
     ignored = set(contour.get("ignored_transient_top_level", []) or [])
     for item in root.iterdir():
         name = item.name
+        if name.endswith(".code-workspace"):
+            continue
         if name in allowed or name in ignored:
             continue
         errors.append(f"{label}: top-level путь не описан контрактом: {name}")

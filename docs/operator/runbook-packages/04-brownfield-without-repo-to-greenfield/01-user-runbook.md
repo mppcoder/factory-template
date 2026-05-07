@@ -52,6 +52,39 @@ done_rule: conversion или documented blocker
 - Evidence: Target root и incoming source записаны без секретов.
 - Следующий шаг: `BWO-010`.
 
+### BWO-005. Если проект уже лежит в нестандартных папках VPS
+
+- Окно: Browser ChatGPT / VS Code Remote SSH.
+- Делает: Пользователь.
+- Зачем: Иногда боевой проект уже существует как runtime distribution или
+  overlay folder без git repo. Это допустимый brownfield input, но не active
+  source root.
+- Что нужно до начала: Есть absolute paths к папкам проекта без repo или вне
+  стандарта `/projects`.
+- Где взять значения: С VPS, без чтения secret files. Примеры:
+  `/root/.openclaw` как patched runtime distribution,
+  `/root/openclaw-plus` как overlay customization layer.
+- Команды для копирования:
+
+```text
+nonstandard_vps_folder_intake:
+  patched_runtime_distribution_source: /absolute/path/to/runtime-distribution
+  overlay_customization_source: /absolute/path/to/overlay-or-customizations
+  target_project_root: /projects/<project-slug>
+  reconstructed_repo: /projects/<project-slug>/reconstructed-repo
+  active_source_root_required: true
+  legacy_runtime_source_required: false
+  secrets_boundary: do_not_copy_raw_values
+```
+
+- Куда вставить: В ChatGPT handoff или заметки.
+- Ожидаемый результат: Codex знает, какие folders инвентаризировать как
+  evidence, но не использует их как active repo roots.
+- Если ошибка: Если папка содержит runtime state, logs, databases, `.env`,
+  tokens или private keys, Codex делает sanitized inventory, а не copy/commit.
+- Evidence: Absolute paths и роль каждой папки записаны без секретов.
+- Следующий шаг: `BWO-010`.
+
 ### BWO-010. Разместить материалы в `_incoming`
 
 - Окно: VS Code Remote SSH terminal / Explorer upload / SCP client.
