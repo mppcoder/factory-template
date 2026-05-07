@@ -1,6 +1,6 @@
 schema: chat-handoff-index/v1
 project_code: FT
-next_chat_number: 19
+next_chat_number: 20
 title_policy:
   canonical_format: <PROJECT_CODE>-CH-<NNNN> <task-slug>
   include_status_in_title: false
@@ -364,3 +364,22 @@ items:
   next_action: Fix first-answer allocator/write-path behavior so ChatGPT attempts
     reachable repo write allocator before blocker fallback and validates materialized
     reservation.
+- chat_id: FT-CH-0019
+  chat_number: 19
+  chat_title: FT-CH-0019 external-user-action-interview-handoff-scenario
+  task_slug: external-user-action-interview-handoff-scenario
+  kind: handoff
+  state: open
+  created_utc: '2026-05-07T00:00:00Z'
+  updated_utc: '2026-05-07T00:00:00Z'
+  source_type: chatgpt-first-answer-correction
+  handoff_group: external-user-action-interview-handoff-scenario
+  handoff_revision: 1
+  handoff_register_item_id: ''
+  status_chain:
+  - chatgpt_handoff
+  evidence:
+  - User requested that every external action requiring Codex to ask the user must be implemented as a handoff scenario with interactive interview, explanations, and answer options.
+  - Previous assistant response incorrectly proposed already occupied FT-CH-0018; this item materializes the corrected current chat title.
+  - FT-CH-0018 remains occupied by chat-title-allocator-write-path-regression and must not be reused.
+  next_action: Start Codex handoff for external-user-action interview scenario or close/supersede this repo reservation; do not reuse this chat number.
