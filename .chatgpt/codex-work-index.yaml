@@ -1,6 +1,6 @@
 schema: codex-work-index/v1
 project_code: FT
-next_codex_work_number: 23
+next_codex_work_number: 24
 id_policy:
   canonical_format: <PROJECT_CODE>-CX-<NNNN> <task-slug>
   independent_from_chat_handoff_index: true
@@ -544,3 +544,32 @@ items:
   - Confirmed rehearsal repo clean at commit 68cd156 before preparing copy block.
   next_action: User external action remains; create the ChatGPT Project in UI and
     paste the inline repo-first instruction block from the response.
+- codex_work_id: FT-CX-0023
+  work_number: 23
+  work_title: FT-CX-0023 rehearsal-route-audit-remediation
+  task_slug: rehearsal-route-audit-remediation
+  kind: self_handoff
+  state: verified
+  created_utc: '2026-05-07T08:15:26Z'
+  updated_utc: '2026-05-07T08:22:14Z'
+  source_type: direct-task
+  handoff_group: rehearsal-route-audit-remediation
+  handoff_revision: 1
+  handoff_register_item_id: ''
+  status_chain:
+  - codex_self_handoff
+  - codex_accepted
+  - codex_completed
+  evidence:
+  - Allocated during direct-task bootstrap before first substantive response.
+  - Confirmed allocator blocker was expected without ChatGPT write access, while
+    generated fallback card and state drift were real defects.
+  - Remediated downstream rehearsal repo and pushed commit b300073 to origin/main.
+  - Added factory bug report reports/bugs/2026-05-07-rehearsal-route-audit-state-card-drift.md.
+  - Hardened launcher, smoke artifact filler and dashboard validator against missing
+    fallback cards, stale factory handoff refs and done/intake drift.
+  - bash scripts/verify-all.sh quick in downstream rehearsal repo
+  - python3 scripts/check-dod.py . in downstream rehearsal repo
+  - bash template-repo/scripts/verify-all.sh quick
+  next_action: No further internal action; rerun the ChatGPT Project route audit if
+    a user-visible confirmation is desired.

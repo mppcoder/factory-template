@@ -1,4 +1,5 @@
 from pathlib import Path
+import subprocess
 import sys
 
 import yaml
@@ -178,6 +179,23 @@ for key in ['intake_complete','classification_complete','reuse_check_complete','
     stage['gates'][key] = True
 stage['stage'] = {'current': 'done', 'previous': 'verification', 'next': 'none'}
 (chat / 'stage-state.yaml').write_text(yaml.safe_dump(stage, allow_unicode=True, sort_keys=False), encoding='utf-8')
+task_state_path = chat / 'task-state.yaml'
+if task_state_path.exists():
+    task_state = yaml.safe_load(task_state_path.read_text(encoding='utf-8')) or {}
+    task_state['current_state'] = 'done'
+    task_state['owner_boundary'] = 'internal_repo'
+    task_state['next_action'] = {
+        'type': 'none',
+        'summary': 'Smoke-test scope closed; no internal action remains.',
+    }
+    task_state['blocked'] = {'status': False, 'reason': 'not_required'}
+    boundaries = task_state.setdefault('boundaries', {})
+    boundaries['internal_work'] = ['Smoke-test repo work completed and verified.']
+    boundaries['external_user_actions'] = []
+    boundaries['external_runtime'] = []
+    boundaries['downstream_sync'] = []
+    task_state['last_updated'] = __import__('datetime').date.today().isoformat()
+    task_state_path.write_text(yaml.safe_dump(task_state, allow_unicode=True, sort_keys=False), encoding='utf-8')
 task = yaml.safe_load((chat / 'task-index.yaml').read_text(encoding='utf-8'))
 task['change']['summary'] = 'Smoke-test изменение для проверки фабрики.'
 for idx, task_item in enumerate(task.get('tasks', []), 1):
@@ -186,3 +204,81 @@ for idx, task_item in enumerate(task.get('tasks', []), 1):
     if not task_item.get('acceptance'):
         task_item['acceptance'] = ['Артефакт создан', 'Проверка проходит']
 (chat / 'task-index.yaml').write_text(yaml.safe_dump(task, allow_unicode=True, sort_keys=False), encoding='utf-8')
+dashboard_path = chat / 'project-lifecycle-dashboard.yaml'
+if dashboard_path.exists():
+    dashboard = yaml.safe_load(dashboard_path.read_text(encoding='utf-8')) or {}
+    active_change = dashboard.setdefault('active_change', {})
+    if isinstance(active_change, dict):
+        active_change['id'] = str(task.get('change', {}).get('id') or active_change.get('id') or 'generated-smoke-change')
+        active_change['title'] = 'Generated project smoke-test baseline'
+        active_change['status'] = 'done'
+        active_change['evidence'] = [
+            '.chatgpt/verification-report.md',
+            '.chatgpt/done-report.md',
+            'bash scripts/verify-all.sh quick',
+            'python3 scripts/check-dod.py .',
+        ]
+        active_change['source_artifacts'] = ['.chatgpt/task-index.yaml', '.chatgpt/stage-state.yaml']
+    lifecycle = dashboard.setdefault('lifecycle_phase', {})
+    if isinstance(lifecycle, dict):
+        lifecycle['current'] = 'release'
+        lifecycle['previous'] = 'verification'
+        lifecycle['next'] = 'deploy'
+    execution = dashboard.setdefault('multi_step_execution', {})
+    if isinstance(execution, dict):
+        execution['final_verification'] = {
+            'status': 'passed',
+            'evidence': [
+                'bash scripts/verify-all.sh quick',
+                'python3 scripts/check-dod.py .',
+            ],
+        }
+        execution['next_task'] = {
+            'id': 'T-NEXT',
+            'owner_boundary': 'internal-repo-follow-up',
+            'action': 'Use the project ChatGPT Project for the next product task.',
+        }
+    orchestration = dashboard.setdefault('handoff_orchestration', {})
+    if isinstance(orchestration, dict):
+        orchestration['parent_handoff'] = {
+            'id': 'not_allocated',
+            'title': 'No ChatGPT handoff allocated inside this generated repo yet',
+            'status': 'not_started',
+            'evidence': [],
+        }
+        orchestration['child_tasks'] = []
+    for package in dashboard.get('runbook_packages', []) or []:
+        if isinstance(package, dict) and package.get('id') == '02-greenfield-product':
+            package['battle_chatgpt_project_created'] = True
+            package['current_phase'] = 'done'
+            package['current_step'] = 'first-project-ready'
+    dashboard_path.write_text(yaml.safe_dump(dashboard, allow_unicode=True, sort_keys=False), encoding='utf-8')
+
+render_script = root / 'scripts' / 'render-project-lifecycle-dashboard.py'
+if render_script.exists():
+    subprocess.run(
+        [
+            sys.executable,
+            str(render_script),
+            '--input',
+            str(dashboard_path),
+            '--format',
+            'markdown-full',
+            '--output',
+            str(root / 'reports' / 'project-lifecycle-dashboard.md'),
+        ],
+        check=True,
+    )
+    subprocess.run(
+        [
+            sys.executable,
+            str(render_script),
+            '--input',
+            str(dashboard_path),
+            '--format',
+            'chatgpt-card',
+            '--output',
+            str(root / 'reports' / 'project-status-card.md'),
+        ],
+        check=True,
+    )

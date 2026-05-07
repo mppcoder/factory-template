@@ -283,6 +283,77 @@ dashboard_path = chat / 'project-lifecycle-dashboard.yaml'
 if dashboard_path.exists():
     dashboard = yaml.safe_load(dashboard_path.read_text(encoding='utf-8')) or {}
     if isinstance(dashboard, dict):
+        project = dashboard.setdefault('project', {})
+        if isinstance(project, dict):
+            project['name'] = os.environ['PROJECT_NAME']
+            project['slug'] = os.environ['PROJECT_SLUG']
+            project['profile'] = os.environ['PROJECT_PRESET']
+            project['lifecycle_state'] = os.environ.get('LIFECYCLE_STATE', project.get('lifecycle_state', 'greenfield-active'))
+            project['current_mode'] = os.environ['PROJECT_MODE']
+            project['owner_boundary'] = 'project-owned'
+        active_change = dashboard.setdefault('active_change', {})
+        if isinstance(active_change, dict):
+            active_change.update({
+                'id': os.environ['CHANGE_ID'],
+                'title': f"{os.environ['PROJECT_NAME']}: initial scaffold",
+                'class': os.environ['CHANGE_CLASS'],
+                'priority': 'medium',
+                'status': 'draft',
+                'owner_boundary': 'internal-repo-follow-up',
+                'evidence': ['.chatgpt/task-index.yaml', '.chatgpt/project-origin.md'],
+                'source_artifacts': ['.chatgpt/task-index.yaml', '.chatgpt/project-origin.md'],
+            })
+        execution = dashboard.setdefault('multi_step_execution', {})
+        if isinstance(execution, dict):
+            execution['current_wave'] = 1
+            execution['waves'] = [{
+                'id': 'wave-1',
+                'title': 'Initial project scaffold materialization',
+                'status': 'completed',
+                'evidence': ['.chatgpt/task-index.yaml', '.chatgpt/project-origin.md'],
+                'tasks': [{
+                    'id': 'T-001',
+                    'title': 'Materialize generated project scaffold',
+                    'status': 'completed',
+                    'owner_boundary': 'internal-repo-follow-up',
+                    'evidence': ['.chatgpt/task-index.yaml', '.chatgpt/project-origin.md'],
+                }],
+            }]
+            execution['completed_tasks'] = ['T-001']
+            execution['blocked_tasks'] = []
+            execution['next_task'] = {
+                'id': 'T-PLAN',
+                'owner_boundary': 'internal-repo-follow-up',
+                'action': 'Run repo-first router and continue the project scenario from the generated project.',
+            }
+            execution['final_verification'] = {
+                'status': 'pending',
+                'evidence': [],
+            }
+            execution['archive_to_work_completed'] = {
+                'allowed': False,
+                'reason': 'Initial scaffold is not a completed product change yet.',
+            }
+        orchestration = dashboard.setdefault('handoff_orchestration', {})
+        if isinstance(orchestration, dict):
+            orchestration['parent_handoff'] = {
+                'id': 'not_allocated',
+                'title': 'No ChatGPT handoff allocated inside this generated repo yet',
+                'status': 'not_started',
+                'evidence': [],
+            }
+            orchestration['child_tasks'] = []
+            orchestration['route_explanation_boundary'] = (
+                'Advisory layer показывает маршрут и handoff-текст, но не переключает '
+                'model/profile/reasoning внутри уже открытой Codex-сессии; надежная '
+                'executable boundary — новый task launch или ручной picker в новом чате.'
+            )
+        dashboard['source_artifacts'] = [
+            '.chatgpt/task-index.yaml',
+            '.chatgpt/chat-handoff-index.yaml',
+            '.chatgpt/handoff-implementation-register.yaml',
+            '.chatgpt/project-origin.md',
+        ]
         control = dashboard.setdefault('universal_task_control', {})
         if isinstance(control, dict):
             control['registry_path'] = '.chatgpt/task-registry.yaml'
@@ -363,6 +434,15 @@ current_state_md = '''# Текущее функциональное состоя
 '''
 (root / 'CURRENT_FUNCTIONAL_STATE.md').write_text(current_state_md, encoding='utf-8')
 PY
+
+python3 "$DEST_DIR/scripts/render-project-lifecycle-dashboard.py" \
+  --input "$DEST_DIR/.chatgpt/project-lifecycle-dashboard.yaml" \
+  --format markdown-full \
+  --output "$DEST_DIR/reports/project-lifecycle-dashboard.md"
+python3 "$DEST_DIR/scripts/render-project-lifecycle-dashboard.py" \
+  --input "$DEST_DIR/.chatgpt/project-lifecycle-dashboard.yaml" \
+  --format chatgpt-card \
+  --output "$DEST_DIR/reports/project-status-card.md"
 
 REGISTRY_FILE="$(cd "$SCRIPT_DIR/.." && pwd)/factory/producer/registry/projects-created.md"
 REGISTRY_MODE="${FACTORY_REGISTRY_MODE:-production}"

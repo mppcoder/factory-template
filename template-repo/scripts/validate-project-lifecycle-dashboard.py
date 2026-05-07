@@ -187,6 +187,7 @@ STANDARDS_VERSION_CURRENT = {
 STANDARDS_VERSION_STALE = {"stale", "unknown", "needs_review", "revision_pending", "current_with_revision_pending"}
 HANDOFF_IMPLEMENTATION_ARTIFACT = ".chatgpt/handoff-implementation-register.yaml"
 CHAT_HANDOFF_INDEX_ARTIFACT = ".chatgpt/chat-handoff-index.yaml"
+CHAT_ID_IN_TEXT_RE = re.compile(r"\b([A-Z][A-Z0-9]*-CH-[0-9]{4})\b")
 MODULE_STATUSES = {"completed", "passed", "verified", "in_progress", "pending", "blocked", "failed", "not_applicable"}
 MODULE_GREEN_STATUSES = {"completed", "passed", "verified"}
 REQUIRED_MODULE_IDS = {"lifecycle", "core", "security", "ui_a11y", "quality", "websec", "ops", "ai"}
@@ -239,6 +240,52 @@ def resolve_source_artifact(dashboard_path: Path, artifact: str) -> Path | None:
         if candidate.exists():
             return candidate
     return None
+
+
+def dashboard_project_root(dashboard_path: Path) -> Path:
+    if dashboard_path.parent.name == ".chatgpt":
+        return dashboard_path.parent.parent
+    return dashboard_path.parent
+
+
+def validate_generated_project_state_alignment(
+    data: dict[str, Any], dashboard_path: Path | None, errors: list[str]
+) -> None:
+    if dashboard_path is None:
+        return
+    project = data.get("project", {}) if isinstance(data.get("project"), dict) else {}
+    project_slug = str(project.get("slug") or "")
+    if "{{" in project_slug or "}}" in project_slug:
+        return
+    root = dashboard_project_root(dashboard_path)
+    chat_dir = root / ".chatgpt"
+
+    active_change = data.get("active_change", {}) if isinstance(data.get("active_change"), dict) else {}
+    active_id = str(active_change.get("id") or "")
+    chat_match = CHAT_ID_IN_TEXT_RE.search(active_id)
+    if chat_match:
+        index_path = chat_dir / "chat-handoff-index.yaml"
+        if index_path.exists():
+            index = load_yaml(index_path)
+            known_ids = {
+                str(item.get("chat_id") or "")
+                for item in index.get("items", [])
+                if isinstance(item, dict)
+            }
+            if chat_match.group(1) not in known_ids:
+                errors.append(
+                    "generated dashboard active_change ссылается на ChatGPT handoff id, "
+                    "которого нет в .chatgpt/chat-handoff-index.yaml"
+                )
+
+    stage_path = chat_dir / "stage-state.yaml"
+    task_state_path = chat_dir / "task-state.yaml"
+    if stage_path.exists() and task_state_path.exists():
+        stage = load_yaml(stage_path)
+        task_state = load_yaml(task_state_path)
+        gates = stage.get("gates", {}) if isinstance(stage.get("gates"), dict) else {}
+        if gates.get("done_complete") is True and str(task_state.get("current_state") or "") == "intake":
+            errors.append("stage-state done_complete=true несовместим с task-state current_state=intake")
 
 
 def registry_standard_ids(data: dict[str, Any], dashboard_path: Path | None) -> set[str]:
@@ -775,6 +822,7 @@ def validate_dashboard(data: dict[str, Any], dashboard_path: Path | None = None)
             errors.append(f"project.{field} обязателен")
     if str(project.get("owner_boundary") or "") not in PROJECT_OWNER_BOUNDARIES:
         errors.append("project.owner_boundary имеет неизвестное значение")
+    validate_generated_project_state_alignment(data, dashboard_path, errors)
 
     lifecycle = as_mapping(data, "lifecycle_phase", errors)
     current_phase = str(lifecycle.get("current") or "")
