@@ -1,6 +1,6 @@
 schema: codex-work-index/v1
 project_code: FT
-next_codex_work_number: 25
+next_codex_work_number: 26
 id_policy:
   canonical_format: <PROJECT_CODE>-CX-<NNNN> <task-slug>
   independent_from_chat_handoff_index: true
@@ -601,3 +601,25 @@ items:
   - bash scripts/verify-all.sh quick in downstream rehearsal repo
   - python3 scripts/check-dod.py . in downstream rehearsal repo
   next_action: No further internal action; route check is confirmed and schema-valid.
+- codex_work_id: FT-CX-0025
+  work_number: 25
+  work_title: FT-CX-0025 rehearsal-project-ui-completion-confirmation
+  task_slug: rehearsal-project-ui-completion-confirmation
+  kind: self_handoff
+  state: verified
+  created_utc: '2026-05-07T08:35:01Z'
+  updated_utc: '2026-05-07T08:35:11Z'
+  source_type: direct-task
+  handoff_group: rehearsal-project-ui-completion-confirmation
+  handoff_revision: 1
+  handoff_register_item_id: ''
+  status_chain:
+  - codex_self_handoff
+  - codex_accepted
+  - codex_completed
+  evidence:
+  - Allocated during direct-task bootstrap before first substantive response.
+  - User confirmed ChatGPT Project "Beginner First Rehearsal E" was created, repo-first
+    instruction saved, and verification request sent.
+  - Factory repo and downstream rehearsal repo were clean before recording this receipt.
+  next_action: No further action; external ChatGPT Project setup is complete.
