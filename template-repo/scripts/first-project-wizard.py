@@ -11,7 +11,7 @@ from pathlib import Path
 
 import yaml
 
-from project_naming import project_slug_from_name, validate_project_slug
+from project_naming import project_code_from_slug, project_slug_from_name, validate_project_code, validate_project_slug
 
 
 @dataclass(frozen=True)
@@ -148,6 +148,26 @@ def _ask_slug(prompt: str, default: str | None = None, allow_reserved: bool = Fa
             default = None
 
 
+def _resolve_project_code(project_slug: str, explicit: str | None = None) -> str:
+    if explicit:
+        code = explicit.strip().upper()
+    else:
+        default = project_code_from_slug(project_slug)
+        if sys.stdin.isatty():
+            code = _ask_text(
+                "PROJECT_CODE проекта (для CH/CX/TASK id, выбирается один раз)",
+                default=default,
+                pattern=r"[A-Z][A-Z0-9]{1,11}",
+                help_text="Например: MP, CRM2 или NGIS. FT зарезервирован за factory-template.",
+            ).upper()
+        else:
+            code = default
+    errors = validate_project_code(code)
+    if errors:
+        raise SystemExit("PROJECT_CODE не подходит:\n- " + "\n- ".join(errors))
+    return code
+
+
 def _ask_yes_no(prompt: str, default_yes: bool = True) -> bool:
     suffix = "[Y/n]" if default_yes else "[y/N]"
     default_value = "y" if default_yes else "n"
@@ -187,6 +207,7 @@ def _resolve_selection(asset_key: str, goal_key: str) -> str:
 def _render_plan(
     project_name: str,
     project_slug: str,
+    project_code: str,
     preset_name: str,
     preset: dict,
     asset: Option,
@@ -202,6 +223,7 @@ def _render_plan(
     print("-" * 72)
     print(f"Проект: {project_name}")
     print(f"Slug: {project_slug}")
+    print(f"PROJECT_CODE: {project_code}")
     print(f"Что у вас сейчас: {asset.title}")
     print(f"Что вы запускаете: {goal.title}")
     print(f"Рекомендованный маршрут: {preset_name}")
@@ -216,10 +238,11 @@ def _render_plan(
     print("\nЧто система сделает дальше")
     print("1. Создаст папку проекта и скопирует туда рабочий шаблон.")
     print("2. Подставит безопасные стартовые настройки под выбранный маршрут.")
-    print("3. Включит сценарный контур и .chatgpt-артефакты для первого цикла.")
-    print("4. Подготовит project-knowledge: папку для устойчивых знаний о проекте.")
+    print("3. Сгенерирует repo-local ChatGPT/Codex индексы с выбранным PROJECT_CODE.")
+    print("4. Включит сценарный контур и .chatgpt-артефакты для первого цикла.")
+    print("5. Подготовит project-knowledge: папку для устойчивых знаний о проекте.")
     if preset.get("conversion_required"):
-        print("5. Зафиксирует, что brownfield является transition и должен завершиться greenfield-product.")
+        print("6. Зафиксирует, что brownfield является transition и должен завершиться greenfield-product.")
 
 
 def _run_preflight(preflight_file: Path, project_slug: str, launch_cwd: Path) -> int:
@@ -248,6 +271,7 @@ def _run_launcher(
     launch_cwd: Path,
     project_name: str,
     project_slug: str,
+    project_code: str,
     reserved_slug_override: bool,
     preset_name: str,
     preset: dict,
@@ -277,6 +301,7 @@ def _run_launcher(
     env = {
         **dict(os.environ),
         "FACTORY_RESERVED_SLUG_OVERRIDE": "true" if reserved_slug_override else "false",
+        "FACTORY_PROJECT_CODE": project_code,
         "FACTORY_ALLOW_RESERVED_SLUG": "true" if args.allow_reserved_slug or reserved_slug_override else "false",
         "FACTORY_CREATE_GITHUB_REPO": "true" if args.create_github_repo else "false",
         "FACTORY_GITHUB_OWNER": args.github_owner or "",
@@ -324,6 +349,10 @@ def main() -> int:
         help="Разрешить reserved/generic slug после явного подтверждения маршрута.",
     )
     parser.add_argument(
+        "--project-code",
+        help="PROJECT_CODE для repo-local CH/CX/TASK id. По умолчанию генерируется из project_slug.",
+    )
+    parser.add_argument(
         "--create-github-repo",
         action="store_true",
         help="После локального создания проекта создать/подключить GitHub repo <owner>/<project_slug> и push.",
@@ -358,6 +387,7 @@ def main() -> int:
         default=default_slug or None,
         allow_reserved=args.allow_reserved_slug,
     )
+    project_code = _resolve_project_code(project_slug, args.project_code)
 
     asset = _ask_option("1) Что у вас уже есть?", ASSET_OPTIONS)
     goal = _ask_option("2) Что вы хотите запустить сейчас?", GOAL_OPTIONS_BY_ASSET[asset.key])
@@ -370,7 +400,7 @@ def main() -> int:
     destination = launch_cwd / project_slug
 
     print("\n3) Что система сделает для вас дальше?")
-    _render_plan(project_name, project_slug, preset_name, preset, asset, goal, destination)
+    _render_plan(project_name, project_slug, project_code, preset_name, preset, asset, goal, destination)
 
     if args.route_only:
         print("\nRoute-only режим: проект не создавался.")
@@ -404,6 +434,7 @@ def main() -> int:
         launch_cwd,
         project_name,
         project_slug,
+        project_code,
         reserved_slug_override,
         preset_name,
         preset,

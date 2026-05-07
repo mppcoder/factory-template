@@ -20,15 +20,18 @@ python3 template-repo/scripts/factory-launcher.py --guided
 python3 template-repo/scripts/first-project-wizard.py
 ```
 
-Wizard задаст 3 понятных вопроса:
+Wizard задаст понятные вопросы:
 1. Что у вас уже есть.
 2. Что вы хотите запустить.
 3. Что система сделает дальше.
+
+В интерактивном запуске wizard также покажет `PROJECT_CODE` с безопасным default; в scripted запуске default берется из `project_slug`.
 
 После ответов wizard:
 - сам подбирает правильный режим (`greenfield` или `brownfield`) и нужный preset;
 - считает введенное название только human-readable `project_name`;
 - генерирует отдельный canonical `project_slug` для папки, GitHub repo, registry и `project-origin`;
+- выделяет один `PROJECT_CODE` для проекта и материализует repo-local ChatGPT/Codex индексы;
 - показывает короткое объяснение выбора;
 - запускает VPS preflight в человекочитаемом виде;
 - создает проект через существующий launcher без ломки текущей архитектуры.
@@ -40,6 +43,8 @@ Wizard задаст 3 понятных вопроса:
 - `Мой первый проект!!!` -> `moy-pervyy-proekt`.
 
 Если из имени невозможно получить slug, wizard остановится и попросит ввести его вручную. Silent fallback в `new-project` запрещен. Reserved/generic slugs вроде `new-project`, `project`, `test`, `demo`, `example`, `factory-template`, `template-repo` требуют явного подтверждения и marker в `project-origin`.
+
+`PROJECT_CODE` выбирается один раз при создании проекта. Он задает независимые локальные пространства `<PROJECT_CODE>-CH-<NNNN>` для ChatGPT handoff и `<PROJECT_CODE>-CX-<NNNN>` для Codex work. Оба счетчика стартуют с `1`, `items: []` остается пустым, а `FT` из factory-template не переносится в downstream-проект.
 
 Полный путь новичка лучше запускать через:
 

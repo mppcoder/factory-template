@@ -435,6 +435,7 @@ run_project_lifecycle_dashboard_smoke() {
     "$ROOT/.chatgpt/chat-handoff-index.yaml"
   python3 "$ROOT/template-repo/scripts/validate-codex-work-index.py" \
     "$ROOT/.chatgpt/codex-work-index.yaml"
+  python3 "$ROOT/template-repo/scripts/validate-project-index-identity.py" "$ROOT" --allow-ft
   cp "$ROOT/template-repo/template/.chatgpt/chat-handoff-index.yaml" "$tmp_dir/chat-handoff-index-allocation.yaml"
   cp "$ROOT/template-repo/template/.chatgpt/codex-work-index.yaml" "$tmp_dir/codex-work-index-allocation.yaml"
   python3 "$ROOT/template-repo/scripts/allocate-chat-handoff-id.py" \
@@ -865,8 +866,11 @@ run_downstream_task_control_materialization_smoke() {
     test -d "reports/release"
 
     python3 scripts/validate-task-registry.py
+    python3 scripts/validate-chat-handoff-index.py .chatgpt/chat-handoff-index.yaml
+    python3 scripts/validate-codex-work-index.py .chatgpt/codex-work-index.yaml
+    python3 scripts/validate-project-index-identity.py .
     python3 scripts/allocate-task-id.py > "$tmp_dir/allocate-dry-run.txt"
-    grep -q "next_task_id=FT-TASK-0002" "$tmp_dir/allocate-dry-run.txt"
+    grep -q "next_task_id=UVS-TASK-0002" "$tmp_dir/allocate-dry-run.txt"
     grep -q "dry_run=true" "$tmp_dir/allocate-dry-run.txt"
 
     python3 scripts/allocate-task-id.py \
@@ -878,20 +882,20 @@ run_downstream_task_control_materialization_smoke() {
       --source-ref verify-all
     python3 scripts/validate-task-registry.py
     python3 scripts/update-task-status.py \
-      --task-id FT-TASK-0002 \
+      --task-id UVS-TASK-0002 \
       --status ready_for_handoff \
       --reason "Task route is clear for downstream quick smoke." \
       --sync-dashboard \
       --write
     python3 scripts/preview-task-handoff.py \
-      --task-id FT-TASK-0002 \
-      --output reports/handoffs/FT-TASK-0002-preview.md
+      --task-id UVS-TASK-0002 \
+      --output reports/handoffs/UVS-TASK-0002-preview.md
     python3 scripts/prepare-task-pack.py \
-      --task-id FT-TASK-0002 \
+      --task-id UVS-TASK-0002 \
       --mark-ready-for-codex \
       --sync-dashboard \
       --write
-    python3 scripts/validate-codex-task-handoff.py reports/handoffs/FT-TASK-0002-codex-handoff.md
+    python3 scripts/validate-codex-task-handoff.py reports/handoffs/UVS-TASK-0002-codex-handoff.md
     python3 scripts/validate-task-registry.py
     python3 scripts/render-task-queue.py --output reports/task-queue.md
     python3 scripts/validate-project-lifecycle-dashboard.py .chatgpt/project-lifecycle-dashboard.yaml
@@ -1043,6 +1047,12 @@ run_generated_project_quick() {
   fi
   if [[ -f "$ROOT/.chatgpt/chat-handoff-index.yaml" ]]; then
     run_step "validate-chat-handoff-index" python3 "$ROOT/scripts/validate-chat-handoff-index.py" "$ROOT/.chatgpt/chat-handoff-index.yaml"
+  fi
+  if [[ -f "$ROOT/.chatgpt/codex-work-index.yaml" ]]; then
+    run_step "validate-codex-work-index" python3 "$ROOT/scripts/validate-codex-work-index.py" "$ROOT/.chatgpt/codex-work-index.yaml"
+  fi
+  if [[ -f "$ROOT/.chatgpt/chat-handoff-index.yaml" && -f "$ROOT/.chatgpt/codex-work-index.yaml" ]]; then
+    run_step "validate-project-index-identity" python3 "$ROOT/scripts/validate-project-index-identity.py" "$ROOT"
   fi
   run_step "validate-standards-gates" python3 "$ROOT/scripts/validate-standards-gates.py" "$ROOT"
   run_step "validate-software-update-governance" python3 "$ROOT/scripts/validate-software-update-governance.py" "$ROOT"

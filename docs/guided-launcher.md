@@ -34,6 +34,7 @@ python3 template-repo/scripts/factory-launcher.py \
 Что происходит:
 - launcher выбирает `greenfield-product`;
 - генерирует `project_slug` `moy-pervyy-proekt` из human-readable `project_name`;
+- выделяет один `PROJECT_CODE` для проекта и записывает его в repo-local identity;
 - показывает рекомендацию следующего шага;
 - вызывает существующий `first-project-wizard.py`;
 - wizard запускает `preflight-vps-check.py`;
@@ -52,7 +53,20 @@ Naming examples:
 - `AI Factory` -> `ai-factory`;
 - `Мой первый проект!!!` -> `moy-pervyy-proekt`.
 
-`project_name` остается свободным human-readable названием. `project_slug` используется для local repo path, GitHub repo name, registry, `project-origin` и технических идентификаторов. Empty slug и reserved/generic slugs блокируются без явного override.
+`project_name` остается свободным human-readable названием. `project_slug` используется для local repo path, GitHub repo name, registry и `project-origin`. Empty slug и reserved/generic slugs блокируются без явного override.
+
+`PROJECT_CODE` выбирается один раз при создании проекта. По умолчанию launcher генерирует uppercase code из `project_slug`, например `moy-pervyy-proekt` -> `MPP`; его можно явно передать через `--project-code`. Этот code становится префиксом repo-local пространств:
+- ChatGPT handoff ids: `<PROJECT_CODE>-CH-<NNNN>`;
+- Codex work ids: `<PROJECT_CODE>-CX-<NNNN>`;
+- universal task ids: `<PROJECT_CODE>-TASK-<NNNN>`.
+
+При создании проекта `.chatgpt/chat-handoff-index.yaml` и `.chatgpt/codex-work-index.yaml` генерируются локально: `project_code` заменяется на выбранный `PROJECT_CODE`, counters CH и CX независимо сбрасываются на `1`, `items: []` остается пустым. Factory-template `FT`-нумерация не переносится в downstream-проекты.
+
+Проверка identity:
+
+```bash
+python3 scripts/validate-project-index-identity.py .
+```
 
 ## Brownfield start / старт brownfield
 

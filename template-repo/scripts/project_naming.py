@@ -16,6 +16,7 @@ except Exception:  # pragma: no cover - validators handle the missing dependency
 
 
 SLUG_RE = re.compile(r"^[a-z0-9][a-z0-9-]{1,62}$")
+PROJECT_CODE_RE = re.compile(r"^[A-Z][A-Z0-9]{1,11}$")
 RESERVED_SLUGS = {
     "new-project",
     "project",
@@ -93,6 +94,26 @@ def project_slug_from_name(project_name: str) -> str:
     if len(slug) > 63:
         slug = slug[:63].strip("-")
     return slug
+
+
+def project_code_from_slug(slug: str) -> str:
+    parts = [part for part in re.split(r"[^a-z0-9]+", slug.lower()) if part]
+    if not parts:
+        return "PRJ"
+    code = "".join(part[0] for part in parts if part and part[0].isalnum()).upper()
+    if not code or not code[0].isalpha():
+        code = f"P{code}"
+    return code[:12]
+
+
+def validate_project_code(project_code: str, *, allow_ft: bool = False) -> tuple[str, ...]:
+    if not project_code:
+        return ("PROJECT_CODE is empty",)
+    if not PROJECT_CODE_RE.fullmatch(project_code):
+        return ("PROJECT_CODE must match ^[A-Z][A-Z0-9]{1,11}$",)
+    if project_code == "FT" and not allow_ft:
+        return ("PROJECT_CODE `FT` is reserved for factory-template; use it only for factory-template itself",)
+    return ()
 
 
 def is_reserved_slug(slug: str) -> bool:
@@ -274,6 +295,10 @@ def run_self_test() -> None:
         raise AssertionError("reserved slug must be blocked without override")
     if not validate_project_slug("new-project", allow_reserved=True).ok:
         raise AssertionError("reserved slug must be allowed with explicit override")
+    if project_code_from_slug("novice-git-identity-smoke") != "NGIS":
+        raise AssertionError("project code generation changed unexpectedly")
+    if not validate_project_code("ft"):
+        raise AssertionError("lowercase project code must fail")
 
 
 def main() -> int:
@@ -281,6 +306,11 @@ def main() -> int:
     sub = parser.add_subparsers(dest="command", required=True)
     slug_parser = sub.add_parser("slug", help="Generate project_slug from human project_name.")
     slug_parser.add_argument("project_name")
+    code_parser = sub.add_parser("code-from-slug", help="Generate default PROJECT_CODE from project_slug.")
+    code_parser.add_argument("project_slug")
+    validate_code_parser = sub.add_parser("validate-code", help="Validate PROJECT_CODE.")
+    validate_code_parser.add_argument("project_code")
+    validate_code_parser.add_argument("--allow-ft", action="store_true", help="Allow reserved FT for factory-template.")
     validate_parser = sub.add_parser("validate", help="Validate a project_slug.")
     validate_parser.add_argument("project_slug")
     validate_parser.add_argument("--allow-reserved", action="store_true")
@@ -293,6 +323,16 @@ def main() -> int:
 
     if args.command == "slug":
         print(project_slug_from_name(args.project_name))
+        return 0
+    if args.command == "code-from-slug":
+        print(project_code_from_slug(args.project_slug))
+        return 0
+    if args.command == "validate-code":
+        errors = validate_project_code(args.project_code, allow_ft=args.allow_ft)
+        if errors:
+            for error in errors:
+                print(f"ERROR: {error}", file=sys.stderr)
+            return 1
         return 0
     if args.command == "validate":
         result = validate_project_slug(args.project_slug, allow_reserved=args.allow_reserved)

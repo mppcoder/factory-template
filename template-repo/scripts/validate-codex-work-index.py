@@ -32,7 +32,7 @@ def has_reason(item: dict[str, Any]) -> bool:
     return bool(str(item.get("accepted_reason") or item.get("replacement_reason") or item.get("closeout_reason") or "").strip())
 
 
-def validate_item(item: dict[str, Any], index: int, errors: list[str]) -> None:
+def validate_item(item: dict[str, Any], index: int, project_code: str, errors: list[str]) -> None:
     path = f"items[{index}]"
     required = [
         "codex_work_id",
@@ -58,6 +58,10 @@ def validate_item(item: dict[str, Any], index: int, errors: list[str]) -> None:
     work_id = str(item.get("codex_work_id") or "")
     if not WORK_ID_RE.match(work_id):
         errors.append(f"{path}.codex_work_id должен соответствовать PROJECT-CX-0001")
+    elif project_code and not work_id.startswith(f"{project_code}-CX-"):
+        errors.append(f"{path}.codex_work_id должен начинаться с `{project_code}-CX-`")
+    if "-CH-" in work_id or "chat_id" in item:
+        errors.append(f"{path} не должен смешивать Codex CX и ChatGPT CH поля")
 
     work_number = item.get("work_number")
     if not isinstance(work_number, int) or work_number < 1:
@@ -100,7 +104,8 @@ def validate_index(data: dict[str, Any]) -> list[str]:
     dumped = yaml.safe_dump(data, allow_unicode=True, sort_keys=False)
     if SECRET_RE.search(dumped) or "-----BEGIN" in dumped:
         errors.append("codex work index содержит secret-like content")
-    if not re.match(r"^[A-Z][A-Z0-9]*$", str(data.get("project_code") or "")):
+    project_code = str(data.get("project_code") or "")
+    if not re.match(r"^[A-Z][A-Z0-9]*$", project_code):
         errors.append("project_code должен быть uppercase code")
     next_number = data.get("next_codex_work_number")
     if not isinstance(next_number, int) or next_number < 1:
@@ -130,7 +135,7 @@ def validate_index(data: dict[str, Any]) -> list[str]:
         if not isinstance(item, dict):
             errors.append(f"items[{index}] должен быть mapping")
             continue
-        validate_item(item, index, errors)
+        validate_item(item, index, project_code, errors)
         work_id = str(item.get("codex_work_id") or "")
         if work_id in seen_ids:
             errors.append(f"items[{index}].codex_work_id повторяется: `{work_id}`")

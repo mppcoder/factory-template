@@ -68,6 +68,12 @@ python3 scripts/check-codex-model-catalog.py . --write-proposal
 - ручные правки в downstream clone запрещены и будут перезаписаны штатным sync/update flow;
 - если repo-local путь к scenario-pack отличается, в downstream clone разрешено менять только `SCENARIO_PACK_PATH`.
 
+## Project Identity При Создании
+
+При создании downstream-проекта launcher один раз выбирает `PROJECT_CODE`: интерактивно через prompt или автоматически из `project_slug`, если запуск non-interactive. Этот code записывается в `.chatgpt/stage-state.yaml`, `.chatgpt/project-origin.md`, `.chatgpt/task-registry.yaml`, `.chatgpt/chat-handoff-index.yaml` и `.chatgpt/codex-work-index.yaml`.
+
+ChatGPT и Codex индексы генерируются локально для нового проекта: `next_chat_number: 1`, `next_codex_work_number: 1`, `items: []`. `FT` остается только identity самого `factory-template`; downstream-проекты не должны наследовать `FT-CH` или `FT-CX` пространства из template seed.
+
 ## Правило фиксации дефектов
 Любой обнаруженный defect должен быть зафиксирован как bug report до исправления или одновременно с ним. Silent fixes запрещены.
 

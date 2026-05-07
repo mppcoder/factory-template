@@ -24,6 +24,23 @@ def default_index_path(root: Path) -> Path:
     return root / "template-repo" / "template" / ".chatgpt" / "codex-work-index.yaml"
 
 
+def project_code_from_root(root: Path) -> str:
+    for path in [
+        root / ".chatgpt" / "codex-work-index.yaml",
+        root / ".chatgpt" / "task-registry.yaml",
+        root / ".chatgpt" / "stage-state.yaml",
+    ]:
+        data = load_yaml(path)
+        if path.name == "stage-state.yaml":
+            project = data.get("project") if isinstance(data.get("project"), dict) else {}
+            configured = str(project.get("code") or "").strip() if isinstance(project, dict) else ""
+        else:
+            configured = str(data.get("project_code") or "").strip()
+        if configured:
+            return configured
+    return "FT" if root.name == "factory-template" else "PRJ"
+
+
 def load_yaml(path: Path) -> dict[str, Any]:
     if not path.exists():
         return {}
@@ -103,10 +120,10 @@ def main() -> int:
 
     root = Path(args.root).resolve()
     index_path = Path(args.index).resolve() if args.index else default_index_path(root)
-    data = ensure_index(load_yaml(index_path), args.project_code or "FT")
+    data = ensure_index(load_yaml(index_path), args.project_code or project_code_from_root(root))
     if args.project_code:
         data["project_code"] = args.project_code
-    project_code = str(data.get("project_code") or "FT")
+    project_code = str(data.get("project_code") or args.project_code or project_code_from_root(root))
     next_number = int(data.get("next_codex_work_number") or 1)
     task_slug = slugify(args.description)
     work_id = f"{project_code}-CX-{next_number:04d}"

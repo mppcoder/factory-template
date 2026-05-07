@@ -123,7 +123,7 @@ def default_task(args: argparse.Namespace, registry: dict[str, Any], new_task_id
 
 def main() -> int:
     parser = argparse.ArgumentParser(
-        description="Выделяет следующий FT-TASK id. Не использует и не меняет FT-CH/FT-CX counters."
+        description="Выделяет следующий PROJECT_CODE-TASK id. Не использует и не меняет CH/CX counters."
     )
     parser.add_argument("--registry", default=default_registry())
     parser.add_argument("--append-draft", action="store_true", help="Добавить draft task и увеличить next_task_number.")
@@ -164,7 +164,7 @@ def main() -> int:
     else:
         print(f"next_task_id={new_task_id}")
         print("dry_run=true")
-        print("Use --append-draft to reserve this FT-TASK id in the registry.")
+        print(f"Use --append-draft to reserve this {project_code}-TASK id in the registry.")
     return 0
 
 

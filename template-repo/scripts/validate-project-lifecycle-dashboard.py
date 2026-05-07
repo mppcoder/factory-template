@@ -121,6 +121,7 @@ CHANGE_CLASSES = {
     "refactor",
     "migration",
     "brownfield-audit",
+    "brownfield-stabilization",
     "deep",
     "quick",
     "build",

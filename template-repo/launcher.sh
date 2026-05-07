@@ -27,6 +27,16 @@ if [ "$ALLOW_RESERVED_SLUG" = "true" ] || [ "$RESERVED_SLUG_OVERRIDE" = "true" ]
   VALIDATE_SLUG_ARGS+=("--allow-reserved")
 fi
 python3 "${VALIDATE_SLUG_ARGS[@]}"
+DEFAULT_PROJECT_CODE="$(python3 "$SCRIPT_DIR/scripts/project_naming.py" code-from-slug "$PROJECT_SLUG")"
+if [ -n "${FACTORY_PROJECT_CODE:-}" ]; then
+  PROJECT_CODE="$FACTORY_PROJECT_CODE"
+elif [ -t 0 ]; then
+  read -rp "PROJECT_CODE проекта (uppercase, один раз при создании) [$DEFAULT_PROJECT_CODE]: " PROJECT_CODE
+  PROJECT_CODE="${PROJECT_CODE:-$DEFAULT_PROJECT_CODE}"
+else
+  PROJECT_CODE="$DEFAULT_PROJECT_CODE"
+fi
+python3 "$SCRIPT_DIR/scripts/project_naming.py" validate-code "$PROJECT_CODE"
 read -rp "Профиль проекта (greenfield-product/brownfield-with-repo-modernization/brownfield-with-repo-integration/brownfield-with-repo-audit/brownfield-without-repo) [greenfield-product]: " PROJECT_PRESET
 PROJECT_PRESET="${PROJECT_PRESET:-greenfield-product}"
 
@@ -75,12 +85,13 @@ EXEC_MODE="${EXEC_MODE:-$DEFAULT_EXEC}"
 
 DEST_DIR="./${PROJECT_SLUG}"
 cp -R "$TEMPLATE_DIR" "$DEST_DIR"
-PROJECT_NAME="$PROJECT_NAME" PROJECT_SLUG="$PROJECT_SLUG" PROJECT_MODE="$PROJECT_MODE" LIFECYCLE_STATE="$LIFECYCLE_STATE" TARGET_LIFECYCLE_STATE="$TARGET_LIFECYCLE_STATE" DEST_DIR="$DEST_DIR" python3 - <<'PY'
+PROJECT_NAME="$PROJECT_NAME" PROJECT_SLUG="$PROJECT_SLUG" PROJECT_CODE="$PROJECT_CODE" PROJECT_MODE="$PROJECT_MODE" LIFECYCLE_STATE="$LIFECYCLE_STATE" TARGET_LIFECYCLE_STATE="$TARGET_LIFECYCLE_STATE" DEST_DIR="$DEST_DIR" python3 - <<'PY'
 import os
 from pathlib import Path
 repl = {
     "{{PROJECT_NAME}}": os.environ['PROJECT_NAME'],
     "{{PROJECT_SLUG}}": os.environ['PROJECT_SLUG'],
+    "{{PROJECT_CODE}}": os.environ.get('PROJECT_CODE', ''),
     "{{PROJECT_MODE}}": os.environ['PROJECT_MODE'],
     "{{LIFECYCLE_STATE}}": os.environ['LIFECYCLE_STATE'],
     "{{TARGET_LIFECYCLE_STATE}}": os.environ['TARGET_LIFECYCLE_STATE'],
@@ -435,6 +446,10 @@ current_state_md = '''# Текущее функциональное состоя
 (root / 'CURRENT_FUNCTIONAL_STATE.md').write_text(current_state_md, encoding='utf-8')
 PY
 
+python3 "$DEST_DIR/scripts/materialize-project-indexes.py" \
+  --root "$DEST_DIR" \
+  --project-code "$PROJECT_CODE"
+
 python3 "$DEST_DIR/scripts/render-project-lifecycle-dashboard.py" \
   --input "$DEST_DIR/.chatgpt/project-lifecycle-dashboard.yaml" \
   --format markdown-full \
@@ -581,6 +596,7 @@ fi
 echo
 echo "Проект создан: $DEST_DIR"
 echo "Change ID: $CHANGE_ID"
+echo "PROJECT_CODE: $PROJECT_CODE"
 echo "Профиль проекта: $PROJECT_PRESET"
 echo "Дальше:"
 echo "1. Создайте ChatGPT Project"

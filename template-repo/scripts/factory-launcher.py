@@ -10,7 +10,7 @@ from pathlib import Path
 
 import yaml
 
-from project_naming import project_slug_from_name, validate_project_slug
+from project_naming import project_code_from_slug, project_slug_from_name, validate_project_code, validate_project_slug
 
 
 @dataclass(frozen=True)
@@ -237,6 +237,14 @@ def _print_plan(plan: RoutePlan, presets: dict) -> None:
         print(f"- {command}")
 
 
+def _resolve_project_code(project_slug: str, explicit: str | None = None) -> str:
+    code = (explicit or project_code_from_slug(project_slug)).strip().upper()
+    errors = validate_project_code(code)
+    if errors:
+        raise SystemExit("PROJECT_CODE не подходит:\n- " + "\n- ".join(errors))
+    return code
+
+
 def _wizard_answers(project_name: str, project_slug: str, asset_choice: str, goal_choice: str, yes: bool) -> str:
     tail = ["y", "y"] if yes else []
     return "\n".join([project_name, project_slug, asset_choice, goal_choice, *tail]) + "\n"
@@ -282,8 +290,10 @@ def _run_project_route(
                 allow_reserved=args.allow_reserved_slug,
             )
     presets = _load_presets(template_root)
+    project_code = _resolve_project_code(project_slug, args.project_code)
     plan = _project_plan(template_root, route, preset, project_slug)
     _print_plan(plan, presets)
+    print(f"PROJECT_CODE: {project_code}")
 
     if args.route_only:
         print("\nRoute-only режим: ничего не создавалось.")
@@ -294,6 +304,7 @@ def _run_project_route(
         raise SystemExit(f"Не найден fallback wizard: {wizard}")
 
     command = [sys.executable, str(wizard), "--template-repo-root", str(template_root)]
+    command.extend(["--project-code", project_code])
     if args.skip_preflight:
         command.append("--skip-preflight")
     if args.allow_reserved_slug or reserved_slug_override:
@@ -409,6 +420,7 @@ def main() -> int:
     )
     parser.add_argument("--project-name", help="Название проекта для greenfield/brownfield route.")
     parser.add_argument("--project-slug", help="Slug проекта для greenfield/brownfield route.")
+    parser.add_argument("--project-code", help="PROJECT_CODE для repo-local CH/CX/TASK id.")
     parser.add_argument(
         "--allow-reserved-slug",
         action="store_true",

@@ -291,6 +291,15 @@ def ensure_codex_work_index(data: dict[str, Any], project_code: str) -> dict[str
 
 
 def project_code_from_root(root: Path) -> str:
+    registry = read_yaml(root / ".chatgpt" / "task-registry.yaml")
+    configured = str(registry.get("project_code") or "").strip()
+    if configured:
+        return configured
+    stage = read_yaml(root / ".chatgpt" / "stage-state.yaml")
+    project = stage.get("project") if isinstance(stage.get("project"), dict) else {}
+    configured = str(project.get("code") or "").strip() if isinstance(project, dict) else ""
+    if configured:
+        return configured
     index = read_yaml(default_chat_index_path(root))
     configured = str(index.get("project_code") or "").strip()
     if configured:

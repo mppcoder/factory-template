@@ -90,7 +90,14 @@ def title_has_forbidden_token(title: str, tokens: set[str]) -> str:
     return ""
 
 
-def validate_item(item: dict[str, Any], index: int, allowed_kinds: set[str], allowed_states: set[str], errors: list[str]) -> None:
+def validate_item(
+    item: dict[str, Any],
+    index: int,
+    allowed_kinds: set[str],
+    allowed_states: set[str],
+    project_code: str,
+    errors: list[str],
+) -> None:
     item_path = f"items[{index}]"
     required = [
         "chat_id",
@@ -116,6 +123,10 @@ def validate_item(item: dict[str, Any], index: int, allowed_kinds: set[str], all
     chat_id = str(item.get("chat_id") or "")
     if not CHAT_ID_RE.match(chat_id):
         errors.append(f"{item_path}.chat_id должен соответствовать ^[A-Z][A-Z0-9]*-CH-[0-9]{{4}}$")
+    elif project_code and not chat_id.startswith(f"{project_code}-CH-"):
+        errors.append(f"{item_path}.chat_id должен начинаться с `{project_code}-CH-`")
+    if "-CX-" in chat_id or "codex_work_id" in item:
+        errors.append(f"{item_path} не должен смешивать ChatGPT CH и Codex CX поля")
 
     chat_number = item.get("chat_number")
     if not isinstance(chat_number, int) or chat_number < 1:
@@ -211,7 +222,7 @@ def validate_index(data: dict[str, Any]) -> list[str]:
         if not isinstance(item, dict):
             errors.append(f"items[{index}] должен быть mapping")
             continue
-        validate_item(item, index, allowed_kinds, allowed_states, errors)
+        validate_item(item, index, allowed_kinds, allowed_states, project_code, errors)
         chat_id = str(item.get("chat_id") or "")
         if chat_id in seen_ids:
             errors.append(f"items[{index}].chat_id повторяется: `{chat_id}`")

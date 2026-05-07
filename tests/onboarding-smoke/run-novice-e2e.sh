@@ -48,6 +48,13 @@ PYCODE
   python3 "$ROOT/template-repo/scripts/create-codex-task-pack.py" "$project_root" >>"$log_file" 2>&1
   python3 "$ROOT/template-repo/scripts/validate-codex-task-pack.py" "$project_root" >>"$log_file" 2>&1
   python3 "$ROOT/template-repo/scripts/validate-codex-routing.py" "$project_root" >>"$log_file" 2>&1
+  python3 "$ROOT/template-repo/scripts/validate-chat-handoff-index.py" "$project_root/.chatgpt/chat-handoff-index.yaml" >>"$log_file" 2>&1
+  python3 "$ROOT/template-repo/scripts/validate-codex-work-index.py" "$project_root/.chatgpt/codex-work-index.yaml" >>"$log_file" 2>&1
+  python3 "$ROOT/template-repo/scripts/validate-project-index-identity.py" "$project_root" >>"$log_file" 2>&1
+  if grep -q "project_code: FT" "$project_root/.chatgpt/chat-handoff-index.yaml" "$project_root/.chatgpt/codex-work-index.yaml"; then
+    echo "ОШИБКА: generated project inherited FT chat/codex project_code" >&2
+    return 1
+  fi
   python3 "$ROOT/tools/fill_smoke_artifacts.py" "$project_root" >>"$log_file" 2>&1
   for validator in \
     validate-stage.py \
