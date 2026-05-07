@@ -121,6 +121,13 @@ BEGINNER_STEP_FIELDS = [
     "- Evidence:",
     "- Следующий шаг:",
 ]
+EXTERNAL_DIALOG_CONTRACT_TOKENS = [
+    "диалоговый сценарий",
+    "рекомендованным вариантом",
+    "fallback",
+    "fenced code block",
+    "ссылку на файл можно использовать только как evidence",
+]
 FACTORY_REQUIRED_STEPS = [
     "FT-000",
     "FT-010",
@@ -428,6 +435,9 @@ def validate_package_files(root: Path, errors: list[str]) -> None:
     for token in DEFAULT_DECISION_STATE_TOKENS:
         if token not in contract:
             errors.append(f"package contract не содержит default-decision state marker `{token}`")
+    for token in EXTERNAL_DIALOG_CONTRACT_TOKENS:
+        if token not in contract:
+            errors.append(f"package contract не содержит external-action dialog marker `{token}`")
 
     for package, spec in PACKAGES.items():
         package_dir = base / package

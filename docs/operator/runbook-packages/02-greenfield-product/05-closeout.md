@@ -9,6 +9,8 @@
 - Codex создал и synced боевой repo или documented blocker.
 - Codex подготовил готовую repo-first instruction для ChatGPT Project боевого проекта.
 - Codex подготовил пошаговую инструкцию пользователю, куда вставить этот текст.
+- Если пользователь должен копировать generated repo-first instruction, Codex выдал готовый fenced code block в финальном ответе; ссылка на файл не заменяет copy block.
+- Внешние UI-шаги оформлены как диалоговый сценарий: цель, окно, подробные шаги, варианты с рекомендацией, ожидаемый результат и что прислать обратно.
 - Пользователь создал ChatGPT Project боевого проекта в UI.
 - Пользователь открыл Project settings/instructions.
 - Пользователь вставил готовую repo-first instruction.
@@ -29,3 +31,4 @@
 - внешних approvals, secrets, GitHub UI blockers или real deploy/release decisions.
 
 Если таких действий нет, closeout пишет: `Внешних действий не требуется.`
+Если такие действия есть, closeout завершает ответ разделом `## Инструкция пользователю` и выдает весь текст для копирования прямо в fenced code blocks.

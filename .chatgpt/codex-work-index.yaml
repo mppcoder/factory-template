@@ -1,6 +1,6 @@
 schema: codex-work-index/v1
 project_code: FT
-next_codex_work_number: 21
+next_codex_work_number: 22
 id_policy:
   canonical_format: <PROJECT_CODE>-CX-<NNNN> <task-slug>
   independent_from_chat_handoff_index: true
@@ -494,3 +494,30 @@ items:
   next_action: No further internal action for beginner-first hardening rehearsal;
     only external battle ChatGPT Project UI paste remains optional for the rehearsal
     repo.
+- codex_work_id: FT-CX-0021
+  work_number: 21
+  work_title: FT-CX-0021 external-user-actions-dialog-rule
+  task_slug: external-user-actions-dialog-rule
+  kind: self_handoff
+  state: verified
+  created_utc: '2026-05-07T05:39:11Z'
+  updated_utc: '2026-05-07T05:42:45Z'
+  source_type: direct-task
+  handoff_group: external-user-actions-dialog-rule
+  handoff_revision: 1
+  handoff_register_item_id: ''
+  status_chain:
+  - codex_self_handoff
+  - codex_accepted
+  - codex_completed
+  evidence:
+  - Allocated during direct-task bootstrap before first substantive response.
+  - Added external-user-action dialog scenario and inline copy-block rule to router,
+    task-pack guidance, runbook packages and validators.
+  - Created defect report reports/bugs/2026-05-07-external-user-actions-dialog-rule-gap.md.
+  - python3 template-repo/scripts/validate-codex-task-pack.py template-repo/template
+  - python3 template-repo/scripts/validate-codex-task-pack.py .
+  - python3 template-repo/scripts/validate-runbook-packages.py .
+  - bash template-repo/scripts/verify-all.sh quick
+  next_action: No further internal action; external user actions now require dialog-style
+    steps and inline copy blocks.
