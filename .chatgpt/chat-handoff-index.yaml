@@ -1,6 +1,6 @@
 schema: chat-handoff-index/v1
 project_code: FT
-next_chat_number: 18
+next_chat_number: 19
 title_policy:
   canonical_format: <PROJECT_CODE>-CH-<NNNN> <task-slug>
   include_status_in_title: false
@@ -58,7 +58,8 @@ items:
   - Current dashboard/card work accepted by Codex; final done evidence pending.
   - bash template-repo/scripts/verify-all.sh quick
   - bash template-repo/scripts/verify-all.sh
-  next_action: No further implementation action; handoff implementation is verified in HIR-003.
+  next_action: No further implementation action; handoff implementation is verified
+    in HIR-003.
 - chat_id: FT-CH-0002
   chat_number: 2
   chat_title: FT-CH-0002 completion-report
@@ -77,8 +78,10 @@ items:
   - codex_completed
   evidence:
   - ChatGPT handoff captured; Codex acceptance pending.
-  - User report on 2026-04-29 confirmed no visible unfinished task exists for this chat title; no linked HIR/source task exists.
-  accepted_reason: Stale seed/index entry without a matching handoff implementation register item; not an active task.
+  - User report on 2026-04-29 confirmed no visible unfinished task exists for this
+    chat title; no linked HIR/source task exists.
+  accepted_reason: Stale seed/index entry without a matching handoff implementation
+    register item; not an active task.
   next_action: No active action; keep only as historical index record.
 - chat_id: FT-CH-0003
   chat_number: 3
@@ -119,8 +122,10 @@ items:
   - codex_completed
   evidence:
   - Blocked until executable routing/manual picker boundary is clarified.
-  - User report on 2026-04-29 confirmed no visible unfinished task exists for this chat title; no linked HIR/source task exists.
-  accepted_reason: Stale seed/index entry without a matching handoff implementation register item; not an active blocked task.
+  - User report on 2026-04-29 confirmed no visible unfinished task exists for this
+    chat title; no linked HIR/source task exists.
+  accepted_reason: Stale seed/index entry without a matching handoff implementation
+    register item; not an active blocked task.
   next_action: No active action; keep only as historical index record.
 - chat_id: FT-CH-0010
   chat_number: 10
@@ -139,14 +144,18 @@ items:
   - codex_accepted
   - codex_completed
   evidence:
-  - 'route receipt: launch_source=chatgpt-handoff, handoff_shape=codex-task-handoff, selected_profile=deep, selected_model=gpt-5.5, reasoning=high'
+  - 'route receipt: launch_source=chatgpt-handoff, handoff_shape=codex-task-handoff,
+    selected_profile=deep, selected_model=gpt-5.5, reasoning=high'
   - bash RELEASE_BUILD.sh
   - sha256sum -c /projects/factory-template/_incoming/factory-v2.5.1.zip.sha256
-  - python3 template-repo/scripts/validate-release-package.py /projects/factory-template/_incoming/factory-v2.5.1.zip --checksum /projects/factory-template/_incoming/factory-v2.5.1.zip.sha256 --manifest /projects/factory-template/_incoming/factory-v2.5.1.manifest.yaml
+  - python3 template-repo/scripts/validate-release-package.py /projects/factory-template/_incoming/factory-v2.5.1.zip
+    --checksum /projects/factory-template/_incoming/factory-v2.5.1.zip.sha256 --manifest
+    /projects/factory-template/_incoming/factory-v2.5.1.manifest.yaml
   - bash template-repo/scripts/verify-all.sh quick in unpacked /tmp root
   - bash template-repo/scripts/verify-all.sh quick in working repo
   - 'layout correction: release artifacts moved under /projects/factory-template/_incoming'
-  next_action: No further implementation action; release package is verified and sync gate remains.
+  next_action: No further implementation action; release package is verified and sync
+    gate remains.
 - chat_id: FT-CH-0011
   chat_number: 11
   chat_title: FT-CH-0011 single-vps-dev-runtime-host
@@ -165,11 +174,15 @@ items:
   - codex_completed
   evidence:
   - 'Retrofix: architecture task was launched before materialized ChatGPT title reservation'
-  - 'Original ChatGPT handoff: Single Big VPS Dev+Runtime Host / split runtime VPS topology standard'
+  - 'Original ChatGPT handoff: Single Big VPS Dev+Runtime Host / split runtime VPS
+    topology standard'
   - User confirmed on 2026-05-06 that FT-CH-0011 single-vps-dev-runtime-host is implemented.
-  - Scope continues with single big VPS architecture and downstream/battle project proof before beginner-first install hardening.
-  accepted_reason: Single big VPS architecture task is treated as implemented by explicit user decision; remaining work moves to proof/materialization roadmap.
-  next_action: No further numbering action for FT-CH-0011; continue with unified roadmap implementation.
+  - Scope continues with single big VPS architecture and downstream/battle project
+    proof before beginner-first install hardening.
+  accepted_reason: Single big VPS architecture task is treated as implemented by explicit
+    user decision; remaining work moves to proof/materialization roadmap.
+  next_action: No further numbering action for FT-CH-0011; continue with unified roadmap
+    implementation.
 - chat_id: FT-CH-0012
   chat_number: 12
   chat_title: FT-CH-0012 chatgpt-first-answer-allocation-not-attempted
@@ -187,16 +200,19 @@ items:
   - codex_accepted
   - codex_completed
   evidence:
-  - 'User requested closure of chatgpt-first-answer-allocation-not-attempted at router/validator/runbook level.'
-  - 'First-answer title reservation was materialized before visible substantive answer.'
-  - 'route receipt: launch_source=chatgpt-handoff, handoff_shape=codex-task-handoff, selected_profile=build, selected_model=gpt-5.5, reasoning=medium'
+  - User requested closure of chatgpt-first-answer-allocation-not-attempted at router/validator/runbook
+    level.
+  - First-answer title reservation was materialized before visible substantive answer.
+  - 'route receipt: launch_source=chatgpt-handoff, handoff_shape=codex-task-handoff,
+    selected_profile=build, selected_model=gpt-5.5, reasoning=medium'
   - 'defect-capture: reports/bugs/2026-05-06-chatgpt-first-answer-allocation-not-attempted.md'
   - 'factory feedback: reports/factory-feedback/feedback-053-chatgpt-first-answer-allocation-not-attempted.md'
-  - 'python3 template-repo/scripts/validate-chat-handoff-index.py .chatgpt/chat-handoff-index.yaml'
-  - 'python3 template-repo/scripts/validate-chatgpt-first-answer-contract.py .'
-  - 'bash template-repo/scripts/verify-all.sh quick'
-  - 'bash template-repo/scripts/verify-all.sh'
-  next_action: No further implementation action; defect is closed at router/validator/runbook level.
+  - python3 template-repo/scripts/validate-chat-handoff-index.py .chatgpt/chat-handoff-index.yaml
+  - python3 template-repo/scripts/validate-chatgpt-first-answer-contract.py .
+  - bash template-repo/scripts/verify-all.sh quick
+  - bash template-repo/scripts/verify-all.sh
+  next_action: No further implementation action; defect is closed at router/validator/runbook
+    level.
 - chat_id: FT-CH-0013
   chat_number: 13
   chat_title: FT-CH-0013 universal-task-control-automation-roadmap
@@ -214,10 +230,14 @@ items:
   - codex_accepted
   - codex_completed
   evidence:
-  - 'Retrofix: first visible ChatGPT title in this chat incorrectly used FT-CH-0011, which is already reserved for single-vps-dev-runtime-host.'
-  - 'This chat covered Universal Task Control, downstream materialization, advanced automation substrate, gated autonomous mode, release/readout closeouts and numbering correction.'
-  - 'FT-CH-0011 remains occupied and must not be reused.'
-  next_action: No further numbering action; use this stable title for the current chat.
+  - 'Retrofix: first visible ChatGPT title in this chat incorrectly used FT-CH-0011,
+    which is already reserved for single-vps-dev-runtime-host.'
+  - This chat covered Universal Task Control, downstream materialization, advanced
+    automation substrate, gated autonomous mode, release/readout closeouts and numbering
+    correction.
+  - FT-CH-0011 remains occupied and must not be reused.
+  next_action: No further numbering action; use this stable title for the current
+    chat.
 - chat_id: FT-CH-0014
   chat_number: 14
   chat_title: FT-CH-0014 product-support-architecture
@@ -235,11 +255,14 @@ items:
   - codex_accepted
   - codex_completed
   evidence:
-  - First visible ChatGPT title incorrectly used FT-CH-0011, which is already reserved for single-vps-dev-runtime-host.
+  - First visible ChatGPT title incorrectly used FT-CH-0011, which is already reserved
+    for single-vps-dev-runtime-host.
   - This chat is not FT-CH-0013 universal-task-control-automation-roadmap.
-  - Chat produced product support architecture, GitHub Issues support model, issue-autofix automation analysis, and P0-P1 MVP Codex handoff.
+  - Chat produced product support architecture, GitHub Issues support model, issue-autofix
+    automation analysis, and P0-P1 MVP Codex handoff.
   - User confirmed task is already completed and requested numbering correction.
-  next_action: No further implementation action; chat numbering corrected and task marked verified.
+  next_action: No further implementation action; chat numbering corrected and task
+    marked verified.
 - chat_id: FT-CH-0015
   chat_number: 15
   chat_title: FT-CH-0015 windows-bootstrapper-release-publication
@@ -257,11 +280,17 @@ items:
   - codex_accepted
   - codex_completed
   evidence:
-  - 'Retrofix: this ChatGPT task initially showed FT-CH-0011, but FT-CH-0011 is already reserved for single-vps-dev-runtime-host.'
-  - 'User explicitly clarified this chat is not the FT-CH-0013 or FT-CH-0014 numbering-fix chat.'
-  - 'This chat covered install-from-scratch guidance, beginner readme.txt, GitHub-vs-npm install clarification, Windows bootstrapper MVP handoff, verified Codex closeout for commit 02c517fcad5562412c1f06e682251f71e0e7babf, and release-publication handoff.'
-  - 'Task outcome accepted by user as completed; numbering corrected to FT-CH-0015 and marked verified.'
-  next_action: No further numbering action; use this stable title for this chat and do not reuse FT-CH-0011, FT-CH-0013 or FT-CH-0014 for it.
+  - 'Retrofix: this ChatGPT task initially showed FT-CH-0011, but FT-CH-0011 is already
+    reserved for single-vps-dev-runtime-host.'
+  - User explicitly clarified this chat is not the FT-CH-0013 or FT-CH-0014 numbering-fix
+    chat.
+  - This chat covered install-from-scratch guidance, beginner readme.txt, GitHub-vs-npm
+    install clarification, Windows bootstrapper MVP handoff, verified Codex closeout
+    for commit 02c517fcad5562412c1f06e682251f71e0e7babf, and release-publication handoff.
+  - Task outcome accepted by user as completed; numbering corrected to FT-CH-0015
+    and marked verified.
+  next_action: No further numbering action; use this stable title for this chat and
+    do not reuse FT-CH-0011, FT-CH-0013 or FT-CH-0014 for it.
 - chat_id: FT-CH-0016
   chat_number: 16
   chat_title: FT-CH-0016 chat-title-allocator-blocker-regression
@@ -280,8 +309,10 @@ items:
   - codex_completed
   evidence:
   - User reported ChatGPT shows allocator blocker instead of stable copy title.
-  - Materialized reservation created before visible substantive response for this defect task.
-  next_action: Reproduce allocator/write path issue and fix router/validator/runbook behavior so reachable write allocator is attempted before blocker fallback.
+  - Materialized reservation created before visible substantive response for this
+    defect task.
+  next_action: Reproduce allocator/write path issue and fix router/validator/runbook
+    behavior so reachable write allocator is attempted before blocker fallback.
 - chat_id: FT-CH-0017
   chat_number: 17
   chat_title: FT-CH-0017 module-gated-vps-downstream-beginner-roadmap
@@ -299,7 +330,37 @@ items:
   - codex_accepted
   - codex_completed
   evidence:
-  - 'Retrofix: this ChatGPT task initially showed allocator blocker instead of stable title.'
-  - 'User requested materialized number assignment for the current unified roadmap chat.'
-  - 'Scope: close module gate baseline first, then single big VPS architecture, downstream/battle project proof, and beginner-first Windows-to-first-project path.'
-  next_action: Start the Codex handoff or close/supersede this repo reservation; do not reuse this chat number.
+  - 'Retrofix: this ChatGPT task initially showed allocator blocker instead of stable
+    title.'
+  - User requested materialized number assignment for the current unified roadmap
+    chat.
+  - 'Scope: close module gate baseline first, then single big VPS architecture, downstream/battle
+    project proof, and beginner-first Windows-to-first-project path.'
+  next_action: Start the Codex handoff or close/supersede this repo reservation; do
+    not reuse this chat number.
+- chat_id: FT-CH-0018
+  chat_number: 18
+  chat_title: FT-CH-0018 chat-title-allocator-write-path-regression
+  task_slug: chat-title-allocator-write-path-regression
+  kind: bug
+  state: open
+  created_utc: '2026-05-06T12:59:00Z'
+  updated_utc: '2026-05-06T12:59:00Z'
+  source_type: chatgpt-first-answer
+  handoff_group: chat-title-allocator-write-path-regression
+  handoff_revision: 1
+  handoff_register_item_id: ''
+  status_chain:
+  - chatgpt_handoff
+  - codex_accepted
+  - codex_completed
+  evidence:
+  - 'User reported recurring first-answer failure: ChatGPT reads next_chat_number=18
+    but still outputs allocator blocker instead of materializing reservation.'
+  - Router contract requires materialized repo reservation or exact allocator blocker
+    before any route receipt or analysis.
+  - Existing FT-CH-0016 remains open and covers related allocator-blocker regression;
+    this item captures the repeated no-number symptom and write-path remediation follow-up.
+  next_action: Fix first-answer allocator/write-path behavior so ChatGPT attempts
+    reachable repo write allocator before blocker fallback and validates materialized
+    reservation.
