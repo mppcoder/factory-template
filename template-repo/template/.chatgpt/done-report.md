@@ -8,6 +8,15 @@
 ## Что реально сделано
 - 
 
+## Статус цели
+- not_applicable
+
+## Evidence относительно DoD
+-
+
+## Guard от proxy signals
+- Goal не закрывался по proxy signals alone.
+
 ## Какие артефакты обновлены
 - 
 

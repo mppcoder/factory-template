@@ -1,28 +1,45 @@
-# Отчет о проверке результата
+# Отчёт о проверке результата
 
 ## Что проверяли
 
-- Direct-task self-handoff `FT-CX-0031 close-unfinished-repo-tasks` материализован до closeout.
-- `.chatgpt/chat-handoff-index.yaml` больше не содержит stale `open` reservations для уже материализованных работ.
-- Компактная project card и полный lifecycle dashboard отражают закрытое состояние без старых `FT-CH` хвостов.
+- Goal-first contract schema/template/current state.
+- Positive and negative goal-contract fixtures.
+- Codex routing, route explanation and beginner handoff UX.
+- Mode parity, tree contract and human-language layer.
+- Full quick verification suite.
 
 ## Что подтверждено
 
-- `FT-CH-0017 module-gated-vps-downstream-beginner-roadmap` закрыт как `verified`: его scope покрыт verified follow-up работами `FT-CX-0020`, `FT-CX-0027` и `FT-CX-0029`.
-- `FT-CH-0019 external-user-action-interview-handoff-scenario` закрыт как `verified`: его scope покрыт `FT-CX-0021`, `FT-CX-0022` и `FT-CX-0025`.
-- `FT-CH-0023 template-install-downstream-deploy-feedback-loop` закрыт как `verified`: его advisory logic материализована в full factory-to-battle lifecycle docs через `FT-CX-0029`.
-- `FT-CH-0025 github-errors-actions-audit` закрыт как `verified`: его GitHub errors / Actions audit scope покрыт `FT-CH-0021` и `HIR-014`.
-- `FT-CX-0031` закрыт как `verified`, а project status card перерендерена.
-
-## Команды проверки
-
-- `python3 template-repo/scripts/validate-chat-handoff-index.py .chatgpt/chat-handoff-index.yaml`: PASS.
-- `python3 template-repo/scripts/validate-codex-work-index.py .chatgpt/codex-work-index.yaml`: PASS.
-- `python3 template-repo/scripts/validate-task-state-lite.py .chatgpt/task-state.yaml`: PASS.
+- `codex --version`: `codex-cli 0.129.0`.
+- `codex features list`: `goals` найден как `experimental false`; используется как рабочий candidate только по явному указанию пользователя.
+- `python3 template-repo/scripts/validate-goal-contract.py template-repo/template/.chatgpt/goal-contract.yaml.template --template`: PASS.
+- `python3 template-repo/scripts/validate-goal-contract.py .chatgpt/goal-contract.yaml`: PASS.
+- `tests/goal-contract/valid/*.yaml`: PASS.
+- `tests/goal-contract/negative/*.yaml`: rejected as expected.
 - `python3 template-repo/scripts/validate-codex-routing.py .`: PASS.
-- `python3 template-repo/scripts/render-project-lifecycle-dashboard.py --input template-repo/template/.chatgpt/project-lifecycle-dashboard.yaml --format chatgpt-card --stdout`: PASS.
+- `python3 template-repo/scripts/validate-route-explain.py .`: PASS.
+- `python3 template-repo/scripts/validate-beginner-handoff-ux.py` on positive fixtures: PASS.
+- `python3 template-repo/scripts/validate-mode-parity.py .`: PASS.
+- `python3 template-repo/scripts/validate-tree-contract.py .`: PASS.
+- `python3 template-repo/scripts/validate-human-language-layer.py .`: active findings `0`.
 - `bash template-repo/scripts/verify-all.sh quick`: PASS.
+
+## Evidence относительно DoD
+
+- Router has goal-first normalization gate.
+- Handoff scenario requires `goal_contract`, runtime recommendation and live validation boundary.
+- Closeout scenario requires `goal_status` and evidence vs DoD.
+- Validators reject missing DoD, proxy-only evidence, enabled goal runtime without live validation and budget-limited closeout without summary.
+
+## Guard от proxy signals
+
+- Goal achieved is based on evidence vs DoD and full validator results, not tests/file/commit/dashboard alone.
+
+## Что не подтверждено или требует повторной проверки
+
+- Codex runtime `/goal` was not switched inside this already-open session; only CLI capability/feature flag was live-checked.
+- `goals` remains experimental/off by default in `codex-cli 0.129.0`.
 
 ## Итоговый вывод
 
-Repo-state хвосты закрыты; internal unfinished task queue пустая.
+- Goal-first transition verification passed.

@@ -1,0 +1,83 @@
+goal_contract:
+  version: goal-contract/v1
+  goal_id: GC-VALID-004
+  goal_command_source:
+    raw_user_goal: "goal: finish long migration"
+    normalized_goal: "Continue migration until budget limit, then report continuation state."
+    goal_first_trigger: explicit_goal_command
+  outcome:
+    desired_result: "Partial progress is reported honestly."
+    definition_of_done:
+      - "Budget-limited closeout includes done, remaining, blockers and next goal."
+    success_metrics:
+      - "No achieved claim when budget stops work."
+    evidence_required:
+      - "continuation summary"
+    evidence_sources:
+      - "closeout"
+  boundaries:
+    scope:
+      - "continuation reporting"
+    non_goals:
+      - "false achieved status"
+    destructive_actions_allowed: false
+    production_actions_allowed: false
+    secrets_allowed: false
+  validation:
+    primary_verification_commands:
+      - "python3 template-repo/scripts/validate-goal-contract.py tests/goal-contract/valid/budget-limited-closeout.yaml"
+    secondary_verification:
+      - "manual closeout review"
+    proxy_signal_denylist:
+      - "tests passed alone"
+      - "file exists alone"
+      - "commit exists alone"
+      - "green dashboard alone"
+      - "validator passed alone"
+    goal_achievement_rule: "mark achieved only when evidence satisfies DoD, not when proxy signals pass"
+  runtime:
+    goal_runtime_recommendation: codex_goal_candidate
+    codex_goal_live_validation_required: true
+    codex_goal_live_validation_evidence: "codex-cli 0.129.0; goals experimental false; explicit operator choice"
+    tool_feedback_ready: true
+    mcp_or_metrics_needed:
+      - "validators"
+    observation_cadence: "operator check every 15-20 minutes for long goal loops"
+    budget_guardrails:
+      token_budget: "bounded"
+      time_budget: "15m"
+      max_iterations: "2"
+      stop_when:
+        - budget_limited
+        - tool_limited
+        - quota_wall
+        - goal_drift
+        - unsafe_action
+    pause_resume_policy:
+      user_controls_lifecycle: true
+      model_must_not_clear_or_pause_goal_without_user_instruction: true
+  continuation:
+    if_budget_limited:
+      required_summary:
+        - done
+        - remaining
+        - blockers
+        - next recommended goal
+    if_unmet:
+      create_followup_handoff: true
+  side_channel:
+    allowed_for_clarifications: true
+    must_not_mutate_goal_without_confirmation: true
+  closeout:
+    goal_status: budget_limited
+    evidence_vs_dod:
+      - "Budget stop occurred before full DoD."
+    proxy_signal_closure_used: false
+    continuation_summary:
+      done:
+        - "initial audit"
+      remaining:
+        - "implementation"
+      blockers:
+        - "time budget"
+      next_recommended_goal: "Implement first decomposed subgoal."

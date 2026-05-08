@@ -8,6 +8,13 @@ CODEX HANDOFF
 
 launch_source: chatgpt-handoff
 handoff_shape: codex-task-handoff
+goal_contract:
+  normalized_goal: "Выполнить проверяемую deep задачу."
+  definition_of_done: ["Evidence satisfies DoD."]
+  evidence_required: ["validator/report evidence"]
+  proxy_signal_denylist: ["tests passed alone", "file exists alone", "commit exists alone", "green dashboard alone", "validator passed alone"]
+goal_runtime_recommendation: codex_goal_candidate
+codex_goal_live_validation_required: true
 task_class: deep
 selected_profile: deep
 selected_model: gpt-5.5
@@ -18,6 +25,7 @@ strict_launch_mode: optional
 selected_scenario: template-repo/scenario-pack/00-master-router.md -> template-repo/scenario-pack/15-handoff-to-codex.md
 
 Используй один цельный handoff block. Уже открытая live session не является надежным auto-switch механизмом; уже открытая live session не является надежным auto-switch механизмом.
+Codex /goal runtime optional and live-gated; success must not be claimed from proxy signals alone.
 Codex решает фактический режим исполнения после анализа task graph и в closeout указывает execution_mode и child/subagent count.
 Orchestration candidate signals: independent child subtasks, different route requirements, deferred_user_actions.
 parent plan expectations: если Codex выбирает orchestrated-child-sessions, parent Codex validates plan before child session files.

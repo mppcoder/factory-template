@@ -1,0 +1,30 @@
+goal_state:
+  version: goal-state/v1
+  active_goal_id: ""
+  active_goal_status: not_applicable
+  source_contract_path: ".chatgpt/goal-contract.yaml"
+  runtime:
+    codex_goal_runtime_active: false
+    codex_goal_runtime_enabled_by: ""
+    codex_goal_live_validation:
+      cli_version: ""
+      goals_feature_flag: ""
+      validation_command: "codex features list"
+      validation_result: ""
+  observation:
+    last_operator_check_utc: ""
+    next_operator_check_hint: ""
+    drift_or_loop_detected: false
+  budget:
+    token_budget_used: ""
+    time_budget_used: ""
+    iteration_count: ""
+  continuation:
+    stop_reason: ""
+    done:
+      - ""
+    remaining:
+      - ""
+    blockers:
+      - ""
+    next_recommended_goal: ""

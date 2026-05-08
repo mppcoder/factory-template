@@ -9,6 +9,12 @@
 ## Что подтверждено
 - 
 
+## Evidence относительно DoD
+-
+
+## Guard от proxy signals
+- Проверка не опирается только на tests passed, file exists, commit exists, green dashboard или validator passed.
+
 ## Что не подтверждено или требует повторной проверки
 - 
 

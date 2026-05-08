@@ -4,6 +4,25 @@
 - advisory layer: `AGENTS`, scenario-pack, runbooks, ChatGPT Project instructions;
 - executable layer: `codex-routing.yaml`, `.codex/config.toml` named profiles и `./scripts/launch-codex-task.sh`;
 - надежная единица маршрутизации: новый task launch.
+- `goal first` является pre-routing normalization layer: сначала `goal_contract`, затем обычный scenario route;
+- `goal first` не меняет selected_profile/model/reasoning сам по себе.
+
+## Flow постановки цели
+
+Любая новая задача должна иметь минимальный `goal_contract`: `normalized_goal`, DoD, evidence, scope/non-goals, safety/budget boundaries и proxy-signal denylist.
+
+`goal`, `goal:`, `/goal`, `цель`, `цель:` в ChatGPT Project означают intent на goal-first flow, а не гарантию Codex CLI slash command.
+
+`Codex /goal runtime` optional and live-gated. Для текущего CLI проверяйте:
+
+```bash
+codex --version
+codex features list
+```
+
+Если `goals` виден как experimental/off by default, использовать его как рабочий runtime можно только по явному выбору пользователя/operator. Уже открытая live session не является надежным auto-switch boundary.
+
+Не закрывайте цель по proxy signals alone: tests passed, file exists, commit exists, green dashboard или validator passed сами по себе не доказывают goal achieved.
 
 ## Именованные profiles
 - `quick`: docs / triage / search
@@ -20,6 +39,7 @@
 - для direct task launcher сначала создает `.chatgpt/direct-task-self-handoff.md` и `.chatgpt/direct-task-response.md`, а затем фиксирует route в `.chatgpt/task-launch.yaml`;
 - первый substantive ответ Codex по direct task должен явно показать self-handoff block до remediation.
 - если после manual UI apply или strict launch виден sticky last-used state, завершите текущую сессию, откройте новую и при необходимости выполните launcher еще раз, а затем сверьте model с `codex debug models`.
+- для long goal loops задайте observation cadence, time/token/iteration budget и stop criteria; при quota/tool wall фиксируйте `budget_limited` или `tool_limited`, а не `achieved`.
 
 ## VPS Remote SSH-first orchestration по умолчанию
 

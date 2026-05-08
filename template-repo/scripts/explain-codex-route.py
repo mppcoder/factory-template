@@ -97,6 +97,8 @@ def explain(
     catalog = model_routing.get("model_catalog", {}) or {}
     catalog_status = str(catalog.get("catalog_check_status") or "unknown")
     live_boundary = "last catalog validation passed" if catalog_status == "available" else "requires live validation"
+    goal_first_triggered = bool(re.search(r"(?i)(^|\s)(/goal|goal:|goal|цель:|цель)\b", task_text)) or "handoff" in task_text.lower()
+    goal_runtime = "codex_goal_candidate" if goal_first_triggered else "goal_first_contract_only"
     return {
         "task_class": task_class,
         "selected_profile": profile,
@@ -106,6 +108,12 @@ def explain(
         "evidence": evidence,
         "handoff_shape": handoff_shape,
         "handoff_shape_evidence": handoff_shape_evidence,
+        "goal_first": {
+            "normalization": "required before scenario-specific execution",
+            "triggered": goal_first_triggered,
+            "runtime_recommendation": goal_runtime,
+            "profile_boundary": "goal first does not change selected_profile/task_class by itself",
+        },
         "method": "deterministic keyword/rule-based routing; not a semantic classifier",
         "live_catalog_boundary": live_boundary,
         "advisory_boundary": "advisory handoff text does not switch an already-open live session",
@@ -124,6 +132,7 @@ def render_markdown(payload: dict[str, Any]) -> str:
 - selected_reasoning_effort: `{payload['selected_reasoning_effort']}`
 - selected_plan_mode_reasoning_effort: `{payload['selected_plan_mode_reasoning_effort']}`
 - handoff_shape: `{payload['handoff_shape']}`
+- goal_runtime_recommendation: `{payload['goal_first']['runtime_recommendation']}`
 
 ## Evidence / evidence маршрута
 
@@ -138,6 +147,7 @@ def render_markdown(payload: dict[str, Any]) -> str:
 - method: {payload['method']}
 - live_catalog_boundary: {payload['live_catalog_boundary']}
 - advisory_boundary: {payload['advisory_boundary']}
+- goal_first_boundary: {payload['goal_first']['profile_boundary']}
 """
 
 

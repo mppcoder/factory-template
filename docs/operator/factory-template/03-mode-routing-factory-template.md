@@ -29,6 +29,31 @@ Executable слой:
 - `deep`
 - `review`
 
+## Goal-first layer
+
+Перед выбором сценария и исполнением новая задача нормализуется в `goal_contract`.
+Это advisory/template layer, а не executable profile switch.
+
+`goal first` фиксирует:
+- `normalized_goal`;
+- DoD и evidence;
+- scope/non-goals;
+- safety/budget boundaries;
+- feedback tools;
+- proxy-signal denylist.
+
+Goal-first не меняет `task_class`, `selected_profile`, model или reasoning сам по себе.
+Эти поля остаются результатом task-based routing и live catalog validation.
+
+`Codex /goal runtime` optional. После обновления CLI проверяйте:
+
+```bash
+codex --version
+codex features list
+```
+
+Если `goals` отображается как experimental/off by default, его можно использовать как рабочий runtime только по явному user/operator выбору. Нельзя считать, что advisory text или уже открытая Codex session включили `/goal`.
+
 ---
 
 ## 1. Профили
@@ -119,6 +144,10 @@ ChatGPT handoff и direct task обязаны использовать один 
 ### Правило 5
 
 Direct task сначала проходит self-handoff и только потом remediation.
+
+### Правило 6
+
+Broad migration/architecture task не запускается одним гигантским goal. Сначала `scrappy`, затем PRD/spec, затем clean implementation.
 
 ---
 

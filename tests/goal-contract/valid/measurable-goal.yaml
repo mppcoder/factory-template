@@ -1,0 +1,84 @@
+goal_contract:
+  version: goal-contract/v1
+  goal_id: GC-VALID-001
+  goal_command_source:
+    raw_user_goal: "goal: добавить проверку goal contract"
+    normalized_goal: "Добавить валидатор goal contract и проверить fixtures."
+    goal_first_trigger: explicit_goal_command
+  outcome:
+    desired_result: "Validator rejects unsafe/under-specified goal contracts."
+    definition_of_done:
+      - "Valid fixture passes."
+      - "Proxy-only negative fixture fails."
+    success_metrics:
+      - "Targeted validator exits 0 for valid fixture."
+    evidence_required:
+      - "validate-goal-contract.py output for valid and negative fixtures"
+    evidence_sources:
+      - "template-repo/scripts/validate-goal-contract.py"
+  boundaries:
+    scope:
+      - "validator and fixtures"
+    non_goals:
+      - "production deploy"
+    destructive_actions_allowed: false
+    production_actions_allowed: false
+    secrets_allowed: false
+  validation:
+    primary_verification_commands:
+      - "python3 template-repo/scripts/validate-goal-contract.py tests/goal-contract/valid/measurable-goal.yaml"
+    secondary_verification:
+      - "git status --short --branch"
+    proxy_signal_denylist:
+      - "tests passed alone"
+      - "file exists alone"
+      - "commit exists alone"
+      - "green dashboard alone"
+      - "validator passed alone"
+    goal_achievement_rule: "mark achieved only when evidence satisfies DoD, not when proxy signals pass"
+  runtime:
+    goal_runtime_recommendation: codex_goal_candidate
+    codex_goal_live_validation_required: true
+    codex_goal_live_validation_evidence: "codex-cli 0.129.0; goals feature detected as experimental false; explicit operator choice required"
+    tool_feedback_ready: true
+    mcp_or_metrics_needed:
+      - "repo validators"
+    observation_cadence: "operator check every 15-20 minutes for long goal loops"
+    budget_guardrails:
+      token_budget: ""
+      time_budget: "30m"
+      max_iterations: "3"
+      stop_when:
+        - budget_limited
+        - tool_limited
+        - quota_wall
+        - goal_drift
+        - unsafe_action
+    pause_resume_policy:
+      user_controls_lifecycle: true
+      model_must_not_clear_or_pause_goal_without_user_instruction: true
+  continuation:
+    if_budget_limited:
+      required_summary:
+        - done
+        - remaining
+        - blockers
+        - next recommended goal
+    if_unmet:
+      create_followup_handoff: true
+  side_channel:
+    allowed_for_clarifications: true
+    must_not_mutate_goal_without_confirmation: true
+  closeout:
+    goal_status: achieved
+    evidence_vs_dod:
+      - "Validator passed valid fixture and rejected negative fixtures, satisfying DoD."
+    proxy_signal_closure_used: false
+    continuation_summary:
+      done:
+        - "validator implemented"
+      remaining:
+        - "none"
+      blockers:
+        - "none"
+      next_recommended_goal: "none"

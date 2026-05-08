@@ -6,6 +6,15 @@
 ## Вид handoff
 codex-task-handoff
 
+## Контракт цели
+<!-- Обязательный goal-first contract: normalized_goal, definition_of_done, evidence_required, scope, non_goals, safety/budget boundaries, proxy_signal_denylist, goal_achievement_rule. -->
+
+## Рекомендация goal runtime
+<!-- goal_first_contract_only / manual_review / codex_goal_candidate / codex_goal_enabled / requires_feedback_setup / not_recommended -->
+
+## Live validation для Codex goal runtime
+<!-- Codex /goal runtime optional. Укажите codex --version, codex features list и evidence включения, если runtime действительно используется. -->
+
 ## Класс задачи
 <!-- quick / build / deep / review -->
 
@@ -67,6 +76,7 @@ codex-task-handoff
 
 ## Диагностика проблем
 <!-- stale live session, manual UI vs strict launch, picker checks -->
+<!-- experimental goals не включаются advisory text; already-open session не является reliable runtime switch -->
 
 ## Payload задачи
 <!-- normalized task text -->

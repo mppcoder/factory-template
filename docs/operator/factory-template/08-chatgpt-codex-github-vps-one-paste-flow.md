@@ -25,6 +25,8 @@ Dashboard показывает статус, blockers и следующий бе
 ### 1. Сформулировать идею
 
 Что делаем: пишем простыми словами, что хотим получить.
+Если начинаете с `goal`, `goal:`, `/goal`, `цель` или `цель:`, ChatGPT Project сначала оформит `goal_contract`: результат, DoD, evidence, scope/non-goals, safety/budget boundaries и proxy-signal denylist.
+Это goal-first contract, а не гарантия Codex CLI `/goal`.
 
 Где выполняем: ChatGPT.
 
@@ -35,6 +37,7 @@ Dashboard показывает статус, blockers и следующий бе
 ```
 
 Ожидаемый результат: ChatGPT уточняет задачу и готовит route-aware handoff.
+Если цель достаточно ясна, лишний вопрос не нужен: ChatGPT фиксирует safe defaults и продолжает route.
 
 Если не получилось: добавьте пример желаемого поведения и что сейчас мешает.
 
@@ -65,6 +68,15 @@ Dashboard показывает статус, blockers и следующий бе
 Ожидаемый результат: новая чистая Codex session готова принять handoff.
 
 Если не получилось: не используйте старый чат как надежный способ переключения профиля. Откройте новый chat.
+
+Если вы сознательно хотите использовать experimental `goals`, сначала проверьте в Codex terminal:
+
+```bash
+codex --version
+codex features list
+```
+
+Если `goals` есть как experimental/off by default, считайте это рабочим runtime candidate только после явного выбора. Handoff все равно вставляется одним цельным блоком.
 
 ### 4. Вставить handoff
 
@@ -116,6 +128,7 @@ python3 template-repo/scripts/validate-project-lifecycle-dashboard.py template-r
 ```
 
 Ожидаемый результат: проверки зеленые или есть понятный blocker.
+Tests/validators green являются evidence, но не закрывают goal автоматически: closeout сравнивает evidence с DoD.
 
 Если не получилось: сохраните точный command и первые значимые строки ошибки без секретов.
 

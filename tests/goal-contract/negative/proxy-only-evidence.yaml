@@ -1,0 +1,67 @@
+goal_contract:
+  version: goal-contract/v1
+  goal_command_source:
+    raw_user_goal: "goal"
+    normalized_goal: "Bad proxy-only goal."
+    goal_first_trigger: explicit_goal_command
+  outcome:
+    desired_result: "Bad"
+    definition_of_done:
+      - "tests passed alone"
+    success_metrics:
+      - "green dashboard alone"
+    evidence_required:
+      - "tests passed alone"
+      - "file exists alone"
+    evidence_sources:
+      - "tests"
+  boundaries:
+    scope:
+      - "bad"
+    non_goals:
+      - "real evidence"
+    destructive_actions_allowed: false
+    production_actions_allowed: false
+    secrets_allowed: false
+  validation:
+    primary_verification_commands: []
+    secondary_verification: []
+    proxy_signal_denylist:
+      - "tests passed alone"
+      - "file exists alone"
+      - "commit exists alone"
+      - "green dashboard alone"
+      - "validator passed alone"
+    goal_achievement_rule: "mark achieved only when evidence satisfies DoD, not when proxy signals pass"
+  runtime:
+    goal_runtime_recommendation: manual_review
+    codex_goal_live_validation_required: true
+    codex_goal_live_validation_evidence: ""
+    tool_feedback_ready: true
+    mcp_or_metrics_needed: []
+    observation_cadence: "operator check every 15-20 minutes for long goal loops"
+    budget_guardrails:
+      stop_when:
+        - budget_limited
+        - tool_limited
+        - quota_wall
+        - goal_drift
+        - unsafe_action
+    pause_resume_policy:
+      user_controls_lifecycle: true
+      model_must_not_clear_or_pause_goal_without_user_instruction: true
+  continuation:
+    if_budget_limited:
+      required_summary:
+        - done
+        - remaining
+        - blockers
+        - next recommended goal
+  side_channel:
+    allowed_for_clarifications: true
+    must_not_mutate_goal_without_confirmation: true
+  closeout:
+    goal_status: achieved
+    evidence_vs_dod:
+      - "tests passed alone"
+    proxy_signal_closure_used: false

@@ -15,6 +15,7 @@ REQUIRED_FIELDS = [
     "selected_plan_mode_reasoning_effort",
     "handoff_shape",
     "handoff_shape_evidence",
+    "goal_first",
     "evidence",
     "method",
     "live_catalog_boundary",
@@ -53,6 +54,14 @@ def run_case(root: Path, task_text: str, expected_class: str, expected_shape: st
         errors.append("route explain falsely claims semantic classifier")
     if "already-open" not in str(payload.get("advisory_boundary", "")):
         errors.append("advisory boundary must mention already-open live session")
+    goal_first = payload.get("goal_first", {})
+    if not isinstance(goal_first, dict):
+        errors.append("goal_first должен быть mapping")
+    else:
+        if "does not change selected_profile" not in str(goal_first.get("profile_boundary", "")):
+            errors.append("goal_first boundary must say it does not change selected_profile")
+        if not goal_first.get("runtime_recommendation"):
+            errors.append("goal_first must include runtime_recommendation")
     return errors
 
 

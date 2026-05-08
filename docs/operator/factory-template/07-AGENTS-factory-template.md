@@ -40,6 +40,11 @@
 ## Правило классификации задач
 
 Перед каждой новой задачей классифицируй ее на launch boundary.
+До классификации исполнения нормализуй задачу в `goal_contract`, если это новый task/handoff/direct task. Goal-first contract фиксирует `normalized_goal`, DoD, evidence, scope/non-goals, safety/budget boundaries и proxy-signal denylist, но сам по себе не переключает selected profile/model/reasoning.
+
+`Codex /goal runtime` optional/live-gated. Если CLI показывает `goals` как experimental/off by default, использовать его можно только по явному выбору пользователя/operator; уже открытая session не считается auto-switch.
+
+Goal нельзя закрывать по proxy signals alone: tests passed, file exists, commit exists, green dashboard или validator passed сами по себе не равны achieved.
 
 ### quick
 

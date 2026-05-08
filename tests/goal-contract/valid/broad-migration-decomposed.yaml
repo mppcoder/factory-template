@@ -1,0 +1,83 @@
+goal_contract:
+  version: goal-contract/v1
+  goal_id: GC-VALID-003
+  goal_command_source:
+    raw_user_goal: "мигрировать весь routing layer на goal first"
+    normalized_goal: "Разложить broad migration через scrappy -> PRD -> clean, не запускать один гигантский goal."
+    goal_first_trigger: handoff
+  outcome:
+    desired_result: "Migration decomposed into measurable subgoals."
+    definition_of_done:
+      - "Exploratory, PRD/spec and clean implementation goals are listed."
+    success_metrics:
+      - "No single unbounded migration loop remains."
+    evidence_required:
+      - "decomposition plan with three subgoals"
+    evidence_sources:
+      - "goal_contract outcome"
+  boundaries:
+    scope:
+      - "decomposition"
+    non_goals:
+      - "one giant autonomous implementation"
+    destructive_actions_allowed: false
+    production_actions_allowed: false
+    secrets_allowed: false
+  validation:
+    primary_verification_commands:
+      - "python3 template-repo/scripts/validate-goal-contract.py tests/goal-contract/valid/broad-migration-decomposed.yaml"
+    secondary_verification:
+      - "manual review of subgoals"
+    proxy_signal_denylist:
+      - "tests passed alone"
+      - "file exists alone"
+      - "commit exists alone"
+      - "green dashboard alone"
+      - "validator passed alone"
+    goal_achievement_rule: "mark achieved only when evidence satisfies DoD, not when proxy signals pass"
+  runtime:
+    goal_runtime_recommendation: goal_first_contract_only
+    codex_goal_live_validation_required: true
+    codex_goal_live_validation_evidence: ""
+    tool_feedback_ready: true
+    mcp_or_metrics_needed:
+      - "decomposition evidence"
+    observation_cadence: "operator check every 15-20 minutes for long goal loops"
+    budget_guardrails:
+      token_budget: ""
+      time_budget: ""
+      max_iterations: "3"
+      stop_when:
+        - budget_limited
+        - tool_limited
+        - quota_wall
+        - goal_drift
+        - unsafe_action
+    pause_resume_policy:
+      user_controls_lifecycle: true
+      model_must_not_clear_or_pause_goal_without_user_instruction: true
+  continuation:
+    if_budget_limited:
+      required_summary:
+        - done
+        - remaining
+        - blockers
+        - next recommended goal
+    if_unmet:
+      create_followup_handoff: true
+  side_channel:
+    allowed_for_clarifications: true
+    must_not_mutate_goal_without_confirmation: true
+  closeout:
+    goal_status: achieved
+    evidence_vs_dod:
+      - "scrappy -> PRD -> clean decomposition satisfies DoD."
+    proxy_signal_closure_used: false
+    continuation_summary:
+      done:
+        - "decomposed"
+      remaining:
+        - "execute subgoals"
+      blockers:
+        - "none"
+      next_recommended_goal: "scrappy exploration"

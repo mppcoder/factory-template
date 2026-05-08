@@ -1,46 +1,58 @@
-# Отчет о завершении
+# Итоговый отчёт по закрытию изменения
 
 ## Что было запрошено
 
-Закончить все незавершенные задачи в `factory-template`.
+- Обновить Codex CLI до доступной линии `0.129.0`.
+- Перевести `factory-template` на goal-first contract.
+- Использовать experimental `goals` как рабочий runtime candidate по явному указанию пользователя.
 
 ## Что реально сделано
 
-- Прочитан `template-repo/scenario-pack/00-master-router.md`.
-- Выполнен direct-task self-handoff и выделен `FT-CX-0031 close-unfinished-repo-tasks`.
-- Проверены `.chatgpt/task-state.yaml`, `.chatgpt/task-index.yaml`, `.chatgpt/chat-handoff-index.yaml`, `.chatgpt/codex-work-index.yaml`, project lifecycle dashboard и `git status`.
-- Закрыты stale open reservations:
-  - `FT-CH-0017 module-gated-vps-downstream-beginner-roadmap`;
-  - `FT-CH-0019 external-user-action-interview-handoff-scenario`;
-  - `FT-CH-0023 template-install-downstream-deploy-feedback-loop`.
-  - `FT-CH-0025 github-errors-actions-audit`.
-- Закрыт текущий `FT-CX-0031` как verified.
-- Перерендерены `reports/project-status-card.md` и `reports/project-lifecycle-dashboard.md`.
+- `@openai/codex` обновлен глобально до `0.129.0`; `codex --version` показывает `codex-cli 0.129.0`.
+- Router получил goal-first normalization gate.
+- Добавлен `template-repo/scenario-pack/03-goal-first-intake.md`.
+- Handoff, closeout, routing, docs and templates обновлены под `goal_contract`.
+- Добавлены `goal-contract.yaml.template`, `goal-state.yaml.template`, active `.chatgpt/goal-contract.yaml` and `.chatgpt/goal-state.yaml`.
+- Добавлен валидатор `validate-goal-contract.py` и fixtures для valid/vague/proxy/live-validation/broad/budget cases.
+- Generated/core parity artifacts обновлены для downstream template sync.
+
+## Статус цели
+
+- achieved
+
+## Evidence относительно DoD
+
+- `bash template-repo/scripts/verify-all.sh quick`: PASS.
+- Targeted goal-contract/routing/handoff/mode/tree/language validators: PASS.
+
+## Guard от proxy signals
+
+- Goal закрыт по evidence vs DoD; proxy-only signals explicitly denied.
 
 ## Какие артефакты обновлены
 
-- `.chatgpt/chat-handoff-index.yaml`
-- `.chatgpt/codex-work-index.yaml`
-- `.chatgpt/direct-task-response.md`
-- `.chatgpt/direct-task-self-handoff.md`
-- `.chatgpt/direct-task-source.md`
-- `.chatgpt/normalized-codex-handoff.md`
+- `AGENTS.md`
+- `.chatgpt/goal-contract.yaml`
+- `.chatgpt/goal-state.yaml`
 - `.chatgpt/task-launch.yaml`
-- `.chatgpt/task-state.yaml`
 - `.chatgpt/verification-report.md`
 - `.chatgpt/done-report.md`
-- `reports/project-status-card.md`
-- `reports/project-lifecycle-dashboard.md`
+- `template-repo/AGENTS.md`
+- `template-repo/codex-routing.yaml`
+- `template-repo/scenario-pack/00-master-router.md`
+- `template-repo/scenario-pack/03-goal-first-intake.md`
+- `template-repo/scenario-pack/15-handoff-to-codex.md`
+- `template-repo/scenario-pack/16-done-closeout.md`
+- `template-repo/template/.chatgpt/*goal*`
+- `template-repo/scripts/validate-goal-contract.py`
+- `tests/goal-contract/*`
+- operator docs and routing validators
 
-## Проверка
+## Что осталось вне объёма
 
-- `python3 template-repo/scripts/validate-chat-handoff-index.py .chatgpt/chat-handoff-index.yaml`: PASS.
-- `python3 template-repo/scripts/validate-codex-work-index.py .chatgpt/codex-work-index.yaml`: PASS.
-- `python3 template-repo/scripts/validate-task-state-lite.py .chatgpt/task-state.yaml`: PASS.
-- `python3 template-repo/scripts/validate-codex-routing.py .`: PASS.
-- `python3 template-repo/scripts/render-project-lifecycle-dashboard.py --input template-repo/template/.chatgpt/project-lifecycle-dashboard.yaml --format chatgpt-card --stdout`: PASS.
-- `bash template-repo/scripts/verify-all.sh quick`: PASS.
+- Включение `/goal` внутри уже открытой Codex session не заявлялось и не выполнялось как auto-switch.
+- Production/destructive/secrets runtime не входил в scope.
 
 ## Итог закрытия
 
-Текущий scope выполнен. Перед финальным ответом остается проверить git state и выполнить verified sync либо зафиксировать реальный blocker.
+- Goal-first transition выполнен и проверен.

@@ -161,6 +161,8 @@ GA-ready: `true`.
 - intake/questionnaire UX теперь recommendation-first: `новый проект` -> выбор `default_decision_mode` -> safe defaults with explanation and override path -> generated Codex handoff с accepted defaults, overrides, uncertainty notes и unresolved decisions/blockers
 - default-decision layer распространяется на greenfield, brownfield with repo, brownfield without repo и factory-template setup; risky/paid/destructive/security/privacy/legal/secret decisions требуют explicit confirmation и не автопринимаются
 - lifecycle dashboard `runbook_packages` теперь показывает `default_decision_mode`, defaults/overrides/unresolved counters, next decision и readiness to generate handoff
+- goal-first layer добавлен как обязательный pre-routing contract: новые задачи нормализуются в `goal_contract` с DoD, evidence, scope/non-goals, safety/budget guardrails, feedback tools, stop criteria и proxy-signal denylist до scenario-specific execution.
+- Codex `/goal` runtime теперь описан как optional live-gated candidate: `codex-cli 0.129.0` показывает `goals` как experimental/off by default, поэтому использование допустимо только по явному user/operator выбору и не считается auto-switch уже открытой сессии.
 
 ## Программа 2.5 (release truth)
 - release truth source: `docs/releases/release-scorecard.yaml`

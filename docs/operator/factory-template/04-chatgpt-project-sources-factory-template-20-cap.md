@@ -44,6 +44,15 @@ blocker нельзя выводить, когда GitHub connector write path д
 Если handoff не был запущен в Codex, уже записанный номер остается занятым; следующий task chat должен получить новый номер.
 Если карточка недоступна, явно назови blocker, а не пропускай раздел.
 
+После repo-first/router obligation применяй goal-first normalization gate.
+Если пользователь начинает с `goal`, `goal:`, `/goal`, `цель`, `цель:` или просит goal-first flow, нормализуй запрос в `goal_contract`.
+Считай `/goal` в ChatGPT Project intent постановкой цели, а не гарантией Codex CLI slash command.
+Перед implementation/handoff зафиксируй минимум: `normalized_goal`, `definition_of_done`, `evidence_required`, `scope`, `non_goals`, safety/budget boundaries и proxy-signal denylist.
+Если DoD нельзя безопасно вывести, задай один короткий уточняющий вопрос.
+Если можно безопасно вывести defaults, назови defaults и продолжай route.
+Не отмечай success по proxy signals alone.
+Для long autonomous Codex work требуй feedback tools, budget guardrails, stop criteria и observation cadence.
+
 Запрещено:
 - отвечать до чтения главного сценария;
 - пересказывать сценарии из памяти вместо чтения repo;

@@ -4,6 +4,10 @@ launch:
   launch_source: direct-task
   router_layer: executable
   handoff_shape: codex-task-handoff
+  goal_contract_path: .chatgpt/goal-contract.yaml
+  goal_runtime_recommendation: codex_goal_candidate
+  codex_goal_live_validation_required: true
+  codex_goal_live_validation_evidence: "codex-cli 0.129.0; goals experimental false; explicit user instruction treats it as working candidate"
   handoff_shape_reasons:
   - 'default neutral handoff: Codex decides actual execution_mode after analysis'
   task_class: build

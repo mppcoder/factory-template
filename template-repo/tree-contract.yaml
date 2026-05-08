@@ -192,6 +192,8 @@ common_generated_required_paths: &common_generated_required_paths
   - .chatgpt/task-state.yaml
   - .chatgpt/stage-state.yaml
   - .chatgpt/active-scenarios.yaml
+  - .chatgpt/goal-contract.yaml.template
+  - .chatgpt/goal-state.yaml.template
   - .chatgpt/evidence-register.md
   - .chatgpt/codex-input.md
   - .chatgpt/direct-task-self-handoff.md
@@ -453,6 +455,8 @@ contours:
       - .chatgpt/task-state.yaml
       - .chatgpt/stage-state.yaml
       - .chatgpt/active-scenarios.yaml
+      - .chatgpt/goal-contract.yaml.template
+      - .chatgpt/goal-state.yaml.template
       - .chatgpt/direct-task-self-handoff.md
       - .chatgpt/normalized-codex-handoff.md
       - .codex/config.toml

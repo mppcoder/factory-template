@@ -699,6 +699,12 @@ def build_launch_record(
             "launch_source": launch_source,
             "router_layer": "executable",
             "handoff_shape": handoff_shape,
+            "goal_contract_path": ".chatgpt/goal-contract.yaml",
+            "goal_runtime_recommendation": "codex_goal_candidate"
+            if any(token in task_text.lower() for token in ["goal", "/goal", "цель"])
+            else "goal_first_contract_only",
+            "codex_goal_live_validation_required": True,
+            "codex_goal_live_validation_evidence": "",
             "handoff_shape_reasons": handoff_shape_reasons,
             "task_class": task_class,
             "task_class_reasons": reasons,
@@ -791,6 +797,20 @@ def render_normalized_handoff(record: dict, task_text: str, title: str) -> str:
 
 ## Вид handoff
 {launch.get('handoff_shape', '')}
+
+## Goal-contract
+- normalized_goal: `{task_text.strip() or launch.get('task_summary', '') or 'Выполнить задачу по repo-first route.'}`
+- definition_of_done: evidence satisfies requested outcome and relevant repo validators or blockers are documented.
+- evidence_required: verification-report.md, done-report.md, targeted validation evidence.
+- scope: repo-local artifacts selected by route.
+- non_goals: production/destructive/secrets actions unless explicitly approved.
+- proxy_signal_denylist: tests passed alone; file exists alone; commit exists alone; green dashboard alone; validator passed alone.
+- goal_achievement_rule: mark achieved only when evidence satisfies DoD, not when proxy signals pass.
+
+## Goal runtime
+- goal_runtime_recommendation: `{launch.get('goal_runtime_recommendation', 'goal_first_contract_only')}`
+- codex_goal_live_validation_required: `true`
+- rule: Codex /goal runtime optional/live-gated; experimental goals require explicit user/operator choice and do not auto-enable in already-open sessions.
 
 ## Решение о фактическом execution mode
 - owner: Codex после route receipt и анализа task graph.
@@ -987,6 +1007,12 @@ Routing:
 - handoff_shape: {route_value('handoff_shape')}
 - execution_mode_decision_owner: Codex runtime after task graph analysis
 - execution_mode_closeout_required: actual execution mode plus child/subagent count
+- goal_contract.normalized_goal: {task_text.strip() or route_value('task_summary')}
+- goal_contract.definition_of_done: evidence satisfies requested outcome and repo validators/blockers are documented
+- goal_contract.proxy_signal_denylist: tests passed alone; file exists alone; commit exists alone; green dashboard alone; validator passed alone
+- goal_runtime_recommendation: {route_value('goal_runtime_recommendation')}
+- codex_goal_live_validation_required: true
+- codex_goal_runtime_rule: optional/live-gated; experimental goals require explicit user/operator choice and no already-open auto-switch
 - task_class: {route_value('task_class')}
 - selected_profile: {route_value('selected_profile')}
 - selected_model: {route_value('selected_model')}

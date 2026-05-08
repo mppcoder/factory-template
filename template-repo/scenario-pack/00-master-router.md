@@ -80,6 +80,47 @@
 Отдельно фиксируй, что "новый чат + вставка handoff" и "new task launch через executable launcher" — не одно и то же.
 Нельзя выдавать manual UI apply за авто-переключение profile/model/reasoning внутри уже открытой live session.
 
+## Goal-first gate нормализации
+
+После repo-first чтения router, title/card contract и до scenario-specific execution каждая новая задача проходит goal-first normalization gate.
+
+Goal first — это pre-routing normalization layer, а не замена lifecycle/intake/spec/handoff сценариев:
+- сначала нормализуй просьбу в минимальный `goal_contract`;
+- затем выбери и исполняй обычный scenario route;
+- selected scenario по-прежнему владеет реализацией, remediation, handoff и closeout;
+- `handoff_shape` при передаче в Codex остается `codex-task-handoff`, если нет legacy readback;
+- фактический `execution_mode` выбирает Codex runtime после анализа task graph;
+- advisory goal-contract не переключает модель, profile, reasoning или runtime mode внутри уже открытой live session.
+
+Gate обязателен для:
+- явных команд `goal`, `goal:`, `/goal`, `цель`, `цель:`;
+- handoff и direct Codex task;
+- любой новой задачи, где можно безопасно определить желаемый результат.
+
+Минимальная форма `goal_contract` должна содержать:
+- `normalized_goal`;
+- измеримый `definition_of_done` или validation contour, который сначала нужно создать/найти;
+- `evidence_required`;
+- `scope` и `non_goals`;
+- safety/budget boundaries;
+- proxy-signal denylist.
+
+Если цель уже достаточно определена, не задавай лишних вопросов: зафиксируй безопасные defaults и продолжай route.
+Если цель размыта и нельзя безопасно вывести DoD, задай один короткий уточняющий вопрос.
+Если задача broad/migration/architecture и не раскладывается в один измеримый контур, применяй pattern `scrappy -> PRD -> clean`: exploratory goal, затем PRD/spec, затем чистая реализация по spec.
+
+`goal first` является обязательным template contract.
+`Codex /goal runtime` является optional runtime mode: в текущем live CLI он может быть experimental feature flag и должен быть live-validated/enabled before use. Если пользователь явно выбирает experimental `goals`, разрешено пометить runtime как `codex_goal_candidate`, но нельзя утверждать, что ChatGPT Project instruction или уже открытая Codex session сами включили `/goal`.
+
+Запрещено закрывать goal по proxy signals alone:
+- tests passed alone;
+- file exists alone;
+- commit exists alone;
+- green dashboard alone;
+- validator passed alone.
+
+Goal closure допустим только когда evidence реально удовлетворяет `definition_of_done`.
+
 ## Контракт доступа к GitHub repo
 
 Для GitHub repo `mppcoder/factory-template` repo-first означает authenticated repo-first, а не browser/public URL by default.

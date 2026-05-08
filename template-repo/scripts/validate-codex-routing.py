@@ -19,6 +19,9 @@ from codex_model_catalog import (
 REQUIRED_FIELDS = [
     "launch_source",
     "handoff_shape",
+    "goal_contract_path",
+    "goal_runtime_recommendation",
+    "codex_goal_live_validation_required",
     "task_class",
     "selected_profile",
     "selected_model",
@@ -73,6 +76,8 @@ DOC_CHECKS = [
             ["новый task launch"],
             ["manual-ui (default)"],
             ["advisory слой сам по себе"],
+            ["Goal-first gate нормализации"],
+            ["goal first is mandatory", "Goal first"],
         ],
     },
     {
@@ -82,6 +87,8 @@ DOC_CHECKS = [
             ["strict_launch_mode"],
             ["live catalog"],
             ["sticky"],
+            ["goal_contract"],
+            ["Codex /goal runtime"],
         ],
     },
     {
@@ -96,6 +103,8 @@ DOC_CHECKS = [
             ["надежная единица маршрутизации: новый task launch"],
             ["./scripts/launch-codex-task.sh"],
             ["sticky last-used state"],
+            ["goal first", "Goal-first"],
+            ["Codex /goal runtime"],
         ],
     },
     {
@@ -304,6 +313,28 @@ def main() -> int:
         errors.append("Отсутствует .chatgpt/normalized-codex-handoff.md")
 
     handoff_shape_spec = ((spec.get("routing_contract", {}) or {}).get("handoff_shape", {}) or {})
+    goal_first_spec = ((spec.get("routing_contract", {}) or {}).get("goal_first", {}) or {})
+    goal_runtime_modes = (spec.get("routing_contract", {}) or {}).get("goal_runtime_modes", []) or []
+    required_goal_modes = {
+        "goal_first_contract_only",
+        "manual_review",
+        "codex_goal_candidate",
+        "codex_goal_enabled_after_live_validation",
+        "requires_feedback_setup",
+        "not_recommended",
+    }
+    missing_goal_modes = sorted(required_goal_modes - set(goal_runtime_modes))
+    if missing_goal_modes:
+        errors.append(f"routing_contract.goal_runtime_modes не содержит: {', '.join(missing_goal_modes)}")
+    if "does not change selected_profile" not in str(goal_first_spec.get("profile_boundary_rule", "")):
+        errors.append("goal_first.profile_boundary_rule должен фиксировать, что goal first не меняет selected_profile")
+    if "03-goal-first-intake.md" not in str(goal_first_spec.get("scenario", "")):
+        errors.append("goal_first.scenario должен ссылаться на 03-goal-first-intake.md")
+    denylist = set(goal_first_spec.get("proxy_signal_denylist", []) or [])
+    for item in ["tests passed alone", "file exists alone", "commit exists alone", "green dashboard alone"]:
+        if item not in denylist:
+            errors.append(f"goal_first.proxy_signal_denylist не содержит `{item}`")
+
     allowed_handoff_shapes = set(handoff_shape_spec.get("allowed_values", []) or [])
     handoff_shape = str(launch.get("handoff_shape") or "")
     if handoff_shape and handoff_shape not in allowed_handoff_shapes:

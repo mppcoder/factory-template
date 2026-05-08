@@ -65,6 +65,8 @@ all_presets_required_artifacts: &all_presets_required_artifacts
   - .chatgpt/task-state.yaml
   - .chatgpt/stage-state.yaml
   - .chatgpt/active-scenarios.yaml
+  - .chatgpt/goal-contract.yaml.template
+  - .chatgpt/goal-state.yaml.template
   - .chatgpt/direct-task-self-handoff.md
   - .chatgpt/codex-input.md
   - .chatgpt/normalized-codex-handoff.md
@@ -130,6 +132,8 @@ core_capabilities:
       - .chatgpt/task-state.yaml
       - .chatgpt/stage-state.yaml
       - .chatgpt/active-scenarios.yaml
+      - .chatgpt/goal-contract.yaml.template
+      - .chatgpt/goal-state.yaml.template
       - .chatgpt/intake.yaml
       - .chatgpt/user-spec.md
       - .chatgpt/tech-spec.md
@@ -141,6 +145,8 @@ core_capabilities:
       - template-repo/template/.chatgpt/task-state.yaml
       - template-repo/template/.chatgpt/stage-state.yaml
       - template-repo/template/.chatgpt/active-scenarios.yaml
+      - template-repo/template/.chatgpt/goal-contract.yaml.template
+      - template-repo/template/.chatgpt/goal-state.yaml.template
       - template-repo/template/.chatgpt/intake.yaml
       - template-repo/template/.chatgpt/user-spec.md
       - template-repo/template/.chatgpt/tech-spec.md
@@ -398,6 +404,8 @@ modes:
       - .chatgpt/task-index.yaml
       - .chatgpt/task-state.yaml
       - .chatgpt/active-scenarios.yaml
+      - .chatgpt/goal-contract.yaml.template
+      - .chatgpt/goal-state.yaml.template
       - .chatgpt/codex-input.md
       - .chatgpt/done-checklist.md
       - .chatgpt/software-inventory.yaml

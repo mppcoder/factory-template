@@ -1,6 +1,10 @@
 # Чек-лист завершения
 
 - [ ] Проверить, что задача выполнена
+- [ ] Если есть `goal_contract`, сравнить evidence с `definition_of_done`
+- [ ] Зафиксировать `goal_status`: `achieved`, `unmet`, `budget_limited`, `tool_limited`, `blocked` или `not_applicable`
+- [ ] Проверить, что goal не закрыт по proxy signals alone: tests passed, file exists, commit exists, green dashboard, validator passed
+- [ ] Если goal не достигнут, зафиксировать done/remaining/blockers/next recommended goal
 - [ ] Обновить verification-report.md
 - [ ] Обновить done-report.md
 - [ ] Обновить CURRENT_FUNCTIONAL_STATE.md

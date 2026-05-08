@@ -1,0 +1,79 @@
+goal_contract:
+  version: goal-contract/v1
+  goal_id: GC-VALID-002
+  intake:
+    clarification_required: true
+    clarifying_question: "Какой измеримый результат должен подтвердить, что стало лучше?"
+  goal_command_source:
+    raw_user_goal: "сделай лучше"
+    normalized_goal: "Цель требует уточнения измеримого результата."
+    goal_first_trigger: inferred_from_task
+  outcome:
+    desired_result: "Уточнить DoD до реализации."
+    definition_of_done: []
+    success_metrics: []
+    evidence_required:
+      - "ответ пользователя с measurable DoD"
+    evidence_sources:
+      - "chat"
+  boundaries:
+    scope:
+      - "clarification only"
+    non_goals:
+      - "implementation before DoD"
+    destructive_actions_allowed: false
+    production_actions_allowed: false
+    secrets_allowed: false
+  validation:
+    primary_verification_commands: []
+    secondary_verification:
+      - "manual clarification"
+    proxy_signal_denylist:
+      - "tests passed alone"
+      - "file exists alone"
+      - "commit exists alone"
+      - "green dashboard alone"
+      - "validator passed alone"
+    goal_achievement_rule: "mark achieved only when evidence satisfies DoD, not when proxy signals pass"
+  runtime:
+    goal_runtime_recommendation: manual_review
+    codex_goal_live_validation_required: true
+    codex_goal_live_validation_evidence: ""
+    tool_feedback_ready: false
+    mcp_or_metrics_needed:
+      - "measurable DoD"
+    observation_cadence: "operator check every 15-20 minutes for long goal loops"
+    budget_guardrails:
+      token_budget: ""
+      time_budget: ""
+      max_iterations: "1"
+      stop_when:
+        - budget_limited
+        - tool_limited
+        - quota_wall
+        - goal_drift
+        - unsafe_action
+    pause_resume_policy:
+      user_controls_lifecycle: true
+      model_must_not_clear_or_pause_goal_without_user_instruction: true
+  continuation:
+    if_budget_limited:
+      required_summary:
+        - done
+        - remaining
+        - blockers
+        - next recommended goal
+    if_unmet:
+      create_followup_handoff: false
+  side_channel:
+    allowed_for_clarifications: true
+    must_not_mutate_goal_without_confirmation: true
+  closeout:
+    goal_status: not_applicable
+    evidence_vs_dod: []
+    proxy_signal_closure_used: false
+    continuation_summary:
+      done: []
+      remaining: []
+      blockers: []
+      next_recommended_goal: ""

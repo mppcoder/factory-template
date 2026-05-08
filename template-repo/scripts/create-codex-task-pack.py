@@ -432,6 +432,27 @@ Compact default:
 Точка входа: {entrypoint}
 Источник запуска: {launch.get('launch_source', 'chatgpt-handoff')}
 Вид handoff: {launch.get('handoff_shape', 'codex-task-handoff')}
+goal_contract:
+  normalized_goal: "Выполнить текущий handoff по проекту {root.name} с измеримым DoD и evidence."
+  definition_of_done:
+    - "Evidence satisfies the requested outcome and repo validators relevant to the change pass or blockers are documented."
+  evidence_required:
+    - "verification-report.md"
+    - "done-report.md"
+  scope:
+    - "repo-local artifacts named in the handoff"
+  non_goals:
+    - "production/destructive/secrets actions unless explicitly approved"
+  proxy_signal_denylist:
+    - "tests passed alone"
+    - "file exists alone"
+    - "commit exists alone"
+    - "green dashboard alone"
+    - "validator passed alone"
+  goal_achievement_rule: "mark achieved only when evidence satisfies DoD, not when proxy signals pass"
+goal_runtime_recommendation: {launch.get('goal_runtime_recommendation', 'goal_first_contract_only')}
+codex_goal_live_validation_required: true
+codex_goal_live_validation_evidence: "{launch.get('codex_goal_live_validation_evidence', '')}"
 Класс задачи: {launch.get('task_class', 'build')}
 Выбранный профиль: {launch.get('selected_profile', 'build')}
 Выбранная модель: {launch.get('selected_model', 'gpt-5.5')}
@@ -452,6 +473,7 @@ chat_index_path: {launch.get('chat_index_path', '')}
 Правило маршрутизации: advisory/handoff text не равен executable profile switch; надежная единица маршрутизации — только новый task launch.
 Правило приема ChatGPT handoff: если launch_source = chatgpt-handoff, Codex исполняет этот входящий handoff; первый ответ может содержать только handoff receipt / route receipt и не должен называть его self-handoff.
 Правило handoff_shape: новый default — один нейтральный `codex-task-handoff`; ChatGPT/handoff layer не должен заранее называть handoff оркестровым.
+Правило goal first: сначала нормализуй goal_contract; Codex /goal runtime optional/live-gated, experimental goals используются только по явному выбору; success нельзя объявлять по proxy signals alone.
 Правило execution mode: Codex после route receipt и анализа task graph сам выбирает `single-session execution` или `orchestrated-child-sessions`; в closeout обязательно указывает actual execution mode и `child/subagent count`.
 Правило ручного UI: для VS Code Codex extension откройте новый чат/окно, вручную выберите model/reasoning в picker, затем вставьте этот handoff.
 Правило live session: уже открытая live session = non-canonical fallback; не обещать auto-switch.

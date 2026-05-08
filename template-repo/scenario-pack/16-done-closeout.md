@@ -12,6 +12,32 @@
 Но такой closeout все равно обязан явно содержать формулировку, что внешних действий больше нет: например `Внешних действий не требуется.` или эквивалентную недвусмысленную фразу.
 Кроме этого, closeout обязан явно зафиксировать continuation outcome: `Следующий пользовательский шаг отсутствует; задачи текущего scope выполнены полностью.` или эквивалентную недвусмысленную формулировку.
 
+## Goal-first закрытие
+
+Если задача имеет `goal_contract`, closeout обязан назвать фактический `goal_status`:
+- `achieved`;
+- `unmet`;
+- `budget_limited`;
+- `tool_limited`;
+- `blocked`;
+- `not_applicable`.
+
+Closeout должен сравнить evidence с `definition_of_done`.
+Запрещено помечать goal как `achieved` только потому, что:
+- tests passed alone;
+- file exists alone;
+- commit exists alone;
+- green dashboard alone;
+- validator passed alone.
+
+Если goal не достигнут, closeout обязан дать continuation outcome:
+- что сделано;
+- что осталось;
+- blockers;
+- next recommended goal или follow-up handoff.
+
+Если остановка вызвана quota/rate limit, tool/MCP failure или approval wall, фиксируй `budget_limited` или `tool_limited`, а не `achieved`.
+
 ## Project card в финальном ответе
 
 Для `factory-template` финальный closeout по repo change обязан включать свежую compact project card из repo renderer. Это отдельный обязательный readout перед коротким summary или рядом с ним.

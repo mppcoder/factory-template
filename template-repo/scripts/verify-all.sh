@@ -421,6 +421,24 @@ run_model_prompt_policy_smoke() {
   python3 "$ROOT/template-repo/scripts/validate-model-prompt-policy.py" "$ROOT"
 }
 
+run_goal_contract_smoke() {
+  python3 "$ROOT/template-repo/scripts/validate-goal-contract.py" \
+    "$ROOT/template-repo/template/.chatgpt/goal-contract.yaml.template" --template
+  python3 "$ROOT/template-repo/scripts/validate-goal-contract.py" \
+    "$ROOT/.chatgpt/goal-contract.yaml"
+  for fixture in "$ROOT"/tests/goal-contract/valid/*.yaml; do
+    python3 "$ROOT/template-repo/scripts/validate-goal-contract.py" "$fixture"
+  done
+  for fixture in "$ROOT"/tests/goal-contract/negative/*.yaml; do
+    if python3 "$ROOT/template-repo/scripts/validate-goal-contract.py" "$fixture" >/tmp/goal-contract-negative.log 2>&1; then
+      echo "goal-contract negative fixture unexpectedly passed: $fixture" >&2
+      cat /tmp/goal-contract-negative.log >&2
+      return 1
+    fi
+  done
+  rm -f /tmp/goal-contract-negative.log
+}
+
 run_project_lifecycle_dashboard_smoke() {
   local tmp_dir
   tmp_dir="$(mktemp -d)"
@@ -1115,6 +1133,7 @@ run_quick() {
   run_step "validate-software-update-governance" python3 "$ROOT/template-repo/scripts/validate-software-update-governance.py" "$ROOT/template-repo/template"
   run_step "validate-gpt55-prompt-contract" run_gpt55_prompt_contract_smoke
   run_step "validate-model-prompt-policy" run_model_prompt_policy_smoke
+  run_step "validate-goal-contract" run_goal_contract_smoke
   run_step "validate-tree-contract" python3 "$ROOT/template-repo/scripts/validate-tree-contract.py" "$ROOT"
   run_step "validate-project-naming" python3 "$ROOT/template-repo/scripts/validate-project-naming.py" "$ROOT"
   run_step "validate-mode-parity" python3 "$ROOT/template-repo/scripts/validate-mode-parity.py" "$ROOT"

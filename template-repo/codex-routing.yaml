@@ -6,6 +6,57 @@ routing_contract:
   strict_launch_rule: "Launcher-first path остается опциональным строгим режимом для автоматизации, воспроизводимости, запуска из shell и scripted launch."
   live_session_fallback_rule: "Уже открытая live session не является надежным механизмом автопереключения profile/model/reasoning и допустима только как неканонический fallback."
   model_expectation_rule: "selected_model и selected_reasoning_effort фиксируют repo-configured mapping выбранного executable profile; live availability подтверждается отдельной проверкой `codex debug models`, а advisory handoff text сам по себе ничего не переключает."
+  goal_first:
+    contract: "goal first is mandatory before scenario-specific execution; it normalizes the task but does not select task_class/profile/model/reasoning by itself."
+    scenario: "03-goal-first-intake.md"
+    triggers:
+      - "goal"
+      - "goal:"
+      - "/goal"
+      - "цель"
+      - "цель:"
+      - "handoff"
+      - "direct_codex_task"
+    required_contract_fields:
+      - "normalized_goal"
+      - "definition_of_done"
+      - "evidence_required"
+      - "scope"
+      - "non_goals"
+      - "safety_boundaries"
+      - "budget_guardrails"
+      - "proxy_signal_denylist"
+    profile_boundary_rule: "goal first does not change selected_profile; task_class/profile/model/reasoning still come from task type and live catalog validation."
+    proxy_signal_denylist:
+      - "tests passed alone"
+      - "file exists alone"
+      - "commit exists alone"
+      - "green dashboard alone"
+      - "validator passed alone"
+    broad_task_pattern: "scrappy -> PRD -> clean"
+  goal_runtime_modes:
+    - "goal_first_contract_only"
+    - "manual_review"
+    - "codex_goal_candidate"
+    - "codex_goal_enabled_after_live_validation"
+    - "requires_feedback_setup"
+    - "not_recommended"
+  goal_runtime_rules:
+    codex_goal_optional: true
+    codex_goal_live_validation_required: true
+    experimental_goals_policy: "If `codex features list` exposes `goals` as experimental/off by default, treat it as working only after explicit user/operator choice; do not claim already-open session auto-switch."
+    candidate_when:
+      - "measurable research or metric improvement with feedback tools"
+      - "explicit user/operator choice to use experimental goals after live validation"
+    contract_only_when:
+      - "broad architecture/migration without decomposition"
+      - "normal repo docs/scripts update where goal contract is enough"
+    requires_feedback_setup_when:
+      - "no tests/metrics/logs/validators/reports feedback"
+    not_recommended_when:
+      - "production/destructive/secrets task without strict safe read-only profile"
+      - "unbounded autonomous loop"
+    observation_policy: "Do not leave long goal loops unsupervised; check status/budget regularly and pause on drift, quota wall, tool failure or unsafe action."
   handoff_shape:
     allowed_values:
       - "codex-task-handoff"
@@ -64,6 +115,7 @@ routing_contract:
   required_handoff_fields:
     - "launch_source"
     - "handoff_shape"
+    - "goal_contract"
     - "task_class"
     - "selected_profile"
     - "selected_model"
@@ -81,6 +133,7 @@ routing_contract:
 
 validation:
   live_catalog_check: "Model availability auto-check выполняется через `scripts/check-codex-model-catalog.py` и `codex debug models`; если live catalog недоступен, не обещать, что mapping гарантированно исполним."
+  goal_contract_check: "Goal-first contract проверяется через `scripts/validate-goal-contract.py`; `codex_goal_enabled` без live validation evidence невалиден."
   apply_mode_default: "manual-ui"
   strict_launch_mode_default: "optional"
   strict_launch_use_cases:
@@ -96,6 +149,7 @@ validation:
     - "Если после launch или manual UI apply виден sticky last-used profile/model/reasoning, закройте текущую сессию, откройте новую и при необходимости выполните launch_command, затем проверьте именованный profile в local Codex config."
     - "Если selected_model отсутствует в live catalog, обновите codex-routing.yaml или local profile mapping, прежде чем обещать этот model ID пользователю."
     - "Если новый model ID появился в live catalog, сначала создайте proposal через `scripts/check-codex-model-catalog.py --write-proposal`; promotion profile mapping требует ручного review."
+    - "Если используется experimental `goals`, сначала проверьте `codex features list`; включение goal runtime является runtime/operator choice и не следует из advisory текста."
 
 profiles:
   quick:
@@ -226,6 +280,8 @@ defaults:
   task_class: "build"
   scenario: "00-master-router.md"
   artifacts_to_update:
+    - ".chatgpt/goal-contract.yaml"
+    - ".chatgpt/goal-state.yaml"
     - ".chatgpt/codex-input.md"
     - ".chatgpt/codex-context.md"
     - ".chatgpt/codex-task-pack.md"

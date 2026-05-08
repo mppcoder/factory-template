@@ -11,6 +11,10 @@ COMMON_REQUIRED_FRAGMENTS = [
     "Язык ответа Codex: русский",
     "manual-ui",
     "уже открытая live session не является надежным",
+    "goal_contract",
+    "goal_runtime_recommendation",
+    "Codex /goal runtime optional",
+    "proxy signals alone",
     "continuation outcome",
 ]
 PARENT_REQUIRED_FRAGMENTS = [
@@ -47,6 +51,7 @@ FORBIDDEN_PATTERNS = [
     re.compile(r"(?i)file-based handoff"),
     re.compile(r"(?i)run this shell command first.*then paste"),
     re.compile(r"(?i)already-open .*auto-switch"),
+    re.compile(r"(?i)Codex /goal runtime (?:is )?(?:guaranteed|mandatory|always enabled)"),
     re.compile(r"(?i)\b[A-Z0-9_]*(TOKEN|SECRET|PASSWORD|API_KEY|PRIVATE_KEY)\s*[:=]\s*['\"]?[^'\"\s]+"),
 ]
 

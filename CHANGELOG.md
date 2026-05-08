@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 ### Добавлено
+- Goal-first contract layer: router gate, `03-goal-first-intake.md`, goal contract/state templates, operator guide, active `.chatgpt/goal-contract.yaml`, active `.chatgpt/goal-state.yaml` and validator fixtures for DoD/evidence/proxy-signal/runtime boundaries.
+- Codex CLI was updated locally to `@openai/codex@0.129.0`; `goals` is now detected as an experimental feature flag and treated as a working candidate only by explicit user/operator choice.
 - Root `LICENSE` now states proprietary terms: public visibility does not grant permission to use, copy, modify, distribute, run or derive from repository content without prior written consent.
 - First-answer ChatGPT allocation regression coverage for GitHub confirmation gates: validator fixtures now fail when the assistant asks to confirm GitHub access before materialized allocation or explicit auth/write blocker.
 - Стандарт `VPS Project Hosting Topologies`: architecture/runbook слой для `single-host` и `split-host`, разделение `/projects` и `/srv`, GitHub source-of-truth, per-project `/etc/<project>.env`, systemd/nginx/compose/backup model, pilot/restore proof checklists.

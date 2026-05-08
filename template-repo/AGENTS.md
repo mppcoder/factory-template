@@ -44,6 +44,12 @@ Public URL fallback допустим только при явном blocker: con
 
 Надёжная единица маршрутизации — только новый task launch.
 
+## Правило goal first
+Перед execution route нормализуй новую задачу в `goal_contract`: `normalized_goal`, DoD, evidence, scope/non-goals, safety/budget boundaries, feedback tools, stop criteria и proxy-signal denylist.
+`goal first` не переключает profile/model/reasoning сам по себе.
+`Codex /goal runtime` optional/live-gated; experimental `goals` можно использовать как рабочий runtime только по явному выбору пользователя/operator.
+Не закрывай goal по proxy signals alone: tests passed, file exists, commit exists, green dashboard или validator passed.
+
 ## Правило прямой задачи
 Если задача пришла без внешнего handoff, сначала сделай self-handoff по repo rules, а уже потом переходи к remediation / implementation.
 

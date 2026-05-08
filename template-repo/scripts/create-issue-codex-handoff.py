@@ -136,6 +136,27 @@ def main() -> int:
 launch_source: direct-task
 external_trigger: github-issue
 handoff_shape: codex-task-handoff
+goal_contract:
+  normalized_goal: "Разобрать Issue #{args.issue} и выполнить минимальное безопасное исправление с evidence."
+  definition_of_done:
+    - "Issue acceptance is addressed or blocker is documented."
+    - "Verification evidence is recorded."
+  evidence_required:
+    - "run.yaml"
+    - "PR/evidence or blocker"
+  scope:
+    - "Issue-scoped repo changes"
+  non_goals:
+    - "production deploy"
+    - "auto-merge"
+  proxy_signal_denylist:
+    - "tests passed alone"
+    - "file exists alone"
+    - "commit exists alone"
+    - "green dashboard alone"
+    - "validator passed alone"
+goal_runtime_recommendation: goal_first_contract_only
+codex_goal_live_validation_required: true
 task_class: {task_class}
 selected_profile: {selected_profile}
 selected_model: repo-configured

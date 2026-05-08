@@ -1,0 +1,108 @@
+goal_contract:
+  version: goal-contract/v1
+  goal_id: goal-first-transition
+  goal_command_source:
+    raw_user_goal: "Переработать factory-template под goal first и использовать experimental goals как рабочий runtime candidate."
+    normalized_goal: "Внедрить обязательный goal-first contract в repo-first routing, handoff, templates, docs, validators and closeout, сохранив Codex /goal как live-gated runtime candidate."
+    goal_first_trigger: handoff
+  outcome:
+    desired_result: "Новые задачи factory-template нормализуются в goal_contract до execution route, а закрытие цели сравнивает evidence с DoD вместо proxy signals."
+    definition_of_done:
+      - "Router содержит ранний goal-first normalization gate."
+      - "Codex handoff содержит обязательный goal_contract и live-gated goal runtime boundary."
+      - "Templates include reusable goal contract/state artifacts with budget, feedback, safety and proxy-signal fields."
+      - "Validators reject missing DoD, missing evidence, proxy-only success and codex_goal_enabled without live validation evidence."
+      - "Docs explain manual-ui default, optional strict launcher and experimental /goal boundary."
+    success_metrics:
+      - "goal-first fixtures cover valid, vague, proxy-only, enabled-without-validation, broad-decomposition and budget-limited closeout cases."
+      - "Targeted validators pass after implementation."
+    evidence_required:
+      - "Changed scenario/docs/template/script/test files in git diff."
+      - "validate-goal-contract.py results for positive and negative fixtures."
+      - "validate-codex-routing.py and validate-beginner-handoff-ux.py results."
+      - "Final git status and sync/commit outcome or exact blocker."
+    evidence_sources:
+      - "template-repo/scenario-pack/00-master-router.md"
+      - "template-repo/scenario-pack/03-goal-first-intake.md"
+      - "template-repo/scenario-pack/15-handoff-to-codex.md"
+      - "template-repo/template/.chatgpt/goal-contract.yaml.template"
+      - "template-repo/scripts/validate-goal-contract.py"
+      - "tests/goal-contract"
+  boundaries:
+    scope:
+      - "factory-template repo contract, templates, docs, validators and fixtures"
+      - "Codex CLI live capability check and explicit experimental runtime boundary"
+    non_goals:
+      - "Do not claim ChatGPT Project UI can switch live Codex runtime."
+      - "Do not require production/destructive runtime."
+      - "Do not invent FT-CH id."
+    destructive_actions_allowed: false
+    production_actions_allowed: false
+    secrets_allowed: false
+  validation:
+    primary_verification_commands:
+      - "python3 template-repo/scripts/validate-goal-contract.py tests/goal-contract/valid/measurable-goal.yaml"
+      - "python3 template-repo/scripts/validate-goal-contract.py template-repo/template/.chatgpt/goal-contract.yaml.template --template"
+      - "python3 template-repo/scripts/validate-codex-routing.py ."
+      - "python3 template-repo/scripts/validate-beginner-handoff-ux.py tests/beginner-handoff-ux/positive/handoff.md"
+    secondary_verification:
+      - "bash template-repo/scripts/verify-all.sh quick"
+      - "git status --short --branch"
+    proxy_signal_denylist:
+      - "tests passed alone"
+      - "file exists alone"
+      - "commit exists alone"
+      - "green dashboard alone"
+      - "validator passed alone"
+    goal_achievement_rule: "mark achieved only when evidence satisfies DoD, not when proxy signals pass"
+  runtime:
+    goal_runtime_recommendation: codex_goal_candidate
+    codex_goal_live_validation_required: true
+    codex_goal_live_validation_evidence: "codex-cli 0.129.0; `codex features list` shows `goals` as experimental false; explicit user instruction treats it as working candidate"
+    tool_feedback_ready: true
+    mcp_or_metrics_needed:
+      - "repo validators"
+      - "git status"
+      - "Codex CLI feature list"
+    observation_cadence: "operator check every 15-20 minutes for long goal loops"
+    budget_guardrails:
+      token_budget: ""
+      time_budget: ""
+      max_iterations: ""
+      stop_when:
+        - budget_limited
+        - tool_limited
+        - quota_wall
+        - goal_drift
+        - unsafe_action
+    pause_resume_policy:
+      user_controls_lifecycle: true
+      model_must_not_clear_or_pause_goal_without_user_instruction: true
+  continuation:
+    if_budget_limited:
+      required_summary:
+        - done
+        - remaining
+        - blockers
+        - next recommended goal
+    if_unmet:
+      create_followup_handoff: true
+  side_channel:
+    allowed_for_clarifications: true
+    must_not_mutate_goal_without_confirmation: true
+  closeout:
+    goal_status: achieved
+    evidence_vs_dod:
+      - "Router, handoff and closeout scenarios contain goal-first gate/contract/runtime/DoD evidence rules."
+      - "Goal contract/state templates and active task goal artifacts exist."
+      - "validate-goal-contract.py passes valid fixtures and rejects negative proxy/live-validation/DoD/budget fixtures."
+      - "verify-all quick passed."
+    proxy_signal_closure_used: false
+    continuation_summary:
+      done:
+        - "goal-first transition implemented"
+      remaining:
+        - "none"
+      blockers:
+        - "none"
+      next_recommended_goal: "none"
