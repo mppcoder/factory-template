@@ -4,39 +4,159 @@ auto_install_without_approval: forbidden
 strict_controlled_mode: true
 
 baseline:
-  status: pending
-  recorded_at: ""
-  evidence: []
+  status: completed
+  recorded_at: "2026-05-08T10:10:11Z"
+  evidence:
+    - "date -Iseconds -> 2026-05-08T13:10:11+03:00"
+    - "cat /etc/os-release -> Ubuntu 24.04.4 LTS (Noble Numbat)"
+    - "uname -r -> 6.8.0-107-generic"
+    - "/etc/cloud/build.info -> build_name=server serial=20260323"
+    - "/run/cloud-init/instance-data.json -> cloud_id=nocloud, subplatform=config-disk (/dev/vda)"
+    - "apt-cache policy unattended-upgrades -> installed/candidate 2.9.1+nmu4ubuntu1"
+    - "dpkg-query -W unattended-upgrades apt -> unattended-upgrades 2.9.1+nmu4ubuntu1, apt 2.8.3"
+    - "systemctl is-enabled unattended-upgrades apt-daily.timer apt-daily-upgrade.timer -> disabled/disabled/disabled"
+    - "systemctl list-timers apt-daily.timer apt-daily-upgrade.timer -> 0 timers listed"
+    - "apt list --upgradable -> 68 packages visible in local apt cache"
+    - "docker --version -> Docker version 29.1.3, build 29.1.3-0ubuntu3~24.04.1"
+    - "docker compose version -> Docker Compose version 2.40.3+ds1-0ubuntu1~24.04.1"
+    - "node --version -> v24.14.1"
+    - "npm --version -> 11.11.0"
+    - "python3 --version -> Python 3.12.3"
+    - "pip3 --version -> pip 24.0 from /usr/lib/python3/dist-packages/pip"
+    - "rg '^\\s*uses:\\s*' .github/workflows -> workflow action refs recorded below"
+    - "rg '^FROM\\s+|image:\\s*' deploy -> Docker image refs recorded below"
+    - "rg --files lockfile scan -> requirements.txt and requirements.lock"
   os:
-    distro_name: ""
-    version: ""
-    codename: ""
-    provider_image_id: ""
-    kernel: ""
-    selected_ubuntu_lts_release: ""
-    later_package_update_state: ""
+    distro_name: "Ubuntu"
+    version: "24.04.4 LTS"
+    codename: noble
+    provider_image_id: "cloud-init build_name=server serial=20260323; platform=nocloud; subplatform=config-disk (/dev/vda)"
+    kernel: "6.8.0-107-generic"
+    selected_ubuntu_lts_release: "Ubuntu 24.04 LTS (noble)"
+    later_package_update_state: "local apt cache reports 68 upgradable packages; no apt update/upgrade/install was run by this task"
   package_manager:
     manager: apt
-    sources: []
+    version: "2.8.3"
+    sources:
+      - path: /etc/apt/sources.list
+        type: deb822-pointer
+        summary: "Ubuntu sources moved to /etc/apt/sources.list.d/ubuntu.sources"
+      - path: /etc/apt/sources.list.d/ubuntu.sources
+        type: deb822
+        suites:
+          - noble
+          - noble-updates
+          - noble-backports
+          - noble-security
+        components:
+          - main
+          - universe
+          - restricted
+          - multiverse
+        uris:
+          - "http://archive.ubuntu.com/ubuntu"
+          - "http://security.ubuntu.com/ubuntu"
+      - path: /etc/apt/sources.list.d/nodesource.sources
+        type: deb822
+        suites:
+          - nodistro
+        components:
+          - main
+        uris:
+          - "https://deb.nodesource.com/node_24.x"
+      - path: /etc/apt/sources.list.d/timeweb-zabbix.list
+        type: deb
+        suites:
+          - focal
+        components:
+          - main
+        uris:
+          - "http://zabbix.repo.timeweb.ru/ubuntu/"
+        note: "Provider Zabbix source is focal on a noble host; record-only finding for future upgrade planning."
     unattended_upgrades:
-      installed: unknown
-      enabled: unknown
-      apt_timers: []
-      policy_exception: ""
+      installed: true
+      version: "2.9.1+nmu4ubuntu1"
+      enabled: false
+      apt_timers:
+        - unit: unattended-upgrades
+          enabled: disabled
+        - unit: apt-daily.timer
+          enabled: disabled
+        - unit: apt-daily-upgrade.timer
+          enabled: disabled
+      policy_exception: "Package and APT periodic config exist, but relevant systemd units/timers are disabled in this environment; keep manual-approved-upgrade policy."
   runtime_stack:
-    docker_version: ""
-    docker_compose_version: ""
-    node_version: ""
-    python_version: ""
+    docker_version: "Docker version 29.1.3, build 29.1.3-0ubuntu3~24.04.1"
+    docker_compose_version: "Docker Compose version 2.40.3+ds1-0ubuntu1~24.04.1"
+    node_version: "v24.14.1"
+    npm_version: "11.11.0"
+    python_version: "Python 3.12.3"
+    pip_version: "pip 24.0"
   github_actions:
-    actions: []
+    actions:
+      - workflow: .github/workflows/issue-autofix.yml
+        uses:
+          - actions/checkout@v4
+      - workflow: .github/workflows/ci.yml
+        uses:
+          - actions/checkout@v6
+          - actions/setup-python@v6
+          - actions/upload-artifact@v7
+      - workflow: .github/workflows/release.yml
+        uses:
+          - actions/checkout@v6
+          - actions/setup-python@v6
+          - actions/upload-artifact@v7
   docker_images:
-    base_images: []
-  package_lockfiles: []
-  critical_runtime_dependencies: []
+    base_images:
+      - path: deploy/compose.yaml
+        image: "nginx:1.27-alpine"
+        digest: ""
+        note: "Pinned tag present; digest is not fixed in repo."
+      - path: deploy/templates/docker-compose.project.template.yml
+        image: "${PROJECT_IMAGE:?set PROJECT_IMAGE in PROJECT_ENV_FILE}"
+        digest: ""
+        note: "Generated downstream projects must provide an explicit project image through env; no template digest is fixed."
+  package_lockfiles:
+    - path: requirements.txt
+      summary: "Delegates to requirements.lock."
+    - path: requirements.lock
+      summary: "Pinned Python utility dependency: PyYAML==6.0.2."
+  critical_runtime_dependencies:
+    - id: ubuntu-lts
+      current: "Ubuntu 24.04.4 LTS noble, kernel 6.8.0-107-generic"
+      role: "VPS operating-system baseline for factory-template and generated project runbooks."
+    - id: apt
+      current: "apt 2.8.3"
+      role: "OS package manager; upgrade/install actions require explicit approval."
+    - id: unattended-upgrades
+      current: "2.9.1+nmu4ubuntu1, installed but disabled by systemd state"
+      role: "Recorded for governance; auto-install remains forbidden without approval."
+    - id: docker
+      current: "Docker 29.1.3"
+      role: "Runtime/deploy proof tooling."
+    - id: docker-compose
+      current: "Docker Compose 2.40.3"
+      role: "Runtime/deploy proof tooling."
+    - id: nodejs
+      current: "Node v24.14.1 / npm 11.11.0"
+      role: "Bootstrapper and release tooling runtime where applicable."
+    - id: python
+      current: "Python 3.12.3 / pip 24.0"
+      role: "Factory validators, renderers and release tooling."
+    - id: pyyaml
+      current: "PyYAML==6.0.2"
+      role: "Pinned dependency for Python YAML validators/renderers."
+    - id: github-actions
+      current: "checkout@v4/v6, setup-python@v6, upload-artifact@v7"
+      role: "CI/release automation actions."
+    - id: nginx-runtime-image
+      current: "nginx:1.27-alpine"
+      role: "Starter deploy compose image for template runtime reference."
 
 policy_exceptions: []
 
 notes:
   - "Ubuntu LTS image release and later package update state are tracked separately."
   - "Ubuntu LTS migration is a separate migration/upgrade project, not silent maintenance."
+  - "This inventory is report-only evidence; it did not run apt upgrade, apt install, Docker image upgrade, dependency upgrade, production deploy or public cutover."

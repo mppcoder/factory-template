@@ -1,6 +1,6 @@
 # Панель жизненного цикла проекта / `project-lifecycle-dashboard`
 
-Generated UTC: `2026-05-08T09:49:42+00:00`
+Generated UTC: `2026-05-08T10:13:55+00:00`
 Source: `/projects/factory-template/template-repo/template/.chatgpt/project-lifecycle-dashboard.yaml`
 
 ## Сейчас
@@ -59,7 +59,7 @@ Source: `/projects/factory-template/template-repo/template/.chatgpt/project-life
 - compact lifecycle chain: ✅ Идея → ✅ Intake → ✅ Спека → ✅ Архитектура → ✅ Handoff → ✅ Исполнение
 → ✅ Проверка → 🕒 Release → 🕒 Deploy → 🕒 Сопровождение
 - compact module readiness chain: ✅ Lifecycle → ✅ Core → ✅ Security → ✅ UI/A11y → ✅ Quality → ✅ WebSec
-→ 🟡 Ops → ⏸ AI
+→ ✅ Ops → ⏸ AI
 
 ### Активные ChatGPT handoff-задачи
 
@@ -287,19 +287,19 @@ Source: `/projects/factory-template/template-repo/template/.chatgpt/project-life
 | `ui_a11y` UI/A11y | `completed` | `wcag_22` | `accessibility_minimum_checked` | none | `docs/operator/runbook-packages/01-factory-template/01-user-runbook.md`, `docs/operator/runbook-packages/02-greenfield-product/01-user-runbook.md`, `docs/operator/beginner-first-windows-to-first-project.md` |
 | `quality` Quality | `completed` | `iso_25010` | `quality_minimum_checked` | none | `template-repo/scripts/validate-runbook-packages.py`, `template-repo/scripts/validate-downstream-application-proof.py`, `bash template-repo/scripts/verify-all.sh quick` |
 | `websec` WebSec | `completed` | `owasp_asvs` | `web_security_checked` | none | `docs/architecture/vps-project-hosting-topologies.md`, `docs/operator/single-big-vps-dev-runtime-architecture.md`, `docs/downstream-application-proof.md` |
-| `ops` Ops | `in_progress` | `dora_metrics` | `operations_health_baseline` | `deploy_runtime`, `software_update_governance` | `docs/architecture/vps-project-hosting-topologies.md`, `docs/releases/single-vps-downstream-proof-roadmap.md`, `reports/release/downstream-application-proof-report.md` |
+| `ops` Ops | `completed` | `dora_metrics` | `operations_health_baseline` | `deploy_runtime`, `software_update_governance` | `docs/architecture/vps-project-hosting-topologies.md`, `docs/releases/single-vps-downstream-proof-roadmap.md`, `reports/release/downstream-application-proof-report.md`, `.chatgpt/software-inventory.yaml`, `.chatgpt/software-update-watchlist.yaml`, `.chatgpt/software-update-readiness.yaml` |
 | `ai` AI | `not_applicable` | `openai_ai_safety_overlay` | `ai_safety_gate` | none | Project has not declared AI model, agent or AI-output behavior. |
 
 ## Управление обновлениями
 
-- baseline status: `pending`
+- baseline status: `completed`
 - auto-update policy: `manual-approved-upgrade`
-- last intelligence check: `not recorded`
-- relevant findings: `0`
+- last intelligence check: `2026-05-08T10:10:11Z`
+- relevant findings: `2`
 - upgrade proposal: `not_started`
 - blockers: `none`
-- next safe action: Заполнить `.chatgpt/software-inventory.yaml`, проверить unattended upgrades и обновить watchlist без установки обновлений.
-- fallback action: Если baseline неполный, заблокировать upgrade proposal до записи OS/runtime/package evidence.
+- next safe action: Если нужны реальные package/runtime upgrades, открыть отдельную upgrade proposal task с явным approval, backup, rollback и test matrix.
+- fallback action: Продолжать monthly report-only watchlist checks; auto-upgrade и auto-install остаются запрещены без explicit approval.
 
 ## Улучшения после релиза
 

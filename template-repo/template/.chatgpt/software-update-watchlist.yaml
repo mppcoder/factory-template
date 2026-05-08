@@ -1,7 +1,7 @@
 schema: software-update-watchlist/v1
 check_cadence: monthly
-last_checked_at: ""
-relevant_findings_count: 0
+last_checked_at: "2026-05-08T10:10:11Z"
+relevant_findings_count: 2
 
 impact_classifications:
   - not_relevant
@@ -16,7 +16,7 @@ impact_classifications:
 watched_components:
   - id: ubuntu-lts
     name: "Ubuntu LTS"
-    current_version: ""
+    current_version: "Ubuntu 24.04.4 LTS (noble), kernel 6.8.0-107-generic"
     official_docs_source:
       name: "Ubuntu Server documentation"
       url: "https://documentation.ubuntu.com/server/"
@@ -33,12 +33,12 @@ watched_components:
       - name: "Ubuntu Discourse"
         url: "https://discourse.ubuntu.com/"
     check_cadence: monthly
-    last_checked_at: ""
-    last_relevant_finding: ""
-    project_impact_classification: monitor_only
+    last_checked_at: "2026-05-08T10:10:11Z"
+    last_relevant_finding: "Local apt cache reports 68 upgradable packages, including noble-updates/noble-security pockets; no upgrade/install was run."
+    project_impact_classification: security_relevant
   - id: docker-compose
     name: "Docker / Docker Compose"
-    current_version: ""
+    current_version: "Docker 29.1.3 / Docker Compose 2.40.3"
     official_docs_source:
       name: "Docker docs"
       url: "https://docs.docker.com/"
@@ -53,12 +53,12 @@ watched_components:
       url: "https://github.com/docker/for-linux/issues"
     secondary_signals: []
     check_cadence: monthly
-    last_checked_at: ""
-    last_relevant_finding: ""
+    last_checked_at: "2026-05-08T10:10:11Z"
+    last_relevant_finding: "Baseline recorded; no repo-confirmed Docker/Compose upgrade proposal opened."
     project_impact_classification: monitor_only
   - id: node-python
     name: "Node.js / Python runtimes"
-    current_version: ""
+    current_version: "Node v24.14.1 / npm 11.11.0 / Python 3.12.3 / pip 24.0"
     official_docs_source:
       name: "Node.js and Python docs"
       url: "https://nodejs.org/en/about/previous-releases"
@@ -73,8 +73,67 @@ watched_components:
       url: "https://github.com/nodejs/node/issues"
     secondary_signals: []
     check_cadence: monthly
-    last_checked_at: ""
-    last_relevant_finding: ""
+    last_checked_at: "2026-05-08T10:10:11Z"
+    last_relevant_finding: "Local apt cache reports nodejs 24.15.0-1nodesource1 available from NodeSource; no upgrade/install was run."
+    project_impact_classification: monitor_only
+  - id: github-actions
+    name: "GitHub Actions used by repo workflows"
+    current_version: "actions/checkout@v4/v6, actions/setup-python@v6, actions/upload-artifact@v7"
+    official_docs_source:
+      name: "GitHub Actions documentation"
+      url: "https://docs.github.com/actions"
+    release_notes_source:
+      name: "GitHub Actions changelog"
+      url: "https://github.blog/changelog/label/actions/"
+    security_advisory_source:
+      name: "GitHub Security Advisories"
+      url: "https://github.com/advisories"
+    issue_tracker_source:
+      name: "GitHub Actions runner issues"
+      url: "https://github.com/actions/runner/issues"
+    secondary_signals: []
+    check_cadence: monthly
+    last_checked_at: "2026-05-08T10:10:11Z"
+    last_relevant_finding: "Workflow action refs are pinned to version tags, not main/master; no automatic action bump proposed."
+    project_impact_classification: monitor_only
+  - id: docker-base-images
+    name: "Docker base/runtime images"
+    current_version: "nginx:1.27-alpine starter image; downstream PROJECT_IMAGE env-bound"
+    official_docs_source:
+      name: "Docker image references"
+      url: "https://docs.docker.com/reference/"
+    release_notes_source:
+      name: "Docker Hub nginx image"
+      url: "https://hub.docker.com/_/nginx"
+    security_advisory_source:
+      name: "Docker Scout documentation"
+      url: "https://docs.docker.com/scout/"
+    issue_tracker_source:
+      name: "nginx Docker image issues"
+      url: "https://github.com/nginxinc/docker-nginx/issues"
+    secondary_signals: []
+    check_cadence: monthly
+    last_checked_at: "2026-05-08T10:10:11Z"
+    last_relevant_finding: "Starter image tag is fixed but digest is not pinned; keep as monitor-only unless production runtime scope requires digest pinning."
     project_impact_classification: monitor_only
 
-findings: []
+findings:
+  - id: SWU-2026-05-08-001
+    component_id: ubuntu-lts
+    impact_classification: security_relevant
+    summary: "Local apt cache reports 68 upgradable packages on Ubuntu 24.04.4 LTS, including security/update pockets."
+    evidence:
+      - "apt list --upgradable 2>/dev/null | sed '1d' | wc -l -> 68"
+      - "Sample packages include curl, openssl, python3.12, linux-virtual, nginx, openssh-server and nodejs."
+    action: "Record baseline and require explicit approval before any package upgrade plan."
+    upgrade_proposal_required: false
+    approval_required_before_change: true
+  - id: SWU-2026-05-08-002
+    component_id: ubuntu-lts
+    impact_classification: monitor_only
+    summary: "APT sources include a provider Zabbix focal repository on a noble host."
+    evidence:
+      - "/etc/apt/sources.list.d/timeweb-zabbix.list -> deb [arch=amd64] http://zabbix.repo.timeweb.ru/ubuntu/ focal main"
+    action: "Keep as upgrade-readiness watch item; review before any OS/package migration."
+    upgrade_proposal_required: false
+    approval_required_before_change: true

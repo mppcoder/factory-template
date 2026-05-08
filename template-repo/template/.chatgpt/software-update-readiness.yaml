@@ -1,43 +1,88 @@
 schema: software-update-readiness/v1
-status: pending
-baseline_status: pending
+status: completed
+baseline_status: completed
 auto_update_policy: manual-approved-upgrade
-last_update_intelligence_check: ""
-relevant_findings_count: 0
+last_update_intelligence_check: "2026-05-08T10:10:11Z"
+relevant_findings_count: 2
 upgrade_proposal_status: not_started
 user_approval_required: true
 auto_upgrade_allowed: false
+evidence:
+  - ".chatgpt/software-inventory.yaml baseline.status=completed"
+  - ".chatgpt/software-update-watchlist.yaml findings SWU-2026-05-08-001 and SWU-2026-05-08-002"
+  - "No apt upgrade, apt install, Docker image upgrade, dependency upgrade, production deploy or public cutover was run."
+  - "Upgrade proposal remains not_started because this task only recorded report-only baseline evidence."
 
 next_safe_action:
-  owner_boundary: internal-repo-follow-up
-  action: "Заполнить software inventory, проверить unattended upgrades и обновить watchlist без установки обновлений."
-  evidence: []
+  owner_boundary: external-user-action
+  action: "If package upgrades are desired, open a separate explicit upgrade proposal task with backup, rollback and test approval."
+  status: pending
+  evidence:
+    - ".chatgpt/software-update-readiness.yaml"
+    - ".chatgpt/software-update-watchlist.yaml"
 
 fallback_action:
   owner_boundary: internal-repo-follow-up
-  action: "Если baseline неполный, заблокировать upgrade proposal до записи OS/runtime/package evidence."
-  evidence: []
+  action: "Continue monthly report-only watchlist checks and keep auto-upgrade forbidden until an approved upgrade task exists."
+  status: completed
+  evidence:
+    - ".chatgpt/software-inventory.yaml"
+    - ".chatgpt/software-update-watchlist.yaml"
 
 blockers: []
 
 upgrade_proposal:
-  current_version: ""
+  current_version: "Ubuntu 24.04.4 LTS noble; Docker 29.1.3; Compose 2.40.3; Node v24.14.1; Python 3.12.3"
   target_version: ""
-  reason: ""
+  reason: "No repo-approved upgrade target selected. Baseline recorded only."
   project_relevance:
     features: []
     bugs: []
-    vulnerabilities: []
-  affected_layers: []
-  required_backups: []
-  restore_rollback_plan: ""
-  test_matrix: []
+    vulnerabilities:
+      - "Local apt cache reports security/update packages available; requires separate approval before change."
+  affected_layers:
+    - os
+    - package-manager
+    - runtime-stack
+    - ci
+    - deploy-runtime
+  required_backups:
+    - "Git clean status and synced branch before upgrade task."
+    - "VPS snapshot or provider backup before OS/package upgrades."
+    - "Application/data volume backup before runtime image or package changes."
+    - "Rollback copy of compose/env/runtime reports for deploy-related changes."
+  restore_rollback_plan: "Skeleton only: restore VPS/provider snapshot for OS/package failure; restore app/data volume backup for runtime failure; revert repo changes via normal git workflow; rerun validators and runtime healthchecks before closing."
+  test_matrix:
+    - id: repo-validators
+      command: "bash template-repo/scripts/verify-all.sh quick"
+      required_before_upgrade: true
+      required_after_upgrade: true
+    - id: software-governance-validator
+      command: "python3 template-repo/scripts/validate-software-update-governance.py template-repo/template"
+      required_before_upgrade: true
+      required_after_upgrade: true
+    - id: docker-compose-config
+      command: "docker compose -f deploy/compose.yaml -f deploy/compose.production.yaml config"
+      required_before_upgrade: true
+      required_after_upgrade: true
+    - id: local-healthcheck
+      command: "Run approved runtime healthcheck only inside a separate runtime proof task."
+      required_before_upgrade: false
+      required_after_upgrade: true
+    - id: rollback-drill
+      command: "Run approved restore/rollback drill only inside a separate runtime proof task."
+      required_before_upgrade: false
+      required_after_upgrade: true
   user_approval_gate:
     required: true
     status: pending
     approved_by: ""
     approved_at: ""
   rollout_plan: []
-  post_upgrade_monitoring: []
-  fallback_decision: ""
-  evidence: []
+  post_upgrade_monitoring:
+    - "Report-only watchlist/readiness refresh after an approved upgrade task."
+    - "No background monitoring daemon is enabled by this baseline."
+  fallback_decision: "If no explicit approval exists, do not upgrade and keep upgrade_proposal_status=not_started."
+  evidence:
+    - ".chatgpt/software-inventory.yaml"
+    - ".chatgpt/software-update-watchlist.yaml"
