@@ -1,6 +1,6 @@
 schema: codex-work-index/v1
 project_code: FT
-next_codex_work_number: 35
+next_codex_work_number: 36
 id_policy:
   canonical_format: <PROJECT_CODE>-CX-<NNNN> <task-slug>
   independent_from_chat_handoff_index: true
@@ -861,15 +861,52 @@ items:
   - Read router, goal-first intake scenario and greenfield-product runbook/checklist.
   - Canonical greenfield start confirmed as ChatGPT Project factory-template -> new
     chat -> `новый проект`; Codex takeover starts at GF-050 after generated handoff.
-  - Received concrete Health Sync Bridge handoff with project_name, project_slug
-    and PROJECT_CODE HSB.
+  - Received concrete Health Sync Bridge handoff with project_name, project_slug and
+    PROJECT_CODE HSB.
   - Created private GitHub repo mppcoder/health-sync-bridge and canonical project
     root /projects/health-sync-bridge.
-  - Filled downstream project knowledge, feasibility-first PRD, API feasibility
-    matrix, OAuth/security, data mapping, dev+prod VPS layout and first backlog.
+  - Filled downstream project knowledge, feasibility-first PRD, API feasibility matrix,
+    OAuth/security, data mapping, dev+prod VPS layout and first backlog.
   - bash scripts/verify-all.sh quick in /projects/health-sync-bridge
   - python3 template-repo/scripts/validate-goal-contract.py .chatgpt/goal-contract.yaml
   - python3 template-repo/scripts/validate-codex-routing.py .
   - python3 template-repo/scripts/validate-codex-work-index.py .chatgpt/codex-work-index.yaml
-  next_action: No further factory-template implementation action; continue in
-    downstream project with Withings OAuth implementation or Garmin approval spike.
+  next_action: No further factory-template implementation action; continue in downstream
+    project with Withings OAuth implementation or Garmin approval spike.
+- codex_work_id: FT-CX-0035
+  work_number: 35
+  work_title: FT-CX-0035 continue-internal-followup-bug
+  task_slug: continue-internal-followup-bug
+  kind: remediation
+  state: verified
+  created_utc: '2026-05-08T15:50:30Z'
+  updated_utc: '2026-05-08T15:55:48Z'
+  source_type: direct-task
+  handoff_group: continue-internal-followup-bug
+  handoff_revision: 1
+  handoff_register_item_id: ''
+  status_chain:
+  - codex_self_handoff
+  - codex_accepted
+  - codex_completed
+  evidence:
+  - Allocated during direct-task bootstrap before first substantive response.
+  - Read router and classified user report as reusable process/launcher remediation.
+  - Fixed factory launcher/wizard project-base handling so canonical runs from /projects/factory-template
+    target /projects/<slug>, while explicit --project-base and smoke cwd behavior remain supported.
+  - Fixed deploy-dry-run validator fallback for generated downstream repos without
+    template-repo/scripts.
+  - Added route-only regression coverage to verify-all and bug report
+    reports/bugs/2026-05-08-guided-launcher-nested-project-root.md.
+  - Continued Health Sync Bridge internal work with stdlib scaffolds for Withings
+    OAuth, Garmin approval blocker, normalized store, dashboard, audit redaction
+    and export fallback.
+  - python3 scripts/health-sync-bridge-smoke.py in /projects/health-sync-bridge
+  - bash scripts/deploy-dry-run.sh in /projects/health-sync-bridge
+  - bash scripts/verify-all.sh quick in /projects/health-sync-bridge
+  - python3 template-repo/scripts/factory-launcher.py --mode greenfield --project-name
+    "Canonical Root Smoke" --project-slug canonical-root-smoke --route-only
+  - python3 template-repo/scripts/validate-goal-contract.py .chatgpt/goal-contract.yaml
+  - python3 template-repo/scripts/validate-codex-work-index.py .chatgpt/codex-work-index.yaml
+  next_action: No internal repo action remains; real provider integration waits
+    for external Withings credentials, Garmin approval and production storage/TLS approval.

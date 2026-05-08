@@ -76,6 +76,9 @@ PROD_COMPOSE="$REPO_ROOT/deploy/compose.production.yaml"
 ENV_FILE="$REPO_ROOT/deploy/.env"
 ENV_EXAMPLE="$REPO_ROOT/deploy/.env.example"
 VALIDATE_ENV_SCRIPT="$REPO_ROOT/template-repo/scripts/validate-operator-env.py"
+if [[ ! -f "$VALIDATE_ENV_SCRIPT" ]]; then
+  VALIDATE_ENV_SCRIPT="$REPO_ROOT/scripts/validate-operator-env.py"
+fi
 REPORT_DIR="$REPO_ROOT/.factory-runtime/reports"
 REPORT_FILE="$REPORT_DIR/deploy-dry-run-latest.txt"
 

@@ -572,6 +572,27 @@ run_project_lifecycle_dashboard_smoke() {
   fi
   awk 'length($0) > 82 { print "too long: " $0; bad=1 } END { exit bad }' "$tmp_dir/chatgpt-card.md"
   python3 "$ROOT/template-repo/scripts/validate-chatgpt-first-answer-contract.py" "$ROOT"
+  python3 "$ROOT/template-repo/scripts/factory-launcher.py" \
+    --template-repo-root "$ROOT/template-repo" \
+    --mode greenfield \
+    --project-name "Route Only Project Base" \
+    --project-slug route-only-project-base \
+    --project-base "$tmp_dir/project-base" \
+    --route-only > "$tmp_dir/factory-launcher-project-base.txt"
+  grep -q "Целевая папка проекта: $tmp_dir/project-base/route-only-project-base" \
+    "$tmp_dir/factory-launcher-project-base.txt"
+  if [ "$ROOT" = "/projects/factory-template" ]; then
+    (
+      cd "$ROOT"
+      python3 "$ROOT/template-repo/scripts/factory-launcher.py" \
+        --mode greenfield \
+        --project-name "Canonical Root Smoke" \
+        --project-slug canonical-root-smoke \
+        --route-only > "$tmp_dir/factory-launcher-canonical-root.txt"
+    )
+    grep -q "Целевая папка проекта: /projects/canonical-root-smoke" \
+      "$tmp_dir/factory-launcher-canonical-root.txt"
+  fi
   python3 "$ROOT/template-repo/scripts/render-project-lifecycle-dashboard.py" \
     --input "$ROOT/tests/project-lifecycle-dashboard/valid/project-lifecycle-dashboard.yaml" \
     --format codex-card \

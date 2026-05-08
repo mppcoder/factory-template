@@ -1,5 +1,5 @@
 launch:
-  timestamp_utc: '2026-05-08T15:04:55+00:00'
+  timestamp_utc: '2026-05-08T15:54:58+00:00'
   launch_unit: new-task-launch
   launch_source: direct-task
   router_layer: executable
@@ -12,7 +12,9 @@ launch:
   - 'default neutral handoff: Codex decides actual execution_mode after analysis'
   task_class: build
   task_class_reasons:
-  - keyword-hit не найден; fallback на default task class `build`
+  - 'keyword-hit: fix'
+  - 'keyword-hit: implement'
+  - 'keyword-hit: implementation'
   - 'явный reasoning/model override совпал с default profile: build'
   selected_profile: build
   selected_model: gpt-5.5
@@ -31,9 +33,12 @@ launch:
   - .chatgpt/codex-task-pack.md
   - .chatgpt/verification-report.md
   - .chatgpt/done-report.md
+  - reports/bugs/
+  - reports/factory-feedback/
   handoff_allowed: yes (forbidden)
-  defect_capture_path: not-required-by-text-signal
-  task_summary: 'codex_work_id: FT-CX-0034'
+  defect_capture_path: reproduce -> evidence -> bug report -> layer classification
+    -> factory feedback if reusable -> remediation
+  task_summary: 'codex_work_id: FT-CX-0035'
   launch_boundary_rule: Выбор модели и reasoning mode считается надежным только на
     новом запуске Codex для новой задачи.
   interactive_default_rule: 'Для интерактивной работы в VS Code Codex extension основной
@@ -110,9 +115,9 @@ launch:
   requested_selected_profile: null
   requested_selected_model: null
   requested_selected_reasoning_effort: null
-  codex_work_id: FT-CX-0034
-  codex_work_title: FT-CX-0034 greenfield-intake
-  task_slug: greenfield-intake
+  codex_work_id: FT-CX-0035
+  codex_work_title: FT-CX-0035 continue-internal-followup-bug
+  task_slug: continue-internal-followup-bug
   codex_work_kind: self_handoff
   codex_work_state: codex_accepted
   codex_work_index_path: .chatgpt/codex-work-index.yaml

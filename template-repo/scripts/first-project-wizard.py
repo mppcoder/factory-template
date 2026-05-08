@@ -99,6 +99,15 @@ def _wizard_paths(explicit_root: str | None) -> tuple[Path, Path, Path, Path]:
     return repo_root, presets_file, launcher_file, preflight_file
 
 
+def _default_project_base(repo_root: Path, explicit_base: str | None = None) -> Path:
+    if explicit_base:
+        return Path(explicit_base).expanduser().resolve()
+    cwd = Path.cwd().resolve()
+    if cwd == repo_root.parent and cwd.parent.as_posix().rstrip("/") == "/projects":
+        return cwd.parent
+    return cwd
+
+
 def _load_presets(presets_file: Path) -> dict:
     if not presets_file.exists():
         raise SystemExit(f"Не найден файл пресетов: {presets_file}")
@@ -344,6 +353,14 @@ def main() -> int:
         help="Только показать маршрут без запуска launcher.",
     )
     parser.add_argument(
+        "--project-base",
+        help=(
+            "Базовая папка, где будет создан project root. По умолчанию wizard "
+            "создает проект в текущей папке, но при запуске из factory-template "
+            "под /projects автоматически использует /projects."
+        ),
+    )
+    parser.add_argument(
         "--allow-reserved-slug",
         action="store_true",
         help="Разрешить reserved/generic slug после явного подтверждения маршрута.",
@@ -373,7 +390,7 @@ def main() -> int:
 
     repo_root, presets_file, launcher_file, preflight_file = _wizard_paths(args.template_repo_root)
     presets = _load_presets(presets_file)
-    launch_cwd = Path.cwd().resolve()
+    launch_cwd = _default_project_base(repo_root, args.project_base)
 
     print("Первый проект: мастер запуска")
     print("Отвечайте простыми словами: мастер сам выберет подходящий маршрут.")

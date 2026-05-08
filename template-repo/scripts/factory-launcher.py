@@ -38,6 +38,15 @@ def _script_paths(explicit_root: str | None) -> tuple[Path, Path]:
     return template_root, template_root / "scripts"
 
 
+def _default_project_base(template_root: Path, explicit_base: str | None = None) -> Path:
+    if explicit_base:
+        return Path(explicit_base).expanduser().resolve()
+    cwd = Path.cwd().resolve()
+    if cwd == template_root.parent and cwd.parent.as_posix().rstrip("/") == "/projects":
+        return cwd.parent
+    return cwd
+
+
 def _factory_hint(template_root: Path, script_name: str) -> str:
     if template_root.name == "template-repo":
         return f"template-repo/scripts/{script_name}"
@@ -259,6 +268,7 @@ def _run_project_route(
     asset_choice: str,
     goal_choice: str,
 ) -> int:
+    project_base = _default_project_base(template_root, args.project_base)
     project_name = args.project_name or _ask_text("\nКак назвать проект")
     default_slug = project_slug_from_name(project_name)
     if args.project_slug:
@@ -297,6 +307,7 @@ def _run_project_route(
 
     if args.route_only:
         print("\nRoute-only режим: ничего не создавалось.")
+        print(f"Целевая папка проекта: {project_base / project_slug}")
         return 0
 
     wizard = scripts_dir / "first-project-wizard.py"
@@ -304,6 +315,7 @@ def _run_project_route(
         raise SystemExit(f"Не найден fallback wizard: {wizard}")
 
     command = [sys.executable, str(wizard), "--template-repo-root", str(template_root)]
+    command.extend(["--project-base", str(project_base)])
     command.extend(["--project-code", project_code])
     if args.skip_preflight:
         command.append("--skip-preflight")
@@ -318,13 +330,13 @@ def _run_project_route(
         command.append("--reuse-existing-github-repo")
     code = _run(
         command,
-        cwd=Path.cwd().resolve(),
+        cwd=project_base,
         input_text=_wizard_answers(project_name, project_slug, asset_choice, goal_choice, args.yes),
     )
     if code != 0:
         return code
 
-    project_root = Path.cwd().resolve() / project_slug
+    project_root = project_base / project_slug
     _show_project_knowledge(project_root)
 
     should_init_feature = args.guided or args.init_feature_workspace or bool(args.feature_id)
@@ -349,7 +361,7 @@ def _run_project_route(
 
     print("\nГотово: проект создан.")
     print(f"Папка проекта: {project_root}")
-    print(f"Следующий шаг: cd {project_slug} && python3 scripts/factory-launcher.py --continue")
+    print(f"Следующий шаг: cd {project_root} && python3 scripts/factory-launcher.py --continue")
     return 0
 
 
@@ -457,6 +469,14 @@ def main() -> int:
     )
     parser.add_argument("--skip-preflight", action="store_true", help="Передать --skip-preflight в wizard.")
     parser.add_argument("--route-only", action="store_true", help="Показать маршрут и next step без запуска действий.")
+    parser.add_argument(
+        "--project-base",
+        help=(
+            "Базовая папка, где будет создан project root. По умолчанию launcher "
+            "создает проект в текущей папке, но при запуске из factory-template "
+            "под /projects автоматически использует /projects."
+        ),
+    )
     parser.add_argument("--yes", action="store_true", help="Автоматически отвечать yes на подтверждения wizard.")
     parser.add_argument("--run-dry-run", action="store_true", help="На continue route запустить deploy dry-run.")
     parser.add_argument("--verify-summary", action="store_true", help="На continue route показать verify summary.")

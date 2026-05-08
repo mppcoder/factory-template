@@ -1,7 +1,7 @@
 ## Номер запроса Codex
 
 ```text
-FT-CX-0034 greenfield-intake
+FT-CX-0035 continue-internal-followup-bug
 ```
 
 ## Карточка проекта
@@ -15,7 +15,8 @@ FT-CX-0034 greenfield-intake
 Tasks: 🕒 0 ready-for-handoff -> 0 ready-for-codex -> 0 running -> 0
   human-review
 В работе:
-🟡 FT-CX-0034 greenfield-intake: ✅ Codex-WORK → ✅ Codex OK → 🕒 Done
+🟡 FT-CX-0035 continue-internal-followup-bug: ✅ Codex-WORK → ✅ Codex OK → 🕒
+  Done
 
 ## Применение в Codex UI
 
@@ -59,13 +60,13 @@ Routing:
 - handoff_shape: codex-task-handoff
 - execution_mode_decision_owner: Codex runtime after task graph analysis
 - execution_mode_closeout_required: actual execution mode plus child/subagent count
-- goal_contract.normalized_goal: codex_work_id: FT-CX-0034
-codex_work_title: FT-CX-0034 greenfield-intake
-task_slug: greenfield-intake
+- goal_contract.normalized_goal: codex_work_id: FT-CX-0035
+codex_work_title: FT-CX-0035 continue-internal-followup-bug
+task_slug: continue-internal-followup-bug
 codex_work_state: codex_accepted
 
-user_request: greenfield intake
-normalized_goal: Start the canonical greenfield-product intake path for the first real downstream/battle project.
+user_request: почему остановка? продолжай все шаги без остановки и пофиксь этот баг
+normalized_goal: Fix premature user-step closeout and guided launcher nested project root bugs, then continue Health Sync Bridge internal implementation scaffolding until real external blockers.
 - goal_contract.definition_of_done: evidence satisfies requested outcome and repo validators/blockers are documented
 - goal_contract.proxy_signal_denylist: tests passed alone; file exists alone; commit exists alone; green dashboard alone; validator passed alone
 - goal_runtime_recommendation: codex_goal_candidate
@@ -82,15 +83,15 @@ normalized_goal: Start the canonical greenfield-product intake path for the firs
 - selected_scenario: 00-master-router.md
 - pipeline_stage: done
 - handoff_allowed: yes (forbidden)
-- defect_capture_path: not-required-by-text-signal
+- defect_capture_path: reproduce -> evidence -> bug report -> layer classification -> factory feedback if reusable -> remediation
 - chat_id: not_applicable
 - chat_title: not_applicable
-- task_slug: greenfield-intake
+- task_slug: continue-internal-followup-bug
 - chat_kind: not_applicable
 - chat_state: not_applicable
 - chat_index_path: not_applicable
-- codex_work_id: FT-CX-0034
-- codex_work_title: FT-CX-0034 greenfield-intake
+- codex_work_id: FT-CX-0035
+- codex_work_title: FT-CX-0035 continue-internal-followup-bug
 - codex_work_kind: self_handoff
 - codex_work_state: codex_accepted
 - codex_work_index_path: .chatgpt/codex-work-index.yaml
@@ -103,15 +104,17 @@ normalized_goal: Start the canonical greenfield-product intake path for the firs
 - .chatgpt/codex-task-pack.md
 - .chatgpt/verification-report.md
 - .chatgpt/done-report.md
+- reports/bugs/
+- reports/factory-feedback/
 
 Текст задачи:
-codex_work_id: FT-CX-0034
-codex_work_title: FT-CX-0034 greenfield-intake
-task_slug: greenfield-intake
+codex_work_id: FT-CX-0035
+codex_work_title: FT-CX-0035 continue-internal-followup-bug
+task_slug: continue-internal-followup-bug
 codex_work_state: codex_accepted
 
-user_request: greenfield intake
-normalized_goal: Start the canonical greenfield-product intake path for the first real downstream/battle project.
+user_request: почему остановка? продолжай все шаги без остановки и пофиксь этот баг
+normalized_goal: Fix premature user-step closeout and guided launcher nested project root bugs, then continue Health Sync Bridge internal implementation scaffolding until real external blockers.
 
 Continuation rule:
 Если задача пришла в уже открытую Codex-сессию и этот route совместим с текущей сессией, после видимого self-handoff продолжай remediation / implementation / verification без отдельного запроса пользователя. Остановка допустима только при реальном blocker, внешнем действии, несовместимом route или необходимости нового task launch.

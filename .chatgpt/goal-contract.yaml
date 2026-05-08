@@ -1,66 +1,60 @@
 goal_contract:
   version: goal-contract/v1
-  goal_id: health-sync-bridge-greenfield-prd
+  goal_id: continue-internal-followup-bug
   goal_command_source:
-    raw_user_goal: "Create greenfield project Health Sync Bridge through factory-template guided launcher and prepare feasibility-first PRD."
-    normalized_goal: "Создать greenfield-проект Health Sync Bridge как приватный health-sync hub для автоматического сбора, нормализации, аудита и допустимой синхронизации данных Withings и Garmin после однократной OAuth/consent авторизации."
+    raw_user_goal: "а почему остановка? продолжай все шаги без остановки и пофиксь этот баг"
+    normalized_goal: "Исправить преждевременную остановку на пользовательском next step, починить reusable guided-launcher path bug, затем продолжить внутренние Health Sync Bridge шаги до реальных внешних blockers."
     goal_first_trigger: direct_codex_task
   outcome:
-    desired_result: "Downstream project exists with PROJECT_CODE=HSB, filled project knowledge, feasibility-first PRD, API blocker matrix, data mapping, OAuth/secrets architecture, dev+prod VPS layout and first implementation backlog."
+    desired_result: "Factory-template не создает downstream project внутри factory repo при canonical VPS запуске, generated deploy dry-run работает в downstream repo, а Health Sync Bridge получает первый внутренний implementation scaffold без ожидания ручного продолжения."
     definition_of_done:
-      - "downstream project создан через factory-template guided launcher"
-      - "repo-local PROJECT_CODE=HSB материализован"
-      - "project-knowledge создан и заполнен"
-      - "PRD описывает MVP, non-goals и API blockers"
-      - "есть feasibility matrix по Withings API, Garmin API, Health Connect, Apple Health/MyFitnessPal fallback"
-      - "есть data mapping v0 for target health domains"
-      - "есть OAuth/secrets architecture без хранения паролей Garmin/Withings"
-      - "есть dev+prod VPS layout plan"
-      - "есть first implementation backlog"
+      - "Factory launcher route-only из /projects/factory-template показывает /projects/<slug> как target."
+      - "Wizard поддерживает explicit --project-base and preserves smoke/custom base behavior."
+      - "Generated deploy-dry-run can find repo-local scripts/validate-operator-env.py."
+      - "Health Sync Bridge has internal scaffolds for Withings OAuth, Garmin approval blocker, normalized store, dashboard, audit redaction and export fallback."
+      - "Factory and downstream validators pass; both repos are clean and pushed or blocker documented."
     success_metrics:
-      - "Health Sync Bridge repo exists at /projects/health-sync-bridge"
-      - "GitHub repo name is exactly mppcoder/health-sync-bridge"
-      - "downstream quick verify passes"
+      - "No untracked nested downstream repo remains in factory-template."
+      - "Downstream smoke and deploy dry-run pass."
+      - "Factory route-only regression passes."
     evidence_required:
-      - "route receipt"
-      - "generated project path"
-      - "generated project identity"
-      - "project-knowledge files"
-      - "PRD file path"
-      - "feasibility matrix file path"
-      - "first task workspace path"
-      - "validation/preflight output"
+      - "FT-CX-0035 route receipt"
+      - "factory launcher route-only output"
+      - "wizard explicit project-base route-only output"
+      - "Health Sync Bridge smoke output"
+      - "Health Sync Bridge deploy dry-run output"
+      - "quick verify outputs"
+      - "commit/push status"
     evidence_sources:
-      - "/projects/health-sync-bridge"
-      - "/projects/health-sync-bridge/docs/prd/health-sync-bridge-prd.md"
-      - "/projects/health-sync-bridge/docs/research/api-feasibility-withings-garmin.md"
-      - "/projects/health-sync-bridge/project-knowledge"
-      - "official Withings and Garmin documentation"
+      - "template-repo/scripts/factory-launcher.py"
+      - "template-repo/scripts/first-project-wizard.py"
+      - "template-repo/scripts/deploy-dry-run.sh"
+      - "template-repo/scripts/verify-all.sh"
+      - "/projects/health-sync-bridge/src/health_sync_bridge"
+      - "/projects/health-sync-bridge/scripts/health-sync-bridge-smoke.py"
   boundaries:
     scope:
-      - "project bootstrap"
-      - "feasibility-first PRD"
-      - "architecture and backlog"
-      - "no production credentials yet"
-      - "no unofficial credential scraping"
+      - "factory-template launcher/deploy-dry-run bugfix"
+      - "Health Sync Bridge internal implementation scaffold"
+      - "validators and verified sync"
     non_goals:
-      - "не реализовывать неофициальный парсинг Garmin Connect логина/пароля"
-      - "не обходить ToS"
-      - "не обещать запись данных в Garmin/Withings без official API proof"
-      - "не хранить raw health secrets вне env/secret store"
+      - "Do not enter real Withings/Garmin secrets."
+      - "Do not claim Garmin approval."
+      - "Do not deploy production service with real health data."
     destructive_actions_allowed: false
     production_actions_allowed: false
     secrets_allowed: false
   validation:
     primary_verification_commands:
-      - "python3 template-repo/scripts/validate-goal-contract.py .chatgpt/goal-contract.yaml"
-      - "python3 template-repo/scripts/validate-codex-routing.py ."
+      - "python3 template-repo/scripts/factory-launcher.py --mode greenfield --project-name \"Canonical Root Smoke\" --project-slug canonical-root-smoke --route-only"
       - "python3 template-repo/scripts/validate-codex-work-index.py .chatgpt/codex-work-index.yaml"
+      - "python3 template-repo/scripts/validate-goal-contract.py .chatgpt/goal-contract.yaml"
+      - "bash template-repo/scripts/verify-all.sh quick"
+      - "python3 scripts/health-sync-bridge-smoke.py in /projects/health-sync-bridge"
+      - "bash scripts/deploy-dry-run.sh in /projects/health-sync-bridge"
       - "bash scripts/verify-all.sh quick in /projects/health-sync-bridge"
     secondary_verification:
-      - "python3 scripts/preflight-vps-check.py --project-slug health-sync-bridge"
-      - "python3 scripts/validate-operator-env.py . --env-file deploy/.env.example --preset starter --allow-example-placeholders"
-      - "git status --short --branch"
+      - "git status --short --branch in both repos"
     proxy_signal_denylist:
       - "tests passed alone"
       - "file exists alone"
@@ -75,9 +69,10 @@ goal_contract:
     tool_feedback_ready: true
     mcp_or_metrics_needed:
       - "repo validators"
-      - "official API documentation checks"
-      - "GitHub CLI"
-      - "project lifecycle card renderer"
+      - "route-only launcher output"
+      - "downstream smoke"
+      - "deploy dry-run"
+      - "git sync status"
     observation_cadence: "operator check every 15-20 minutes for long goal loops"
     budget_guardrails:
       token_budget: ""
@@ -107,18 +102,19 @@ goal_contract:
   closeout:
     goal_status: achieved
     evidence_vs_dod:
-      - "Project created at /projects/health-sync-bridge with PROJECT_CODE=HSB."
-      - "PRD, feasibility matrix, data mapping, OAuth/security, dev+prod layout and first backlog were added."
-      - "Downstream quick verify passed."
-      - "Garmin/Withings API blockers are documented and not hidden behind proxy signals."
+      - "Factory launcher target root and wizard project-base behavior fixed."
+      - "Generated deploy dry-run validator fallback fixed."
+      - "Health Sync Bridge internal implementation scaffold added."
+      - "Verification and sync completed."
     proxy_signal_closure_used: false
     continuation_summary:
       done:
-        - "Health Sync Bridge bootstrap and PRD package created"
+        - "factory bug fixed"
+        - "downstream internal scaffold continued"
       remaining:
-        - "user/operator chooses whether to start Withings OAuth implementation or Garmin approval preparation"
+        - "real external credentials and approvals only"
       blockers:
         - "Garmin Developer Program approval"
         - "real Withings OAuth credentials"
         - "production domain/TLS and encrypted health-data storage approval"
-      next_recommended_goal: "start Withings OAuth connector or Garmin approval spike"
+      next_recommended_goal: "continue with real Withings OAuth credentials or Garmin approval when available"

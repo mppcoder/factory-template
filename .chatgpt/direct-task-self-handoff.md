@@ -6,14 +6,14 @@ direct-task
 ## Вид handoff
 codex-task-handoff
 
-## Goal-contract
-- normalized_goal: `codex_work_id: FT-CX-0034
-codex_work_title: FT-CX-0034 greenfield-intake
-task_slug: greenfield-intake
+## Контракт цели
+- normalized_goal: `codex_work_id: FT-CX-0035
+codex_work_title: FT-CX-0035 continue-internal-followup-bug
+task_slug: continue-internal-followup-bug
 codex_work_state: codex_accepted
 
-user_request: greenfield intake
-normalized_goal: Start the canonical greenfield-product intake path for the first real downstream/battle project.`
+user_request: почему остановка? продолжай все шаги без остановки и пофиксь этот баг
+normalized_goal: Fix premature user-step closeout and guided launcher nested project root bugs, then continue Health Sync Bridge internal implementation scaffolding until real external blockers.`
 - definition_of_done: evidence satisfies requested outcome and relevant repo validators or blockers are documented.
 - evidence_required: verification-report.md, done-report.md, targeted validation evidence.
 - scope: repo-local artifacts selected by route.
@@ -21,7 +21,7 @@ normalized_goal: Start the canonical greenfield-product intake path for the firs
 - proxy_signal_denylist: tests passed alone; file exists alone; commit exists alone; green dashboard alone; validator passed alone.
 - goal_achievement_rule: mark achieved only when evidence satisfies DoD, not when proxy signals pass.
 
-## Goal runtime
+## Среда выполнения цели
 - goal_runtime_recommendation: `codex_goal_candidate`
 - codex_goal_live_validation_required: `true`
 - rule: Codex /goal runtime optional/live-gated; experimental goals require explicit user/operator choice and do not auto-enable in already-open sessions.
@@ -35,7 +35,7 @@ normalized_goal: Start the canonical greenfield-product intake path for the firs
 ## Стабильная identity чата и handoff
 - chat_id: ``
 - chat_title: ``
-- task_slug: `greenfield-intake`
+- task_slug: `continue-internal-followup-bug`
 - kind: ``
 - state: ``
 - source_of_truth: `.chatgpt/chat-handoff-index.yaml`
@@ -48,7 +48,9 @@ normalized_goal: Start the canonical greenfield-product intake path for the firs
 build
 
 ## Evidence для класса задачи
-- keyword-hit не найден; fallback на default task class `build`
+- keyword-hit: fix
+- keyword-hit: implement
+- keyword-hit: implementation
 - явный reasoning/model override совпал с default profile: build
 
 ## Выбранный профиль
@@ -96,12 +98,14 @@ done
 - .chatgpt/codex-task-pack.md
 - .chatgpt/verification-report.md
 - .chatgpt/done-report.md
+- reports/bugs/
+- reports/factory-feedback/
 
 ## Разрешение handoff
 yes (forbidden)
 
 ## Маршрут defect-capture
-not-required-by-text-signal
+reproduce -> evidence -> bug report -> layer classification -> factory feedback if reusable -> remediation
 
 ## Правило launch boundary
 Выбор модели и reasoning mode считается надежным только на новом запуске Codex для новой задачи.
@@ -165,10 +169,10 @@ selected_model совпадает с последним сохраненным s
 - Если используется experimental `goals`, сначала проверьте `codex features list`; включение goal runtime является runtime/operator choice и не следует из advisory текста.
 
 ## Текст задачи
-codex_work_id: FT-CX-0034
-codex_work_title: FT-CX-0034 greenfield-intake
-task_slug: greenfield-intake
+codex_work_id: FT-CX-0035
+codex_work_title: FT-CX-0035 continue-internal-followup-bug
+task_slug: continue-internal-followup-bug
 codex_work_state: codex_accepted
 
-user_request: greenfield intake
-normalized_goal: Start the canonical greenfield-product intake path for the first real downstream/battle project.
+user_request: почему остановка? продолжай все шаги без остановки и пофиксь этот баг
+normalized_goal: Fix premature user-step closeout and guided launcher nested project root bugs, then continue Health Sync Bridge internal implementation scaffolding until real external blockers.
