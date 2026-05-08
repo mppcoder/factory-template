@@ -17,7 +17,14 @@ dedupe:
   enabled: true
   key_field: dedupe_key
 routing:
-  default_topic: factory-main
+  default_topic: template-general
+  contour_to_topic:
+    template: template-general
+    battle-development: battle-development
+    battle-deploy: battle-deploy
+    battle-operate: battle-operate
+    battle-updates: battle-updates
+    downstream-feedback: downstream-feedback
   kind_to_topic:
     task.completed: codex-completions
     codex.completed: codex-completions
@@ -31,9 +38,34 @@ routing:
     deploy.done: updates
     downstream.feedback: downstream-projects
 topics:
+  template-general:
+    chat_id: REPLACE_WITH_TELEGRAM_CHAT_ID
+    message_thread_id: REPLACE_WITH_TEMPLATE_GENERAL_TOPIC_ID
+    description: Main factory-template topic. For the main template this is the general topic.
+  battle-development:
+    chat_id: REPLACE_WITH_BATTLE_DEV_CHAT_ID
+    message_thread_id: REPLACE_WITH_BATTLE_DEV_TOPIC_ID
+    description: Battle project development notifications created from the template.
+  battle-deploy:
+    chat_id: REPLACE_WITH_BATTLE_DEPLOY_CHAT_ID
+    message_thread_id: REPLACE_WITH_BATTLE_DEPLOY_TOPIC_ID
+    description: Battle project deployment/release notifications created from the template.
+  battle-operate:
+    chat_id: REPLACE_WITH_BATTLE_OPERATE_CHAT_ID
+    message_thread_id: REPLACE_WITH_BATTLE_OPERATE_TOPIC_ID
+    description: Battle project operate/support notifications created from the template.
+  battle-updates:
+    chat_id: REPLACE_WITH_BATTLE_UPDATES_CHAT_ID
+    message_thread_id: REPLACE_WITH_BATTLE_UPDATES_TOPIC_ID
+    description: Battle project update recommendations and update availability.
+  downstream-feedback:
+    chat_id: REPLACE_WITH_DOWNSTREAM_FEEDBACK_CHAT_ID
+    message_thread_id: REPLACE_WITH_DOWNSTREAM_FEEDBACK_TOPIC_ID
+    description: Feedback from battle/downstream projects back to the factory.
   factory-main:
     chat_id: REPLACE_WITH_TELEGRAM_CHAT_ID
     message_thread_id: null
+    description: Backward-compatible alias for older configs; prefer template-general.
   codex-completions:
     chat_id: REPLACE_WITH_TELEGRAM_CHAT_ID
     message_thread_id: REPLACE_WITH_OPTIONAL_FORUM_TOPIC_ID
@@ -70,3 +102,14 @@ placeholder_replacements:
   TELEGRAM_ALLOWED_USER_IDS: Comma-separated numeric Telegram user ids allowed for inbound commands.
   REPLACE_WITH_TELEGRAM_CHAT_ID: Real chat id for the destination channel or group.
   REPLACE_WITH_OPTIONAL_FORUM_TOPIC_ID: Real Telegram forum topic id, or null when topics are not used.
+  REPLACE_WITH_TEMPLATE_GENERAL_TOPIC_ID: Forum topic id for the main template general topic, or null.
+  REPLACE_WITH_BATTLE_DEV_CHAT_ID: Chat id for battle project development notifications.
+  REPLACE_WITH_BATTLE_DEV_TOPIC_ID: Forum topic id for battle project development, or null.
+  REPLACE_WITH_BATTLE_DEPLOY_CHAT_ID: Chat id for battle project deploy notifications.
+  REPLACE_WITH_BATTLE_DEPLOY_TOPIC_ID: Forum topic id for battle project deploy, or null.
+  REPLACE_WITH_BATTLE_OPERATE_CHAT_ID: Chat id for battle project operate/support notifications.
+  REPLACE_WITH_BATTLE_OPERATE_TOPIC_ID: Forum topic id for battle project operate/support, or null.
+  REPLACE_WITH_BATTLE_UPDATES_CHAT_ID: Chat id for battle project update notifications.
+  REPLACE_WITH_BATTLE_UPDATES_TOPIC_ID: Forum topic id for battle project updates, or null.
+  REPLACE_WITH_DOWNSTREAM_FEEDBACK_CHAT_ID: Chat id for downstream-to-factory feedback.
+  REPLACE_WITH_DOWNSTREAM_FEEDBACK_TOPIC_ID: Forum topic id for downstream-to-factory feedback, or null.

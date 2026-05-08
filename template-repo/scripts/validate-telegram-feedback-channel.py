@@ -31,6 +31,15 @@ DEFAULT_KINDS = {
     "release.published",
     "deploy.done",
 }
+DEFAULT_CONTOURS = {
+    "template",
+    "battle-development",
+    "battle-deploy",
+    "battle-operate",
+    "battle-updates",
+    "downstream-feedback",
+}
+REQUIRED_CONTOUR_FIXTURES = {"template", "battle-development", "battle-deploy"}
 DEFAULT_ALLOWED_COMMANDS = {"status", "ack", "defer", "bug", "handoff_draft", "feedback"}
 DEFAULT_FORBIDDEN_COMMANDS = {"shell", "codex_run", "deploy", "delete", "merge", "push"}
 
@@ -85,6 +94,7 @@ def validate_schema(schema: dict[str, Any], errors: list[str]) -> dict[str, set[
         "event_id",
         "project_id",
         "project_type",
+        "project_contour",
         "repo",
         "source",
         "kind",
@@ -104,8 +114,13 @@ def validate_schema(schema: dict[str, Any], errors: list[str]) -> dict[str, set[
     ]:
         if field not in required:
             errors.append(f"event schema required_fields не содержит `{field}`")
+    allowed_contours = {str(item) for item in schema.get("allowed_project_contours", []) or []}
+    missing_schema_contours = sorted(DEFAULT_CONTOURS - allowed_contours)
+    if missing_schema_contours:
+        errors.append("event schema allowed_project_contours не содержит: " + ", ".join(missing_schema_contours))
     return {
         "project_types": {str(item) for item in schema.get("allowed_project_types", []) or []},
+        "project_contours": allowed_contours,
         "kinds": {str(item) for item in schema.get("allowed_kinds", []) or []},
         "severities": {str(item) for item in schema.get("allowed_severities", []) or []},
         "statuses": {str(item) for item in schema.get("allowed_statuses", []) or []},
@@ -142,6 +157,13 @@ def validate_config(config: dict[str, Any], *, allow_placeholders: bool, errors:
     if default_topic not in topics:
         errors.append("routing.default_topic должен ссылаться на topics")
     kind_to_topic = as_mapping(routing.get("kind_to_topic"), "routing.kind_to_topic", errors)
+    contour_to_topic = as_mapping(routing.get("contour_to_topic"), "routing.contour_to_topic", errors)
+    missing_contours = sorted(DEFAULT_CONTOURS - set(contour_to_topic))
+    if missing_contours:
+        errors.append("routing.contour_to_topic не содержит project contours: " + ", ".join(missing_contours))
+    for contour, topic_name in contour_to_topic.items():
+        if str(topic_name) not in topics:
+            errors.append(f"routing.contour_to_topic.{contour} ссылается на неизвестный topic `{topic_name}`")
     missing_kinds = sorted(DEFAULT_KINDS - set(kind_to_topic))
     if missing_kinds:
         errors.append("routing.kind_to_topic не содержит P0 kinds: " + ", ".join(missing_kinds))
@@ -202,11 +224,13 @@ def validate_event(event: dict[str, Any], contract: dict[str, set[str]], path: s
     for field in sorted(contract["required"]):
         if field not in event:
             errors.append(f"{path}: отсутствует обязательное поле `{field}`")
-    for field in ["event_id", "project_id", "project_type", "repo", "source", "kind", "severity", "title", "summary", "status", "created_utc", "dedupe_key"]:
+    for field in ["event_id", "project_id", "project_type", "project_contour", "repo", "source", "kind", "severity", "title", "summary", "status", "created_utc", "dedupe_key"]:
         if not str(event.get(field, "")).strip():
             errors.append(f"{path}: поле `{field}` не должно быть пустым")
     if event.get("project_type") not in contract["project_types"]:
         errors.append(f"{path}: неизвестный project_type `{event.get('project_type')}`")
+    if event.get("project_contour") not in contract["project_contours"]:
+        errors.append(f"{path}: неизвестный project_contour `{event.get('project_contour')}`")
     if event.get("kind") not in contract["kinds"]:
         errors.append(f"{path}: неизвестный kind `{event.get('kind')}`")
     if event.get("severity") not in contract["severities"]:
@@ -281,12 +305,18 @@ def main() -> int:
             seen_dedupe.add(dedupe_key)
 
     fixture_kinds: set[str] = set()
+    fixture_contours: set[str] = set()
     for event_file in collect_event_files([root / item for item in args.events]):
         if event_file.exists():
-            fixture_kinds.update(str(event.get("kind")) for event in normalize_events(load_data(event_file)))
+            for event in normalize_events(load_data(event_file)):
+                fixture_kinds.add(str(event.get("kind")))
+                fixture_contours.add(str(event.get("project_contour")))
     missing_p0 = DEFAULT_KINDS - fixture_kinds
     if missing_p0:
         errors.append("event fixtures не покрывают P0 kinds: " + ", ".join(sorted(missing_p0)))
+    missing_required_contours = REQUIRED_CONTOUR_FIXTURES - fixture_contours
+    if missing_required_contours:
+        errors.append("event fixtures не покрывают обязательные project_contours: " + ", ".join(sorted(missing_required_contours)))
 
     if errors:
         print("TELEGRAM FEEDBACK CHANNEL НЕВАЛИДЕН")

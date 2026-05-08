@@ -2,6 +2,7 @@ events:
   - event_id: evt-task-completed-001
     project_id: factory-template
     project_type: factory-template
+    project_contour: template
     repo: mppcoder/factory-template
     source: .chatgpt/task-index.yaml
     kind: task.completed
@@ -23,6 +24,7 @@ events:
   - event_id: evt-codex-completed-001
     project_id: factory-template
     project_type: factory-template
+    project_contour: template
     repo: mppcoder/factory-template
     source: .chatgpt/codex-work-index.yaml
     kind: codex.completed
@@ -44,6 +46,7 @@ events:
   - event_id: evt-user-action-001
     project_id: factory-template
     project_type: factory-template
+    project_contour: template
     repo: mppcoder/factory-template
     source: .chatgpt/boundary-actions.md
     kind: user_action.required
@@ -65,6 +68,7 @@ events:
   - event_id: evt-bug-detected-001
     project_id: factory-template
     project_type: factory-template
+    project_contour: template
     repo: mppcoder/factory-template
     source: reports/bugs/example.md
     kind: bug.detected
@@ -86,6 +90,7 @@ events:
   - event_id: evt-bug-fixed-001
     project_id: factory-template
     project_type: factory-template
+    project_contour: template
     repo: mppcoder/factory-template
     source: reports/bugs/example.md
     kind: bug.fixed
@@ -106,8 +111,9 @@ events:
     created_utc: "2026-05-08T09:04:00Z"
     dedupe_key: factory-template:bug-example:bug.fixed:v1
   - event_id: evt-verification-failed-001
-    project_id: factory-template
-    project_type: factory-template
+    project_id: battle-project
+    project_type: downstream-battle
+    project_contour: battle-development
     repo: mppcoder/factory-template
     source: template-repo/scripts/verify-all.sh
     kind: verification.failed
@@ -127,8 +133,9 @@ events:
     created_utc: "2026-05-08T09:05:00Z"
     dedupe_key: factory-template:verify-all:verification.failed:v1
   - event_id: evt-update-available-001
-    project_id: factory-template
-    project_type: factory-template
+    project_id: battle-project
+    project_type: downstream-battle
+    project_contour: battle-updates
     repo: mppcoder/factory-template
     source: .chatgpt/software-update-watchlist.yaml
     kind: update.available
@@ -148,8 +155,9 @@ events:
     created_utc: "2026-05-08T09:06:00Z"
     dedupe_key: factory-template:software-watchlist:update.available:v1
   - event_id: evt-update-recommended-001
-    project_id: factory-template
-    project_type: factory-template
+    project_id: battle-project
+    project_type: downstream-battle
+    project_contour: battle-updates
     repo: mppcoder/factory-template
     source: .chatgpt/software-update-readiness.yaml
     kind: update.recommended
@@ -169,8 +177,9 @@ events:
     created_utc: "2026-05-08T09:07:00Z"
     dedupe_key: factory-template:software-readiness:update.recommended:v1
   - event_id: evt-release-published-001
-    project_id: factory-template
-    project_type: factory-template
+    project_id: battle-project
+    project_type: downstream-battle
+    project_contour: battle-deploy
     repo: mppcoder/factory-template
     source: reports/release/release-report.md
     kind: release.published
@@ -190,8 +199,9 @@ events:
     created_utc: "2026-05-08T09:08:00Z"
     dedupe_key: factory-template:release:release.published:v1
   - event_id: evt-deploy-done-001
-    project_id: factory-template
-    project_type: factory-template
+    project_id: battle-project
+    project_type: downstream-battle
+    project_contour: battle-deploy
     repo: mppcoder/factory-template
     source: reports/release/deploy-report.md
     kind: deploy.done

@@ -4,6 +4,7 @@ required_fields:
   - event_id
   - project_id
   - project_type
+  - project_contour
   - repo
   - source
   - kind
@@ -24,6 +25,13 @@ allowed_project_types:
   - factory-template
   - downstream-battle
   - generated-project
+allowed_project_contours:
+  - template
+  - battle-development
+  - battle-deploy
+  - battle-operate
+  - battle-updates
+  - downstream-feedback
 allowed_kinds:
   - task.completed
   - codex.completed
@@ -54,6 +62,7 @@ allowed_statuses:
   - published
   - done
 field_contract:
+  project_contour: routing contour for Telegram delivery; `template` routes factory-template events to the general topic
   evidence: list of strings or mappings with title/path/url
   links: list of strings or mappings with title/path/url
   required_user_action: empty string when no user action is required

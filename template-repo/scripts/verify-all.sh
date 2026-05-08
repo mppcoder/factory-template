@@ -454,6 +454,9 @@ run_telegram_feedback_channel_smoke() {
     echo "telegram dry-run outbox must contain 10 P0 event records" >&2
     return 1
   fi
+  for topic in template-general battle-development battle-deploy battle-updates; do
+    grep -q "\"topic\": \"$topic\"" "$tmp_dir/outbox.jsonl"
+  done
   python3 "$ROOT/template-repo/scripts/factory_notify_telegram.py" send \
     --root "$ROOT" \
     --event "$ROOT/tests/telegram-feedback-channel/events/p0-events.yaml" \

@@ -97,6 +97,7 @@ def format_message(event: dict[str, Any]) -> str:
     severity = html.escape(str(event.get("severity") or "info"))
     status = html.escape(str(event.get("status") or ""))
     project = html.escape(str(event.get("project_id") or ""))
+    contour = html.escape(str(event.get("project_contour") or ""))
     repo = html.escape(str(event.get("repo") or ""))
     summary = html.escape(truncate(redact_text(str(event.get("summary") or "")), 900))
     required_action = html.escape(truncate(redact_text(str(event.get("required_user_action") or "")), 500))
@@ -110,6 +111,7 @@ def format_message(event: dict[str, Any]) -> str:
         f"<b>{title}</b>",
         f"<code>{kind}</code> | <code>{severity}</code> | <code>{status}</code>",
         f"<b>Project:</b> {project}",
+        f"<b>Contour:</b> {contour}",
         f"<b>Repo:</b> {repo}",
     ]
     if identifiers:
@@ -132,8 +134,13 @@ def format_message(event: dict[str, Any]) -> str:
 
 def topic_for_event(config: dict[str, Any], event: dict[str, Any]) -> dict[str, Any]:
     routing = config.get("routing") or {}
+    contour_to_topic = routing.get("contour_to_topic") or {}
     kind_to_topic = routing.get("kind_to_topic") or {}
-    topic_name = kind_to_topic.get(event.get("kind")) or routing.get("default_topic")
+    topic_name = (
+        contour_to_topic.get(event.get("project_contour"))
+        or kind_to_topic.get(event.get("kind"))
+        or routing.get("default_topic")
+    )
     topics = config.get("topics") or {}
     topic = topics.get(topic_name)
     if not isinstance(topic, dict):
@@ -235,6 +242,7 @@ def send_events(args: argparse.Namespace) -> int:
                     "event_id": event.get("event_id"),
                     "dedupe_key": dedupe_key,
                     "kind": event.get("kind"),
+                    "project_contour": event.get("project_contour"),
                     "topic": topic.get("name"),
                     "delivery_status": "duplicate_skipped",
                     "dry_run": args.dry_run,
@@ -271,6 +279,7 @@ def send_events(args: argparse.Namespace) -> int:
                 "event_id": event.get("event_id"),
                 "dedupe_key": dedupe_key,
                 "kind": event.get("kind"),
+                "project_contour": event.get("project_contour"),
                 "topic": topic.get("name"),
                 "delivery_status": status,
                 "dry_run": args.dry_run,

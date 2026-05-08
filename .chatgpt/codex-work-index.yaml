@@ -1,6 +1,6 @@
 schema: codex-work-index/v1
 project_code: FT
-next_codex_work_number: 32
+next_codex_work_number: 33
 id_policy:
   canonical_format: <PROJECT_CODE>-CX-<NNNN> <task-slug>
   independent_from_chat_handoff_index: true
@@ -773,12 +773,39 @@ items:
   evidence:
   - Allocated during direct-task bootstrap before first substantive response.
   - Read router and completed direct-task self-handoff for the user's closeout request.
-  - Closed stale open ChatGPT reservations FT-CH-0017, FT-CH-0019, FT-CH-0023
-    and FT-CH-0025
-    after confirming their scopes were already materialized by verified follow-up work.
+  - Closed stale open ChatGPT reservations FT-CH-0017, FT-CH-0019, FT-CH-0023 and
+    FT-CH-0025 after confirming their scopes were already materialized by verified
+    follow-up work.
   - Regenerated project status card and lifecycle dashboard after closing active-work
     drift.
   - python3 template-repo/scripts/validate-chat-handoff-index.py .chatgpt/chat-handoff-index.yaml
   - python3 template-repo/scripts/validate-codex-work-index.py .chatgpt/codex-work-index.yaml
   - bash template-repo/scripts/verify-all.sh quick
   next_action: No further internal action; unfinished repo-state tasks are closed.
+- codex_work_id: FT-CX-0032
+  work_number: 32
+  work_title: FT-CX-0032 telegram-per-project-topics
+  task_slug: telegram-per-project-topics
+  kind: self_handoff
+  state: verified
+  created_utc: '2026-05-08T09:41:32Z'
+  updated_utc: '2026-05-08T09:50:00Z'
+  source_type: direct-task
+  handoff_group: telegram-per-project-topics
+  handoff_revision: 1
+  handoff_register_item_id: ''
+  status_chain:
+  - codex_self_handoff
+  - codex_accepted
+  - codex_completed
+  evidence:
+  - Allocated during direct-task bootstrap before first substantive response.
+  - Read router and rendered canonical factory-template project card.
+  - Added project_contour to Telegram event envelope for per-project/per-stage routing.
+  - Added contour_to_topic config mapping for template general, battle development, battle deploy, battle operate, battle updates and downstream feedback.
+  - Notifier now routes by project_contour before kind fallback and records project_contour in outbox.
+  - Fixture dry-run covers template-general, battle-development, battle-deploy and battle-updates topics.
+  - python3 template-repo/scripts/validate-telegram-feedback-channel.py --allow-placeholders
+  - python3 template-repo/scripts/factory_notify_telegram.py send --event tests/telegram-feedback-channel/events/p0-events.yaml --dry-run --outbox <tmp>/outbox.jsonl
+  - python3 template-repo/scripts/validate-codex-work-index.py .chatgpt/codex-work-index.yaml
+  next_action: No further implementation action for Telegram per-project topic routing.

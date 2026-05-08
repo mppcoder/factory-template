@@ -1,10 +1,10 @@
 # Канал Telegram Feedback
 
-Telegram Feedback Channel - repo-native delivery/control layer for `factory-template` and downstream projects. It does not create a new task database and does not replace repo artifacts as source of truth.
+Telegram Feedback Channel - repo-native слой доставки и безопасного управления для `factory-template` и downstream/battle проектов. Он не создает новую базу задач и не заменяет repo artifacts как source of truth.
 
 ## Источник истины
 
-Telegram events are derived from existing repo contours:
+Telegram events выводятся из существующих repo contours:
 
 - `.chatgpt/chat-handoff-index.yaml`
 - `.chatgpt/codex-work-index.yaml`
@@ -15,7 +15,7 @@ Telegram events are derived from existing repo contours:
 - update/release governance artifacts
 - validators and closeout scripts
 
-Outbound delivery writes audit records to `reports/notifications/outbox.jsonl`. Inbound commands write sanitized audit records to `reports/notifications/inbound-audit.jsonl`. Runtime JSONL files are git-ignored.
+Outbound delivery пишет audit records в `reports/notifications/outbox.jsonl`. Inbound commands пишут sanitized audit records в `reports/notifications/inbound-audit.jsonl`. Runtime JSONL files находятся в `.gitignore`.
 
 ## Артефакты
 
@@ -27,7 +27,7 @@ Outbound delivery writes audit records to `reports/notifications/outbox.jsonl`. 
 
 ## Таксономия P0 событий
 
-Supported P0 kinds:
+Поддерживаемые P0 kinds:
 
 - `task.completed`
 - `codex.completed`
@@ -40,11 +40,27 @@ Supported P0 kinds:
 - `release.published`
 - `deploy.done`
 
-`downstream.feedback` is also reserved for upstream feedback from battle projects into the factory.
+`downstream.feedback` также зарезервирован для upstream feedback из battle проектов обратно в фабрику.
 
 ## Маршрутизация Telegram
 
-The example config defines topic names that can map to one chat or to Telegram forum topics:
+Маршрутизация состоит из двух слоев:
+
+- `project_contour` выбирает отдельную Telegram destination/topic для проектного контура;
+- `kind_to_topic` остается fallback для старых или общих уведомлений.
+
+Приоритет у `project_contour`. Так у каждого контура проекта может быть отдельная Telegram тема или отдельный чат:
+
+- `template` -> `template-general`: основной шаблон, тема `general`;
+- `battle-development` -> `battle-development`: разработка боевого проекта на базе шаблона;
+- `battle-deploy` -> `battle-deploy`: развертывание боевого проекта на базе шаблона;
+- `battle-operate` -> `battle-operate`: сопровождение/операционная поддержка боевого проекта;
+- `battle-updates` -> `battle-updates`: обновления и рекомендации по обновлениям боевого проекта;
+- `downstream-feedback` -> `downstream-feedback`: feedback из downstream/battle проектов обратно в фабрику.
+
+`topics` могут указывать на разные Telegram чаты или на разные forum topics внутри одного чата. Для основного шаблона canonical topic name - `template-general`; operator-facing имя темы в Telegram: `general`.
+
+Также остаются topic names для fallback по типам событий:
 
 - `factory-main`
 - `codex-completions`
@@ -53,18 +69,18 @@ The example config defines topic names that can map to one chat or to Telegram f
 - `updates`
 - `downstream-projects`
 
-If forum topics are not configured yet, keep `message_thread_id: null`. Replace `REPLACE_WITH_TELEGRAM_CHAT_ID` and `REPLACE_WITH_OPTIONAL_FORUM_TOPIC_ID` only in a local config copy, not in the template example.
+Если forum topics еще не настроены, держите `message_thread_id: null` в локальном config. Placeholders заменяются только в локальной config copy, не в template example.
 
 ## Безопасность
 
-`TELEGRAM_BOT_TOKEN` must exist only in env or a secret store. It must not be committed.
+`TELEGRAM_BOT_TOKEN` должен жить только в env или secret store. Его нельзя коммитить.
 
 Inbound commands require both allowlists:
 
 - `TELEGRAM_ALLOWED_CHAT_IDS`
 - `TELEGRAM_ALLOWED_USER_IDS`
 
-Allowed inbound commands are intentionally narrow: `status`, `ack`, `defer`, `bug`, `handoff_draft`, `feedback`. Telegram must not launch arbitrary shell, Codex, deploy, merge, push or destructive actions.
+Allowed inbound commands намеренно узкие: `status`, `ack`, `defer`, `bug`, `handoff_draft`, `feedback`. Telegram не должен запускать arbitrary shell, Codex, deploy, merge, push или destructive actions.
 
 ## Dry-run
 
@@ -94,25 +110,26 @@ python3 template-repo/scripts/factory_notify_telegram.py audit-inbound \
 
 ## Live-настройка
 
-1. Create a bot in BotFather and store the token outside the repo as `TELEGRAM_BOT_TOKEN`.
-2. Get the destination chat id. If using Telegram forum topics, get each `message_thread_id`.
-3. Create a local config from `.chatgpt/telegram-feedback-channel.example.yaml`.
-4. Replace placeholders in the local config and set `enabled: true`.
-5. Set `TELEGRAM_ALLOWED_CHAT_IDS` and `TELEGRAM_ALLOWED_USER_IDS`.
-6. Run validator against the local config without `--allow-placeholders`.
-7. Run one `--dry-run`, then run a real send only after the outbox entry looks safe.
+1. Создайте bot в BotFather и храните token вне repo как `TELEGRAM_BOT_TOKEN`.
+2. Получите destination `chat_id` для каждого контура или один общий `chat_id` с разными forum topics.
+3. Для основного шаблона создайте topic `general` и подставьте его id в `template-general.message_thread_id`.
+4. Создайте локальный config из `.chatgpt/telegram-feedback-channel.example.yaml`.
+5. Замените placeholders для нужных контуров и установите `enabled: true`.
+6. Установите `TELEGRAM_ALLOWED_CHAT_IDS` и `TELEGRAM_ALLOWED_USER_IDS`.
+7. Запустите validator против локального config без `--allow-placeholders`.
+8. Выполните один `--dry-run`, затем real send только после проверки outbox entry.
 
 ## Точки интеграции
 
-- Closeout task completed: emit `task.completed` from `.chatgpt/done-report.md` / `.chatgpt/task-index.yaml`.
-- Codex completed: emit `codex.completed` from `.chatgpt/codex-work-index.yaml` or `.chatgpt/handoff-implementation-register.yaml`.
-- User action required: emit `user_action.required` from `.chatgpt/boundary-actions.md`.
-- Bug detected/fixed: emit `bug.detected` / `bug.fixed` from `reports/bugs/` and reusable feedback from `reports/factory-feedback/`.
-- Validator failed: emit `verification.failed` only after failure evidence is captured.
-- Update available/recommended: emit from `.chatgpt/software-update-watchlist.yaml` and `.chatgpt/software-update-readiness.yaml`.
-- Release/deploy: emit `release.published` / `deploy.done` from release governance reports.
-- Downstream feedback: emit `downstream.feedback` from `reports/factory-feedback/incoming-learnings/`.
+- Closeout task completed: emit `task.completed` из `.chatgpt/done-report.md` / `.chatgpt/task-index.yaml`.
+- Codex completed: emit `codex.completed` из `.chatgpt/codex-work-index.yaml` или `.chatgpt/handoff-implementation-register.yaml`.
+- User action required: emit `user_action.required` из `.chatgpt/boundary-actions.md`.
+- Bug detected/fixed: emit `bug.detected` / `bug.fixed` из `reports/bugs/` и reusable feedback из `reports/factory-feedback/`.
+- Validator failed: emit `verification.failed` только после capture failure evidence.
+- Update available/recommended: emit из `.chatgpt/software-update-watchlist.yaml` и `.chatgpt/software-update-readiness.yaml`.
+- Release/deploy: emit `release.published` / `deploy.done` из release governance reports.
+- Downstream feedback: emit `downstream.feedback` из `reports/factory-feedback/incoming-learnings/`.
 
 ## Границы
 
-Telegram status is not canonical. The canonical state remains in repo artifacts. Dedupe uses `dedupe_key`, and the outbox records delivery attempts. A green Telegram delivery alone does not close a goal, task, bug, update, release or deploy.
+Telegram status не canonical. Canonical state остается в repo artifacts. Dedupe использует `dedupe_key`, а outbox фиксирует delivery attempts. Green Telegram delivery alone не закрывает goal, task, bug, update, release или deploy.
