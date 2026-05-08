@@ -3,6 +3,7 @@
 ## Документы
 
 - `universal-task-control.md` - очередь задач, allocate -> preview -> prepare pack -> `ready_for_codex` -> queue.
+- `telegram-feedback-channel.md` - optional Telegram notification delivery over repo-native lifecycle artifacts.
 
 ## Правило путей
 

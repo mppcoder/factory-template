@@ -1,0 +1,67 @@
+schema: telegram-feedback-event-schema/v1
+description: Repo-native envelope for Telegram feedback notifications. Telegram is a delivery/control layer, not a task status source of truth.
+required_fields:
+  - event_id
+  - project_id
+  - project_type
+  - repo
+  - source
+  - kind
+  - severity
+  - title
+  - summary
+  - task_id
+  - chat_id
+  - codex_work_id
+  - status
+  - required_user_action
+  - recommendation
+  - evidence
+  - links
+  - created_utc
+  - dedupe_key
+allowed_project_types:
+  - factory-template
+  - downstream-battle
+  - generated-project
+allowed_kinds:
+  - task.completed
+  - codex.completed
+  - user_action.required
+  - bug.detected
+  - bug.fixed
+  - verification.failed
+  - update.available
+  - update.recommended
+  - release.published
+  - deploy.done
+  - downstream.feedback
+allowed_severities:
+  - info
+  - success
+  - warning
+  - error
+  - critical
+allowed_statuses:
+  - captured
+  - queued
+  - in_progress
+  - implemented
+  - verified
+  - blocked
+  - failed
+  - action_required
+  - published
+  - done
+field_contract:
+  evidence: list of strings or mappings with title/path/url
+  links: list of strings or mappings with title/path/url
+  required_user_action: empty string when no user action is required
+  recommendation: empty string when no recommendation is needed
+  created_utc: ISO-8601 timestamp with UTC timezone
+  dedupe_key: stable source-of-truth key, for example factory-template:FT-CH-0027:codex.completed:v1
+security_contract:
+  secrets_forbidden: true
+  token_fields_forbidden: true
+  private_transcript_dumps_forbidden: true
+  env_file_content_forbidden: true

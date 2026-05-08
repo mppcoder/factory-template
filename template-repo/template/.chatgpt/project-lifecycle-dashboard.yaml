@@ -74,17 +74,17 @@ lifecycle_phase:
     status: pending
     evidence: []
 active_change:
-  id: HIR-014-connector-safe-allocation-actions-status
-  title: Connector-safe allocation, active card visibility and Actions status
-  class: build
-  priority: critical
+  id: HIR-016-telegram-feedback-channel
+  title: Repo-native Telegram Feedback Channel
+  class: deep
+  priority: high
   status: done
   owner_boundary: internal-repo-follow-up
   evidence:
-  - .chatgpt/chat-handoff-index.yaml
-  - .chatgpt/handoff-implementation-register.yaml
-  - reports/ci/latest-actions-status.md
-  - reports/bugs/2026-05-07-chat-title-allocation-runtime-enforcement-gap.md
+  - template-repo/template/.chatgpt/telegram-feedback-event.schema.yaml
+  - template-repo/scripts/factory_notify_telegram.py
+  - template-repo/scripts/validate-telegram-feedback-channel.py
+  - tests/telegram-feedback-channel/events/p0-events.yaml
   source_artifacts:
   - .chatgpt/chat-handoff-index.yaml
   - .chatgpt/handoff-implementation-register.yaml

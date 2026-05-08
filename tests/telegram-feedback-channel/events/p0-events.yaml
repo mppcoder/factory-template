@@ -1,0 +1,212 @@
+events:
+  - event_id: evt-task-completed-001
+    project_id: factory-template
+    project_type: factory-template
+    repo: mppcoder/factory-template
+    source: .chatgpt/task-index.yaml
+    kind: task.completed
+    severity: success
+    title: Task completed
+    summary: Repo task reached done with evidence recorded in existing lifecycle artifacts.
+    task_id: FT-TASK-0001
+    chat_id: ""
+    codex_work_id: ""
+    status: done
+    required_user_action: ""
+    recommendation: ""
+    evidence:
+      - .chatgpt/done-report.md
+    links:
+      - reports/project-lifecycle-dashboard.md
+    created_utc: "2026-05-08T09:00:00Z"
+    dedupe_key: factory-template:FT-TASK-0001:task.completed:v1
+  - event_id: evt-codex-completed-001
+    project_id: factory-template
+    project_type: factory-template
+    repo: mppcoder/factory-template
+    source: .chatgpt/codex-work-index.yaml
+    kind: codex.completed
+    severity: success
+    title: Codex handoff completed
+    summary: Codex implementation finished and verification evidence is attached to the handoff register.
+    task_id: ""
+    chat_id: FT-CH-0027
+    codex_work_id: ""
+    status: verified
+    required_user_action: ""
+    recommendation: ""
+    evidence:
+      - .chatgpt/handoff-implementation-register.yaml
+    links:
+      - reports/project-lifecycle-dashboard.md
+    created_utc: "2026-05-08T09:01:00Z"
+    dedupe_key: factory-template:FT-CH-0027:codex.completed:v1
+  - event_id: evt-user-action-001
+    project_id: factory-template
+    project_type: factory-template
+    repo: mppcoder/factory-template
+    source: .chatgpt/boundary-actions.md
+    kind: user_action.required
+    severity: warning
+    title: User action required
+    summary: External setup is required before live Telegram delivery can be enabled.
+    task_id: ""
+    chat_id: FT-CH-0027
+    codex_work_id: ""
+    status: action_required
+    required_user_action: Create a bot in BotFather and set env-only token and allowed ids.
+    recommendation: Keep channel config disabled until chat id and allowlists are verified.
+    evidence:
+      - docs/operator/factory-template/telegram-feedback-channel.md
+    links:
+      - template-repo/template/.chatgpt/telegram-feedback-channel.example.yaml
+    created_utc: "2026-05-08T09:02:00Z"
+    dedupe_key: factory-template:FT-CH-0027:user_action.required:v1
+  - event_id: evt-bug-detected-001
+    project_id: factory-template
+    project_type: factory-template
+    repo: mppcoder/factory-template
+    source: reports/bugs/example.md
+    kind: bug.detected
+    severity: error
+    title: Bug detected
+    summary: A validator regression was captured in the factory defect flow.
+    task_id: ""
+    chat_id: ""
+    codex_work_id: FT-CX-0001
+    status: captured
+    required_user_action: ""
+    recommendation: Triage reusable factory impact before remediation.
+    evidence:
+      - reports/bugs/example.md
+    links:
+      - reports/factory-feedback/example.md
+    created_utc: "2026-05-08T09:03:00Z"
+    dedupe_key: factory-template:bug-example:bug.detected:v1
+  - event_id: evt-bug-fixed-001
+    project_id: factory-template
+    project_type: factory-template
+    repo: mppcoder/factory-template
+    source: reports/bugs/example.md
+    kind: bug.fixed
+    severity: success
+    title: Bug fixed
+    summary: The captured defect was remediated and verified by repo-native tests.
+    task_id: ""
+    chat_id: ""
+    codex_work_id: FT-CX-0001
+    status: verified
+    required_user_action: ""
+    recommendation: ""
+    evidence:
+      - reports/bugs/example.md
+      - bash template-repo/scripts/verify-all.sh quick
+    links:
+      - reports/project-lifecycle-dashboard.md
+    created_utc: "2026-05-08T09:04:00Z"
+    dedupe_key: factory-template:bug-example:bug.fixed:v1
+  - event_id: evt-verification-failed-001
+    project_id: factory-template
+    project_type: factory-template
+    repo: mppcoder/factory-template
+    source: template-repo/scripts/verify-all.sh
+    kind: verification.failed
+    severity: error
+    title: Verification failed
+    summary: Quick verification failed and remediation must start from captured evidence.
+    task_id: ""
+    chat_id: FT-CH-0027
+    codex_work_id: ""
+    status: failed
+    required_user_action: ""
+    recommendation: Capture the failing command output in reports/bugs before applying a fix.
+    evidence:
+      - reports/bugs/example-verification-failed.md
+    links:
+      - .chatgpt/verification-report.md
+    created_utc: "2026-05-08T09:05:00Z"
+    dedupe_key: factory-template:verify-all:verification.failed:v1
+  - event_id: evt-update-available-001
+    project_id: factory-template
+    project_type: factory-template
+    repo: mppcoder/factory-template
+    source: .chatgpt/software-update-watchlist.yaml
+    kind: update.available
+    severity: info
+    title: Update available
+    summary: Software watchlist found a newer dependency version for review.
+    task_id: ""
+    chat_id: ""
+    codex_work_id: ""
+    status: captured
+    required_user_action: ""
+    recommendation: Review update governance before recommending downstream action.
+    evidence:
+      - .chatgpt/software-update-watchlist.yaml
+    links:
+      - reports/software-updates/README.md
+    created_utc: "2026-05-08T09:06:00Z"
+    dedupe_key: factory-template:software-watchlist:update.available:v1
+  - event_id: evt-update-recommended-001
+    project_id: factory-template
+    project_type: factory-template
+    repo: mppcoder/factory-template
+    source: .chatgpt/software-update-readiness.yaml
+    kind: update.recommended
+    severity: warning
+    title: Update recommended
+    summary: Update governance marked a dependency update as safe to schedule.
+    task_id: ""
+    chat_id: ""
+    codex_work_id: ""
+    status: action_required
+    required_user_action: Approve the separate gated update workflow before applying downstream.
+    recommendation: Prepare a normal repo-first update handoff; do not auto-update from Telegram.
+    evidence:
+      - .chatgpt/software-update-readiness.yaml
+    links:
+      - docs/operator/software-update-governance.md
+    created_utc: "2026-05-08T09:07:00Z"
+    dedupe_key: factory-template:software-readiness:update.recommended:v1
+  - event_id: evt-release-published-001
+    project_id: factory-template
+    project_type: factory-template
+    repo: mppcoder/factory-template
+    source: reports/release/release-report.md
+    kind: release.published
+    severity: success
+    title: Release published
+    summary: A release artifact was published after release governance checks completed.
+    task_id: ""
+    chat_id: ""
+    codex_work_id: ""
+    status: published
+    required_user_action: ""
+    recommendation: ""
+    evidence:
+      - reports/release/release-report.md
+    links:
+      - .chatgpt/release-decision.yaml
+    created_utc: "2026-05-08T09:08:00Z"
+    dedupe_key: factory-template:release:release.published:v1
+  - event_id: evt-deploy-done-001
+    project_id: factory-template
+    project_type: factory-template
+    repo: mppcoder/factory-template
+    source: reports/release/deploy-report.md
+    kind: deploy.done
+    severity: success
+    title: Deploy done
+    summary: Deployment completed and sanitized evidence was stored in release reports.
+    task_id: ""
+    chat_id: ""
+    codex_work_id: ""
+    status: done
+    required_user_action: ""
+    recommendation: ""
+    evidence:
+      - reports/release/deploy-report.md
+    links:
+      - docs/operator/factory-template/production-deploy-gate.md
+    created_utc: "2026-05-08T09:09:00Z"
+    dedupe_key: factory-template:deploy:deploy.done:v1

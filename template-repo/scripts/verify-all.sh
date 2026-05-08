@@ -439,6 +439,39 @@ run_goal_contract_smoke() {
   rm -f /tmp/goal-contract-negative.log
 }
 
+run_telegram_feedback_channel_smoke() {
+  local tmp_dir
+  tmp_dir="$(mktemp -d)"
+  python3 "$ROOT/template-repo/scripts/validate-telegram-feedback-channel.py" \
+    --root "$ROOT" \
+    --allow-placeholders
+  python3 "$ROOT/template-repo/scripts/factory_notify_telegram.py" send \
+    --root "$ROOT" \
+    --event "$ROOT/tests/telegram-feedback-channel/events/p0-events.yaml" \
+    --outbox "$tmp_dir/outbox.jsonl" \
+    --dry-run >/dev/null
+  if [[ "$(wc -l < "$tmp_dir/outbox.jsonl")" != "10" ]]; then
+    echo "telegram dry-run outbox must contain 10 P0 event records" >&2
+    return 1
+  fi
+  python3 "$ROOT/template-repo/scripts/factory_notify_telegram.py" send \
+    --root "$ROOT" \
+    --event "$ROOT/tests/telegram-feedback-channel/events/p0-events.yaml" \
+    --outbox "$tmp_dir/outbox.jsonl" \
+    --dry-run >/dev/null
+  if [[ "$(grep -c '"delivery_status": "duplicate_skipped"' "$tmp_dir/outbox.jsonl")" != "10" ]]; then
+    echo "telegram dry-run should dedupe repeated P0 events" >&2
+    return 1
+  fi
+  TELEGRAM_ALLOWED_CHAT_IDS=123456789 TELEGRAM_ALLOWED_USER_IDS=987654321 \
+    python3 "$ROOT/template-repo/scripts/factory_notify_telegram.py" audit-inbound \
+      --root "$ROOT" \
+      --payload "$ROOT/tests/telegram-feedback-channel/inbound/ack-command.json" \
+      --audit "$tmp_dir/inbound-audit.jsonl" >/dev/null
+  grep -q '"allowed": true' "$tmp_dir/inbound-audit.jsonl"
+  rm -rf "$tmp_dir"
+}
+
 run_project_lifecycle_dashboard_smoke() {
   local tmp_dir
   tmp_dir="$(mktemp -d)"
@@ -1094,6 +1127,14 @@ run_generated_project_quick() {
   fi
   run_step "validate-standards-gates" python3 "$ROOT/scripts/validate-standards-gates.py" "$ROOT"
   run_step "validate-software-update-governance" python3 "$ROOT/scripts/validate-software-update-governance.py" "$ROOT"
+  if [[ -f "$ROOT/scripts/validate-telegram-feedback-channel.py" && -f "$ROOT/.chatgpt/telegram-feedback-channel.example.yaml" && -d "$ROOT/tests/telegram-feedback-channel/events" ]]; then
+    run_step "validate-telegram-feedback-channel" python3 "$ROOT/scripts/validate-telegram-feedback-channel.py" \
+      --root "$ROOT" \
+      --config ".chatgpt/telegram-feedback-channel.example.yaml" \
+      --schema ".chatgpt/telegram-feedback-event.schema.yaml" \
+      --events "$ROOT/tests/telegram-feedback-channel/events" \
+      --allow-placeholders
+  fi
   run_step "validate-feature-execution-lite" python3 "$ROOT/scripts/validate-feature-execution-lite.py" "$ROOT"
   run_step "validate-learning-patch-loop" python3 "$ROOT/scripts/validate-learning-patch-loop.py" "$ROOT"
   run_step "validate-versioning-layer" python3 "$ROOT/scripts/validate-versioning-layer.py" "$ROOT"
@@ -1134,6 +1175,7 @@ run_quick() {
   run_step "validate-gpt55-prompt-contract" run_gpt55_prompt_contract_smoke
   run_step "validate-model-prompt-policy" run_model_prompt_policy_smoke
   run_step "validate-goal-contract" run_goal_contract_smoke
+  run_step "telegram-feedback-channel-smoke" run_telegram_feedback_channel_smoke
   run_step "validate-tree-contract" python3 "$ROOT/template-repo/scripts/validate-tree-contract.py" "$ROOT"
   run_step "validate-project-naming" python3 "$ROOT/template-repo/scripts/validate-project-naming.py" "$ROOT"
   run_step "validate-mode-parity" python3 "$ROOT/template-repo/scripts/validate-mode-parity.py" "$ROOT"

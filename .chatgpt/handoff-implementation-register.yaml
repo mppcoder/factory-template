@@ -855,3 +855,71 @@ items:
     next_action: "No further implementation action after green full verification; complete verified sync."
     created_at: "2026-05-08T05:36:30Z"
     updated_at: "2026-05-08T05:40:54Z"
+  - id: HIR-016
+    title: "Repo-native Telegram Feedback Channel"
+    chat_id: FT-CH-0027
+    chat_title: "FT-CH-0027 telegram-feedback-channel"
+    task_slug: telegram-feedback-channel
+    chat_state: verified
+    chat_index_item_id: FT-CH-0027
+    handoff_group: "telegram-feedback-channel"
+    handoff_revision: 1
+    source_type: chatgpt-handoff
+    source_chat: "FT-CH-0027 telegram-feedback-channel"
+    source_handoff_path: ".chatgpt/codex-input.md"
+    task_class: deep
+    selected_profile: deep
+    selected_model: gpt-5.5
+    selected_reasoning_effort: high
+    selected_plan_mode_reasoning_effort: high
+    status: verified
+    priority: high
+    calculated_priority: high
+    depends_on: []
+    blocks: []
+    replaces: []
+    superseded_by: ""
+    replacement_reason: ""
+    owner_boundary: internal-repo-follow-up
+    artifacts_to_update:
+      - "docs/operator/factory-template/telegram-feedback-channel.md"
+      - "template-repo/template/docs/operator/telegram-feedback-channel.md"
+      - "template-repo/template/.chatgpt/telegram-feedback-event.schema.yaml"
+      - "template-repo/template/.chatgpt/telegram-feedback-channel.example.yaml"
+      - "template-repo/scripts/factory_notify_telegram.py"
+      - "template-repo/scripts/validate-telegram-feedback-channel.py"
+      - "template-repo/scripts/validate-handoff-language.py"
+      - "template-repo/scripts/verify-all.sh"
+      - "tests/telegram-feedback-channel/events/p0-events.yaml"
+      - "tests/telegram-feedback-channel/inbound/ack-command.json"
+      - "reports/bugs/2026-05-08-handoff-language-yaml-scope-false-positive.md"
+      - "reports/factory-feedback/feedback-062-handoff-language-yaml-scope-false-positive.md"
+      - "reports/notifications/README.md"
+      - "template-repo/template/reports/notifications/README.md"
+      - ".chatgpt/chat-handoff-index.yaml"
+      - ".chatgpt/handoff-implementation-register.yaml"
+      - "template-repo/template/.chatgpt/project-lifecycle-dashboard.yaml"
+      - "reports/project-status-card.md"
+      - "reports/project-lifecycle-dashboard.md"
+    evidence:
+      - "route receipt: launch_source=chatgpt-handoff, handoff_shape=codex-task-handoff, selected_profile=deep, selected_model=gpt-5.5, reasoning=high"
+      - "schema/config: template-repo/template/.chatgpt/telegram-feedback-event.schema.yaml and telegram-feedback-channel.example.yaml"
+      - "notifier: template-repo/scripts/factory_notify_telegram.py supports dry-run, outbox JSONL, dedupe_key idempotency and env-only TELEGRAM_BOT_TOKEN"
+      - "inbound audit: safe command audit path writes sanitized records and requires TELEGRAM_ALLOWED_CHAT_IDS / TELEGRAM_ALLOWED_USER_IDS"
+      - "fixtures: tests/telegram-feedback-channel/events/p0-events.yaml covers all P0 event kinds"
+      - "python3 template-repo/scripts/validate-telegram-feedback-channel.py --allow-placeholders"
+      - "python3 template-repo/scripts/factory_notify_telegram.py send --event tests/telegram-feedback-channel/events/p0-events.yaml --dry-run --outbox <tmp>/outbox.jsonl"
+      - "TELEGRAM_ALLOWED_CHAT_IDS=123456789 TELEGRAM_ALLOWED_USER_IDS=987654321 python3 template-repo/scripts/factory_notify_telegram.py audit-inbound --payload tests/telegram-feedback-channel/inbound/ack-command.json --audit <tmp>/inbound-audit.jsonl"
+      - "incidental defect fixed: reports/bugs/2026-05-08-handoff-language-yaml-scope-false-positive.md"
+      - "factory feedback: reports/factory-feedback/feedback-062-handoff-language-yaml-scope-false-positive.md"
+      - "python3 template-repo/scripts/validate-handoff-language.py .matrix-test/bugflow/factory-bugflow/.chatgpt/handoff-response.md"
+      - "python3 template-repo/scripts/validate-chat-handoff-index.py .chatgpt/chat-handoff-index.yaml"
+      - "python3 template-repo/scripts/validate-handoff-implementation-register.py .chatgpt/handoff-implementation-register.yaml"
+      - "bash template-repo/scripts/verify-all.sh quick"
+      - "bash MATRIX_TEST.sh"
+      - "bash template-repo/scripts/verify-all.sh"
+    closeout_reason: "Telegram feedback P0 implemented as a thin delivery/control layer over repo-first artifacts with schema, safe config, dry-run notifier, outbox/audit logs, idempotency, docs, fixtures and validator coverage."
+    deactivation_handoff_required: false
+    next_action: "No further P0 implementation action; live Telegram delivery requires external BotFather/chat id/env setup."
+    created_at: "2026-05-08T09:48:00Z"
+    updated_at: "2026-05-08T10:11:00Z"

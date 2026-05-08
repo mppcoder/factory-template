@@ -1,0 +1,72 @@
+schema: telegram-feedback-channel-config/v1
+enabled: false
+project_id: "{{PROJECT_SLUG}}"
+project_type: generated-project
+repo: "{{PROJECT_REPO}}"
+telegram:
+  bot_token_env: TELEGRAM_BOT_TOKEN
+  parse_mode: HTML
+  request_timeout_seconds: 15
+  allowed_chat_ids_env: TELEGRAM_ALLOWED_CHAT_IDS
+  allowed_user_ids_env: TELEGRAM_ALLOWED_USER_IDS
+paths:
+  event_schema: .chatgpt/telegram-feedback-event.schema.yaml
+  outbox_jsonl: reports/notifications/outbox.jsonl
+  inbound_audit_jsonl: reports/notifications/inbound-audit.jsonl
+dedupe:
+  enabled: true
+  key_field: dedupe_key
+routing:
+  default_topic: factory-main
+  kind_to_topic:
+    task.completed: codex-completions
+    codex.completed: codex-completions
+    user_action.required: user-actions
+    bug.detected: bugs
+    bug.fixed: bugs
+    verification.failed: bugs
+    update.available: updates
+    update.recommended: updates
+    release.published: updates
+    deploy.done: updates
+    downstream.feedback: downstream-projects
+topics:
+  factory-main:
+    chat_id: REPLACE_WITH_TELEGRAM_CHAT_ID
+    message_thread_id: null
+  codex-completions:
+    chat_id: REPLACE_WITH_TELEGRAM_CHAT_ID
+    message_thread_id: REPLACE_WITH_OPTIONAL_FORUM_TOPIC_ID
+  user-actions:
+    chat_id: REPLACE_WITH_TELEGRAM_CHAT_ID
+    message_thread_id: REPLACE_WITH_OPTIONAL_FORUM_TOPIC_ID
+  bugs:
+    chat_id: REPLACE_WITH_TELEGRAM_CHAT_ID
+    message_thread_id: REPLACE_WITH_OPTIONAL_FORUM_TOPIC_ID
+  updates:
+    chat_id: REPLACE_WITH_TELEGRAM_CHAT_ID
+    message_thread_id: REPLACE_WITH_OPTIONAL_FORUM_TOPIC_ID
+  downstream-projects:
+    chat_id: REPLACE_WITH_TELEGRAM_CHAT_ID
+    message_thread_id: REPLACE_WITH_OPTIONAL_FORUM_TOPIC_ID
+inbound_commands:
+  allowed:
+    - status
+    - ack
+    - defer
+    - bug
+    - handoff_draft
+    - feedback
+  forbidden:
+    - shell
+    - codex_run
+    - deploy
+    - delete
+    - merge
+    - push
+placeholder_replacements:
+  TELEGRAM_BOT_TOKEN: Set only in env or secret store. Do not write it into this file.
+  TELEGRAM_ALLOWED_CHAT_IDS: Comma-separated numeric Telegram chat ids allowed for inbound commands.
+  TELEGRAM_ALLOWED_USER_IDS: Comma-separated numeric Telegram user ids allowed for inbound commands.
+  REPLACE_WITH_TELEGRAM_CHAT_ID: Real chat id for the destination channel or group.
+  REPLACE_WITH_OPTIONAL_FORUM_TOPIC_ID: Real Telegram forum topic id, or null when topics are not used.

@@ -53,7 +53,7 @@ def main() -> int:
             errors.append(f"англоязычная handoff phrase `{phrase}`")
 
     for label in ("repo", "goal", "entry point", "scope"):
-        if re.search(rf"(?mi)^\s*{re.escape(label)}\s*:", text):
+        if re.search(rf"(?mi)^{re.escape(label)}\s*:", text):
             errors.append(f"англоязычный handoff label `{label}:`")
 
     if "## handoff в codex" in lowered:

@@ -612,13 +612,13 @@ items:
   chat_title: FT-CH-0027 telegram-feedback-channel
   task_slug: telegram-feedback-channel
   kind: handoff
-  state: open
+  state: verified
   created_utc: '2026-05-08T05:58:00Z'
-  updated_utc: '2026-05-08T05:58:00Z'
+  updated_utc: '2026-05-08T09:48:00Z'
   source_type: chatgpt-first-answer
   handoff_group: telegram-feedback-channel
   handoff_revision: 1
-  handoff_register_item_id: ''
+  handoff_register_item_id: HIR-016
   status_chain:
   - chatgpt_handoff
   - codex_accepted
@@ -628,9 +628,13 @@ items:
       completion, Codex completion, required user action, bugs, update releases, update
       recommendations, and related notifications.
   - '2026-05-08 normalization: status_chain expanded to canonical handoff chain required
-    by validate-chat-handoff-index.py; state remains open and telegram scope is unchanged.'
-  next_action: Prepare architecture and Codex handoff for Telegram feedback channel
-    integration.
+    by validate-chat-handoff-index.py; telegram scope is unchanged.'
+  - 'Codex implemented repo-native Telegram Feedback Channel as schema/config/notifier/outbox/audit/docs/fixtures/validator in HIR-016.'
+  - python3 template-repo/scripts/validate-telegram-feedback-channel.py --allow-placeholders
+  - bash template-repo/scripts/verify-all.sh quick
+  - bash template-repo/scripts/verify-all.sh
+  next_action: No further implementation action for Telegram feedback P0; live delivery
+    requires external BotFather/chat id/env setup.
 - chat_id: FT-CH-0028
   chat_number: 28
   chat_title: FT-CH-0028 goal-first-transition

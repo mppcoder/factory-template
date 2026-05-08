@@ -1,6 +1,6 @@
 # Панель жизненного цикла проекта / `project-lifecycle-dashboard`
 
-Generated UTC: `2026-05-08T05:41:22+00:00`
+Generated UTC: `2026-05-08T09:30:39+00:00`
 Source: `/projects/factory-template/template-repo/template/.chatgpt/project-lifecycle-dashboard.yaml`
 
 ## Сейчас
@@ -15,9 +15,9 @@ Source: `/projects/factory-template/template-repo/template/.chatgpt/project-life
 
 ## Активное изменение
 
-- id: `HIR-014-connector-safe-allocation-actions-status`
-- title: Connector-safe allocation, active card visibility and Actions status
-- class/priority/status: `build` / `critical` / `done`
+- id: `HIR-016-telegram-feedback-channel`
+- title: Repo-native Telegram Feedback Channel
+- class/priority/status: `deep` / `high` / `done`
 - boundary: `internal-repo-follow-up`
 - task-state next action: not set
 
@@ -102,6 +102,8 @@ Source: `/projects/factory-template/template-repo/template/.chatgpt/project-life
 ✅ FT-CH-0025 github-errors-actions-audit: ✅ GPT-HO → ✅ Codex OK → ✅ Done
 ✅ FT-CH-0026 github-access-confirmation-gate-regression: ✅ GPT-HO → ✅
   Codex OK → ✅ Done
+✅ FT-CH-0027 telegram-feedback-channel: ✅ GPT-HO → ✅ Codex OK → ✅ Done
+✅ FT-CH-0028 goal-first-transition: ✅ GPT-HO → ✅ Codex OK → ✅ Done
 
 ### История Codex-доработок
 
@@ -255,7 +257,7 @@ Source: `/projects/factory-template/template-repo/template/.chatgpt/project-life
 - status: `pending`
 - preset: `starter`
 - operator source: `template-repo/scripts/operator-dashboard.py`
-- dry-run report present: `True`
+- dry-run report present: `False`
 - deploy report present: `False`
 - boundary: Runtime evidence может подтягиваться из operator-dashboard reports; dry-run/report evidence не является real deploy proof.
 

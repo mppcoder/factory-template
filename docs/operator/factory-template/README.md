@@ -34,6 +34,7 @@
 10. `07-AGENTS-factory-template.md`
 11. `07-universal-codex-handoff-factory.md`
 12. `08-chatgpt-codex-github-vps-one-paste-flow.md`
+13. `telegram-feedback-channel.md`
 
 ## Назначение
 
