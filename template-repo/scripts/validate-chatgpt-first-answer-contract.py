@@ -27,6 +27,12 @@ REQUIRED_ROUTER_PHRASES = [
     "blocker нельзя выводить",
     "connector-safe reservation patch",
     "append one item and bump `next_chat_number`",
+    "не спрашивай conversational confirmation",
+    "repo-first instruction authorizes configured GitHub connector",
+    "external_auth_blocker",
+    "platform-level OAuth",
+    "write action exposed",
+    "confirm fetch succeeds",
 ]
 REQUIRED_HANDOFF_PHRASES = [
     "Название чата для копирования",
@@ -43,6 +49,12 @@ REQUIRED_HANDOFF_PHRASES = [
     "blocker нельзя выводить",
     "connector-safe reservation patch",
     "append one item and bump `next_chat_number`",
+    "не спрашивай conversational confirmation",
+    "repo-first instruction authorizes configured GitHub connector",
+    "external_auth_blocker",
+    "platform-level OAuth",
+    "write action exposed",
+    "confirm fetch succeeds",
 ]
 REQUIRED_DOC_PHRASES = [
     "Название чата для копирования",
@@ -64,6 +76,12 @@ REQUIRED_DOC_PHRASES = [
     "blocker нельзя выводить",
     "connector-safe reservation patch",
     "append one item and bump `next_chat_number`",
+    "не спрашивай conversational confirmation",
+    "repo-first instruction authorizes configured GitHub connector",
+    "external_auth_blocker",
+    "platform-level OAuth",
+    "write action exposed",
+    "confirm fetch succeeds",
 ]
 FORBIDDEN_OVERCLAIMS = [
     "автоматически переименует ChatGPT",
@@ -88,10 +106,20 @@ REPO_LOCAL_ALLOCATOR_UNAVAILABLE_MARKERS = [
 CONFIRMED_WRITE_BLOCKER_MARKERS = [
     "confirmed_write_blocker:",
     "allocator_blocker_reason:",
+    "external_auth_blocker",
+    "write_auth_blocker",
     "confirm fetch failed",
     "GitHub connector write rejected",
     "GitHub connector write unavailable",
 ]
+GITHUB_CONFIRMATION_QUESTION_RE = re.compile(
+    r"(?is)("
+    r"подтверд(?:и|ите)[^\n.?!]{0,80}(?:доступ[^\n.?!]{0,40})?github|"
+    r"разреш(?:и|ите)[^\n.?!]{0,80}(?:использовать|доступ)[^\n.?!]{0,40}github|"
+    r"do you confirm[^\n.?!]{0,80}github access|"
+    r"please (?:grant|confirm)[^\n.?!]{0,80}(?:github )?access"
+    r")"
+)
 
 
 def read(path: Path) -> str:
@@ -117,6 +145,23 @@ def validate_visible_first_answer_outcome(text: str) -> list[str]:
             errors.append("route/analysis/handoff начался до title allocation outcome")
         if card_pos < 0 or card_pos > first_route_pos:
             errors.append("route/analysis/handoff начался до project card")
+
+    confirmation_match = GITHUB_CONFIRMATION_QUESTION_RE.search(text)
+    if confirmation_match:
+        outcome_positions = [match.start() for match in CHAT_TITLE_RE.finditer(text)]
+        blocker_pos = text.find(ALLOCATOR_BLOCKER)
+        if blocker_pos >= 0:
+            outcome_positions.append(blocker_pos)
+        for marker in CONFIRMED_WRITE_BLOCKER_MARKERS:
+            marker_pos = text.find(marker)
+            if marker_pos >= 0:
+                outcome_positions.append(marker_pos)
+        first_outcome_pos = min(outcome_positions) if outcome_positions else -1
+        if first_outcome_pos < 0 or confirmation_match.start() < first_outcome_pos:
+            errors.append(
+                "нельзя спрашивать conversational confirmation на GitHub access до materialized allocation "
+                "или explicit external_auth/write blocker"
+            )
 
     if title_pos >= 0:
         title_end = card_pos if card_pos > title_pos else len(text)
@@ -224,6 +269,36 @@ def main() -> int:
             errors.append(
                 f"{connector_false_blocker_fixture.relative_to(root)} должен быть negative fixture для false blocker при доступном GitHub connector write path, но прошел проверку"
             )
+
+    github_access_confirmation_fixture = (
+        root
+        / "tests"
+        / "chatgpt-first-answer-contract"
+        / "negative"
+        / "github-access-confirmation-before-allocation.md"
+    )
+    if not github_access_confirmation_fixture.exists():
+        errors.append(f"{github_access_confirmation_fixture.relative_to(root)} отсутствует")
+    else:
+        fixture_errors = validate_visible_first_answer_outcome(read(github_access_confirmation_fixture))
+        if not fixture_errors:
+            errors.append(
+                f"{github_access_confirmation_fixture.relative_to(root)} должен быть negative fixture для GitHub confirmation gate перед allocation outcome, но прошел проверку"
+            )
+
+    github_no_confirmation_fixture = (
+        root
+        / "tests"
+        / "chatgpt-first-answer-contract"
+        / "positive"
+        / "github-connector-no-confirmation-materialized.md"
+    )
+    if not github_no_confirmation_fixture.exists():
+        errors.append(f"{github_no_confirmation_fixture.relative_to(root)} отсутствует")
+    else:
+        fixture_errors = validate_visible_first_answer_outcome(read(github_no_confirmation_fixture))
+        if fixture_errors:
+            errors.append(f"{github_no_confirmation_fixture.relative_to(root)} не прошел positive fixture: {'; '.join(fixture_errors)}")
 
     card_path = root / "reports" / "project-status-card.md"
     if not card_path.exists():

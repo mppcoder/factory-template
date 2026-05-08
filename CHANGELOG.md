@@ -3,6 +3,7 @@
 ## [Unreleased]
 ### Добавлено
 - Root `LICENSE` now states proprietary terms: public visibility does not grant permission to use, copy, modify, distribute, run or derive from repository content without prior written consent.
+- First-answer ChatGPT allocation regression coverage for GitHub confirmation gates: validator fixtures now fail when the assistant asks to confirm GitHub access before materialized allocation or explicit auth/write blocker.
 - Стандарт `VPS Project Hosting Topologies`: architecture/runbook слой для `single-host` и `split-host`, разделение `/projects` и `/srv`, GitHub source-of-truth, per-project `/etc/<project>.env`, systemd/nginx/compose/backup model, pilot/restore proof checklists.
 - Project runtime deploy templates under `deploy/templates/`, dry-run-first deploy/backup/restore script templates under `scripts/deploy/` and host-safe validators under `scripts/validators/`.
 - ADR `docs/decisions/vps-project-hosting-topologies.md`, risk register `factory/producer/registry/known-risks/vps-project-hosting-risks.md` and incidental security bug report for an untracked in-repo runtime env boundary violation.
@@ -12,6 +13,7 @@
 - `WINDOWS_INSTALL_LATEST.md` now preserves the executable automation boundary: before launch the user only sets up PowerShell 7, downloads/verifies the latest package and runs `install-windows.ps1`; SSH/VPS automation is described as installer-owned; post-handoff work is described as Codex-owned.
 
 ### Исправлено
+- ChatGPT Project repo-first instructions now forbid conversational GitHub confirmation before required repo/index/allocation attempts and distinguish platform-level OAuth blockers from model-level confirmation questions.
 - Defect report `reports/bugs/2026-04-30-windows-latest-install-boundary-overcorrection.md` captures the overcorrection where SSH/VPS preparation moved outside the installer boundary.
 
 ## [2.5.7] - 2026-04-30

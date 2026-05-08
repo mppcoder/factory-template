@@ -654,6 +654,7 @@ items:
       - "python3 template-repo/scripts/validate-handoff-implementation-register.py .chatgpt/handoff-implementation-register.yaml"
       - "bash template-repo/scripts/verify-all.sh quick"
       - "bash template-repo/scripts/verify-all.sh"
+      - "bash template-repo/scripts/verify-all.sh"
     closeout_reason: "Defect chatgpt-first-answer-allocation-not-attempted closed at router/validator/runbook level with negative fixture coverage, docs/runbook guidance, bug report, factory feedback and refreshed dashboard/card artifacts."
     deactivation_handoff_required: false
     next_action: "No further implementation action for this HIR item."
@@ -794,3 +795,63 @@ items:
     next_action: "No further implementation action after verify and verified sync."
     created_at: "2026-05-07T16:25:00Z"
     updated_at: "2026-05-07T16:25:00Z"
+  - id: HIR-015
+    title: "ChatGPT GitHub confirmation gate allocation regression"
+    chat_id: FT-CH-0026
+    chat_title: "FT-CH-0026 github-access-confirmation-gate-regression"
+    task_slug: github-access-confirmation-gate-regression
+    chat_state: verified
+    chat_index_item_id: FT-CH-0026
+    handoff_group: "github-access-confirmation-gate-regression"
+    handoff_revision: 1
+    source_type: chatgpt-handoff
+    source_chat: "chatgpt-handoff: Нужно выделить номер через repo chat-handoff-index / allocator."
+    source_handoff_path: ""
+    task_class: build
+    selected_profile: build
+    selected_model: gpt-5.5
+    selected_reasoning_effort: medium
+    selected_plan_mode_reasoning_effort: medium
+    status: verified
+    priority: critical
+    calculated_priority: critical
+    depends_on: []
+    blocks: []
+    replaces: []
+    superseded_by: ""
+    replacement_reason: ""
+    owner_boundary: internal-repo-follow-up
+    artifacts_to_update:
+      - ".chatgpt/chat-handoff-index.yaml"
+      - ".chatgpt/handoff-implementation-register.yaml"
+      - "template-repo/scenario-pack/00-master-router.md"
+      - "template-repo/scenario-pack/15-handoff-to-codex.md"
+      - "template-repo/scripts/validate-chatgpt-first-answer-contract.py"
+      - "tests/chatgpt-first-answer-contract/negative/github-access-confirmation-before-allocation.md"
+      - "tests/chatgpt-first-answer-contract/positive/github-connector-no-confirmation-materialized.md"
+      - "docs/operator/factory-template/01-runbook-dlya-polzovatelya-factory-template.md"
+      - "docs/operator/factory-template/04-chatgpt-project-sources-factory-template-20-cap.md"
+      - "docs/operator/factory-template/06-project-lifecycle-dashboard.md"
+      - "reports/bugs/2026-05-07-chat-title-allocation-github-confirmation-gate-regression.md"
+      - "reports/factory-feedback/feedback-061-chatgpt-github-confirmation-gate-allocation.md"
+      - "reports/project-status-card.md"
+      - "reports/project-lifecycle-dashboard.md"
+      - "CHANGELOG.md"
+    evidence:
+      - "route receipt: launch_source=chatgpt-handoff, handoff_shape=codex-task-handoff, selected_profile=build, selected_model=gpt-5.5, reasoning=medium"
+      - "ChatGPT first answer could not materialize title because current connector exposed no write/update action."
+      - "User reported repeated allocator blocker and GitHub access confirmation prompt."
+      - "defect-capture: reports/bugs/2026-05-07-chat-title-allocation-github-confirmation-gate-regression.md"
+      - "factory feedback: reports/factory-feedback/feedback-061-chatgpt-github-confirmation-gate-allocation.md"
+      - "Remediation implemented no-confirmation connector allocation gate."
+      - "regression fixture: tests/chatgpt-first-answer-contract/negative/github-access-confirmation-before-allocation.md"
+      - "regression fixture: tests/chatgpt-first-answer-contract/positive/github-connector-no-confirmation-materialized.md"
+      - "python3 template-repo/scripts/validate-chat-handoff-index.py .chatgpt/chat-handoff-index.yaml"
+      - "python3 template-repo/scripts/validate-chatgpt-first-answer-contract.py ."
+      - "python3 template-repo/scripts/validate-handoff-implementation-register.py .chatgpt/handoff-implementation-register.yaml"
+      - "bash template-repo/scripts/verify-all.sh quick"
+    closeout_reason: "Router, handoff scenario, operator docs and first-answer validator now forbid conversational GitHub confirmation before required repo/index/allocation attempts, preserve the platform-level OAuth boundary and validate materialized connector allocation without a confirmation question."
+    deactivation_handoff_required: false
+    next_action: "No further implementation action after green full verification; complete verified sync."
+    created_at: "2026-05-08T05:36:30Z"
+    updated_at: "2026-05-08T05:40:54Z"

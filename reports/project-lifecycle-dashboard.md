@@ -1,6 +1,6 @@
 # Панель жизненного цикла проекта / `project-lifecycle-dashboard`
 
-Generated UTC: `2026-05-08T05:12:39+00:00`
+Generated UTC: `2026-05-08T05:41:22+00:00`
 Source: `/projects/factory-template/template-repo/template/.chatgpt/project-lifecycle-dashboard.yaml`
 
 ## Сейчас
@@ -100,6 +100,8 @@ Source: `/projects/factory-template/template-repo/template/.chatgpt/project-life
 ✅ FT-CH-0024 github-connector-first-chat-number: ✅ GPT-HO → ✅ Codex OK → ✅
   Done
 ✅ FT-CH-0025 github-errors-actions-audit: ✅ GPT-HO → ✅ Codex OK → ✅ Done
+✅ FT-CH-0026 github-access-confirmation-gate-regression: ✅ GPT-HO → ✅
+  Codex OK → ✅ Done
 
 ### История Codex-доработок
 

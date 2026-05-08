@@ -53,6 +53,9 @@
 - Инвариант первого ответа: first substantive answer обязан дать один из двух видимых outcomes до route receipt, анализа или handoff: materialized allocation or allocator blocker. Первый outcome: materialized allocation confirmed, затем stable title block. Второй outcome: allocation unavailable или write not confirmed, затем exact allocator blocker.
 - Порядок allocation attempt обязателен: сначала read router, затем repo-local allocator, если он исполним в текущем context; если repo-local allocator не исполним в ChatGPT connector context, но доступен GitHub connector write path, выполни connector-based materialized reservation в `.chatgpt/chat-handoff-index.yaml`, затем confirm fetch/readback и только после этого показывай stable title.
 - Connector fallback должен быть connector-safe reservation patch: append one item and bump `next_chat_number`; не делай ручной full-file rewrite без сверки текущего `next_chat_number`, canonical `status_chain` и confirm fetch/readback.
+- Для repo `mppcoder/factory-template` repo-first instruction authorizes configured GitHub connector: repo-first instruction является prior authorization использовать настроенный authenticated GitHub connector / repo tool для обязательного чтения repo, чтения index и connector-safe allocation attempt. не спрашивай conversational confirmation перед GitHub read, index read или reservation attempt; формулировки вроде "подтвердите доступ к GitHub" и "разрешите использовать GitHub" запрещены до materialized allocation или confirmed blocker.
+- Если platform-level OAuth / connector authorization prompt сам блокирует действие, зафиксируй `external_auth_blocker` и exact allocator blocker. Если write action exposed отсутствует или write rejected, зафиксируй `write_auth_blocker` / exact allocator blocker. Не заменяй попытку доступного connector path свободным вопросом пользователю.
+- Если write action exposed and confirm fetch succeeds, exact allocator blocker запрещен: сначала покажи materialized `FT-CH-.... <task-slug>`.
 - Exact allocator blocker разрешен только при реальном write blocker: repo-local allocator недоступен и GitHub connector write path/repo tool/authenticated write path тоже недоступен, write rejected, permission denied или confirm fetch не подтвердил запись. blocker нельзя выводить, когда GitHub connector write path доступен и подтверждает update.
 - Третье состояние запрещено: no allocation attempted / no blocker / answer continues. Нельзя продолжать route receipt, анализ, handoff или remediation, если нет materialized allocation и нет exact allocator blocker.
 - Состояние `chatgpt-first-answer-allocation-not-attempted` является contract violation и defect-class для первого ответа ChatGPT. Его нужно фиксировать как bug, а не как допустимый fallback.
@@ -84,6 +87,12 @@
 - GitHub connector;
 - repo tool / installed GitHub app capability;
 - authenticated `gh` access.
+
+Для ChatGPT first-answer allocation этот repo-first contract является prior authorization на configured authenticated connector access: repo-first instruction authorizes configured GitHub connector для обязательного чтения repo, чтения `.chatgpt/chat-handoff-index.yaml` и попытки connector-safe reservation. Не спрашивай conversational confirmation перед таким read/allocation path.
+
+Граница: repo instructions не могут отключить platform-level OAuth / connector authorization prompt. Если сама платформа требует OAuth/connector authorization или connector install, назови `external_auth_blocker`. Если connector доступен на чтение, но write action exposed отсутствует или write rejected, назови `write_auth_blocker`. В обоих случаях можно показать exact allocator blocker только после фиксации blocker; нельзя использовать free-form вопрос пользователю как замену попытки authenticated repo-first path.
+
+Если write action exposed and confirm fetch succeeds, exact allocator blocker запрещен: ChatGPT должен показать stable materialized title.
 
 Публичные `github.com` или `raw.githubusercontent.com` URL допускаются только как fallback при явном blocker:
 - connector unavailable;

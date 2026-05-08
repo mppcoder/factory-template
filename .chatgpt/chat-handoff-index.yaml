@@ -1,6 +1,6 @@
 schema: chat-handoff-index/v1
 project_code: FT
-next_chat_number: 26
+next_chat_number: 27
 title_policy:
   canonical_format: <PROJECT_CODE>-CH-<NNNN> <task-slug>
   include_status_in_title: false
@@ -148,14 +148,18 @@ items:
   - codex_accepted
   - codex_completed
   evidence:
-  - 'route receipt: launch_source=chatgpt-handoff, handoff_shape=codex-task-handoff, selected_profile=deep, selected_model=gpt-5.5, reasoning=high'
+  - 'route receipt: launch_source=chatgpt-handoff, handoff_shape=codex-task-handoff,
+    selected_profile=deep, selected_model=gpt-5.5, reasoning=high'
   - bash RELEASE_BUILD.sh
   - sha256sum -c /projects/factory-template/_incoming/factory-v2.5.1.zip.sha256
-  - python3 template-repo/scripts/validate-release-package.py /projects/factory-template/_incoming/factory-v2.5.1.zip --checksum /projects/factory-template/_incoming/factory-v2.5.1.zip.sha256 --manifest /projects/factory-template/_incoming/factory-v2.5.1.manifest.yaml
+  - python3 template-repo/scripts/validate-release-package.py /projects/factory-template/_incoming/factory-v2.5.1.zip
+    --checksum /projects/factory-template/_incoming/factory-v2.5.1.zip.sha256 --manifest
+    /projects/factory-template/_incoming/factory-v2.5.1.manifest.yaml
   - bash template-repo/scripts/verify-all.sh quick in unpacked /tmp root
   - bash template-repo/scripts/verify-all.sh quick in working repo
   - 'layout correction: release artifacts moved under /projects/factory-template/_incoming'
-  next_action: No further implementation action; release package is verified and sync gate remains.
+  next_action: No further implementation action; release package is verified and sync
+    gate remains.
 - chat_id: FT-CH-0011
   chat_number: 11
   chat_title: FT-CH-0011 single-vps-dev-runtime-host
@@ -174,11 +178,15 @@ items:
   - codex_completed
   evidence:
   - 'Retrofix: architecture task was launched before materialized ChatGPT title reservation'
-  - 'Original ChatGPT handoff: Single Big VPS Dev+Runtime Host / split runtime VPS topology standard'
+  - 'Original ChatGPT handoff: Single Big VPS Dev+Runtime Host / split runtime VPS
+    topology standard'
   - User confirmed on 2026-05-06 that FT-CH-0011 single-vps-dev-runtime-host is implemented.
-  - Scope continues with single big VPS architecture and downstream/battle project proof before beginner-first install hardening.
-  accepted_reason: Single big VPS architecture task is treated as implemented by explicit user decision; remaining work moves to proof/materialization roadmap.
-  next_action: No further numbering action for FT-CH-0011; continue with unified roadmap implementation.
+  - Scope continues with single big VPS architecture and downstream/battle project
+    proof before beginner-first install hardening.
+  accepted_reason: Single big VPS architecture task is treated as implemented by explicit
+    user decision; remaining work moves to proof/materialization roadmap.
+  next_action: No further numbering action for FT-CH-0011; continue with unified roadmap
+    implementation.
 - chat_id: FT-CH-0012
   chat_number: 12
   chat_title: FT-CH-0012 chatgpt-first-answer-allocation-not-attempted
@@ -196,16 +204,19 @@ items:
   - codex_accepted
   - codex_completed
   evidence:
-  - User requested closure of chatgpt-first-answer-allocation-not-attempted at router/validator/runbook level.
+  - User requested closure of chatgpt-first-answer-allocation-not-attempted at router/validator/runbook
+    level.
   - First-answer title reservation was materialized before visible substantive answer.
-  - 'route receipt: launch_source=chatgpt-handoff, handoff_shape=codex-task-handoff, selected_profile=build, selected_model=gpt-5.5, reasoning=medium'
+  - 'route receipt: launch_source=chatgpt-handoff, handoff_shape=codex-task-handoff,
+    selected_profile=build, selected_model=gpt-5.5, reasoning=medium'
   - 'defect-capture: reports/bugs/2026-05-06-chatgpt-first-answer-allocation-not-attempted.md'
   - 'factory feedback: reports/factory-feedback/feedback-053-chatgpt-first-answer-allocation-not-attempted.md'
   - python3 template-repo/scripts/validate-chat-handoff-index.py .chatgpt/chat-handoff-index.yaml
   - python3 template-repo/scripts/validate-chatgpt-first-answer-contract.py .
   - bash template-repo/scripts/verify-all.sh quick
   - bash template-repo/scripts/verify-all.sh
-  next_action: No further implementation action; defect is closed at router/validator/runbook level.
+  next_action: No further implementation action; defect is closed at router/validator/runbook
+    level.
 - chat_id: FT-CH-0013
   chat_number: 13
   chat_title: FT-CH-0013 universal-task-control-automation-roadmap
@@ -223,10 +234,14 @@ items:
   - codex_accepted
   - codex_completed
   evidence:
-  - 'Retrofix: first visible ChatGPT title in this chat incorrectly used FT-CH-0011, which is already reserved for single-vps-dev-runtime-host.'
-  - This chat covered Universal Task Control, downstream materialization, advanced automation substrate, gated autonomous mode, release/readout closeouts and numbering correction.
+  - 'Retrofix: first visible ChatGPT title in this chat incorrectly used FT-CH-0011,
+    which is already reserved for single-vps-dev-runtime-host.'
+  - This chat covered Universal Task Control, downstream materialization, advanced
+    automation substrate, gated autonomous mode, release/readout closeouts and numbering
+    correction.
   - FT-CH-0011 remains occupied and must not be reused.
-  next_action: No further numbering action; use this stable title for the current chat.
+  next_action: No further numbering action; use this stable title for the current
+    chat.
 - chat_id: FT-CH-0014
   chat_number: 14
   chat_title: FT-CH-0014 product-support-architecture
@@ -244,11 +259,14 @@ items:
   - codex_accepted
   - codex_completed
   evidence:
-  - First visible ChatGPT title incorrectly used FT-CH-0011, which is already reserved for single-vps-dev-runtime-host.
+  - First visible ChatGPT title incorrectly used FT-CH-0011, which is already reserved
+    for single-vps-dev-runtime-host.
   - This chat is not FT-CH-0013 universal-task-control-automation-roadmap.
-  - Chat produced product support architecture, GitHub Issues support model, issue-autofix automation analysis, and P0-P1 MVP Codex handoff.
+  - Chat produced product support architecture, GitHub Issues support model, issue-autofix
+    automation analysis, and P0-P1 MVP Codex handoff.
   - User confirmed task is already completed and requested numbering correction.
-  next_action: No further implementation action; chat numbering corrected and task marked verified.
+  next_action: No further implementation action; chat numbering corrected and task
+    marked verified.
 - chat_id: FT-CH-0015
   chat_number: 15
   chat_title: FT-CH-0015 windows-bootstrapper-release-publication
@@ -266,11 +284,17 @@ items:
   - codex_accepted
   - codex_completed
   evidence:
-  - 'Retrofix: this ChatGPT task initially showed FT-CH-0011, but FT-CH-0011 is already reserved for single-vps-dev-runtime-host.'
-  - User explicitly clarified this chat is not the FT-CH-0013 or FT-CH-0014 numbering-fix chat.
-  - This chat covered install-from-scratch guidance, beginner readme.txt, GitHub-vs-npm install clarification, Windows bootstrapper MVP handoff, verified Codex closeout for commit 02c517fcad5562412c1f06e682251f71e0e7babf, and release-publication handoff.
-  - Task outcome accepted by user as completed; numbering corrected to FT-CH-0015 and marked verified.
-  next_action: No further numbering action; use this stable title for this chat and do not reuse FT-CH-0011, FT-CH-0013 or FT-CH-0014 for it.
+  - 'Retrofix: this ChatGPT task initially showed FT-CH-0011, but FT-CH-0011 is already
+    reserved for single-vps-dev-runtime-host.'
+  - User explicitly clarified this chat is not the FT-CH-0013 or FT-CH-0014 numbering-fix
+    chat.
+  - This chat covered install-from-scratch guidance, beginner readme.txt, GitHub-vs-npm
+    install clarification, Windows bootstrapper MVP handoff, verified Codex closeout
+    for commit 02c517fcad5562412c1f06e682251f71e0e7babf, and release-publication handoff.
+  - Task outcome accepted by user as completed; numbering corrected to FT-CH-0015
+    and marked verified.
+  next_action: No further numbering action; use this stable title for this chat and
+    do not reuse FT-CH-0011, FT-CH-0013 or FT-CH-0014 for it.
 - chat_id: FT-CH-0016
   chat_number: 16
   chat_title: FT-CH-0016 chat-title-allocator-blocker-regression
@@ -289,9 +313,12 @@ items:
   - codex_completed
   evidence:
   - User reported ChatGPT shows allocator blocker instead of stable copy title.
-  - Materialized reservation created before visible substantive response for this defect task.
-  - 'Closed by FT-CH-0020 / HIR-013: connector write fallback contract and regression fixture added.'
-  next_action: No further implementation action; keep this historical reservation closed and do not reuse the chat number.
+  - Materialized reservation created before visible substantive response for this
+    defect task.
+  - 'Closed by FT-CH-0020 / HIR-013: connector write fallback contract and regression
+    fixture added.'
+  next_action: No further implementation action; keep this historical reservation
+    closed and do not reuse the chat number.
 - chat_id: FT-CH-0017
   chat_number: 17
   chat_title: FT-CH-0017 module-gated-vps-downstream-beginner-roadmap
@@ -338,11 +365,16 @@ items:
   - codex_accepted
   - codex_completed
   evidence:
-  - 'User reported recurring first-answer failure: ChatGPT reads next_chat_number=18 but still outputs allocator blocker instead of materializing reservation.'
-  - Router contract requires materialized repo reservation or exact allocator blocker before any route receipt or analysis.
-  - FT-CH-0016 covered the related allocator-blocker regression; this item captured the repeated no-number symptom and write-path remediation follow-up.
-  - 'Closed by FT-CH-0020 / HIR-013: connector write fallback contract and regression fixture added.'
-  next_action: No further implementation action; keep this historical reservation closed and do not reuse the chat number.
+  - 'User reported recurring first-answer failure: ChatGPT reads next_chat_number=18
+    but still outputs allocator blocker instead of materializing reservation.'
+  - Router contract requires materialized repo reservation or exact allocator blocker
+    before any route receipt or analysis.
+  - FT-CH-0016 covered the related allocator-blocker regression; this item captured
+    the repeated no-number symptom and write-path remediation follow-up.
+  - 'Closed by FT-CH-0020 / HIR-013: connector write fallback contract and regression
+    fixture added.'
+  next_action: No further implementation action; keep this historical reservation
+    closed and do not reuse the chat number.
 - chat_id: FT-CH-0019
   chat_number: 19
   chat_title: FT-CH-0019 external-user-action-interview-handoff-scenario
@@ -390,19 +422,24 @@ items:
   - codex_accepted
   - codex_completed
   evidence:
-  - User again reported that the first ChatGPT answer shows the exact allocator blocker instead of allocating a stable FT-CH title.
+  - User again reported that the first ChatGPT answer shows the exact allocator blocker
+    instead of allocating a stable FT-CH title.
   - Main router was read via GitHub connector before reservation.
-  - Direct GitHub connector write materialized this reservation because the allocator script exists in repo but cannot be executed inside ChatGPT connector context.
+  - Direct GitHub connector write materialized this reservation because the allocator
+    script exists in repo but cannot be executed inside ChatGPT connector context.
   - Related defects were FT-CH-0016 and FT-CH-0018.
-  - 'Codex route receipt: launch_source=chatgpt-handoff, selected_profile=build, selected_model=gpt-5.5, reasoning=medium'
+  - 'Codex route receipt: launch_source=chatgpt-handoff, selected_profile=build, selected_model=gpt-5.5,
+    reasoning=medium'
   - 'Defect-capture: reports/bugs/2026-05-07-chat-title-allocation-blocker-still-returned.md'
-  - 'Remediation: router/handoff/runbook/tooling now require GitHub connector materialized write fallback and confirm fetch.'
+  - 'Remediation: router/handoff/runbook/tooling now require GitHub connector materialized
+    write fallback and confirm fetch.'
   - 'Regression coverage: tests/chatgpt-first-answer-contract/negative/connector-write-available-silent-blocker.md'
   - python3 template-repo/scripts/validate-chat-handoff-index.py .chatgpt/chat-handoff-index.yaml
   - python3 template-repo/scripts/validate-chatgpt-first-answer-contract.py .
   - bash template-repo/scripts/verify-all.sh quick
   - bash template-repo/scripts/verify-all.sh
-  next_action: No further implementation action; exact allocator blocker is forbidden when GitHub connector write path is available and confirms update.
+  next_action: No further implementation action; exact allocator blocker is forbidden
+    when GitHub connector write path is available and confirms update.
 - chat_id: FT-CH-0021
   chat_number: 21
   chat_title: FT-CH-0021 github-errors-analysis
@@ -423,9 +460,11 @@ items:
   - User requested analysis of errors in GitHub.
   - Main router was read via GitHub connector before reservation.
   - 'GitHub triage via authenticated gh: open issues [], open PRs [].'
-  - 'GitHub Actions latest failing run captured in reports/ci/latest-actions-status.md.'
-  - 'CI root cause: FT-CH-0023 and FT-CH-0024 connector-created reservations had incomplete status_chain.'
-  next_action: No further GitHub issue/PR triage action; Actions status is persisted and remediation is tracked in HIR-014.
+  - GitHub Actions latest failing run captured in reports/ci/latest-actions-status.md.
+  - 'CI root cause: FT-CH-0023 and FT-CH-0024 connector-created reservations had incomplete
+    status_chain.'
+  next_action: No further GitHub issue/PR triage action; Actions status is persisted
+    and remediation is tracked in HIR-014.
 - chat_id: FT-CH-0022
   chat_number: 22
   chat_title: FT-CH-0022 per-project-unique-chatgpt-codex-indexes
@@ -443,10 +482,12 @@ items:
   - codex_accepted
   - codex_completed
   evidence:
-  - User reported that ChatGPT did not assign a number for the per-project unique ChatGPT/Codex index requirement.
-  - Router requires materialized repo reservation or exact allocator blocker before substantive answer.
+  - User reported that ChatGPT did not assign a number for the per-project unique
+    ChatGPT/Codex index requirement.
+  - Router requires materialized repo reservation or exact allocator blocker before
+    substantive answer.
   - 'Current repo index showed next_chat_number: 22 after FT-CH-0021 github-errors-analysis.'
-  - 'Implemented and verified by FT-CX-0030 per-project-unique-chatgpt-codex-indexes.'
+  - Implemented and verified by FT-CX-0030 per-project-unique-chatgpt-codex-indexes.
   - python3 template-repo/scripts/validate-chat-handoff-index.py .chatgpt/chat-handoff-index.yaml
   next_action: No further implementation action; FT-CX-0030 closed this reservation.
 - chat_id: FT-CH-0023
@@ -466,16 +507,16 @@ items:
   - codex_accepted
   - codex_completed
   evidence:
-  - User asked to output step-by-step logic for installing the factory template on VPS,
-    launching a new battle project from the template, developing and deploying the
-    battle project, and confirming the upstream GitHub issue feedback model.
+  - User asked to output step-by-step logic for installing the factory template on
+    VPS, launching a new battle project from the template, developing and deploying
+    the battle project, and confirming the upstream GitHub issue feedback model.
   - Previous response could not show stable title because write reservation was not
     confirmed.
   - '2026-05-07 remediation: connector-created reservation normalized to the canonical
     status_chain required by validate-chat-handoff-index.py.'
   - 'Closed by verified follow-up work: FT-CX-0029 full-factory-lifecycle-map materialized
-    VPS install, downstream/battle project creation, deploy/sustainment, upstream feedback
-    loop and controlled downstream upgrade in canonical repo docs.'
+    VPS install, downstream/battle project creation, deploy/sustainment, upstream
+    feedback loop and controlled downstream upgrade in canonical repo docs.'
   - python3 template-repo/scripts/validate-chat-handoff-index.py .chatgpt/chat-handoff-index.yaml
   next_action: No further internal action; template install/downstream deploy feedback
     loop is materialized and this historical reservation is closed.
@@ -496,13 +537,17 @@ items:
   - codex_accepted
   - codex_completed
   evidence:
-  - User required GitHub requests for factory-template to go through connectors rather than public URLs.
-  - User requested the assistant to allocate the chat number directly through the GitHub connector instead of delegating to Codex.
+  - User required GitHub requests for factory-template to go through connectors rather
+    than public URLs.
+  - User requested the assistant to allocate the chat number directly through the
+    GitHub connector instead of delegating to Codex.
   - Main router and chat-handoff index were read via GitHub connector before reservation.
-  - '2026-05-07 remediation: connector-created reservation normalized to the canonical status_chain required by validate-chat-handoff-index.py.'
+  - '2026-05-07 remediation: connector-created reservation normalized to the canonical
+    status_chain required by validate-chat-handoff-index.py.'
   - 'Connector-safe reservation patch contract added: append one item and bump next_chat_number.'
   - 'Regression fixture: tests/chatgpt-first-answer-contract/positive/connector-safe-reservation-patch.md'
-  next_action: No further connector-first policy hardening action for this item; HIR-014 closes the remediation.
+  next_action: No further connector-first policy hardening action for this item; HIR-014
+    closes the remediation.
 - chat_id: FT-CH-0025
   chat_number: 25
   chat_title: FT-CH-0025 github-errors-actions-audit
@@ -520,9 +565,11 @@ items:
   - codex_accepted
   - codex_completed
   evidence:
-  - User requested assigning the chat number after GitHub errors and Actions audit returned allocator blocker.
+  - User requested assigning the chat number after GitHub errors and Actions audit
+    returned allocator blocker.
   - Main router and chat-handoff index were read via GitHub connector before reservation.
-  - This reservation materializes the current ChatGPT chat title after confirming next_chat_number was 25.
+  - This reservation materializes the current ChatGPT chat title after confirming
+    next_chat_number was 25.
   - 'Closed by existing verified audit evidence: FT-CH-0021 github-errors-analysis
     captured Issues/PR triage and latest Actions status in reports/ci/latest-actions-status.md.'
   - 'Closed by HIR-014: connector-safe allocation, active card visibility and Actions
@@ -530,3 +577,32 @@ items:
   - python3 template-repo/scripts/validate-chat-handoff-index.py .chatgpt/chat-handoff-index.yaml
   next_action: No further internal GitHub errors / Actions audit action; this follow-up
     reservation is closed.
+- chat_id: FT-CH-0026
+  chat_number: 26
+  chat_title: FT-CH-0026 github-access-confirmation-gate-regression
+  task_slug: github-access-confirmation-gate-regression
+  kind: bug
+  state: verified
+  created_utc: '2026-05-08T05:36:30Z'
+  updated_utc: '2026-05-08T05:40:54Z'
+  source_type: chatgpt-first-answer-correction
+  handoff_group: github-access-confirmation-gate-regression
+  handoff_revision: 1
+  handoff_register_item_id: HIR-015
+  status_chain:
+  - chatgpt_handoff
+  - codex_accepted
+  - codex_completed
+  evidence:
+  - ChatGPT first answer could not materialize title because current connector exposed
+    no write/update action.
+  - User reported repeated allocator blocker and GitHub access confirmation prompt.
+  - Remediation implemented no-confirmation connector allocation gate.
+  - 'Defect-capture: reports/bugs/2026-05-07-chat-title-allocation-github-confirmation-gate-regression.md'
+  - 'Factory feedback: reports/factory-feedback/feedback-061-chatgpt-github-confirmation-gate-allocation.md'
+  - python3 template-repo/scripts/validate-chat-handoff-index.py .chatgpt/chat-handoff-index.yaml
+  - python3 template-repo/scripts/validate-chatgpt-first-answer-contract.py .
+  - python3 template-repo/scripts/validate-handoff-implementation-register.py .chatgpt/handoff-implementation-register.yaml
+  - bash template-repo/scripts/verify-all.sh quick
+  - bash template-repo/scripts/verify-all.sh
+  next_action: No further implementation action; no-confirmation GitHub connector allocation gate is verified in HIR-015.
