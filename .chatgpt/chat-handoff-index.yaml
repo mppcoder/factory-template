@@ -1,6 +1,6 @@
 schema: chat-handoff-index/v1
 project_code: FT
-next_chat_number: 28
+next_chat_number: 29
 title_policy:
   canonical_format: <PROJECT_CODE>-CH-<NNNN> <task-slug>
   include_status_in_title: false
@@ -605,7 +605,8 @@ items:
   - python3 template-repo/scripts/validate-handoff-implementation-register.py .chatgpt/handoff-implementation-register.yaml
   - bash template-repo/scripts/verify-all.sh quick
   - bash template-repo/scripts/verify-all.sh
-  next_action: No further implementation action; no-confirmation GitHub connector allocation gate is verified in HIR-015.
+  next_action: No further implementation action; no-confirmation GitHub connector
+    allocation gate is verified in HIR-015.
 - chat_id: FT-CH-0027
   chat_number: 27
   chat_title: FT-CH-0027 telegram-feedback-channel
@@ -620,6 +621,33 @@ items:
   handoff_register_item_id: ''
   status_chain:
   - chatgpt_handoff
+  - codex_accepted
+  - codex_completed
   evidence:
-  - User requested Telegram chatbot connection to the factory for feedback from the template and downstream projects: task completion, Codex completion, required user action, bugs, update releases, update recommendations, and related notifications.
-  next_action: Prepare architecture and Codex handoff for Telegram feedback channel integration.
+  - User requested Telegram chatbot connection to the factory for feedback from the template and downstream projects: task
+      completion, Codex completion, required user action, bugs, update releases, update
+      recommendations, and related notifications.
+  - '2026-05-08 normalization: status_chain expanded to canonical handoff chain required
+    by validate-chat-handoff-index.py; state remains open and telegram scope is unchanged.'
+  next_action: Prepare architecture and Codex handoff for Telegram feedback channel
+    integration.
+- chat_id: FT-CH-0028
+  chat_number: 28
+  chat_title: FT-CH-0028 goal-first-transition
+  task_slug: goal-first-transition
+  kind: handoff
+  state: verified
+  created_utc: '2026-05-08T09:19:09Z'
+  updated_utc: '2026-05-08T09:19:09Z'
+  source_type: chatgpt-first-answer
+  handoff_group: goal-first-transition
+  handoff_revision: 1
+  handoff_register_item_id: ''
+  status_chain:
+  - chatgpt_handoff
+  - codex_accepted
+  - codex_completed
+  evidence:
+  - Codex completed goal-first transition in commit 8b7f3fb
+  next_action: Start the Codex handoff or close/supersede this repo reservation; do
+    not reuse this chat number.
