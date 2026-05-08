@@ -7,13 +7,7 @@ direct-task
 codex-task-handoff
 
 ## Контракт цели
-- normalized_goal: `codex_work_id: FT-CX-0039
-codex_work_title: FT-CX-0039 continue-health-sync-bridge-next-stage
-task_slug: continue-health-sync-bridge-next-stage
-codex_work_state: in_progress
-
-user_request: продолжай проект HSB
-normalized_goal: Continue the Health Sync Bridge project from the latest repo-local state by finding the next internal Codex-eligible step, executing it if safely possible, and closing with evidence or a concrete blocker.`
+- normalized_goal: `Получи Garmin Developer Program approval.`
 - definition_of_done: evidence satisfies requested outcome and relevant repo validators or blockers are documented.
 - evidence_required: verification-report.md, done-report.md, targeted validation evidence.
 - scope: repo-local artifacts selected by route.
@@ -22,7 +16,7 @@ normalized_goal: Continue the Health Sync Bridge project from the latest repo-lo
 - goal_achievement_rule: mark achieved only when evidence satisfies DoD, not when proxy signals pass.
 
 ## Среда выполнения цели
-- goal_runtime_recommendation: `codex_goal_candidate`
+- goal_runtime_recommendation: `goal_first_contract_only`
 - codex_goal_live_validation_required: `true`
 - rule: Codex /goal runtime optional/live-gated; experimental goals require explicit user/operator choice and do not auto-enable in already-open sessions.
 
@@ -35,7 +29,7 @@ normalized_goal: Continue the Health Sync Bridge project from the latest repo-lo
 ## Стабильная identity чата и handoff
 - chat_id: ``
 - chat_title: ``
-- task_slug: `continue-health-sync-bridge-next-stage`
+- task_slug: `garmin-developer-program-approval`
 - kind: ``
 - state: ``
 - source_of_truth: `.chatgpt/chat-handoff-index.yaml`
@@ -45,20 +39,20 @@ normalized_goal: Continue the Health Sync Bridge project from the latest repo-lo
 - default neutral handoff: Codex decides actual execution_mode after analysis
 
 ## Класс задачи
-quick
+build
 
 ## Evidence для класса задачи
-- keyword-hit: find
-- явный reasoning/model override совпал с default profile: quick
+- keyword-hit не найден; fallback на default task class `build`
+- явный reasoning/model override совпал с default profile: build
 
 ## Выбранный профиль
-quick
+build
 
 ## Выбранная модель
-gpt-5.4-mini
+gpt-5.5
 
 ## Выбранное reasoning effort
-low
+medium
 
 ## Выбранное reasoning effort для plan mode
 medium
@@ -68,7 +62,7 @@ manual-ui
 
 ## Ручное применение через UI
 - Откройте новый чат/окно Codex в VS Code extension.
-- Вручную выберите model `gpt-5.4-mini` и reasoning `low` в picker.
+- Вручную выберите model `gpt-5.5` и reasoning `medium` в picker.
 - Только после этого вставьте handoff.
 - Codex должен отвечать пользователю на русском языке; английский допустим только для technical literal values.
 - Уже открытая live session не считается надежным auto-switch boundary.
@@ -152,7 +146,7 @@ selected_model совпадает с последним сохраненным s
 - scripted launch
 
 ## Прямая команда Codex за launcher
-`codex --profile quick`
+`codex --profile build`
 
 ## Диагностика проблем
 - Если вы работаете через VS Code Codex extension интерактивно, используйте новый чат/окно, вручную выставьте selected_model и selected_reasoning_effort в picker, а затем вставьте handoff.
@@ -165,10 +159,4 @@ selected_model совпадает с последним сохраненным s
 - Если используется experimental `goals`, сначала проверьте `codex features list`; включение goal runtime является runtime/operator choice и не следует из advisory текста.
 
 ## Текст задачи
-codex_work_id: FT-CX-0039
-codex_work_title: FT-CX-0039 continue-health-sync-bridge-next-stage
-task_slug: continue-health-sync-bridge-next-stage
-codex_work_state: in_progress
-
-user_request: продолжай проект HSB
-normalized_goal: Continue the Health Sync Bridge project from the latest repo-local state by finding the next internal Codex-eligible step, executing it if safely possible, and closing with evidence or a concrete blocker.
+Получи Garmin Developer Program approval.

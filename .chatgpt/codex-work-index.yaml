@@ -1,6 +1,6 @@
 schema: codex-work-index/v1
 project_code: FT
-next_codex_work_number: 40
+next_codex_work_number: 41
 id_policy:
   canonical_format: <PROJECT_CODE>-CX-<NNNN> <task-slug>
   independent_from_chat_handoff_index: true
@@ -1000,6 +1000,29 @@ items:
   - 'Allocated for direct request: продолжай проект HSB.'
   - Downstream Health Sync Bridge continuation allocated as HSB-CX-0006.
   - HSB commit c07a801 completed and pushed to origin/main.
-  - HSB internal pre-credential release candidate verified; live credentials and
-    production deploy remain external final-stage blockers.
+  - HSB internal pre-credential release candidate verified; live credentials and production
+    deploy remain external final-stage blockers.
   next_action: No factory-side implementation remains for this request.
+- codex_work_id: FT-CX-0040
+  work_number: 40
+  work_title: FT-CX-0040 garmin-developer-program-approval
+  task_slug: garmin-developer-program-approval
+  kind: self_handoff
+  state: blocked
+  created_utc: '2026-05-08T18:01:58Z'
+  updated_utc: '2026-05-08T18:15:00Z'
+  source_type: direct-task
+  handoff_group: garmin-developer-program-approval
+  handoff_revision: 1
+  handoff_register_item_id: ''
+  status_chain:
+  - codex_self_handoff
+  - codex_accepted
+  - codex_completed
+  evidence:
+  - Allocated during direct-task bootstrap before first substantive response.
+  - Official Garmin Developer Program approval path checked.
+  - Application package prepared; actual approval requires user submission and Garmin
+    decision.
+  next_action: User submits Garmin request with business details, then returns Garmin
+    response or approval evidence.

@@ -1,23 +1,29 @@
-CODEX HANDOFF — GPT-5.5 PROMPT MIGRATION FOR FACTORY-TEMPLATE
+# Codex Input
 
-launch_source: chatgpt-handoff
-handoff_shape: single-agent-handoff
-task_class: deep
-selected_profile: deep
+launch_source: direct-task
+codex_work_id: FT-CX-0040
+codex_work_title: FT-CX-0040 garmin-developer-program-approval
+handoff_shape: codex-task-handoff
+task_class: build
+selected_profile: build
 selected_model: gpt-5.5
-selected_reasoning_effort: high
-selected_plan_mode_reasoning_effort: high
+selected_reasoning_effort: medium
 apply_mode: manual-ui
 strict_launch_mode: optional
-project_profile: factory-template self-improvement
-selected_scenario: template-repo/scenario-pack/00-master-router.md -> template-repo/scenario-pack/15-handoff-to-codex.md -> docs/operator/factory-template/04-vps-remote-ssh-full-handoff-orchestration.md
-pipeline_stage: handoff policy modernization -> routing UX -> validation -> closeout
+project_profile: factory-template external approval support
+selected_scenario: template-repo/scenario-pack/00-master-router.md
+pipeline_stage: external-user-action
 handoff_allowed: yes
-defect_capture_path: reports/bugs/2026-04-29-handoff-shape-validator-drift.md
+defect_capture_path: not-required-by-text-signal
 
-Язык ответа Codex: русский
-Отвечай пользователю по-русски.
+## User Request
 
-Цель: добавить обязательный выбор вида handoff для новой задачи и сделать validators/tests shape-aware.
+Получи Garmin Developer Program approval.
 
-Почему parent orchestration не требуется: задача цельная, выполняется одним deep route в одном repo и не требует child Codex sessions.
+## Normalized Goal
+
+Подготовить получение Garmin Connect Developer Program approval до максимально возможного состояния внутри Codex: проверить официальный route, подготовить заявку и зафиксировать внешний blocker, если нужна подача через Garmin UI/account и решение Garmin.
+
+## External Boundary
+
+Actual approval requires user-owned Garmin/business information and Garmin's review decision. Codex must not bypass Garmin approval or recommend unofficial scraping/workarounds.

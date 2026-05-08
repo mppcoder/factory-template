@@ -1,7 +1,7 @@
 goal_state:
   version: goal-state/v1
-  active_goal_id: fix-downstream-closeout-card
-  active_goal_status: achieved
+  active_goal_id: garmin-developer-program-approval
+  active_goal_status: blocked
   source_contract_path: ".chatgpt/goal-contract.yaml"
   runtime:
     codex_goal_runtime_active: false
@@ -12,21 +12,23 @@ goal_state:
       validation_command: ""
       validation_result: "Not used for this task; goal-first contract only."
   observation:
-    last_operator_check_utc: "2026-05-08T16:15:00Z"
-    next_operator_check_hint: "No internal continuation remains after factory quick verification and push."
+    last_operator_check_utc: "2026-05-08T18:15:00Z"
+    next_operator_check_hint: "Resume when the user submits the Garmin request or receives Garmin's response."
     drift_or_loop_detected: false
   budget:
     token_budget_used: ""
     time_budget_used: ""
     iteration_count: ""
   continuation:
-    stop_reason: "achieved"
+    stop_reason: "external-user-action"
     done:
       - "router read"
-      - "FT-CX-0036 allocated and self-handoff materialized"
-      - "direct-task card selection rule patched"
-      - "renderer candidate order patched"
-      - "downstream card regression smoke added"
-    remaining: []
-    blockers: []
-    next_recommended_goal: ""
+      - "FT-CX-0040 allocated and self-handoff materialized"
+      - "official Garmin approval path checked"
+      - "copy-ready application package prepared"
+    remaining:
+      - "User submits Garmin Connect Developer Program request."
+      - "Garmin reviews and approves or requests more information."
+    blockers:
+      - "Garmin approval cannot be obtained by Codex without user account/business details and Garmin's external decision."
+    next_recommended_goal: "On approval, start a credential-safe Garmin integration setup task."

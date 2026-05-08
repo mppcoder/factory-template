@@ -1,16 +1,21 @@
 # Контекст для Codex
 
 ## Проект
+
 factory-template
 
 ## Классификация
-Классификация еще не заполнена.
+
+External vendor approval support; direct-task self-handoff.
 
 ## Текущий этап
-done
 
-## Идентификатор изменения
-chg-20260428-project-root-boundary
+external-user-action
+
+## Идентификатор работы
+
+FT-CX-0040 garmin-developer-program-approval
 
 ## Краткое резюме
-Уточнить canonical VPS layout: промежуточные repo живут внутри repo целевого greenfield-product, не как siblings в /projects.
+
+Нужно помочь получить Garmin Connect Developer Program approval. Официальный путь требует business/enterprise request, пользовательских контактных/организационных данных и решения Garmin. Внутри Codex можно подготовить заявку, проверить источники и выдать точные внешние шаги; нельзя получить approval без пользовательского submit и ответа Garmin.

@@ -1,76 +1,69 @@
 goal_contract:
   version: goal-contract/v1
-  goal_id: fix-downstream-closeout-card
+  goal_id: garmin-developer-program-approval
   goal_command_source:
-    raw_user_goal: "почему опять остановился? и почему если мы делаем новый проект карточку проекта открываешь шаблона?"
-    normalized_goal: "Исправить reusable closeout bug: при greenfield/downstream scope финальная карточка проекта должна браться из созданного downstream repo, а не из factory-template dashboard; объяснить остановку и закрыть correction без нового ручного продолжения."
+    raw_user_goal: "Получи Garmin Developer Program approval."
+    normalized_goal: "Подготовить и довести до внешнего шага получение Garmin Connect Developer Program approval: выяснить официальный approval path, подготовить заявку и явно зафиксировать блокер, если подача/approval требуют пользовательского аккаунта, бизнес-данных или решения Garmin."
     goal_first_trigger: direct_codex_task
   outcome:
-    desired_result: "Factory direct-task closeout rules and renderer selection prevent template card leakage when the completed scope is a generated/downstream project."
+    desired_result: "Garmin Connect Developer Program approval получен Garmin'ом либо текущая Codex-сессия доведена до внешнего submit/approval blocker с готовым пакетом заявки."
     definition_of_done:
-      - "Direct-task response completion rule explicitly distinguishes factory-template card from downstream/greenfield repo-local card."
-      - "Project-card renderer helper prefers repo-local generated project dashboard before template dashboard."
-      - "A regression smoke proves downstream card wins when both downstream and template dashboards exist."
-      - "Current closeout uses Health Sync Bridge downstream card for the Health Sync Bridge project scope."
-      - "Factory validators pass; repo is clean and pushed or blocker documented."
+      - "Официальный Garmin approval path проверен по актуальным источникам Garmin."
+      - "Подготовлен copy-ready текст заявки/ответа для Garmin Developer Program."
+      - "Пользователь получил точные внешние шаги для подачи request и сведения, которые нужны для завершения approval."
+      - "Если approval не может быть получен Codex самостоятельно, blocker documented as external-user-action and Garmin-decision-boundary."
+      - "Repo task artifacts reflect current blocked/external state."
     success_metrics:
-      - "No closeout instruction hardcodes template dashboard as the only valid project card source."
-      - "Regression smoke fails if template project name leaks into downstream card selection."
-      - "Human-language gate remains green for generated handoff artifacts."
+      - "Application text clearly states business use, APIs requested, data handling, consent, security posture and non-goals."
+      - "No unofficial scraping, credential workarounds or Terms-bypassing path is recommended."
+      - "Final answer distinguishes prepared package from actual Garmin approval."
     evidence_required:
-      - "FT-CX-0036 route receipt"
-      - "Downstream Health Sync Bridge card render output"
-      - "template-repo/scripts/codex_task_router.py diff"
-      - "template-repo/scripts/verify-all.sh regression smoke"
-      - "validate-codex-routing output"
-      - "factory quick verify output"
-      - "commit/push status"
+      - "Official Garmin Developer Program overview/FAQ/agreement references."
+      - "Copy-ready application draft."
+      - "External action instructions for Garmin form/portal/contact."
+      - "Documented blocker: user account/business details and Garmin approval decision are outside Codex control."
     evidence_sources:
-      - "template-repo/scripts/codex_task_router.py"
-      - "template-repo/scripts/create-codex-task-pack.py"
-      - "template-repo/scripts/validate-codex-routing.py"
-      - "template-repo/scripts/verify-all.sh"
-      - "reports/bugs/bug-039-downstream-closeout-card-used-template-dashboard.md"
-      - "/projects/health-sync-bridge/.chatgpt/project-lifecycle-dashboard.yaml"
+      - "https://developer.garmin.com/gc-developer-program/overview/"
+      - "https://developer.garmin.com/gc-developer-program/program-faq/"
+      - "https://developerportal.garmin.com/developer-programs/connect-developer-api"
+      - "https://developerportal.garmin.com/developer-programs/4/nda-acceptance?dest=%2Fdeveloper-programs%2Fconnect-developer-api"
   boundaries:
     scope:
-      - "factory-template direct-task closeout/card selection logic"
-      - "regression coverage"
-      - "bug report and route evidence"
+      - "Garmin Connect Developer Program approval preparation."
+      - "Official application path and copy-ready request content."
+      - "External blocker documentation."
     non_goals:
-      - "Do not change Health Sync Bridge product scope or provider integrations."
-      - "Do not deploy or request production credentials."
-      - "Do not rewrite unrelated lifecycle dashboard content."
+      - "Do not submit forms using user identity without credentials and explicit live user action."
+      - "Do not bypass Garmin approval, scrape Garmin Connect, reverse engineer APIs or recommend unofficial credential workarounds."
+      - "Do not create production integrations or request API keys after approval."
+      - "Do not provide legal advice."
     destructive_actions_allowed: false
     production_actions_allowed: false
     secrets_allowed: false
   validation:
     primary_verification_commands:
-      - "python3 scripts/render-project-lifecycle-dashboard.py --input .chatgpt/project-lifecycle-dashboard.yaml --format chatgpt-card --stdout in /projects/health-sync-bridge"
-      - "python3 template-repo/scripts/validate-codex-routing.py ."
       - "python3 template-repo/scripts/validate-goal-contract.py .chatgpt/goal-contract.yaml"
       - "python3 template-repo/scripts/validate-codex-work-index.py .chatgpt/codex-work-index.yaml"
-      - "bash template-repo/scripts/verify-all.sh quick"
-    secondary_verification:
       - "git status --short --branch"
+    secondary_verification:
+      - "Review official Garmin sources for application scope and restrictions."
     proxy_signal_denylist:
       - "tests passed alone"
       - "file exists alone"
       - "commit exists alone"
       - "green dashboard alone"
       - "validator passed alone"
-    goal_achievement_rule: "mark achieved only when evidence satisfies DoD, not when proxy signals pass"
+    goal_achievement_rule: "mark achieved only when evidence satisfies DoD, not when proxy signals pass; actual approval requires Garmin written approval or portal access."
   runtime:
     goal_runtime_recommendation: goal_first_contract_only
     codex_goal_live_validation_required: true
     codex_goal_live_validation_evidence: "Current task uses repo goal-first contract only; no /goal runtime switch is claimed for this already-open session."
     tool_feedback_ready: true
     mcp_or_metrics_needed:
+      - "official Garmin web sources"
       - "repo validators"
-      - "downstream card render"
-      - "regression smoke"
-      - "git sync status"
-    observation_cadence: "operator check every 15-20 minutes for long goal loops"
+      - "user feedback after Garmin submission"
+    observation_cadence: "external follow-up after Garmin response or after two business days from submission"
     budget_guardrails:
       token_budget: ""
       time_budget: ""
@@ -92,24 +85,25 @@ goal_contract:
         - blockers
         - next recommended goal
     if_unmet:
-      create_followup_handoff: true
+      create_followup_handoff: false
   side_channel:
     allowed_for_clarifications: true
     must_not_mutate_goal_without_confirmation: true
   closeout:
-    goal_status: achieved
+    goal_status: blocked
     evidence_vs_dod:
-      - "Direct-task response completion rule now distinguishes factory-template and downstream/greenfield repo-local project cards."
-      - "render_project_card_for_codex_response now prefers repo-local generated project dashboard before template dashboard."
-      - "downstream_project_card_selection smoke passes and proves template card does not leak when both dashboards exist."
-      - "Health Sync Bridge card renders from /projects/health-sync-bridge with project name Health Sync Bridge."
-      - "Routing, task-pack, work-index and human-language validators pass before factory quick verification."
+      - "Official Garmin sources were checked."
+      - "Application draft and user instructions were prepared."
+      - "Actual approval remains blocked on user submission/account/business details and Garmin's review decision."
     proxy_signal_closure_used: false
     continuation_summary:
       done:
-        - "downstream closeout card rule fixed"
-        - "renderer candidate order fixed"
-        - "regression smoke added"
-      remaining: []
-      blockers: []
-      next_recommended_goal: ""
+        - "FT-CX-0040 allocated and self-handoff materialized"
+        - "Garmin official approval path checked"
+        - "application package prepared"
+      remaining:
+        - "User submits request through Garmin and returns Garmin response/portal result."
+      blockers:
+        - "External user action required: Garmin account/form/business identity."
+        - "External vendor decision required: Garmin approval."
+      next_recommended_goal: "After Garmin approval, create the Garmin integration credential/intake task."
