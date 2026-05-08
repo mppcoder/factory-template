@@ -174,7 +174,7 @@ GPT-5.5 не считать drop-in replacement для старого prompt sta
 - [ ] Если в финале назван следующий этап pipeline, классифицировать его как internal / external / mixed / fully done до отправки ответа
 - [ ] Если roadmap/readout содержит несколько следующих веток, финальный ответ называет рекомендованную ветку и fallback-ветку
 - [ ] Если текущий scope закрыт, но есть next-roadmap recommendation, финал не заменяет ее фразой `Следующий пользовательский шаг отсутствует`
-- [ ] Перед финальным ответом сгенерировать compact project card: `python3 template-repo/scripts/render-project-lifecycle-dashboard.py --input template-repo/template/.chatgpt/project-lifecycle-dashboard.yaml --format chatgpt-card --stdout`
+- [ ] Перед финальным ответом сгенерировать compact project card для фактического repo текущего scope: `python3 template-repo/scripts/render-project-lifecycle-dashboard.py --input template-repo/template/.chatgpt/project-lifecycle-dashboard.yaml --format chatgpt-card --stdout` для `factory-template` или downstream-equivalent `python3 scripts/render-project-lifecycle-dashboard.py --input .chatgpt/project-lifecycle-dashboard.yaml --format chatgpt-card --stdout` для созданного/боевого проекта
 - [ ] Финальный ответ содержит раздел `Карточка проекта` со строками project name, lifecycle chain, `Модули:` и `В работе:`
 - [ ] В финальном ответе есть continuation outcome: `## Инструкция пользователю` с действием для продолжения или явное `Следующий пользовательский шаг отсутствует; задачи текущего scope выполнены полностью.`
 - [ ] `## Инструкция пользователю` оформлена как диалоговый сценарий

@@ -95,12 +95,12 @@ def read_task_text(task_file: Path | None, task_text: str | None) -> str:
 def render_project_card_for_codex_response(root: Path) -> str:
     candidates = [
         (
-            root / "template-repo" / "scripts" / "render-project-lifecycle-dashboard.py",
-            root / "template-repo" / "template" / ".chatgpt" / "project-lifecycle-dashboard.yaml",
-        ),
-        (
             root / "scripts" / "render-project-lifecycle-dashboard.py",
             root / ".chatgpt" / "project-lifecycle-dashboard.yaml",
+        ),
+        (
+            root / "template-repo" / "scripts" / "render-project-lifecycle-dashboard.py",
+            root / "template-repo" / "template" / ".chatgpt" / "project-lifecycle-dashboard.yaml",
         ),
     ]
     for script_path, input_path in candidates:
@@ -798,7 +798,7 @@ def render_normalized_handoff(record: dict, task_text: str, title: str) -> str:
 ## Вид handoff
 {launch.get('handoff_shape', '')}
 
-## Goal-contract
+## Контракт цели
 - normalized_goal: `{task_text.strip() or launch.get('task_summary', '') or 'Выполнить задачу по repo-first route.'}`
 - definition_of_done: evidence satisfies requested outcome and relevant repo validators or blockers are documented.
 - evidence_required: verification-report.md, done-report.md, targeted validation evidence.
@@ -807,7 +807,7 @@ def render_normalized_handoff(record: dict, task_text: str, title: str) -> str:
 - proxy_signal_denylist: tests passed alone; file exists alone; commit exists alone; green dashboard alone; validator passed alone.
 - goal_achievement_rule: mark achieved only when evidence satisfies DoD, not when proxy signals pass.
 
-## Goal runtime
+## Среда выполнения цели
 - goal_runtime_recommendation: `{launch.get('goal_runtime_recommendation', 'goal_first_contract_only')}`
 - codex_goal_live_validation_required: `true`
 - rule: Codex /goal runtime optional/live-gated; experimental goals require explicit user/operator choice and do not auto-enable in already-open sessions.
@@ -1047,7 +1047,7 @@ Continuation rule:
 Если задача пришла в уже открытую Codex-сессию и этот route совместим с текущей сессией, после видимого self-handoff продолжай remediation / implementation / verification без отдельного запроса пользователя. Остановка допустима только при реальном blocker, внешнем действии, несовместимом route или необходимости нового task launch.
 
 Completion rule:
-Перед финальным ответом сгенерируй compact project card командой `python3 template-repo/scripts/render-project-lifecycle-dashboard.py --input template-repo/template/.chatgpt/project-lifecycle-dashboard.yaml --format chatgpt-card --stdout` и вставь ее в раздел `Карточка проекта`. Карточка должна содержать строки `Модули:` и `В работе:`. Если в конце остается следующий пользовательский или внешний шаг, финальный ответ обязан завершаться разделом `## Инструкция пользователю`. Если внешних действий нет, финальный ответ обязан явно сказать: `Внешних действий не требуется.` и добавить continuation outcome: `Следующий пользовательский шаг отсутствует; задачи текущего scope выполнены полностью.`
+Перед финальным ответом сгенерируй compact project card для фактического repo, которое закрывает текущий scope. Для `factory-template` используй `python3 template-repo/scripts/render-project-lifecycle-dashboard.py --input template-repo/template/.chatgpt/project-lifecycle-dashboard.yaml --format chatgpt-card --stdout`; для downstream/greenfield проекта используй repo-local equivalent `python3 scripts/render-project-lifecycle-dashboard.py --input .chatgpt/project-lifecycle-dashboard.yaml --format chatgpt-card --stdout`. Если closeout относится к созданному downstream-проекту, карточка должна быть downstream-проекта, а не template repo. Карточка должна содержать строки `Модули:` и `В работе:`. Если в конце остается следующий пользовательский или внешний шаг, финальный ответ обязан завершаться разделом `## Инструкция пользователю`. Если внешних действий нет, финальный ответ обязан явно сказать: `Внешних действий не требуется.` и добавить continuation outcome: `Следующий пользовательский шаг отсутствует; задачи текущего scope выполнены полностью.`
 ```
 
 ## Совместимость validator

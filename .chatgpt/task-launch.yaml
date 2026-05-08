@@ -1,5 +1,5 @@
 launch:
-  timestamp_utc: '2026-05-08T15:54:58+00:00'
+  timestamp_utc: '2026-05-08T16:03:03+00:00'
   launch_unit: new-task-launch
   launch_source: direct-task
   router_layer: executable
@@ -13,8 +13,6 @@ launch:
   task_class: build
   task_class_reasons:
   - 'keyword-hit: fix'
-  - 'keyword-hit: implement'
-  - 'keyword-hit: implementation'
   - 'явный reasoning/model override совпал с default profile: build'
   selected_profile: build
   selected_model: gpt-5.5
@@ -33,12 +31,9 @@ launch:
   - .chatgpt/codex-task-pack.md
   - .chatgpt/verification-report.md
   - .chatgpt/done-report.md
-  - reports/bugs/
-  - reports/factory-feedback/
   handoff_allowed: yes (forbidden)
-  defect_capture_path: reproduce -> evidence -> bug report -> layer classification
-    -> factory feedback if reusable -> remediation
-  task_summary: 'codex_work_id: FT-CX-0035'
+  defect_capture_path: not-required-by-text-signal
+  task_summary: 'codex_work_id: FT-CX-0036'
   launch_boundary_rule: Выбор модели и reasoning mode считается надежным только на
     новом запуске Codex для новой задачи.
   interactive_default_rule: 'Для интерактивной работы в VS Code Codex extension основной
@@ -115,9 +110,9 @@ launch:
   requested_selected_profile: null
   requested_selected_model: null
   requested_selected_reasoning_effort: null
-  codex_work_id: FT-CX-0035
-  codex_work_title: FT-CX-0035 continue-internal-followup-bug
-  task_slug: continue-internal-followup-bug
+  codex_work_id: FT-CX-0036
+  codex_work_title: FT-CX-0036 fix-downstream-closeout-card
+  task_slug: fix-downstream-closeout-card
   codex_work_kind: self_handoff
-  codex_work_state: codex_accepted
+  codex_work_state: in_progress
   codex_work_index_path: .chatgpt/codex-work-index.yaml

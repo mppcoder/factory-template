@@ -1,7 +1,7 @@
 ## Номер запроса Codex
 
 ```text
-FT-CX-0035 continue-internal-followup-bug
+FT-CX-0036 fix-downstream-closeout-card
 ```
 
 ## Карточка проекта
@@ -15,7 +15,7 @@ FT-CX-0035 continue-internal-followup-bug
 Tasks: 🕒 0 ready-for-handoff -> 0 ready-for-codex -> 0 running -> 0
   human-review
 В работе:
-🟡 FT-CX-0035 continue-internal-followup-bug: ✅ Codex-WORK → ✅ Codex OK → 🕒
+🟡 FT-CX-0036 fix-downstream-closeout-card: ✅ Codex-WORK → ✅ Codex OK → 🕒
   Done
 
 ## Применение в Codex UI
@@ -60,13 +60,13 @@ Routing:
 - handoff_shape: codex-task-handoff
 - execution_mode_decision_owner: Codex runtime after task graph analysis
 - execution_mode_closeout_required: actual execution mode plus child/subagent count
-- goal_contract.normalized_goal: codex_work_id: FT-CX-0035
-codex_work_title: FT-CX-0035 continue-internal-followup-bug
-task_slug: continue-internal-followup-bug
-codex_work_state: codex_accepted
+- goal_contract.normalized_goal: codex_work_id: FT-CX-0036
+codex_work_title: FT-CX-0036 fix-downstream-closeout-card
+task_slug: fix-downstream-closeout-card
+codex_work_state: in_progress
 
-user_request: почему остановка? продолжай все шаги без остановки и пофиксь этот баг
-normalized_goal: Fix premature user-step closeout and guided launcher nested project root bugs, then continue Health Sync Bridge internal implementation scaffolding until real external blockers.
+user_request: почему опять остановился? и почему если мы делаем новый проект карточку проекта открываешь шаблона?
+normalized_goal: Fix closeout card selection so greenfield/downstream tasks use the downstream project lifecycle card, and document the process error.
 - goal_contract.definition_of_done: evidence satisfies requested outcome and repo validators/blockers are documented
 - goal_contract.proxy_signal_denylist: tests passed alone; file exists alone; commit exists alone; green dashboard alone; validator passed alone
 - goal_runtime_recommendation: codex_goal_candidate
@@ -83,17 +83,17 @@ normalized_goal: Fix premature user-step closeout and guided launcher nested pro
 - selected_scenario: 00-master-router.md
 - pipeline_stage: done
 - handoff_allowed: yes (forbidden)
-- defect_capture_path: reproduce -> evidence -> bug report -> layer classification -> factory feedback if reusable -> remediation
+- defect_capture_path: not-required-by-text-signal
 - chat_id: not_applicable
 - chat_title: not_applicable
-- task_slug: continue-internal-followup-bug
+- task_slug: fix-downstream-closeout-card
 - chat_kind: not_applicable
 - chat_state: not_applicable
 - chat_index_path: not_applicable
-- codex_work_id: FT-CX-0035
-- codex_work_title: FT-CX-0035 continue-internal-followup-bug
+- codex_work_id: FT-CX-0036
+- codex_work_title: FT-CX-0036 fix-downstream-closeout-card
 - codex_work_kind: self_handoff
-- codex_work_state: codex_accepted
+- codex_work_state: in_progress
 - codex_work_index_path: .chatgpt/codex-work-index.yaml
 
 Артефакты для обновления:
@@ -104,23 +104,21 @@ normalized_goal: Fix premature user-step closeout and guided launcher nested pro
 - .chatgpt/codex-task-pack.md
 - .chatgpt/verification-report.md
 - .chatgpt/done-report.md
-- reports/bugs/
-- reports/factory-feedback/
 
 Текст задачи:
-codex_work_id: FT-CX-0035
-codex_work_title: FT-CX-0035 continue-internal-followup-bug
-task_slug: continue-internal-followup-bug
-codex_work_state: codex_accepted
+codex_work_id: FT-CX-0036
+codex_work_title: FT-CX-0036 fix-downstream-closeout-card
+task_slug: fix-downstream-closeout-card
+codex_work_state: in_progress
 
-user_request: почему остановка? продолжай все шаги без остановки и пофиксь этот баг
-normalized_goal: Fix premature user-step closeout and guided launcher nested project root bugs, then continue Health Sync Bridge internal implementation scaffolding until real external blockers.
+user_request: почему опять остановился? и почему если мы делаем новый проект карточку проекта открываешь шаблона?
+normalized_goal: Fix closeout card selection so greenfield/downstream tasks use the downstream project lifecycle card, and document the process error.
 
 Continuation rule:
 Если задача пришла в уже открытую Codex-сессию и этот route совместим с текущей сессией, после видимого self-handoff продолжай remediation / implementation / verification без отдельного запроса пользователя. Остановка допустима только при реальном blocker, внешнем действии, несовместимом route или необходимости нового task launch.
 
 Completion rule:
-Перед финальным ответом сгенерируй compact project card командой `python3 template-repo/scripts/render-project-lifecycle-dashboard.py --input template-repo/template/.chatgpt/project-lifecycle-dashboard.yaml --format chatgpt-card --stdout` и вставь ее в раздел `Карточка проекта`. Карточка должна содержать строки `Модули:` и `В работе:`. Если в конце остается следующий пользовательский или внешний шаг, финальный ответ обязан завершаться разделом `## Инструкция пользователю`. Если внешних действий нет, финальный ответ обязан явно сказать: `Внешних действий не требуется.` и добавить continuation outcome: `Следующий пользовательский шаг отсутствует; задачи текущего scope выполнены полностью.`
+Перед финальным ответом сгенерируй compact project card для фактического repo, которое закрывает текущий scope. Для `factory-template` используй `python3 template-repo/scripts/render-project-lifecycle-dashboard.py --input template-repo/template/.chatgpt/project-lifecycle-dashboard.yaml --format chatgpt-card --stdout`; для downstream/greenfield проекта используй repo-local equivalent `python3 scripts/render-project-lifecycle-dashboard.py --input .chatgpt/project-lifecycle-dashboard.yaml --format chatgpt-card --stdout`. Если closeout относится к созданному downstream-проекту, карточка должна быть downstream-проекта, а не template repo. Карточка должна содержать строки `Модули:` и `В работе:`. Если в конце остается следующий пользовательский или внешний шаг, финальный ответ обязан завершаться разделом `## Инструкция пользователю`. Если внешних действий нет, финальный ответ обязан явно сказать: `Внешних действий не требуется.` и добавить continuation outcome: `Следующий пользовательский шаг отсутствует; задачи текущего scope выполнены полностью.`
 ```
 
 ## Совместимость validator

@@ -1,60 +1,58 @@
 goal_contract:
   version: goal-contract/v1
-  goal_id: continue-internal-followup-bug
+  goal_id: fix-downstream-closeout-card
   goal_command_source:
-    raw_user_goal: "а почему остановка? продолжай все шаги без остановки и пофиксь этот баг"
-    normalized_goal: "Исправить преждевременную остановку на пользовательском next step, починить reusable guided-launcher path bug, затем продолжить внутренние Health Sync Bridge шаги до реальных внешних blockers."
+    raw_user_goal: "почему опять остановился? и почему если мы делаем новый проект карточку проекта открываешь шаблона?"
+    normalized_goal: "Исправить reusable closeout bug: при greenfield/downstream scope финальная карточка проекта должна браться из созданного downstream repo, а не из factory-template dashboard; объяснить остановку и закрыть correction без нового ручного продолжения."
     goal_first_trigger: direct_codex_task
   outcome:
-    desired_result: "Factory-template не создает downstream project внутри factory repo при canonical VPS запуске, generated deploy dry-run работает в downstream repo, а Health Sync Bridge получает первый внутренний implementation scaffold без ожидания ручного продолжения."
+    desired_result: "Factory direct-task closeout rules and renderer selection prevent template card leakage when the completed scope is a generated/downstream project."
     definition_of_done:
-      - "Factory launcher route-only из /projects/factory-template показывает /projects/<slug> как target."
-      - "Wizard поддерживает explicit --project-base and preserves smoke/custom base behavior."
-      - "Generated deploy-dry-run can find repo-local scripts/validate-operator-env.py."
-      - "Health Sync Bridge has internal scaffolds for Withings OAuth, Garmin approval blocker, normalized store, dashboard, audit redaction and export fallback."
-      - "Factory and downstream validators pass; both repos are clean and pushed or blocker documented."
+      - "Direct-task response completion rule explicitly distinguishes factory-template card from downstream/greenfield repo-local card."
+      - "Project-card renderer helper prefers repo-local generated project dashboard before template dashboard."
+      - "A regression smoke proves downstream card wins when both downstream and template dashboards exist."
+      - "Current closeout uses Health Sync Bridge downstream card for the Health Sync Bridge project scope."
+      - "Factory validators pass; repo is clean and pushed or blocker documented."
     success_metrics:
-      - "No untracked nested downstream repo remains in factory-template."
-      - "Downstream smoke and deploy dry-run pass."
-      - "Factory route-only regression passes."
+      - "No closeout instruction hardcodes template dashboard as the only valid project card source."
+      - "Regression smoke fails if template project name leaks into downstream card selection."
+      - "Human-language gate remains green for generated handoff artifacts."
     evidence_required:
-      - "FT-CX-0035 route receipt"
-      - "factory launcher route-only output"
-      - "wizard explicit project-base route-only output"
-      - "Health Sync Bridge smoke output"
-      - "Health Sync Bridge deploy dry-run output"
-      - "quick verify outputs"
+      - "FT-CX-0036 route receipt"
+      - "Downstream Health Sync Bridge card render output"
+      - "template-repo/scripts/codex_task_router.py diff"
+      - "template-repo/scripts/verify-all.sh regression smoke"
+      - "validate-codex-routing output"
+      - "factory quick verify output"
       - "commit/push status"
     evidence_sources:
-      - "template-repo/scripts/factory-launcher.py"
-      - "template-repo/scripts/first-project-wizard.py"
-      - "template-repo/scripts/deploy-dry-run.sh"
+      - "template-repo/scripts/codex_task_router.py"
+      - "template-repo/scripts/create-codex-task-pack.py"
+      - "template-repo/scripts/validate-codex-routing.py"
       - "template-repo/scripts/verify-all.sh"
-      - "/projects/health-sync-bridge/src/health_sync_bridge"
-      - "/projects/health-sync-bridge/scripts/health-sync-bridge-smoke.py"
+      - "reports/bugs/bug-039-downstream-closeout-card-used-template-dashboard.md"
+      - "/projects/health-sync-bridge/.chatgpt/project-lifecycle-dashboard.yaml"
   boundaries:
     scope:
-      - "factory-template launcher/deploy-dry-run bugfix"
-      - "Health Sync Bridge internal implementation scaffold"
-      - "validators and verified sync"
+      - "factory-template direct-task closeout/card selection logic"
+      - "regression coverage"
+      - "bug report and route evidence"
     non_goals:
-      - "Do not enter real Withings/Garmin secrets."
-      - "Do not claim Garmin approval."
-      - "Do not deploy production service with real health data."
+      - "Do not change Health Sync Bridge product scope or provider integrations."
+      - "Do not deploy or request production credentials."
+      - "Do not rewrite unrelated lifecycle dashboard content."
     destructive_actions_allowed: false
     production_actions_allowed: false
     secrets_allowed: false
   validation:
     primary_verification_commands:
-      - "python3 template-repo/scripts/factory-launcher.py --mode greenfield --project-name \"Canonical Root Smoke\" --project-slug canonical-root-smoke --route-only"
-      - "python3 template-repo/scripts/validate-codex-work-index.py .chatgpt/codex-work-index.yaml"
+      - "python3 scripts/render-project-lifecycle-dashboard.py --input .chatgpt/project-lifecycle-dashboard.yaml --format chatgpt-card --stdout in /projects/health-sync-bridge"
+      - "python3 template-repo/scripts/validate-codex-routing.py ."
       - "python3 template-repo/scripts/validate-goal-contract.py .chatgpt/goal-contract.yaml"
+      - "python3 template-repo/scripts/validate-codex-work-index.py .chatgpt/codex-work-index.yaml"
       - "bash template-repo/scripts/verify-all.sh quick"
-      - "python3 scripts/health-sync-bridge-smoke.py in /projects/health-sync-bridge"
-      - "bash scripts/deploy-dry-run.sh in /projects/health-sync-bridge"
-      - "bash scripts/verify-all.sh quick in /projects/health-sync-bridge"
     secondary_verification:
-      - "git status --short --branch in both repos"
+      - "git status --short --branch"
     proxy_signal_denylist:
       - "tests passed alone"
       - "file exists alone"
@@ -69,9 +67,8 @@ goal_contract:
     tool_feedback_ready: true
     mcp_or_metrics_needed:
       - "repo validators"
-      - "route-only launcher output"
-      - "downstream smoke"
-      - "deploy dry-run"
+      - "downstream card render"
+      - "regression smoke"
       - "git sync status"
     observation_cadence: "operator check every 15-20 minutes for long goal loops"
     budget_guardrails:
@@ -102,19 +99,17 @@ goal_contract:
   closeout:
     goal_status: achieved
     evidence_vs_dod:
-      - "Factory launcher target root and wizard project-base behavior fixed."
-      - "Generated deploy dry-run validator fallback fixed."
-      - "Health Sync Bridge internal implementation scaffold added."
-      - "Verification and sync completed."
+      - "Direct-task response completion rule now distinguishes factory-template and downstream/greenfield repo-local project cards."
+      - "render_project_card_for_codex_response now prefers repo-local generated project dashboard before template dashboard."
+      - "downstream_project_card_selection smoke passes and proves template card does not leak when both dashboards exist."
+      - "Health Sync Bridge card renders from /projects/health-sync-bridge with project name Health Sync Bridge."
+      - "Routing, task-pack, work-index and human-language validators pass before factory quick verification."
     proxy_signal_closure_used: false
     continuation_summary:
       done:
-        - "factory bug fixed"
-        - "downstream internal scaffold continued"
-      remaining:
-        - "real external credentials and approvals only"
-      blockers:
-        - "Garmin Developer Program approval"
-        - "real Withings OAuth credentials"
-        - "production domain/TLS and encrypted health-data storage approval"
-      next_recommended_goal: "continue with real Withings OAuth credentials or Garmin approval when available"
+        - "downstream closeout card rule fixed"
+        - "renderer candidate order fixed"
+        - "regression smoke added"
+      remaining: []
+      blockers: []
+      next_recommended_goal: ""

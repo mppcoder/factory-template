@@ -7,13 +7,13 @@ direct-task
 codex-task-handoff
 
 ## Контракт цели
-- normalized_goal: `codex_work_id: FT-CX-0035
-codex_work_title: FT-CX-0035 continue-internal-followup-bug
-task_slug: continue-internal-followup-bug
-codex_work_state: codex_accepted
+- normalized_goal: `codex_work_id: FT-CX-0036
+codex_work_title: FT-CX-0036 fix-downstream-closeout-card
+task_slug: fix-downstream-closeout-card
+codex_work_state: in_progress
 
-user_request: почему остановка? продолжай все шаги без остановки и пофиксь этот баг
-normalized_goal: Fix premature user-step closeout and guided launcher nested project root bugs, then continue Health Sync Bridge internal implementation scaffolding until real external blockers.`
+user_request: почему опять остановился? и почему если мы делаем новый проект карточку проекта открываешь шаблона?
+normalized_goal: Fix closeout card selection so greenfield/downstream tasks use the downstream project lifecycle card, and document the process error.`
 - definition_of_done: evidence satisfies requested outcome and relevant repo validators or blockers are documented.
 - evidence_required: verification-report.md, done-report.md, targeted validation evidence.
 - scope: repo-local artifacts selected by route.
@@ -35,7 +35,7 @@ normalized_goal: Fix premature user-step closeout and guided launcher nested pro
 ## Стабильная identity чата и handoff
 - chat_id: ``
 - chat_title: ``
-- task_slug: `continue-internal-followup-bug`
+- task_slug: `fix-downstream-closeout-card`
 - kind: ``
 - state: ``
 - source_of_truth: `.chatgpt/chat-handoff-index.yaml`
@@ -49,8 +49,6 @@ build
 
 ## Evidence для класса задачи
 - keyword-hit: fix
-- keyword-hit: implement
-- keyword-hit: implementation
 - явный reasoning/model override совпал с default profile: build
 
 ## Выбранный профиль
@@ -98,14 +96,12 @@ done
 - .chatgpt/codex-task-pack.md
 - .chatgpt/verification-report.md
 - .chatgpt/done-report.md
-- reports/bugs/
-- reports/factory-feedback/
 
 ## Разрешение handoff
 yes (forbidden)
 
 ## Маршрут defect-capture
-reproduce -> evidence -> bug report -> layer classification -> factory feedback if reusable -> remediation
+not-required-by-text-signal
 
 ## Правило launch boundary
 Выбор модели и reasoning mode считается надежным только на новом запуске Codex для новой задачи.
@@ -169,10 +165,10 @@ selected_model совпадает с последним сохраненным s
 - Если используется experimental `goals`, сначала проверьте `codex features list`; включение goal runtime является runtime/operator choice и не следует из advisory текста.
 
 ## Текст задачи
-codex_work_id: FT-CX-0035
-codex_work_title: FT-CX-0035 continue-internal-followup-bug
-task_slug: continue-internal-followup-bug
-codex_work_state: codex_accepted
+codex_work_id: FT-CX-0036
+codex_work_title: FT-CX-0036 fix-downstream-closeout-card
+task_slug: fix-downstream-closeout-card
+codex_work_state: in_progress
 
-user_request: почему остановка? продолжай все шаги без остановки и пофиксь этот баг
-normalized_goal: Fix premature user-step closeout and guided launcher nested project root bugs, then continue Health Sync Bridge internal implementation scaffolding until real external blockers.
+user_request: почему опять остановился? и почему если мы делаем новый проект карточку проекта открываешь шаблона?
+normalized_goal: Fix closeout card selection so greenfield/downstream tasks use the downstream project lifecycle card, and document the process error.

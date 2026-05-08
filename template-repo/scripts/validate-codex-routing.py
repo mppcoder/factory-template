@@ -307,6 +307,8 @@ def main() -> int:
             for fragment in ["Карточка проекта", "--format chatgpt-card", "Модули:", "В работе:"]:
                 if fragment not in direct_response_text:
                     errors.append(f"direct-task response не содержит project card closeout rule `{fragment}`")
+            if "downstream/greenfield" not in direct_response_text or "repo-local equivalent" not in direct_response_text:
+                errors.append("direct-task response не фиксирует downstream/greenfield project-card closeout rule")
 
     normalized = root / ".chatgpt" / "normalized-codex-handoff.md"
     if not normalized.exists():

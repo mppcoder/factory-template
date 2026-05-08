@@ -178,6 +178,36 @@ run_artifact_eval_smoke() {
   rm -rf "$tmp_dir"
 }
 
+run_downstream_project_card_selection_smoke() {
+  local tmp_dir
+  tmp_dir="$(mktemp -d)"
+  cp -a "$ROOT/template-repo/template/." "$tmp_dir/"
+  mkdir -p "$tmp_dir/scripts" "$tmp_dir/template-repo/scripts" "$tmp_dir/template-repo/template/.chatgpt"
+  cp "$ROOT"/template-repo/scripts/*.py "$tmp_dir/scripts/"
+  cp "$ROOT"/template-repo/scripts/*.py "$tmp_dir/template-repo/scripts/"
+  cp "$ROOT/README.md" "$tmp_dir/README.md"
+  sed "s/{{PROJECT_NAME}}/Downstream Card Smoke/g; s/{{PROJECT_SLUG}}/downstream-card-smoke/g; s/{{PROJECT_MODE}}/greenfield/g; s/{{LIFECYCLE_STATE}}/verification/g" \
+    "$ROOT/template-repo/template/.chatgpt/project-lifecycle-dashboard.yaml" \
+    > "$tmp_dir/.chatgpt/project-lifecycle-dashboard.yaml"
+  sed "s/{{PROJECT_NAME}}/Template Card Smoke/g; s/{{PROJECT_SLUG}}/template-card-smoke/g; s/{{PROJECT_MODE}}/template/g; s/{{LIFECYCLE_STATE}}/verification/g" \
+    "$ROOT/template-repo/template/.chatgpt/project-lifecycle-dashboard.yaml" \
+    > "$tmp_dir/template-repo/template/.chatgpt/project-lifecycle-dashboard.yaml"
+  PYTHONPATH="$ROOT/template-repo/scripts" python3 - "$tmp_dir" <<'PY'
+import sys
+from pathlib import Path
+
+from codex_task_router import render_project_card_for_codex_response
+
+card = render_project_card_for_codex_response(Path(sys.argv[1]))
+if "Downstream Card Smoke" not in card:
+    raise SystemExit(f"downstream card was not preferred:\n{card}")
+if "Template Card Smoke" in card:
+    raise SystemExit(f"template card leaked into downstream closeout:\n{card}")
+print("downstream_project_card_selection=passed")
+PY
+  rm -rf "$tmp_dir"
+}
+
 run_task_state_lite_smoke() {
   python3 "$ROOT/template-repo/scripts/validate-task-state-lite.py" "$ROOT/tests/task-state-lite/valid"
   if python3 "$ROOT/template-repo/scripts/validate-task-state-lite.py" "$ROOT/tests/task-state-lite/missing-state" >/tmp/task-state-lite-negative.log 2>&1; then
@@ -1218,6 +1248,7 @@ run_quick() {
   run_step "learning-patch-loop-smoke" run_learning_patch_loop_smoke
   run_step "artifact-eval-smoke" run_artifact_eval_smoke
   run_step "downstream-application-proof-smoke" run_downstream_application_proof_smoke
+  run_step "downstream-project-card-selection-smoke" run_downstream_project_card_selection_smoke
   run_step "codex-orchestration-smoke" run_codex_orchestration_smoke
   run_step "codex-orchestration-runner-negative-smoke" run_codex_orchestration_runner_negative_smoke
   run_step "plan6-productization-smoke" run_plan6_productization_smoke

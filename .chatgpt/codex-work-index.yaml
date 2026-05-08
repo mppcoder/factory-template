@@ -1,6 +1,6 @@
 schema: codex-work-index/v1
 project_code: FT
-next_codex_work_number: 36
+next_codex_work_number: 37
 id_policy:
   canonical_format: <PROJECT_CODE>-CX-<NNNN> <task-slug>
   independent_from_chat_handoff_index: true
@@ -893,14 +893,14 @@ items:
   - Allocated during direct-task bootstrap before first substantive response.
   - Read router and classified user report as reusable process/launcher remediation.
   - Fixed factory launcher/wizard project-base handling so canonical runs from /projects/factory-template
-    target /projects/<slug>, while explicit --project-base and smoke cwd behavior remain supported.
+    target /projects/<slug>, while explicit --project-base and smoke cwd behavior
+    remain supported.
   - Fixed deploy-dry-run validator fallback for generated downstream repos without
     template-repo/scripts.
-  - Added route-only regression coverage to verify-all and bug report
-    reports/bugs/2026-05-08-guided-launcher-nested-project-root.md.
+  - Added route-only regression coverage to verify-all and bug report reports/bugs/2026-05-08-guided-launcher-nested-project-root.md.
   - Continued Health Sync Bridge internal work with stdlib scaffolds for Withings
-    OAuth, Garmin approval blocker, normalized store, dashboard, audit redaction
-    and export fallback.
+    OAuth, Garmin approval blocker, normalized store, dashboard, audit redaction and
+    export fallback.
   - python3 scripts/health-sync-bridge-smoke.py in /projects/health-sync-bridge
   - bash scripts/deploy-dry-run.sh in /projects/health-sync-bridge
   - bash scripts/verify-all.sh quick in /projects/health-sync-bridge
@@ -908,5 +908,34 @@ items:
     "Canonical Root Smoke" --project-slug canonical-root-smoke --route-only
   - python3 template-repo/scripts/validate-goal-contract.py .chatgpt/goal-contract.yaml
   - python3 template-repo/scripts/validate-codex-work-index.py .chatgpt/codex-work-index.yaml
-  next_action: No internal repo action remains; real provider integration waits
-    for external Withings credentials, Garmin approval and production storage/TLS approval.
+  next_action: No internal repo action remains; real provider integration waits for
+    external Withings credentials, Garmin approval and production storage/TLS approval.
+- codex_work_id: FT-CX-0036
+  work_number: 36
+  work_title: FT-CX-0036 fix-downstream-closeout-card
+  task_slug: fix-downstream-closeout-card
+  kind: remediation
+  state: verified
+  created_utc: '2026-05-08T16:01:44Z'
+  updated_utc: '2026-05-08T16:18:00Z'
+  source_type: direct-task
+  handoff_group: fix-downstream-closeout-card
+  handoff_revision: 1
+  handoff_register_item_id: ''
+  status_chain:
+  - codex_self_handoff
+  - codex_accepted
+  - codex_completed
+  evidence:
+  - Router read for user correction about premature stop and wrong project card
+  - "Reproduced incorrect Health Sync Bridge closeout card path: factory command rendered factory/template context while downstream repo-local command rendered Health Sync Bridge."
+  - Fixed direct-task completion rule to require repo-local downstream/greenfield project
+    card when closeout belongs to a created downstream project.
+  - Fixed render_project_card_for_codex_response candidate order to prefer generated
+    repo-local scripts/dashboard before template dashboard.
+  - Added downstream-project-card-selection-smoke to verify-all quick.
+  - python3 template-repo/scripts/validate-codex-routing.py .
+  - python3 template-repo/scripts/validate-codex-work-index.py .chatgpt/codex-work-index.yaml
+  - python3 template-repo/scripts/validate-human-language-layer.py .
+  next_action: No internal repo action remains after quick verification and push; future
+    Health Sync Bridge provider work remains gated by real external credentials/approvals.
