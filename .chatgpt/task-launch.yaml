@@ -1,5 +1,5 @@
 launch:
-  timestamp_utc: '2026-05-08T18:01:57+00:00'
+  timestamp_utc: '2026-05-08T18:11:49+00:00'
   launch_unit: new-task-launch
   launch_source: direct-task
   router_layer: executable
@@ -33,7 +33,8 @@ launch:
   - .chatgpt/done-report.md
   handoff_allowed: yes (forbidden)
   defect_capture_path: not-required-by-text-signal
-  task_summary: Получи Garmin Developer Program approval.
+  task_summary: Сделать compliant вариант Garmin data flow без Garmin Developer Program
+    approval; не обходить approval через scraping/reverse engineering/credential workarounds.
   launch_boundary_rule: Выбор модели и reasoning mode считается надежным только на
     новом запуске Codex для новой задачи.
   interactive_default_rule: 'Для интерактивной работы в VS Code Codex extension основной
@@ -110,9 +111,9 @@ launch:
   requested_selected_profile: null
   requested_selected_model: null
   requested_selected_reasoning_effort: null
-  codex_work_id: FT-CX-0040
-  codex_work_title: FT-CX-0040 garmin-developer-program-approval
-  task_slug: garmin-developer-program-approval
+  codex_work_id: FT-CX-0041
+  codex_work_title: FT-CX-0041 compliant-garmin-data-flow-garmin-developer-program-approval-approval-scraping-reverse-engineering-credential-workarounds
+  task_slug: compliant-garmin-data-flow-garmin-developer-program-approval-approval-scraping-reverse-engineering-credential-workarounds
   codex_work_kind: self_handoff
   codex_work_state: open
   codex_work_index_path: .chatgpt/codex-work-index.yaml

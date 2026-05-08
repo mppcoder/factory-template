@@ -1,7 +1,7 @@
 ## Номер запроса Codex
 
 ```text
-FT-CX-0040 garmin-developer-program-approval
+FT-CX-0041 compliant-garmin-data-flow-garmin-developer-program-approval-approval-scraping-reverse-engineering-credential-workarounds
 ```
 
 ## Карточка проекта
@@ -19,8 +19,11 @@ Tasks: 🕒 0 ready-for-handoff -> 0 ready-for-codex -> 0 running -> 0
   Done
 🟡 FT-CX-0038 continue-health-sync-bridge-project: ✅ Codex-WORK → ✅ Codex
   OK → 🕒 Done
-🟡 FT-CX-0040 garmin-developer-program-approval: ✅ Codex-WORK → 🕒 Codex OK
-  → 🕒 Done
+🔴 FT-CX-0040 garmin-developer-program-approval: ✅ Codex-WORK → ✅ Codex OK
+  → 🔴 Blocked
+🟡 FT-CX-0041
+  compliant-garmin-data-flow-garmin-developer-program-approval-approval-scraping-reverse-engineering-credential-workarounds:
+  ✅ Codex-WORK → 🕒 Codex OK → 🕒 Done
 
 ## Применение в Codex UI
 
@@ -64,7 +67,7 @@ Routing:
 - handoff_shape: codex-task-handoff
 - execution_mode_decision_owner: Codex runtime after task graph analysis
 - execution_mode_closeout_required: actual execution mode plus child/subagent count
-- goal_contract.normalized_goal: Получи Garmin Developer Program approval.
+- goal_contract.normalized_goal: Сделать compliant вариант Garmin data flow без Garmin Developer Program approval; не обходить approval через scraping/reverse engineering/credential workarounds.
 - goal_contract.definition_of_done: evidence satisfies requested outcome and repo validators/blockers are documented
 - goal_contract.proxy_signal_denylist: tests passed alone; file exists alone; commit exists alone; green dashboard alone; validator passed alone
 - goal_runtime_recommendation: goal_first_contract_only
@@ -84,12 +87,12 @@ Routing:
 - defect_capture_path: not-required-by-text-signal
 - chat_id: not_applicable
 - chat_title: not_applicable
-- task_slug: garmin-developer-program-approval
+- task_slug: compliant-garmin-data-flow-garmin-developer-program-approval-approval-scraping-reverse-engineering-credential-workarounds
 - chat_kind: not_applicable
 - chat_state: not_applicable
 - chat_index_path: not_applicable
-- codex_work_id: FT-CX-0040
-- codex_work_title: FT-CX-0040 garmin-developer-program-approval
+- codex_work_id: FT-CX-0041
+- codex_work_title: FT-CX-0041 compliant-garmin-data-flow-garmin-developer-program-approval-approval-scraping-reverse-engineering-credential-workarounds
 - codex_work_kind: self_handoff
 - codex_work_state: open
 - codex_work_index_path: .chatgpt/codex-work-index.yaml
@@ -104,7 +107,7 @@ Routing:
 - .chatgpt/done-report.md
 
 Текст задачи:
-Получи Garmin Developer Program approval.
+Сделать compliant вариант Garmin data flow без Garmin Developer Program approval; не обходить approval через scraping/reverse engineering/credential workarounds.
 
 Continuation rule:
 Если задача пришла в уже открытую Codex-сессию и этот route совместим с текущей сессией, после видимого self-handoff продолжай remediation / implementation / verification без отдельного запроса пользователя. Остановка допустима только при реальном blocker, внешнем действии, несовместимом route или необходимости нового task launch.

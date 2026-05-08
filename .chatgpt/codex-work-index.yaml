@@ -1,6 +1,6 @@
 schema: codex-work-index/v1
 project_code: FT
-next_codex_work_number: 41
+next_codex_work_number: 42
 id_policy:
   canonical_format: <PROJECT_CODE>-CX-<NNNN> <task-slug>
   independent_from_chat_handoff_index: true
@@ -1026,3 +1026,26 @@ items:
     decision.
   next_action: User submits Garmin request with business details, then returns Garmin
     response or approval evidence.
+- codex_work_id: FT-CX-0041
+  work_number: 41
+  work_title: FT-CX-0041 compliant-garmin-data-flow-garmin-developer-program-approval-approval-scraping-reverse-engineering-credential-workarounds
+  task_slug: compliant-garmin-data-flow-garmin-developer-program-approval-approval-scraping-reverse-engineering-credential-workarounds
+  kind: self_handoff
+  state: superseded
+  created_utc: '2026-05-08T18:11:49Z'
+  updated_utc: '2026-05-08T18:35:00Z'
+  source_type: direct-task
+  handoff_group: compliant-garmin-data-flow-garmin-developer-program-approval-approval-scraping-reverse-engineering-credential-workarounds
+  handoff_revision: 1
+  handoff_register_item_id: ''
+  status_chain:
+  - codex_self_handoff
+  - codex_accepted
+  - codex_completed
+  evidence:
+  - Allocated during direct-task bootstrap before first substantive response.
+  - User interrupted the Garmin fallback task and redirected priority to Withings
+    automatic sync in downstream Health Sync Bridge.
+  replacement_reason: Replaced by downstream HSB-CX-0008 automatic Withings sync.
+  next_action: No factory-template implementation action; downstream HSB-CX-0008
+    completed the redirected request.

@@ -7,7 +7,7 @@ direct-task
 codex-task-handoff
 
 ## Контракт цели
-- normalized_goal: `Получи Garmin Developer Program approval.`
+- normalized_goal: `Сделать compliant вариант Garmin data flow без Garmin Developer Program approval; не обходить approval через scraping/reverse engineering/credential workarounds.`
 - definition_of_done: evidence satisfies requested outcome and relevant repo validators or blockers are documented.
 - evidence_required: verification-report.md, done-report.md, targeted validation evidence.
 - scope: repo-local artifacts selected by route.
@@ -29,7 +29,7 @@ codex-task-handoff
 ## Стабильная identity чата и handoff
 - chat_id: ``
 - chat_title: ``
-- task_slug: `garmin-developer-program-approval`
+- task_slug: `compliant-garmin-data-flow-garmin-developer-program-approval-approval-scraping-reverse-engineering-credential-workarounds`
 - kind: ``
 - state: ``
 - source_of_truth: `.chatgpt/chat-handoff-index.yaml`
@@ -159,4 +159,4 @@ selected_model совпадает с последним сохраненным s
 - Если используется experimental `goals`, сначала проверьте `codex features list`; включение goal runtime является runtime/operator choice и не следует из advisory текста.
 
 ## Текст задачи
-Получи Garmin Developer Program approval.
+Сделать compliant вариант Garmin data flow без Garmin Developer Program approval; не обходить approval через scraping/reverse engineering/credential workarounds.
