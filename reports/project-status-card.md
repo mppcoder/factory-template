@@ -3,7 +3,7 @@
 → ✅ Проверка → 🕒 Release → 🕒 Deploy → 🕒 Сопровождение
 Модули:
 ✅ Lifecycle → ✅ Core → ✅ Security → ✅ UI/A11y → ✅ Quality → ✅ WebSec
-→ ✅ Ops → ⏸ AI
+→ 🟡 Ops → ⏸ AI
 Tasks: 🕒 0 ready-for-handoff -> 0 ready-for-codex -> 0 running -> 0
   human-review
 В работе:

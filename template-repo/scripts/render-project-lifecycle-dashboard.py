@@ -664,6 +664,7 @@ def optional_context(root: Path, dashboard_path: Path) -> dict[str, Any]:
         "dry_run": read_text(root / ".factory-runtime" / "reports" / "deploy-dry-run-latest.txt"),
         "deploy": read_text(root / ".factory-runtime" / "reports" / "deploy-last-run.txt"),
     }
+    factory_manifest = read_yaml(root / "FACTORY_MANIFEST.yaml")
     return {
         "task_state": task_state,
         "stage_state": stage_state,
@@ -676,6 +677,7 @@ def optional_context(root: Path, dashboard_path: Path) -> dict[str, Any]:
         "verify_summary": verify_summary,
         "current_state_present": bool(current_state.strip()),
         "runtime_reports": runtime_reports,
+        "factory_manifest": factory_manifest,
     }
 
 
@@ -683,13 +685,19 @@ def resolved_project(data: dict[str, Any], context: dict[str, Any]) -> dict[str,
     stage_project = context.get("stage_state", {}).get("project", {}) if isinstance(context.get("stage_state"), dict) else {}
     stage_lifecycle = context.get("stage_state", {}).get("lifecycle", {}) if isinstance(context.get("stage_state"), dict) else {}
     root_project = context.get("root_stage_state", {}).get("project", {}) if isinstance(context.get("root_stage_state"), dict) else {}
+    factory_manifest = context.get("factory_manifest", {}) if isinstance(context.get("factory_manifest"), dict) else {}
+    producer_layer = (
+        "True"
+        if factory_manifest.get("factory_producer_layer") is True
+        else value(data, "project", "factory_producer_owned_layer")
+    )
     return {
         "name": clean_placeholder(stage_project.get("name")) or clean_placeholder(root_project.get("name")) or value(data, "project", "name"),
         "slug": clean_placeholder(stage_project.get("slug")) or clean_placeholder(root_project.get("slug")) or value(data, "project", "slug"),
         "profile": value(data, "project", "profile"),
         "lifecycle_state": value(data, "project", "lifecycle_state") or str(stage_lifecycle.get("lifecycle_state") or ""),
         "current_mode": value(data, "project", "current_mode") or clean_placeholder(stage_project.get("mode")),
-        "factory_producer_owned_layer": value(data, "project", "factory_producer_owned_layer"),
+        "factory_producer_owned_layer": producer_layer,
     }
 
 

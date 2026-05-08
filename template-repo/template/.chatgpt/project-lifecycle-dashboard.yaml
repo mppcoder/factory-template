@@ -355,7 +355,7 @@ module_readiness:
     accepted_reason: ''
   - id: ops
     label: Ops
-    status: completed
+    status: in_progress
     standard_refs:
     - dora_metrics
     gate_refs:
@@ -367,7 +367,7 @@ module_readiness:
     - docs/architecture/vps-project-hosting-topologies.md
     - docs/releases/single-vps-downstream-proof-roadmap.md
     - reports/release/downstream-application-proof-report.md
-    accepted_reason: ''
+    accepted_reason: Операционный baseline есть; controlled software update governance baseline остается pending.
   - id: ai
     label: AI
     status: not_applicable

@@ -79,6 +79,15 @@ Plan №6 productizes the beginner-facing full handoff UX on top of Plan №5. I
 | `P6-GAP-05` | Safe full orchestration rehearsal evidence was missing. | `reports/orchestration/plan-6-safe-rehearsal.md`; cockpit report; future-placeholder fixture. | P6-S5 | implemented/verified synthetic only | repo evidence |
 | `P6-GAP-06` | Future-boundary placeholders such as `future-user-action` needed normalization without real proof overclaim. | `tests/codex-orchestration/fixtures/future-placeholder/parent-plan.yaml`; runner placeholder timing accepts `final-user-action` and `future-user-action`. | P6-S2/P6-S5 | implemented/verified | executable validator |
 
+## Аудит целостности repo 2026-05-08
+
+This audit checks dashboard/release/module consistency and donor/reference boundaries after the advanced automation and lifecycle dashboard layers. These gaps do not reopen `2.5.8 Package Ready`; they correct readout and validator drift.
+
+| ID | Gap | Current evidence | Target stage | Status | Owner boundary |
+|---|---|---|---|---|---|
+| `RIA-2026-05-08-GAP-01` | Factory-template dashboard readout showed `Factory producer layer: False` while `FACTORY_MANIFEST.yaml` says `factory_producer_layer: true`. | `reports/bugs/2026-05-08-dashboard-factory-producer-layer-drift.md`; renderer now overlays root `FACTORY_MANIFEST.yaml` for factory-template readout only; `bash template-repo/scripts/verify-all.sh quick` passed. | dashboard consistency | remediated/verified | factory-template |
+| `RIA-2026-05-08-GAP-02` | Ops module readiness was green while `software_update_governance.baseline_status` remained `pending`. | `reports/bugs/2026-05-08-module-readiness-software-update-false-green.md`; Ops readiness is `in_progress`; dashboard validator now blocks green modules referencing pending software update governance; `bash template-repo/scripts/verify-all.sh quick` passed. | module readiness / validator coverage | remediated/verified | shared |
+
 ## `molyanov-ai-dev` adaptation register
 
 Reference snapshot: `pavel-molyanov/molyanov-ai-dev` HEAD `1bfe745d43b0602d8279cb4c9cb7894b1bb56bba`.

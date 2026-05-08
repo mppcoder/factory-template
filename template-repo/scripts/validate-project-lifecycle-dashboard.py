@@ -684,6 +684,13 @@ def validate_module_readiness(item: Any, data: dict[str, Any], dashboard_path: P
         for source_ref in source_refs:
             if str(source_ref) not in MODULE_SOURCE_REFS:
                 errors.append(f"module_readiness.modules[{module_id}].source_refs содержит неизвестный source_ref `{source_ref}`")
+        if status in MODULE_GREEN_STATUSES and "software_update_governance" in {str(ref) for ref in source_refs}:
+            software = data.get("software_update_governance", {}) if isinstance(data.get("software_update_governance"), dict) else {}
+            if str(software.get("baseline_status") or "") not in GREEN_STATUSES:
+                errors.append(
+                    f"module_readiness.modules[{module_id}] green status `{status}` "
+                    "ссылается на pending software_update_governance"
+                )
 
         claim = str(module.get("claim") or "")
         if claim and FALSE_COMPLIANCE_RE.search(claim):

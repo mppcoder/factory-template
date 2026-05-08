@@ -1,6 +1,6 @@
 # Панель жизненного цикла проекта / `project-lifecycle-dashboard`
 
-Generated UTC: `2026-05-07T16:35:01+00:00`
+Generated UTC: `2026-05-08T05:12:39+00:00`
 Source: `/projects/factory-template/template-repo/template/.chatgpt/project-lifecycle-dashboard.yaml`
 
 ## Сейчас
@@ -9,7 +9,7 @@ Source: `/projects/factory-template/template-repo/template/.chatgpt/project-life
 - Профиль: `greenfield-product`
 - Lifecycle state: ``
 - Текущий mode: `factory-improvement`
-- Factory producer layer: `False`
+- Factory producer layer: `True`
 - Фаза: `release` -> next `deploy`
 - Stage file говорит: current `done`, next `none`
 
@@ -59,7 +59,7 @@ Source: `/projects/factory-template/template-repo/template/.chatgpt/project-life
 - compact lifecycle chain: ✅ Идея → ✅ Intake → ✅ Спека → ✅ Архитектура → ✅ Handoff → ✅ Исполнение
 → ✅ Проверка → 🕒 Release → 🕒 Deploy → 🕒 Сопровождение
 - compact module readiness chain: ✅ Lifecycle → ✅ Core → ✅ Security → ✅ UI/A11y → ✅ Quality → ✅ WebSec
-→ ✅ Ops → ⏸ AI
+→ 🟡 Ops → ⏸ AI
 
 ### Активные ChatGPT handoff-задачи
 
@@ -279,7 +279,7 @@ Source: `/projects/factory-template/template-repo/template/.chatgpt/project-life
 | `ui_a11y` UI/A11y | `completed` | `wcag_22` | `accessibility_minimum_checked` | none | `docs/operator/runbook-packages/01-factory-template/01-user-runbook.md`, `docs/operator/runbook-packages/02-greenfield-product/01-user-runbook.md`, `docs/operator/beginner-first-windows-to-first-project.md` |
 | `quality` Quality | `completed` | `iso_25010` | `quality_minimum_checked` | none | `template-repo/scripts/validate-runbook-packages.py`, `template-repo/scripts/validate-downstream-application-proof.py`, `bash template-repo/scripts/verify-all.sh quick` |
 | `websec` WebSec | `completed` | `owasp_asvs` | `web_security_checked` | none | `docs/architecture/vps-project-hosting-topologies.md`, `docs/operator/single-big-vps-dev-runtime-architecture.md`, `docs/downstream-application-proof.md` |
-| `ops` Ops | `completed` | `dora_metrics` | `operations_health_baseline` | `deploy_runtime`, `software_update_governance` | `docs/architecture/vps-project-hosting-topologies.md`, `docs/releases/single-vps-downstream-proof-roadmap.md`, `reports/release/downstream-application-proof-report.md` |
+| `ops` Ops | `in_progress` | `dora_metrics` | `operations_health_baseline` | `deploy_runtime`, `software_update_governance` | `docs/architecture/vps-project-hosting-topologies.md`, `docs/releases/single-vps-downstream-proof-roadmap.md`, `reports/release/downstream-application-proof-report.md` |
 | `ai` AI | `not_applicable` | `openai_ai_safety_overlay` | `ai_safety_gate` | none | Project has not declared AI model, agent or AI-output behavior. |
 
 ## Управление обновлениями
