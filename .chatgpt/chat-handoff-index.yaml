@@ -1,6 +1,6 @@
 schema: chat-handoff-index/v1
 project_code: FT
-next_chat_number: 29
+next_chat_number: 30
 title_policy:
   canonical_format: <PROJECT_CODE>-CH-<NNNN> <task-slug>
   include_status_in_title: false
@@ -629,7 +629,8 @@ items:
       recommendations, and related notifications.
   - '2026-05-08 normalization: status_chain expanded to canonical handoff chain required
     by validate-chat-handoff-index.py; telegram scope is unchanged.'
-  - 'Codex implemented repo-native Telegram Feedback Channel as schema/config/notifier/outbox/audit/docs/fixtures/validator in HIR-016.'
+  - Codex implemented repo-native Telegram Feedback Channel as schema/config/notifier/outbox/audit/docs/fixtures/validator
+    in HIR-016.
   - python3 template-repo/scripts/validate-telegram-feedback-channel.py --allow-placeholders
   - bash template-repo/scripts/verify-all.sh quick
   - bash template-repo/scripts/verify-all.sh
@@ -655,3 +656,37 @@ items:
   - Codex completed goal-first transition in commit 8b7f3fb
   next_action: Start the Codex handoff or close/supersede this repo reservation; do
     not reuse this chat number.
+- chat_id: FT-CH-0029
+  chat_number: 29
+  chat_title: FT-CH-0029 chat-title-write-access-request-gate
+  task_slug: chat-title-write-access-request-gate
+  kind: bug
+  state: verified
+  created_utc: '2026-05-08T09:39:25Z'
+  updated_utc: '2026-05-08T09:49:05Z'
+  source_type: chatgpt-first-answer-write-access-request-gate
+  handoff_group: chat-title-write-access-request-gate
+  handoff_revision: 1
+  handoff_register_item_id: HIR-017
+  status_chain:
+  - chatgpt_handoff
+  - codex_accepted
+  - codex_completed
+  evidence:
+  - User reported ChatGPT still outputs exact allocator blocker instead of stable
+    chat number.
+  - User explicitly required keeping the GitHub write-access request mechanism for
+    ChatGPT number assignment.
+  - Current ChatGPT connector could read repo/index but had no exposed write/update-file
+    action in this environment.
+  - Reservation retro-materialized by Codex because browser ChatGPT could not perform
+    confirmed repo write.
+  - 'Defect-capture: reports/bugs/2026-05-08-chat-title-write-access-request-gate.md'
+  - 'Factory feedback: reports/factory-feedback/feedback-063-chatgpt-write-access-request-gate.md'
+  - python3 template-repo/scripts/validate-chat-handoff-index.py .chatgpt/chat-handoff-index.yaml
+  - python3 template-repo/scripts/validate-chatgpt-first-answer-contract.py .
+  - python3 template-repo/scripts/validate-handoff-implementation-register.py .chatgpt/handoff-implementation-register.yaml
+  - bash template-repo/scripts/verify-all.sh quick
+  - bash template-repo/scripts/verify-all.sh
+  next_action: No further implementation action; ChatGPT write-access request gate
+    before allocator blocker is verified in HIR-017.

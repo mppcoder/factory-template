@@ -33,6 +33,12 @@ REQUIRED_ROUTER_PHRASES = [
     "platform-level OAuth",
     "write action exposed",
     "confirm fetch succeeds",
+    "GitHub write-access request gate",
+    "structured write-access request",
+    "not a conversational confirmation",
+    "write_access_request_attempted",
+    "request unavailable/rejected",
+    "retry connector-safe reservation",
 ]
 REQUIRED_HANDOFF_PHRASES = [
     "Название чата для копирования",
@@ -55,6 +61,12 @@ REQUIRED_HANDOFF_PHRASES = [
     "platform-level OAuth",
     "write action exposed",
     "confirm fetch succeeds",
+    "GitHub write-access request gate",
+    "structured write-access request",
+    "not a conversational confirmation",
+    "write_access_request_attempted",
+    "request unavailable/rejected",
+    "retry connector-safe reservation",
 ]
 REQUIRED_DOC_PHRASES = [
     "Название чата для копирования",
@@ -82,6 +94,12 @@ REQUIRED_DOC_PHRASES = [
     "platform-level OAuth",
     "write action exposed",
     "confirm fetch succeeds",
+    "GitHub write-access request gate",
+    "structured write-access request",
+    "not a conversational confirmation",
+    "write_access_request_attempted",
+    "request unavailable/rejected",
+    "retry connector-safe reservation",
 ]
 FORBIDDEN_OVERCLAIMS = [
     "автоматически переименует ChatGPT",
@@ -108,9 +126,33 @@ CONFIRMED_WRITE_BLOCKER_MARKERS = [
     "allocator_blocker_reason:",
     "external_auth_blocker",
     "write_auth_blocker",
+    "write_access_request_result: unavailable",
+    "write_access_request_result: rejected",
+    "request unavailable/rejected",
+    "request rejected",
+    "materialized write failed after request",
+    "write action truly absent with no platform request path",
     "confirm fetch failed",
     "GitHub connector write rejected",
     "GitHub connector write unavailable",
+]
+WRITE_ACCESS_REQUEST_ATTEMPT_MARKERS = [
+    "write_access_request_attempted",
+    "structured write-access request",
+]
+WRITE_ACTION_NOT_EXPOSED_MARKERS = [
+    "write_action: not_exposed",
+    "write action not exposed",
+]
+WRITE_ACCESS_REQUEST_POSSIBLE_MARKERS = [
+    "write_access_request_possible: true",
+    "request/escalation possible",
+    "platform/connector can request write scope",
+]
+CODEX_RETRO_HANDOFF_MARKERS = [
+    "Codex retro-materialization handoff",
+    "retro-materialize ChatGPT reservation",
+    "launch_source: chatgpt-handoff",
 ]
 GITHUB_CONFIRMATION_QUESTION_RE = re.compile(
     r"(?is)("
@@ -171,8 +213,28 @@ def validate_visible_first_answer_outcome(text: str) -> list[str]:
         connector_write_available = any(marker in text for marker in CONNECTOR_WRITE_AVAILABLE_MARKERS)
         repo_local_allocator_unavailable = any(marker in text for marker in REPO_LOCAL_ALLOCATOR_UNAVAILABLE_MARKERS)
         has_confirmed_write_blocker = any(marker in text for marker in CONFIRMED_WRITE_BLOCKER_MARKERS)
+        write_action_not_exposed = any(marker in text for marker in WRITE_ACTION_NOT_EXPOSED_MARKERS)
+        write_access_request_possible = any(marker in text for marker in WRITE_ACCESS_REQUEST_POSSIBLE_MARKERS)
+        write_access_request_attempted = any(marker in text for marker in WRITE_ACCESS_REQUEST_ATTEMPT_MARKERS)
+        has_codex_retro_handoff = any(marker in text for marker in CODEX_RETRO_HANDOFF_MARKERS)
         if not has_materialized_title and not has_allocator_blocker:
             errors.append("title block не содержит materialized allocation or allocator blocker")
+        if has_allocator_blocker and not has_materialized_title:
+            if not has_confirmed_write_blocker:
+                errors.append(
+                    "exact allocator blocker требует explicit write_auth/external_auth/request unavailable/rejected "
+                    "или confirm-fetch blocker evidence"
+                )
+            if write_action_not_exposed and write_access_request_possible and not write_access_request_attempted:
+                errors.append(
+                    "write action not exposed при доступном request/escalation path требует "
+                    "write_access_request_attempted перед exact allocator blocker"
+                )
+            if write_access_request_attempted and not has_codex_retro_handoff:
+                errors.append(
+                    "allocator blocker after structured write-access request должен содержать Codex "
+                    "retro-materialization handoff"
+                )
         if (
             connector_write_available
             and repo_local_allocator_unavailable
@@ -286,6 +348,22 @@ def main() -> int:
                 f"{github_access_confirmation_fixture.relative_to(root)} должен быть negative fixture для GitHub confirmation gate перед allocation outcome, но прошел проверку"
             )
 
+    write_access_request_skipped_fixture = (
+        root
+        / "tests"
+        / "chatgpt-first-answer-contract"
+        / "negative"
+        / "write-access-request-skipped-blocker.md"
+    )
+    if not write_access_request_skipped_fixture.exists():
+        errors.append(f"{write_access_request_skipped_fixture.relative_to(root)} отсутствует")
+    else:
+        fixture_errors = validate_visible_first_answer_outcome(read(write_access_request_skipped_fixture))
+        if not fixture_errors:
+            errors.append(
+                f"{write_access_request_skipped_fixture.relative_to(root)} должен быть negative fixture для skipped write-access request gate, но прошел проверку"
+            )
+
     github_no_confirmation_fixture = (
         root
         / "tests"
@@ -299,6 +377,32 @@ def main() -> int:
         fixture_errors = validate_visible_first_answer_outcome(read(github_no_confirmation_fixture))
         if fixture_errors:
             errors.append(f"{github_no_confirmation_fixture.relative_to(root)} не прошел positive fixture: {'; '.join(fixture_errors)}")
+
+    write_access_request_gate_fixture = (
+        root
+        / "tests"
+        / "chatgpt-first-answer-contract"
+        / "positive"
+        / "write-access-request-gate-before-blocker.md"
+    )
+    if not write_access_request_gate_fixture.exists():
+        errors.append(f"{write_access_request_gate_fixture.relative_to(root)} отсутствует")
+    else:
+        fixture_text = read(write_access_request_gate_fixture)
+        fixture_errors = validate_visible_first_answer_outcome(fixture_text)
+        for phrase in [
+            "GitHub write-access request gate",
+            "structured write-access request",
+            "write_access_request_attempted",
+            "request unavailable/rejected",
+            "Codex retro-materialization handoff",
+        ]:
+            if phrase not in fixture_text:
+                fixture_errors.append(f"fixture не содержит `{phrase}`")
+        if fixture_errors:
+            errors.append(
+                f"{write_access_request_gate_fixture.relative_to(root)} не прошел positive fixture: {'; '.join(fixture_errors)}"
+            )
 
     card_path = root / "reports" / "project-status-card.md"
     if not card_path.exists():

@@ -7,5 +7,5 @@
 Tasks: 🕒 0 ready-for-handoff -> 0 ready-for-codex -> 0 running -> 0
   human-review
 В работе:
-✅ FT-CX-0031 close-unfinished-repo-tasks: ✅ Codex-WORK → ✅ Codex OK → ✅
+✅ FT-CX-0032 telegram-per-project-topics: ✅ Codex-WORK → ✅ Codex OK → ✅
   Done

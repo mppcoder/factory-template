@@ -1,5 +1,9 @@
 # Позитивный fixture: allocator blocker is one-click copyable
 
+repo_local_allocator: unavailable_in_chatgpt_connector_context
+write_auth_blocker: write action truly absent with no platform request path
+allocator_blocker_reason: request unavailable/rejected
+
 ## Название чата для копирования
 ```text
 Нужно выделить номер через repo chat-handoff-index / allocator.

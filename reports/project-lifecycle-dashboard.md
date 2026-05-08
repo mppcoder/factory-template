@@ -1,6 +1,6 @@
 # Панель жизненного цикла проекта / `project-lifecycle-dashboard`
 
-Generated UTC: `2026-05-08T09:30:39+00:00`
+Generated UTC: `2026-05-08T09:49:42+00:00`
 Source: `/projects/factory-template/template-repo/template/.chatgpt/project-lifecycle-dashboard.yaml`
 
 ## Сейчас
@@ -15,9 +15,9 @@ Source: `/projects/factory-template/template-repo/template/.chatgpt/project-life
 
 ## Активное изменение
 
-- id: `HIR-016-telegram-feedback-channel`
-- title: Repo-native Telegram Feedback Channel
-- class/priority/status: `deep` / `high` / `done`
+- id: `HIR-017-chat-title-write-access-request-gate`
+- title: ChatGPT write-access request gate before allocator blocker
+- class/priority/status: `build` / `critical` / `done`
 - boundary: `internal-repo-follow-up`
 - task-state next action: not set
 
@@ -63,7 +63,7 @@ Source: `/projects/factory-template/template-repo/template/.chatgpt/project-life
 
 ### Активные ChatGPT handoff-задачи
 
-✅ FT-CX-0031 close-unfinished-repo-tasks: ✅ Codex-WORK → ✅ Codex OK → ✅
+✅ FT-CX-0032 telegram-per-project-topics: ✅ Codex-WORK → ✅ Codex OK → ✅
   Done
 
 ### История ChatGPT handoff-задач
@@ -104,6 +104,8 @@ Source: `/projects/factory-template/template-repo/template/.chatgpt/project-life
   Codex OK → ✅ Done
 ✅ FT-CH-0027 telegram-feedback-channel: ✅ GPT-HO → ✅ Codex OK → ✅ Done
 ✅ FT-CH-0028 goal-first-transition: ✅ GPT-HO → ✅ Codex OK → ✅ Done
+✅ FT-CH-0029 chat-title-write-access-request-gate: ✅ GPT-HO → ✅ Codex OK →
+  ✅ Done
 
 ### История Codex-доработок
 
@@ -160,6 +162,8 @@ Source: `/projects/factory-template/template-repo/template/.chatgpt/project-life
 ✅ FT-CX-0030 per-project-unique-chatgpt-codex-indexes: ✅ Codex-WORK → ✅
   Codex OK → ✅ Done
 ✅ FT-CX-0031 close-unfinished-repo-tasks: ✅ Codex-WORK → ✅ Codex OK → ✅
+  Done
+✅ FT-CX-0032 telegram-per-project-topics: ✅ Codex-WORK → ✅ Codex OK → ✅
   Done
 
 ## Передача и оркестрация

@@ -923,3 +923,62 @@ items:
     next_action: "No further P0 implementation action; live Telegram delivery requires external BotFather/chat id/env setup."
     created_at: "2026-05-08T09:48:00Z"
     updated_at: "2026-05-08T10:11:00Z"
+  - id: HIR-017
+    title: "ChatGPT write-access request gate before allocator blocker"
+    chat_id: FT-CH-0029
+    chat_title: "FT-CH-0029 chat-title-write-access-request-gate"
+    task_slug: chat-title-write-access-request-gate
+    chat_state: verified
+    chat_index_item_id: FT-CH-0029
+    handoff_group: "chat-title-write-access-request-gate"
+    handoff_revision: 1
+    source_type: chatgpt-handoff
+    source_chat: "chatgpt-handoff: write_auth_blocker_current_chat"
+    source_handoff_path: ""
+    task_class: build
+    selected_profile: build
+    selected_model: gpt-5.5
+    selected_reasoning_effort: medium
+    selected_plan_mode_reasoning_effort: medium
+    status: verified
+    priority: critical
+    calculated_priority: critical
+    depends_on: []
+    blocks: []
+    replaces: []
+    superseded_by: ""
+    replacement_reason: ""
+    owner_boundary: internal-repo-follow-up
+    artifacts_to_update:
+      - ".chatgpt/chat-handoff-index.yaml"
+      - ".chatgpt/handoff-implementation-register.yaml"
+      - "template-repo/scenario-pack/00-master-router.md"
+      - "template-repo/scenario-pack/15-handoff-to-codex.md"
+      - "template-repo/scripts/validate-chatgpt-first-answer-contract.py"
+      - "tests/chatgpt-first-answer-contract/negative/write-access-request-skipped-blocker.md"
+      - "tests/chatgpt-first-answer-contract/positive/write-access-request-gate-before-blocker.md"
+      - "docs/operator/factory-template/01-runbook-dlya-polzovatelya-factory-template.md"
+      - "docs/operator/factory-template/04-chatgpt-project-sources-factory-template-20-cap.md"
+      - "docs/operator/factory-template/06-project-lifecycle-dashboard.md"
+      - "reports/bugs/2026-05-08-chat-title-write-access-request-gate.md"
+      - "reports/factory-feedback/feedback-063-chatgpt-write-access-request-gate.md"
+      - "reports/project-status-card.md"
+      - "reports/project-lifecycle-dashboard.md"
+    evidence:
+      - "route receipt: launch_source=chatgpt-handoff, handoff_shape=codex-task-handoff, selected_profile=build, selected_model=gpt-5.5, reasoning=medium"
+      - "Current defect reservation materialized as FT-CH-0029 chat-title-write-access-request-gate."
+      - "User explicitly required preserving the ChatGPT GitHub write-access request mechanism for number assignment."
+      - "defect-capture: reports/bugs/2026-05-08-chat-title-write-access-request-gate.md"
+      - "factory feedback: reports/factory-feedback/feedback-063-chatgpt-write-access-request-gate.md"
+      - "regression fixture: tests/chatgpt-first-answer-contract/negative/write-access-request-skipped-blocker.md"
+      - "positive fixture: tests/chatgpt-first-answer-contract/positive/write-access-request-gate-before-blocker.md"
+      - "python3 template-repo/scripts/validate-chat-handoff-index.py .chatgpt/chat-handoff-index.yaml"
+      - "python3 template-repo/scripts/validate-chatgpt-first-answer-contract.py ."
+      - "python3 template-repo/scripts/validate-handoff-implementation-register.py .chatgpt/handoff-implementation-register.yaml"
+      - "bash template-repo/scripts/verify-all.sh quick"
+      - "bash template-repo/scripts/verify-all.sh"
+    closeout_reason: "Router, handoff scenario, runbooks, validator and fixtures now require a structured GitHub write-access request gate before exact allocator blocker when write action is not exposed but request/escalation is possible. The ChatGPT GitHub write-access request mechanism is preserved and Codex retro-materialization is reserved for confirmed blocker handoff cases."
+    deactivation_handoff_required: false
+    next_action: "No further implementation action; verified sync remains the only closeout step."
+    created_at: "2026-05-08T09:39:25Z"
+    updated_at: "2026-05-08T09:49:05Z"

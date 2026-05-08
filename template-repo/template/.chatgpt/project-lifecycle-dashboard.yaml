@@ -74,17 +74,17 @@ lifecycle_phase:
     status: pending
     evidence: []
 active_change:
-  id: HIR-016-telegram-feedback-channel
-  title: Repo-native Telegram Feedback Channel
-  class: deep
-  priority: high
+  id: HIR-017-chat-title-write-access-request-gate
+  title: ChatGPT write-access request gate before allocator blocker
+  class: build
+  priority: critical
   status: done
   owner_boundary: internal-repo-follow-up
   evidence:
-  - template-repo/template/.chatgpt/telegram-feedback-event.schema.yaml
-  - template-repo/scripts/factory_notify_telegram.py
-  - template-repo/scripts/validate-telegram-feedback-channel.py
-  - tests/telegram-feedback-channel/events/p0-events.yaml
+  - .chatgpt/chat-handoff-index.yaml
+  - template-repo/scenario-pack/00-master-router.md
+  - template-repo/scenario-pack/15-handoff-to-codex.md
+  - template-repo/scripts/validate-chatgpt-first-answer-contract.py
   source_artifacts:
   - .chatgpt/chat-handoff-index.yaml
   - .chatgpt/handoff-implementation-register.yaml

@@ -55,6 +55,13 @@
 - Connector fallback должен быть connector-safe reservation patch: append one item and bump `next_chat_number`; не делай ручной full-file rewrite без сверки текущего `next_chat_number`, canonical `status_chain` и confirm fetch/readback.
 - Для repo `mppcoder/factory-template` repo-first instruction authorizes configured GitHub connector: repo-first instruction является prior authorization использовать настроенный authenticated GitHub connector / repo tool для обязательного чтения repo, чтения index и connector-safe allocation attempt. не спрашивай conversational confirmation перед GitHub read, index read или reservation attempt; формулировки вроде "подтвердите доступ к GitHub" и "разрешите использовать GitHub" запрещены до materialized allocation или confirmed blocker.
 - Если platform-level OAuth / connector authorization prompt сам блокирует действие, зафиксируй `external_auth_blocker` и exact allocator blocker. Если write action exposed отсутствует или write rejected, зафиксируй `write_auth_blocker` / exact allocator blocker. Не заменяй попытку доступного connector path свободным вопросом пользователю.
+- GitHub write-access request gate обязателен перед exact allocator blocker, если write action not exposed, но platform/connector может запросить write scope. Structured write-access request — not a conversational confirmation: запрещен свободный вопрос о разрешении использовать GitHub до repo-first read/index read, но разрешен и обязателен structured write-access request, если он нужен для записи `.chatgpt/chat-handoff-index.yaml`.
+- Порядок allocation/write gate:
+  a) repo-local allocator, если исполним;
+  b) connector-safe reservation, если write action exposed;
+  c) structured GitHub write-access request, если write action not exposed but request/escalation possible;
+  d) retry connector-safe reservation after grant;
+  e) exact allocator blocker только если `write_access_request_attempted` завершился как `request unavailable/rejected`, materialized write failed after request, write action truly absent with no platform request path, write rejected или confirm fetch failed.
 - Если write action exposed and confirm fetch succeeds, exact allocator blocker запрещен: сначала покажи materialized `FT-CH-.... <task-slug>`.
 - Exact allocator blocker разрешен только при реальном write blocker: repo-local allocator недоступен и GitHub connector write path/repo tool/authenticated write path тоже недоступен, write rejected, permission denied или confirm fetch не подтвердил запись. blocker нельзя выводить, когда GitHub connector write path доступен и подтверждает update.
 - Третье состояние запрещено: no allocation attempted / no blocker / answer continues. Нельзя продолжать route receipt, анализ, handoff или remediation, если нет materialized allocation и нет exact allocator blocker.
@@ -134,6 +141,21 @@ Goal closure допустим только когда evidence реально у
 Граница: repo instructions не могут отключить platform-level OAuth / connector authorization prompt. Если сама платформа требует OAuth/connector authorization или connector install, назови `external_auth_blocker`. Если connector доступен на чтение, но write action exposed отсутствует или write rejected, назови `write_auth_blocker`. В обоих случаях можно показать exact allocator blocker только после фиксации blocker; нельзя использовать free-form вопрос пользователю как замену попытки authenticated repo-first path.
 
 Если write action exposed and confirm fetch succeeds, exact allocator blocker запрещен: ChatGPT должен показать stable materialized title.
+
+## Gate запроса GitHub write-доступа
+
+Это правило `GitHub write-access request gate` находится между connector read/index read и exact allocator blocker. Оно сохраняет механизм запроса GitHub write-доступа из ChatGPT и запрещает заменять его Codex-only fallback.
+
+Structured write-access request — not a conversational confirmation. Запрещен свободный вопрос о разрешении использовать GitHub до repo-first read/index read. Разрешен и обязателен structured write-access request, если он нужен для записи `.chatgpt/chat-handoff-index.yaml` и платформа/connector может запросить write scope.
+
+Обязательный порядок:
+1. repo-local allocator, если исполним;
+2. connector-safe reservation, если write action exposed;
+3. structured GitHub write-access request, если write action not exposed but request/escalation possible;
+4. retry connector-safe reservation after grant;
+5. exact allocator blocker только если `write_access_request_attempted` зафиксировал `request unavailable/rejected`, request rejected, materialized write failed after request, write action truly absent with no platform request path, write rejected или confirm fetch failed.
+
+Exact allocator blocker нельзя считать валидным, если перед ним не зафиксировано одно из состояний: materialized write failed after request, request unavailable/rejected, request rejected, write action truly absent with no platform request path, write rejected, permission denied или confirm fetch failed. Dry-run номер по-прежнему запрещен: read-only расчет `FT-CH-....` не является reservation.
 
 Публичные `github.com` или `raw.githubusercontent.com` URL допускаются только как fallback при явном blocker:
 - connector unavailable;

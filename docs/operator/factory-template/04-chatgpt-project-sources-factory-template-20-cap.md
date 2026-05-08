@@ -35,9 +35,11 @@
 Connector fallback должен быть connector-safe reservation patch: append one item and bump `next_chat_number`; не делай ручной full-file rewrite без сверки текущего counter, canonical `status_chain` и confirm fetch/readback.
 repo-first instruction authorizes configured GitHub connector: эта инструкция заранее разрешает использовать настроенный authenticated GitHub connector / repo tool для обязательного чтения repo, чтения `.chatgpt/chat-handoff-index.yaml` и allocation attempt.
 не спрашивай conversational confirmation перед GitHub read/index read/allocation attempt. Не задавай вопросы вроде "подтвердите доступ к GitHub", "разрешите использовать GitHub" или "do you confirm GitHub access" вместо попытки доступного connector path.
+GitHub write-access request gate сохраняет ChatGPT write-access request mechanism: structured write-access request — not a conversational confirmation. Если write action not exposed, но platform/connector может запросить write scope, сначала сделай structured write-access request для записи `.chatgpt/chat-handoff-index.yaml`, затем retry connector-safe reservation after grant.
 platform-level OAuth / connector authorization prompt нельзя отключить инструкцией: если его требует платформа, назови `external_auth_blocker`; если write action exposed отсутствует или write rejected, назови `write_auth_blocker`.
 Если write action exposed and confirm fetch succeeds, exact allocator blocker запрещен: покажи materialized stable title.
 blocker нельзя выводить, когда GitHub connector write path доступен и confirm fetch подтверждает update.
+Exact blocker допустим только если `write_access_request_attempted` завершился как `request unavailable/rejected`, request rejected, materialized write failed after request, write action truly absent with no platform request path, write rejected или confirm fetch failed.
 Если точный следующий номер неизвестен или repo write не подтвержден, не придумывай его и не показывай `FT-CH-....`. Напиши: `Нужно выделить номер через repo chat-handoff-index / allocator.`
 третье состояние запрещено: no allocation attempted / no blocker / answer continues.
 Если ChatGPT не показал `FT-CH-....` и не показал allocator blocker, это ошибка первого ответа `allocation-not-attempted`. Останови route и запусти repo allocator или передай Codex remediation; не продолжай с примерным номером.
