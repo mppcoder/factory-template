@@ -1,19 +1,19 @@
 goal_state:
   version: goal-state/v1
-  active_goal_id: goal-first-transition
+  active_goal_id: health-sync-bridge-greenfield-prd
   active_goal_status: achieved
   source_contract_path: ".chatgpt/goal-contract.yaml"
   runtime:
-    codex_goal_runtime_active: true
-    codex_goal_runtime_enabled_by: "explicit user instruction on 2026-05-08 to use experimental goals as working"
+    codex_goal_runtime_active: false
+    codex_goal_runtime_enabled_by: ""
     codex_goal_live_validation:
-      cli_version: "codex-cli 0.129.0"
-      goals_feature_flag: "experimental false"
-      validation_command: "codex features list"
-      validation_result: "goals feature flag detected as experimental and off by default; treated as working candidate by explicit user instruction, not by auto-switch"
+      cli_version: ""
+      goals_feature_flag: ""
+      validation_command: ""
+      validation_result: "Not used for this task; goal-first contract only."
   observation:
-    last_operator_check_utc: ""
-    next_operator_check_hint: "check status/budget before any long autonomous loop"
+    last_operator_check_utc: "2026-05-08T15:47:05Z"
+    next_operator_check_hint: "Continue in /projects/health-sync-bridge with the first implementation backlog."
     drift_or_loop_detected: false
   budget:
     token_budget_used: ""
@@ -22,11 +22,13 @@ goal_state:
   continuation:
     stop_reason: "achieved"
     done:
-      - "Codex CLI updated from 0.125.0 to 0.129.0"
-      - "goal-first scenario/router/docs/templates/validators implemented"
-      - "quick verify passed"
+      - "downstream project created"
+      - "feasibility-first PRD package created"
+      - "downstream quick verify passed"
     remaining:
-      - "none"
+      - "choose first implementation branch"
     blockers:
-      - "none"
-    next_recommended_goal: "none"
+      - "Garmin Developer Program approval"
+      - "real Withings OAuth credentials"
+      - "production domain/TLS and encrypted storage approval"
+    next_recommended_goal: "start Withings OAuth connector or Garmin approval spike"

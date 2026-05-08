@@ -1,52 +1,65 @@
 goal_contract:
   version: goal-contract/v1
-  goal_id: goal-first-transition
+  goal_id: health-sync-bridge-greenfield-prd
   goal_command_source:
-    raw_user_goal: "Переработать factory-template под goal first и использовать experimental goals как рабочий runtime candidate."
-    normalized_goal: "Внедрить обязательный goal-first contract в repo-first routing, handoff, templates, docs, validators and closeout, сохранив Codex /goal как live-gated runtime candidate."
-    goal_first_trigger: handoff
+    raw_user_goal: "Create greenfield project Health Sync Bridge through factory-template guided launcher and prepare feasibility-first PRD."
+    normalized_goal: "Создать greenfield-проект Health Sync Bridge как приватный health-sync hub для автоматического сбора, нормализации, аудита и допустимой синхронизации данных Withings и Garmin после однократной OAuth/consent авторизации."
+    goal_first_trigger: direct_codex_task
   outcome:
-    desired_result: "Новые задачи factory-template нормализуются в goal_contract до execution route, а закрытие цели сравнивает evidence с DoD вместо proxy signals."
+    desired_result: "Downstream project exists with PROJECT_CODE=HSB, filled project knowledge, feasibility-first PRD, API blocker matrix, data mapping, OAuth/secrets architecture, dev+prod VPS layout and first implementation backlog."
     definition_of_done:
-      - "Router содержит ранний goal-first normalization gate."
-      - "Codex handoff содержит обязательный goal_contract и live-gated goal runtime boundary."
-      - "Templates include reusable goal contract/state artifacts with budget, feedback, safety and proxy-signal fields."
-      - "Validators reject missing DoD, missing evidence, proxy-only success and codex_goal_enabled without live validation evidence."
-      - "Docs explain manual-ui default, optional strict launcher and experimental /goal boundary."
+      - "downstream project создан через factory-template guided launcher"
+      - "repo-local PROJECT_CODE=HSB материализован"
+      - "project-knowledge создан и заполнен"
+      - "PRD описывает MVP, non-goals и API blockers"
+      - "есть feasibility matrix по Withings API, Garmin API, Health Connect, Apple Health/MyFitnessPal fallback"
+      - "есть data mapping v0 for target health domains"
+      - "есть OAuth/secrets architecture без хранения паролей Garmin/Withings"
+      - "есть dev+prod VPS layout plan"
+      - "есть first implementation backlog"
     success_metrics:
-      - "goal-first fixtures cover valid, vague, proxy-only, enabled-without-validation, broad-decomposition and budget-limited closeout cases."
-      - "Targeted validators pass after implementation."
+      - "Health Sync Bridge repo exists at /projects/health-sync-bridge"
+      - "GitHub repo name is exactly mppcoder/health-sync-bridge"
+      - "downstream quick verify passes"
     evidence_required:
-      - "Changed scenario/docs/template/script/test files in git diff."
-      - "validate-goal-contract.py results for positive and negative fixtures."
-      - "validate-codex-routing.py and validate-beginner-handoff-ux.py results."
-      - "Final git status and sync/commit outcome or exact blocker."
+      - "route receipt"
+      - "generated project path"
+      - "generated project identity"
+      - "project-knowledge files"
+      - "PRD file path"
+      - "feasibility matrix file path"
+      - "first task workspace path"
+      - "validation/preflight output"
     evidence_sources:
-      - "template-repo/scenario-pack/00-master-router.md"
-      - "template-repo/scenario-pack/03-goal-first-intake.md"
-      - "template-repo/scenario-pack/15-handoff-to-codex.md"
-      - "template-repo/template/.chatgpt/goal-contract.yaml.template"
-      - "template-repo/scripts/validate-goal-contract.py"
-      - "tests/goal-contract"
+      - "/projects/health-sync-bridge"
+      - "/projects/health-sync-bridge/docs/prd/health-sync-bridge-prd.md"
+      - "/projects/health-sync-bridge/docs/research/api-feasibility-withings-garmin.md"
+      - "/projects/health-sync-bridge/project-knowledge"
+      - "official Withings and Garmin documentation"
   boundaries:
     scope:
-      - "factory-template repo contract, templates, docs, validators and fixtures"
-      - "Codex CLI live capability check and explicit experimental runtime boundary"
+      - "project bootstrap"
+      - "feasibility-first PRD"
+      - "architecture and backlog"
+      - "no production credentials yet"
+      - "no unofficial credential scraping"
     non_goals:
-      - "Do not claim ChatGPT Project UI can switch live Codex runtime."
-      - "Do not require production/destructive runtime."
-      - "Do not invent FT-CH id."
+      - "не реализовывать неофициальный парсинг Garmin Connect логина/пароля"
+      - "не обходить ToS"
+      - "не обещать запись данных в Garmin/Withings без official API proof"
+      - "не хранить raw health secrets вне env/secret store"
     destructive_actions_allowed: false
     production_actions_allowed: false
     secrets_allowed: false
   validation:
     primary_verification_commands:
-      - "python3 template-repo/scripts/validate-goal-contract.py tests/goal-contract/valid/measurable-goal.yaml"
-      - "python3 template-repo/scripts/validate-goal-contract.py template-repo/template/.chatgpt/goal-contract.yaml.template --template"
+      - "python3 template-repo/scripts/validate-goal-contract.py .chatgpt/goal-contract.yaml"
       - "python3 template-repo/scripts/validate-codex-routing.py ."
-      - "python3 template-repo/scripts/validate-beginner-handoff-ux.py tests/beginner-handoff-ux/positive/handoff.md"
+      - "python3 template-repo/scripts/validate-codex-work-index.py .chatgpt/codex-work-index.yaml"
+      - "bash scripts/verify-all.sh quick in /projects/health-sync-bridge"
     secondary_verification:
-      - "bash template-repo/scripts/verify-all.sh quick"
+      - "python3 scripts/preflight-vps-check.py --project-slug health-sync-bridge"
+      - "python3 scripts/validate-operator-env.py . --env-file deploy/.env.example --preset starter --allow-example-placeholders"
       - "git status --short --branch"
     proxy_signal_denylist:
       - "tests passed alone"
@@ -56,14 +69,15 @@ goal_contract:
       - "validator passed alone"
     goal_achievement_rule: "mark achieved only when evidence satisfies DoD, not when proxy signals pass"
   runtime:
-    goal_runtime_recommendation: codex_goal_candidate
+    goal_runtime_recommendation: goal_first_contract_only
     codex_goal_live_validation_required: true
-    codex_goal_live_validation_evidence: "codex-cli 0.129.0; `codex features list` shows `goals` as experimental false; explicit user instruction treats it as working candidate"
+    codex_goal_live_validation_evidence: "Current task uses repo goal-first contract only; no /goal runtime switch is claimed for this already-open session."
     tool_feedback_ready: true
     mcp_or_metrics_needed:
       - "repo validators"
-      - "git status"
-      - "Codex CLI feature list"
+      - "official API documentation checks"
+      - "GitHub CLI"
+      - "project lifecycle card renderer"
     observation_cadence: "operator check every 15-20 minutes for long goal loops"
     budget_guardrails:
       token_budget: ""
@@ -93,16 +107,18 @@ goal_contract:
   closeout:
     goal_status: achieved
     evidence_vs_dod:
-      - "Router, handoff and closeout scenarios contain goal-first gate/contract/runtime/DoD evidence rules."
-      - "Goal contract/state templates and active task goal artifacts exist."
-      - "validate-goal-contract.py passes valid fixtures and rejects negative proxy/live-validation/DoD/budget fixtures."
-      - "verify-all quick passed."
+      - "Project created at /projects/health-sync-bridge with PROJECT_CODE=HSB."
+      - "PRD, feasibility matrix, data mapping, OAuth/security, dev+prod layout and first backlog were added."
+      - "Downstream quick verify passed."
+      - "Garmin/Withings API blockers are documented and not hidden behind proxy signals."
     proxy_signal_closure_used: false
     continuation_summary:
       done:
-        - "goal-first transition implemented"
+        - "Health Sync Bridge bootstrap and PRD package created"
       remaining:
-        - "none"
+        - "user/operator chooses whether to start Withings OAuth implementation or Garmin approval preparation"
       blockers:
-        - "none"
-      next_recommended_goal: "none"
+        - "Garmin Developer Program approval"
+        - "real Withings OAuth credentials"
+        - "production domain/TLS and encrypted health-data storage approval"
+      next_recommended_goal: "start Withings OAuth connector or Garmin approval spike"

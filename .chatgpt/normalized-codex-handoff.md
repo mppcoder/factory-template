@@ -6,6 +6,26 @@ direct-task
 ## Вид handoff
 codex-task-handoff
 
+## Goal-contract
+- normalized_goal: `codex_work_id: FT-CX-0034
+codex_work_title: FT-CX-0034 greenfield-intake
+task_slug: greenfield-intake
+codex_work_state: codex_accepted
+
+user_request: greenfield intake
+normalized_goal: Start the canonical greenfield-product intake path for the first real downstream/battle project.`
+- definition_of_done: evidence satisfies requested outcome and relevant repo validators or blockers are documented.
+- evidence_required: verification-report.md, done-report.md, targeted validation evidence.
+- scope: repo-local artifacts selected by route.
+- non_goals: production/destructive/secrets actions unless explicitly approved.
+- proxy_signal_denylist: tests passed alone; file exists alone; commit exists alone; green dashboard alone; validator passed alone.
+- goal_achievement_rule: mark achieved only when evidence satisfies DoD, not when proxy signals pass.
+
+## Goal runtime
+- goal_runtime_recommendation: `codex_goal_candidate`
+- codex_goal_live_validation_required: `true`
+- rule: Codex /goal runtime optional/live-gated; experimental goals require explicit user/operator choice and do not auto-enable in already-open sessions.
+
 ## Решение о фактическом execution mode
 - owner: Codex после route receipt и анализа task graph.
 - allowed modes: `single-session execution` или `orchestrated-child-sessions`.
@@ -15,7 +35,7 @@ codex-task-handoff
 ## Стабильная identity чата и handoff
 - chat_id: ``
 - chat_title: ``
-- task_slug: `close-unfinished-repo-tasks`
+- task_slug: `greenfield-intake`
 - kind: ``
 - state: ``
 - source_of_truth: `.chatgpt/chat-handoff-index.yaml`
@@ -69,6 +89,8 @@ unknown-project-profile
 done
 
 ## Артефакты для обновления
+- .chatgpt/goal-contract.yaml
+- .chatgpt/goal-state.yaml
 - .chatgpt/codex-input.md
 - .chatgpt/codex-context.md
 - .chatgpt/codex-task-pack.md
@@ -140,6 +162,13 @@ selected_model совпадает с последним сохраненным s
 - Если после launch или manual UI apply виден sticky last-used profile/model/reasoning, закройте текущую сессию, откройте новую и при необходимости выполните launch_command, затем проверьте именованный profile в local Codex config.
 - Если selected_model отсутствует в live catalog, обновите codex-routing.yaml или local profile mapping, прежде чем обещать этот model ID пользователю.
 - Если новый model ID появился в live catalog, сначала создайте proposal через `scripts/check-codex-model-catalog.py --write-proposal`; promotion profile mapping требует ручного review.
+- Если используется experimental `goals`, сначала проверьте `codex features list`; включение goal runtime является runtime/operator choice и не следует из advisory текста.
 
 ## Текст задачи
-заканчивай все незавершенные задачи
+codex_work_id: FT-CX-0034
+codex_work_title: FT-CX-0034 greenfield-intake
+task_slug: greenfield-intake
+codex_work_state: codex_accepted
+
+user_request: greenfield intake
+normalized_goal: Start the canonical greenfield-product intake path for the first real downstream/battle project.

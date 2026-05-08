@@ -1,6 +1,6 @@
 schema: codex-work-index/v1
 project_code: FT
-next_codex_work_number: 33
+next_codex_work_number: 35
 id_policy:
   canonical_format: <PROJECT_CODE>-CX-<NNNN> <task-slug>
   independent_from_chat_handoff_index: true
@@ -802,10 +802,74 @@ items:
   - Allocated during direct-task bootstrap before first substantive response.
   - Read router and rendered canonical factory-template project card.
   - Added project_contour to Telegram event envelope for per-project/per-stage routing.
-  - Added contour_to_topic config mapping for template general, battle development, battle deploy, battle operate, battle updates and downstream feedback.
-  - Notifier now routes by project_contour before kind fallback and records project_contour in outbox.
-  - Fixture dry-run covers template-general, battle-development, battle-deploy and battle-updates topics.
+  - Added contour_to_topic config mapping for template general, battle development,
+    battle deploy, battle operate, battle updates and downstream feedback.
+  - Notifier now routes by project_contour before kind fallback and records project_contour
+    in outbox.
+  - Fixture dry-run covers template-general, battle-development, battle-deploy and
+    battle-updates topics.
   - python3 template-repo/scripts/validate-telegram-feedback-channel.py --allow-placeholders
-  - python3 template-repo/scripts/factory_notify_telegram.py send --event tests/telegram-feedback-channel/events/p0-events.yaml --dry-run --outbox <tmp>/outbox.jsonl
+  - python3 template-repo/scripts/factory_notify_telegram.py send --event tests/telegram-feedback-channel/events/p0-events.yaml
+    --dry-run --outbox <tmp>/outbox.jsonl
   - python3 template-repo/scripts/validate-codex-work-index.py .chatgpt/codex-work-index.yaml
   next_action: No further implementation action for Telegram per-project topic routing.
+- codex_work_id: FT-CX-0033
+  work_number: 33
+  work_title: FT-CX-0033 next-step-route
+  task_slug: next-step-route
+  kind: self_handoff
+  state: verified
+  created_utc: '2026-05-08T14:56:58Z'
+  updated_utc: '2026-05-08T14:58:17Z'
+  source_type: direct-task
+  handoff_group: next-step-route
+  handoff_revision: 1
+  handoff_register_item_id: ''
+  status_chain:
+  - codex_self_handoff
+  - codex_accepted
+  - codex_completed
+  evidence:
+  - Allocated during direct-task bootstrap before first substantive response.
+  - Read router and completed direct-task self-handoff for the user's next-step request.
+  - Verified current repo queue has 0 ready-for-handoff, 0 ready-for-codex, 0 running
+    and no blockers.
+  - Recommended next branch is either first real greenfield product intake or explicit
+    release/deploy approval boundary.
+  - python3 template-repo/scripts/validate-codex-work-index.py .chatgpt/codex-work-index.yaml
+  - python3 template-repo/scripts/validate-codex-routing.py .
+  next_action: No further implementation action for next-step routing; wait for user
+    choice of greenfield intake or release/deploy boundary.
+- codex_work_id: FT-CX-0034
+  work_number: 34
+  work_title: FT-CX-0034 greenfield-intake
+  task_slug: greenfield-intake
+  kind: self_handoff
+  state: verified
+  created_utc: '2026-05-08T15:04:24Z'
+  updated_utc: '2026-05-08T15:47:05Z'
+  source_type: direct-task
+  handoff_group: greenfield-intake
+  handoff_revision: 1
+  handoff_register_item_id: ''
+  status_chain:
+  - codex_self_handoff
+  - codex_accepted
+  - codex_completed
+  evidence:
+  - Allocated during direct-task bootstrap before first substantive response.
+  - Read router, goal-first intake scenario and greenfield-product runbook/checklist.
+  - Canonical greenfield start confirmed as ChatGPT Project factory-template -> new
+    chat -> `новый проект`; Codex takeover starts at GF-050 after generated handoff.
+  - Received concrete Health Sync Bridge handoff with project_name, project_slug
+    and PROJECT_CODE HSB.
+  - Created private GitHub repo mppcoder/health-sync-bridge and canonical project
+    root /projects/health-sync-bridge.
+  - Filled downstream project knowledge, feasibility-first PRD, API feasibility
+    matrix, OAuth/security, data mapping, dev+prod VPS layout and first backlog.
+  - bash scripts/verify-all.sh quick in /projects/health-sync-bridge
+  - python3 template-repo/scripts/validate-goal-contract.py .chatgpt/goal-contract.yaml
+  - python3 template-repo/scripts/validate-codex-routing.py .
+  - python3 template-repo/scripts/validate-codex-work-index.py .chatgpt/codex-work-index.yaml
+  next_action: No further factory-template implementation action; continue in
+    downstream project with Withings OAuth implementation or Garmin approval spike.

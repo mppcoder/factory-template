@@ -1,5 +1,5 @@
 launch:
-  timestamp_utc: '2026-05-07T16:26:28+00:00'
+  timestamp_utc: '2026-05-08T15:04:55+00:00'
   launch_unit: new-task-launch
   launch_source: direct-task
   router_layer: executable
@@ -7,7 +7,7 @@ launch:
   goal_contract_path: .chatgpt/goal-contract.yaml
   goal_runtime_recommendation: codex_goal_candidate
   codex_goal_live_validation_required: true
-  codex_goal_live_validation_evidence: "codex-cli 0.129.0; goals experimental false; explicit user instruction treats it as working candidate"
+  codex_goal_live_validation_evidence: ''
   handoff_shape_reasons:
   - 'default neutral handoff: Codex decides actual execution_mode after analysis'
   task_class: build
@@ -24,6 +24,8 @@ launch:
   selected_scenario: 00-master-router.md
   pipeline_stage: done
   artifacts_to_update:
+  - .chatgpt/goal-contract.yaml
+  - .chatgpt/goal-state.yaml
   - .chatgpt/codex-input.md
   - .chatgpt/codex-context.md
   - .chatgpt/codex-task-pack.md
@@ -31,7 +33,7 @@ launch:
   - .chatgpt/done-report.md
   handoff_allowed: yes (forbidden)
   defect_capture_path: not-required-by-text-signal
-  task_summary: заканчивай все незавершенные задачи
+  task_summary: 'codex_work_id: FT-CX-0034'
   launch_boundary_rule: Выбор модели и reasoning mode считается надежным только на
     новом запуске Codex для новой задачи.
   interactive_default_rule: 'Для интерактивной работы в VS Code Codex extension основной
@@ -98,6 +100,9 @@ launch:
     local profile mapping, прежде чем обещать этот model ID пользователю.
   - Если новый model ID появился в live catalog, сначала создайте proposal через `scripts/check-codex-model-catalog.py
     --write-proposal`; promotion profile mapping требует ручного review.
+  - Если используется experimental `goals`, сначала проверьте `codex features list`;
+    включение goal runtime является runtime/operator choice и не следует из advisory
+    текста.
   direct_self_handoff_required: true
   direct_self_handoff_completed: true
   requested_task_class: null
@@ -105,9 +110,9 @@ launch:
   requested_selected_profile: null
   requested_selected_model: null
   requested_selected_reasoning_effort: null
-  codex_work_id: FT-CX-0031
-  codex_work_title: FT-CX-0031 close-unfinished-repo-tasks
-  task_slug: close-unfinished-repo-tasks
+  codex_work_id: FT-CX-0034
+  codex_work_title: FT-CX-0034 greenfield-intake
+  task_slug: greenfield-intake
   codex_work_kind: self_handoff
-  codex_work_state: verified
+  codex_work_state: codex_accepted
   codex_work_index_path: .chatgpt/codex-work-index.yaml

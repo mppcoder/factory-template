@@ -193,3 +193,14 @@
   execution_mode: codex-led
   reserved_slug_override: false
   примечание: создан через launcher
+- дата: 2026-05-08
+  проект: Health Sync Bridge
+  slug: health-sync-bridge
+  версия_фабрики: 2.5.0
+  режим: greenfield
+  статус_записи: production
+  project_preset: greenfield-product
+  change_class: feature
+  execution_mode: codex-led
+  reserved_slug_override: false
+  примечание: создан через launcher

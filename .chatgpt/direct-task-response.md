@@ -1,7 +1,7 @@
 ## Номер запроса Codex
 
 ```text
-FT-CX-0031 close-unfinished-repo-tasks
+FT-CX-0034 greenfield-intake
 ```
 
 ## Карточка проекта
@@ -15,8 +15,7 @@ FT-CX-0031 close-unfinished-repo-tasks
 Tasks: 🕒 0 ready-for-handoff -> 0 ready-for-codex -> 0 running -> 0
   human-review
 В работе:
-✅ FT-CX-0031 close-unfinished-repo-tasks: ✅ Codex-WORK → ✅ Codex OK → ✅
-  Done
+🟡 FT-CX-0034 greenfield-intake: ✅ Codex-WORK → ✅ Codex OK → 🕒 Done
 
 ## Применение в Codex UI
 
@@ -60,6 +59,18 @@ Routing:
 - handoff_shape: codex-task-handoff
 - execution_mode_decision_owner: Codex runtime after task graph analysis
 - execution_mode_closeout_required: actual execution mode plus child/subagent count
+- goal_contract.normalized_goal: codex_work_id: FT-CX-0034
+codex_work_title: FT-CX-0034 greenfield-intake
+task_slug: greenfield-intake
+codex_work_state: codex_accepted
+
+user_request: greenfield intake
+normalized_goal: Start the canonical greenfield-product intake path for the first real downstream/battle project.
+- goal_contract.definition_of_done: evidence satisfies requested outcome and repo validators/blockers are documented
+- goal_contract.proxy_signal_denylist: tests passed alone; file exists alone; commit exists alone; green dashboard alone; validator passed alone
+- goal_runtime_recommendation: codex_goal_candidate
+- codex_goal_live_validation_required: true
+- codex_goal_runtime_rule: optional/live-gated; experimental goals require explicit user/operator choice and no already-open auto-switch
 - task_class: build
 - selected_profile: build
 - selected_model: gpt-5.5
@@ -74,17 +85,19 @@ Routing:
 - defect_capture_path: not-required-by-text-signal
 - chat_id: not_applicable
 - chat_title: not_applicable
-- task_slug: close-unfinished-repo-tasks
+- task_slug: greenfield-intake
 - chat_kind: not_applicable
 - chat_state: not_applicable
 - chat_index_path: not_applicable
-- codex_work_id: FT-CX-0031
-- codex_work_title: FT-CX-0031 close-unfinished-repo-tasks
+- codex_work_id: FT-CX-0034
+- codex_work_title: FT-CX-0034 greenfield-intake
 - codex_work_kind: self_handoff
-- codex_work_state: verified
+- codex_work_state: codex_accepted
 - codex_work_index_path: .chatgpt/codex-work-index.yaml
 
 Артефакты для обновления:
+- .chatgpt/goal-contract.yaml
+- .chatgpt/goal-state.yaml
 - .chatgpt/codex-input.md
 - .chatgpt/codex-context.md
 - .chatgpt/codex-task-pack.md
@@ -92,7 +105,13 @@ Routing:
 - .chatgpt/done-report.md
 
 Текст задачи:
-заканчивай все незавершенные задачи
+codex_work_id: FT-CX-0034
+codex_work_title: FT-CX-0034 greenfield-intake
+task_slug: greenfield-intake
+codex_work_state: codex_accepted
+
+user_request: greenfield intake
+normalized_goal: Start the canonical greenfield-product intake path for the first real downstream/battle project.
 
 Continuation rule:
 Если задача пришла в уже открытую Codex-сессию и этот route совместим с текущей сессией, после видимого self-handoff продолжай remediation / implementation / verification без отдельного запроса пользователя. Остановка допустима только при реальном blocker, внешнем действии, несовместимом route или необходимости нового task launch.
