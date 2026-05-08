@@ -7,13 +7,13 @@ direct-task
 codex-task-handoff
 
 ## Контракт цели
-- normalized_goal: `codex_work_id: FT-CX-0036
-codex_work_title: FT-CX-0036 fix-downstream-closeout-card
-task_slug: fix-downstream-closeout-card
+- normalized_goal: `codex_work_id: FT-CX-0039
+codex_work_title: FT-CX-0039 continue-health-sync-bridge-next-stage
+task_slug: continue-health-sync-bridge-next-stage
 codex_work_state: in_progress
 
-user_request: почему опять остановился? и почему если мы делаем новый проект карточку проекта открываешь шаблона?
-normalized_goal: Fix closeout card selection so greenfield/downstream tasks use the downstream project lifecycle card, and document the process error.`
+user_request: продолжай проект HSB
+normalized_goal: Continue the Health Sync Bridge project from the latest repo-local state by finding the next internal Codex-eligible step, executing it if safely possible, and closing with evidence or a concrete blocker.`
 - definition_of_done: evidence satisfies requested outcome and relevant repo validators or blockers are documented.
 - evidence_required: verification-report.md, done-report.md, targeted validation evidence.
 - scope: repo-local artifacts selected by route.
@@ -35,7 +35,7 @@ normalized_goal: Fix closeout card selection so greenfield/downstream tasks use 
 ## Стабильная identity чата и handoff
 - chat_id: ``
 - chat_title: ``
-- task_slug: `fix-downstream-closeout-card`
+- task_slug: `continue-health-sync-bridge-next-stage`
 - kind: ``
 - state: ``
 - source_of_truth: `.chatgpt/chat-handoff-index.yaml`
@@ -45,20 +45,20 @@ normalized_goal: Fix closeout card selection so greenfield/downstream tasks use 
 - default neutral handoff: Codex decides actual execution_mode after analysis
 
 ## Класс задачи
-build
+quick
 
 ## Evidence для класса задачи
-- keyword-hit: fix
-- явный reasoning/model override совпал с default profile: build
+- keyword-hit: find
+- явный reasoning/model override совпал с default profile: quick
 
 ## Выбранный профиль
-build
+quick
 
 ## Выбранная модель
-gpt-5.5
+gpt-5.4-mini
 
 ## Выбранное reasoning effort
-medium
+low
 
 ## Выбранное reasoning effort для plan mode
 medium
@@ -68,7 +68,7 @@ manual-ui
 
 ## Ручное применение через UI
 - Откройте новый чат/окно Codex в VS Code extension.
-- Вручную выберите model `gpt-5.5` и reasoning `medium` в picker.
+- Вручную выберите model `gpt-5.4-mini` и reasoning `low` в picker.
 - Только после этого вставьте handoff.
 - Codex должен отвечать пользователю на русском языке; английский допустим только для technical literal values.
 - Уже открытая live session не считается надежным auto-switch boundary.
@@ -152,7 +152,7 @@ selected_model совпадает с последним сохраненным s
 - scripted launch
 
 ## Прямая команда Codex за launcher
-`codex --profile build`
+`codex --profile quick`
 
 ## Диагностика проблем
 - Если вы работаете через VS Code Codex extension интерактивно, используйте новый чат/окно, вручную выставьте selected_model и selected_reasoning_effort в picker, а затем вставьте handoff.
@@ -165,10 +165,10 @@ selected_model совпадает с последним сохраненным s
 - Если используется experimental `goals`, сначала проверьте `codex features list`; включение goal runtime является runtime/operator choice и не следует из advisory текста.
 
 ## Текст задачи
-codex_work_id: FT-CX-0036
-codex_work_title: FT-CX-0036 fix-downstream-closeout-card
-task_slug: fix-downstream-closeout-card
+codex_work_id: FT-CX-0039
+codex_work_title: FT-CX-0039 continue-health-sync-bridge-next-stage
+task_slug: continue-health-sync-bridge-next-stage
 codex_work_state: in_progress
 
-user_request: почему опять остановился? и почему если мы делаем новый проект карточку проекта открываешь шаблона?
-normalized_goal: Fix closeout card selection so greenfield/downstream tasks use the downstream project lifecycle card, and document the process error.
+user_request: продолжай проект HSB
+normalized_goal: Continue the Health Sync Bridge project from the latest repo-local state by finding the next internal Codex-eligible step, executing it if safely possible, and closing with evidence or a concrete blocker.

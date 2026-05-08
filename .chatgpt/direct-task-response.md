@@ -1,7 +1,7 @@
 ## Номер запроса Codex
 
 ```text
-FT-CX-0036 fix-downstream-closeout-card
+FT-CX-0039 continue-health-sync-bridge-next-stage
 ```
 
 ## Карточка проекта
@@ -15,14 +15,18 @@ FT-CX-0036 fix-downstream-closeout-card
 Tasks: 🕒 0 ready-for-handoff -> 0 ready-for-codex -> 0 running -> 0
   human-review
 В работе:
-🟡 FT-CX-0036 fix-downstream-closeout-card: ✅ Codex-WORK → ✅ Codex OK → 🕒
+🟡 FT-CX-0037 fix-stale-closeout-reports: ✅ Codex-WORK → ✅ Codex OK → 🕒
   Done
+🟡 FT-CX-0038 continue-health-sync-bridge-project: ✅ Codex-WORK → ✅ Codex
+  OK → 🕒 Done
+🟡 FT-CX-0039 continue-health-sync-bridge-next-stage: ✅ Codex-WORK → ✅
+  Codex OK → 🕒 Done
 
 ## Применение в Codex UI
 
 `apply_mode: manual-ui (default)`.
 
-Для интерактивной работы открой новый чат/окно Codex в VS Code extension, вручную выбери model `gpt-5.5` и reasoning `medium` в picker, затем вставь один цельный handoff block ниже.
+Для интерактивной работы открой новый чат/окно Codex в VS Code extension, вручную выбери model `gpt-5.4-mini` и reasoning `low` в picker, затем вставь один цельный handoff block ниже.
 
 Новый чат + вставка handoff и новый task launch через executable launcher — не одно и то же. Advisory layer сам по себе не переключает model/profile/reasoning; надежная единица маршрутизации — новый task launch. Уже открытая live session допустима только как non-canonical fallback без обещаний auto-switch.
 
@@ -37,7 +41,7 @@ Tasks: 🕒 0 ready-for-handoff -> 0 ready-for-codex -> 0 running -> 0
 Прямая команда profile за launcher:
 
 ```bash
-codex --profile build
+codex --profile quick
 ```
 
 ## Handoff в Codex
@@ -60,22 +64,22 @@ Routing:
 - handoff_shape: codex-task-handoff
 - execution_mode_decision_owner: Codex runtime after task graph analysis
 - execution_mode_closeout_required: actual execution mode plus child/subagent count
-- goal_contract.normalized_goal: codex_work_id: FT-CX-0036
-codex_work_title: FT-CX-0036 fix-downstream-closeout-card
-task_slug: fix-downstream-closeout-card
+- goal_contract.normalized_goal: codex_work_id: FT-CX-0039
+codex_work_title: FT-CX-0039 continue-health-sync-bridge-next-stage
+task_slug: continue-health-sync-bridge-next-stage
 codex_work_state: in_progress
 
-user_request: почему опять остановился? и почему если мы делаем новый проект карточку проекта открываешь шаблона?
-normalized_goal: Fix closeout card selection so greenfield/downstream tasks use the downstream project lifecycle card, and document the process error.
+user_request: продолжай проект HSB
+normalized_goal: Continue the Health Sync Bridge project from the latest repo-local state by finding the next internal Codex-eligible step, executing it if safely possible, and closing with evidence or a concrete blocker.
 - goal_contract.definition_of_done: evidence satisfies requested outcome and repo validators/blockers are documented
 - goal_contract.proxy_signal_denylist: tests passed alone; file exists alone; commit exists alone; green dashboard alone; validator passed alone
 - goal_runtime_recommendation: codex_goal_candidate
 - codex_goal_live_validation_required: true
 - codex_goal_runtime_rule: optional/live-gated; experimental goals require explicit user/operator choice and no already-open auto-switch
-- task_class: build
-- selected_profile: build
-- selected_model: gpt-5.5
-- selected_reasoning_effort: medium
+- task_class: quick
+- selected_profile: quick
+- selected_model: gpt-5.4-mini
+- selected_reasoning_effort: low
 - selected_plan_mode_reasoning_effort: medium
 - apply_mode: manual-ui
 - strict_launch_mode: optional
@@ -86,12 +90,12 @@ normalized_goal: Fix closeout card selection so greenfield/downstream tasks use 
 - defect_capture_path: not-required-by-text-signal
 - chat_id: not_applicable
 - chat_title: not_applicable
-- task_slug: fix-downstream-closeout-card
+- task_slug: continue-health-sync-bridge-next-stage
 - chat_kind: not_applicable
 - chat_state: not_applicable
 - chat_index_path: not_applicable
-- codex_work_id: FT-CX-0036
-- codex_work_title: FT-CX-0036 fix-downstream-closeout-card
+- codex_work_id: FT-CX-0039
+- codex_work_title: FT-CX-0039 continue-health-sync-bridge-next-stage
 - codex_work_kind: self_handoff
 - codex_work_state: in_progress
 - codex_work_index_path: .chatgpt/codex-work-index.yaml
@@ -106,13 +110,13 @@ normalized_goal: Fix closeout card selection so greenfield/downstream tasks use 
 - .chatgpt/done-report.md
 
 Текст задачи:
-codex_work_id: FT-CX-0036
-codex_work_title: FT-CX-0036 fix-downstream-closeout-card
-task_slug: fix-downstream-closeout-card
+codex_work_id: FT-CX-0039
+codex_work_title: FT-CX-0039 continue-health-sync-bridge-next-stage
+task_slug: continue-health-sync-bridge-next-stage
 codex_work_state: in_progress
 
-user_request: почему опять остановился? и почему если мы делаем новый проект карточку проекта открываешь шаблона?
-normalized_goal: Fix closeout card selection so greenfield/downstream tasks use the downstream project lifecycle card, and document the process error.
+user_request: продолжай проект HSB
+normalized_goal: Continue the Health Sync Bridge project from the latest repo-local state by finding the next internal Codex-eligible step, executing it if safely possible, and closing with evidence or a concrete blocker.
 
 Continuation rule:
 Если задача пришла в уже открытую Codex-сессию и этот route совместим с текущей сессией, после видимого self-handoff продолжай remediation / implementation / verification без отдельного запроса пользователя. Остановка допустима только при реальном blocker, внешнем действии, несовместимом route или необходимости нового task launch.

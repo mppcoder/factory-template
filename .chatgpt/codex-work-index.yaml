@@ -1,6 +1,6 @@
 schema: codex-work-index/v1
 project_code: FT
-next_codex_work_number: 37
+next_codex_work_number: 40
 id_policy:
   canonical_format: <PROJECT_CODE>-CX-<NNNN> <task-slug>
   independent_from_chat_handoff_index: true
@@ -928,14 +928,78 @@ items:
   - codex_completed
   evidence:
   - Router read for user correction about premature stop and wrong project card
-  - "Reproduced incorrect Health Sync Bridge closeout card path: factory command rendered factory/template context while downstream repo-local command rendered Health Sync Bridge."
-  - Fixed direct-task completion rule to require repo-local downstream/greenfield project
-    card when closeout belongs to a created downstream project.
+  - 'Reproduced incorrect Health Sync Bridge closeout card path: factory command rendered
+    factory/template context while downstream repo-local command rendered Health Sync
+    Bridge.'
+  - Fixed direct-task completion rule to require repo-local downstream/greenfield
+    project card when closeout belongs to a created downstream project.
   - Fixed render_project_card_for_codex_response candidate order to prefer generated
     repo-local scripts/dashboard before template dashboard.
   - Added downstream-project-card-selection-smoke to verify-all quick.
   - python3 template-repo/scripts/validate-codex-routing.py .
   - python3 template-repo/scripts/validate-codex-work-index.py .chatgpt/codex-work-index.yaml
   - python3 template-repo/scripts/validate-human-language-layer.py .
-  next_action: No internal repo action remains after quick verification and push; future
-    Health Sync Bridge provider work remains gated by real external credentials/approvals.
+  next_action: No internal repo action remains after quick verification and push;
+    future Health Sync Bridge provider work remains gated by real external credentials/approvals.
+- codex_work_id: FT-CX-0037
+  work_number: 37
+  work_title: FT-CX-0037 fix-stale-closeout-reports
+  task_slug: fix-stale-closeout-reports
+  kind: remediation
+  state: in_progress
+  created_utc: '2026-05-08T16:53:40Z'
+  updated_utc: '2026-05-08T16:53:40Z'
+  source_type: direct-task
+  handoff_group: fix-stale-closeout-reports
+  handoff_revision: 1
+  handoff_register_item_id: ''
+  status_chain:
+  - codex_self_handoff
+  - codex_accepted
+  - codex_completed
+  evidence:
+  - Allocated during direct-task continuation after detecting stale closeout reports
+    for FT-CX-0036.
+  next_action: Accept in Codex or update repo state before implementation.
+- codex_work_id: FT-CX-0038
+  work_number: 38
+  work_title: FT-CX-0038 continue-health-sync-bridge-project
+  task_slug: continue-health-sync-bridge-project
+  kind: direct_task
+  state: in_progress
+  created_utc: '2026-05-08T16:56:01Z'
+  updated_utc: '2026-05-08T16:56:01Z'
+  source_type: direct-task
+  handoff_group: continue-health-sync-bridge-project
+  handoff_revision: 1
+  handoff_register_item_id: ''
+  status_chain:
+  - codex_self_handoff
+  - codex_accepted
+  - codex_completed
+  evidence:
+  - 'Allocated for direct request: продолжай проект HSB.'
+  next_action: Accept in Codex or update repo state before implementation.
+- codex_work_id: FT-CX-0039
+  work_number: 39
+  work_title: FT-CX-0039 continue-health-sync-bridge-next-stage
+  task_slug: continue-health-sync-bridge-next-stage
+  kind: direct_task
+  state: verified
+  created_utc: '2026-05-08T16:57:05Z'
+  updated_utc: '2026-05-08T17:00:52Z'
+  source_type: direct-task
+  handoff_group: continue-health-sync-bridge-next-stage
+  handoff_revision: 1
+  handoff_register_item_id: ''
+  status_chain:
+  - codex_self_handoff
+  - codex_accepted
+  - codex_completed
+  evidence:
+  - 'Allocated for direct request: продолжай проект HSB.'
+  - Downstream Health Sync Bridge continuation allocated as HSB-CX-0006.
+  - HSB commit c07a801 completed and pushed to origin/main.
+  - HSB internal pre-credential release candidate verified; live credentials and
+    production deploy remain external final-stage blockers.
+  next_action: No factory-side implementation remains for this request.

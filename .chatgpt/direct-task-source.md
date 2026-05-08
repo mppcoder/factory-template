@@ -1,7 +1,7 @@
-codex_work_id: FT-CX-0036
-codex_work_title: FT-CX-0036 fix-downstream-closeout-card
-task_slug: fix-downstream-closeout-card
+codex_work_id: FT-CX-0039
+codex_work_title: FT-CX-0039 continue-health-sync-bridge-next-stage
+task_slug: continue-health-sync-bridge-next-stage
 codex_work_state: in_progress
 
-user_request: почему опять остановился? и почему если мы делаем новый проект карточку проекта открываешь шаблона?
-normalized_goal: Fix closeout card selection so greenfield/downstream tasks use the downstream project lifecycle card, and document the process error.
+user_request: продолжай проект HSB
+normalized_goal: Continue the Health Sync Bridge project from the latest repo-local state by finding the next internal Codex-eligible step, executing it if safely possible, and closing with evidence or a concrete blocker.

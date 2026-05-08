@@ -1,5 +1,5 @@
 launch:
-  timestamp_utc: '2026-05-08T16:03:03+00:00'
+  timestamp_utc: '2026-05-08T16:57:29+00:00'
   launch_unit: new-task-launch
   launch_source: direct-task
   router_layer: executable
@@ -10,13 +10,13 @@ launch:
   codex_goal_live_validation_evidence: ''
   handoff_shape_reasons:
   - 'default neutral handoff: Codex decides actual execution_mode after analysis'
-  task_class: build
+  task_class: quick
   task_class_reasons:
-  - 'keyword-hit: fix'
-  - 'явный reasoning/model override совпал с default profile: build'
-  selected_profile: build
-  selected_model: gpt-5.5
-  selected_reasoning_effort: medium
+  - 'keyword-hit: find'
+  - 'явный reasoning/model override совпал с default profile: quick'
+  selected_profile: quick
+  selected_model: gpt-5.4-mini
+  selected_reasoning_effort: low
   selected_plan_mode_reasoning_effort: medium
   apply_mode: manual-ui
   strict_launch_mode: optional
@@ -33,7 +33,7 @@ launch:
   - .chatgpt/done-report.md
   handoff_allowed: yes (forbidden)
   defect_capture_path: not-required-by-text-signal
-  task_summary: 'codex_work_id: FT-CX-0036'
+  task_summary: 'codex_work_id: FT-CX-0039'
   launch_boundary_rule: Выбор модели и reasoning mode считается надежным только на
     новом запуске Codex для новой задачи.
   interactive_default_rule: 'Для интерактивной работы в VS Code Codex extension основной
@@ -77,7 +77,7 @@ launch:
   launch_artifact_path: .chatgpt/direct-task-source.md
   launch_command: ./scripts/launch-codex-task.sh --launch-source direct-task --task-file
     .chatgpt/direct-task-source.md --execute
-  codex_profile_command: codex --profile build
+  codex_profile_command: codex --profile quick
   strict_launch_use_cases:
   - автоматизация
   - воспроизводимость
@@ -110,9 +110,9 @@ launch:
   requested_selected_profile: null
   requested_selected_model: null
   requested_selected_reasoning_effort: null
-  codex_work_id: FT-CX-0036
-  codex_work_title: FT-CX-0036 fix-downstream-closeout-card
-  task_slug: fix-downstream-closeout-card
+  codex_work_id: FT-CX-0039
+  codex_work_title: FT-CX-0039 continue-health-sync-bridge-next-stage
+  task_slug: continue-health-sync-bridge-next-stage
   codex_work_kind: self_handoff
   codex_work_state: in_progress
   codex_work_index_path: .chatgpt/codex-work-index.yaml
